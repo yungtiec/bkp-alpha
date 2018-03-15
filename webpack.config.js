@@ -21,11 +21,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", 'css-loader?url=false']
       },
       {
         test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["style-loader", 'css-loader?url=false', "sass-loader"]
       },
       {
         test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot/,

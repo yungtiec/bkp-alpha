@@ -3,6 +3,8 @@ import "normalize.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "Tether";
 import "bootstrap/dist/js/bootstrap.min.js";
+import './annotator/annotator.min.css'
+import './annotator/annotator-full.min.js'
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
