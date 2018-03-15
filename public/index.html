@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width initial-scale=1.0'>
-    <title>Boilermaker</title>
-    <link rel="stylesheet" href="/style.css" />
-    <script defer src="/bundle.js"></script>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
-</html>
 
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1.0'>
+  <title>Boilermaker</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script
+  src="https://code.jquery.com/jquery-1.7.2.min.js"
+  integrity="sha256-R7aNzoy2gFrVs+pNJ6+SokH04ppcEqJ0yFLkNGoFALQ="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.2.7/annotator.min.css">
+  <script src="http://assets.annotateit.org/annotator/v1.2.5/annotator-full.min.js"></script>
+  <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.2.7/annotator.min.css">
+  <script defer src="/bundle.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+  // Call Annotator JS
+  var content = $('#app').annotator();
+
+
+});
+
+</script>
+
+</html>

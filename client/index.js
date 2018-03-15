@@ -1,13 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import {Router} from 'react-router-dom'
-import history from './history'
-import store from './store'
-import App from './app'
-
-// establishes socket connection
-import './socket'
+import $ from "jquery";
+import "normalize.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "Tether";
+import "bootstrap/dist/js/bootstrap.min.js";
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { Router } from "react-router-dom";
+import history from "./history";
+import store from "./store";
+import App from "./app";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -15,5 +17,5 @@ ReactDOM.render(
       <App />
     </Router>
   </Provider>,
-  document.getElementById('app')
-)
+  document.getElementById("app")
+);
