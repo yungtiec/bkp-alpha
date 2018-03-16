@@ -5,5 +5,7 @@
  */
 export {default as Navbar} from './Navbar'
 export {default as TestArticle} from './TestArticle'
+export {default as TestArticle2} from './TestArticle2'
+export {default as Test} from './Test'
 export {default as UserHome} from './UserHome'
 export {Login, Signup} from './AuthForm'

@@ -18,13 +18,14 @@ export default class TestArticle extends Component {
         limit: 20,
       },
       annotationData: {
-        uri: "http://localhost:8080/home"
+        uri: "http://localhost:8080/home",
+        item_id: "1"
       },
       urls: {
         create: "/store",
         update: "/update/:id",
         destroy: "/delete/:id",
-        search: "/search"
+        search: "/search/1"
       }
     });
   }

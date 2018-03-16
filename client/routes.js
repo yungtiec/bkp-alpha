@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import { TestArticle } from "./components";
+import { Test } from "./components";
 import { me } from "./store";
 
 /**
@@ -19,7 +19,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route path="/home" component={TestArticle} />
+        <Route path="/home" component={Test} />
       </Switch>
     );
   }

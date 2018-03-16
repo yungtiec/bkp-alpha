@@ -6,6 +6,10 @@ const Annotation = db.define("annotation", {
     type: Sequelize.STRING,
     allowNull: false
   },
+  item_id: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   quote: {
     type: Sequelize.TEXT,
     allowNull: false
