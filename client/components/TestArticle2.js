@@ -9,12 +9,13 @@ export default class TestArticle2 extends Component {
   }
 
   componentDidMount() {
-    const annotation = $(this.article2).annotator();
+    const annotation = $(this.article).annotator();
     annotation.annotator("addPlugin", "Store", {
       prefix: "/api/annotation",
       loadFromSearch: {
         uri: "http://localhost:8080/home",
         limit: 20,
+        item_id: "2"
       },
       annotationData: {
         uri: "http://localhost:8080/home",
@@ -24,14 +25,14 @@ export default class TestArticle2 extends Component {
         create: "/store",
         update: "/update/:id",
         destroy: "/delete/:id",
-        search: "/search/2"
+        search: "/search/"
       }
     });
   }
 
   render() {
     return (
-      <div ref={el => (this.article2 = el)}>
+      <div ref={el => (this.article = el)}>
         <h1 className="bd-title" id="content">
           I am facing issue on getting value of tagid from my url. localhost:8888/p?tagid=1234
         </h1>

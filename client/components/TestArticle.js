@@ -15,7 +15,7 @@ export default class TestArticle extends Component {
       prefix: "/api/annotation",
       loadFromSearch: {
         uri: "http://localhost:8080/home",
-        limit: 20,
+        item_id: "1"
       },
       annotationData: {
         uri: "http://localhost:8080/home",
@@ -25,7 +25,7 @@ export default class TestArticle extends Component {
         create: "/store",
         update: "/update/:id",
         destroy: "/delete/:id",
-        search: "/search/1"
+        search: "/search/"
       }
     });
   }

@@ -12,13 +12,13 @@ router.get("/", (req, res, next) => {
 router.post("/store", async (req, res, next) => {
   try {
     const { ranges, quote, text, uri, annotator_schema_version, item_id } = req.body;
-    console.log(req.body)
     const newAnnotation = await Annotation.findOrCreate({
       where: {
-        uri,
-        item_id
+        quote
       },
       defaults: {
+        uri,
+        item_id,
         quote,
         text,
         ranges,
@@ -43,10 +43,10 @@ router.get("/annotations", async (req, res, next) => {
   }
 });
 
-router.get("/search/:item_id", async (req, res, next) => {
+router.get("/search", async (req, res, next) => {
   try {
     const annotations = await Annotation.findAll({
-      where: { uri: req.query.uri, item_id: req.params.item_id }
+      where: { uri: req.query.uri, item_id: req.query.item_id }
     }).map(annotation => {
       return annotation.toJSON();
     });
