@@ -2,12 +2,12 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import createLogger from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import user from "./user/reducer";
-import project from "./project/reducer";
+import data from "./data/reducer";
+import scenes from "./scenes/reducer";
 
 const reducer = combineReducers({
-  user,
-  project
+  data,
+  scenes
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
@@ -15,8 +15,4 @@ const middleware = composeWithDevTools(
 const store = createStore(reducer, middleware);
 
 export default store;
-export * from "./user/actions";
-export * from "./project/actions";
-export * from "./project/reducer";
-export * from "./project/survey/reducer";
-export * from "./project/question/reducer";
+export * from "./data/user/actions";

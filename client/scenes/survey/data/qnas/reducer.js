@@ -8,7 +8,7 @@ const initialState = {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.SURVEY_QUESTIONS_FETCHED:
+    case types.SURVEY_FETCH_SUCCESS:
       return {
         ...state,
         surveyQnasById: action.surveyQnasById,
@@ -20,5 +20,5 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getAllSurveyQuestions(state) {
-  return state.project.question
+  return state.scenes.survey.data.qnas
 }
