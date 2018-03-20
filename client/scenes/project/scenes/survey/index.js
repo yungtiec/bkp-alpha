@@ -44,7 +44,7 @@ class Survey extends Component {
     if (!surveyQnaIds.length) return "loading";
     return (
       <div className="container">
-        {surveyQnaIds.map(id => <QnaBox qna={surveyQnasById[id]}/>)}
+        {surveyQnaIds.map(id => <QnaBox key={id} qna={surveyQnasById[id]}/>)}
       </div>
     );
   }

@@ -10,24 +10,40 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
-    annotation.annotator("addPlugin", "Store", {
-      prefix: "/api/annotation",
-      loadFromSearch: {
-        uri: `http://localhost:8080${this.props.match.url}`,
-        survey_question_id: this.props.qna.id
-      },
-      annotationData: {
-        uri: `http://localhost:8080${this.props.match.url}`,
-        survey_question_id: this.props.qna.id
-      },
-      urls: {
-        create: "/store",
-        update: "/update/:id",
-        destroy: "/delete/:id",
-        search: "/search/"
-      }
-    });
+    if (!this.annotation) {
+      this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
+      this.annotation.annotator("addPlugin", "Store", {
+        prefix: "/api/annotation",
+        loadFromSearch: {
+          uri: `http://localhost:8080${this.props.match.url}`,
+          survey_question_id: this.props.qna.id
+        },
+        annotationData: {
+          uri: `http://localhost:8080${this.props.match.url}`,
+          survey_question_id: this.props.qna.id
+        },
+        urls: {
+          create: "/store",
+          update: "/update/:id",
+          destroy: "/delete/:id",
+          search: "/search/"
+        }
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const prevProjectSymbol = this.props.match.url.split("/")[2];
+    const nextProjectSymbol = nextProps.match.url.split("/")[2];
+    const prevSurveyId = this.props.match.params.surveyId;
+    const nextSurveyId = nextProps.match.params.surveyId;
+    if (
+      prevProjectSymbol &&
+      prevSurveyId &&
+      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
+    ) {
+      this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
+    }
   }
 
   render() {
