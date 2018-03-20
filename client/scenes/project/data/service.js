@@ -1,4 +1,4 @@
-var projectData = require("../mock-data/project");
+var projectData = require("../../../mock-data/project");
 import { keyBy } from "lodash";
 
 export function getProjectBySymbol(symbol) {

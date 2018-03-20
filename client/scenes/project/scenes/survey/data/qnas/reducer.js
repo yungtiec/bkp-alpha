@@ -20,5 +20,5 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getAllSurveyQuestions(state) {
-  return state.scenes.survey.data.qnas
+  return state.scenes.project.scenes.survey.data.qnas
 }

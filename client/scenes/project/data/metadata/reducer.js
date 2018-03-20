@@ -16,6 +16,6 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getSelectedProject(state) {
-  return state.scene.project.data.metadata
+  return state.scenes.project.data.metadata
 }
 

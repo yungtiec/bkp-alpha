@@ -15,7 +15,7 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
-export function getSelectedProject(state) {
-  return state.scene.survey.data.metadata
+export function getSelectedSurvey(state) {
+  return state.scenes.project.scenes.survey.data.metadata
 }
 

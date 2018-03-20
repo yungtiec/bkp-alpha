@@ -21,5 +21,5 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getAllProjects(state) {
-  return pick(state.project, ["projectsBySymbol", "projectSymbolArr"]);
+  return pick(state.scenes.projects.data.projects, ["projectsBySymbol", "projectSymbolArr"]);
 }
