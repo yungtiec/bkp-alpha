@@ -1,3 +1,4 @@
+import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -5,8 +6,9 @@ import PropTypes from "prop-types";
 import { fetchQuestionsBySurveyId } from "./data/actions";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
+import { getSelectedProject } from "../../data/metadata/reducer"
 import { ListView, ListRow } from "../../components";
-import { QnaBox } from "./components";
+import { QnaBox, SurveyHeader } from "./components";
 import autoBind from "react-autobind";
 
 class Survey extends Component {
@@ -40,10 +42,14 @@ class Survey extends Component {
   }
 
   render() {
-    const { surveyQnasById, surveyQnaIds, metadata } = this.props;
+    const { surveyQnasById, surveyQnaIds, surveyMetadata, projectMetadata } = this.props;
     if (!surveyQnaIds.length) return "loading";
     return (
-      <div className="container">
+      <div className="project-survey">
+        <SurveyHeader
+          survey={surveyMetadata}
+          project={projectMetadata}
+        />
         {surveyQnaIds.map(id => <QnaBox key={id} qna={surveyQnasById[id]}/>)}
       </div>
     );
@@ -55,7 +61,8 @@ const mapState = state => {
   return {
     surveyQnasById,
     surveyQnaIds,
-    metadata: getSelectedSurvey(state)
+    surveyMetadata: getSelectedSurvey(state),
+    projectMetadata: getSelectedProject(state)
   };
 };
 

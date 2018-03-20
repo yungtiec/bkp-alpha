@@ -8,6 +8,6 @@ export default class Question extends Component {
   }
 
   render() {
-    return <div>{this.props.question.text}</div>;
+    return <h5 className="qna__question">{this.props.question.text}</h5>;
   }
 }

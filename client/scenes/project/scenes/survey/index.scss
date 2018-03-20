@@ -1,0 +1,40 @@
+.project-survey {
+  margin-top: 50px;
+  margin-bottom: 6rem;
+}
+
+.project-survey__header .project-name__box {
+  font-family: 'Roboto Condensed', sans-serif;
+  background: #2A48D4;
+  color: white;
+  display: inline-block;
+  padding: 0px 5px;
+  font-size: 1.2rem;
+}
+
+.project-survey__header .survey-name__box {
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 2.8rem;
+  text-transform: capitalize;
+}
+
+.project-survey__header .survey-creator-name__box {
+  font-size: 1.2rem;
+  color: #838383;
+  font-family: 'Roboto Condensed', sans-serif;
+  margin-bottom: 60px;
+}
+
+.qna__container {
+  margin-bottom: 2rem;
+}
+
+.qna__question {
+  font-family: 'Vollkorn', serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: left;
+  line-height: 1;
+}

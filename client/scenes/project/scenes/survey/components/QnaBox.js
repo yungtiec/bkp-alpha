@@ -50,7 +50,7 @@ class QnaBox extends Component {
     const { qna } = this.props;
 
     return (
-      <div ref={el => (this[`qna-${qna.id}`] = el)}>
+      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)}>
         <Question question={qna.question} />
         <Answers answers={qna.survey_answers} />
       </div>

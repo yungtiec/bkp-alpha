@@ -34,14 +34,16 @@ class ProjectIndex extends Component {
 
     return (
       <div className="container">
+        <Route path={`${match.url}/survey/:surveyId`} component={Survey} />
+        {!match.isExact && <div>You might also be interested in</div>}
         <ListView
           viewClassName={"row projects-container"}
-          rowClassName={"col-md-12"}
+          rowClassName={match.isExact ? "col-md-12" : "col-md-4"}
           rowsIdArray={projectSurveyIds}
           rowsById={projectSurveysById}
           renderRow={ThisSurveyCard}
         />
-        <Route path={`${match.url}/survey/:surveyId`} component={Survey} /> </div>
+      </div>
     );
   }
 }

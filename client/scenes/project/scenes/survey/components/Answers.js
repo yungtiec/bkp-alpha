@@ -18,7 +18,7 @@ export default class Answers extends Component {
     const answersById = keyBy(answers, "id");
 
     return (
-      <div>{answerOrder.map(id => <div>{answersById[id].answer}</div>)}</div>
+      <div className="qna__answer-container">{answerOrder.map(id => <p className="qna__answer">{answersById[id].answer}</p>)}</div>
     );
   }
 }

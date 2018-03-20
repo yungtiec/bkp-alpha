@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import { getProjectBySymbol } from "./service";
-import { keyBy, omit } from "lodash";
+import { keyBy, omit, assignIn, pick } from "lodash";
 
 export function fetchQuestionsBySurveyId({ projectSymbol, surveyId }) {
   return async (dispatch, getState) => {
@@ -10,9 +10,10 @@ export function fetchQuestionsBySurveyId({ projectSymbol, surveyId }) {
       const surveyQnas = projectSurveysById[surveyId].survey.survey_questions;
       const surveyQnasById = keyBy(surveyQnas, "id");
       const surveyQnaIds = surveyQnas.map(qna => qna.id);
-      const surveyMetadata = omit(projectSurveysById[surveyId].survey, [
-        "survey_questions"
-      ]);
+      const surveyMetadata = assignIn(
+        pick(projectSurveysById[surveyId], ["name", "id"]),
+        omit(projectSurveysById[surveyId].survey, ["survey_questions", "id"])
+      );
       dispatch({
         type: types.SURVEY_FETCH_SUCCESS,
         surveyQnasById,
