@@ -6,7 +6,7 @@ const Annotation = db.define("annotation", {
     type: Sequelize.STRING,
     allowNull: false
   },
-  item_id: {
+  survey_question_id: {
     type: Sequelize.STRING,
     allowNull: false
   },
@@ -26,3 +26,4 @@ const Annotation = db.define("annotation", {
 });
 
 module.exports = Annotation;
+
