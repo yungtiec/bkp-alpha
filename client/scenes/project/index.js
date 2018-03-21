@@ -33,8 +33,11 @@ class ProjectIndex extends Component {
     const ThisSurveyCard = SurveyCard.bind(SurveyCard, match.url);
 
     return (
-      <div className="container">
-        <Route path={`${match.url}/survey/:surveyId`} component={Survey} />
+      <div className="project-container">
+        <Route
+          path={`${match.url}/survey/:surveyId`}
+          component={Survey}
+        />
         {!match.isExact && <div>You might also be interested in</div>}
         <ListView
           viewClassName={"row projects-container"}

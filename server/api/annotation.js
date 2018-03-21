@@ -30,7 +30,7 @@ router.post("/store", async (req, res, next) => {
   }
 });
 
-router.get("/annotations", async (req, res, next) => {
+router.get("/survey", async (req, res, next) => {
   try {
     const annotations = await Annotation.findAll({
       where: { uri: req.query.uri }

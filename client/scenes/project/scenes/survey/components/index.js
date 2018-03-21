@@ -1,5 +1,5 @@
-export {default as QnaBox} from './QnaBox'
-export {default as Question} from './Question'
-export {default as Answers} from './Answers'
+export {default as Qna} from './Qna'
 export {default as SurveyHeader} from './SurveyHeader'
+export {default as AnnotationSidebar} from './Annotations/AnnotationSidebar'
+export {default as AnnotationItem} from './Annotations/AnnotationItem'
 

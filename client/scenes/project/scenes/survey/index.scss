@@ -1,6 +1,8 @@
 .project-survey {
+  max-width: 740px;
   margin-top: 50px;
   margin-bottom: 6rem;
+  margin-left: 80px;
 }
 
 .project-survey__header .project-name__box {
@@ -15,7 +17,7 @@
 .project-survey__header .survey-name__box {
   font-weight: 700;
   font-size: 3rem;
-  line-height: 2.8rem;
+  line-height: 3rem;
   text-transform: capitalize;
 }
 

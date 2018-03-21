@@ -9,3 +9,18 @@ body {
 p {
   font-size: 14px;
 }
+
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+  background: #F2F4F8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7c4c4de;
+  -webkit-border-radius: 2px;
+}
+
+::-webkit-scrollbar-corner {
+  background: #F2F4F8;
+}

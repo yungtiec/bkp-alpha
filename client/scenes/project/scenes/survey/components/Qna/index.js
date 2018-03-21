@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
-import { Question, Answers } from "./index";
+import Question from './Question'
+import Answers from './Answers'
 
 class QnaBox extends Component {
   constructor(props) {

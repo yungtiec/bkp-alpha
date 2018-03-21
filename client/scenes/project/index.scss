@@ -1,3 +1,11 @@
+.project-container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .survey-custom {
   margin: 15px auto;
   border: none;
@@ -40,14 +48,14 @@
   display: flex;
   align-items: center;
   font-size: 12px;
-  color:#D2D5EA;
+  color: #D2D5EA;
   cursor: pointer;
   margin-top: 15px;
 }
 
 .survey__more .fa-long-arrow-alt-right {
   margin-left: 5px;
-  color:#D2D5EA;
+  color: #D2D5EA;
 }
 
 .survey__action--upper .fa-star {
@@ -62,8 +70,8 @@
 .survey__header {
   display: flex;
   text-transform: uppercase;
-      margin-left: -35px;
-    border-left: 3px solid #3f82f4;
+  margin-left: -35px;
+  border-left: 3px solid #3f82f4;
 }
 
 .survey__header p {
