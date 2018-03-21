@@ -38,6 +38,7 @@ class ProjectIndex extends Component {
           path={`${match.url}/survey/:surveyId`}
           component={Survey}
         />
+        <div className="surveys-container">
         {!match.isExact && <div>You might also be interested in</div>}
         <ListView
           viewClassName={"row projects-container"}
@@ -46,6 +47,7 @@ class ProjectIndex extends Component {
           rowsById={projectSurveysById}
           renderRow={ThisSurveyCard}
         />
+        </div>
       </div>
     );
   }
