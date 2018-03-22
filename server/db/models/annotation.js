@@ -7,8 +7,11 @@ const Annotation = db.define("annotation", {
     allowNull: false
   },
   survey_question_id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false
+  },
+  survey_answer_id: {
+    type: Sequelize.INTEGER
   },
   quote: {
     type: Sequelize.TEXT,
@@ -23,7 +26,10 @@ const Annotation = db.define("annotation", {
   ranges: {
     type: Sequelize.ARRAY(Sequelize.JSON)
   }
+}, {
+    hierarchy: true
 });
+// Annotation.isHierarchy()
 
 module.exports = Annotation;
 

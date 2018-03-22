@@ -10,7 +10,7 @@ import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { ListView, ListRow } from "../../components";
-import { Events, Link, Element, scrollSpy } from "react-scroll";
+import { Events, Link, Element, scrollSpy, animateScroll as scroll } from "react-scroll";
 import {
   Qna,
   SurveyHeader,
@@ -43,6 +43,10 @@ class Survey extends Component {
       console.log("end", arguments);
     });
     scrollSpy.update();
+  }
+
+  componentDidUpdate() {
+    scroll.scrollToTop()
   }
 
   componentWillUnmount() {
@@ -117,6 +121,7 @@ class Survey extends Component {
           {annotationIds &&
             annotationIds.map(id => (
               <Link
+                activeClass="active"
                 to={`qna-${annotationsById[id].survey_question_id}`}
                 spy={true}
                 smooth={true}

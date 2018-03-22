@@ -1,5 +1,6 @@
-const User = require('./user')
-const Annotation = require('./annotation')
+const User = require("./user");
+const Annotation = require("./annotation");
+const AnnotationThread = require("./annotation-thread");
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -7,6 +8,20 @@ const Annotation = require('./annotation')
  *
  *    BlogPost.belongsTo(User)
  */
+
+// Annotation.belongsToMany(Annotation, {
+//   as: "children",
+//   through: AnnotationThread,
+//   foreignKey: "annotation_id",
+//   targetKey: "id"
+// });
+
+// Annotation.hasOne(Annotation, {
+//   as: "root",
+//   through: AnnotationThread,
+//   foreignKey: "id",
+//   targetKey: "root_annotation_id"
+// });
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -16,5 +31,6 @@ const Annotation = require('./annotation')
  */
 module.exports = {
   User,
-  Annotation
-}
+  Annotation,
+  AnnotationThread
+};
