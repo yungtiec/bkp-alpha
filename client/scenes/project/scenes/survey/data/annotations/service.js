@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function getAnnotationsBySurvey(uri) {
   return axios
-    .get("/api/annotation/survey", {
+    .get("/api/annotation", {
       params: {
         uri
       }

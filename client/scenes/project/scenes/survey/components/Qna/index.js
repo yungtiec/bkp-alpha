@@ -14,7 +14,7 @@ class QnaBox extends Component {
     if (!this.annotation) {
       this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
       this.annotation.annotator("addPlugin", "Store", {
-        prefix: "/api/annotation",
+        prefix: "/api/annotator",
         loadFromSearch: {
           uri: `http://localhost:8080${this.props.match.url}`,
           survey_question_id: this.props.qna.id

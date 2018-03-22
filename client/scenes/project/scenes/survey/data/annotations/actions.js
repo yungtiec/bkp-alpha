@@ -6,6 +6,7 @@ export const fetchAnnotationsBySurvey = uri => {
   return async (dispatch) => {
     try {
       const annotations = await getAnnotationsBySurvey(uri)
+
       const annotationsById = keyBy(annotations, 'id')
       const annotationIds = annotations.map(a => a.id)
       dispatch({
