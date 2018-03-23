@@ -49,6 +49,16 @@
   transition: all 0.2s ease-in-out;
 }
 
+.annotation-sidebar__logo-consensys {
+  margin: 50px auto 20px;
+  width: 100px;
+}
+
+.annotation-sidebar__logo-tbp {
+  width: 120px;
+  margin: 0 auto 40px;
+}
+
 .annotations-header {
   color: white;
   padding: 0px 15px;
@@ -82,6 +92,7 @@
 .annotation-toolbar {
   position: absolute;
   left: -37.5px;
+  top: 0;
   width: 40px;
 }
 

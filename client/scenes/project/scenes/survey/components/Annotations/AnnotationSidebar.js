@@ -44,6 +44,22 @@ export default class AnnotationSidebar extends Component {
 
     return (
       <div className="annotation-sidebar" style={style}>
+        <div className="annotation-sidebar__logo-consensys">
+          <img
+            width="100px"
+            height="auto"
+            className="logo__large"
+            src="/assets/consensys-logo-white-transparent.png"
+          />
+        </div>
+        <div className="annotation-sidebar__logo-tbp">
+          <img
+            width="120px"
+            height="auto"
+            className="logo__large"
+            src="/assets/the-brooklyn-project-logo-white-transparent.png"
+          />
+        </div>
         <div className="annotation-coordinate__container" />
         <div className="annotation-toolbar">
           <button
