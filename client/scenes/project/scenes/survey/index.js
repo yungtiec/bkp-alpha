@@ -155,6 +155,22 @@ class Survey extends Component {
             id="annotation-sidebar"
             className="annotation-contents"
           >
+            <div className="annotation-sidebar__logo-consensys">
+              <img
+                width="100px"
+                height="auto"
+                className="logo__large"
+                src="/assets/consensys-logo-white-transparent.png"
+              />
+            </div>
+            <div className="annotation-sidebar__logo-tbp">
+              <img
+                width="120px"
+                height="auto"
+                className="logo__large"
+                src="/assets/the-brooklyn-project-logo-white-transparent.png"
+              />
+            </div>
             <p className="annotations-header">
               Annotation ({annotationIds.length})
             </p>
