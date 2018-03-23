@@ -1,10 +1,27 @@
-import { cloneDeep, find, orderBy, values } from "lodash";
+import { cloneDeep, find, orderBy, values, isEmpty } from "lodash";
 import * as types from "./actionTypes";
 
 const initialState = {
   annotationsById: {},
   annotationIds: []
 };
+
+function removeEmptyAnnotationFromHierarchy({ state, accessors, parent }) {
+  const rootAnnotation = state.annotationsById[accessors[0]];
+  const anscestors = accessors.slice(1);
+  if (!anscestors.length) {
+    state.annotationsById[accessors[0]].children = state.annotationsById[
+      accessors[0]
+    ].children.filter(child => !isEmpty(child));
+  } else {
+    var current = rootAnnotation;
+    anscestors.filter(a => a).forEach(aid => {
+      current = find(current.children, a => a.id === aid);
+    });
+    current.children = current.children.filter(child => !isEmpty(child));
+  }
+  return state;
+}
 
 function addEmptyAnnotationToHierarchy({ state, accessors, parent }) {
   const rootAnnotation = state.annotationsById[accessors[0]];
@@ -58,6 +75,12 @@ export default function reduce(state = initialState, action = {}) {
         accessors: action.accessors,
         parent: action.parent
       });
+    case types.ANNOTATION_REPLY_CANCEL:
+      return removeEmptyAnnotationFromHierarchy({
+        state: cloneDeep(state),
+        accessors: action.accessors,
+        parent: action.parent
+      });
     case types.ANNOTATION_ADDED:
       return addNewAnnotationSentFromServer({
         state: cloneDeep(state),
@@ -67,7 +90,7 @@ export default function reduce(state = initialState, action = {}) {
       return addNewAnnotationSentFromServer({
         state: cloneDeep(state),
         annotation: action.rootAnnotation
-      })
+      });
     default:
       return state;
   }

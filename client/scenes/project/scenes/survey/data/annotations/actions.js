@@ -29,6 +29,12 @@ export const initiateReplyToAnnotation = ({ accessors, parent }) => ({
   parent
 });
 
+export const cancelReplyToAnnotation = ({ accessors, parent }) => ({
+  type: types.ANNOTATION_REPLY_CANCEL,
+  accessors,
+  parent
+});
+
 export const replyToAnnotation = ({ parentId, comment }) => {
   return async (dispatch, getState) => {
     try {

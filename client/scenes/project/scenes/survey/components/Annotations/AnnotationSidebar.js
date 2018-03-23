@@ -14,7 +14,7 @@ export default class AnnotationSidebar extends Component {
         <div className="annotation-coordinate__container" />
         <div className="annotation-toolbar">
           <button className="annotations-sidebar__size-btn">
-            <i class="fas fa-angle-left" />
+            <i class="fas fa-angle-right" />
           </button>
           <button className="annotations__visibility-btn">
             <i class="fas fa-eye" />

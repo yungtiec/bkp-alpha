@@ -1,10 +1,11 @@
+import "./CommentBox.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 
 export default class CommentBox extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = { value: "" };
     autoBind(this);
   }
 
@@ -22,14 +23,17 @@ export default class CommentBox extends Component {
 
   render() {
     return (
-      <form>
+      <form className="comment-box">
         <textarea
-          className="comment__text-area"
+          className="comment-box__text-area"
           name="textarea"
           value={this.state.value}
           onChange={this.handleChange}
         />
-        <button onClick={this.handleSubmit}>save</button>
+        <div className="comment-box__actions">
+          <button onClick={this.handleSubmit}>save</button>
+          <button onClick={this.props.cancelReplyToThis}>cancel</button>
+        </div>
       </form>
     );
   }

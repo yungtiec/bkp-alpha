@@ -6,7 +6,8 @@ import { cloneDeep, isEmpty } from "lodash";
 import CommentBox from "./CommentBox";
 import {
   replyToAnnotation,
-  initiateReplyToAnnotation
+  initiateReplyToAnnotation,
+  cancelReplyToAnnotation
 } from "../../data/annotations/actions";
 
 class AnnotationItem extends Component {
@@ -24,8 +25,13 @@ class AnnotationItem extends Component {
     this.props.initiateReplyToAnnotation({ accessors, parent });
   }
 
+  cancelReply(accessors, parent) {
+    accessors.push(parent.id);
+    this.props.cancelReplyToAnnotation({ accessors, parent });
+  }
+
   renderMainComment(annotation) {
-    const initReplyToThis = this.initReply.bind(this, [], annotation)
+    const initReplyToThis = this.initReply.bind(this, [], annotation);
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -50,10 +56,12 @@ class AnnotationItem extends Component {
     var accessors = cloneDeep(parentIds);
     const replies = children.map(child => {
       const initReplyToThis = this.initReply.bind(this, accessors, child);
+      const cancelReplyToThis = this.cancelReply.bind(this, accessors, child);
       const reply = isEmpty(child) ? (
         <CommentBox
           parentId={accessors.slice(-1)[0]}
           replyToAnnotation={this.props.replyToAnnotation}
+          cancelReplyToThis={cancelReplyToThis}
         />
       ) : (
         <div className="annotation-item__reply-item">
@@ -110,7 +118,8 @@ const mapState = (state, ownProps) => ({ ...ownProps });
 
 const actions = {
   replyToAnnotation,
-  initiateReplyToAnnotation
+  initiateReplyToAnnotation,
+  cancelReplyToAnnotation
 };
 
 export default connect(mapState, actions)(AnnotationItem);
