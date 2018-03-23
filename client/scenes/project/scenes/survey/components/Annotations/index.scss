@@ -1,3 +1,30 @@
+.annotator-annotation.annotator-item {
+  display: none;
+}
+
+.annotator-listing:after {
+  display: none;
+}
+
+.annotator-listing {
+  border: none;
+}
+
+.annotator-filter,
+.annotator-filter .annotator-filter-navigation button,
+.annotator-editor .annotator-controls {
+  width: 100%;
+}
+
+.annotator-widget .annotator-listing,
+.annotator-widget .annotator-controls,
+.annotator-widget .annotator-controls a {
+  background-image: none;
+  text-shadow: none;
+  box-shadow: none;
+  border-radius: none;
+}
+
 .annotation-sidebar {
   margin: 0;
   padding: 0;
@@ -19,7 +46,7 @@
   color: white;
   padding: 0px 15px;
   padding-top: 10px;
-  width: 410px
+  width: 410px;
 }
 
 .annotation-contents {
@@ -45,7 +72,6 @@
   background: #09263a;
 }
 
-
 .annotation-toolbar {
   position: absolute;
   left: -37.5px;
@@ -64,7 +90,7 @@
 
 .annotation-item {
   background: #0d3048;
-  padding: 5px 15px;
+  padding: 5px 15px 15px;
   margin-bottom: 30px;
 }
 
@@ -86,4 +112,31 @@
 
 .annotation-item__action--bottom .fas {
   margin: 5px;
+}
+
+.annotation-item__reply-thread {
+  display: flex;
+}
+
+.annotation-item__reply-contents {
+  width: 100%;
+}
+
+.annotation-item__reply-edge {
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-item__reply-edge .fa-caret-down {
+  height: 24px;
+  margin: 0 8px;
+}
+
+.annotation-item__thread-line {
+  border-right: 1px dashed #dbdbdb;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  position: relative;
+  right: 12px;
 }

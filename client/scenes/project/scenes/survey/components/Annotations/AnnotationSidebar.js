@@ -20,9 +20,7 @@ export default class AnnotationSidebar extends Component {
             <i class="fas fa-eye" />
           </button>
         </div>
-        <div className="annotation-contents">
-          {this.props.children}
-        </div>
+        {this.props.children}
       </div>
     );
   }

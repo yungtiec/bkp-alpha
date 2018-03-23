@@ -4,13 +4,25 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { fetchQuestionsBySurveyId } from "./data/actions";
-import { fetchAnnotationsBySurvey } from "./data/annotations/actions";
+import {
+  fetchAnnotationsBySurvey,
+  replyToAnnotation,
+  initiateReplyToAnnotation,
+  addNewAnnotationSentFromServer
+} from "./data/annotations/actions";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
+import { findFirstAnnotationInQna } from "./utils";
 import { ListView, ListRow } from "../../components";
-import { Events, Link, Element, scrollSpy, animateScroll as scroll } from "react-scroll";
+import {
+  Events,
+  Link,
+  Element,
+  scrollSpy,
+  animateScroll as scroll
+} from "react-scroll";
 import {
   Qna,
   SurveyHeader,
@@ -20,11 +32,15 @@ import {
   Answers
 } from "./components";
 import autoBind from "react-autobind";
+import socket from "../../../../socket";
 
 class Survey extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    socket.on("annotationAdded", newAnnotation => {
+      this.props.addNewAnnotationSentFromServer(newAnnotation);
+    });
   }
 
   componentDidMount() {
@@ -35,18 +51,22 @@ class Survey extends Component {
     this.props.fetchAnnotationsBySurvey(
       `http://localhost:8080${this.props.match.url}`
     );
-    Events.scrollEvent.register("begin", function() {
-      console.log("begin", arguments);
-    });
-
-    Events.scrollEvent.register("end", function() {
-      console.log("end", arguments);
-    });
+    Events.scrollEvent.register("begin", () => {});
+    Events.scrollEvent.register("end", () => {});
     scrollSpy.update();
   }
 
-  componentDidUpdate() {
-    scroll.scrollToTop()
+  componentDidUpdate(prevProps) {
+    const prevProjectSymbol = prevProps.match.url.split("/")[2];
+    const nextProjectSymbol = this.props.match.url.split("/")[2];
+    const prevSurveyId = prevProps.match.params.surveyId;
+    const nextSurveyId = this.props.match.params.surveyId;
+    if (
+      prevProjectSymbol !== nextProjectSymbol ||
+      prevSurveyId !== nextSurveyId
+    ) {
+      scroll.scrollToTop();
+    }
   }
 
   componentWillUnmount() {
@@ -83,7 +103,8 @@ class Survey extends Component {
       !this.props.surveyMetadata.id || // on init
       (prevProjectSymbol !== nextProjectSymbol ||
         prevSurveyId !== nextSurveyId) || // project_survey changed
-      nextProps.annotationIds.toString() !== this.props.annotationIds.toString() // annotation changed
+      JSON.stringify(nextProps.annotationsById) !==
+        JSON.stringify(this.props.annotationsById) // annotation changed
     ) {
       return true;
     } else {
@@ -98,7 +119,9 @@ class Survey extends Component {
       surveyMetadata,
       projectMetadata,
       annotationsById,
-      annotationIds
+      annotationIds,
+      replyToAnnotation,
+      initiateReplyToAnnotation
     } = this.props;
     if (!surveyQnaIds.length) return "loading";
     return (
@@ -106,33 +129,57 @@ class Survey extends Component {
         <div className="project-survey">
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => (
-            <Element name={`qna-${id}`}>
-              <Qna key={`qna-${id}`} qna={surveyQnasById[id]}>
-                <Question question={surveyQnasById[id].question} />
-                <Answers answers={surveyQnasById[id].survey_answers} />
-              </Qna>
-            </Element>
+            <Link
+              activeClass="active"
+              containerId="annotation-sidebar"
+              to={`annotation-${findFirstAnnotationInQna({
+                annotationIds,
+                annotationsById,
+                survey_question_id: id
+              })}`}
+              spy={true}
+              smooth={true}
+              duration={500}
+            >
+              <Element name={`qna-${id}`}>
+                <Qna key={`qna-${id}`} qna={surveyQnasById[id]}>
+                  <Question question={surveyQnasById[id].question} />
+                  <Answers answers={surveyQnasById[id].survey_answers} />
+                </Qna>
+              </Element>
+            </Link>
           ))}
         </div>
+
         <AnnotationSidebar>
-          <p className="annotations-header">
-            Annotation ({annotationIds.length})
-          </p>
-          {annotationIds &&
-            annotationIds.map(id => (
-              <Link
-                activeClass="active"
-                to={`qna-${annotationsById[id].survey_question_id}`}
-                spy={true}
-                smooth={true}
-                duration={500}
-              >
-                <AnnotationItem
-                  key={`annotation-${id}`}
-                  annotation={annotationsById[id]}
-                />
-              </Link>
-            ))}
+          <Element
+            name="annotation-sidebar"
+            id="annotation-sidebar"
+            className="annotation-contents"
+          >
+            <p className="annotations-header">
+              Annotation ({annotationIds.length})
+            </p>
+            {annotationIds &&
+              annotationIds.map(id => (
+                <Link
+                  activeClass="active"
+                  to={`qna-${annotationsById[id].survey_question_id}`}
+                  spy={true}
+                  smooth={true}
+                  duration={500}
+                >
+                  <Element name={`annotation-${id}`}>
+                    <AnnotationItem
+                      key={`annotation-${id}`}
+                      annotation={annotationsById[id]}
+                      replyToAnnotation={replyToAnnotation}
+                      initiateReplyToAnnotation={initiateReplyToAnnotation}
+                    />
+                  </Element>
+                </Link>
+              ))}
+          </Element>
         </AnnotationSidebar>
       </div>
     );
@@ -154,7 +201,10 @@ const mapState = state => {
 
 const actions = {
   fetchQuestionsBySurveyId,
-  fetchAnnotationsBySurvey
+  fetchAnnotationsBySurvey,
+  replyToAnnotation,
+  initiateReplyToAnnotation,
+  addNewAnnotationSentFromServer
 };
 
 export default withRouter(connect(mapState, actions)(Survey));
