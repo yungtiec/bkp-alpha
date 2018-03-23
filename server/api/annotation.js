@@ -21,8 +21,10 @@ router.get("/", async (req, res, next) => {
 
 router.post("/reply", async (req, res, next) => {
   try {
+    var ancestry;
+    const parent = await Annotation.findById(Number(req.body.parentId));
     const child = _.assignIn(
-      _.omit(req.body.parent, [
+      _.omit(parent.toJSON(), [
         "id",
         "createdAt",
         "updatedAt",
@@ -30,11 +32,21 @@ router.post("/reply", async (req, res, next) => {
         "parentId",
         "text"
       ]),
-      {text: req.body.comment}
+      { text: req.body.comment }
     );
-    var reply = await Annotation.create(child)
-    reply = await reply.setParent(req.body.parent.id);
-    res.send(reply)
+    const ancestors = await parent.getAncestors({raw: true});
+    var rootAncestor = _.orderBy(ancestors, ['hierarchyLevel'], ['asc'])[0]
+    var reply = await Annotation.create(child);
+    reply = await reply.setParent(parent.toJSON().id);
+    ancestry = await Annotation.findOne({
+      where: { id: rootAncestor ? rootAncestor.id : parent.id },
+      include: {
+        model: Annotation,
+        as: "descendents",
+        hierarchy: true
+      }
+    });
+    res.send(ancestry);
   } catch (err) {
     next(err);
   }

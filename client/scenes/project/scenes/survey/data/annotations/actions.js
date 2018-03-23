@@ -21,19 +21,25 @@ export const fetchAnnotationsBySurvey = uri => {
 export const addNewAnnotationSentFromServer = annotation => ({
   type: types.ANNOTATION_ADDED,
   annotation
-})
+});
 
-export const initiateReplyToAnnotation = ({accessors, parent}) => ({
+export const initiateReplyToAnnotation = ({ accessors, parent }) => ({
   type: types.ANNOTATION_REPLY_INIT,
   accessors,
   parent
-})
+});
 
-export const replyToAnnotation = ({ parent, comment }) => {
-  return async dispatch => {
+export const replyToAnnotation = ({ parentId, comment }) => {
+  return async (dispatch, getState) => {
     try {
-      const reply = await postReplyToAnnotation({ parent, comment });
-      console.log(reply);
+      const rootAnnotation = await postReplyToAnnotation({
+        parentId,
+        comment
+      });
+      dispatch({
+        type: types.ANNOTATION_UPDATED,
+        rootAnnotation
+      })
     } catch (err) {
       console.log(err);
     }

@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import { connect } from "react-redux";
 import moment from "moment";
 import { cloneDeep, isEmpty } from "lodash";
+import CommentBox from "./CommentBox";
+import {
+  replyToAnnotation,
+  initiateReplyToAnnotation
+} from "../../data/annotations/actions";
 
-export default class AnnotationItem extends Component {
+class AnnotationItem extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -14,12 +20,12 @@ export default class AnnotationItem extends Component {
   }
 
   initReply(accessors, parent) {
-    accessors.push(parent.id)
-    this.props.initiateReplyToAnnotation({accessors, parent})
+    accessors.push(parent.id);
+    this.props.initiateReplyToAnnotation({ accessors, parent });
   }
 
   renderMainComment(annotation) {
-    const replyToThis = this.reply.bind(this, annotation);
+    const initReplyToThis = this.initReply.bind(this, [], annotation)
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -29,20 +35,27 @@ export default class AnnotationItem extends Component {
         <p className="annotation-item__text">{annotation.quote}</p>
         <p className="annotation-item__note">{annotation.text}</p>
         <div className="annotation-item__action--bottom">
-          <i className="fas fa-reply" onClick={replyToThis} />
-          <i className="fas fa-star" />
+          <i className="fas fa-reply" onClick={initReplyToThis} />
+          <span>
+            <i className="fas fa-thumbs-up" />
+            {annotation.upvotes}
+          </span>
         </div>
       </div>
     );
   }
 
   renderThread(children, parentIds) {
-    if (!children) return ''
-    var accessors = cloneDeep(parentIds)
+    if (!children) return "";
+    var accessors = cloneDeep(parentIds);
     const replies = children.map(child => {
-      const replyToThis = this.reply.bind(this, child);
       const initReplyToThis = this.initReply.bind(this, accessors, child);
-      const reply = isEmpty(child) ? 'comment box' : (
+      const reply = isEmpty(child) ? (
+        <CommentBox
+          parentId={accessors.slice(-1)[0]}
+          replyToAnnotation={this.props.replyToAnnotation}
+        />
+      ) : (
         <div className="annotation-item__reply-item">
           <div className="annotation-item__header">
             <p>tammy</p>
@@ -51,15 +64,18 @@ export default class AnnotationItem extends Component {
           <p className="annotation-item__note">{child.text}</p>
           <div className="annotation-item__action--bottom">
             <i className="fas fa-reply" onClick={initReplyToThis} />
-            <i className="fas fa-star" />
+            <span>
+              <i className="fas fa-thumbs-up" />
+              {child.upvotes}
+            </span>
           </div>
         </div>
       );
 
       let subReplies;
-      let subAccessor = cloneDeep(accessors)
+      let subAccessor = cloneDeep(accessors);
       if (child.children && child.children.length) {
-        subAccessor.push(child.id)
+        subAccessor.push(child.id);
         subReplies = this.renderThread(child.children, subAccessor);
       }
 
@@ -89,3 +105,12 @@ export default class AnnotationItem extends Component {
     );
   }
 }
+
+const mapState = (state, ownProps) => ({ ...ownProps });
+
+const actions = {
+  replyToAnnotation,
+  initiateReplyToAnnotation
+};
+
+export default connect(mapState, actions)(AnnotationItem);

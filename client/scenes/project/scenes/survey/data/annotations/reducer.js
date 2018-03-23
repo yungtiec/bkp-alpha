@@ -63,6 +63,11 @@ export default function reduce(state = initialState, action = {}) {
         state: cloneDeep(state),
         annotation: action.annotation
       });
+    case types.ANNOTATION_UPDATED:
+      return addNewAnnotationSentFromServer({
+        state: cloneDeep(state),
+        annotation: action.rootAnnotation
+      })
     default:
       return state;
   }

@@ -6,8 +6,6 @@ import PropTypes from "prop-types";
 import { fetchQuestionsBySurveyId } from "./data/actions";
 import {
   fetchAnnotationsBySurvey,
-  replyToAnnotation,
-  initiateReplyToAnnotation,
   addNewAnnotationSentFromServer
 } from "./data/annotations/actions";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
@@ -173,8 +171,6 @@ class Survey extends Component {
                     <AnnotationItem
                       key={`annotation-${id}`}
                       annotation={annotationsById[id]}
-                      replyToAnnotation={replyToAnnotation}
-                      initiateReplyToAnnotation={initiateReplyToAnnotation}
                     />
                   </Element>
                 </Link>
@@ -202,8 +198,6 @@ const mapState = state => {
 const actions = {
   fetchQuestionsBySurveyId,
   fetchAnnotationsBySurvey,
-  replyToAnnotation,
-  initiateReplyToAnnotation,
   addNewAnnotationSentFromServer
 };
 
