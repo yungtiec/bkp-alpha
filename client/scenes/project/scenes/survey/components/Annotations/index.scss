@@ -1,3 +1,4 @@
+// remove annotatorjs tooltip on hober
 .annotator-annotation.annotator-item {
   display: none;
 }
@@ -25,6 +26,12 @@
   border-radius: none;
 }
 
+// hide annotatorjs highlights
+.annotator-hl.hidden {
+  background: transparent;
+}
+
+// sidebar
 .annotation-sidebar {
   margin: 0;
   padding: 0;
@@ -37,9 +44,9 @@
   left: 100%;
   z-index: 2;
   max-width: 410px;
-  margin-left: -410px;
   background: #09263a;
   color: #9ca6af;
+  transition: all 0.2s ease-in-out;
 }
 
 .annotations-header {

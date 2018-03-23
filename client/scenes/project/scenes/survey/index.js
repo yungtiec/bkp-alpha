@@ -137,7 +137,7 @@ class Survey extends Component {
               })}`}
               spy={true}
               smooth={true}
-              duration={500}
+              duration={300}
             >
               <Element name={`qna-${id}`}>
                 <Qna key={`qna-${id}`} qna={surveyQnasById[id]}>
@@ -165,7 +165,7 @@ class Survey extends Component {
                   to={`qna-${annotationsById[id].survey_question_id}`}
                   spy={true}
                   smooth={true}
-                  duration={500}
+                  duration={300}
                 >
                   <Element name={`annotation-${id}`}>
                     <AnnotationItem
