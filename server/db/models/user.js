@@ -38,6 +38,24 @@ User.prototype.correctPassword = function(candidatePwd) {
   return User.encryptPassword(candidatePwd, this.salt()) === this.password();
 };
 
+User.prototype.hasPermission = async function(permissionName) {
+  const userRoles = await this.getRoles({
+    include: [
+      {
+        model: db.model('permission')
+      }
+    ]
+  });
+  return userRoles
+    .map(role =>
+      role.permissions.reduce(
+        (bool, permission) => permission.name === permissionName || bool,
+        false
+      )
+    )
+    .reduce((bool, roleHasPermission) => roleHasPermission || bool, false);
+};
+
 /**
  * classMethods
  */
