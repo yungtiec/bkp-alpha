@@ -1,20 +1,50 @@
 const User = require("./user");
 const Annotation = require("./annotation");
+const Permission = require("./permission");
+const Role = require("./role");
+const Project = require('./project')
 
+/*=======================================================
+=            role based authorization system            =
+=======================================================*/
 /**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
+ * https://stackoverflow.com/questions/190257/best-role-based-access-control-rbac-database-model
  */
 
-/**
- * We'll export all of our models here, so that any time a module needs a model,
- * we can just require it from 'db/models'
- * for example, we can say: const {User} = require('../db/models')
- * instead of: const User = require('../db/models/user')
- */
+User.belongsToMany(Role, {
+  through: "user_role",
+  foreignKey: "user_id"
+});
+Role.belongsToMany(User, {
+  through: "user_role",
+  foreignKey: "role_id"
+});
+
+Role.belongsToMany(Permission, {
+  through: "role_permission",
+  foreignKey: "role_id"
+});
+Permission.belongsToMany(Role, {
+  through: "role_permission",
+  foreignKey: "permission_id"
+});
+
+/*=====  End of role based authorization system  ======*/
+
+User.belongsToMany(Project, {
+  through: "user_project",
+  foreignKey: "user_id"
+});
+Project.belongsToMany(User, {
+  through: "user_project",
+  foreignKey: "project_id"
+});
+
+
 module.exports = {
   User,
-  Annotation
+  Annotation,
+  Permission,
+  Role,
+  Project
 };
