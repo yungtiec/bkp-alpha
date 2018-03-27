@@ -56,10 +56,10 @@ export const replyToAnnotation = ({ parentId, comment }) => {
   };
 };
 
-export const upvoteAnnotation = annotationId => {
+export const upvoteAnnotation = ({annotationId, hasUpvoted}) => {
   return async dispatch => {
     try {
-      const rootAnnotation = await postUpvoteToAnnotation(annotationId);
+      const rootAnnotation = await postUpvoteToAnnotation({annotationId, hasUpvoted});
       dispatch({
         type: types.ANNOTATION_UPVOTED,
         rootAnnotation

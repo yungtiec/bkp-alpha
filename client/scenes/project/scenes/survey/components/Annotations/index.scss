@@ -137,6 +137,10 @@
   cursor: pointer;
 }
 
+.annotation-item__action--bottom .upvoted {
+  color: #0057ff;
+}
+
 .annotation-item__reply-thread {
   display: flex;
 }

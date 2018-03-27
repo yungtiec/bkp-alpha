@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import moment from "moment";
-import { cloneDeep, isEmpty } from "lodash";
+import { cloneDeep, isEmpty, find } from "lodash";
 import CommentBox from "./CommentBox";
 import {
   replyToAnnotation,
@@ -33,7 +33,14 @@ class AnnotationItem extends Component {
 
   renderMainComment(annotation) {
     const initReplyToThis = this.initReply.bind(this, [], annotation);
-    const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, annotation.id)
+    const hasUpvoted = find(
+      annotation.upvotesFrom,
+      user => user.email === this.props.userEmail
+    );
+    const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, {
+      annotationId: annotation.id,
+      hasUpvoted
+    });
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -44,8 +51,8 @@ class AnnotationItem extends Component {
         <p className="annotation-item__note">{annotation.text}</p>
         <div className="annotation-item__action--bottom">
           <i className="fas fa-reply" onClick={initReplyToThis} />
-          <span>
-            <i className="fas fa-thumbs-up" onClick={upvoteAnnotation}/>
+          <span className={`${hasUpvoted ? "upvoted" : ""}`}>
+            <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
             {annotation.upvotesFrom.length}
           </span>
         </div>
@@ -59,7 +66,14 @@ class AnnotationItem extends Component {
     const replies = children.map(child => {
       const initReplyToThis = this.initReply.bind(this, accessors, child);
       const cancelReplyToThis = this.cancelReply.bind(this, accessors, child);
-      const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, child.id)
+      const hasUpvoted = find(
+        child.upvotesFrom,
+        user => user.email === this.props.userEmail
+      );
+      const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, {
+        annotationId: child.id,
+        hasUpvoted
+      });
       const reply = isEmpty(child) ? (
         <CommentBox
           parentId={accessors.slice(-1)[0]}
@@ -75,8 +89,8 @@ class AnnotationItem extends Component {
           <p className="annotation-item__note">{child.text}</p>
           <div className="annotation-item__action--bottom">
             <i className="fas fa-reply" onClick={initReplyToThis} />
-            <span>
-              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation}/>
+            <span className={`${hasUpvoted ? "upvoted" : ""}`}>
+              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
               {child.upvotesFrom.length}
             </span>
           </div>
@@ -117,7 +131,10 @@ class AnnotationItem extends Component {
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps });
+const mapState = (state, ownProps) => ({
+  userEmail: state.data.user.email,
+  ...ownProps
+});
 
 const actions = {
   replyToAnnotation,
