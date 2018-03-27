@@ -87,6 +87,7 @@ export default function reduce(state = initialState, action = {}) {
         annotation: action.annotation
       });
     case types.ANNOTATION_UPDATED:
+    case types.ANNOTATION_UPVOTED:
       return addNewAnnotationSentFromServer({
         state: cloneDeep(state),
         annotation: action.rootAnnotation

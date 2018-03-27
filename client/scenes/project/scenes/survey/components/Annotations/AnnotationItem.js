@@ -7,7 +7,8 @@ import CommentBox from "./CommentBox";
 import {
   replyToAnnotation,
   initiateReplyToAnnotation,
-  cancelReplyToAnnotation
+  cancelReplyToAnnotation,
+  upvoteAnnotation
 } from "../../data/annotations/actions";
 
 class AnnotationItem extends Component {
@@ -32,6 +33,7 @@ class AnnotationItem extends Component {
 
   renderMainComment(annotation) {
     const initReplyToThis = this.initReply.bind(this, [], annotation);
+    const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, annotation.id)
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -43,8 +45,8 @@ class AnnotationItem extends Component {
         <div className="annotation-item__action--bottom">
           <i className="fas fa-reply" onClick={initReplyToThis} />
           <span>
-            <i className="fas fa-thumbs-up" />
-            {annotation.upvotes}
+            <i className="fas fa-thumbs-up" onClick={upvoteAnnotation}/>
+            {annotation.upvotesFrom.length}
           </span>
         </div>
       </div>
@@ -57,6 +59,7 @@ class AnnotationItem extends Component {
     const replies = children.map(child => {
       const initReplyToThis = this.initReply.bind(this, accessors, child);
       const cancelReplyToThis = this.cancelReply.bind(this, accessors, child);
+      const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, child.id)
       const reply = isEmpty(child) ? (
         <CommentBox
           parentId={accessors.slice(-1)[0]}
@@ -73,8 +76,8 @@ class AnnotationItem extends Component {
           <div className="annotation-item__action--bottom">
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span>
-              <i className="fas fa-thumbs-up" />
-              {child.upvotes}
+              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation}/>
+              {child.upvotesFrom.length}
             </span>
           </div>
         </div>
@@ -119,7 +122,8 @@ const mapState = (state, ownProps) => ({ ...ownProps });
 const actions = {
   replyToAnnotation,
   initiateReplyToAnnotation,
-  cancelReplyToAnnotation
+  cancelReplyToAnnotation,
+  upvoteAnnotation
 };
 
 export default connect(mapState, actions)(AnnotationItem);

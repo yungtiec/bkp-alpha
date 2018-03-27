@@ -2,7 +2,7 @@ const User = require("./user");
 const Annotation = require("./annotation");
 const Permission = require("./permission");
 const Role = require("./role");
-const Project = require('./project')
+const Project = require("./project");
 
 /*=======================================================
 =            role based authorization system            =
@@ -31,6 +31,10 @@ Permission.belongsToMany(Role, {
 
 /*=====  End of role based authorization system  ======*/
 
+/*=============================================
+=            User and Organization            =
+=============================================*/
+
 User.belongsToMany(Project, {
   through: "user_project",
   foreignKey: "user_id"
@@ -40,6 +44,24 @@ Project.belongsToMany(User, {
   foreignKey: "project_id"
 });
 
+/*=====  End of User and Organization  ======*/
+
+/*==============================
+=            Upvote            =
+==============================*/
+
+User.belongsToMany(Annotation, {
+  as: "upvoted",
+  through: "annotation_upvote",
+  foreignKey: "user_id"
+});
+Annotation.belongsToMany(User, {
+  as: "upvotesFrom",
+  through: "annotation_upvote",
+  foreignKey: "annotation_id"
+});
+
+/*=====  End of Upvote  ======*/
 
 module.exports = {
   User,

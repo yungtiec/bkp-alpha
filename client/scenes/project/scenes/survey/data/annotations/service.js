@@ -15,3 +15,10 @@ export function postReplyToAnnotation({ parentId, comment }) {
     .post("/api/annotation/reply", { parentId, comment })
     .then(res => res.data);
 }
+
+
+export function postUpvoteToAnnotation(annotationId) {
+  return axios
+    .post("/api/annotation/upvote", { annotationId })
+    .then(res => res.data)
+}

@@ -1,4 +1,8 @@
-import { getAnnotationsBySurvey, postReplyToAnnotation } from "./service";
+import {
+  getAnnotationsBySurvey,
+  postReplyToAnnotation,
+  postUpvoteToAnnotation
+} from "./service";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick } from "lodash";
 
@@ -45,9 +49,23 @@ export const replyToAnnotation = ({ parentId, comment }) => {
       dispatch({
         type: types.ANNOTATION_UPDATED,
         rootAnnotation
-      })
+      });
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const upvoteAnnotation = annotationId => {
+  return async dispatch => {
+    try {
+      const rootAnnotation = await postUpvoteToAnnotation(annotationId);
+      dispatch({
+        type: types.ANNOTATION_UPVOTED,
+        rootAnnotation
+      })
+    } catch (err) {
+      console.log(Err);
     }
   };
 };

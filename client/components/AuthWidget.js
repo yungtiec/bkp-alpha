@@ -22,7 +22,7 @@ class AuthWidget extends Component {
   }
 
   render() {
-    const { isLoggedIn, name } = this.props;
+    const { isLoggedIn, name, logout } = this.props;
     if (isLoggedIn)
       return (
         <div className="auth-widget">
@@ -37,7 +37,7 @@ class AuthWidget extends Component {
           </div>
           {this.state.dropdown && (
             <div className="auth-widget__dropdown">
-              <div className="auth-widget__dropdown-item">logout</div>
+              <div className="auth-widget__dropdown-item" onClick={logout}>logout</div>
             </div>
           )}
         </div>
