@@ -119,7 +119,8 @@ class Survey extends Component {
       annotationsById,
       annotationIds,
       replyToAnnotation,
-      initiateReplyToAnnotation
+      initiateReplyToAnnotation,
+      isLoggedIn
     } = this.props;
     if (!surveyQnaIds.length) return "loading";
     return (
@@ -140,7 +141,11 @@ class Survey extends Component {
               duration={300}
             >
               <Element name={`qna-${id}`}>
-                <Qna key={`qna-${id}`} qna={surveyQnasById[id]}>
+                <Qna
+                  key={`qna-${id}`}
+                  qna={surveyQnasById[id]}
+                  isLoggedIn={isLoggedIn}
+                >
                   <Question question={surveyQnasById[id].question} />
                   <Answers answers={surveyQnasById[id].survey_answers} />
                 </Qna>
@@ -202,6 +207,7 @@ const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const { annotationsById, annotationIds } = getAllAnnotations(state);
   return {
+    isLoggedIn: !!state.data.user.id,
     surveyQnasById,
     surveyQnaIds,
     surveyMetadata: getSelectedSurvey(state),

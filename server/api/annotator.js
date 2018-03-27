@@ -10,29 +10,32 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/store", async (req, res, next) => {
-  try {
-    const {
-      ranges,
-      quote,
-      text,
-      uri,
-      annotator_schema_version,
-      survey_question_id
-    } = req.body;
-    const newAnnotation = await Annotation.create({
-      quote,
-      uri,
-      survey_question_id,
-      quote,
-      text,
-      ranges,
-      annotator_schema_version
-    });
-    var io = req.app.get("io");
-    io.sockets.emit("annotationAdded", newAnnotation);
-    res.send(newAnnotation);
-  } catch (err) {
-    next(err);
+  if (!req.user) res.sendStatus(401);
+  else {
+    try {
+      const {
+        ranges,
+        quote,
+        text,
+        uri,
+        annotator_schema_version,
+        survey_question_id
+      } = req.body;
+      const newAnnotation = await Annotation.create({
+        quote,
+        uri,
+        survey_question_id,
+        quote,
+        text,
+        ranges,
+        annotator_schema_version
+      });
+      var io = req.app.get("io");
+      io.sockets.emit("annotationAdded", newAnnotation);
+      res.send(newAnnotation);
+    } catch (err) {
+      next(err);
+    }
   }
 });
 

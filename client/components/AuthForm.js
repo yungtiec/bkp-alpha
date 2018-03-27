@@ -81,14 +81,8 @@ const AuthForm = props => {
         <div className="auth-form__form-footer">
           <div className="auth-form__form-footer__left">
             <nav>
-              <a href="https://penmon.com/about" target="_blank">
+              <a href="https://thebrooklynproject.consensys.net/" target="_blank">
                 <span>About</span>
-              </a>
-              <a href="https://penmon.com/products" target="_blank">
-                <span>Products</span>
-              </a>
-              <a href="https://penmon.com/services" target="_blank">
-                <span>Services</span>
               </a>
             </nav>
           </div>
