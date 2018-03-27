@@ -1,7 +1,7 @@
 import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { fetchQuestionsBySurveyId } from "./data/actions";
 import {
@@ -13,10 +13,9 @@ import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { findFirstAnnotationInQna } from "./utils";
-import { ListView, ListRow } from "../../components";
 import {
   Events,
-  Link,
+  Link as ScrollLink,
   Element,
   scrollSpy,
   animateScroll as scroll
@@ -98,6 +97,7 @@ class Survey extends Component {
     const prevSurveyId = this.props.match.params.surveyId;
     const nextSurveyId = nextProps.match.params.surveyId;
     if (
+      this.props.isLoggedIn !== nextProps.isLoggedIn || // login event
       !this.props.surveyMetadata.id || // on init
       (prevProjectSymbol !== nextProjectSymbol ||
         prevSurveyId !== nextSurveyId) || // project_survey changed
@@ -122,13 +122,14 @@ class Survey extends Component {
       initiateReplyToAnnotation,
       isLoggedIn
     } = this.props;
+
     if (!surveyQnaIds.length) return "loading";
     return (
       <div>
         <div className="project-survey">
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => (
-            <Link
+            <ScrollLink
               activeClass="active"
               containerId="annotation-sidebar"
               to={`annotation-${findFirstAnnotationInQna({
@@ -150,7 +151,7 @@ class Survey extends Component {
                   <Answers answers={surveyQnasById[id].survey_answers} />
                 </Qna>
               </Element>
-            </Link>
+            </ScrollLink>
           ))}
         </div>
 
@@ -179,9 +180,21 @@ class Survey extends Component {
             <p className="annotations-header">
               Annotation ({annotationIds.length})
             </p>
+            {!isLoggedIn && (
+              <div className="annotation-item">
+                <div className="annotation-item__main">
+                  <div className="annotation-item__header">
+                    <p>
+                      <Link to="/login">Login</Link> or{" "}
+                      <Link to="/signup">signup</Link> to create an annotation
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             {annotationIds &&
               annotationIds.map(id => (
-                <Link
+                <ScrollLink
                   activeClass="active"
                   to={`qna-${annotationsById[id].survey_question_id}`}
                   spy={true}
@@ -194,7 +207,7 @@ class Survey extends Component {
                       annotation={annotationsById[id]}
                     />
                   </Element>
-                </Link>
+                </ScrollLink>
               ))}
           </Element>
         </AnnotationSidebar>

@@ -26,6 +26,12 @@ const User = db.define("user", {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  first_name: {
+    type: Sequelize.STRING
+  },
+  last_name: {
+    type: Sequelize.STRING
   }
 });
 
@@ -42,7 +48,7 @@ User.prototype.hasPermission = async function(permissionName) {
   const userRoles = await this.getRoles({
     include: [
       {
-        model: db.model('permission')
+        model: db.model("permission")
       }
     ]
   });

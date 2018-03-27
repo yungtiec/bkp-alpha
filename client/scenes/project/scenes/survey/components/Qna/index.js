@@ -32,20 +32,21 @@ class QnaBox extends Component {
         }
       });
     }
+  }
 
+  componentDidUpdate() {
     /**
      * guest user cannot annotate
      * let's hide the annotatorjs widget
      */
-    $(".annotator-adder button").click(function(event) {
-      if (!isLoggedIn) event.stopPropagation();
-    });
-    if (!isLoggedIn) {
+    if (!this.props.isLoggedIn) {
       $(".annotator-adder").css("opacity", 0);
       $(".annotator-adder button").css("cursor", "text");
+      $(".annotator-adder").css("height", "0px");
     } else {
       $(".annotator-adder").css("opacity", 1);
       $(".annotator-adder").css("cursor", "pointer");
+      $(".annotator-adder").css("height", "inherit");
     }
   }
 

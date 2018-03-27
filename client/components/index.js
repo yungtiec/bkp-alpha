@@ -4,10 +4,7 @@
  * having to figure out which file they belong to!
  */
 export {default as Navbar} from './Navbar'
-export {default as TestArticle} from './TestArticle'
-export {default as TestArticle2} from './TestArticle2'
-export {default as Test} from './Test'
-export {default as UserHome} from './UserHome'
 export {Login, Signup} from './AuthForm'
 export {default as ListView} from './ListView'
 export {default as ListRow} from './ListRow'
+export {default as AuthWidget} from './AuthWidget'

@@ -1,6 +1,7 @@
 import "./index.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import { AuthWidget } from "../../../../../../components";
 
 export default class AnnotationSidebar extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ export default class AnnotationSidebar extends Component {
       <div className="annotation-sidebar" style={style}>
         <div className="annotation-coordinate__container" />
         <div className="annotation-toolbar">
+          <AuthWidget />
           <button
             className="annotations-sidebar__size-btn"
             onClick={this.toggleSidebar}
