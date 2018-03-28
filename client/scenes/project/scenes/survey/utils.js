@@ -9,6 +9,17 @@ export const findFirstAnnotationInQna = ({
   const firstAnnotation = find(
     annotationIds.map(aid => annotationsById[aid]),
     annotation => annotation.survey_question_id === survey_question_id
-  )
-  return firstAnnotation ? firstAnnotation.id : ''
+  );
+  return firstAnnotation ? firstAnnotation.id : "";
+};
+
+export const findAnnotationsInQna = ({
+  annotationIds,
+  annotationsById,
+  survey_question_id
+}) => {
+  if (!annotationIds.length) return;
+  return annotationIds
+    .map(aid => annotationsById[aid])
+    .filter(annotation => annotation.survey_question_id === survey_question_id);
 };
