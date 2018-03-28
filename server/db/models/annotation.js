@@ -48,6 +48,11 @@ Annotation.getAnnotationsFromUrl = function(uri) {
         attributes: ["first_name", "last_name", "email"]
       },
       {
+        model: db.model("user"),
+        as: 'owner',
+        attributes: ["first_name", "last_name", "email"]
+      },
+      {
         model: Annotation,
         include: {
           model: db.model('user'),

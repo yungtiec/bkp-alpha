@@ -4,9 +4,9 @@ const Permission = require("./permission");
 const Role = require("./role");
 const Project = require("./project");
 
-/*=======================================================
-=            role based authorization system            =
-=======================================================*/
+/*=============================================
+=            role based authorization         =
+==============================================*/
 /**
  * https://stackoverflow.com/questions/190257/best-role-based-access-control-rbac-database-model
  */
@@ -29,7 +29,7 @@ Permission.belongsToMany(Role, {
   foreignKey: "permission_id"
 });
 
-/*=====  End of role based authorization system  ======*/
+/*=====  End of role based authorization  ===*/
 
 /*=============================================
 =            User and Organization            =
@@ -46,9 +46,9 @@ Project.belongsToMany(User, {
 
 /*=====  End of User and Organization  ======*/
 
-/*==============================
-=            Upvote            =
-==============================*/
+/*=============================================
+=            User and Annotation              =
+==============================================*/
 
 User.belongsToMany(Annotation, {
   as: "upvoted",
@@ -61,7 +61,10 @@ Annotation.belongsToMany(User, {
   foreignKey: "annotation_id"
 });
 
-/*=====  End of Upvote  ======*/
+User.hasMany(Annotation, { foreignKey: "owner_id" });
+Annotation.belongsTo(User, { foreignKey: "owner_id", as: "owner" });
+
+/*=====  End of User and Annotation  ========*/
 
 module.exports = {
   User,

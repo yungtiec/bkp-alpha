@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { Annotation } = require("../db/models");
+const { assignIn, pick } = require("lodash");
 module.exports = router;
 
 router.get("/", (req, res, next) => {
@@ -30,8 +31,15 @@ router.post("/store", async (req, res, next) => {
         ranges,
         annotator_schema_version
       });
+      await newAnnotation.setOwner(req.user.id);
       var io = req.app.get("io");
-      io.sockets.emit("annotationAdded", newAnnotation);
+      io.sockets.emit(
+        "annotationAdded",
+        assignIn(
+          {owner: pick(req.user, ["first_name", "last_name", "email"])},
+          newAnnotation.toJSON()
+        )
+      );
       res.send(newAnnotation);
     } catch (err) {
       next(err);

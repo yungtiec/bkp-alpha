@@ -44,7 +44,9 @@ class AnnotationItem extends Component {
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
-          <p>tammy</p>
+          <p>
+            {annotation.owner.first_name + " " + annotation.owner.last_name}
+          </p>
           <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
         </div>
         <p className="annotation-item__text">{annotation.quote}</p>
@@ -53,7 +55,7 @@ class AnnotationItem extends Component {
           <i className="fas fa-reply" onClick={initReplyToThis} />
           <span className={`${hasUpvoted ? "upvoted" : ""}`}>
             <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
-            {annotation.upvotesFrom.length}
+            {annotation.upvotesFrom ? annotation.upvotesFrom.length : 0}
           </span>
         </div>
       </div>
@@ -83,7 +85,7 @@ class AnnotationItem extends Component {
       ) : (
         <div className="annotation-item__reply-item">
           <div className="annotation-item__header">
-            <p>tammy</p>
+            <p>{child.owner.first_name + " " + child.owner.last_name}</p>
             <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
           </div>
           <p className="annotation-item__note">{child.text}</p>
@@ -91,7 +93,7 @@ class AnnotationItem extends Component {
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span className={`${hasUpvoted ? "upvoted" : ""}`}>
               <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
-              {child.upvotesFrom.length}
+              {child.upvotesFrom ? child.upvotesFrom.length : 0}
             </span>
           </div>
         </div>

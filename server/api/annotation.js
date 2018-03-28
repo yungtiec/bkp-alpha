@@ -41,6 +41,11 @@ router.post("/reply", async (req, res, next) => {
           attributes: ["first_name", "last_name", "email"]
         },
         {
+          model: db.model("user"),
+          as: "owner",
+          attributes: ["first_name", "last_name", "email"]
+        },
+        {
           model: Annotation,
           include: {
             model: db.model("user"),
@@ -64,7 +69,7 @@ router.post("/upvote", async (req, res, next) => {
     try {
       const user = await User.findById(req.user.id);
       if (!req.body.hasUpvoted) await user.addUpvoted(req.body.annotationId);
-      else await user.removeUpvoted(req.body.annotationId)
+      else await user.removeUpvoted(req.body.annotationId);
       const annotation = await Annotation.findOne({
         where: { id: req.body.annotationId },
         include: [
@@ -85,6 +90,11 @@ router.post("/upvote", async (req, res, next) => {
           {
             model: db.model("user"),
             as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "email"]
+          },
+          {
+            model: db.model("user"),
+            as: "owner",
             attributes: ["first_name", "last_name", "email"]
           },
           {

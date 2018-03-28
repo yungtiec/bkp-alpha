@@ -81,7 +81,10 @@ const AuthForm = props => {
         <div className="auth-form__form-footer">
           <div className="auth-form__form-footer__left">
             <nav>
-              <a href="https://thebrooklynproject.consensys.net/" target="_blank">
+              <a
+                href="https://thebrooklynproject.consensys.net/"
+                target="_blank"
+              >
                 <span>About</span>
               </a>
             </nav>
@@ -145,7 +148,17 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
-      dispatch(auth(email, password, formName));
+      var userInfo =
+        formName === "login"
+          ? { email, password }
+          : {
+              email,
+              password,
+              first_name: evt.target.firstName.value,
+              last_name: evt.target.lastName.value,
+              company: evt.target.company.value
+            };
+      dispatch(auth(userInfo, formName));
     }
   };
 };
