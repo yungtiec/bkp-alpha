@@ -15,7 +15,7 @@ export const me = () => dispatch =>
 
 export const auth = (userInfo, method) => dispatch => {
   userInfo =
-    method === "login" ? pick(userInfo, ["email", password]) : userInfo;
+    method === "login" ? pick(userInfo, ["email", "password"]) : userInfo;
   return axios
     .post(`/auth/${method}`, userInfo)
     .then(

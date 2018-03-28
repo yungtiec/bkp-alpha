@@ -40,7 +40,7 @@ export default class Survey extends Component {
     } = this.props;
     return (
       <div>
-        <div className="project-survey">
+        <div className="project-survey" id="project-survey">
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => (
             <ScrollLink
