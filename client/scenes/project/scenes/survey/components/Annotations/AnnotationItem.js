@@ -41,15 +41,19 @@ class AnnotationItem extends Component {
       annotationId: annotation.id,
       hasUpvoted
     });
+    const openModal = this.props.openModal.bind(null, annotation)
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
-          <p>{annotation.owner.first_name + ' ' + annotation.owner.last_name}</p>
+          <p>
+            {annotation.owner.first_name + " " + annotation.owner.last_name}
+          </p>
           <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
         </div>
-        <p className="annotation-item__text">{annotation.quote}</p>
-        <p className="annotation-item__note">{annotation.text}</p>
+        <p className="annotation-item__quote">{annotation.quote}</p>
+        <p className="annotation-item__comment">{annotation.comment}</p>
         <div className="annotation-item__action--bottom">
+          {annotation.owner.email === this.props.userEmail && <i class="fas fa-edit" onClick={openModal}/>}
           <i className="fas fa-reply" onClick={initReplyToThis} />
           <span className={`${hasUpvoted ? "upvoted" : ""}`}>
             <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
@@ -74,20 +78,22 @@ class AnnotationItem extends Component {
         annotationId: child.id,
         hasUpvoted
       });
+      const openModal = this.props.openModal.bind(null, child)
       const reply = isEmpty(child) ? (
         <CommentBox
           parentId={accessors.slice(-1)[0]}
-          replyToAnnotation={this.props.replyToAnnotation}
-          cancelReplyToThis={cancelReplyToThis}
+          onSubmit={this.props.replyToAnnotation}
+          onCancel={cancelReplyToThis}
         />
       ) : (
         <div className="annotation-item__reply-item">
           <div className="annotation-item__header">
-            <p>{child.owner.first_name + ' ' + child.owner.last_name}</p>
+            <p>{child.owner.first_name + " " + child.owner.last_name}</p>
             <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
           </div>
-          <p className="annotation-item__note">{child.text}</p>
+          <p className="annotation-item__comment">{child.comment}</p>
           <div className="annotation-item__action--bottom">
+            {child.owner.email === this.props.userEmail && <i class="fas fa-edit" onClick={openModal}/>}
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span className={`${hasUpvoted ? "upvoted" : ""}`}>
               <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />

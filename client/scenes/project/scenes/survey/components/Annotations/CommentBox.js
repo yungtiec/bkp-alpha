@@ -5,7 +5,7 @@ import autoBind from "react-autobind";
 export default class CommentBox extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: "" };
+    this.state = { value: this.props.initialValue };
     autoBind(this);
   }
 
@@ -15,7 +15,8 @@ export default class CommentBox extends Component {
 
   handleSubmit(event) {
     if (this.state.value)
-      this.props.replyToAnnotation({
+      this.props.onSubmit({
+        annotationId: this.props.annotationId,
         parentId: this.props.parentId,
         comment: this.state.value
       });
@@ -23,7 +24,7 @@ export default class CommentBox extends Component {
 
   render() {
     return (
-      <form className="comment-box">
+      <div className="comment-box">
         <textarea
           className="comment-box__text-area"
           name="textarea"
@@ -32,9 +33,9 @@ export default class CommentBox extends Component {
         />
         <div className="comment-box__actions">
           <button onClick={this.handleSubmit}>save</button>
-          <button onClick={this.props.cancelReplyToThis}>cancel</button>
+          <button onClick={this.props.onCancel}>cancel</button>
         </div>
-      </form>
+      </div>
     );
   }
 }

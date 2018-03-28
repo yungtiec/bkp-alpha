@@ -14,6 +14,14 @@ class AuthWidget extends Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
   toggleDropdown() {
     const { dropdown } = this.state;
     this.setState({
@@ -21,11 +29,21 @@ class AuthWidget extends Component {
     });
   }
 
+  handleClickOutside() {
+    this.setState({
+      dropdown: false
+    });
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
   render() {
     const { isLoggedIn, name, logout } = this.props;
     if (isLoggedIn)
       return (
-        <div className="auth-widget">
+        <div className="auth-widget" ref={this.setWrapperRef}>
           <div className="auth-widget__avatar-container">
             <Avatar
               name={name}
@@ -37,7 +55,12 @@ class AuthWidget extends Component {
           </div>
           {this.state.dropdown && (
             <div className="auth-widget__dropdown">
-              <div className="auth-widget__dropdown-item" onClick={logout}>logout</div>
+              <div className="auth-widget__dropdown-item">
+                profile
+              </div>
+              <div className="auth-widget__dropdown-item" onClick={logout}>
+                logout
+              </div>
             </div>
           )}
         </div>

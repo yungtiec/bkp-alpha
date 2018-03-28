@@ -24,9 +24,9 @@ router.post("/reply", async (req, res, next) => {
         "updatedAt",
         "hierarchyLevel",
         "parentId",
-        "text"
+        "comment"
       ]),
-      { text: req.body.comment }
+      { comment: req.body.comment }
     );
     const ancestors = await parent.getAncestors({ raw: true });
     var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
@@ -124,6 +124,73 @@ router.post("/upvote", async (req, res, next) => {
         ]
       });
       res.send(ancestry);
+    } catch (err) {
+      next(err);
+    }
+  }
+});
+
+router.post("/edit", async (req, res, next) => {
+  if (!req.user) res.sendStatus(401);
+  else {
+    try {
+      var annotation = await Annotation.findOne({
+        where: { id: req.body.annotationId },
+        include: [
+          {
+            model: User,
+            as: "owner",
+            attributes: ["first_name", "last_name", "email"]
+          }
+        ]
+      });
+      console.log('?', annotation.owner.email !== req.user.email)
+      if (annotation.owner.email !== req.user.email) res.sendStatus(401);
+      else {
+        annotation = await annotation.update({comment: req.body.comment})
+        const ancestors = await annotation.getAncestors({
+          raw: true
+        });
+        const rootAncestor = _.orderBy(
+          ancestors,
+          ["hierarchyLevel"],
+          ["asc"]
+        )[0];
+        const ancestry = await Annotation.findOne({
+          where: { id: rootAncestor ? rootAncestor.id : annotation.id },
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: Annotation,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                }
+              ],
+              as: "descendents",
+              hierarchy: true
+            }
+          ]
+        });
+
+        res.send(ancestry);
+      }
     } catch (err) {
       next(err);
     }

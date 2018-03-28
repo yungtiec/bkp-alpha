@@ -11,9 +11,11 @@ import {
   AnnotationSidebar,
   AnnotationItem,
   Question,
-  Answers
+  Answers,
+  CommentBox
 } from "./index";
 import { findFirstAnnotationInQna, findAnnotationsInQna } from "../utils";
+import Modal from "react-modal";
 import autoBind from "react-autobind";
 
 export default class Survey extends Component {
@@ -21,8 +23,18 @@ export default class Survey extends Component {
     super(props);
     autoBind(this);
     this.state = {
-      selectedQna: ""
+      selectedQna: "",
+      editModalOpen: false,
+      annotationInModal: {}
     };
+  }
+
+  openModal(annotationInModal) {
+    this.setState({ modalIsOpen: true, annotationInModal });
+  }
+
+  closeModal() {
+    this.setState({ modalIsOpen: false, annotationInModal: {} });
   }
 
   handleQnaOnClick(qnaId) {
@@ -45,7 +57,10 @@ export default class Survey extends Component {
     });
     if (annotationIds && selectedQna && annotations.length) {
       return (
-        <p className="annotations-header reset-selection" onClick={this.resetSelectedQna}>
+        <p
+          className="annotations-header reset-selection"
+          onClick={this.resetSelectedQna}
+        >
           Show all Annotation ({annotationIds.length})
         </p>
       );
@@ -80,6 +95,8 @@ export default class Survey extends Component {
             <AnnotationItem
               key={`annotation-${annotation.id}`}
               annotation={annotation}
+              openModal={this.openModal}
+              closeModal={this.closeModal}
             />
           ))}
         </div>
@@ -109,18 +126,24 @@ export default class Survey extends Component {
           smooth="easeInOutCubic"
           duration={300}
           spy={true}
-          offset={-100}
         >
           <Element name={`annotation-${id}`}>
             <AnnotationItem
               key={`annotation-${id}`}
               annotation={annotationsById[id]}
               ref={el => (this[`annotation-${id}`] = el)}
+              openModal={this.openModal}
+              closeModal={this.closeModal}
             />
           </Element>
         </ScrollLink>
       ));
     }
+  }
+
+  handleSubmitEditedComment(argObj) {
+    this.props.editAnnotationComment(argObj)
+    this.closeModal()
   }
 
   render() {
@@ -131,29 +154,34 @@ export default class Survey extends Component {
       projectMetadata,
       annotationsById,
       annotationIds,
-      replyToAnnotation,
-      initiateReplyToAnnotation,
-      isLoggedIn
+      isLoggedIn,
+      editAnnotationComment
     } = this.props;
     return (
       <div>
         <div className="project-survey" id="project-survey">
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onRequestClose={this.closeModal}
+            contentLabel="Example Modal"
+          >
+            <div className="annotation-item__edit">
+              <p className="annotation-item__quote">
+                {this.state.annotationInModal.quote}
+              </p>
+              <CommentBox
+                initialValue={this.state.annotationInModal.comment}
+                annotationId={this.state.annotationInModal.id}
+                onSubmit={this.handleSubmitEditedComment}
+                onCancel={this.closeModal}
+              />
+              <div className="annotation-item__action--bottom " />
+            </div>
+          </Modal>
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => {
             const handleQnaOnClick = this.handleQnaOnClick.bind(this, id);
             return (
-              // <ScrollLink
-              //   className={`qna-${id}`}
-              //   activeClass="active"
-              //   containerId="annotation-sidebar"
-              //   to={`annotation-${findFirstAnnotationInQna({
-              //     annotationIds,
-              //     annotationsById,
-              //     survey_question_id: id
-              //   })}`}
-              //   smooth="easeInOutCubic"
-              //   duration={300}
-              // >
               <Element name={`qna-${id}`} onClick={handleQnaOnClick}>
                 <Qna
                   key={`qna-${id}`}
@@ -165,7 +193,6 @@ export default class Survey extends Component {
                   <Answers answers={surveyQnasById[id].survey_answers} />
                 </Qna>
               </Element>
-              // </ScrollLink>
             );
           })}
         </div>

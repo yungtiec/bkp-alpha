@@ -19,7 +19,7 @@ const Annotation = db.define(
       type: Sequelize.TEXT,
       allowNull: false
     },
-    text: {
+    comment: {
       type: Sequelize.TEXT
     },
     annotator_schema_version: {

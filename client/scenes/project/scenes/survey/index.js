@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 import { fetchQuestionsBySurveyId } from "./data/actions";
 import {
   fetchAnnotationsBySurvey,
-  addNewAnnotationSentFromServer
+  addNewAnnotationSentFromServer,
+  editAnnotationComment
 } from "./data/annotations/actions";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
@@ -119,7 +120,8 @@ const mapState = state => {
 const actions = {
   fetchQuestionsBySurveyId,
   fetchAnnotationsBySurvey,
-  addNewAnnotationSentFromServer
+  addNewAnnotationSentFromServer,
+  editAnnotationComment
 };
 
 export default withRouter(connect(mapState, actions)(SurveyContainer));

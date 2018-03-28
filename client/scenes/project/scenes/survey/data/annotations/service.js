@@ -22,3 +22,9 @@ export function postUpvoteToAnnotation({annotationId, hasUpvoted}) {
     .post("/api/annotation/upvote", { annotationId, hasUpvoted })
     .then(res => res.data)
 }
+
+export function postUpdatedCommentToAnnotation({annotationId, comment}) {
+  return axios
+    .post("/api/annotation/edit", { annotationId, comment })
+    .then(res => res.data)
+}

@@ -6,7 +6,10 @@
 
 [ ] user profile
 
-[ ] edit annotation
+[ ] redux state for edit modal
+  - for error handling
+
+[x] edit annotation
 
 [ ] prompt login when guests try to upvote
 
