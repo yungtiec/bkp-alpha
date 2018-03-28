@@ -44,21 +44,28 @@ Annotation.getAnnotationsFromUrl = function(uri) {
     include: [
       {
         model: db.model("user"),
-        as: 'upvotesFrom',
+        as: "upvotesFrom",
         attributes: ["first_name", "last_name", "email"]
       },
       {
         model: db.model("user"),
-        as: 'owner',
+        as: "owner",
         attributes: ["first_name", "last_name", "email"]
       },
       {
         model: Annotation,
-        include: {
-          model: db.model('user'),
-          as: 'upvotesFrom',
-          attributes: ["first_name", "last_name", "email"]
-        },
+        include: [
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "email"]
+          },
+          {
+            model: db.model("user"),
+            as: "owner",
+            attributes: ["first_name", "last_name", "email"]
+          }
+        ],
         as: "descendents",
         hierarchy: true
       }

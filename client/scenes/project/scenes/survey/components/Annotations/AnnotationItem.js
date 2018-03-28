@@ -44,9 +44,7 @@ class AnnotationItem extends Component {
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
-          <p>
-            {annotation.owner.first_name + " " + annotation.owner.last_name}
-          </p>
+          <p>{annotation.owner.first_name + ' ' + annotation.owner.last_name}</p>
           <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
         </div>
         <p className="annotation-item__text">{annotation.quote}</p>
@@ -85,7 +83,7 @@ class AnnotationItem extends Component {
       ) : (
         <div className="annotation-item__reply-item">
           <div className="annotation-item__header">
-            <p>{child.owner.first_name + " " + child.owner.last_name}</p>
+            <p>{child.owner.first_name + ' ' + child.owner.last_name}</p>
             <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
           </div>
           <p className="annotation-item__note">{child.text}</p>

@@ -95,7 +95,7 @@
 
 .annotation-toolbar {
   position: absolute;
-  left: -37.5px;
+  left: -40.5px;
   top: 0;
   width: 40px;
 }
@@ -122,9 +122,17 @@
 }
 
 .annotation-item__text {
-  border-left: 3px solid #0057ff;
+  border-left: 3px solid white;
   color: white;
   padding-left: 10px;
+}
+
+.active .annotation-item__text {
+  border-left: 3px solid #0057ff;
+}
+
+.active .annotator-hl {
+  background: rgba(0, 123, 255, 0.35);
 }
 
 .annotation-item__action--bottom {
@@ -138,7 +146,7 @@
 }
 
 .annotation-item__action--bottom .upvoted {
-  color: #0057ff;
+  color: white;
 }
 
 .annotation-item__reply-thread {

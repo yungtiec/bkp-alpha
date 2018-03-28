@@ -12,26 +12,12 @@ import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
-import { findFirstAnnotationInQna } from "./utils";
-import {
-  Events,
-  Link as ScrollLink,
-  Element,
-  scrollSpy,
-  animateScroll as scroll
-} from "react-scroll";
-import {
-  Qna,
-  SurveyHeader,
-  AnnotationSidebar,
-  AnnotationItem,
-  Question,
-  Answers
-} from "./components";
+import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
+import { Survey } from "./components";
 import autoBind from "react-autobind";
 import socket from "../../../../socket";
 
-class Survey extends Component {
+class SurveyContainer extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -111,108 +97,8 @@ class Survey extends Component {
   }
 
   render() {
-    const {
-      surveyQnasById,
-      surveyQnaIds,
-      surveyMetadata,
-      projectMetadata,
-      annotationsById,
-      annotationIds,
-      replyToAnnotation,
-      initiateReplyToAnnotation,
-      isLoggedIn
-    } = this.props;
-
-    if (!surveyQnaIds.length) return "loading";
-    return (
-      <div>
-        <div className="project-survey">
-          <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
-          {surveyQnaIds.map(id => (
-            <ScrollLink
-              activeClass="active"
-              containerId="annotation-sidebar"
-              to={`annotation-${findFirstAnnotationInQna({
-                annotationIds,
-                annotationsById,
-                survey_question_id: id
-              })}`}
-              spy={true}
-              smooth={true}
-              duration={300}
-            >
-              <Element name={`qna-${id}`}>
-                <Qna
-                  key={`qna-${id}`}
-                  qna={surveyQnasById[id]}
-                  isLoggedIn={isLoggedIn}
-                >
-                  <Question question={surveyQnasById[id].question} />
-                  <Answers answers={surveyQnasById[id].survey_answers} />
-                </Qna>
-              </Element>
-            </ScrollLink>
-          ))}
-        </div>
-
-        <AnnotationSidebar>
-          <Element
-            name="annotation-sidebar"
-            id="annotation-sidebar"
-            className="annotation-contents"
-          >
-            <div className="annotation-sidebar__logo-consensys">
-              <img
-                width="100px"
-                height="auto"
-                className="logo__large"
-                src="/assets/consensys-logo-white-transparent.png"
-              />
-            </div>
-            <div className="annotation-sidebar__logo-tbp">
-              <img
-                width="120px"
-                height="auto"
-                className="logo__large"
-                src="/assets/the-brooklyn-project-logo-white-transparent.png"
-              />
-            </div>
-            <p className="annotations-header">
-              Annotation ({annotationIds.length})
-            </p>
-            {!isLoggedIn && (
-              <div className="annotation-item">
-                <div className="annotation-item__main">
-                  <div className="annotation-item__header">
-                    <p>
-                      <Link to="/login">Login</Link> or{" "}
-                      <Link to="/signup">signup</Link> to create an annotation
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-            {annotationIds &&
-              annotationIds.map(id => (
-                <ScrollLink
-                  activeClass="active"
-                  to={`qna-${annotationsById[id].survey_question_id}`}
-                  spy={true}
-                  smooth={true}
-                  duration={300}
-                >
-                  <Element name={`annotation-${id}`}>
-                    <AnnotationItem
-                      key={`annotation-${id}`}
-                      annotation={annotationsById[id]}
-                    />
-                  </Element>
-                </ScrollLink>
-              ))}
-          </Element>
-        </AnnotationSidebar>
-      </div>
-    );
+    if (!this.props.surveyQnaIds.length) return "loading";
+    return <Survey {...this.props} />;
   }
 }
 
@@ -236,4 +122,4 @@ const actions = {
   addNewAnnotationSentFromServer
 };
 
-export default withRouter(connect(mapState, actions)(Survey));
+export default withRouter(connect(mapState, actions)(SurveyContainer));
