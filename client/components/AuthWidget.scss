@@ -15,12 +15,12 @@
 
 .auth-widget__dropdown-item {
   cursor: pointer;
-  border: 2px solid #09263a;
+  border-style: solid;
+  border-color: #09263a;
+  border-width: 2px 2px 0px 2px;
   padding-left: 10px;
-  position: absolute;
   width: 150px;
-  height: 50px;
-  top: 0px;
+  height: 48px;
   background: white;
   line-height: 46px;
   text-transform: uppercase;

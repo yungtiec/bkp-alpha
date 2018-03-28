@@ -6,6 +6,8 @@
 
 [ ] user profile
 
+[ ] global error handling
+
 [ ] redux state for edit modal
   - for error handling
 
