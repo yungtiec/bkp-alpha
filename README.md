@@ -8,6 +8,8 @@
 
 [ ] user profile
 
+[ ] make survey page mobile responsive
+
 [ ] global error handling
 
 [ ] redux state for edit modal
@@ -17,7 +19,7 @@
 
 [ ] prompt login when guests try to upvote
 
-[ ] have some sort of highlight when an annotation is clicked on (in both sidebar and main container)
+[x] have some sort of highlight when an annotation is clicked on (in both sidebar and main container)
 
 [ ] annotator api
   - use reviewed flag to filter
