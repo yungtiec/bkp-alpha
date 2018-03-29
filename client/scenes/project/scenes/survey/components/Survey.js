@@ -11,7 +11,8 @@ import {
   AnnotationSidebar,
   AnnotationItem,
   Question,
-  Answers
+  Answers,
+  AnnotationSidebarHeader
 } from "./index";
 import { findFirstAnnotationInQna, findAnnotationsInQna } from "../utils";
 import autoBind from "react-autobind";
@@ -37,35 +38,6 @@ export default class Survey extends Component {
     this.setState({
       selectedQna: ""
     });
-  }
-
-  renderHeader({ annotationIds, annotationsById, selectedQna }) {
-    const annotations = findAnnotationsInQna({
-      annotationIds,
-      annotationsById,
-      survey_question_id: selectedQna
-    });
-    if (annotationIds && selectedQna && annotations.length) {
-      return (
-        <p
-          className="annotations-header reset-selection"
-          onClick={this.resetSelectedQna}
-        >
-          Show all Annotation ({annotationIds.length})
-        </p>
-      );
-    } else if (
-      (annotationIds && !selectedQna) ||
-      (annotationIds && selectedQna && !annotations.length)
-    ) {
-      return (
-        <p className="annotations-header">
-          Annotation ({annotationIds.length})
-        </p>
-      );
-    } else {
-      return <p className="annotations-header">Annotation</p>;
-    }
   }
 
   renderSidebarWithSelectedQna({
@@ -171,39 +143,13 @@ export default class Survey extends Component {
             id="annotation-sidebar"
             className="annotation-contents"
           >
-            <div className="annotation-sidebar__logo-consensys">
-              <img
-                width="100px"
-                height="auto"
-                className="logo__large"
-                src="/assets/consensys-logo-white-transparent.png"
-              />
-            </div>
-            <div className="annotation-sidebar__logo-tbp">
-              <img
-                width="120px"
-                height="auto"
-                className="logo__large"
-                src="/assets/the-brooklyn-project-logo-white-transparent.png"
-              />
-            </div>
-            {this.renderHeader({
-              annotationIds,
-              annotationsById,
-              selectedQna: this.state.selectedQna
-            })}
-            {!isLoggedIn && (
-              <div className="annotation-item">
-                <div className="annotation-item__main">
-                  <div className="annotation-item__header">
-                    <p>
-                      <Link to="/login">Login</Link> or{" "}
-                      <Link to="/signup">signup</Link> to create an annotation
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+            <AnnotationSidebarHeader
+              annotationIds={annotationIds}
+              annotationsById={annotationsById}
+              selectedQna={this.state.selectedQna}
+              isLoggedIn={isLoggedIn}
+              resetSelectedQna={this.resetSelectedQna}
+            />
             {this.renderSidebarWithAllAnnotations({
               annotationIds,
               annotationsById,
