@@ -11,11 +11,9 @@ import {
   AnnotationSidebar,
   AnnotationItem,
   Question,
-  Answers,
-  CommentBox
+  Answers
 } from "./index";
 import { findFirstAnnotationInQna, findAnnotationsInQna } from "../utils";
-import Modal from "react-modal";
 import autoBind from "react-autobind";
 
 export default class Survey extends Component {
@@ -27,14 +25,6 @@ export default class Survey extends Component {
       editModalOpen: false,
       annotationInModal: {}
     };
-  }
-
-  openModal(annotationInModal) {
-    this.setState({ modalIsOpen: true, annotationInModal });
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false, annotationInModal: {} });
   }
 
   handleQnaOnClick(qnaId) {
@@ -95,8 +85,6 @@ export default class Survey extends Component {
             <AnnotationItem
               key={`annotation-${annotation.id}`}
               annotation={annotation}
-              openModal={this.openModal}
-              closeModal={this.closeModal}
             />
           ))}
         </div>
@@ -132,8 +120,6 @@ export default class Survey extends Component {
               key={`annotation-${id}`}
               annotation={annotationsById[id]}
               ref={el => (this[`annotation-${id}`] = el)}
-              openModal={this.openModal}
-              closeModal={this.closeModal}
             />
           </Element>
         </ScrollLink>
@@ -142,8 +128,8 @@ export default class Survey extends Component {
   }
 
   handleSubmitEditedComment(argObj) {
-    this.props.editAnnotationComment(argObj)
-    this.closeModal()
+    this.props.editAnnotationComment(argObj);
+    this.closeModal();
   }
 
   render() {
@@ -160,24 +146,6 @@ export default class Survey extends Component {
     return (
       <div>
         <div className="project-survey" id="project-survey">
-          <Modal
-            isOpen={this.state.modalIsOpen}
-            onRequestClose={this.closeModal}
-            contentLabel="Example Modal"
-          >
-            <div className="annotation-item__edit">
-              <p className="annotation-item__quote">
-                {this.state.annotationInModal.quote}
-              </p>
-              <CommentBox
-                initialValue={this.state.annotationInModal.comment}
-                annotationId={this.state.annotationInModal.id}
-                onSubmit={this.handleSubmitEditedComment}
-                onCancel={this.closeModal}
-              />
-              <div className="annotation-item__action--bottom " />
-            </div>
-          </Modal>
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => {
             const handleQnaOnClick = this.handleQnaOnClick.bind(this, id);

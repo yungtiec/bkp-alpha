@@ -85,6 +85,9 @@ export const editAnnotationComment = ({ annotationId, comment }) => {
         type: types.ANNOTATION_UPDATED,
         rootAnnotation
       });
+      dispatch({
+        type: 'modal.HIDE_MODAL'
+      });
     } catch (err) {
       console.log(err);
     }
