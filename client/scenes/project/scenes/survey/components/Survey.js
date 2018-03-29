@@ -115,8 +115,10 @@ export default class Survey extends Component {
       annotationsById,
       annotationIds,
       isLoggedIn,
-      editAnnotationComment
+      editAnnotationComment,
+      match
     } = this.props;
+
     return (
       <div>
         <div className="project-survey" id="project-survey">

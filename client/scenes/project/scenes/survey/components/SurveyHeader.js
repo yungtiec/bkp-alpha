@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import history from '../../../../../history'
 
 export default class SurveyHeader extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+  }
+
+  goBack() {
+    history.push('/project/' + this.props.project.symbol)
   }
 
   render() {
@@ -19,7 +24,7 @@ export default class SurveyHeader extends Component {
 
     return (
       <div className="project-survey__header">
-        <p className="project-survey__back-btn">back to project page</p>
+        <p className="project-survey__back-btn" onClick={this.goBack}>back to project page</p>
         <p className="project-name__box">
           {project.name && project.name.toUpperCase()}
         </p>
