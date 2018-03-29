@@ -6,7 +6,7 @@ import { default as modalReducer } from './modal/reducer';
 
 export default combineReducers({
   user: userReducer,
-  modal: modalReducer
+  modal: modalReducer,
 });
 
 export * from './user/reducer'

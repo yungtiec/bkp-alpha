@@ -144,7 +144,6 @@ router.post("/edit", async (req, res, next) => {
           }
         ]
       });
-      console.log('?', annotation.owner.email !== req.user.email)
       if (annotation.owner.email !== req.user.email) res.sendStatus(401);
       else {
         annotation = await annotation.update({comment: req.body.comment})
@@ -188,7 +187,7 @@ router.post("/edit", async (req, res, next) => {
             }
           ]
         });
-
+        throw(new Error('random'))
         res.send(ancestry);
       }
     } catch (err) {

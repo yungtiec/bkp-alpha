@@ -6,6 +6,7 @@ import {
 } from "./service";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick } from "lodash";
+import { notify } from "reapop";
 
 export const fetchAnnotationsBySurvey = uri => {
   return async dispatch => {
@@ -86,10 +87,20 @@ export const editAnnotationComment = ({ annotationId, comment }) => {
         rootAnnotation
       });
       dispatch({
-        type: 'modal.HIDE_MODAL'
+        type: "modal.HIDE_MODAL"
       });
     } catch (err) {
-      console.log(err);
+      if (err.message.indexOf("code 500") !== -1) {
+        dispatch(
+          notify({
+            title: "Something went wrong",
+            message: "Please try again later",
+            status: "error",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
+      }
     }
   };
 };
