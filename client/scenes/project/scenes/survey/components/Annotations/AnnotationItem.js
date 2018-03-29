@@ -10,6 +10,7 @@ import {
   cancelReplyToAnnotation,
   upvoteAnnotation
 } from "../../data/annotations/actions";
+import { loadModal } from "../../../../../../data/reducer";
 
 class AnnotationItem extends Component {
   constructor(props) {
@@ -31,6 +32,10 @@ class AnnotationItem extends Component {
     this.props.cancelReplyToAnnotation({ accessors, parent });
   }
 
+  openModal(annotation) {
+    this.props.loadModal('ANNOTATION_EDIT_MODAL', annotation)
+  }
+
   renderMainComment(annotation) {
     const initReplyToThis = this.initReply.bind(this, [], annotation);
     const hasUpvoted = find(
@@ -41,7 +46,7 @@ class AnnotationItem extends Component {
       annotationId: annotation.id,
       hasUpvoted
     });
-    const openModal = this.props.openModal.bind(null, annotation)
+    const openModal = this.openModal.bind(null, annotation);
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -53,7 +58,9 @@ class AnnotationItem extends Component {
         <p className="annotation-item__quote">{annotation.quote}</p>
         <p className="annotation-item__comment">{annotation.comment}</p>
         <div className="annotation-item__action--bottom">
-          {annotation.owner.email === this.props.userEmail && <i class="fas fa-edit" onClick={openModal}/>}
+          {annotation.owner.email === this.props.userEmail && (
+            <i class="fas fa-edit" onClick={openModal} />
+          )}
           <i className="fas fa-reply" onClick={initReplyToThis} />
           <span className={`${hasUpvoted ? "upvoted" : ""}`}>
             <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
@@ -78,7 +85,7 @@ class AnnotationItem extends Component {
         annotationId: child.id,
         hasUpvoted
       });
-      const openModal = this.props.openModal.bind(null, child)
+      const openModal = this.openModal.bind(null, child);
       const reply = isEmpty(child) ? (
         <CommentBox
           parentId={accessors.slice(-1)[0]}
@@ -93,7 +100,9 @@ class AnnotationItem extends Component {
           </div>
           <p className="annotation-item__comment">{child.comment}</p>
           <div className="annotation-item__action--bottom">
-            {child.owner.email === this.props.userEmail && <i class="fas fa-edit" onClick={openModal}/>}
+            {child.owner.email === this.props.userEmail && (
+              <i class="fas fa-edit" onClick={openModal} />
+            )}
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span className={`${hasUpvoted ? "upvoted" : ""}`}>
               <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
@@ -146,7 +155,8 @@ const actions = {
   replyToAnnotation,
   initiateReplyToAnnotation,
   cancelReplyToAnnotation,
-  upvoteAnnotation
+  upvoteAnnotation,
+  loadModal
 };
 
 export default connect(mapState, actions)(AnnotationItem);

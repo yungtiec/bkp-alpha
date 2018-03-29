@@ -6,3 +6,5 @@ export { default as SurveyHeader } from "./SurveyHeader";
 export { default as AnnotationSidebar } from "./Annotations/AnnotationSidebar";
 export { default as AnnotationItem } from "./Annotations/AnnotationItem";
 export { default as CommentBox } from "./Annotations/CommentBox";
+export { default as AnnotationEditModal } from "./Annotations/AnnotationEditModal";
+
