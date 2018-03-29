@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Projects, Project, Survey } from "./scenes";
-import { Login, Signup } from "./components";
+import { Login, Signup, Navbar } from "./components";
 import { me } from "./data/reducer";
 
 /**
@@ -15,23 +15,27 @@ class Routes extends Component {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, match } = this.props;
+    console.log(match)
 
     return (
-      <Switch>
-        {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/project/:symbol" component={Project} />
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-          </Switch>
-        )}
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
-      </Switch>
+      <div>
+        <Navbar />
+        <Switch>
+          {/* Routes placed here are available to all visitors */}
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/projects" component={Projects} />
+          <Route path="/project/:symbol" component={Project} />
+          {isLoggedIn && (
+            <Switch>
+              {/* Routes placed here are only available after logging in */}
+            </Switch>
+          )}
+          {/* Displays our Login component as a fallback */}
+          <Route component={Login} />
+        </Switch>
+      </div>
     );
   }
 }

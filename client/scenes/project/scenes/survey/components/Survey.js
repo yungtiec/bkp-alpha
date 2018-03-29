@@ -50,7 +50,7 @@ export default class Survey extends Component {
       annotationsById,
       survey_question_id: selectedQna
     });
-    if (annotationIds && selectedQna && annotations.length) {
+    if (annotationIds && selectedQna && annotations && annotations.length) {
       return (
         <div>
           {annotations.map(annotation => (
@@ -76,7 +76,9 @@ export default class Survey extends Component {
     });
     if (
       (annotationIds && !selectedQna) ||
-      (annotationIds && selectedQna && !annotations.length)
+      (annotationIds &&
+        selectedQna &&
+        (!annotations || (annotations && !annotations.length)))
     ) {
       return annotationIds.map(id => (
         <ScrollLink

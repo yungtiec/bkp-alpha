@@ -47,7 +47,6 @@ export default class AnnotationSidebar extends Component {
       <div className="annotation-sidebar" style={style}>
         <div className="annotation-coordinate__container" />
         <div className="annotation-toolbar">
-          <AuthWidget />
           <button
             className="annotations-sidebar__size-btn"
             onClick={this.toggleSidebar}
@@ -60,6 +59,7 @@ export default class AnnotationSidebar extends Component {
           >
             <i class={`fas fa-${eye}`} />
           </button>
+          {this.state.sidebarOpen && <AuthWidget />}
         </div>
         {this.props.children}
       </div>

@@ -98,6 +98,7 @@ class SurveyContainer extends Component {
   }
 
   render() {
+    console.log(this.props.match)
     if (!this.props.surveyQnaIds.length) return "loading";
     return <Survey {...this.props} />;
   }

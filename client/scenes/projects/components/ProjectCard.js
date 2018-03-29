@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default (projectId, project) => {
   return (
-    <ListRow className="project-container" rowId={projectId} onClick>
+    <ListRow className="project-card" rowId={projectId} onClick>
       <div className="project-custom">
         <div className="project__block">
           <div className="project__action--upper">

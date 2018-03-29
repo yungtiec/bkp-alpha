@@ -7,7 +7,7 @@
   margin-left: auto;
 }
 
-.surveys-container {
+.surveys-card {
   margin: 0 80px;
 }
 
@@ -19,6 +19,7 @@
   box-shadow: 0 5px 20px -5px rgba(50, 50, 93, .12), 0 3px 4px -2px rgba(0, 0, 0, .08);
   text-decoration: none !important;
   background-color: #fff;
+  border: 1px solid #f2f2f2;
 }
 
 .survey-custom:hover {
