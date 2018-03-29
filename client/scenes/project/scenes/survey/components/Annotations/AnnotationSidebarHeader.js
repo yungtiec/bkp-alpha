@@ -15,7 +15,7 @@ export default class AnnotationSidebarHeader extends Component {
       annotationsById,
       survey_question_id: selectedQna
     });
-    if (annotationIds && selectedQna && annotations.length) {
+    if (annotationIds && selectedQna && annotations && annotations.length) {
       return (
         <p
           className="annotations-header reset-selection"
@@ -26,7 +26,9 @@ export default class AnnotationSidebarHeader extends Component {
       );
     } else if (
       (annotationIds && !selectedQna) ||
-      (annotationIds && selectedQna && !annotations.length)
+      (annotationIds &&
+        selectedQna &&
+        (!annotations || (annotations && !annotations.length)))
     ) {
       return (
         <p className="annotations-header">
@@ -39,7 +41,12 @@ export default class AnnotationSidebarHeader extends Component {
   }
 
   render() {
-    const { annotationIds, annotationsById, selectedQna, isLoggedIn } = this.props;
+    const {
+      annotationIds,
+      annotationsById,
+      selectedQna,
+      isLoggedIn
+    } = this.props;
 
     return (
       <div>
@@ -49,14 +56,6 @@ export default class AnnotationSidebarHeader extends Component {
             height="auto"
             className="logo__large"
             src="/assets/consensys-logo-white-transparent.png"
-          />
-        </div>
-        <div className="annotation-sidebar__logo-tbp">
-          <img
-            width="120px"
-            height="auto"
-            className="logo__large"
-            src="/assets/the-brooklyn-project-logo-white-transparent.png"
           />
         </div>
         {this.renderAnnotationCount({

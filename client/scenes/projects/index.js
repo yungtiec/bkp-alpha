@@ -23,7 +23,7 @@ class ProjectList extends Component {
     const { projectsBySymbol, projectSymbolArr } = this.props
 
     return (
-      <div className="container">
+      <div className="container main-container">
         <ListView
           viewClassName={"row projects-container"}
           rowClassName={"col-md-12"}

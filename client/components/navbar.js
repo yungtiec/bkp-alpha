@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { logout } from "../data/reducer";
+import { AuthWidget } from "./index"
 
 class Navbar extends Component {
   constructor(props) {
@@ -13,17 +14,16 @@ class Navbar extends Component {
   }
 
   render() {
-    console.log(this.props.match)
     return (
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
             <div className="logo-header">
               <img
-                width="70px"
+                width="100px"
                 height="auto"
                 className="logo__large"
-                src="/assets/the-brooklyn-project-logo-border.png"
+                src="/assets/the-brooklyn-project-logo.png"
               />
             </div>
           </div>
@@ -31,6 +31,7 @@ class Navbar extends Component {
             <div className="icon-container">
               <i className="fas fa-search" />
             </div>
+            <AuthWidget inNavbar={true}/>
           </div>
         </nav>
       </div>

@@ -40,25 +40,29 @@ class AuthWidget extends Component {
   }
 
   render() {
-    const { isLoggedIn, name, logout } = this.props;
+    const { isLoggedIn, name, logout, inNavbar } = this.props;
+    const className = inNavbar ? "auth-widget--navbar" : "auth-widget"
+    const avatarColor = inNavbar ? "#459DF9" : "#ffffff"
+    const avatarFgColor = inNavbar ? "#ffffff" : "#09263a"
+
     if (isLoggedIn)
       return (
-        <div className="auth-widget" ref={this.setWrapperRef}>
-          <div className="auth-widget__avatar-container">
+        <div className={className} ref={this.setWrapperRef}>
+          <div className={`${className}__avatar-container`}>
             <Avatar
               name={name}
               size={46}
-              color="#ffffff"
-              fgColor="#09263a"
+              color={avatarColor}
+              fgColor={avatarFgColor}
               onClick={this.toggleDropdown}
             />
           </div>
           {this.state.dropdown && (
-            <div className="auth-widget__dropdown">
-              <div className="auth-widget__dropdown-item">
+            <div className={`${className}__dropdown`}>
+              <div className={`${className}__dropdown-item`}>
                 profile
               </div>
-              <div className="auth-widget__dropdown-item" onClick={logout}>
+              <div className={`${className}__dropdown-item last`} onClick={logout}>
                 logout
               </div>
             </div>
