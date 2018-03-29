@@ -3,8 +3,23 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Projects, Project, Survey } from "./scenes";
-import { Login, Signup, Navbar } from "./components";
+import { Login, Signup, Layout, LayoutWithNav } from "./components";
 import { me } from "./data/reducer";
+
+function RouteWithLayout({ layout, component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        React.createElement(
+          layout,
+          props,
+          React.createElement(component, props)
+        )
+      }
+    />
+  );
+}
 
 /**
  * COMPONENT
@@ -19,13 +34,20 @@ class Routes extends Component {
 
     return (
       <div>
-        <Navbar />
         <Switch>
           {/* Routes placed here are available to all visitors */}
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/projects" component={Projects} />
-          <Route path="/project/:symbol" component={Project} />
+          <RouteWithLayout layout={Layout} path="/login" component={Login} />
+          <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/projects"
+            component={Projects}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/project/:symbol"
+            component={Project}
+          />
           {isLoggedIn && (
             <Switch>
               {/* Routes placed here are only available after logging in */}
