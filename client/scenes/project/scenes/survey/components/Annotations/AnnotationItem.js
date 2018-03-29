@@ -11,6 +11,7 @@ import {
   upvoteAnnotation
 } from "../../data/annotations/actions";
 import { loadModal } from "../../../../../../data/reducer";
+import { notify } from "reapop";
 
 class AnnotationItem extends Component {
   constructor(props) {
@@ -33,19 +34,33 @@ class AnnotationItem extends Component {
   }
 
   openModal(annotation) {
-    this.props.loadModal('ANNOTATION_EDIT_MODAL', annotation)
+    this.props.loadModal("ANNOTATION_EDIT_MODAL", annotation);
+  }
+
+  promptLoginToast() {
+    this.props.notify({
+      title: "",
+      message: "Login required",
+      status: "error",
+      dismissible: true,
+      dismissAfter: 3000
+    });
   }
 
   renderMainComment(annotation) {
-    const initReplyToThis = this.initReply.bind(this, [], annotation);
+    const initReplyToThis = this.props.userEmail
+      ? this.initReply.bind(this, [], annotation)
+      : this.promptLoginToast;
     const hasUpvoted = find(
       annotation.upvotesFrom,
       user => user.email === this.props.userEmail
     );
-    const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, {
-      annotationId: annotation.id,
-      hasUpvoted
-    });
+    const upvoteAnnotation = this.props.userEmail
+      ? this.props.upvoteAnnotation.bind(this, {
+          annotationId: annotation.id,
+          hasUpvoted
+        })
+      : this.promptLoginToast;
     const openModal = this.openModal.bind(null, annotation);
     return (
       <div className="annotation-item__main">
@@ -75,16 +90,20 @@ class AnnotationItem extends Component {
     if (!children) return "";
     var accessors = cloneDeep(parentIds);
     const replies = children.map(child => {
-      const initReplyToThis = this.initReply.bind(this, accessors, child);
+      const initReplyToThis = this.props.userEmail
+        ? this.initReply.bind(this, accessors, child)
+        : this.promptLoginToast;
       const cancelReplyToThis = this.cancelReply.bind(this, accessors, child);
       const hasUpvoted = find(
         child.upvotesFrom,
         user => user.email === this.props.userEmail
       );
-      const upvoteAnnotation = this.props.upvoteAnnotation.bind(this, {
-        annotationId: child.id,
-        hasUpvoted
-      });
+      const upvoteAnnotation = this.props.userEmail
+        ? this.props.upvoteAnnotation.bind(this, {
+            annotationId: child.id,
+            hasUpvoted
+          })
+        : this.promptLoginToast;
       const openModal = this.openModal.bind(null, child);
       const reply = isEmpty(child) ? (
         <CommentBox
@@ -156,7 +175,8 @@ const actions = {
   initiateReplyToAnnotation,
   cancelReplyToAnnotation,
   upvoteAnnotation,
-  loadModal
+  loadModal,
+  notify
 };
 
 export default connect(mapState, actions)(AnnotationItem);

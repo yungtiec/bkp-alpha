@@ -12,7 +12,7 @@
 
 [ ] global error handling
 
-[ ] redux state for edit modal
+[x] redux state for edit modal
   - for error handling
 
 [x] edit annotation

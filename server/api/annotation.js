@@ -187,7 +187,6 @@ router.post("/edit", async (req, res, next) => {
             }
           ]
         });
-        throw(new Error('random'))
         res.send(ancestry);
       }
     } catch (err) {
