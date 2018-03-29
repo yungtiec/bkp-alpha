@@ -11,6 +11,7 @@ const reducer = combineReducers({
   scenes,
   notifications: notificationsReducer()
 });
+
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );

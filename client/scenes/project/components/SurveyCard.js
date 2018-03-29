@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default (url, surveyId, survey) => {
   return (
-    <ListRow className="survey-container" rowId={surveyId} onClick>
+    <ListRow className="survey-card" rowId={surveyId} onClick>
       <div className="survey-custom">
         <div className="survey__block">
           <div className="survey__action--upper">

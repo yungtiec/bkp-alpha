@@ -10,14 +10,12 @@
 
 [ ] make survey page mobile responsive
 
-[ ] global error handling
-
 [x] redux state for edit modal
   - for error handling
 
 [x] edit annotation
 
-[ ] prompt login when guests try to upvote
+[x] prompt login when guests try to upvote
 
 [x] have some sort of highlight when an annotation is clicked on (in both sidebar and main container)
 

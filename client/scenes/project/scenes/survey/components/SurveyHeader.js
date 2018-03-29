@@ -19,6 +19,7 @@ export default class SurveyHeader extends Component {
 
     return (
       <div className="project-survey__header">
+        <p className="project-survey__back-btn">back to project page</p>
         <p className="project-name__box">
           {project.name && project.name.toUpperCase()}
         </p>
