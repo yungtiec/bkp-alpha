@@ -5,7 +5,12 @@ import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { fetchUserProfile } from "./data/actions";
 import { getProfile } from "./data/reducer";
-import { ProfileBanner, ProfileNavbar, About } from "./components";
+import {
+  ProfileBanner,
+  ProfileNavbar,
+  About,
+  ProfileAnnotations
+} from "./components";
 import autoBind from "react-autobind";
 import moment from "moment";
 import history from "../../history";
@@ -38,6 +43,15 @@ class Profile extends Component {
           <Route
             path={`${match.url}/about`}
             render={props => <About {...about} {...props} />}
+          />
+          <Route
+            path={`${match.url}/annotations`}
+            render={props => (
+              <ProfileAnnotations
+                annotations={pastActions.annotations}
+                {...props}
+              />
+            )}
           />
           <Redirect from="/" exact to="/about" />
         </Switch>

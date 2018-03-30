@@ -3,7 +3,7 @@ import React from "react";
 
 export default about => {
   return (
-    <div className="profile-about container">
+    <div className="profile-subroute container">
       <div className="profile-about__field">
         <span className="profile-about__field-label">First Name</span>
         <div className="profile-about__field-value">

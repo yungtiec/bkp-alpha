@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import history from '../../../../../history'
+import history from "../../../../../history";
+import { ProjectSymbolBlueBox } from "../../../../../components";
 
 export default class SurveyHeader extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ export default class SurveyHeader extends Component {
   }
 
   goBack() {
-    history.push('/project/' + this.props.project.symbol)
+    history.push("/project/" + this.props.project.symbol);
   }
 
   render() {
@@ -24,10 +25,10 @@ export default class SurveyHeader extends Component {
 
     return (
       <div className="project-survey__header">
-        <p className="project-survey__back-btn" onClick={this.goBack}>back to project page</p>
-        <p className="project-name__box">
-          {project.name && project.name.toUpperCase()}
+        <p className="project-survey__back-btn" onClick={this.goBack}>
+          back to project page
         </p>
+        <ProjectSymbolBlueBox name={project.name} />
         <p className="survey-name__box">
           {`${survey.name} - ${survey.description}`}
         </p>

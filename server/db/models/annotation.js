@@ -31,7 +31,7 @@ const Annotation = db.define(
     upvotes: {
       type: Sequelize.INTEGER,
       defaultValue: 0
-    }
+    },
   },
   {
     hierarchy: true

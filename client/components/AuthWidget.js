@@ -2,6 +2,7 @@ import "./AuthWidget.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
 import { logout } from "../data/reducer";
 
@@ -41,9 +42,9 @@ class AuthWidget extends Component {
 
   render() {
     const { isLoggedIn, name, logout, inNavbar } = this.props;
-    const className = inNavbar ? "auth-widget--navbar" : "auth-widget"
-    const avatarColor = inNavbar ? "#459DF9" : "#ffffff"
-    const avatarFgColor = inNavbar ? "#ffffff" : "#09263a"
+    const className = inNavbar ? "auth-widget--navbar" : "auth-widget";
+    const avatarColor = inNavbar ? "#459DF9" : "#ffffff";
+    const avatarFgColor = inNavbar ? "#ffffff" : "#09263a";
 
     if (isLoggedIn)
       return (
@@ -59,10 +60,13 @@ class AuthWidget extends Component {
           </div>
           {this.state.dropdown && (
             <div className={`${className}__dropdown`}>
-              <div className={`${className}__dropdown-item`}>
-                profile
-              </div>
-              <div className={`${className}__dropdown-item last`} onClick={logout}>
+              <Link to="/profile" style={{ display: "block", margin: "0px" }}>
+                <div className={`${className}__dropdown-item`}>profile</div>
+              </Link>
+              <div
+                className={`${className}__dropdown-item last`}
+                onClick={logout}
+              >
                 logout
               </div>
             </div>
