@@ -52,10 +52,10 @@ const AuthForm = props => {
             )}
             {name === "signup" && (
               <div className="form-group row">
-                <label htmlFor="company">
-                  <small>Company</small>
+                <label htmlFor="organization">
+                  <small>Organization</small>
                 </label>
-                <input name="company" className="form-control" type="text" />
+                <input name="organization" className="form-control" type="text" />
               </div>
             )}
             <div className="form-group row">
@@ -156,7 +156,7 @@ const mapDispatch = dispatch => {
               password,
               first_name: evt.target.firstName.value,
               last_name: evt.target.lastName.value,
-              company: evt.target.company.value
+              organization: evt.target.organization.value
             };
       dispatch(auth(userInfo, formName));
     }

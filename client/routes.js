@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Projects, Project, Survey } from "./scenes";
-import { Login, Signup, Navbar } from "./components";
+import { Projects, Project, Profile } from "./scenes";
+import { Login, Signup, Layout, LayoutWithNav, RouteWithLayout } from "./components";
 import { me } from "./data/reducer";
 
 /**
@@ -19,16 +19,28 @@ class Routes extends Component {
 
     return (
       <div>
-        <Navbar />
         <Switch>
           {/* Routes placed here are available to all visitors */}
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/projects" component={Projects} />
-          <Route path="/project/:symbol" component={Project} />
+          <RouteWithLayout layout={Layout} path="/login" component={Login} />
+          <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/projects"
+            component={Projects}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/project/:symbol"
+            component={Project}
+          />
           {isLoggedIn && (
             <Switch>
               {/* Routes placed here are only available after logging in */}
+              <RouteWithLayout
+                layout={LayoutWithNav}
+                path="/profile"
+                component={Profile}
+              />
             </Switch>
           )}
           {/* Displays our Login component as a fallback */}

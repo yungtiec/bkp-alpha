@@ -1,0 +1,23 @@
+.profile-annotation__main {
+  padding: 20px 15px 20px 35px;
+  margin: 15px auto;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.15s ease-out;
+  box-shadow: 0 5px 20px -5px rgba(50, 50, 93, 0.12),
+    0 3px 4px -2px rgba(0, 0, 0, 0.08);
+  text-decoration: none !important;
+  background-color: #fff;
+  border: 1px solid #f2f2f2;
+}
+
+.profile-annotation__quote {
+  border-left: 3px solid #d4d4d4;
+  color: #d4d4d4;
+  padding-left: 10px;
+}
+
+.profile-annotation__action--bottom {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -32,6 +32,9 @@ const User = db.define("user", {
   },
   last_name: {
     type: Sequelize.STRING
+  },
+  organization: {
+    type: Sequelize.STRING
   }
 });
 

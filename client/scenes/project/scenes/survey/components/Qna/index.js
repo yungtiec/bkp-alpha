@@ -17,11 +17,11 @@ class QnaBox extends Component {
       this.annotation.annotator("addPlugin", "Store", {
         prefix: "/api/annotator",
         loadFromSearch: {
-          uri: `http://localhost:8080${match.url}`,
+          uri: `http://localhost:8000${match.url}`,
           survey_question_id: qna.id
         },
         annotationData: {
-          uri: `http://localhost:8080${match.url}`,
+          uri: `http://localhost:8000${match.url}`,
           survey_question_id: qna.id
         },
         urls: {

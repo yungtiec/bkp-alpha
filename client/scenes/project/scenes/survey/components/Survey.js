@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import {
   Link as ScrollLink,
   Element,
-  animateScroll as scroll
+  animateScroll as scroll,
+  scroller
 } from "react-scroll";
 import {
   Qna,
@@ -24,8 +25,39 @@ export default class Survey extends Component {
     this.state = {
       selectedQna: "",
       editModalOpen: false,
-      annotationInModal: {}
+      annotationInModal: {},
+      sidebarScrollTo: null,
+      mainScrollTo: null
     };
+  }
+
+  componentDidMount() {
+    const givenAnnotationContext =
+      window.location.pathname.indexOf("/annotation/") !== -1;
+    const givenQnaContext =
+      window.location.pathname.indexOf("/question/") !== -1;
+    var annotationId, qnaId, pos;
+    if (givenAnnotationContext && givenQnaContext) {
+      pos = window.location.pathname.indexOf("/annotation/");
+      annotationId = window.location.pathname.substring(pos).split("/")[2];
+      pos = window.location.pathname.indexOf("/question/");
+      qnaId = window.location.pathname.substring(pos).split("/")[2];
+      this.setState({
+        sidebarScrollTo: `annotation-${annotationId}`,
+        mainScrollTo: `qna-${qnaId}`,
+        selectedQna: Number(qnaId)
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.sidebarScrollTo && this.state.mainScrollTo) {
+      scroller.scrollTo(this.state.mainScrollTo);
+      this.setState({
+        sidebarScrollTo: null,
+        mainScrollTo: null,
+      });
+    }
   }
 
   handleQnaOnClick(qnaId) {
@@ -81,22 +113,22 @@ export default class Survey extends Component {
         (!annotations || (annotations && !annotations.length)))
     ) {
       return annotationIds.map(id => (
-        <ScrollLink
-          className={`annotation-${id}`}
-          activeClass="active"
-          to={`qna-${annotationsById[id].survey_question_id}`}
-          smooth="easeInOutCubic"
-          duration={300}
-          spy={true}
-        >
-          <Element name={`annotation-${id}`}>
+        <Element name={`annotation-${id}`}>
+          <ScrollLink
+            className={`annotation-${id}`}
+            activeClass="active"
+            to={`qna-${annotationsById[id].survey_question_id}`}
+            smooth="easeInOutCubic"
+            duration={300}
+            spy={true}
+          >
             <AnnotationItem
               key={`annotation-${id}`}
               annotation={annotationsById[id]}
               ref={el => (this[`annotation-${id}`] = el)}
             />
-          </Element>
-        </ScrollLink>
+          </ScrollLink>
+        </Element>
       ));
     }
   }
@@ -126,12 +158,15 @@ export default class Survey extends Component {
           {surveyQnaIds.map(id => {
             const handleQnaOnClick = this.handleQnaOnClick.bind(this, id);
             return (
-              <Element name={`qna-${id}`} onClick={handleQnaOnClick}>
+              <Element
+                name={`qna-${id}`}
+                onClick={handleQnaOnClick}
+                ref={el => (this[`qna-${id}`] = el)}
+              >
                 <Qna
                   key={`qna-${id}`}
                   qna={surveyQnasById[id]}
                   isLoggedIn={isLoggedIn}
-                  ref={el => (this[`qna-${id}`] = el)}
                 >
                   <Question question={surveyQnasById[id].question} />
                   <Answers answers={surveyQnasById[id].survey_answers} />

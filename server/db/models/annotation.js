@@ -31,7 +31,7 @@ const Annotation = db.define(
     upvotes: {
       type: Sequelize.INTEGER,
       defaultValue: 0
-    }
+    },
   },
   {
     hierarchy: true
@@ -41,6 +41,41 @@ const Annotation = db.define(
 Annotation.getAnnotationsFromUrl = function(uri) {
   return Annotation.findAll({
     where: { uri, parentId: null },
+    include: [
+      {
+        model: db.model("user"),
+        as: "upvotesFrom",
+        attributes: ["first_name", "last_name", "email"]
+      },
+      {
+        model: db.model("user"),
+        as: "owner",
+        attributes: ["first_name", "last_name", "email"]
+      },
+      {
+        model: Annotation,
+        include: [
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "email"]
+          },
+          {
+            model: db.model("user"),
+            as: "owner",
+            attributes: ["first_name", "last_name", "email"]
+          }
+        ],
+        as: "descendents",
+        hierarchy: true
+      }
+    ]
+  });
+};
+
+Annotation.findOneThreadByRootId = function(id) {
+  return Annotation.findOne({
+    where: { id },
     include: [
       {
         model: db.model("user"),

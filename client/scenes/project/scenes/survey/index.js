@@ -33,7 +33,7 @@ class SurveyContainer extends Component {
       surveyId: this.props.match.params.surveyId
     });
     this.props.fetchAnnotationsBySurvey(
-      `http://localhost:8080${this.props.match.url}`
+      `http://localhost:8000${this.props.match.url}`
     );
     Events.scrollEvent.register("begin", () => {});
     Events.scrollEvent.register("end", () => {});

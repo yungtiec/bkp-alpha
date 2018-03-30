@@ -32,38 +32,9 @@ router.post("/reply", async (req, res, next) => {
     var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
     var reply = await Annotation.create(child);
     reply = await reply.setParent(parent.toJSON().id);
-    ancestry = await Annotation.findOne({
-      where: { id: rootAncestor ? rootAncestor.id : parent.id },
-      include: [
-        {
-          model: db.model("user"),
-          as: "upvotesFrom",
-          attributes: ["first_name", "last_name", "email"]
-        },
-        {
-          model: db.model("user"),
-          as: "owner",
-          attributes: ["first_name", "last_name", "email"]
-        },
-        {
-          model: Annotation,
-          include: [
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
-            },
-            {
-              model: db.model("user"),
-              as: "owner",
-              attributes: ["first_name", "last_name", "email"]
-            }
-          ],
-          as: "descendents",
-          hierarchy: true
-        }
-      ]
-    });
+    ancestry = await Annotation.findOneThreadByRootId(
+      rootAncestor ? rootAncestor.id : parent.id
+    );
     res.send(ancestry);
   } catch (err) {
     next(err);
@@ -91,38 +62,9 @@ router.post("/upvote", async (req, res, next) => {
         raw: true
       });
       const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-      const ancestry = await Annotation.findOne({
-        where: { id: rootAncestor ? rootAncestor.id : annotation.id },
-        include: [
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: Annotation,
-            include: [
-              {
-                model: db.model("user"),
-                as: "upvotesFrom",
-                attributes: ["first_name", "last_name", "email"]
-              },
-              {
-                model: db.model("user"),
-                as: "owner",
-                attributes: ["first_name", "last_name", "email"]
-              }
-            ],
-            as: "descendents",
-            hierarchy: true
-          }
-        ]
-      });
+      const ancestry = await Annotation.findOneThreadByRootId(
+        rootAncestor ? rootAncestor.id : annotation.id
+      );
       res.send(ancestry);
     } catch (err) {
       next(err);
@@ -146,7 +88,7 @@ router.post("/edit", async (req, res, next) => {
       });
       if (annotation.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        annotation = await annotation.update({comment: req.body.comment})
+        annotation = await annotation.update({ comment: req.body.comment });
         const ancestors = await annotation.getAncestors({
           raw: true
         });
@@ -155,38 +97,9 @@ router.post("/edit", async (req, res, next) => {
           ["hierarchyLevel"],
           ["asc"]
         )[0];
-        const ancestry = await Annotation.findOne({
-          where: { id: rootAncestor ? rootAncestor.id : annotation.id },
-          include: [
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
-            },
-            {
-              model: db.model("user"),
-              as: "owner",
-              attributes: ["first_name", "last_name", "email"]
-            },
-            {
-              model: Annotation,
-              include: [
-                {
-                  model: db.model("user"),
-                  as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "email"]
-                },
-                {
-                  model: db.model("user"),
-                  as: "owner",
-                  attributes: ["first_name", "last_name", "email"]
-                }
-              ],
-              as: "descendents",
-              hierarchy: true
-            }
-          ]
-        });
+        const ancestry = await Annotation.findOneThreadByRootId(
+          rootAncestor ? rootAncestor.id : annotation.id
+        );
         res.send(ancestry);
       }
     } catch (err) {
