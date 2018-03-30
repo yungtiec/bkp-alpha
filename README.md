@@ -6,7 +6,7 @@
 
 [x] set up annotation owner association
 
-[ ] user profile
+[x] user profile
 
 [ ] make survey page mobile responsive
 

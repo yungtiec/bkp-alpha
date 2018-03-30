@@ -73,7 +73,7 @@ class SurveyContainer extends Component {
         surveyId: nextProps.match.params.surveyId
       });
       this.props.fetchAnnotationsBySurvey(
-        `http://localhost:8080${nextProps.match.url}`
+        `http://localhost:8000${nextProps.match.url}`
       );
     }
   }
