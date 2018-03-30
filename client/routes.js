@@ -2,24 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Projects, Project, Survey } from "./scenes";
-import { Login, Signup, Layout, LayoutWithNav } from "./components";
+import { Projects, Project, Profile } from "./scenes";
+import { Login, Signup, Layout, LayoutWithNav, RouteWithLayout } from "./components";
 import { me } from "./data/reducer";
-
-function RouteWithLayout({ layout, component, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        React.createElement(
-          layout,
-          props,
-          React.createElement(component, props)
-        )
-      }
-    />
-  );
-}
 
 /**
  * COMPONENT
@@ -51,6 +36,11 @@ class Routes extends Component {
           {isLoggedIn && (
             <Switch>
               {/* Routes placed here are only available after logging in */}
+              <RouteWithLayout
+                layout={LayoutWithNav}
+                path="/profile"
+                component={Profile}
+              />
             </Switch>
           )}
           {/* Displays our Login component as a fallback */}

@@ -1,13 +1,21 @@
 html,
 body {
   width: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
+  color: #020721;
   // overflow: hidden;
 }
 
 p {
   font-size: 14px;
+}
+
+ul,
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .main-container {
@@ -18,7 +26,7 @@ p {
 ::-webkit-scrollbar {
   height: 12px;
   width: 12px;
-  background: #F2F4F8;
+  background: #f2f4f8;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -27,5 +35,5 @@ p {
 }
 
 ::-webkit-scrollbar-corner {
-  background: #F2F4F8;
+  background: #f2f4f8;
 }

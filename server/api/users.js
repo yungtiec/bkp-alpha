@@ -33,20 +33,20 @@ router.get("/profile", async (req, res, next) => {
       include: [
         {
           model: Annotation,
-          as: "annotation",
+          as: "annotations",
           where: {
             hierarchyLevel: 1
           }
         }
       ]
     });
-    const reply = await user.getAnnotation({
+    const replies = await user.getAnnotations({
       raw: true,
       where: {
         hierarchyLevel: { $not: 1 }
       }
     });
-    const profile = assignIn({ reply }, user.toJSON())
+    const profile = assignIn({ replies }, user.toJSON())
     res.send(profile);
   } catch (err) {
     next(err);

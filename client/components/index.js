@@ -11,3 +11,4 @@ export { default as AuthWidget } from "./AuthWidget";
 export { default as ModalContainer } from "./ModalContainer";
 export { default as Layout } from "./Layout";
 export { default as LayoutWithNav } from "./LayoutWithNav";
+export { default as RouteWithLayout } from "./RouteWithLayout"
