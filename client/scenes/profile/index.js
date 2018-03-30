@@ -9,7 +9,8 @@ import {
   ProfileBanner,
   ProfileNavbar,
   About,
-  ProfileAnnotations
+  ProfileAnnotations,
+  ProfileReplies
 } from "./components";
 import autoBind from "react-autobind";
 import moment from "moment";
@@ -49,6 +50,16 @@ class Profile extends Component {
             render={props => (
               <ProfileAnnotations
                 annotations={pastActions.annotations}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            path={`${match.url}/replies`}
+            render={props => (
+              <ProfileReplies
+                about={about}
+                replies={pastActions.replies}
                 {...props}
               />
             )}
