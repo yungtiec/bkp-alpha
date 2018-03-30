@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
 import { logout } from "../data/reducer";
+import ReactDOM from "react-dom";
 
 class AuthWidget extends Component {
   constructor(props) {
@@ -30,10 +31,11 @@ class AuthWidget extends Component {
     });
   }
 
-  handleClickOutside() {
-    this.setState({
-      dropdown: false
-    });
+  handleClickOutside(evt) {
+    if (this.wrapperRef && !this.wrapperRef.contains(evt.target))
+      this.setState({
+        dropdown: false
+      });
   }
 
   setWrapperRef(node) {
@@ -60,7 +62,10 @@ class AuthWidget extends Component {
           </div>
           {this.state.dropdown && (
             <div className={`${className}__dropdown`}>
-              <Link to="/profile/about" style={{ display: "block", margin: "0px" }}>
+              <Link
+                to="/profile/about"
+                style={{ display: "block", margin: "0px" }}
+              >
                 <div className={`${className}__dropdown-item`}>profile</div>
               </Link>
               <div
