@@ -23,11 +23,10 @@ router.post("/store", async (req, res, next) => {
         survey_question_id
       } = req.body;
       const newAnnotation = await Annotation.create({
-        quote,
         uri,
         survey_question_id,
-        quote,
-        text,
+        quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
+        comment: text,
         ranges,
         annotator_schema_version
       });
@@ -36,7 +35,7 @@ router.post("/store", async (req, res, next) => {
       io.sockets.emit(
         "annotationAdded",
         assignIn(
-          {owner: pick(req.user, ["first_name", "last_name", "email"])},
+          { owner: pick(req.user, ["first_name", "last_name", "email"]) },
           newAnnotation.toJSON()
         )
       );

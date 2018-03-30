@@ -61,7 +61,7 @@ Annotation.belongsToMany(User, {
   foreignKey: "annotation_id"
 });
 
-User.hasMany(Annotation, { foreignKey: "owner_id" });
+User.hasMany(Annotation, { foreignKey: "owner_id", as: "annotation" });
 Annotation.belongsTo(User, { foreignKey: "owner_id", as: "owner" });
 
 /*=====  End of User and Annotation  ========*/
