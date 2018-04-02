@@ -32,23 +32,29 @@ class ProjectIndex extends Component {
 
     const ThisSurveyCard = SurveyCard.bind(SurveyCard, match.url);
 
-    const projectContainerClass = match.isExact ? "container main-container" : "project-container";
+    const projectContainerClass = match.isExact
+      ? "container main-container"
+      : "project-container";
 
-    const surveyContainerClass = match.isExact ? "surveys-container" : "surveys-container--sub";
+    const surveyContainerClass = match.isExact
+      ? "surveys-container"
+      : "surveys-container--sub";
 
     return (
       <div className={projectContainerClass}>
         <Route path={`${match.url}/survey/:surveyId`} component={Survey} />
-        <div className={surveyContainerClass}>
-          {!match.isExact && <div>You might also be interested in</div>}
-          <ListView
-            viewClassName={"row projects-container"}
-            rowClassName={match.isExact ? "col-md-12" : "col-md-4"}
-            rowsIdArray={projectSurveyIds}
-            rowsById={projectSurveysById}
-            renderRow={ThisSurveyCard}
-          />
-        </div>
+        {match.isExact && (
+          <div className={surveyContainerClass}>
+            {!match.isExact && <div>You might also be interested in</div>}
+            <ListView
+              viewClassName={"row projects-container"}
+              rowClassName={match.isExact ? "col-md-12" : "col-md-4"}
+              rowsIdArray={projectSurveyIds}
+              rowsById={projectSurveysById}
+              renderRow={ThisSurveyCard}
+            />
+          </div>
+        )}
       </div>
     );
   }

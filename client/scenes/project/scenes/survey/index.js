@@ -1,18 +1,15 @@
 import React, { Component } from "react";
 import Loadable from "react-loadable";
-
-function MyLoadingComponent() {
-  return <div>Loading...</div>;
-}
+import { LoadingScreen } from "../../../../components";
 
 const LoadableSurvey = Loadable({
   loader: () => import("./main"),
-  loading: MyLoadingComponent,
-  serverSideRequirePath: "/"
+  loading: LoadingScreen,
+  delay: 1000
 });
 
 export default class MyComponent extends React.Component {
   render() {
-    return <LoadableSurvey/>;
+    return <LoadableSurvey />;
   }
 }

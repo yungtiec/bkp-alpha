@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import Loadable from "react-loadable";
-
-function MyLoadingComponent() {
-  return <div>Loading...</div>;
-}
+import { LoadingScreen } from "../../components";
 
 const LoadableProject = Loadable({
   loader: () => import("./main"),
-  loading: MyLoadingComponent,
+  loading: LoadingScreen,
   serverSideRequirePath: "/"
 });
 
