@@ -3,8 +3,16 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Projects, Project, Profile } from "./scenes";
-import { Login, Signup, Layout, LayoutWithNav, RouteWithLayout } from "./components";
+import {
+  Login,
+  Signup,
+  Layout,
+  LayoutWithNav,
+  RouteWithLayout
+} from "./components";
 import { me } from "./data/reducer";
+import Loadable from "react-loadable";
+import path from "path";
 
 /**
  * COMPONENT
