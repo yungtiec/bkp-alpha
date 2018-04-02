@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { logout } from "../data/reducer";
-import { AuthWidget } from "./index"
+import { AuthWidget, SearchBar } from "./index";
 
 class Navbar extends Component {
   constructor(props) {
@@ -13,27 +13,53 @@ class Navbar extends Component {
     autoBind(this);
   }
 
+  state = {
+    showFilters: false
+  };
+
+  setSearchBarRef(input) {
+    this.searchBar = input;
+  }
+
+  handleSearchIconOnClick() {
+    this.setState(state => ({ showSearchBar: !state.showSearchBar }));
+  }
+
   render() {
     return (
       <div className="header">
-        <nav className="navbar navbar-expand-md no-gutters navbar--logo">
-          <div className="box--left">
-            <div className="logo-header">
-              <img
-                width="100px"
-                height="auto"
-                className="logo__large"
-                src="/assets/the-brooklyn-project-logo.png"
-              />
+        {!this.state.showSearchBar && (
+          <nav className="navbar navbar-expand-md no-gutters navbar--logo">
+            <div className="box--left">
+              <div className="logo-header">
+                <img
+                  width="100px"
+                  height="auto"
+                  className="logo__large"
+                  src="/assets/the-brooklyn-project-logo.png"
+                />
+              </div>
             </div>
-          </div>
-          <div className="box--right">
-            <div className="icon-container">
-              <i className="fas fa-search" />
+            <div className="box--right">
+              <Link to="/projects" className="navbar__nav-item">
+                projects
+              </Link>
+              <div
+                className="navbar__nav-item"
+                onClick={this.handleSearchIconOnClick}
+              >
+                <i className="fas fa-search" />
+              </div>
+              <AuthWidget inNavbar={true} />
             </div>
-            <AuthWidget inNavbar={true}/>
-          </div>
-        </nav>
+          </nav>
+        )}
+        {this.state.showSearchBar && (
+          <SearchBar
+            handleSearchIconOnClick={this.handleSearchIconOnClick}
+            setSearchBarRef={this.setSearchBarRef}
+          />
+        )}
       </div>
     );
   }

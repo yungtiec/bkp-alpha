@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import Loadable from "react-loadable";
-import { LoadingScreen } from "../../../../components";
+import { SquareLoader } from "halogenium";
 
 const LoadableSurvey = Loadable({
   loader: () => import("./main"),
-  loading: LoadingScreen,
+  loading: () => (
+    <SquareLoader
+      className="route__loader"
+      color="#2d4dd1"
+      size="16px"
+      margin="4px"
+    />
+  ),
   delay: 1000
 });
 

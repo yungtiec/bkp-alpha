@@ -4,6 +4,7 @@
  * having to figure out which file they belong to!
  */
 export { default as Navbar } from "./Navbar";
+export { default as SearchBar } from "./SearchBar";
 export { Login, Signup } from "./AuthForm";
 export { default as ListView } from "./ListView";
 export { default as ListRow } from "./ListRow";

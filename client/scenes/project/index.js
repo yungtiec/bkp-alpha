@@ -1,15 +1,22 @@
 import React, { Component } from "react";
 import Loadable from "react-loadable";
-import { LoadingScreen } from "../../components";
+import { SquareLoader } from "halogenium";
 
 const LoadableProject = Loadable({
   loader: () => import("./main"),
-  loading: LoadingScreen,
-  serverSideRequirePath: "/"
+  loading: () => (
+    <SquareLoader
+      className="route__loader"
+      color="#2d4dd1"
+      size="16px"
+      margin="4px"
+    />
+  ),
+  delay: 1000
 });
 
 export default class MyComponent extends React.Component {
   render() {
-    return <LoadableProject/>;
+    return <LoadableProject />;
   }
 }
