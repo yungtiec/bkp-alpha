@@ -1,5 +1,4 @@
 var webpack = require("webpack");
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 const isDev = process.env.NODE_ENV === "development";
 
@@ -39,7 +38,6 @@ module.exports = {
   // files. It's like `nodemon` for the front end!
   plugins: isDev
     ? [
-        new HardSourceWebpackPlugin(),
         new webpack.ProvidePlugin({
           $: "jquery",
           jQuery: "jquery",
@@ -50,7 +48,6 @@ module.exports = {
         new LiveReloadPlugin({ appendScriptTag: true })
       ]
     : [
-        new HardSourceWebpackPlugin(),
         new webpack.ProvidePlugin({
           $: "jquery",
           jQuery: "jquery",

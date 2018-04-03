@@ -31,7 +31,6 @@
     "express": "^4.14.1",
     "express-session": "^1.15.1",
     "halogenium": "^2.2.3",
-    "hard-source-webpack-plugin": "^0.6.4",
     "history": "^4.6.3",
     "jquery": "^1.12.4",
     "loadable-components": "^1.2.0",
@@ -95,6 +94,7 @@
     "style-loader": "^0.13.1",
     "supertest": "^3.0.0",
     "webpack": "^4.0.1",
+    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-cli": "^2.0.9",
     "webpack-livereload-plugin": "^2.0.0"
   }

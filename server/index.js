@@ -10,7 +10,7 @@ const db = require("./db");
 const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8000;
 const app = express();
-const socketio = require('socket.io')
+const socketio = require("socket.io");
 module.exports = app;
 
 /**
@@ -62,16 +62,21 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, "..", "public")));
 
-
   app.get("/project/:symbol/survey/public/:file", (req, res, next) => {
-    res.redirect(`/${req.params.file}`)
-  })
+    res.redirect(`/${req.params.file}`);
+  });
   app.get("/:route/public/:file", (req, res, next) => {
-    res.redirect(`/${req.params.file}`)
-  })
+    res.redirect(`/${req.params.file}`);
+  });
   app.get("/public/:file", (req, res, next) => {
-    res.redirect(`/${req.params.file}`)
-  })
+    res.redirect(`/${req.params.file}`);
+  });
+  app.get(
+    "/project/:symbol/survey/:surveyId/question/:questionId/annotation/public/:file",
+    (req, res, next) => {
+      res.redirect(`/${req.params.file}`);
+    }
+  );
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
@@ -95,8 +100,6 @@ const createApp = () => {
     console.error(err.stack);
     res.status(err.status || 500).send(err.message || "Internal server error.");
   });
-
-
 };
 
 const startListening = () => {
@@ -105,10 +108,9 @@ const startListening = () => {
     console.log(`Mixing it up on port ${PORT}`)
   );
   // set up our socket control center
-  const io = socketio(server)
-  require('./socket')(io)
-  app.set('io', io);
-
+  const io = socketio(server);
+  require("./socket")(io);
+  app.set("io", io);
 };
 
 const syncDb = () => db.sync();

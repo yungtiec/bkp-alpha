@@ -32,6 +32,10 @@ const Annotation = db.define(
       type: Sequelize.INTEGER,
       defaultValue: 0
     },
+    reviewed: {
+      type: Sequelize.ENUM('pending', 'spam', 'not_spam'),
+      defaultValue: 'pending'
+    }
   },
   {
     hierarchy: true

@@ -10,7 +10,7 @@ import {
   LayoutWithNav,
   RouteWithLayout
 } from "./components";
-import { me } from "./data/reducer";
+import { me, initEnvironment } from "./data/reducer";
 import Loadable from "react-loadable";
 import path from "path";
 
@@ -63,10 +63,14 @@ class Routes extends Component {
  * CONTAINER
  */
 const mapState = state => {
+  const { height, isMobile, width } = state.data.environment;
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.data.user.id
+    isLoggedIn: !!state.data.user.id,
+    height,
+    isMobile,
+    width
   };
 };
 
@@ -74,6 +78,7 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me());
+      dispatch(initEnvironment());
     }
   };
 };

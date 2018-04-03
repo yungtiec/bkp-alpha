@@ -23,6 +23,17 @@ li {
   margin-bottom: 30px;
 }
 
+.route__loader div {
+  position: fixed;
+  height: 2em !important;
+  width: 2em !important;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 ::-webkit-scrollbar {
   height: 12px;
   width: 12px;
