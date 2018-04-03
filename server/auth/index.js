@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const User = require("../db/models/user");
+const Role = require("../db/models/role");
+
 module.exports = router;
 
 router.post("/login", (req, res, next) => {
@@ -36,8 +38,26 @@ router.post("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get("/me", (req, res) => {
-  res.json(req.user);
+router.get("/me", async (req, res) => {
+  const user = await User.findOne({
+    where: { id: req.user.id },
+    attributes: [
+      "id",
+      "first_name",
+      "last_name",
+      "organization",
+      "email",
+      "createdAt"
+    ],
+    include: [
+      {
+        model: Role,
+        attributes: ["name"]
+      }
+    ]
+  });
+
+  res.json(user);
 });
 
 router.use("/google", require("./google"));

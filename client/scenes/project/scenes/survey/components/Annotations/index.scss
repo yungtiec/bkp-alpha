@@ -55,7 +55,7 @@
   color: #9ca6af;
   transition: all 0.2s ease-in-out;
   @include breakpoint(xs) {
-    max-width: 300px;
+    max-width: 350px;
   }
 }
 
@@ -75,7 +75,7 @@
   padding-top: 10px;
   width: 410px;
   @include breakpoint(xs) {
-    width: 300px;
+    width: 350px;
   }
 }
 
@@ -89,6 +89,9 @@
   padding: 20px 30px;
   overflow-y: scroll;
   overflow-x: hidden;
+  @include breakpoint(xs) {
+    padding: 20px;
+  }
 }
 
 .annotation-contents::-webkit-scrollbar {
@@ -127,6 +130,9 @@
   background: #0d3048;
   padding: 20px;
   margin-bottom: 30px;
+  @include breakpoint(xs) {
+    padding: 10px;
+  }
 }
 
 .annotation-item__header {
@@ -147,6 +153,15 @@
   border-left: 3px solid white;
   color: white;
   padding-left: 10px;
+  @include breakpoint(xs) {
+    font-size: 12px;
+  }
+}
+
+.annotation-item__comment {
+  @include breakpoint(xs) {
+    font-size: 12px;
+  }
 }
 
 .annotation-item__edit .annotation-item__quote {
@@ -162,6 +177,7 @@
 .annotation-item__action--bottom {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 .annotation-item__action--bottom .fas {

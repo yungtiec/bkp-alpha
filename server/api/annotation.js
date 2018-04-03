@@ -107,3 +107,32 @@ router.post("/edit", async (req, res, next) => {
     }
   }
 });
+
+router.get("/pending", async (req, res, next) => {
+  try {
+    var annotations = await Annotation.findAll({
+      where: { reviewed: "pending" },
+      include: [
+        {
+          model: User,
+          as: "owner"
+        },
+        {
+          model: Annotation,
+          as: "parent",
+          include: [
+            {
+              model: User,
+              as: "owner"
+            }
+          ]
+        }
+      ]
+    });
+    res.send(annotations);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/verified", async (req, res, next) => {});
