@@ -84,6 +84,7 @@ class SurveyContainer extends Component {
     const prevSurveyId = this.props.match.params.surveyId;
     const nextSurveyId = nextProps.match.params.surveyId;
     if (
+      this.props.width !== nextProps.width || // window resized
       this.props.isLoggedIn !== nextProps.isLoggedIn || // login event
       !this.props.surveyMetadata.id || // on init
       (prevProjectSymbol !== nextProjectSymbol ||
@@ -106,6 +107,7 @@ class SurveyContainer extends Component {
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const { annotationsById, annotationIds } = getAllAnnotations(state);
+  const { width } = state.data.environment
   return {
     isLoggedIn: !!state.data.user.id,
     surveyQnasById,
@@ -113,7 +115,8 @@ const mapState = state => {
     surveyMetadata: getSelectedSurvey(state),
     projectMetadata: getSelectedProject(state),
     annotationsById,
-    annotationIds
+    annotationIds,
+    width
   };
 };
 

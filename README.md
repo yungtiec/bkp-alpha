@@ -8,10 +8,6 @@
 
 [x] user profile
 
-[ ] make survey page mobile responsive
-
-[ ] breadcrumb
-
 [x] redux state for edit modal
   - for error handling
 
@@ -20,6 +16,8 @@
 [x] prompt login when guests try to upvote
 
 [x] have some sort of highlight when an annotation is clicked on (in both sidebar and main container)
+
+[ ] make survey page mobile responsive
 
 [ ] annotator api
   - use reviewed flag to filter

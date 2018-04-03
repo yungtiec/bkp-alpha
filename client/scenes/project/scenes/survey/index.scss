@@ -1,8 +1,15 @@
+@import "../../../../breakpoint";
+
 .project-survey {
   max-width: 740px;
   padding-top: 50px;
   padding-bottom: 6rem;
   margin-left: 80px;
+  margin-right: 0px;
+  @include breakpoint(xs) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
 .project-survey__back-btn {
@@ -14,6 +21,10 @@
   font-size: 3rem;
   line-height: 3rem;
   text-transform: capitalize;
+  @include breakpoint(xs) {
+    font-size: 36px;
+    line-height: 40px;
+  }
 }
 
 .project-survey__header .survey-creator-name__box {

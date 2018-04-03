@@ -148,7 +148,8 @@ export default class Survey extends Component {
       annotationIds,
       isLoggedIn,
       editAnnotationComment,
-      match
+      match,
+      width
     } = this.props;
 
     return (
@@ -176,7 +177,7 @@ export default class Survey extends Component {
           })}
         </div>
 
-        <AnnotationSidebar>
+        <AnnotationSidebar width={width}>
           <Element
             name="annotation-sidebar"
             id="annotation-sidebar"

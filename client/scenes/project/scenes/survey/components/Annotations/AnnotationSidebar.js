@@ -35,7 +35,7 @@ export default class AnnotationSidebar extends Component {
   render() {
     var style = this.state.sidebarOpen
       ? {
-          marginLeft: "-410px"
+          marginLeft: this.props.width < 767 ? "-300px" : "-410px"
         }
       : {
           marginLeft: "-10px"

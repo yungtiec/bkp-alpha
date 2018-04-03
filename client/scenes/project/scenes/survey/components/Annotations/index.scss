@@ -1,3 +1,6 @@
+@import "../../../../../../breakpoint";
+
+
 .annotator-notice.annotator-notice-show.annotator-notice-error {
   border-bottom: 4px solid #ec7063;
 }
@@ -51,6 +54,9 @@
   background: #09263a;
   color: #9ca6af;
   transition: all 0.2s ease-in-out;
+  @include breakpoint(xs) {
+    max-width: 300px;
+  }
 }
 
 .annotation-sidebar__logo-consensys {
@@ -68,6 +74,9 @@
   padding: 0px 15px;
   padding-top: 10px;
   width: 410px;
+  @include breakpoint(xs) {
+    width: 300px;
+  }
 }
 
 .annotations-header.reset-selection {
@@ -122,7 +131,16 @@
 
 .annotation-item__header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  @include breakpoint(xs) {
+    flex-direction: column;
+    margin-bottom: 7px;
+    p {
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+  }
 }
 
 .annotation-item__quote {
