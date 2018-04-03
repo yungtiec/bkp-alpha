@@ -1,4 +1,4 @@
-.profile-annotation__main {
+.main-annotation__main{
   padding: 20px 15px 20px 35px;
   margin: 15px auto;
   border: none;
@@ -11,18 +11,18 @@
   border: 1px solid #f2f2f2;
 }
 
-.profile-annotation__quote {
+.main-annotation__quote {
   border-left: 3px solid #d4d4d4;
   color: #d4d4d4;
   padding-left: 10px;
 }
 
-.profile-annotation__action--bottom {
+.main-annotation__action--bottom{
   display: flex;
   justify-content: flex-end;
 }
 
-.profile-annotation__action--bottom .see-in-context {
+.main-annotation__action--bottom .see-in-context {
   cursor: pointer;
   color: #459df9;
 }
