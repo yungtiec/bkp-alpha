@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { keyBy, assignIn, omit, pick } from "lodash";
+import { keyBy } from "lodash";
 import { getPendingAnnotations } from "./service";
 import { notify } from "reapop";
 

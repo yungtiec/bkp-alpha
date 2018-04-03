@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const db = require("../db");
-const { Annotation, User } = require("../db/models");
+const { Annotation, User, Role } = require("../db/models");
 const _ = require("lodash");
 module.exports = router;
 
@@ -110,26 +110,38 @@ router.post("/edit", async (req, res, next) => {
 
 router.get("/pending", async (req, res, next) => {
   try {
-    var annotations = await Annotation.findAll({
-      where: { reviewed: "pending" },
+    const requestor = await User.findOne({
+      where: { id: req.user.id },
       include: [
         {
-          model: User,
-          as: "owner"
-        },
-        {
-          model: Annotation,
-          as: "parent",
-          include: [
-            {
-              model: User,
-              as: "owner"
-            }
-          ]
+          model: Role
         }
       ]
     });
-    res.send(annotations);
+    if (requestor.roles.filter(r => r.name === "admin").length) {
+      var annotations = await Annotation.findAll({
+        where: { reviewed: "pending" },
+        include: [
+          {
+            model: User,
+            as: "owner"
+          },
+          {
+            model: Annotation,
+            as: "parent",
+            include: [
+              {
+                model: User,
+                as: "owner"
+              }
+            ]
+          }
+        ]
+      });
+      res.send(annotations);
+    } else {
+      res.sendStatus(401)
+    }
   } catch (err) {
     next(err);
   }
