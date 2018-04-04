@@ -76,28 +76,6 @@ class SurveyContainer extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    // break this up, distribute the logics to children
-    const prevProjectSymbol = this.props.match.url.split("/")[2];
-    const nextProjectSymbol = nextProps.match.url.split("/")[2];
-    const prevSurveyId = this.props.match.params.surveyId;
-    const nextSurveyId = nextProps.match.params.surveyId;
-    if (
-      this.props.sidebarOpen !== nextProps.sidebarOpen || // window resized
-      this.props.width !== nextProps.width || // window resized
-      this.props.isLoggedIn !== nextProps.isLoggedIn || // login event
-      !this.props.surveyMetadata.id || // on init
-      (prevProjectSymbol !== nextProjectSymbol ||
-        prevSurveyId !== nextSurveyId) || // project_survey changed
-      JSON.stringify(nextProps.annotationsById) !==
-        JSON.stringify(this.props.annotationsById) // annotation changed
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   render() {
     if (!this.props.surveyQnaIds.length) return "loading";
     return <Survey {...this.props} />;
