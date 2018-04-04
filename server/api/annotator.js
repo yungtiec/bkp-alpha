@@ -41,7 +41,8 @@ router.get("/search", async (req, res, next) => {
     const annotations = await Annotation.findAll({
       where: {
         uri: req.query.uri,
-        survey_question_id: req.query.survey_question_id
+        survey_question_id: req.query.survey_question_id,
+        reviewed: { $not: "spam" }
       }
     }).map(annotation => {
       return annotation.toJSON();

@@ -33,8 +33,8 @@ const Annotation = db.define(
       defaultValue: 0
     },
     reviewed: {
-      type: Sequelize.ENUM('pending', 'spam', 'verified'),
-      defaultValue: 'pending'
+      type: Sequelize.ENUM("pending", "spam", "verified"),
+      defaultValue: "pending"
     }
   },
   {
@@ -44,7 +44,7 @@ const Annotation = db.define(
 
 Annotation.getAnnotationsFromUrl = function(uri) {
   return Annotation.findAll({
-    where: { uri, parentId: null },
+    where: { uri, parentId: null, reviewed: { [Sequelize.Op.ne]: "spam" } },
     include: [
       {
         model: db.model("user"),
@@ -58,6 +58,15 @@ Annotation.getAnnotationsFromUrl = function(uri) {
       },
       {
         model: Annotation,
+        where: {
+          reviewed: {
+            [Sequelize.Op.or]: [
+              { [Sequelize.Op.eq]: "pending" },
+              { [Sequelize.Op.eq]: "verified" }
+            ]
+          }
+        },
+        required: false,
         include: [
           {
             model: db.model("user"),
@@ -79,7 +88,7 @@ Annotation.getAnnotationsFromUrl = function(uri) {
 
 Annotation.findOneThreadByRootId = function(id) {
   return Annotation.findOne({
-    where: { id },
+    where: { id, reviewed: { [Sequelize.Op.ne]: "spam" } },
     include: [
       {
         model: db.model("user"),
@@ -93,6 +102,15 @@ Annotation.findOneThreadByRootId = function(id) {
       },
       {
         model: Annotation,
+        where: {
+          reviewed: {
+            [Sequelize.Op.or]: [
+              { [Sequelize.Op.eq]: "pending" },
+              { [Sequelize.Op.eq]: "verified" }
+            ]
+          }
+        },
+        required: false,
         include: [
           {
             model: db.model("user"),
