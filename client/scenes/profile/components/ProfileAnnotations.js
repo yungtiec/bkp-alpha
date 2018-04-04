@@ -17,7 +17,20 @@ export default props => {
           <div className="profile-annotation__uri">
             <ProjectSymbolBlueBox name={projectSymbol} />
             {annotations.map(annotation => (
-              <AnnotationMain annotation={annotation} path={path} />
+              <AnnotationMain annotation={annotation} path={path}>
+                <a
+                  className="see-in-context"
+                  onClick={() =>
+                    history.push(
+                      `${path}/question/${
+                        annotation.survey_question_id
+                      }/annotation/${annotation.id}`
+                    )
+                  }
+                >
+                  see in context
+                </a>
+              </AnnotationMain>
             ))}
           </div>
         );

@@ -5,12 +5,10 @@ import history from "../history";
 import moment from "moment";
 import Avatar from "react-avatar";
 
-export default ({ annotation, path }) => {
+export default ({ annotation, path, children }) => {
   const replier = annotation.owner ? (
     <Avatar
-      name={`${annotation.owner.first_name} ${
-        annotation.owner.last_name
-      }`}
+      name={`${annotation.owner.first_name} ${annotation.owner.last_name}`}
       size={40}
     />
   ) : (
@@ -43,18 +41,8 @@ export default ({ annotation, path }) => {
         <p className="reply-annotation__comment">{annotation.comment}</p>
       </div>
       <div className="reply-annotation__action--bottom">
-        <a
-          className="see-in-context"
-          onClick={() =>
-            history.push(
-              `${path}/question/${annotation.survey_question_id}/annotation/${
-                annotation.id
-              }`
-            )
-          }
-        >
-          see in context
-        </a>
+        <div />
+        {children}
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 import * as types from "./actionTypes";
+import { values, orderBy } from "lodash";
+import moment from "moment";
 
 const initialState = {
   annotationsById: {},
@@ -8,7 +10,7 @@ const initialState = {
 export default function reduce(state = initialState, action = {}) {
   var sortedAnnotations, annotationIds;
   switch (action.type) {
-    case types.ANNOTATIONS_FETCH_SUCCESS:
+    case types.PENDING_ANNOTATIONS_FETCH_SUCCESS:
       sortedAnnotations = orderBy(
         values(action.annotationsById).map(a => ({
           id: a.id,
@@ -26,3 +28,6 @@ export default function reduce(state = initialState, action = {}) {
       return state;
   }
 }
+
+export const getPendingAnnotations = state =>
+  state.scenes.admin.data.pendingAnnotations;

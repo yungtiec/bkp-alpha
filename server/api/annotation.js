@@ -4,6 +4,22 @@ const { Annotation, User, Role } = require("../db/models");
 const _ = require("lodash");
 module.exports = router;
 
+const ensureAdminRole = async (req, res, next) => {
+  const requestor = await User.findOne({
+    where: { id: req.user.id },
+    include: [
+      {
+        model: Role
+      }
+    ]
+  });
+  if (requestor.roles.filter(r => r.name === "admin").length) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+};
+
 router.get("/", async (req, res, next) => {
   try {
     const annotations = await Annotation.getAnnotationsFromUrl(req.query.uri);
@@ -110,41 +126,38 @@ router.post("/edit", async (req, res, next) => {
 
 router.get("/pending", async (req, res, next) => {
   try {
-    const requestor = await User.findOne({
-      where: { id: req.user.id },
+    var annotations = await Annotation.findAll({
+      where: { reviewed: "pending" },
       include: [
         {
-          model: Role
+          model: User,
+          as: "owner"
+        },
+        {
+          model: Annotation,
+          as: "parent",
+          include: [
+            {
+              model: User,
+              as: "owner"
+            }
+          ]
         }
       ]
     });
-    if (requestor.roles.filter(r => r.name === "admin").length) {
-      var annotations = await Annotation.findAll({
-        where: { reviewed: "pending" },
-        include: [
-          {
-            model: User,
-            as: "owner"
-          },
-          {
-            model: Annotation,
-            as: "parent",
-            include: [
-              {
-                model: User,
-                as: "owner"
-              }
-            ]
-          }
-        ]
-      });
-      res.send(annotations);
-    } else {
-      res.sendStatus(401)
-    }
+    res.send(annotations);
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/verified", async (req, res, next) => {});
+router.post("/verify", ensureAdminRole, async (req, res, next) => {
+  try {
+    var annotation = await Annotation.findById(req.body.annotationId);
+    annotation = annotation.update({ reviewed: req.body.reviewed });
+    res.send(200);
+    // make socket broadcast
+  } catch (err) {
+    next(err);
+  }
+});

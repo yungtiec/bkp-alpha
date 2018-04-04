@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import { keyBy } from "lodash";
-import { getPendingAnnotations } from "./service";
+import { getPendingAnnotations, postPendingAnnotationStatus } from "./service";
 import { notify } from "reapop";
 
 export function fetchPendingAnnotations() {
@@ -9,7 +9,7 @@ export function fetchPendingAnnotations() {
       const annotations = await getPendingAnnotations();
       const annotationsById = keyBy(annotations, "id");
       dispatch({
-        type: types.PENING_ANNOTATIONS_FETCH_SUCCESS,
+        type: types.PENDING_ANNOTATIONS_FETCH_SUCCESS,
         annotationsById
       });
     } catch (error) {
@@ -17,6 +17,27 @@ export function fetchPendingAnnotations() {
         notify({
           title: "Unauthorized requests",
           message: "",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
+export function verifyPendingAnnotation(annotationId, status) {
+  return async dispatch => {
+    try {
+      await postPendingAnnotationStatus(annotationId, status);
+      dispatch({
+        type: types.PENDING_ANNOTATIONS_VERIFIED_SUCCESS,
+      });
+    } catch (error) {
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
           status: "error",
           dismissible: true,
           dismissAfter: 3000
