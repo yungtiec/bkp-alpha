@@ -14,6 +14,12 @@ import {
   AnnotationReply
 } from "../../components";
 import history from "../../history";
+import asyncPoll from "react-async-poll";
+
+const onPollInterval = (props, dispatch) => {
+  console.log('hey')
+  return props.fetchPendingAnnotations();
+};
 
 class AdminPanel extends Component {
   constructor(props) {
@@ -106,5 +112,9 @@ const actions = {
 };
 
 export default withRouter(
-  connect(mapState, actions)(requiresAuthorization(AdminPanel, "admin"))
+  connect(mapState, actions)(
+    asyncPoll(60 * 1000, onPollInterval)(
+      requiresAuthorization(AdminPanel, "admin")
+    )
+  )
 );

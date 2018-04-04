@@ -12,10 +12,9 @@ export { default as AuthWidget } from "./AuthWidget";
 export { default as ModalContainer } from "./ModalContainer";
 export { default as Layout } from "./Layout";
 export { default as LayoutWithNav } from "./LayoutWithNav";
-export { default as RouteWithLayout } from "./RouteWithLayout"
+export { default as RouteWithLayout } from "./RouteWithLayout";
 export { default as ProjectSymbolBlueBox } from "./ProjectSymbolBlueBox";
 export { default as AnnotationMain } from "./AnnotationMain";
 export { default as AnnotationReply } from "./AnnotationReply";
 export { default as requiresAuthorization } from "./requiresAuthorization";
-
-
+export { default as asyncPolling } from "./asyncPolling";

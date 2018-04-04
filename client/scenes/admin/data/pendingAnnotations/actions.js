@@ -31,7 +31,7 @@ export function verifyPendingAnnotation(annotationId, status) {
     try {
       await postPendingAnnotationStatus(annotationId, status);
       dispatch({
-        type: types.PENDING_ANNOTATIONS_VERIFIED_SUCCESS,
+        type: types.PENDING_ANNOTATIONS_VERIFIED_SUCCESS
       });
     } catch (error) {
       dispatch(
