@@ -17,7 +17,6 @@ import history from "../../history";
 import asyncPoll from "react-async-poll";
 
 const onPollInterval = (props, dispatch) => {
-  console.log('hey')
   return props.fetchPendingAnnotations();
 };
 

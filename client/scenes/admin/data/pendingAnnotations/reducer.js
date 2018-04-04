@@ -1,11 +1,19 @@
 import * as types from "./actionTypes";
-import { values, orderBy } from "lodash";
+import { values, orderBy, clone, keys } from "lodash";
 import moment from "moment";
 
 const initialState = {
   annotationsById: {},
   annotationIds: []
 };
+
+function removePendingAnnotation(state, annotationId) {
+  delete state.annotationsById[annotationId];
+  return {
+    ...state,
+    annotationIds: keys(state.annotationsById)
+  };
+}
 
 export default function reduce(state = initialState, action = {}) {
   var sortedAnnotations, annotationIds;
@@ -24,6 +32,8 @@ export default function reduce(state = initialState, action = {}) {
         annotationsById: action.annotationsById,
         annotationIds
       };
+    case types.PENDING_ANNOTATIONS_VERIFIED_SUCCESS:
+      return removePendingAnnotation(clone(state), action.annotationId);
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-const { User } = require("../db/models");
+const { User, Role } = require("../db/models");
 
 const ensureAuthentication = async (req, res, next) => {
   if (req.user) {

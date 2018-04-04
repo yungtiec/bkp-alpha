@@ -2,7 +2,7 @@ const router = require("express").Router();
 const db = require("../db");
 const { Annotation, User, Role } = require("../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("./utils")
+const { ensureAuthentication, ensureAdminRole } = require("./utils");
 module.exports = router;
 
 router.get("/", async (req, res, next) => {
@@ -134,7 +134,7 @@ router.post(
     try {
       var annotation = await Annotation.findById(req.body.annotationId);
       annotation = annotation.update({ reviewed: req.body.reviewed });
-      res.send(200);
+      res.send(annotation.id);
     } catch (err) {
       next(err);
     }
