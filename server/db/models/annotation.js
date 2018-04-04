@@ -33,7 +33,7 @@ const Annotation = db.define(
       defaultValue: 0
     },
     reviewed: {
-      type: Sequelize.ENUM('pending', 'spam', 'not_spam'),
+      type: Sequelize.ENUM('pending', 'spam', 'verified'),
       defaultValue: 'pending'
     }
   },

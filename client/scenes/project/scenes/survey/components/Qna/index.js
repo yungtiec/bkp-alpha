@@ -11,7 +11,7 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn } = this.props;
+    const { qna, match, isLoggedIn, pollData } = this.props;
     if (!this.annotation) {
       this.annotation = $(this[`qna-${qna.id}`]).annotator();
       this.annotation.annotator("addPlugin", "Store", {
@@ -32,6 +32,16 @@ class QnaBox extends Component {
         }
       });
     }
+    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).click(event => {
+      setTimeout(() => pollData(), 500);
+    });
+    $(`div[name="qna-${qna.id}"] .annotator-item textarea`).keydown(event => {
+      if (event.which === 13) {
+        setTimeout(() => {
+          pollData();
+        }, 500);
+      }
+    });
   }
 
   componentDidUpdate() {

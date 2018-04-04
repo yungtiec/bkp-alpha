@@ -17,6 +17,14 @@ export default ({ annotation, path, children }) => {
 
   return (
     <div className="reply-annotation__main">
+      <div className="reply-annotation__header">
+        <p>
+          <span className={`reply-annotation__review--${annotation.reviewed}`}>
+            ({annotation.reviewed})
+          </span>{"  "}
+          submitted {moment(annotation.createdAt).fromNow()}
+        </p>
+      </div>
       <p className="reply-annotation__quote">{annotation.quote}</p>
       <div className="reply-annotation__parent">
         <p className="reply-annotation__user">

@@ -55,7 +55,7 @@ export default class Survey extends Component {
       scroller.scrollTo(this.state.mainScrollTo);
       this.setState({
         sidebarScrollTo: null,
-        mainScrollTo: null,
+        mainScrollTo: null
       });
     }
   }
@@ -138,6 +138,12 @@ export default class Survey extends Component {
     this.closeModal();
   }
 
+  handlePollData() {
+    this.props.fetchAnnotationsBySurvey(
+      `http://localhost:8000${this.props.match.url}`
+    );
+  }
+
   render() {
     const {
       surveyQnasById,
@@ -168,6 +174,7 @@ export default class Survey extends Component {
                   key={`qna-${id}`}
                   qna={surveyQnasById[id]}
                   isLoggedIn={isLoggedIn}
+                  pollData={this.handlePollData}
                 >
                   <Question question={surveyQnasById[id].question} />
                   <Answers answers={surveyQnasById[id].survey_answers} />

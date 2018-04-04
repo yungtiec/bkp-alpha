@@ -1,4 +1,4 @@
-.main-annotation__main{
+.main-annotation__main {
   padding: 20px 15px 20px 35px;
   margin: 15px auto;
   border: none;
@@ -17,7 +17,20 @@
   padding-left: 10px;
 }
 
-.main-annotation__action--bottom{
+.main-annotation__review--pending {
+  color: #838383;
+}
+
+.main-annotation__review--spam {
+  color: #dc3545;
+}
+
+.main-annotation__review--verified {
+  color: #007bff;
+}
+
+.main-annotation__action--bottom,
+.main-annotation__header {
   display: flex;
   justify-content: space-between;
 }

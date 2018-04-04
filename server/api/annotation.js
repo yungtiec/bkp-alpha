@@ -2,23 +2,8 @@ const router = require("express").Router();
 const db = require("../db");
 const { Annotation, User, Role } = require("../db/models");
 const _ = require("lodash");
+const { ensureAuthentication, ensureAdminRole } = require("./utils")
 module.exports = router;
-
-const ensureAdminRole = async (req, res, next) => {
-  const requestor = await User.findOne({
-    where: { id: req.user.id },
-    include: [
-      {
-        model: Role
-      }
-    ]
-  });
-  if (requestor.roles.filter(r => r.name === "admin").length) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
 
 router.get("/", async (req, res, next) => {
   try {
@@ -29,7 +14,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/reply", async (req, res, next) => {
+router.post("/reply", ensureAuthentication, async (req, res, next) => {
   try {
     var ancestry;
     const parent = await Annotation.findById(Number(req.body.parentId));
@@ -57,23 +42,49 @@ router.post("/reply", async (req, res, next) => {
   }
 });
 
-router.post("/upvote", async (req, res, next) => {
-  if (!req.user) res.sendStatus(401);
-  else {
-    try {
-      const user = await User.findById(req.user.id);
-      if (!req.body.hasUpvoted) await user.addUpvoted(req.body.annotationId);
-      else await user.removeUpvoted(req.body.annotationId);
-      const annotation = await Annotation.findOne({
-        where: { id: req.body.annotationId },
-        include: [
-          {
-            model: User,
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ]
-      });
+router.post("/upvote", ensureAuthentication, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!req.body.hasUpvoted) await user.addUpvoted(req.body.annotationId);
+    else await user.removeUpvoted(req.body.annotationId);
+    const annotation = await Annotation.findOne({
+      where: { id: req.body.annotationId },
+      include: [
+        {
+          model: User,
+          as: "upvotesFrom",
+          attributes: ["first_name", "last_name", "email"]
+        }
+      ]
+    });
+    const ancestors = await annotation.getAncestors({
+      raw: true
+    });
+    const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
+    const ancestry = await Annotation.findOneThreadByRootId(
+      rootAncestor ? rootAncestor.id : annotation.id
+    );
+    res.send(ancestry);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/edit", ensureAuthentication, async (req, res, next) => {
+  try {
+    var annotation = await Annotation.findOne({
+      where: { id: req.body.annotationId },
+      include: [
+        {
+          model: User,
+          as: "owner",
+          attributes: ["first_name", "last_name", "email"]
+        }
+      ]
+    });
+    if (annotation.owner.email !== req.user.email) res.sendStatus(401);
+    else {
+      annotation = await annotation.update({ comment: req.body.comment });
       const ancestors = await annotation.getAncestors({
         raw: true
       });
@@ -82,45 +93,9 @@ router.post("/upvote", async (req, res, next) => {
         rootAncestor ? rootAncestor.id : annotation.id
       );
       res.send(ancestry);
-    } catch (err) {
-      next(err);
     }
-  }
-});
-
-router.post("/edit", async (req, res, next) => {
-  if (!req.user) res.sendStatus(401);
-  else {
-    try {
-      var annotation = await Annotation.findOne({
-        where: { id: req.body.annotationId },
-        include: [
-          {
-            model: User,
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ]
-      });
-      if (annotation.owner.email !== req.user.email) res.sendStatus(401);
-      else {
-        annotation = await annotation.update({ comment: req.body.comment });
-        const ancestors = await annotation.getAncestors({
-          raw: true
-        });
-        const rootAncestor = _.orderBy(
-          ancestors,
-          ["hierarchyLevel"],
-          ["asc"]
-        )[0];
-        const ancestry = await Annotation.findOneThreadByRootId(
-          rootAncestor ? rootAncestor.id : annotation.id
-        );
-        res.send(ancestry);
-      }
-    } catch (err) {
-      next(err);
-    }
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -151,13 +126,17 @@ router.get("/pending", async (req, res, next) => {
   }
 });
 
-router.post("/verify", ensureAdminRole, async (req, res, next) => {
-  try {
-    var annotation = await Annotation.findById(req.body.annotationId);
-    annotation = annotation.update({ reviewed: req.body.reviewed });
-    res.send(200);
-    // make socket broadcast
-  } catch (err) {
-    next(err);
+router.post(
+  "/verify",
+  ensureAuthentication,
+  ensureAdminRole,
+  async (req, res, next) => {
+    try {
+      var annotation = await Annotation.findById(req.body.annotationId);
+      annotation = annotation.update({ reviewed: req.body.reviewed });
+      res.send(200);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);

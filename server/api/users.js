@@ -40,6 +40,7 @@ router.get("/profile", async (req, res, next) => {
         }
       ]
     });
+    if (!user) user = await User.findById(req.user.id);
     const replies = await user.getAnnotations({
       where: {
         hierarchyLevel: { $not: 1 }

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { Annotation } = require("../db/models");
 const { assignIn, pick } = require("lodash");
+const { ensureAuthentication } = require("./utils");
 module.exports = router;
 
 router.get("/", (req, res, next) => {
@@ -10,39 +11,28 @@ router.get("/", (req, res, next) => {
   });
 });
 
-router.post("/store", async (req, res, next) => {
-  if (!req.user) res.sendStatus(401);
-  else {
-    try {
-      const {
-        ranges,
-        quote,
-        text,
-        uri,
-        annotator_schema_version,
-        survey_question_id
-      } = req.body;
-      const newAnnotation = await Annotation.create({
-        uri,
-        survey_question_id,
-        quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
-        comment: text,
-        ranges,
-        annotator_schema_version
-      });
-      await newAnnotation.setOwner(req.user.id);
-      var io = req.app.get("io");
-      io.sockets.emit(
-        "annotationAdded",
-        assignIn(
-          { owner: pick(req.user, ["first_name", "last_name", "email"]) },
-          newAnnotation.toJSON()
-        )
-      );
-      res.send(newAnnotation);
-    } catch (err) {
-      next(err);
-    }
+router.post("/store", ensureAuthentication, async (req, res, next) => {
+  try {
+    const {
+      ranges,
+      quote,
+      text,
+      uri,
+      annotator_schema_version,
+      survey_question_id
+    } = req.body;
+    const newAnnotation = await Annotation.create({
+      uri,
+      survey_question_id,
+      quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
+      comment: text,
+      ranges,
+      annotator_schema_version
+    });
+    await newAnnotation.setOwner(req.user.id);
+    res.send(newAnnotation);
+  } catch (err) {
+    next(err);
   }
 });
 

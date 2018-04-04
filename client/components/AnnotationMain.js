@@ -7,7 +7,12 @@ import moment from "moment";
 export default ({ annotation, path, children }) => (
   <div className="main-annotation__main">
     <div className="main-annotation__header">
-      <p>{moment(annotation.createdAt).fromNow()}</p>
+      <p>
+        <span className={`main-annotation__review--${annotation.reviewed}`}>
+          ({annotation.reviewed})
+        </span>{"  "}
+        submitted {moment(annotation.createdAt).fromNow()}
+      </p>
     </div>
     <p className="main-annotation__quote">{annotation.quote}</p>
     <p className="main-annotation__comment">{annotation.comment}</p>

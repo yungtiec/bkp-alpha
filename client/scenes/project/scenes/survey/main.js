@@ -16,15 +16,11 @@ import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
 import autoBind from "react-autobind";
-import socket from "../../../../socket";
 
 class SurveyContainer extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    socket.on("annotationAdded", newAnnotation => {
-      this.props.addNewAnnotationSentFromServer(newAnnotation);
-    });
   }
 
   componentDidMount() {
@@ -107,9 +103,10 @@ class SurveyContainer extends Component {
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const { annotationsById, annotationIds } = getAllAnnotations(state);
-  const { width } = state.data.environment
+  const { width } = state.data.environment;
   return {
     isLoggedIn: !!state.data.user.id,
+    myUserId: state.data.user.id,
     surveyQnasById,
     surveyQnaIds,
     surveyMetadata: getSelectedSurvey(state),

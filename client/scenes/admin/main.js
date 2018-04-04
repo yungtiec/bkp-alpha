@@ -26,7 +26,7 @@ class AdminPanel extends Component {
   }
 
   labelAsNotSpam(annotationId) {
-    this.props.verifyPendingAnnotation(annotationId, "not_spam");
+    this.props.verifyPendingAnnotation(annotationId, "verified");
   }
 
   labelAsSpam(annotationId) {

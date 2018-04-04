@@ -10,7 +10,6 @@ const db = require("./db");
 const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8000;
 const app = express();
-const socketio = require("socket.io");
 module.exports = app;
 
 /**
@@ -107,10 +106,6 @@ const startListening = () => {
   const server = app.listen(PORT, () =>
     console.log(`Mixing it up on port ${PORT}`)
   );
-  // set up our socket control center
-  const io = socketio(server);
-  require("./socket")(io);
-  app.set("io", io);
 };
 
 const syncDb = () => db.sync();

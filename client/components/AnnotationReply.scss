@@ -17,7 +17,20 @@
   padding-left: 10px;
 }
 
-.reply-annotation__action--bottom{
+.reply-annotation__review--pending {
+  color: #838383;
+}
+
+.reply-annotation__review--spam {
+  color: #dc3545;
+}
+
+.reply-annotation__review--verified {
+  color: #007bff;
+}
+
+.reply-annotation__action--bottom,
+.reply-annotation__header {
   display: flex;
   justify-content: space-between;
 }
