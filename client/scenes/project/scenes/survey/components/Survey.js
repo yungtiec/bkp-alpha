@@ -15,7 +15,11 @@ import {
   Answers,
   AnnotationSidebarHeader
 } from "./index";
-import { findFirstAnnotationInQna, findAnnotationsInQna } from "../utils";
+import {
+  findFirstAnnotationInQna,
+  findAnnotationsInQna,
+  findAnnotationsInQnaByText
+} from "../utils";
 import autoBind from "react-autobind";
 
 export default class Survey extends Component {
@@ -23,7 +27,7 @@ export default class Survey extends Component {
     super(props);
     autoBind(this);
     this.state = {
-      selectedQna: "",
+      selectedText: "",
       editModalOpen: false,
       annotationInModal: {},
       sidebarScrollTo: null,
@@ -37,7 +41,11 @@ export default class Survey extends Component {
     const givenQnaContext =
       window.location.pathname.indexOf("/question/") !== -1;
     var annotationId, qnaId, pos;
-    if (givenAnnotationContext && givenQnaContext) {
+    if (
+      givenAnnotationContext &&
+      givenQnaContext &&
+      this.props.annotationIds.length
+    ) {
       pos = window.location.pathname.indexOf("/annotation/");
       annotationId = window.location.pathname.substring(pos).split("/")[2];
       pos = window.location.pathname.indexOf("/question/");
@@ -45,7 +53,7 @@ export default class Survey extends Component {
       this.setState({
         sidebarScrollTo: `annotation-${annotationId}`,
         mainScrollTo: `qna-${qnaId}`,
-        selectedQna: Number(qnaId)
+        selectedText: this.props.annotationsById[Number(annotationId)].quote
       });
     }
   }
@@ -60,29 +68,23 @@ export default class Survey extends Component {
     }
   }
 
-  handleQnaOnClick(qnaId) {
+  resetSelectedText() {
     this.setState({
-      selectedQna: qnaId
+      selectedText: ""
     });
   }
 
-  resetSelectedQna() {
-    this.setState({
-      selectedQna: ""
-    });
-  }
-
-  renderSidebarWithSelectedQna({
+  renderSidebarWithSelectedText({
     annotationIds,
     annotationsById,
-    selectedQna
+    selectedText
   }) {
-    const annotations = findAnnotationsInQna({
+    const annotations = findAnnotationsInQnaByText({
       annotationIds,
       annotationsById,
-      survey_question_id: selectedQna
+      text: selectedText
     });
-    if (annotationIds && selectedQna && annotations && annotations.length) {
+    if (annotationIds && selectedText && annotations && annotations.length) {
       return (
         <div>
           {annotations.map(annotation => (
@@ -99,17 +101,17 @@ export default class Survey extends Component {
   renderSidebarWithAllAnnotations({
     annotationIds,
     annotationsById,
-    selectedQna
+    selectedText
   }) {
-    const annotations = findAnnotationsInQna({
+    const annotations = findAnnotationsInQnaByText({
       annotationIds,
       annotationsById,
-      survey_question_id: selectedQna
+      text: selectedText
     });
     if (
-      (annotationIds && !selectedQna) ||
+      (annotationIds && !selectedText) ||
       (annotationIds &&
-        selectedQna &&
+        selectedText &&
         (!annotations || (annotations && !annotations.length)))
     ) {
       return annotationIds.map(id => (
@@ -144,6 +146,13 @@ export default class Survey extends Component {
     );
   }
 
+  annotationOnClick(evt) {
+    const selectedText = evt.target.innerHTML;
+    this.setState({
+      selectedText
+    });
+  }
+
   render() {
     const {
       surveyQnasById,
@@ -163,18 +172,15 @@ export default class Survey extends Component {
         <div className="project-survey" id="project-survey">
           <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
           {surveyQnaIds.map(id => {
-            const handleQnaOnClick = this.handleQnaOnClick.bind(this, id);
             return (
-              <Element
-                name={`qna-${id}`}
-                onClick={handleQnaOnClick}
-                ref={el => (this[`qna-${id}`] = el)}
-              >
+              <Element name={`qna-${id}`} ref={el => (this[`qna-${id}`] = el)}>
                 <Qna
                   key={`qna-${id}`}
                   qna={surveyQnasById[id]}
                   isLoggedIn={isLoggedIn}
                   pollData={this.handlePollData}
+                  numAnnotations={annotationIds.length}
+                  handleAnnotationOnClick={this.annotationOnClick}
                 >
                   <Question question={surveyQnasById[id].question} />
                   <Answers answers={surveyQnasById[id].survey_answers} />
@@ -193,19 +199,19 @@ export default class Survey extends Component {
             <AnnotationSidebarHeader
               annotationIds={annotationIds}
               annotationsById={annotationsById}
-              selectedQna={this.state.selectedQna}
+              selectedText={this.state.selectedText}
               isLoggedIn={isLoggedIn}
-              resetSelectedQna={this.resetSelectedQna}
+              resetSelection={this.resetSelectedText}
             />
             {this.renderSidebarWithAllAnnotations({
               annotationIds,
               annotationsById,
-              selectedQna: this.state.selectedQna
+              selectedText: this.state.selectedText
             })}
-            {this.renderSidebarWithSelectedQna({
+            {this.renderSidebarWithSelectedText({
               annotationIds,
               annotationsById,
-              selectedQna: this.state.selectedQna
+              selectedText: this.state.selectedText
             })}
           </Element>
         </AnnotationSidebar>

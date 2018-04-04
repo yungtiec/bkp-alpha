@@ -23,3 +23,14 @@ export const findAnnotationsInQna = ({
     .map(aid => annotationsById[aid])
     .filter(annotation => annotation.survey_question_id === survey_question_id);
 };
+
+export const findAnnotationsInQnaByText = ({
+  annotationIds,
+  annotationsById,
+  text
+}) => {
+  if (!annotationIds.length) return;
+  return annotationIds
+    .map(aid => annotationsById[aid])
+    .filter(annotation => annotation.quote === text);
+};

@@ -17,4 +17,3 @@ export { default as ProjectSymbolBlueBox } from "./ProjectSymbolBlueBox";
 export { default as AnnotationMain } from "./AnnotationMain";
 export { default as AnnotationReply } from "./AnnotationReply";
 export { default as requiresAuthorization } from "./requiresAuthorization";
-export { default as asyncPolling } from "./asyncPolling";

@@ -16,6 +16,7 @@ import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
 import autoBind from "react-autobind";
+import asyncPoll from "react-async-poll";
 
 class SurveyContainer extends Component {
   constructor(props) {
@@ -71,6 +72,7 @@ class SurveyContainer extends Component {
       this.props.fetchAnnotationsBySurvey(
         `http://localhost:8000${nextProps.match.url}`
       );
+      console.log('hello')
     }
   }
 
@@ -124,4 +126,14 @@ const actions = {
   editAnnotationComment
 };
 
-export default withRouter(connect(mapState, actions)(SurveyContainer));
+const onPollInterval = (props, dispatch) => {
+  return props.fetchAnnotationsBySurvey(
+    `http://localhost:8000${props.match.url}`
+  );
+};
+
+export default withRouter(
+  connect(mapState, actions)(
+    asyncPoll(60 * 1000, onPollInterval)(SurveyContainer)
+  )
+);

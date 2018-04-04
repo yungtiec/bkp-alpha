@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
-import { findFirstAnnotationInQna, findAnnotationsInQna } from "../../utils";
+import { findAnnotationsInQnaByText } from "../../utils";
 
 export default class AnnotationSidebarHeader extends Component {
   constructor(props) {
@@ -9,25 +9,25 @@ export default class AnnotationSidebarHeader extends Component {
     autoBind(this);
   }
 
-  renderAnnotationCount({ annotationIds, annotationsById, selectedQna }) {
-    const annotations = findAnnotationsInQna({
+  renderAnnotationCount({ annotationIds, annotationsById, selectedText }) {
+    const annotations = findAnnotationsInQnaByText({
       annotationIds,
       annotationsById,
-      survey_question_id: selectedQna
+      text: selectedText
     });
-    if (annotationIds && selectedQna && annotations && annotations.length) {
+    if (annotationIds && selectedText && annotations && annotations.length) {
       return (
         <p
           className="annotations-header reset-selection"
-          onClick={this.props.resetSelectedQna}
+          onClick={this.props.resetSelection}
         >
           Show all Annotation ({annotationIds.length})
         </p>
       );
     } else if (
-      (annotationIds && !selectedQna) ||
+      (annotationIds && !selectedText) ||
       (annotationIds &&
-        selectedQna &&
+        selectedText &&
         (!annotations || (annotations && !annotations.length)))
     ) {
       return (
@@ -44,7 +44,7 @@ export default class AnnotationSidebarHeader extends Component {
     const {
       annotationIds,
       annotationsById,
-      selectedQna,
+      selectedText,
       isLoggedIn
     } = this.props;
 
@@ -61,7 +61,7 @@ export default class AnnotationSidebarHeader extends Component {
         {this.renderAnnotationCount({
           annotationIds,
           annotationsById,
-          selectedQna
+          selectedText
         })}
         {!isLoggedIn && (
           <div className="annotation-item">

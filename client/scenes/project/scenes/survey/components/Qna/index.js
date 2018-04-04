@@ -65,20 +65,25 @@ class QnaBox extends Component {
     const nextProjectSymbol = nextProps.match.url.split("/")[2];
     const prevSurveyId = this.props.match.params.surveyId;
     const nextSurveyId = nextProps.match.params.surveyId;
+    const prevNumAnnotations = this.props.numAnnotations;
+    const nextNumAnnotations = nextProps.numAnnotations;
     if (
       prevProjectSymbol &&
       prevSurveyId &&
-      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
+      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId) ||
+      prevNumAnnotations !== nextNumAnnotations
     ) {
       this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
     }
   }
 
+
+
   render() {
     const { qna } = this.props;
 
     return (
-      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)}>
+      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)} onClick={this.props.handleAnnotationOnClick}>
         {this.props.children}
       </div>
     );
