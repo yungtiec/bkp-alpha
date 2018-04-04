@@ -2,46 +2,25 @@ import "./index.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { AuthWidget } from "../../../../../../components";
+import { connect } from "react-redux";
+import { toggleSidebar, toggleHighlights } from "../../reducer";
 
-export default class AnnotationSidebar extends Component {
+class AnnotationSidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      sidebarOpen: true,
-      showHighlights: true
-    };
     autoBind(this);
   }
 
-  toggleSidebar() {
-    const next = !this.state.sidebarOpen;
-    this.setState({
-      sidebarOpen: next
-    });
-  }
-
-  toggleHighlights() {
-    const next = !this.state.showHighlights;
-    this.setState({
-      showHighlights: next
-    });
-    if (!next) {
-      $(".annotator-hl").addClass("hidden");
-    } else {
-      $(".annotator-hl").removeClass("hidden");
-    }
-  }
-
   render() {
-    var style = this.state.sidebarOpen
+    var style = this.props.sidebarOpen
       ? {
           marginLeft: this.props.width < 767 ? "-350px" : "-410px"
         }
       : {
           marginLeft: "-10px"
         };
-    var sizeBtnAngle = this.state.sidebarOpen ? "right" : "left";
-    var eye = this.state.showHighlights ? "eye" : "eye-slash";
+    var sizeBtnAngle = this.props.sidebarOpen ? "right" : "left";
+    var eye = this.props.showHighlights ? "eye" : "eye-slash";
 
     return (
       <div className="annotation-sidebar" style={style}>
@@ -49,20 +28,29 @@ export default class AnnotationSidebar extends Component {
         <div className="annotation-toolbar">
           <button
             className="annotations-sidebar__size-btn"
-            onClick={this.toggleSidebar}
+            onClick={this.props.toggleSidebar}
           >
             <i class={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
           <button
             className="annotations__visibility-btn"
-            onClick={this.toggleHighlights}
+            onClick={this.props.toggleHighlights}
           >
             <i class={`fas fa-${eye}`} />
           </button>
-          {this.state.sidebarOpen && <AuthWidget />}
+          {this.props.sidebarOpen && <AuthWidget />}
         </div>
         {this.props.children}
       </div>
     );
   }
 }
+
+const mapState = state => {
+  const { sidebarOpen, showHighlights } = state.scenes.project.scenes.survey;
+  return { sidebarOpen, showHighlights };
+};
+
+const actions = { toggleSidebar, toggleHighlights }
+
+export default connect(mapState, actions)(AnnotationSidebar);

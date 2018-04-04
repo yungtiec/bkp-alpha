@@ -17,12 +17,18 @@
 
 [x] have some sort of highlight when an annotation is clicked on (in both sidebar and main container)
 
-[ ] make survey page mobile responsive
+[x] make survey page mobile responsive
 
-[ ] annotator api
+[x] annotator api
   - use reviewed flag to filter
 
-[ ] incredibly simple admin interface
+[x] incredibly simple admin interface
+
+[ ] lift sidebar state to survey
+
+[ ] small notification widget like facebook
+
+[ ] email/slack push notification for admin
 
 # Boilermaker
 

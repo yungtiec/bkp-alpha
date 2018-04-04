@@ -151,6 +151,9 @@ export default class Survey extends Component {
     this.setState({
       selectedText
     });
+    if (!this.props.sidebarOpen) {
+      this.props.toggleSidebar()
+    }
   }
 
   render() {

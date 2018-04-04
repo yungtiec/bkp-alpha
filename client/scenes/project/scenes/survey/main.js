@@ -9,6 +9,7 @@ import {
   addNewAnnotationSentFromServer,
   editAnnotationComment
 } from "./data/annotations/actions";
+import { toggleSidebar } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
@@ -72,16 +73,17 @@ class SurveyContainer extends Component {
       this.props.fetchAnnotationsBySurvey(
         `http://localhost:8000${nextProps.match.url}`
       );
-      console.log('hello')
     }
   }
 
   shouldComponentUpdate(nextProps) {
+    // break this up, distribute the logics to children
     const prevProjectSymbol = this.props.match.url.split("/")[2];
     const nextProjectSymbol = nextProps.match.url.split("/")[2];
     const prevSurveyId = this.props.match.params.surveyId;
     const nextSurveyId = nextProps.match.params.surveyId;
     if (
+      this.props.sidebarOpen !== nextProps.sidebarOpen || // window resized
       this.props.width !== nextProps.width || // window resized
       this.props.isLoggedIn !== nextProps.isLoggedIn || // login event
       !this.props.surveyMetadata.id || // on init
@@ -106,6 +108,7 @@ const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const { annotationsById, annotationIds } = getAllAnnotations(state);
   const { width } = state.data.environment;
+  const { sidebarOpen } = state.scenes.project.scenes.survey;
   return {
     isLoggedIn: !!state.data.user.id,
     myUserId: state.data.user.id,
@@ -115,7 +118,8 @@ const mapState = state => {
     projectMetadata: getSelectedProject(state),
     annotationsById,
     annotationIds,
-    width
+    width,
+    sidebarOpen
   };
 };
 
@@ -123,7 +127,8 @@ const actions = {
   fetchQuestionsBySurveyId,
   fetchAnnotationsBySurvey,
   addNewAnnotationSentFromServer,
-  editAnnotationComment
+  editAnnotationComment,
+  toggleSidebar
 };
 
 const onPollInterval = (props, dispatch) => {
