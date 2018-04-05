@@ -24,7 +24,9 @@
 
 [x] incredibly simple admin interface
 
-[ ] lift sidebar state to survey
+[x] lift sidebar state to redux
+
+[ ] tabs in sidebar (pending and verified)
 
 [ ] small notification widget like facebook
 

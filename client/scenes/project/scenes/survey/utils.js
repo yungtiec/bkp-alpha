@@ -32,5 +32,5 @@ export const findAnnotationsInQnaByText = ({
   if (!annotationIds.length) return;
   return annotationIds
     .map(aid => annotationsById[aid])
-    .filter(annotation => annotation.quote === text);
+    .filter(annotation => annotation.quote.trim() === text.trim());
 };

@@ -74,28 +74,40 @@ export default class Survey extends Component {
     });
   }
 
-  renderSidebarWithSelectedText({
-    annotationIds,
-    annotationsById,
-    selectedText
-  }) {
+  renderSidebar({ annotationIds, annotationsById, selectedText }) {
     const annotations = findAnnotationsInQnaByText({
       annotationIds,
       annotationsById,
       text: selectedText
     });
     if (annotationIds && selectedText && annotations && annotations.length) {
-      return (
-        <div>
-          {annotations.map(annotation => (
-            <AnnotationItem
-              key={`annotation-${annotation.id}`}
-              annotation={annotation}
-            />
-          ))}
-        </div>
-      );
+      return this.renderSidebarWithSelectedText(annotations);
     }
+    if (
+      (annotationIds && !selectedText) ||
+      (annotationIds &&
+        selectedText &&
+        (!annotations || (annotations && !annotations.length)))
+    ) {
+      return this.renderSidebarWithAllAnnotations({
+        annotationIds,
+        annotationsById,
+        selectedText
+      });
+    }
+  }
+
+  renderSidebarWithSelectedText(annotations) {
+    return (
+      <div>
+        {annotations.map(annotation => (
+          <AnnotationItem
+            key={`annotation-${annotation.id}`}
+            annotation={annotation}
+          />
+        ))}
+      </div>
+    );
   }
 
   renderSidebarWithAllAnnotations({
@@ -103,42 +115,30 @@ export default class Survey extends Component {
     annotationsById,
     selectedText
   }) {
-    const annotations = findAnnotationsInQnaByText({
-      annotationIds,
-      annotationsById,
-      text: selectedText
-    });
-    if (
-      (annotationIds && !selectedText) ||
-      (annotationIds &&
-        selectedText &&
-        (!annotations || (annotations && !annotations.length)))
-    ) {
-      return annotationIds.map(id => (
-        <Element name={`annotation-${id}`}>
-          <ScrollLink
-            className={`annotation-${id}`}
-            activeClass="active"
-            to={`qna-${annotationsById[id].survey_question_id}`}
-            smooth="easeInOutCubic"
-            duration={300}
-            spy={true}
-          >
-            <AnnotationItem
-              key={`annotation-${id}`}
-              annotation={annotationsById[id]}
-              ref={el => (this[`annotation-${id}`] = el)}
-            />
-          </ScrollLink>
-        </Element>
-      ));
-    }
+    return annotationIds.map(id => (
+      <Element name={`annotation-${id}`}>
+        <ScrollLink
+          className={`annotation-${id}`}
+          activeClass="active"
+          to={`qna-${annotationsById[id].survey_question_id}`}
+          smooth="easeInOutCubic"
+          duration={300}
+          spy={true}
+        >
+          <AnnotationItem
+            key={`annotation-${id}`}
+            annotation={annotationsById[id]}
+            ref={el => (this[`annotation-${id}`] = el)}
+          />
+        </ScrollLink>
+      </Element>
+    ));
   }
 
-  handleSubmitEditedComment(argObj) {
-    this.props.editAnnotationComment(argObj);
-    this.closeModal();
-  }
+  // handleSubmitEditedComment(argObj) {
+  //   this.props.editAnnotationComment(argObj);
+  //   this.closeModal();
+  // }
 
   handlePollData() {
     this.props.fetchAnnotationsBySurvey(
@@ -152,7 +152,7 @@ export default class Survey extends Component {
       selectedText
     });
     if (!this.props.sidebarOpen) {
-      this.props.toggleSidebar()
+      this.props.toggleSidebar();
     }
   }
 
@@ -206,12 +206,7 @@ export default class Survey extends Component {
               isLoggedIn={isLoggedIn}
               resetSelection={this.resetSelectedText}
             />
-            {this.renderSidebarWithAllAnnotations({
-              annotationIds,
-              annotationsById,
-              selectedText: this.state.selectedText
-            })}
-            {this.renderSidebarWithSelectedText({
+            {this.renderSidebar({
               annotationIds,
               annotationsById,
               selectedText: this.state.selectedText
