@@ -34,17 +34,14 @@ li {
   right: 0;
 }
 
-::-webkit-scrollbar {
-  height: 12px;
-  width: 12px;
-  background: #f2f4f8;
+.ReactModal__Overlay {
+  z-index: 3;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #c7c4c4de;
-  -webkit-border-radius: 2px;
-}
-
-::-webkit-scrollbar-corner {
-  background: #f2f4f8;
+.ReactModal__Content {
+  z-index: 3;
+  top: 100px !important;
+  left: 100px !important;
+  right: 100px !important;
+  bottom: 100px !important;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, ModalContainer } from "./components";
+import { Navbar, ModalContainer, Scrollbar } from "./components";
 import Routes from "./routes";
 import NotificationsSystem from 'reapop';
 import theme from 'reapop-theme-wybo';

@@ -1,6 +1,5 @@
 @import "../../../../../../breakpoint";
 
-
 .annotator-notice.annotator-notice-show.annotator-notice-error {
   border-bottom: 4px solid #ec7063;
 }
@@ -59,57 +58,17 @@
   }
 }
 
-.annotation-sidebar__logo-consensys {
-  margin: 10px auto 20px;
-  width: 100px;
-}
-
-.annotation-sidebar__logo-tbp {
-  width: 120px;
-  margin: 0 auto 40px;
-}
-
-.annotations-header {
-  color: white;
-  padding: 0px 15px;
-  padding-top: 10px;
-  width: 410px;
-  @include breakpoint(xs) {
-    width: 350px;
-  }
-}
-
-.annotations-header.reset-selection {
-  cursor: pointer;
-}
-
 .annotation-contents {
   width: 100%;
   height: 100%;
   padding: 20px 30px;
-  overflow-y: scroll;
-  overflow-x: hidden;
   @include breakpoint(xs) {
     padding: 20px;
   }
 }
 
-.annotation-contents::-webkit-scrollbar {
-  height: 12px;
-  width: 12px;
-  background: #f2f4f8;
-}
-
-.annotation-contents::-webkit-scrollbar-thumb {
-  background: #9e9e9e;
-  -webkit-border-radius: 2px;
-}
-
-.annotation-contents::-webkit-scrollbar-corner {
-  background: #f2f4f8;
-}
-
 .annotation-toolbar {
+  z-index: 2;
   position: absolute;
   left: -40.5px;
   top: 74px;
@@ -124,114 +83,4 @@
   border: 2;
   background: white;
   color: #09263a;
-}
-
-.annotation-item {
-  background: #0d3048;
-  padding: 20px;
-  margin-bottom: 30px;
-  @include breakpoint(xs) {
-    padding: 10px;
-  }
-}
-
-.annotation-item__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  @include breakpoint(xs) {
-    flex-direction: column;
-    margin-bottom: 7px;
-    p {
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
-  }
-}
-
-.annotation-item__quote {
-  border-left: 3px solid white;
-  color: white;
-  padding-left: 10px;
-  @include breakpoint(xs) {
-    font-size: 12px;
-  }
-}
-
-.annotation-item__comment {
-  @include breakpoint(xs) {
-    font-size: 12px;
-  }
-}
-
-.annotation-item__edit .annotation-item__quote {
-  border-left: 3px solid #0057ff;
-  color: black;
-  padding-left: 10px;
-}
-
-.active .annotation-item__quote {
-  border-left: 3px solid #0057ff;
-}
-
-.annotation-item__action--bottom {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
-
-.annotation-item__action--bottom .fas {
-  margin: 5px;
-  cursor: pointer;
-}
-
-.annotation-item__action--bottom .upvoted {
-  color: white;
-}
-
-.annotation-item__reply-thread {
-  display: flex;
-}
-
-.annotation-item__reply-contents {
-  width: 100%;
-}
-
-.annotation-item__reply-edge {
-  display: flex;
-  flex-direction: column;
-}
-
-.annotation-item__reply-edge .fa-caret-down {
-  height: 24px;
-  margin: 0 8px;
-}
-
-.annotation-item__thread-line {
-  border-right: 1px dashed #dbdbdb;
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  position: relative;
-  right: 12px;
-}
-
-.ReactModal__Overlay {
-  z-index: 3;
-}
-
-.ReactModal__Content {
-  z-index: 3;
-  top: 100px !important;
-  left: 100px !important;
-  right: 100px !important;
-  bottom: 100px !important;
-}
-
-.annotation-item__edit {
-  width: 400px;
-  margin: 0 auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }

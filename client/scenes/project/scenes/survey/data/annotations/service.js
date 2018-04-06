@@ -16,15 +16,21 @@ export function postReplyToAnnotation({ parentId, comment }) {
     .then(res => res.data);
 }
 
-
-export function postUpvoteToAnnotation({annotationId, hasUpvoted}) {
+export function postUpvoteToAnnotation({ annotationId, hasUpvoted }) {
   return axios
     .post("/api/annotation/upvote", { annotationId, hasUpvoted })
-    .then(res => res.data)
+    .then(res => res.data);
 }
 
-export function postUpdatedCommentToAnnotation({annotationId, comment}) {
+export function postUpdatedCommentToAnnotation({ annotationId, comment }) {
   return axios
     .post("/api/annotation/edit", { annotationId, comment })
-    .then(res => res.data)
+    .then(res => res.data);
+}
+
+export function postPendingAnnotationStatus({ annotationId, reviewed }) {
+  return axios.post("/api/annotation/verify", {
+    annotationId,
+    reviewed
+  });
 }

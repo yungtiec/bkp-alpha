@@ -26,11 +26,17 @@
 
 [x] lift sidebar state to redux
 
+[x] custom scrollbar
+
 [ ] tabs in sidebar (pending and verified)
 
 [ ] small notification widget like facebook
 
 [ ] email/slack push notification for admin
+
+[ ] split vendor file
+
+[ ] awesome search bar like https://expo.io/
 
 # Boilermaker
 

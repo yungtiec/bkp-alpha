@@ -1,0 +1,41 @@
+@import "../../../../../../breakpoint";
+
+.annotation-sidebar__logo-consensys {
+  margin: 24px auto 20px;
+  width: 100px;
+}
+
+.annotation-sidebar__tab-container {
+  z-index: 1;
+  position: relative;
+  left: 1px;
+  display: flex;
+  height: 46px;
+  top: 5px;
+  background: white;
+}
+
+.annotation-sidebar__tab {
+  flex: 1;
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
+.annotation-sidebar__tab.active {
+  box-shadow: #007bff 0px -4px 0px 0px inset;
+}
+
+.annotations-header__count {
+  color: white;
+  padding: 0px 15px;
+  padding-top: 10px;
+  width: 410px;
+  @include breakpoint(xs) {
+    width: 350px;
+  }
+}
+
+.annotations-header__count.reset-selection {
+  cursor: pointer;
+}

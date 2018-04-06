@@ -8,4 +8,5 @@ export const ANNOTATION_REPLY_CANCEL = "annotations.ANNOTATION_REPLY_CANCEL";
 export const ANNOTATION_ADDED = "annotations.ANNOTATION_ADDED";
 export const ANNOTATION_UPDATED = "annotations.ANNOTATION_UPDATED";
 export const ANNOTATION_UPVOTED = "annotations.ANNOTATION_UPVOTED";
+export const ANNOTATION_VERIFIED = "annotations.ANNOTATION_VERIFIED";
 

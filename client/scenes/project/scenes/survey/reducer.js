@@ -3,25 +3,26 @@ import * as types from "./data/actionTypes";
 import { reducer as dataReducer } from "./data/reducer";
 
 const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
-const SHOW_HIGHLIGHT_TOGGLE = "survey.SHOW_HIGHLIGHT_TOGGLE";
+const ANNOTATION_TYPE_IN_VIEW = "survey.ANNOTATION_TYPE_IN_VIEW";
 
 export const toggleSidebar = () => ({
   type: "survey.SIDEBAR_OPEN_TOGGLE"
 });
 
-export const toggleHighlights = () => ({
-  type: "survey.SHOW_HIGHLIGHT_TOGGLE"
+export const updateAnnotationTypeInView = annotationType => ({
+  type: "survey.ANNOTATION_TYPE_IN_VIEW",
+  annotationType
 });
 
 const initialState = {
   sidebarOpen: true,
-  showHighlights: true
+  annotationType: "all"
 };
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
-    case SHOW_HIGHLIGHT_TOGGLE:
-      return { ...state, showHighlights: !state.showHighlights };
+    case ANNOTATION_TYPE_IN_VIEW:
+      return { ...state, annotationType: action.annotationType };
     case SIDEBAR_OPEN_TOGGLE:
       return { ...state, sidebarOpen: !state.sidebarOpen };
     default:

@@ -84,7 +84,11 @@ class SurveyContainer extends Component {
 
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
-  const { annotationsById, annotationIds } = getAllAnnotations(state);
+  const {
+    annotationsById,
+    annotationIds,
+    unfilteredAnnotationIds
+  } = getAllAnnotations(state);
   const { width } = state.data.environment;
   const { sidebarOpen } = state.scenes.project.scenes.survey;
   return {
@@ -96,6 +100,7 @@ const mapState = state => {
     projectMetadata: getSelectedProject(state),
     annotationsById,
     annotationIds,
+    unfilteredAnnotationIds,
     width,
     sidebarOpen
   };

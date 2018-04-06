@@ -1,4 +1,4 @@
-import { cloneDeep, find, orderBy, values, isEmpty } from "lodash";
+import { cloneDeep, find, orderBy, values, isEmpty, keys } from "lodash";
 import * as types from "./actionTypes";
 
 const initialState = {
@@ -55,6 +55,44 @@ function addNewAnnotationSentFromServer({ state, annotation }) {
   return state;
 }
 
+function findAnnotationInTreeById(annotationCollection, targetId) {
+  if (find(annotationCollection, a => a.id === targetId)) {
+    return find(annotationCollection, a => a.id === targetId);
+  }
+  var result, aid;
+  for (var i = 0; i < annotationCollection.length; i++) {
+    if (
+      annotationCollection[i].children &&
+      annotationCollection[i].children.length
+    ) {
+      result = findAnnotationInTreeById(
+        annotationCollection[i].children,
+        targetId
+      );
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return result;
+}
+
+function reviewAnnotation({ state, annotationId, reviewed }) {
+  var target;
+  if (state.annotationsById[annotationId]) {
+    // itself is root
+    state.annotationsById[annotationId].reviewed = reviewed;
+  } else {
+    // its descendant(reply) to another annotation
+    target = findAnnotationInTreeById(
+      values(state.annotationsById),
+      annotationId
+    );
+    target.reviewed = reviewed;
+  }
+  return state;
+}
+
 export default function reduce(state = initialState, action = {}) {
   var sortedAnnotations, annotationIds;
   switch (action.type) {
@@ -92,11 +130,39 @@ export default function reduce(state = initialState, action = {}) {
         state: cloneDeep(state),
         annotation: action.rootAnnotation
       });
+    case types.ANNOTATION_VERIFIED:
+      return reviewAnnotation({
+        state: cloneDeep(state),
+        annotationId: action.annotationId,
+        reviewed: action.reviewed
+      });
     default:
       return state;
   }
 }
 
 export function getAllAnnotations(state) {
-  return state.scenes.project.scenes.survey.data.annotations;
+  const annotationType = state.scenes.project.scenes.survey.annotationType;
+  var filteredAnnotationIds, annotationIds, annotationsById;
+  if (annotationType === "all") {
+    return {
+      unfilteredAnnotationIds:
+        state.scenes.project.scenes.survey.data.annotations.annotationIds,
+      ...state.scenes.project.scenes.survey.data.annotations
+    };
+  } else {
+    annotationIds =
+      state.scenes.project.scenes.survey.data.annotations.annotationIds;
+    annotationsById =
+      state.scenes.project.scenes.survey.data.annotations.annotationsById;
+    filteredAnnotationIds = annotationIds.filter(
+      aid => annotationsById[aid].reviewed === annotationType
+    );
+    return {
+      annotationIds: filteredAnnotationIds,
+      annotationsById,
+      unfilteredAnnotationIds:
+        state.scenes.project.scenes.survey.data.annotations.annotationIds
+    };
+  }
 }

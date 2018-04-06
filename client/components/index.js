@@ -16,4 +16,6 @@ export { default as RouteWithLayout } from "./RouteWithLayout";
 export { default as ProjectSymbolBlueBox } from "./ProjectSymbolBlueBox";
 export { default as AnnotationMain } from "./AnnotationMain";
 export { default as AnnotationReply } from "./AnnotationReply";
+export { default as Scrollbar } from "./Scrollbar";
 export { default as requiresAuthorization } from "./requiresAuthorization";
+

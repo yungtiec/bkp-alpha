@@ -9,19 +9,29 @@ export default class AnnotationSidebarHeader extends Component {
     autoBind(this);
   }
 
-  renderAnnotationCount({ annotationIds, annotationsById, selectedText }) {
+  renderAnnotationCount({
+    annotationIds,
+    unfilteredAnnotationIds,
+    annotationsById,
+    selectedText
+  }) {
     const annotations = findAnnotationsInQnaByText({
-      annotationIds,
+      annotationIds: unfilteredAnnotationIds,
       annotationsById,
       text: selectedText
     });
-    if (annotationIds && selectedText && annotations && annotations.length) {
+    if (
+      annotationIds &&
+      selectedText &&
+      annotations &&
+      annotations.length
+    ) {
       return (
         <p
-          className="annotations-header reset-selection"
+          className="annotations-header__count reset-selection"
           onClick={this.props.resetSelection}
         >
-          Show all Annotation ({annotationIds.length})
+          Show all Annotations ({annotationIds.length})
         </p>
       );
     } else if (
@@ -31,35 +41,29 @@ export default class AnnotationSidebarHeader extends Component {
         (!annotations || (annotations && !annotations.length)))
     ) {
       return (
-        <p className="annotations-header">
-          Annotation ({annotationIds.length})
+        <p className="annotations-header__count">
+          Annotations ({annotationIds.length})
         </p>
       );
     } else {
-      return <p className="annotations-header">Annotation</p>;
+      return <p className="annotations-header__count">Annotation</p>;
     }
   }
 
   render() {
     const {
-      annotationIds,
+      unfilteredAnnotationIds,
       annotationsById,
       selectedText,
-      isLoggedIn
+      isLoggedIn,
+      annotationIds
     } = this.props;
 
     return (
       <div>
-        <div className="annotation-sidebar__logo-consensys">
-          <img
-            width="100px"
-            height="auto"
-            className="logo__large"
-            src="/assets/consensys-logo-white-transparent.png"
-          />
-        </div>
         {this.renderAnnotationCount({
           annotationIds,
+          unfilteredAnnotationIds,
           annotationsById,
           selectedText
         })}

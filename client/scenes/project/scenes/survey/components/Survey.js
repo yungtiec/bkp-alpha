@@ -20,6 +20,8 @@ import {
   findAnnotationsInQna,
   findAnnotationsInQnaByText
 } from "../utils";
+import { Scrollbar } from "../../../../../components";
+import { Scrollbars } from "react-custom-scrollbars";
 import autoBind from "react-autobind";
 
 export default class Survey extends Component {
@@ -28,8 +30,7 @@ export default class Survey extends Component {
     autoBind(this);
     this.state = {
       selectedText: "",
-      editModalOpen: false,
-      annotationInModal: {},
+      annotationSelected: false,
       sidebarScrollTo: null,
       mainScrollTo: null
     };
@@ -53,7 +54,8 @@ export default class Survey extends Component {
       this.setState({
         sidebarScrollTo: `annotation-${annotationId}`,
         mainScrollTo: `qna-${qnaId}`,
-        selectedText: this.props.annotationsById[Number(annotationId)].quote
+        selectedText: this.props.annotationsById[Number(annotationId)].quote,
+        annotationSelected: true
       });
     }
   }
@@ -70,13 +72,19 @@ export default class Survey extends Component {
 
   resetSelectedText() {
     this.setState({
-      selectedText: ""
+      selectedText: "",
+      annotationSelected: false
     });
   }
 
-  renderSidebar({ annotationIds, annotationsById, selectedText }) {
+  renderSidebar({
+    unfilteredAnnotationIds,
+    annotationIds,
+    annotationsById,
+    selectedText
+  }) {
     const annotations = findAnnotationsInQnaByText({
-      annotationIds,
+      annotationIds: unfilteredAnnotationIds,
       annotationsById,
       text: selectedText
     });
@@ -135,11 +143,6 @@ export default class Survey extends Component {
     ));
   }
 
-  // handleSubmitEditedComment(argObj) {
-  //   this.props.editAnnotationComment(argObj);
-  //   this.closeModal();
-  // }
-
   handlePollData() {
     this.props.fetchAnnotationsBySurvey(
       `http://localhost:8000${this.props.match.url}`
@@ -148,11 +151,23 @@ export default class Survey extends Component {
 
   annotationOnClick(evt) {
     const selectedText = evt.target.innerHTML;
-    this.setState({
-      selectedText
+    const annotations = findAnnotationsInQnaByText({
+      annotationIds: this.props.unfilteredAnnotationIds,
+      annotationsById: this.props.annotationsById,
+      text: selectedText
     });
-    if (!this.props.sidebarOpen) {
+    if (!this.props.sidebarOpen && annotations.length) {
       this.props.toggleSidebar();
+    }
+    if (annotations.length) {
+      this.setState({
+        selectedText,
+        annotationSelected: true
+      });
+    } else {
+      this.setState({
+        selectedText
+      });
     }
   }
 
@@ -164,8 +179,8 @@ export default class Survey extends Component {
       projectMetadata,
       annotationsById,
       annotationIds,
+      unfilteredAnnotationIds,
       isLoggedIn,
-      editAnnotationComment,
       match,
       width
     } = this.props;
@@ -192,26 +207,38 @@ export default class Survey extends Component {
             );
           })}
         </div>
-
-        <AnnotationSidebar width={width}>
-          <Element
-            name="annotation-sidebar"
-            id="annotation-sidebar"
-            className="annotation-contents"
+        <AnnotationSidebar
+          width={width}
+          annotationSelected={this.state.annotationSelected}
+        >
+          <Scrollbar
+            containerWidth={this.props.width < 767 ? "350px" : "410px"}
+            containerHeight="calc(100% - 120px)"
+            autoHide={true}
+            thumbColor="rgb(233, 236, 239)"
           >
-            <AnnotationSidebarHeader
-              annotationIds={annotationIds}
-              annotationsById={annotationsById}
-              selectedText={this.state.selectedText}
-              isLoggedIn={isLoggedIn}
-              resetSelection={this.resetSelectedText}
-            />
-            {this.renderSidebar({
-              annotationIds,
-              annotationsById,
-              selectedText: this.state.selectedText
-            })}
-          </Element>
+            <Element
+              name="annotation-sidebar"
+              id="annotation-sidebar"
+              className="annotation-contents"
+            >
+              <AnnotationSidebarHeader
+                unfilteredAnnotationIds={unfilteredAnnotationIds}
+                annotationIds={annotationIds}
+                annotationsById={annotationsById}
+                selectedText={this.state.selectedText}
+                isLoggedIn={isLoggedIn}
+                resetSelection={this.resetSelectedText}
+                width={width}
+              />
+              {this.renderSidebar({
+                unfilteredAnnotationIds,
+                annotationIds,
+                annotationsById,
+                selectedText: this.state.selectedText
+              })}
+            </Element>
+          </Scrollbar>
         </AnnotationSidebar>
       </div>
     );

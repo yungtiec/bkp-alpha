@@ -1,3 +1,4 @@
+import "./AnnotationItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
@@ -8,7 +9,8 @@ import {
   replyToAnnotation,
   initiateReplyToAnnotation,
   cancelReplyToAnnotation,
-  upvoteAnnotation
+  upvoteAnnotation,
+  verifyAnnotationAsAdmin
 } from "../../data/annotations/actions";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
@@ -47,6 +49,41 @@ class AnnotationItem extends Component {
     });
   }
 
+  labelAsNotSpam(annotationId) {
+    this.props.verifyAnnotationAsAdmin(annotationId, "verified");
+  }
+
+  labelAsSpam(annotationId) {
+    this.props.verifyAnnotationAsAdmin(annotationId, "spam");
+  }
+
+  renderAdminActions(annotation) {
+    return this.props.admin && annotation.reviewed === "pending" ? (
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          class="btn btn-outline-danger btn-sm"
+          onClick={() => this.labelAsSpam(annotation.id)}
+        >
+          spam
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm"
+          onClick={() => this.labelAsNotSpam(annotation.id)}
+        >
+          verify
+        </button>
+      </div>
+    ) : (
+      <div
+        className={`annotation-item__verified-message ${annotation.reviewed}`}
+      >
+        {annotation.reviewed === 'verified' ? annotation.reviewed : ''}
+      </div>
+    );
+  }
+
   renderMainComment(annotation) {
     const initReplyToThis = this.props.userEmail
       ? this.initReply.bind(this, [], annotation)
@@ -73,14 +110,17 @@ class AnnotationItem extends Component {
         <p className="annotation-item__quote">{annotation.quote}</p>
         <p className="annotation-item__comment">{annotation.comment}</p>
         <div className="annotation-item__action--bottom">
-          {annotation.owner.email === this.props.userEmail && (
-            <i class="fas fa-edit" onClick={openModal} />
-          )}
-          <i className="fas fa-reply" onClick={initReplyToThis} />
-          <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-            <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
-            {annotation.upvotesFrom ? annotation.upvotesFrom.length : 0}
-          </span>
+          {this.renderAdminActions(annotation)}
+          <div>
+            {annotation.owner.email === this.props.userEmail && (
+              <i class="fas fa-edit" onClick={openModal} />
+            )}
+            <i className="fas fa-reply" onClick={initReplyToThis} />
+            <span className={`${hasUpvoted ? "upvoted" : ""}`}>
+              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
+              {annotation.upvotesFrom ? annotation.upvotesFrom.length : 0}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -119,14 +159,17 @@ class AnnotationItem extends Component {
           </div>
           <p className="annotation-item__comment">{child.comment}</p>
           <div className="annotation-item__action--bottom">
-            {child.owner.email === this.props.userEmail && (
-              <i class="fas fa-edit" onClick={openModal} />
-            )}
-            <i className="fas fa-reply" onClick={initReplyToThis} />
-            <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
-              {child.upvotesFrom ? child.upvotesFrom.length : 0}
-            </span>
+            {this.renderAdminActions(child)}
+            <div>
+              {child.owner.email === this.props.userEmail && (
+                <i class="fas fa-edit" onClick={openModal} />
+              )}
+              <i className="fas fa-reply" onClick={initReplyToThis} />
+              <span className={`${hasUpvoted ? "upvoted" : ""}`}>
+                <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
+                {child.upvotesFrom ? child.upvotesFrom.length : 0}
+              </span>
+            </div>
           </div>
         </div>
       );
@@ -167,6 +210,9 @@ class AnnotationItem extends Component {
 
 const mapState = (state, ownProps) => ({
   userEmail: state.data.user.email,
+  admin:
+    state.data.user.roles &&
+    state.data.user.roles.filter(r => r.name === "admin").length,
   ...ownProps
 });
 
@@ -174,6 +220,7 @@ const actions = {
   replyToAnnotation,
   initiateReplyToAnnotation,
   cancelReplyToAnnotation,
+  verifyAnnotationAsAdmin,
   upvoteAnnotation,
   loadModal,
   notify

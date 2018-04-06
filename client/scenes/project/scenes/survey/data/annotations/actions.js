@@ -2,7 +2,8 @@ import {
   getAnnotationsBySurvey,
   postReplyToAnnotation,
   postUpvoteToAnnotation,
-  postUpdatedCommentToAnnotation
+  postUpdatedCommentToAnnotation,
+  postPendingAnnotationStatus
 } from "./service";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick } from "lodash";
@@ -101,6 +102,24 @@ export const editAnnotationComment = ({ annotationId, comment }) => {
           })
         );
       }
+    }
+  };
+};
+
+export const verifyAnnotationAsAdmin = (annotationId, reviewed) => {
+  return async dispatch => {
+    try {
+      await postPendingAnnotationStatus({
+        annotationId,
+        reviewed
+      });
+      dispatch({
+        type: types.ANNOTATION_VERIFIED,
+        annotationId,
+        reviewed
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 };

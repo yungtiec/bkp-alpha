@@ -25,9 +25,10 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
         "updatedAt",
         "hierarchyLevel",
         "parentId",
-        "comment"
+        "comment",
+        "reviewed"
       ]),
-      { comment: req.body.comment }
+      { comment: req.body.comment, reviewed: "pending" }
     );
     const ancestors = await parent.getAncestors({ raw: true });
     var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
@@ -133,8 +134,8 @@ router.post(
   async (req, res, next) => {
     try {
       var annotation = await Annotation.findById(req.body.annotationId);
-      annotation = annotation.update({ reviewed: req.body.reviewed });
-      res.send(annotation.id);
+      annotation.update({ reviewed: req.body.reviewed });
+      res.sendStatus(200);
     } catch (err) {
       next(err);
     }
