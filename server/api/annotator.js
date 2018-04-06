@@ -2,7 +2,26 @@ const router = require("express").Router();
 const { Annotation } = require("../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication } = require("./utils");
+const { IncomingWebhook } = require("@slack/client");
+const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+const webhook = new IncomingWebhook(slackWebhookUrl);
 module.exports = router;
+
+function sendNotificationToSlack(annotation) {
+  // Send simple text to the webhook channel
+  webhook.send(
+    `Incoming annotation at ${annotation.uri}/question/${annotation.survey_question_id}/annotation/${
+      annotation.id
+    }\nor view it in your admin panel at http://localhost:8000/admin`,
+    function(err, res) {
+      if (err) {
+        console.log("Error:", err);
+      } else {
+        console.log("Message sent: ", res);
+      }
+    }
+  );
+}
 
 router.get("/", (req, res, next) => {
   res.send({
@@ -30,6 +49,7 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       annotator_schema_version
     });
     await newAnnotation.setOwner(req.user.id);
+    sendNotificationToSlack(newAnnotation)
     res.send(newAnnotation);
   } catch (err) {
     next(err);

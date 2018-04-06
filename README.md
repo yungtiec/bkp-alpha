@@ -28,11 +28,15 @@
 
 [x] custom scrollbar
 
-[ ] tabs in sidebar (pending and verified)
+[x] tabs in sidebar (pending and verified)
+
+[x] email/slack push notification for admin
 
 [ ] small notification widget like facebook
 
-[ ] email/slack push notification for admin
+[ ] optimize client side polling for data
+  - send message like '3 more notifications'
+  - get real data when user clicks on push notification
 
 [ ] split vendor file
 

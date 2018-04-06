@@ -34,3 +34,4 @@ export const findAnnotationsInQnaByText = ({
     .map(aid => annotationsById[aid])
     .filter(annotation => annotation.quote.trim() === text.trim());
 };
+

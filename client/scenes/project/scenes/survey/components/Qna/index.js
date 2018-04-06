@@ -32,9 +32,11 @@ class QnaBox extends Component {
         }
       });
     }
-    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).click(event => {
-      setTimeout(() => pollData(), 500);
-    });
+    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).click(
+      event => {
+        setTimeout(() => pollData(), 500);
+      }
+    );
     $(`div[name="qna-${qna.id}"] .annotator-item textarea`).keydown(event => {
       if (event.which === 13) {
         setTimeout(() => {
@@ -68,22 +70,25 @@ class QnaBox extends Component {
     const prevNumAnnotations = this.props.numAnnotations;
     const nextNumAnnotations = nextProps.numAnnotations;
     if (
-      prevProjectSymbol &&
-      prevSurveyId &&
-      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId) ||
+      (prevProjectSymbol &&
+        prevSurveyId &&
+        (prevProjectSymbol !== nextProjectSymbol ||
+          prevSurveyId !== nextSurveyId)) ||
       prevNumAnnotations !== nextNumAnnotations
     ) {
       this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
     }
   }
 
-
-
   render() {
     const { qna } = this.props;
 
     return (
-      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)} onClick={this.props.handleAnnotationOnClick}>
+      <div
+        className="qna__container"
+        ref={el => (this[`qna-${qna.id}`] = el)}
+        onClick={this.props.handleAnnotationOnClick}
+      >
         {this.props.children}
       </div>
     );
