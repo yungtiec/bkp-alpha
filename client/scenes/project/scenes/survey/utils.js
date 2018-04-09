@@ -1,4 +1,5 @@
 import { find } from "lodash";
+import striptags from "striptags";
 
 export const findFirstAnnotationInQna = ({
   annotationIds,
@@ -29,9 +30,9 @@ export const findAnnotationsInQnaByText = ({
   annotationsById,
   text
 }) => {
+  text = striptags(text);
   if (!annotationIds.length) return;
   return annotationIds
     .map(aid => annotationsById[aid])
-    .filter(annotation => annotation.quote.trim() === text.trim());
+    .filter(annotation => annotation.quote.trim().indexOf(text.trim()) !== -1);
 };
-
