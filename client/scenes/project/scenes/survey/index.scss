@@ -19,8 +19,8 @@
 
 .project-survey__header .survey-name__box {
   font-weight: 700;
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 42px;
+  line-height: 1.58;
   text-transform: capitalize;
   @include breakpoint(xs) {
     font-size: 36px;
@@ -41,9 +41,14 @@
 
 .qna__question {
   font-family: "Vollkorn", serif;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 1rem;
   text-align: left;
-  line-height: 1;
+  line-height: 1.58;
+}
+
+.qna__answer {
+  font-size: 18px;
+  line-height: 1.58;
 }

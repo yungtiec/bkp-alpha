@@ -32,6 +32,12 @@
 
 [x] email/slack push notification for admin
 
+[ ] sort by time and popularity
+
+[ ] general comment
+
+[ ] admin can pin annotation
+
 [ ] small notification widget like facebook
 
 [ ] optimize client side polling for data

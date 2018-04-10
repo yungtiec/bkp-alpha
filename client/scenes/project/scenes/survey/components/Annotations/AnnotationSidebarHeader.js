@@ -9,23 +9,8 @@ export default class AnnotationSidebarHeader extends Component {
     autoBind(this);
   }
 
-  renderAnnotationCount({
-    annotationIds,
-    unfilteredAnnotationIds,
-    annotationsById,
-    selectedText
-  }) {
-    const annotations = findAnnotationsInQnaByText({
-      annotationIds: unfilteredAnnotationIds,
-      annotationsById,
-      text: selectedText
-    });
-    if (
-      annotationIds &&
-      selectedText &&
-      annotations &&
-      annotations.length
-    ) {
+  renderAnnotationCount({ selectedAnnotations, annotationIds }) {
+    if (selectedAnnotations) {
       return (
         <p
           className="annotations-header__count reset-selection"
@@ -34,39 +19,21 @@ export default class AnnotationSidebarHeader extends Component {
           Show all Annotations ({annotationIds.length})
         </p>
       );
-    } else if (
-      (annotationIds && !selectedText) ||
-      (annotationIds &&
-        selectedText &&
-        (!annotations || (annotations && !annotations.length)))
-    ) {
+    } else {
       return (
         <p className="annotations-header__count">
           Annotations ({annotationIds.length})
         </p>
       );
-    } else {
-      return <p className="annotations-header__count">Annotation</p>;
     }
   }
 
   render() {
-    const {
-      unfilteredAnnotationIds,
-      annotationsById,
-      selectedText,
-      isLoggedIn,
-      annotationIds
-    } = this.props;
+    const { isLoggedIn, selectedAnnotations, annotationIds } = this.props;
 
     return (
       <div>
-        {this.renderAnnotationCount({
-          annotationIds,
-          unfilteredAnnotationIds,
-          annotationsById,
-          selectedText
-        })}
+        {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

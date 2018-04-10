@@ -30,7 +30,8 @@ export default class Survey extends Component {
     autoBind(this);
     this.state = {
       selectedText: "",
-      annotationSelected: false,
+      selectedAnnotations: null,
+      selectedDomNode: null,
       sidebarScrollTo: null,
       mainScrollTo: null
     };
@@ -70,24 +71,8 @@ export default class Survey extends Component {
     }
   }
 
-  resetSelectedText() {
-    this.setState({
-      selectedText: "",
-      annotationSelected: false
-    });
-  }
-
-  renderSidebar({
-    unfilteredAnnotationIds,
-    annotationIds,
-    annotationsById,
-    selectedText
-  }) {
-    const annotations = findAnnotationsInQnaByText({
-      annotationIds: unfilteredAnnotationIds,
-      annotationsById,
-      text: selectedText
-    });
+  renderSidebar({ annotationIds, annotationsById, selectedText }) {
+    const annotations = this.state.selectedAnnotations;
     if (annotationIds && selectedText && annotations && annotations.length) {
       return this.renderSidebarWithSelectedText(annotations);
     }
@@ -149,26 +134,64 @@ export default class Survey extends Component {
     );
   }
 
-  annotationOnClick(evt) {
+  annotationOnClick(evt, qnaId, answerId) {
+    if (!qnaId && !answerId) return;
+    this.resetHighlightColor();
     const selectedText = evt.target.innerHTML;
     const annotations = findAnnotationsInQnaByText({
       annotationIds: this.props.unfilteredAnnotationIds,
       annotationsById: this.props.annotationsById,
-      text: selectedText
+      text: selectedText,
+      qnaId
     });
     if (!this.props.sidebarOpen && annotations.length) {
       this.props.toggleSidebar();
     }
     if (annotations.length) {
+      const annotationInSelectedOne = evt.target.getElementsByClassName(
+        "annotator-hl"
+      );
+      annotationInSelectedOne.length > 1 &&
+        annotationInSelectedOne.forEach(el => {
+          el.classList.add("annotation-selected");
+        });
+      annotationInSelectedOne.length === 1 &&
+        annotationInSelectedOne[0].classList.add("annotation-selected");
+      evt.target.classList.add("annotation-selected");
       this.setState({
         selectedText,
-        annotationSelected: true
+        selectedAnnotations: annotations,
+        selectedDomNode: evt.target
       });
     } else {
       this.setState({
-        selectedText
+        selectedText,
+        selectedAnnotations: null
       });
     }
+  }
+
+  resetHighlightColor() {
+    if (!this.state.selectedDomNode) return;
+    const annotationInSelectedOne = this.state.selectedDomNode.getElementsByClassName(
+      "annotator-hl"
+    );
+    annotationInSelectedOne.length > 1 &&
+      annotationInSelectedOne.forEach(el => {
+        el.classList.remove("annotation-selected");
+      });
+    annotationInSelectedOne.length === 1 &&
+      annotationInSelectedOne[0].classList.remove("annotation-selected");
+    this.state.selectedDomNode.classList.remove("annotation-selected");
+  }
+
+  resetSelectedText() {
+    this.resetHighlightColor();
+    this.setState({
+      selectedText: "",
+      selectedAnnotations: null,
+      selectedDomNode: null
+    });
   }
 
   render() {
@@ -200,8 +223,16 @@ export default class Survey extends Component {
                   numAnnotations={annotationIds.length}
                   handleAnnotationOnClick={this.annotationOnClick}
                 >
-                  <Question question={surveyQnasById[id].question} />
-                  <Answers answers={surveyQnasById[id].survey_answers} />
+                  <Question
+                    qnaId={id}
+                    question={surveyQnasById[id].question}
+                    handleAnnotationOnClick={this.annotationOnClick}
+                  />
+                  <Answers
+                    qnaId={id}
+                    answers={surveyQnasById[id].survey_answers}
+                    handleAnnotationOnClick={this.annotationOnClick}
+                  />
                 </Qna>
               </Element>
             );
@@ -209,7 +240,7 @@ export default class Survey extends Component {
         </div>
         <AnnotationSidebar
           width={width}
-          annotationSelected={this.state.annotationSelected}
+          selectedAnnotations={this.state.selectedAnnotations}
         >
           <Scrollbar
             containerWidth={this.props.width < 767 ? "350px" : "410px"}
@@ -223,16 +254,12 @@ export default class Survey extends Component {
               className="annotation-contents"
             >
               <AnnotationSidebarHeader
-                unfilteredAnnotationIds={unfilteredAnnotationIds}
                 annotationIds={annotationIds}
-                annotationsById={annotationsById}
-                selectedText={this.state.selectedText}
+                selectedAnnotations={this.state.selectedAnnotations}
                 isLoggedIn={isLoggedIn}
                 resetSelection={this.resetSelectedText}
-                width={width}
               />
               {this.renderSidebar({
-                unfilteredAnnotationIds,
                 annotationIds,
                 annotationsById,
                 selectedText: this.state.selectedText

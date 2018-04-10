@@ -32,7 +32,7 @@ class AnnotationSidebar extends Component {
       updateAnnotationTypeInView,
       toggleSidebar,
       sidebarOpen,
-      annotationSelected,
+      selectedAnnotations,
       annotationType,
       width,
       children
@@ -86,7 +86,7 @@ class AnnotationSidebar extends Component {
             <button
               type="button"
               class={`annotation-sidebar__tab ${annotationType === "all" &&
-                !annotationSelected &&
+                !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("all")}
             >
@@ -95,7 +95,7 @@ class AnnotationSidebar extends Component {
             <button
               type="button"
               class={`annotation-sidebar__tab ${annotationType === "verified" &&
-                !annotationSelected &&
+                !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("verified")}
             >
@@ -104,7 +104,7 @@ class AnnotationSidebar extends Component {
             <button
               type="button"
               class={`annotation-sidebar__tab ${annotationType === "pending" &&
-                !annotationSelected &&
+                !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("pending")}
             >

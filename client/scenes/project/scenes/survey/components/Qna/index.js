@@ -32,18 +32,22 @@ class QnaBox extends Component {
         }
       });
     }
-    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).click(
+    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).on(
+      "click",
       event => {
         setTimeout(() => pollData(), 500);
       }
     );
-    $(`div[name="qna-${qna.id}"] .annotator-item textarea`).keydown(event => {
-      if (event.which === 13) {
-        setTimeout(() => {
-          pollData();
-        }, 500);
+    $(`div[name="qna-${qna.id}"] .annotator-item textarea`).on(
+      "keydown",
+      event => {
+        if (event.which === 13) {
+          setTimeout(() => {
+            pollData();
+          }, 500);
+        }
       }
-    });
+    );
   }
 
   componentDidUpdate() {
@@ -87,7 +91,7 @@ class QnaBox extends Component {
       <div
         className="qna__container"
         ref={el => (this[`qna-${qna.id}`] = el)}
-        onClick={this.props.handleAnnotationOnClick}
+
       >
         {this.props.children}
       </div>

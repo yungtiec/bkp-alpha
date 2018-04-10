@@ -84,3 +84,8 @@
   background: white;
   color: #09263a;
 }
+
+// change highlight color of selected annotation
+.annotator-hl.annotation-selected {
+  background: rgba(10, 142, 255, 0.3);
+}

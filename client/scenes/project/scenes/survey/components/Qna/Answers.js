@@ -9,16 +9,29 @@ export default class Answers extends Component {
   }
 
   render() {
-    const { answers } = this.props;
+    const { answers, qnaId, handleAnnotationOnClick } = this.props;
     const latestAnswer = find(
       answers,
       answer => answer.references.length === answers.length - 1
     );
-    const answerOrder = latestAnswer.references.length ? latestAnswer.references.push(latestAnswer.id) : [latestAnswer.id]
+    const answerOrder = latestAnswer.references.length
+      ? latestAnswer.references.push(latestAnswer.id)
+      : [latestAnswer.id];
     const answersById = keyBy(answers, "id");
 
     return (
-      <div className="qna__answer-container">{answerOrder.map(id => <p className="qna__answer">{answersById[id].answer}</p>)}</div>
+      <div className="qna__answer-container">
+        {answerOrder.map(id => (
+          <p
+            className="qna__answer"
+            onClick={e => {
+              handleAnnotationOnClick(e, qnaId, id);
+            }}
+          >
+            {answersById[id].answer}
+          </p>
+        ))}
+      </div>
     );
   }
 }

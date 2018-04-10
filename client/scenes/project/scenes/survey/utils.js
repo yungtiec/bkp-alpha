@@ -28,11 +28,17 @@ export const findAnnotationsInQna = ({
 export const findAnnotationsInQnaByText = ({
   annotationIds,
   annotationsById,
-  text
+  text,
+  qnaId,
+  answerId // not in used yet
 }) => {
   text = striptags(text);
   if (!annotationIds.length) return;
   return annotationIds
     .map(aid => annotationsById[aid])
-    .filter(annotation => annotation.quote.trim().indexOf(text.trim()) !== -1);
+    .filter(
+      annotation =>
+        qnaId === annotation.survey_question_id &&
+        annotation.quote.trim().indexOf(text.trim()) !== -1
+    );
 };

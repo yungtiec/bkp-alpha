@@ -8,6 +8,15 @@ export default class Question extends Component {
   }
 
   render() {
-    return <h5 className="qna__question">{this.props.question.text}</h5>;
+    return (
+      <h5
+        className="qna__question"
+        onClick={e => {
+          this.props.handleAnnotationOnClick(e, this.props.qnaId);
+        }}
+      >
+        {this.props.question.text}
+      </h5>
+    );
   }
 }
