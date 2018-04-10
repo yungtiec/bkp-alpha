@@ -11,7 +11,7 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn, pollData } = this.props;
+    const { qna, match, isLoggedIn, pollData, tags } = this.props;
     if (!this.annotation) {
       this.annotation = $(this[`qna-${qna.id}`]).annotator();
       this.annotation.annotator("addPlugin", "Store", {
@@ -31,6 +31,7 @@ class QnaBox extends Component {
           search: "/search/"
         }
       });
+      this.annotation.annotator("addPlugin", "Tags");
     }
     $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).on(
       "click",
@@ -88,11 +89,7 @@ class QnaBox extends Component {
     const { qna } = this.props;
 
     return (
-      <div
-        className="qna__container"
-        ref={el => (this[`qna-${qna.id}`] = el)}
-
-      >
+      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)}>
         {this.props.children}
       </div>
     );

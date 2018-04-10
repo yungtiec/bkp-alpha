@@ -12,13 +12,14 @@ import moment from "moment";
 
 const initialState = {
   annotationsById: {},
-  annotationIds: []
+  annotationIds: [],
+  tags: []
 };
 
 const sortFns = {
-  'timestamp': sortAnnotationsByTimestamp,
-  "upvotes": sortAnnotationsByUpvotes
-}
+  timestamp: sortAnnotationsByTimestamp,
+  upvotes: sortAnnotationsByUpvotes
+};
 
 function sortAnnotationsByTimestamp(annotationCollection) {
   return orderBy(
@@ -31,7 +32,11 @@ function sortAnnotationsByTimestamp(annotationCollection) {
 }
 
 function sortAnnotationsByUpvotes(annotationCollection) {
-  return orderBy(annotationCollection, ["upvotesFrom.length", "unix"], ["desc", "desc"]);
+  return orderBy(
+    annotationCollection,
+    ["upvotesFrom.length", "unix"],
+    ["desc", "desc"]
+  );
 }
 
 function removeEmptyAnnotationFromHierarchy({ state, accessors, parent }) {
@@ -121,6 +126,7 @@ export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
     case types.ANNOTATIONS_FETCH_SUCCESS:
       return {
+        tags: action.tags,
         annotationsById: action.annotationsById,
         annotationIds: keys(action.annotationsById)
       };
@@ -160,14 +166,14 @@ export default function reduce(state = initialState, action = {}) {
 
 export function getAllAnnotations(state) {
   const annotationType = state.scenes.project.scenes.survey.annotationType;
-  const sortFn = sortFns[state.scenes.project.scenes.survey.sortBy]
+  const sortFn = sortFns[state.scenes.project.scenes.survey.sortBy];
   var {
     annotationIds,
     annotationsById
   } = state.scenes.project.scenes.survey.data.annotations;
   var filteredAnnotationIds;
   var sortedAnnotations = sortFn(values(annotationsById));
-  var sortedAnnotationIds = sortedAnnotations.map(a => a.id)
+  var sortedAnnotationIds = sortedAnnotations.map(a => a.id);
   if (annotationType === "all") {
     return {
       unfilteredAnnotationIds: sortedAnnotationIds,
@@ -184,4 +190,8 @@ export function getAllAnnotations(state) {
       unfilteredAnnotationIds: sortedAnnotationIds
     };
   }
+}
+
+export function getAllTags(state) {
+  return state.scenes.project.scenes.survey.data.annotations.tags.map(tag => tag.name)
 }

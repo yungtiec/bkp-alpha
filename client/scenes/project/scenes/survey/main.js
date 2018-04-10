@@ -12,7 +12,7 @@ import {
 import { toggleSidebar, sortAnnotationBy } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
-import { getAllAnnotations } from "./data/annotations/reducer";
+import { getAllAnnotations, getAllTags } from "./data/annotations/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
@@ -103,6 +103,7 @@ const mapState = state => {
     annotationsById,
     annotationIds,
     unfilteredAnnotationIds,
+    tags: getAllTags(state),
     width,
     sidebarOpen,
     sortBy

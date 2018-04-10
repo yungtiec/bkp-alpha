@@ -1,16 +1,19 @@
 const router = require("express").Router();
-const { Annotation } = require("../db/models");
+const { Annotation, Tag } = require("../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication } = require("./utils");
 const { IncomingWebhook } = require("@slack/client");
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(slackWebhookUrl);
+Promise = require("bluebird");
 module.exports = router;
 
 function sendNotificationToSlack(annotation) {
   // Send simple text to the webhook channel
   webhook.send(
-    `Incoming annotation at ${annotation.uri}/question/${annotation.survey_question_id}/annotation/${
+    `Incoming annotation at ${annotation.uri}/question/${
+      annotation.survey_question_id
+    }/annotation/${
       annotation.id
     }\nor view it in your admin panel at http://localhost:8000/admin`,
     function(err, res) {
@@ -38,7 +41,8 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       text,
       uri,
       annotator_schema_version,
-      survey_question_id
+      survey_question_id,
+      tags
     } = req.body;
     const newAnnotation = await Annotation.create({
       uri,
@@ -48,8 +52,13 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       ranges,
       annotator_schema_version
     });
-    await newAnnotation.setOwner(req.user.id);
-    sendNotificationToSlack(newAnnotation)
+    const tagPromises = Promise.map(tags, async tag => {
+      const [tagInstance, created] = await Tag.findOrCreate({ where: { name: tag } });
+      return newAnnotation.addTag(tagInstance.id);
+    });
+    const ownerPromise = newAnnotation.setOwner(req.user.id);
+    await Promise.all([tagPromises, ownerPromise]);
+    // sendNotificationToSlack(newAnnotation);
     res.send(newAnnotation);
   } catch (err) {
     next(err);

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import history from "../../../../../history";
-import { ProjectSymbolBlueBox } from "../../../../../components";
+import history from "../../../../../../history";
+import { ProjectSymbolBlueBox } from "../../../../../../components";
 
 export default class SurveyHeader extends Component {
   constructor(props) {

@@ -23,7 +23,7 @@ export const sortAnnotationBy = sortBy => ({
 const initialState = {
   sidebarOpen: true,
   annotationType: "all",
-  sortBy: "upvotes"
+  sortBy: "timestamp"
 };
 
 export default function reduce(state = initialState, action) {

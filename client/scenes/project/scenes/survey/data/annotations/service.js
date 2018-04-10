@@ -34,3 +34,7 @@ export function postPendingAnnotationStatus({ annotationId, reviewed }) {
     reviewed
   });
 }
+
+export function getAllTags() {
+  return axios.get("/api/tag").then(res => res.data);
+}

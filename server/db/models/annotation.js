@@ -57,6 +57,10 @@ Annotation.getAnnotationsFromUrl = function(uri) {
         attributes: ["first_name", "last_name", "email"]
       },
       {
+        model: db.model("tag"),
+        attributes: ["name"]
+      },
+      {
         model: Annotation,
         where: {
           reviewed: {

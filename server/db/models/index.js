@@ -3,6 +3,7 @@ const Annotation = require("./annotation");
 const Permission = require("./permission");
 const Role = require("./role");
 const Project = require("./project");
+const Tag = require("./tag");
 
 /*=============================================
 =            role based authorization         =
@@ -66,10 +67,26 @@ Annotation.belongsTo(User, { foreignKey: "owner_id", as: "owner" });
 
 /*=====  End of User and Annotation  ========*/
 
+/*=============================================
+=            Annotation and Tag             =
+==============================================*/
+
+Tag.belongsToMany(Annotation, {
+  through: "annotation_tag",
+  foreignKey: "tag_id"
+});
+Annotation.belongsToMany(Tag, {
+  through: "annotation_tag",
+  foreignKey: "annotation_id"
+});
+
+/*=====  End of Annotation and Tag ========*/
+
 module.exports = {
   User,
   Annotation,
   Permission,
   Role,
-  Project
+  Project,
+  Tag
 };

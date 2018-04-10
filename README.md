@@ -32,7 +32,9 @@
 
 [x] email/slack push notification for admin
 
-[ ] sort by time and popularity
+[x] sort by time and popularity
+
+[x] tag vote like slack reaction
 
 [ ] general comment
 
