@@ -28,12 +28,44 @@ export default class AnnotationSidebarHeader extends Component {
     }
   }
 
+  renderSortBy(sortBy) {
+    return (
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <span>sort by</span>
+        <button
+          type="button"
+          class={`btn btn-outline-secondary btn-sm ${sortBy === "timestamp" &&
+            "active"}`}
+          onClick={() => this.props.sortAnnotationBy("timestamp")}
+        >
+          date
+        </button>
+        <button
+          type="button"
+          class={`btn btn-outline-secondary btn-sm ${sortBy === "upvotes" &&
+            "active"}`}
+          onClick={() => this.props.sortAnnotationBy("upvotes")}
+        >
+          upvotes
+        </button>
+      </div>
+    );
+  }
+
   render() {
-    const { isLoggedIn, selectedAnnotations, annotationIds } = this.props;
+    const {
+      isLoggedIn,
+      selectedAnnotations,
+      annotationIds,
+      sortBy
+    } = this.props;
 
     return (
       <div>
-        {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
+        <div className="annotation-sidebar__menu">
+          {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
+          {!selectedAnnotations && this.renderSortBy(sortBy)}
+        </div>
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

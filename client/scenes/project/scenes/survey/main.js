@@ -9,7 +9,7 @@ import {
   addNewAnnotationSentFromServer,
   editAnnotationComment
 } from "./data/annotations/actions";
-import { toggleSidebar } from "./reducer";
+import { toggleSidebar, sortAnnotationBy } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
@@ -92,7 +92,7 @@ const mapState = state => {
     unfilteredAnnotationIds
   } = getAllAnnotations(state);
   const { width } = state.data.environment;
-  const { sidebarOpen } = state.scenes.project.scenes.survey;
+  const { sidebarOpen, sortBy } = state.scenes.project.scenes.survey;
   return {
     isLoggedIn: !!state.data.user.id,
     myUserId: state.data.user.id,
@@ -104,7 +104,8 @@ const mapState = state => {
     annotationIds,
     unfilteredAnnotationIds,
     width,
-    sidebarOpen
+    sidebarOpen,
+    sortBy
   };
 };
 
@@ -113,7 +114,8 @@ const actions = {
   fetchAnnotationsBySurvey,
   addNewAnnotationSentFromServer,
   editAnnotationComment,
-  toggleSidebar
+  toggleSidebar,
+  sortAnnotationBy
 };
 
 const onPollInterval = (props, dispatch) => {

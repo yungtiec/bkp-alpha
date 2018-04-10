@@ -205,7 +205,9 @@ export default class Survey extends Component {
       unfilteredAnnotationIds,
       isLoggedIn,
       match,
-      width
+      width,
+      sortBy,
+      sortAnnotationBy
     } = this.props;
 
     return (
@@ -254,6 +256,8 @@ export default class Survey extends Component {
               className="annotation-contents"
             >
               <AnnotationSidebarHeader
+                sortBy={sortBy}
+                sortAnnotationBy={sortAnnotationBy}
                 annotationIds={annotationIds}
                 selectedAnnotations={this.state.selectedAnnotations}
                 isLoggedIn={isLoggedIn}

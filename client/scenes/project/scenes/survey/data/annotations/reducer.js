@@ -1,10 +1,38 @@
-import { cloneDeep, find, orderBy, values, isEmpty, keys } from "lodash";
+import {
+  cloneDeep,
+  find,
+  orderBy,
+  values,
+  isEmpty,
+  keys,
+  assignIn
+} from "lodash";
 import * as types from "./actionTypes";
+import moment from "moment";
 
 const initialState = {
   annotationsById: {},
   annotationIds: []
 };
+
+const sortFns = {
+  'timestamp': sortAnnotationsByTimestamp,
+  "upvotes": sortAnnotationsByUpvotes
+}
+
+function sortAnnotationsByTimestamp(annotationCollection) {
+  return orderBy(
+    annotationCollection.map(annotation =>
+      assignIn({ unix: moment(annotation.createdAt).format("X") }, annotation)
+    ),
+    ["unix", "upvotesFrom.length"],
+    ["desc", "desc"]
+  );
+}
+
+function sortAnnotationsByUpvotes(annotationCollection) {
+  return orderBy(annotationCollection, ["upvotesFrom.length", "unix"], ["desc", "desc"]);
+}
 
 function removeEmptyAnnotationFromHierarchy({ state, accessors, parent }) {
   const rootAnnotation = state.annotationsById[accessors[0]];
@@ -46,12 +74,7 @@ function addEmptyAnnotationToHierarchy({ state, accessors, parent }) {
 function addNewAnnotationSentFromServer({ state, annotation }) {
   var sortedAnnotations;
   state.annotationsById[annotation.id] = annotation;
-  sortedAnnotations = orderBy(
-    values(state.annotationsById),
-    ["survey_question_id"],
-    ["asc"]
-  );
-  state.annotationIds = sortedAnnotations.map(a => a.id);
+  state.annotationIds = keys(state.annotationsById);
   return state;
 }
 
@@ -97,15 +120,9 @@ export default function reduce(state = initialState, action = {}) {
   var sortedAnnotations, annotationIds;
   switch (action.type) {
     case types.ANNOTATIONS_FETCH_SUCCESS:
-      sortedAnnotations = orderBy(
-        values(action.annotationsById),
-        ["survey_question_id"],
-        ["asc"]
-      );
-      annotationIds = sortedAnnotations.map(a => a.id);
       return {
         annotationsById: action.annotationsById,
-        annotationIds
+        annotationIds: keys(action.annotationsById)
       };
     case types.ANNOTATION_REPLY_INIT:
       return addEmptyAnnotationToHierarchy({
@@ -143,26 +160,28 @@ export default function reduce(state = initialState, action = {}) {
 
 export function getAllAnnotations(state) {
   const annotationType = state.scenes.project.scenes.survey.annotationType;
-  var filteredAnnotationIds, annotationIds, annotationsById;
+  const sortFn = sortFns[state.scenes.project.scenes.survey.sortBy]
+  var {
+    annotationIds,
+    annotationsById
+  } = state.scenes.project.scenes.survey.data.annotations;
+  var filteredAnnotationIds;
+  var sortedAnnotations = sortFn(values(annotationsById));
+  var sortedAnnotationIds = sortedAnnotations.map(a => a.id)
   if (annotationType === "all") {
     return {
-      unfilteredAnnotationIds:
-        state.scenes.project.scenes.survey.data.annotations.annotationIds,
-      ...state.scenes.project.scenes.survey.data.annotations
+      unfilteredAnnotationIds: sortedAnnotationIds,
+      annotationIds: sortedAnnotationIds,
+      annotationsById
     };
   } else {
-    annotationIds =
-      state.scenes.project.scenes.survey.data.annotations.annotationIds;
-    annotationsById =
-      state.scenes.project.scenes.survey.data.annotations.annotationsById;
-    filteredAnnotationIds = annotationIds.filter(
+    filteredAnnotationIds = sortedAnnotationIds.filter(
       aid => annotationsById[aid].reviewed === annotationType
     );
     return {
       annotationIds: filteredAnnotationIds,
       annotationsById,
-      unfilteredAnnotationIds:
-        state.scenes.project.scenes.survey.data.annotations.annotationIds
+      unfilteredAnnotationIds: sortedAnnotationIds
     };
   }
 }

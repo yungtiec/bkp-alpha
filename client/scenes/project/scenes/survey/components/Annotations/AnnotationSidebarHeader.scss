@@ -26,14 +26,33 @@
   box-shadow: #007bff 0px -4px 0px 0px inset;
 }
 
+.annotation-sidebar__menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 15px 5px;
+}
+
+.annotation-sidebar__menu .btn-group span {
+  line-height: 2;
+  margin-right: 5px;
+  color: white;
+  font-size: 14px;
+}
+
+.annotation-sidebar__menu .btn-group .btn {
+  border-radius: 0 !important;
+}
+
+.annotation-sidebar__menu .btn-group .btn.active {
+  background: inherit;
+  color: white;
+  border-color: white;
+}
+
 .annotations-header__count {
   color: white;
-  padding: 0px 15px;
-  padding-top: 10px;
-  width: 410px;
-  @include breakpoint(xs) {
-    width: 350px;
-  }
+  line-height: 2;
 }
 
 .annotations-header__count.reset-selection {
