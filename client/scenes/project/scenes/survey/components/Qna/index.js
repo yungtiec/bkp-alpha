@@ -19,7 +19,7 @@ class QnaBox extends Component {
         prefix: "/api/annotator",
         loadFromSearch: {
           uri: `${window.origin}${match.url}`,
-          survey_question_id: qna.id,
+          survey_question_id: qna.id
         },
         annotationData: {
           uri: `${window.origin}${match.url}`,
@@ -37,16 +37,16 @@ class QnaBox extends Component {
     $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).on(
       "click",
       event => {
-        setTimeout(() => pollData(), 500);
+        setTimeout(() => pollData(), 800);
+        setTimeout(() => pollData(), 40000);
       }
     );
     $(`div[name="qna-${qna.id}"] .annotator-item textarea`).on(
       "keypress",
       event => {
         if (event.which === 13) {
-          setTimeout(() => {
-            pollData();
-          }, 500);
+          setTimeout(() => pollData(), 800);
+          setTimeout(() => pollData(), 40000);
         }
       }
     );
