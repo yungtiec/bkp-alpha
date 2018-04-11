@@ -50,13 +50,17 @@ export default class Survey extends Component {
       annotations = findAnnotationsInQnaByText({
         annotationIds: this.props.unfilteredAnnotationIds,
         annotationsById: this.props.annotationsById,
-        text: this.props.annotationsById[Number(annotationId)].quote, // what if it's a reply!!, need to find its parend...
+        text:
+          this.props.annotationsById[Number(annotationId)] &&
+          this.props.annotationsById[Number(annotationId)].quote,
         qnaId: Number(qnaId)
       });
       this.setState({
         sidebarScrollTo: `annotation-${annotationId}`,
         mainScrollTo: `qna-${qnaId}`,
-        selectedText: this.props.annotationsById[Number(annotationId)].quote,
+        selectedText:
+          this.props.annotationsById[Number(annotationId)] &&
+          this.props.annotationsById[Number(annotationId)].quote,
         selectedAnnotations: annotations
       });
     }
