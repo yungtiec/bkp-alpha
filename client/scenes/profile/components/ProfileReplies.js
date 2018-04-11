@@ -26,11 +26,11 @@ export default props => {
                     history.push(
                       `${path}/question/${
                         annotation.survey_question_id
-                      }/annotation/${annotation.id}`
+                      }/annotation/${annotation.id}` // should be root annotation id
                     )
                   }
                 >
-                  see in context
+                  {annotation.reviewed !== 'spam' && "see in context"}
                 </a>
               </AnnotationReply>
             ))}

@@ -28,7 +28,7 @@ export default props => {
                     )
                   }
                 >
-                  see in context
+                  {annotation.reviewed !== 'spam' && "see in context"}
                 </a>
               </AnnotationMain>
             ))}

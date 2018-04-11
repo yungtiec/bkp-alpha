@@ -107,6 +107,15 @@
   transform: translateY(-50%);
 }
 
+.annotation-item__edit .Select {
+  flex: 1;
+}
+
+.annotation-item__edit label {
+  line-height: 2;
+  margin-right: 5px;
+}
+
 .annotation-item__tags .badge-light,
 .annotation-item__tags button {
   margin-right: 5px;

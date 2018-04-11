@@ -40,6 +40,8 @@
 
 [x] delete tags
 
+[ ] tooltip next to tabs explaining admin verification
+
 [ ] stock image for emty profile annotation and reply
 
 [ ] filter by tag
@@ -47,6 +49,10 @@
 [x] edit tags
 
 [ ] tag vote like slack reaction
+
+[ ] star(follow) project
+
+[ ] star(follow) survey
 
 [ ] general comment
 

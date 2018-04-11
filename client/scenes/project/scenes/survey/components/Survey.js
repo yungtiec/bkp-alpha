@@ -51,7 +51,7 @@ export default class Survey extends Component {
       annotations = findAnnotationsInQnaByText({
         annotationIds: this.props.unfilteredAnnotationIds,
         annotationsById: this.props.annotationsById,
-        text: this.props.annotationsById[Number(annotationId)].quote,
+        text: this.props.annotationsById[Number(annotationId)].quote, // what if it's a reply!!, need to find its parend...
         qnaId: Number(qnaId)
       });
       this.setState({
@@ -135,6 +135,7 @@ export default class Survey extends Component {
     const annotationParent = targetNode.parentElement;
     annotationParent.classList.contains("annotator-hl") &&
       annotationParent.classList.remove("annotation-selected");
+    console.log(annotationInSelectedOne)
     annotationInSelectedOne.length > 1 &&
       annotationInSelectedOne.forEach(el => {
         el.classList.remove("annotation-selected");
