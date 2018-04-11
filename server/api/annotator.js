@@ -15,7 +15,7 @@ function sendNotificationToSlack(annotation) {
       annotation.survey_question_id
     }/annotation/${
       annotation.id
-    }\nor view it in your admin panel at http://localhost:8000/admin`,
+    }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
     function(err, res) {
       if (err) {
         console.log("Error:", err);
@@ -60,7 +60,7 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
     });
     const ownerPromise = newAnnotation.setOwner(req.user.id);
     await Promise.all([tagPromises, ownerPromise]);
-    // sendNotificationToSlack(newAnnotation);
+    sendNotificationToSlack(newAnnotation);
     res.send(newAnnotation);
   } catch (err) {
     next(err);
