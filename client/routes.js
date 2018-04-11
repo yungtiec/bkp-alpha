@@ -41,6 +41,9 @@ class Routes extends Component {
             path="/unauthorized"
             component={Unauthorized}
           />
+          {/* Displays our Login component as a fallback */}
+          <Route exact path="/" component={Login} />
+          <Route component={Login} />
           {isLoggedIn && (
             <Switch>
               {/* Routes placed here are only available after logging in */}
@@ -56,8 +59,7 @@ class Routes extends Component {
               />
             </Switch>
           )}
-          {/* Displays our Login component as a fallback */}
-          <Route component={Login} />
+
         </Switch>
       </div>
     );

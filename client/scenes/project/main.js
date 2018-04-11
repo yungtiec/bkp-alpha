@@ -7,7 +7,7 @@ import { fetchProjectBySymbol } from "./data/actions";
 import { getAllProjectSurveys } from "./data/surveys/reducer";
 import { getSelectedProject } from "./data/metadata/reducer";
 import { SurveyCard } from "./components";
-import { ListView } from "../../components";
+import { ListView, ProjectSymbolBlueBox } from "../../components";
 import Survey from "./scenes/survey";
 import autoBind from "react-autobind";
 
@@ -45,6 +45,11 @@ class ProjectIndex extends Component {
         <Route path={`${match.url}/survey/:surveyId`} component={Survey} />
         {match.isExact && (
           <div className={surveyContainerClass}>
+            <div className="project__title d-flex align-content-center">
+              <span>{metadata.name}</span>
+              <ProjectSymbolBlueBox name={metadata.symbol} />
+            </div>
+            <p>{metadata.description}</p>
             <ListView
               viewClassName={"row projects-container"}
               rowClassName={match.isExact ? "col-md-12" : "col-md-4"}
