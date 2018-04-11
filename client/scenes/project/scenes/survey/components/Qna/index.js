@@ -41,7 +41,7 @@ class QnaBox extends Component {
       }
     );
     $(`div[name="qna-${qna.id}"] .annotator-item textarea`).on(
-      "keydown",
+      "keypress",
       event => {
         if (event.which === 13) {
           setTimeout(() => {
