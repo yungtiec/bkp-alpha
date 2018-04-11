@@ -74,7 +74,7 @@ export default class Survey extends Component {
 
   handlePollData() {
     this.props.fetchAnnotationsBySurvey(
-      `http://localhost:8000${this.props.match.url}`
+      `${window.origin}${this.props.match.url}`
     );
   }
 
@@ -91,10 +91,10 @@ export default class Survey extends Component {
       text: selectedText,
       qnaId
     });
-    if (!this.props.sidebarOpen && annotations.length) {
+    if (!this.props.sidebarOpen && annotations && annotations.length) {
       this.props.toggleSidebar();
     }
-    if (annotations.length) {
+    if (annotations && annotations.length) {
       // this.changeHighlightColor(evt.target);
       this.setState({
         selectedText,

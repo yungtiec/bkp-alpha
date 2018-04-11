@@ -33,7 +33,7 @@ class SurveyContainer extends Component {
       surveyId: this.props.match.params.surveyId
     });
     this.props.fetchAnnotationsBySurvey(
-      `http://localhost:8000${this.props.match.url}`
+      `${window.origin}${this.props.match.url}`
     );
     Events.scrollEvent.register("begin", () => {});
     Events.scrollEvent.register("end", () => {});
@@ -73,7 +73,7 @@ class SurveyContainer extends Component {
         surveyId: nextProps.match.params.surveyId
       });
       this.props.fetchAnnotationsBySurvey(
-        `http://localhost:8000${nextProps.match.url}`
+        `${window.origin}${nextProps.match.url}`
       );
     }
   }
@@ -124,7 +124,7 @@ const actions = {
 
 const onPollInterval = (props, dispatch) => {
   return props.fetchAnnotationsBySurvey(
-    `http://localhost:8000${props.match.url}`
+    `${window.origin}${props.match.url}`
   );
 };
 

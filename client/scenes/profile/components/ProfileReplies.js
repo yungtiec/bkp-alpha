@@ -1,7 +1,7 @@
 import "./ProfileReplies.scss";
 import React from "react";
 import { Link } from "react-router-dom";
-import { groupBy, keys } from "lodash";
+import { groupBy, keys, isEmpty } from "lodash";
 import moment from "moment";
 import { ProjectSymbolBlueBox, AnnotationReply } from "../../../components";
 import history from "../../../history";
@@ -9,6 +9,10 @@ import Avatar from "react-avatar";
 
 export default props => {
   const groupByUri = groupBy(props.replies, "uri");
+  if (isEmpty(groupByUri))
+    return (
+      <p class="profile-subroute__empty">You haven't replied to anyone yet</p>
+    );
   return (
     <div className="profile-subroute">
       {keys(groupByUri).map(uri => {
@@ -18,7 +22,6 @@ export default props => {
         return (
           <div className="profile-annotation__uri">
             <ProjectSymbolBlueBox name={projectSymbol} />
-            {!annotations.length && <p>You haven't replied to anyone yet</p>}
             {annotations.map(annotation => (
               <AnnotationReply annotation={annotation} path={path}>
                 <a
