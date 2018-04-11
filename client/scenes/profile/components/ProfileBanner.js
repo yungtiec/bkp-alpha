@@ -13,7 +13,7 @@ export default ({ name, numAnnotations, joinDate }) => (
         <p>
           <span>{numAnnotations} annotation(s) made</span>
           <span className="divider">|</span>
-          <span>{joinDate}</span>
+          <span>joined {joinDate}</span>
         </p>
       </div>
     </div>
