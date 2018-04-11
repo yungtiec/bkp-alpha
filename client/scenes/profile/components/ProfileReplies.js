@@ -17,11 +17,16 @@ export default props => {
     <div className="profile-subroute">
       {keys(groupByUri).map(uri => {
         const annotations = groupByUri[uri];
-        const projectSymbol = uri.substring(22).split("/")[1];
+        const uriFragments = uri.substring(window.origin.length + 1).split("/");
+        const projectSymbol = uriFragments[1];
+        const survey = `${uriFragments[2]} ${uriFragments[3]}`;
         const path = uri.replace(window.location.origin, "");
         return (
           <div className="profile-annotation__uri">
-            <ProjectSymbolBlueBox name={projectSymbol} />
+            <div>
+              <ProjectSymbolBlueBox name={`${projectSymbol}`} />
+              <span style={{marginLeft: "5px"}}>{survey}</span>
+            </div>
             {annotations.map(annotation => (
               <AnnotationReply annotation={annotation} path={path}>
                 <a

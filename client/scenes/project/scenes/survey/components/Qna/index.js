@@ -34,6 +34,7 @@ class QnaBox extends Component {
       });
       this.annotation.annotator("addPlugin", "Tags");
     }
+    $('.annotator-item input').attr('placeholder','Add some tags here (separate by space)');
     $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).on(
       "click",
       event => {
