@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
 import { findAnnotationsInQnaByText } from "../../utils";
+import Select from "react-select";
+import { keys } from "lodash";
 
 export default class AnnotationSidebarHeader extends Component {
   constructor(props) {
@@ -52,19 +54,43 @@ export default class AnnotationSidebarHeader extends Component {
     );
   }
 
+  handleTagFilterChange(selectedOptions) {
+    const { updateTagFilter } = this.props;
+    console.log(selectedOptions);
+    if (selectedOptions) {
+      updateTagFilter(selectedOptions);
+    }
+  }
+
   render() {
     const {
       isLoggedIn,
       selectedAnnotations,
       annotationIds,
-      sortBy
+      sortBy,
+      tagsWithCountInSurvey,
+      tagFilter,
+      updateTagFilter
     } = this.props;
+
+    console.log("filter", tagFilter);
 
     return (
       <div>
         <div className="annotation-sidebar__menu">
           {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
           {!selectedAnnotations && this.renderSortBy(sortBy)}
+        </div>
+        <div className="annotation-tags__filter-container">
+          <Select
+            name="annotation-tags__filter"
+            className="annotation-tags__filter"
+            placeholder="Enter tag to filter annotations"
+            multi={true}
+            value={tagFilter}
+            onChange={this.handleTagFilterChange}
+            options={tagsWithCountInSurvey}
+          />
         </div>
         {!isLoggedIn && (
           <div className="annotation-item">

@@ -9,17 +9,17 @@ import {
   addNewAnnotationSentFromServer,
   editAnnotationComment
 } from "./data/annotations/actions";
+import { updateTagFilter } from "./data/tags/actions"
 import { toggleSidebar, sortAnnotationBy } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
-import { getAllAnnotations, getAllTags } from "./data/annotations/reducer";
+import { getAllAnnotations } from "./data/annotations/reducer";
+import { getAllTags, getTagsWithCountInSurvey, getTagFilter} from "./data/tags/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
 import autoBind from "react-autobind";
 import asyncPoll from "react-async-poll";
-
-
 
 class SurveyContainer extends Component {
   constructor(props) {
@@ -104,6 +104,8 @@ const mapState = state => {
     annotationIds,
     unfilteredAnnotationIds,
     tags: getAllTags(state),
+    tagFilter: getTagFilter(state),
+    tagsWithCountInSurvey: getTagsWithCountInSurvey(state),
     width,
     sidebarOpen,
     sortBy
@@ -116,7 +118,8 @@ const actions = {
   addNewAnnotationSentFromServer,
   editAnnotationComment,
   toggleSidebar,
-  sortAnnotationBy
+  sortAnnotationBy,
+  updateTagFilter
 };
 
 const onPollInterval = (props, dispatch) => {

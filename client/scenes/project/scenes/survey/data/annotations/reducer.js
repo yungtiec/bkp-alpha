@@ -5,15 +5,15 @@ import {
   values,
   isEmpty,
   keys,
-  assignIn
+  assignIn,
+  filter
 } from "lodash";
 import * as types from "./actionTypes";
 import moment from "moment";
 
 const initialState = {
   annotationsById: {},
-  annotationIds: [],
-  tags: []
+  annotationIds: []
 };
 
 const sortFns = {
@@ -126,9 +126,8 @@ function removeTagFromAnnotation({ state, annotation }) {
   return state;
 }
 
-function addTagToAnnotation({ state, annotation, tag }) {
+function addTagToAnnotation({ state, annotation }) {
   state.annotationsById[annotation.id] = annotation;
-  if (state.tags.indexOf(tag) === -1) state.tags.push(tag);
   return state;
 }
 
@@ -137,7 +136,6 @@ export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
     case types.ANNOTATIONS_FETCH_SUCCESS:
       return {
-        tags: action.tags,
         annotationsById: action.annotationsById,
         annotationIds: keys(action.annotationsById)
       };
@@ -178,12 +176,23 @@ export default function reduce(state = initialState, action = {}) {
     case types.ANNOTATION_TAG_ADDED:
       return addTagToAnnotation({
         state: cloneDeep(state),
-        annotation: action.annotation,
-        tag: action.tag
+        annotation: action.annotation
       });
     default:
       return state;
   }
+}
+
+function filterByTags({ tagFilter, annotationsById, annotationIds }) {
+  var tagFilterArray = keys(tagFilter).filter(tag => tagFilter[tag]);
+  if (!tagFilterArray.length) return annotationIds;
+  return filter(annotationIds, aid => {
+    return tagFilterArray.reduce((bool, tag) => {
+      return (
+        bool || annotationsById[aid].tags.map(t => t.name).indexOf(tag) !== -1
+      );
+    }, false);
+  });
 }
 
 export function getAllAnnotations(state) {
@@ -193,17 +202,22 @@ export function getAllAnnotations(state) {
     annotationIds,
     annotationsById
   } = state.scenes.project.scenes.survey.data.annotations;
-  var filteredAnnotationIds;
+  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
   var sortedAnnotations = sortFn(values(annotationsById));
   var sortedAnnotationIds = sortedAnnotations.map(a => a.id);
+  var filteredAnnotationIds = filterByTags({
+    tagFilter,
+    annotationIds: sortedAnnotationIds,
+    annotationsById
+  });
   if (annotationType === "all") {
     return {
       unfilteredAnnotationIds: sortedAnnotationIds,
-      annotationIds: sortedAnnotationIds,
+      annotationIds: filteredAnnotationIds,
       annotationsById
     };
   } else {
-    filteredAnnotationIds = sortedAnnotationIds.filter(
+    filteredAnnotationIds = filteredAnnotationIds.filter(
       aid => annotationsById[aid].reviewed === annotationType
     );
     return {
@@ -212,8 +226,4 @@ export function getAllAnnotations(state) {
       unfilteredAnnotationIds: sortedAnnotationIds
     };
   }
-}
-
-export function getAllTags(state) {
-  return state.scenes.project.scenes.survey.data.annotations.tags;
 }

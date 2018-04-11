@@ -45,3 +45,7 @@ li {
   right: 100px !important;
   bottom: 100px !important;
 }
+
+button:focus {
+  outline: none;
+}

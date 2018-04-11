@@ -98,7 +98,7 @@ export default class Survey extends Component {
       // this.changeHighlightColor(evt.target);
       this.setState({
         selectedText,
-        selectedAnnotations: annotations,
+        selectedAnnotations: annotations
       });
     } else {
       this.setState({
@@ -111,7 +111,7 @@ export default class Survey extends Component {
   resetSelectedText() {
     this.setState({
       selectedText: "",
-      selectedAnnotations: null,
+      selectedAnnotations: null
     });
   }
 
@@ -129,10 +129,13 @@ export default class Survey extends Component {
       width,
       sortBy,
       sortAnnotationBy,
-      tags
+      tags,
+      tagsWithCountInSurvey,
+      tagFilter,
+      updateTagFilter
     } = this.props;
 
-    console.log(tags, 'in survey')
+    console.log(tagsWithCountInSurvey, "in survey");
 
     return (
       <div>
@@ -144,6 +147,7 @@ export default class Survey extends Component {
           numAnnotations={annotationIds.length}
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
+          tagFilter={tagFilter}
           annotationOnClick={this.annotationOnClick}
           handlePollData={this.handlePollData}
         />
@@ -167,6 +171,9 @@ export default class Survey extends Component {
                 sortAnnotationBy={sortAnnotationBy}
                 annotationIds={annotationIds}
                 selectedAnnotations={this.state.selectedAnnotations}
+                tagFilter={tagFilter}
+                updateTagFilter={updateTagFilter}
+                tagsWithCountInSurvey={tagsWithCountInSurvey}
                 isLoggedIn={isLoggedIn}
                 resetSelection={this.resetSelectedText}
               />

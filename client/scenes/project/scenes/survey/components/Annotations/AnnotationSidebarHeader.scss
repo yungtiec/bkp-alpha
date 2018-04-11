@@ -30,7 +30,8 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
-  padding: 15px 5px;
+  padding: 0px 5px;
+  margin: 10px 0px;
 }
 
 .annotation-sidebar__menu .btn-group span {
@@ -57,4 +58,13 @@
 
 .annotations-header__count.reset-selection {
   cursor: pointer;
+}
+
+.annotation-tags__filter-container {
+  padding: 0px 5px;
+  margin-bottom: 30px;
+}
+
+.annotation-tags__filter .Select-control {
+  border-radius: 0px;
 }

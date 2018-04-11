@@ -3,12 +3,9 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Modal from "react-modal";
 import { hideModal } from "../../../../../../data/reducer";
-import {
-  editAnnotationComment,
-  removeTag,
-  addTag
-} from "../../data/annotations/actions";
-import { getAllTags } from "../../data/annotations/reducer";
+import { editAnnotationComment } from "../../data/annotations/actions";
+import { removeTag, addTag } from "../../data/tags/actions";
+import { getAllTags } from "../../data/tags/reducer";
 import { CommentBox } from "../index";
 import Select from "react-select";
 
