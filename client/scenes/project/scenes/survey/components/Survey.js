@@ -27,7 +27,6 @@ export default class Survey extends Component {
     this.state = {
       selectedText: "",
       selectedAnnotations: null,
-      selectedDomNode: null,
       sidebarScrollTo: null,
       mainScrollTo: null
     };
@@ -85,7 +84,6 @@ export default class Survey extends Component {
       : document.selection.createRange().text;
     if (selectedTextByUser) return;
     if (!qnaId && !answerId) return;
-    this.resetHighlightColor(this.state.selectedDomNode);
     const selectedText = evt.target.innerHTML;
     const annotations = findAnnotationsInQnaByText({
       annotationIds: this.props.unfilteredAnnotationIds,
@@ -97,11 +95,10 @@ export default class Survey extends Component {
       this.props.toggleSidebar();
     }
     if (annotations.length) {
-      this.changeHighlightColor(evt.target);
+      // this.changeHighlightColor(evt.target);
       this.setState({
         selectedText,
         selectedAnnotations: annotations,
-        selectedDomNode: evt.target
       });
     } else {
       this.setState({
@@ -111,46 +108,10 @@ export default class Survey extends Component {
     }
   }
 
-  changeHighlightColor(targetNode) {
-    const annotationInSelectedOne = targetNode.getElementsByClassName(
-      "annotator-hl"
-    );
-    const annotationParent = targetNode.parentElement;
-    annotationParent.classList.contains("annotator-hl") &&
-      annotationParent.classList.add("annotation-selected");
-    annotationInSelectedOne.length > 1 &&
-      annotationInSelectedOne.forEach(el => {
-        el.classList.add("annotation-selected");
-      });
-    annotationInSelectedOne.length === 1 &&
-      annotationInSelectedOne[0].classList.add("annotation-selected");
-    targetNode.classList.add("annotation-selected");
-  }
-
-  resetHighlightColor(targetNode) {
-    if (!targetNode) return;
-    const annotationInSelectedOne = targetNode.getElementsByClassName(
-      "annotator-hl"
-    );
-    const annotationParent = targetNode.parentElement;
-    annotationParent.classList.contains("annotator-hl") &&
-      annotationParent.classList.remove("annotation-selected");
-    console.log(annotationInSelectedOne)
-    annotationInSelectedOne.length > 1 &&
-      annotationInSelectedOne.forEach(el => {
-        el.classList.remove("annotation-selected");
-      });
-    annotationInSelectedOne.length === 1 &&
-      annotationInSelectedOne[0].classList.remove("annotation-selected");
-    targetNode.classList.remove("annotation-selected");
-  }
-
   resetSelectedText() {
-    this.resetHighlightColor(this.state.selectedDomNode);
     this.setState({
       selectedText: "",
       selectedAnnotations: null,
-      selectedDomNode: null
     });
   }
 
