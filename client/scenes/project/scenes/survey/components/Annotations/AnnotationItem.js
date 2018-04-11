@@ -79,7 +79,7 @@ class AnnotationItem extends Component {
       <div
         className={`annotation-item__verified-message ${annotation.reviewed}`}
       >
-        {annotation.reviewed === 'verified' ? annotation.reviewed : ''}
+        {annotation.reviewed === "verified" ? annotation.reviewed : ""}
       </div>
     );
   }
@@ -108,12 +108,25 @@ class AnnotationItem extends Component {
           <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
         </div>
         <p className="annotation-item__quote">{annotation.quote}</p>
+        <div className="annotation-item__tags">
+          {annotation.tags.length
+            ? annotation.tags.map(tag => (
+                <span class="badge badge-light">
+                  {tag.name}
+                  {"  "}
+                </span>
+              ))
+            : ""}
+        </div>
         <p className="annotation-item__comment">{annotation.comment}</p>
         <div className="annotation-item__action--bottom">
           {this.renderAdminActions(annotation)}
           <div>
             {annotation.owner.email === this.props.userEmail && (
-              <i class="fas fa-edit" onClick={openModal} />
+              <i
+                class="fas fa-edit"
+                onClick={() => this.openModal(annotation)}
+              />
             )}
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span className={`${hasUpvoted ? "upvoted" : ""}`}>

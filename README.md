@@ -34,7 +34,19 @@
 
 [x] sort by time and popularity
 
-[x] tag vote like slack reaction
+[x] tags
+
+[x] delete annotation
+
+[x] delete tags
+
+[ ] stock image for emty profile annotation and reply
+
+[ ] filter by tag
+
+[x] edit tags
+
+[ ] tag vote like slack reaction
 
 [ ] general comment
 
@@ -49,14 +61,6 @@
 [ ] split vendor file
 
 [ ] awesome search bar like https://expo.io/
-
-# Boilermaker
-
-*Good things come in pairs*
-
-Looking to mix up a backend with express/sequelize and a frontend with react/redux? That's `boilermaker`!
-
-Follow along with the workshop to make your own! This canonical version can serve as a reference, or a starting point all on its own.
 
 ## Setup
 

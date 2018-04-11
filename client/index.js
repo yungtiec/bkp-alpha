@@ -1,5 +1,6 @@
 import $ from "jquery";
 import "normalize.css";
+import 'react-select/dist/react-select.css';
 import "bootstrap/dist/css/bootstrap.css";
 import "Tether";
 import "bootstrap/dist/js/bootstrap.min.js";

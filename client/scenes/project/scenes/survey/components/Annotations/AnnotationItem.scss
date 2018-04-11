@@ -106,3 +106,16 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.annotation-item__tags .badge-light,
+.annotation-item__tags button {
+  margin-right: 5px;
+}
+
+.annotation-item__tags .badge-danger {
+  margin-left: 5px;
+}
+
+.annotation-item__tags {
+  margin-bottom: 1rem;
+}

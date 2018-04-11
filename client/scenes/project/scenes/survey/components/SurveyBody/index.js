@@ -13,8 +13,7 @@ export default ({
   projectMetadata,
   annotationOnClick,
   handlePollData,
-  parent,
-  tags
+  parent
 }) => (
   <div className="project-survey" id="project-survey">
     <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
@@ -27,7 +26,6 @@ export default ({
             isLoggedIn={isLoggedIn}
             pollData={handlePollData}
             numAnnotations={numAnnotations}
-            tags={tags}
           >
             <Question
               qnaId={id}

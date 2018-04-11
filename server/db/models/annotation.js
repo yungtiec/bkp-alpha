@@ -58,7 +58,7 @@ Annotation.getAnnotationsFromUrl = function(uri) {
       },
       {
         model: db.model("tag"),
-        attributes: ["name"]
+        attributes: ["name", "id"]
       },
       {
         model: Annotation,
@@ -103,6 +103,10 @@ Annotation.findOneThreadByRootId = function(id) {
         model: db.model("user"),
         as: "owner",
         attributes: ["first_name", "last_name", "email"]
+      },
+      {
+        model: db.model("tag"),
+        attributes: ["name", "id"]
       },
       {
         model: Annotation,

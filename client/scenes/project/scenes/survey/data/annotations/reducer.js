@@ -121,6 +121,17 @@ function reviewAnnotation({ state, annotationId, reviewed }) {
   return state;
 }
 
+function removeTagFromAnnotation({ state, annotation }) {
+  state.annotationsById[annotation.id] = annotation;
+  return state;
+}
+
+function addTagToAnnotation({ state, annotation, tag }) {
+  state.annotationsById[annotation.id] = annotation;
+  if (state.tags.indexOf(tag) === -1) state.tags.push(tag);
+  return state;
+}
+
 export default function reduce(state = initialState, action = {}) {
   var sortedAnnotations, annotationIds;
   switch (action.type) {
@@ -159,6 +170,17 @@ export default function reduce(state = initialState, action = {}) {
         annotationId: action.annotationId,
         reviewed: action.reviewed
       });
+    case types.ANNOTATION_TAG_REMOVED:
+      return removeTagFromAnnotation({
+        state: cloneDeep(state),
+        annotation: action.annotation
+      });
+    case types.ANNOTATION_TAG_ADDED:
+      return addTagToAnnotation({
+        state: cloneDeep(state),
+        annotation: action.annotation,
+        tag: action.tag
+      });
     default:
       return state;
   }
@@ -193,5 +215,5 @@ export function getAllAnnotations(state) {
 }
 
 export function getAllTags(state) {
-  return state.scenes.project.scenes.survey.data.annotations.tags.map(tag => tag.name)
+  return state.scenes.project.scenes.survey.data.annotations.tags;
 }

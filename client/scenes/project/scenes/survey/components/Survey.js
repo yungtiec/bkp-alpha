@@ -184,7 +184,6 @@ export default class Survey extends Component {
           projectMetadata={projectMetadata}
           annotationOnClick={this.annotationOnClick}
           handlePollData={this.handlePollData}
-          tags={tags}
         />
         <AnnotationSidebar
           width={width}

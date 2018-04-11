@@ -4,10 +4,12 @@ import {
   postUpvoteToAnnotation,
   postUpdatedCommentToAnnotation,
   postPendingAnnotationStatus,
-  getAllTags
+  getAllTags,
+  deleteTag,
+  putTag
 } from "./service";
 import * as types from "./actionTypes";
-import { keyBy, omit, assignIn, pick } from "lodash";
+import { keyBy, omit, assignIn, pick, cloneDeep } from "lodash";
 import { notify } from "reapop";
 
 export const fetchAnnotationsBySurvey = uri => {
@@ -54,6 +56,61 @@ export const replyToAnnotation = ({ parentId, comment }) => {
       dispatch({
         type: types.ANNOTATION_UPDATED,
         rootAnnotation
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const removeTag = ({ annotationId, tagId }) => {
+  return async (dispatch, getState) => {
+    try {
+      var annotation = cloneDeep(
+        getState().scenes.project.scenes.survey.data.annotations
+          .annotationsById[annotationId]
+      );
+      await deleteTag({
+        annotationId,
+        tagId
+      });
+      annotation.tags = annotation.tags.filter(tag => tag.id !== tagId);
+      dispatch({
+        type: types.ANNOTATION_TAG_REMOVED,
+        annotation
+      });
+      dispatch({
+        type: "modal.UPDATE_MODAL_PROPS",
+        modalProps: annotation
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const addTag = ({ annotationId, tagName }) => {
+  return async (dispatch, getState) => {
+    console.log(tagName);
+    try {
+      var annotation = cloneDeep(
+        getState().scenes.project.scenes.survey.data.annotations
+          .annotationsById[annotationId]
+      );
+      var tag = await putTag({
+        annotationId,
+        tagName
+      });
+      if (!annotation.tags) annotations.tags = [];
+      annotation.tags.push(tag);
+      dispatch({
+        type: types.ANNOTATION_TAG_ADDED,
+        annotation,
+        tag
+      });
+      dispatch({
+        type: "modal.UPDATE_MODAL_PROPS",
+        modalProps: annotation
       });
     } catch (err) {
       console.log(err);

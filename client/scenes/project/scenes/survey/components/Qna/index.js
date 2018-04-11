@@ -11,7 +11,7 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn, pollData, tags } = this.props;
+    const { qna, match, isLoggedIn, pollData } = this.props;
     if (!this.annotation) {
       this.annotation = $(this[`qna-${qna.id}`]).annotator();
       this.annotation.annotator("addPlugin", "Store", {

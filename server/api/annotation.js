@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const db = require("../db");
-const { Annotation, User, Role } = require("../db/models");
+const { Annotation, User, Role, Tag } = require("../db/models");
 const _ = require("lodash");
 const { ensureAuthentication, ensureAdminRole } = require("./utils");
 module.exports = router;
@@ -95,6 +95,30 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
       );
       res.send(ancestry);
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/tag/remove", async (req, res, next) => {
+  try {
+    const annotation = await Annotation.findById(Number(req.body.annotationId));
+    await annotation.removeTag(req.body.tagId);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/tag/add", async (req, res, next) => {
+  try {
+    const annotation = await Annotation.findById(Number(req.body.annotationId));
+    const [tag, created] = await Tag.findOrCreate({
+      where: { name: req.body.tagName },
+      default: { name: req.body.tagName }
+    });
+    await annotation.addTag(tag.id);
+    res.send(tag);
   } catch (err) {
     next(err);
   }
