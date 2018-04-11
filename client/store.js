@@ -4,7 +4,9 @@ import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import data from "./data/reducer";
 import scenes from "./scenes/reducer";
-import {reducer as notificationsReducer} from 'reapop';
+import { reducer as notificationsReducer } from "reapop";
+
+const isDev = process.env.NODE_ENV === "development";
 
 const reducer = combineReducers({
   data,
@@ -13,7 +15,9 @@ const reducer = combineReducers({
 });
 
 const middleware = composeWithDevTools(
-  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+  isDev
+    ? applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
+    : applyMiddleware(thunkMiddleware)
 );
 const store = createStore(reducer, middleware);
 
