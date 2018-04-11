@@ -56,7 +56,6 @@ export default class AnnotationSidebarHeader extends Component {
 
   handleTagFilterChange(selectedOptions) {
     const { updateTagFilter } = this.props;
-    console.log(selectedOptions);
     if (selectedOptions) {
       updateTagFilter(selectedOptions);
     }
@@ -73,25 +72,25 @@ export default class AnnotationSidebarHeader extends Component {
       updateTagFilter
     } = this.props;
 
-    console.log("filter", tagFilter);
-
     return (
       <div>
         <div className="annotation-sidebar__menu">
           {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
           {!selectedAnnotations && this.renderSortBy(sortBy)}
         </div>
-        <div className="annotation-tags__filter-container">
-          <Select
-            name="annotation-tags__filter"
-            className="annotation-tags__filter"
-            placeholder="Enter tag to filter annotations"
-            multi={true}
-            value={tagFilter}
-            onChange={this.handleTagFilterChange}
-            options={tagsWithCountInSurvey}
-          />
-        </div>
+        {!selectedAnnotations && (
+          <div className="annotation-tags__filter-container">
+            <Select
+              name="annotation-tags__filter"
+              className="annotation-tags__filter"
+              placeholder="Enter tag to filter annotations"
+              multi={true}
+              value={tagFilter}
+              onChange={this.handleTagFilterChange}
+              options={tagsWithCountInSurvey}
+            />
+          </div>
+        )}
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

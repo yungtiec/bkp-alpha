@@ -44,7 +44,7 @@
 
 [ ] stock image for emty profile annotation and reply
 
-[ ] filter by tag
+[x] filter by tag
 
 [x] edit tags
 
@@ -53,6 +53,10 @@
 [ ] star(follow) project
 
 [ ] star(follow) survey
+
+[ ] refactor qna with
+  - "loadAnnotations"
+  - $(this[`qna-${this.props.qna.id}`]).annotator("loadAnnotations", filteredAnnotations);
 
 [ ] general comment
 

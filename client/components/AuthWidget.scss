@@ -1,5 +1,6 @@
 .auth-widget {
   margin-bottom: -2px;
+  cursor: pointer;
 }
 
 .auth-widget__avatar-container {
@@ -30,6 +31,7 @@
 
 .auth-widget--navbar {
   position: relative;
+  cursor: pointer;
 }
 
 .auth-widget--navbar__dropdown {

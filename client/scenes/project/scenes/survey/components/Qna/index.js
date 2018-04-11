@@ -11,14 +11,15 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn, pollData } = this.props;
+    const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
+
     if (!this.annotation) {
       this.annotation = $(this[`qna-${qna.id}`]).annotator();
       this.annotation.annotator("addPlugin", "Store", {
         prefix: "/api/annotator",
         loadFromSearch: {
           uri: `http://localhost:8000${match.url}`,
-          survey_question_id: qna.id
+          survey_question_id: qna.id,
         },
         annotationData: {
           uri: `http://localhost:8000${match.url}`,
@@ -74,6 +75,8 @@ class QnaBox extends Component {
     const nextSurveyId = nextProps.match.params.surveyId;
     const prevNumAnnotations = this.props.numAnnotations;
     const nextNumAnnotations = nextProps.numAnnotations;
+    const nextTags = nextProps.tagFilter.map(tag => tag.value);
+    const prevTags = this.props.tagFilter.map(tag => tag.value);
     if (
       (prevProjectSymbol &&
         prevSurveyId &&

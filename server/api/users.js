@@ -55,9 +55,11 @@ router.get("/profile", async (req, res, next) => {
               as: "owner"
             }
           ]
-        }
+        },
+        { model: Annotation, as: "ancestors" }
       ]
     });
+
     const profile = assignIn({ replies }, user.toJSON());
     res.send(profile);
   } catch (err) {

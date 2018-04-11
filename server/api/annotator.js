@@ -53,7 +53,9 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       annotator_schema_version
     });
     const tagPromises = Promise.map(tags, async tag => {
-      const [tagInstance, created] = await Tag.findOrCreate({ where: { name: tag } });
+      const [tagInstance, created] = await Tag.findOrCreate({
+        where: { name: tag }
+      });
       return newAnnotation.addTag(tagInstance.id);
     });
     const ownerPromise = newAnnotation.setOwner(req.user.id);
@@ -67,12 +69,18 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
 
 router.get("/search", async (req, res, next) => {
   try {
-    const annotations = await Annotation.findAll({
+    var annotations = await Annotation.findAll({
       where: {
         uri: req.query.uri,
         survey_question_id: req.query.survey_question_id,
         reviewed: { $not: "spam" }
-      }
+      },
+      include: [
+        {
+          model: Tag,
+          attributes: ["name", "id"]
+        }
+      ]
     }).map(annotation => {
       return annotation.toJSON();
     });

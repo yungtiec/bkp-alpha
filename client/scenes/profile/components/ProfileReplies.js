@@ -18,6 +18,7 @@ export default props => {
         return (
           <div className="profile-annotation__uri">
             <ProjectSymbolBlueBox name={projectSymbol} />
+            {!annotations.length && <p>You haven't replied to anyone yet</p>}
             {annotations.map(annotation => (
               <AnnotationReply annotation={annotation} path={path}>
                 <a
@@ -26,11 +27,13 @@ export default props => {
                     history.push(
                       `${path}/question/${
                         annotation.survey_question_id
-                      }/annotation/${annotation.id}` // should be root annotation id
+                      }/annotation/${
+                        annotation.ancestors.filter(a => !a.parendId)[0].id
+                      }`
                     )
                   }
                 >
-                  {annotation.reviewed !== 'spam' && "see in context"}
+                  {annotation.reviewed !== "spam" && "see in context"}
                 </a>
               </AnnotationReply>
             ))}

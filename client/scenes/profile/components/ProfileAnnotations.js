@@ -16,6 +16,7 @@ export default props => {
         return (
           <div className="profile-annotation__uri">
             <ProjectSymbolBlueBox name={projectSymbol} />
+            {!annotations.length && <p>You haven't made any annotation</p>}
             {annotations.map(annotation => (
               <AnnotationMain annotation={annotation} path={path}>
                 <a
@@ -28,7 +29,7 @@ export default props => {
                     )
                   }
                 >
-                  {annotation.reviewed !== 'spam' && "see in context"}
+                  {annotation.reviewed !== "spam" && "see in context"}
                 </a>
               </AnnotationMain>
             ))}

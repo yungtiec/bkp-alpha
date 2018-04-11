@@ -135,8 +135,6 @@ export default class Survey extends Component {
       updateTagFilter
     } = this.props;
 
-    console.log(tagsWithCountInSurvey, "in survey");
-
     return (
       <div>
         <SurveyBody
