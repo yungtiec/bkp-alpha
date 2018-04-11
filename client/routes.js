@@ -41,25 +41,23 @@ class Routes extends Component {
             path="/unauthorized"
             component={Unauthorized}
           />
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/profile"
+              component={Profile}
+            />
+          )}
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/admin"
+              component={Admin}
+            />
+          )}
           {/* Displays our Login component as a fallback */}
           <Route exact path="/" component={Login} />
           <Route component={Login} />
-          {isLoggedIn && (
-            <Switch>
-              {/* Routes placed here are only available after logging in */}
-              <RouteWithLayout
-                layout={LayoutWithNav}
-                path="/profile"
-                component={Profile}
-              />
-              <RouteWithLayout
-                layout={LayoutWithNav}
-                path="/admin"
-                component={Admin}
-              />
-            </Switch>
-          )}
-
         </Switch>
       </div>
     );
