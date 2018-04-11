@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import { find, keyBy } from "lodash";
+import { find, keyBy, clone } from "lodash";
 
 export default class Answers extends Component {
   constructor(props) {
@@ -14,11 +14,14 @@ export default class Answers extends Component {
       answers,
       answer => answer.references.length === answers.length - 1
     );
-    const answerOrder = latestAnswer.references.length
-      ? latestAnswer.references.push(latestAnswer.id)
-      : [latestAnswer.id];
+    var answerOrder;
+    if (latestAnswer.references.length) {
+      answerOrder = clone(latestAnswer.references);
+      answerOrder.push(latestAnswer.id);
+    } else {
+      answerOrder = [latestAnswer.id];
+    }
     const answersById = keyBy(answers, "id");
-
     return (
       <div className="qna__answer-container">
         {answerOrder.map(id => (
@@ -29,6 +32,11 @@ export default class Answers extends Component {
             }}
           >
             {answersById[id].answer}
+            {answersById[id].link && (
+              <a style={{ marginLeft: "5px" }} target="_blank" href={answersById[id].link}>
+                {answersById[id].linkLabel}
+              </a>
+            )}
           </p>
         ))}
       </div>
