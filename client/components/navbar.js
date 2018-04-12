@@ -41,6 +41,11 @@ class Navbar extends Component {
               </div>
             </div>
             <div className="box--right">
+              {this.props.isAdmin ? (
+                <Link to="/admin" className="navbar__nav-item">
+                  admin
+                </Link>
+              ) : ""}
               <Link to="/projects" className="navbar__nav-item">
                 projects
               </Link>
@@ -67,6 +72,9 @@ class Navbar extends Component {
 
 const mapState = state => {
   return {
+    isAdmin:
+      state.data.user.roles &&
+      state.data.user.roles.filter(role => role.name === "admin").length,
     isLoggedIn: !!state.data.user.id
   };
 };
