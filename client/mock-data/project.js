@@ -373,7 +373,7 @@ module.exports = [{
         {
           id: 48,
           question: {
-            text: "Driver",
+            text: "Drivers",
             subcategory_id: 2,
             question_order: 3
           },
@@ -406,7 +406,7 @@ module.exports = [{
         {
           id: 51,
           question: {
-            text: "Risk",
+            text: "Risks",
             subcategory_id: 2,
             question_order: 3
           },
@@ -439,7 +439,7 @@ module.exports = [{
         {
           id: 54,
           question: {
-            text: "Question",
+            text: "Questions",
             subcategory_id: 2,
             question_order: 3
           },
