@@ -26,13 +26,15 @@ export default class Survey extends Component {
     autoBind(this);
     this.state = {
       selectedText: "",
-      selectedAnnotations: null,
-      sidebarScrollTo: null,
-      mainScrollTo: null
+      selectedAnnotations: null
     };
   }
 
-  componentDidMount() {
+  componentWillReceiveProps() {
+    this.focusOnContext()
+  }
+
+  focusOnContext() {
     const givenAnnotationContext =
       window.location.pathname.indexOf("/annotation/") !== -1;
     const givenQnaContext =
@@ -41,38 +43,27 @@ export default class Survey extends Component {
     if (
       givenAnnotationContext &&
       givenQnaContext &&
-      this.props.annotationIds.length
+      this.props.annotationIds.length &&
+      this.props.surveyQnaIds.length
     ) {
+
       pos = window.location.pathname.indexOf("/annotation/");
       annotationId = window.location.pathname.substring(pos).split("/")[2];
       pos = window.location.pathname.indexOf("/question/");
       qnaId = window.location.pathname.substring(pos).split("/")[2];
-      annotations = findAnnotationsInQnaByText({
-        annotationIds: this.props.unfilteredAnnotationIds,
-        annotationsById: this.props.annotationsById,
-        text:
-          this.props.annotationsById[Number(annotationId)] &&
-          this.props.annotationsById[Number(annotationId)].quote,
-        qnaId: Number(qnaId)
-      });
-      this.setState({
-        sidebarScrollTo: `annotation-${annotationId}`,
-        mainScrollTo: `qna-${qnaId}`,
-        selectedText:
-          this.props.annotationsById[Number(annotationId)] &&
-          this.props.annotationsById[Number(annotationId)].quote,
-        selectedAnnotations: annotations
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.state.sidebarScrollTo && this.state.mainScrollTo) {
-      scroller.scrollTo(this.state.mainScrollTo);
-      this.setState({
-        sidebarScrollTo: null,
-        mainScrollTo: null
-      });
+      if (this.props.annotationsById[Number(annotationId)]) {
+        annotations = findAnnotationsInQnaByText({
+          annotationIds: this.props.unfilteredAnnotationIds,
+          annotationsById: this.props.annotationsById,
+          text: this.props.annotationsById[Number(annotationId)].quote,
+          qnaId: Number(qnaId)
+        });
+        scroller.scrollTo(`qna-${qnaId}`);
+        this.setState({
+          selectedText: this.props.annotationsById[Number(annotationId)].quote,
+          selectedAnnotations: annotations
+        });
+      }
     }
   }
 
@@ -99,7 +90,6 @@ export default class Survey extends Component {
       this.props.toggleSidebar();
     }
     if (annotations && annotations.length) {
-      // this.changeHighlightColor(evt.target);
       this.setState({
         selectedText,
         selectedAnnotations: annotations
