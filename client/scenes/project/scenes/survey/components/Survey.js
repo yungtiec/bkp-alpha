@@ -26,12 +26,13 @@ export default class Survey extends Component {
     autoBind(this);
     this.state = {
       selectedText: "",
-      selectedAnnotations: null
+      selectedAnnotations: null,
+      focusOnce: false
     };
   }
 
-  componentWillReceiveProps() {
-    this.focusOnContext()
+  componentWillReceiveProps(nextProps) {
+    this.focusOnContext();
   }
 
   focusOnContext() {
@@ -44,9 +45,9 @@ export default class Survey extends Component {
       givenAnnotationContext &&
       givenQnaContext &&
       this.props.annotationIds.length &&
-      this.props.surveyQnaIds.length
+      this.props.surveyQnaIds.length &&
+      !this.state.focusOnce
     ) {
-
       pos = window.location.pathname.indexOf("/annotation/");
       annotationId = window.location.pathname.substring(pos).split("/")[2];
       pos = window.location.pathname.indexOf("/question/");
@@ -61,7 +62,8 @@ export default class Survey extends Component {
         scroller.scrollTo(`qna-${qnaId}`);
         this.setState({
           selectedText: this.props.annotationsById[Number(annotationId)].quote,
-          selectedAnnotations: annotations
+          selectedAnnotations: annotations,
+          focusOnce: true
         });
       }
     }
