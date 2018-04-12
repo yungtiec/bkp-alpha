@@ -10,7 +10,7 @@ import {
   editAnnotationComment
 } from "./data/annotations/actions";
 import { updateTagFilter } from "./data/tags/actions"
-import { toggleSidebar, sortAnnotationBy } from "./reducer";
+import { toggleSidebar, sortAnnotationBy, updateAnnotationTypeInView } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
@@ -56,6 +56,7 @@ class SurveyContainer extends Component {
   componentWillUnmount() {
     Events.scrollEvent.remove("begin");
     Events.scrollEvent.remove("end");
+    this.props.updateAnnotationTypeInView("all")
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,7 +120,8 @@ const actions = {
   editAnnotationComment,
   toggleSidebar,
   sortAnnotationBy,
-  updateTagFilter
+  updateTagFilter,
+  updateAnnotationTypeInView
 };
 
 const onPollInterval = (props, dispatch) => {
