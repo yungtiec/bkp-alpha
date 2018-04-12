@@ -1,6 +1,6 @@
 module.exports = [{
   id: 2,
-  name: "Virtual Poker",
+  name: "Virtue Poker",
   symbol: "VPP",
   description: "Virtue Poker is a privately held company headquartered in Gibraltar. It was founded in 2016, and is a Consensys backed startup. ",
   project_surveys: [{
