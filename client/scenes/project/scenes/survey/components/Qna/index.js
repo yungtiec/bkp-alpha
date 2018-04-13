@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import Question from "./Question";
 import Answers from "./Answers";
 import annotator from "annotator";
+import { draw, undraw } from "../../../../../../annotator/highlight";
 
 class QnaBox extends Component {
   constructor(props) {
@@ -12,22 +13,23 @@ class QnaBox extends Component {
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
-
-    var pageUri = function() {
-      return {
-        beforeAnnotationCreated: function(ann) {
-          ann.uri = `${window.location.origin}${match.url}`;
-          ann.survey_question_id = qna.id;
-        },
-        annotationCreated: function(ann) {
-          console.log(ann, "created?");
-          pollData();
-        }
-      };
-    };
+    const self = this;
     if (!this.annotation) {
+      const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
       var app = new annotator.App();
+      var pageUri = function() {
+        return {
+          beforeAnnotationCreated: function(ann) {
+            console.log(ann, self[`qna-${qna.id}`]);
+            draw(self[`qna-${qna.id}`], ann);
+            ann.uri = `${window.location.origin}${match.url}`;
+            ann.survey_question_id = qna.id;
+          },
+          annotationCreated: function(ann) {
+            pollData(); // add to store
+          }
+        };
+      };
       app
         .include(annotator.ui.main, {
           element: this[`qna-${qna.id}`],
@@ -51,11 +53,11 @@ class QnaBox extends Component {
         });
       });
       this.annotator = app;
+      $(".annotator-item input").attr(
+        "placeholder",
+        "Add some tags here (separate by space)"
+      );
     }
-    $(".annotator-item input").attr(
-      "placeholder",
-      "Add some tags here (separate by space)"
-    );
   }
 
   componentDidUpdate() {
