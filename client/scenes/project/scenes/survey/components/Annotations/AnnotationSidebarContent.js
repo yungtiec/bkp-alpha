@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import AnnotationItem from "./AnnotationItem"
-import {
-  Link as ScrollLink,
-  Element
-} from "react-scroll";
+import AnnotationItem from "./AnnotationItem";
+import { Link as ScrollLink, Element } from "react-scroll";
 
 export default ({
   annotationIds,
@@ -19,7 +16,7 @@ export default ({
     selectedAnnotations &&
     selectedAnnotations.length
   ) {
-    return renderSidebarWithSelectedText(selectedAnnotations);
+    return renderSidebarWithSelectedText(annotationsById, selectedAnnotations);
   }
   if (
     (annotationIds && !selectedText) ||
@@ -37,15 +34,17 @@ export default ({
   }
 };
 
-function renderSidebarWithSelectedText(annotations) {
+function renderSidebarWithSelectedText(annotationsById, annotations) {
   return (
     <div>
-      {annotations.map(annotation => (
-        <AnnotationItem
-          key={`annotation-${annotation.id}`}
-          annotation={annotation}
-        />
-      ))}
+      {annotations
+        .filter(a => annotationsById[a.id].reviewed !== "spam")
+        .map(annotation => (
+          <AnnotationItem
+            key={`annotation-${annotation.id}`}
+            annotation={annotation}
+          />
+        ))}
     </div>
   );
 }
@@ -56,22 +55,24 @@ function renderSidebarWithAllAnnotations({
   selectedText,
   parent
 }) {
-  return annotationIds.map(id => (
-    <Element name={`annotation-${id}`}>
-      <ScrollLink
-        className={`annotation-${id}`}
-        activeClass="active"
-        to={`qna-${annotationsById[id].survey_question_id}`}
-        smooth="easeInOutCubic"
-        duration={300}
-        spy={true}
-      >
-        <AnnotationItem
-          key={`annotation-${id}`}
-          annotation={annotationsById[id]}
-          ref={el => (parent[`annotation-${id}`] = el)}
-        />
-      </ScrollLink>
-    </Element>
-  ));
+  return annotationIds
+    .filter(id => annotationsById[id].reviewed !== "spam")
+    .map(id => (
+      <Element name={`annotation-${id}`}>
+        <ScrollLink
+          className={`annotation-${id}`}
+          activeClass="active"
+          to={`qna-${annotationsById[id].survey_question_id}`}
+          smooth="easeInOutCubic"
+          duration={300}
+          spy={true}
+        >
+          <AnnotationItem
+            key={`annotation-${id}`}
+            annotation={annotationsById[id]}
+            ref={el => (parent[`annotation-${id}`] = el)}
+          />
+        </ScrollLink>
+      </Element>
+    ));
 }
