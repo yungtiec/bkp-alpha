@@ -44,7 +44,7 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       survey_question_id,
       tags
     } = req.body;
-    const newAnnotation = await Annotation.create({
+    var newAnnotation = await Annotation.create({
       uri,
       survey_question_id,
       quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
@@ -60,6 +60,7 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
     });
     const ownerPromise = newAnnotation.setOwner(req.user.id);
     await Promise.all([tagPromises, ownerPromise]);
+    newAnnotation = await Annotation.findOneThreadByRootId(newAnnotation.id)
     sendNotificationToSlack(newAnnotation);
     res.send(newAnnotation);
   } catch (err) {

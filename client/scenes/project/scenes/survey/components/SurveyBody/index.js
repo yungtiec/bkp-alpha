@@ -14,7 +14,8 @@ export default ({
   annotationOnClick,
   handlePollData,
   parent,
-  tagFilter
+  tagFilter,
+  addNewAnnotationSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
     <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
@@ -28,6 +29,7 @@ export default ({
             pollData={handlePollData}
             numAnnotations={numAnnotations}
             tagFilter={tagFilter}
+            addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
           >
             <Question
               qnaId={id}

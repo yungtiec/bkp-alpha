@@ -5,11 +5,15 @@ import Question from "./Question";
 import Answers from "./Answers";
 import annotator from "annotator";
 import { draw, undraw } from "../../../../../../annotator/highlight";
+import { isEmpty } from "lodash";
 
 class QnaBox extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.state = {
+      temporaryHighlight: {}
+    };
   }
 
   componentDidMount() {
@@ -20,13 +24,16 @@ class QnaBox extends Component {
       var pageUri = function() {
         return {
           beforeAnnotationCreated: function(ann) {
-            console.log(ann, self[`qna-${qna.id}`]);
-            draw(self[`qna-${qna.id}`], ann);
+            var temporaryHighlight = draw(self[`qna-${qna.id}`], ann);
+            self.setState({
+              temporaryHighlight
+            });
             ann.uri = `${window.location.origin}${match.url}`;
             ann.survey_question_id = qna.id;
           },
           annotationCreated: function(ann) {
-            pollData(); // add to store
+            undraw(self.state.temporaryHighlight);
+            self.props.addNewAnnotationSentFromServer(ann);
           }
         };
       };
@@ -46,7 +53,6 @@ class QnaBox extends Component {
         })
         .include(pageUri);
       app.start().then(function() {
-        console.log("starting?");
         app.annotations.load({
           uri: `${window.location.origin}${match.url}`,
           survey_question_id: qna.id
@@ -57,6 +63,10 @@ class QnaBox extends Component {
         "placeholder",
         "Add some tags here (separate by space)"
       );
+      $(".annotator-cancel").click(evt => {
+        if (!isEmpty(self.state.temporaryHighlight))
+          undraw(self.state.temporaryHighlight);
+      });
     }
   }
 
