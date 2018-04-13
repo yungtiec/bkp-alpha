@@ -1,6 +1,7 @@
 var webpack = require("webpack");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 const isDev = process.env.NODE_ENV === "development";
+require("image-webpack-loader");
 
 module.exports = {
   entry: [
@@ -21,15 +22,22 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader?url=false"]
+        use: ["style-loader", "css-loader"]
       },
       {
         test: /\.scss$/,
-        use: ["style-loader", "css-loader?url=false", "sass-loader"]
+        use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
-        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot/,
-        loader: "file-loader"
+        test: /\.svg$|\.ttf?|\.woff$|\.woff2|\.eof|\.eot|\.png|\.jpg|\.gif/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 10000
+            }
+          }
+        ]
       }
     ]
   },

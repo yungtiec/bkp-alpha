@@ -3,54 +3,71 @@ import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
 import Question from "./Question";
 import Answers from "./Answers";
+import annotator from "annotator";
+import { draw, undraw } from "../../../../../../annotator/highlight";
+import { isEmpty } from "lodash";
 
 class QnaBox extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.state = {
+      temporaryHighlight: {}
+    };
   }
 
   componentDidMount() {
-    const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
-
+    const self = this;
     if (!this.annotation) {
-      this.annotation = $(this[`qna-${qna.id}`]).annotator();
-      this.annotation.annotator("addPlugin", "Store", {
-        prefix: "/api/annotator",
-        loadFromSearch: {
-          uri: `${window.origin}${match.url}`,
+      const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
+      var app = new annotator.App();
+      var pageUri = function() {
+        return {
+          beforeAnnotationCreated: function(ann) {
+            var temporaryHighlight = draw(self[`qna-${qna.id}`], ann);
+            self.setState({
+              temporaryHighlight
+            });
+            ann.uri = `${window.location.origin}${match.url}`;
+            ann.survey_question_id = qna.id;
+          },
+          annotationCreated: function(ann) {
+            undraw(self.state.temporaryHighlight);
+            self.props.addNewAnnotationSentFromServer(ann);
+          }
+        };
+      };
+      app
+        .include(annotator.ui.main, {
+          element: this[`qna-${qna.id}`],
+          editorExtensions: [annotator.ui.tags.editorExtension]
+        })
+        .include(annotator.storage.http, {
+          prefix: `${window.location.origin}/api/annotator`,
+          urls: {
+            create: "/store",
+            update: "/update/:id",
+            destroy: "/delete/:id",
+            search: "/search/"
+          }
+        })
+        .include(pageUri);
+      app.start().then(function() {
+        app.annotations.load({
+          uri: `${window.location.origin}${match.url}`,
           survey_question_id: qna.id
-        },
-        annotationData: {
-          uri: `${window.origin}${match.url}`,
-          survey_question_id: qna.id
-        },
-        urls: {
-          create: "/store",
-          update: "/update/:id",
-          destroy: "/delete/:id",
-          search: "/search/"
-        }
+        });
       });
-      this.annotation.annotator("addPlugin", "Tags");
+      this.annotator = app;
+      $(".annotator-item input").attr(
+        "placeholder",
+        "Add some tags here (separate by space)"
+      );
+      $(".annotator-cancel").click(evt => {
+        if (!isEmpty(self.state.temporaryHighlight))
+          undraw(self.state.temporaryHighlight);
+      });
     }
-    $('.annotator-item input').attr('placeholder','Add some tags here (separate by space)');
-    $(`div[name="qna-${qna.id}"] .annotator-controls .annotator-save`).on(
-      "click",
-      event => {
-        setTimeout(() => pollData(), 800);
-        setTimeout(() => pollData(), 40000);
-      }
-    );
-    $(`div[name="qna-${qna.id}"] .annotator-item textarea`).on(
-      "keypress",
-      event => {
-        if (event.which === 13) {
-          setTimeout(() => pollData(), 800);
-          setTimeout(() => pollData(), 40000);
-        }
-      }
-    );
   }
 
   componentDidUpdate() {
@@ -85,7 +102,7 @@ class QnaBox extends Component {
           prevSurveyId !== nextSurveyId)) ||
       prevNumAnnotations !== nextNumAnnotations
     ) {
-      this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
+      // this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
     }
   }
 

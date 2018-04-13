@@ -69,12 +69,6 @@ export default class Survey extends Component {
     }
   }
 
-  handlePollData() {
-    this.props.fetchAnnotationsBySurvey(
-      `${window.origin}${this.props.match.url}`
-    );
-  }
-
   annotationOnClick(evt, qnaId, answerId) {
     const selectedTextByUser = window.getSelection
       ? "" + window.getSelection()
@@ -128,7 +122,8 @@ export default class Survey extends Component {
       tags,
       tagsWithCountInSurvey,
       tagFilter,
-      updateTagFilter
+      updateTagFilter,
+      addNewAnnotationSentFromServer
     } = this.props;
 
     return (
@@ -143,7 +138,7 @@ export default class Survey extends Component {
           projectMetadata={projectMetadata}
           tagFilter={tagFilter}
           annotationOnClick={this.annotationOnClick}
-          handlePollData={this.handlePollData}
+          addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
         />
         <AnnotationSidebar
           width={width}
