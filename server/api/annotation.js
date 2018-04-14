@@ -26,7 +26,8 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
         "hierarchyLevel",
         "parentId",
         "comment",
-        "reviewed"
+        "reviewed",
+        "owner"
       ]),
       { comment: req.body.comment, reviewed: "pending" }
     );
@@ -34,6 +35,7 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
     var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
     var reply = await Annotation.create(child);
     reply = await reply.setParent(parent.toJSON().id);
+    reply = reply.setOwner(req.user.id);
     ancestry = await Annotation.findOneThreadByRootId(
       rootAncestor ? rootAncestor.id : parent.id
     );
