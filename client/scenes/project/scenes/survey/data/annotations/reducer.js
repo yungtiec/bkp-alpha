@@ -265,9 +265,7 @@ export function getAllAnnotations(state) {
       annotation
     );
   });
-
   var sortedAnnotations = sortFn(annotationCollection);
-  console.log(sortedAnnotations)
   var sortedAnnotationIds = sortedAnnotations.map(a => a.id);
   var filteredAnnotationIds = filterByTags({
     tagFilter,
