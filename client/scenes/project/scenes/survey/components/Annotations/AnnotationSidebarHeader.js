@@ -30,26 +30,27 @@ export default class AnnotationSidebarHeader extends Component {
     }
   }
 
+  handleSortByChange(selectedOption) {
+    if (selectedOption.value !== this.props.sortBy) {
+      this.props.sortAnnotationBy(selectedOption.value);
+    }
+  }
+
   renderSortBy(sortBy) {
     return (
       <div class="btn-group" role="group" aria-label="Basic example">
         <span>sort by</span>
-        <button
-          type="button"
-          class={`btn btn-outline-secondary btn-sm ${sortBy === "timestamp" &&
-            "active"}`}
-          onClick={() => this.props.sortAnnotationBy("timestamp")}
-        >
-          date
-        </button>
-        <button
-          type="button"
-          class={`btn btn-outline-secondary btn-sm ${sortBy === "upvotes" &&
-            "active"}`}
-          onClick={() => this.props.sortAnnotationBy("upvotes")}
-        >
-          upvotes
-        </button>
+        <Select
+          name="form-field-name"
+          value={sortBy}
+          onChange={this.handleSortByChange}
+          options={[
+            { value: "position", label: "position" },
+            { value: "timestamp", label: "timestamp" },
+            { value: "upvotes", label: "upvotes" }
+          ]}
+        />
+
       </div>
     );
   }

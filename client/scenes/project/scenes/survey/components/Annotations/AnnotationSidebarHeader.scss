@@ -35,7 +35,7 @@
 }
 
 .annotation-sidebar__menu .btn-group span {
-  line-height: 2;
+  line-height: 2.5;
   margin-right: 5px;
   color: white;
   font-size: 14px;
@@ -53,7 +53,7 @@
 
 .annotations-header__count {
   color: white;
-  line-height: 2;
+  line-height: 2.5;
 }
 
 .annotations-header__count.reset-selection {
@@ -67,4 +67,12 @@
 
 .annotation-tags__filter .Select-control {
   border-radius: 0px;
+}
+
+.annotation-sidebar__menu .Select-control {
+  border-radius: 0px;
+}
+
+.annotation-sidebar__menu .Select {
+  width: 130px;
 }
