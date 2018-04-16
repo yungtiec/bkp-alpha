@@ -6,7 +6,9 @@ import {
   isEmpty,
   keys,
   assignIn,
-  filter
+  filter,
+  flatten,
+  maxBy
 } from "lodash";
 import * as types from "./actionTypes";
 import moment from "moment";
@@ -18,26 +20,9 @@ const initialState = {
 
 const sortFns = {
   timestamp: sortAnnotationsByTimestamp,
-  upvotes: sortAnnotationsByUpvotes
+  upvotes: sortAnnotationsByUpvotes,
+  position: sortAnnotationsByPosition
 };
-
-function sortAnnotationsByTimestamp(annotationCollection) {
-  return orderBy(
-    annotationCollection.map(annotation =>
-      assignIn({ unix: moment(annotation.createdAt).format("X") }, annotation)
-    ),
-    ["unix", "upvotesFrom.length"],
-    ["desc", "desc"]
-  );
-}
-
-function sortAnnotationsByUpvotes(annotationCollection) {
-  return orderBy(
-    annotationCollection,
-    ["upvotesFrom.length", "unix"],
-    ["desc", "desc"]
-  );
-}
 
 function removeEmptyAnnotationFromHierarchy({ state, accessors, parent }) {
   const rootAnnotation = state.annotationsById[accessors[0]];
@@ -195,6 +180,69 @@ function filterByTags({ tagFilter, annotationsById, annotationIds }) {
   });
 }
 
+function sortAnnotationsByPosition(annotationCollection) {
+  if (!annotationCollection.length) return []
+  var mostNestedStartDomPath = maxBy(
+    annotationCollection,
+    a => a.range.start.length
+  ).range.start;
+  var mostNestedEndDomPath = maxBy(
+    annotationCollection,
+    a => a.range.end.length
+  ).range.end;
+  const startPathOrder = mostNestedStartDomPath.map(
+    (p, i) => `range.start[${i}]`
+  );
+  const endPathOrder = mostNestedEndDomPath.map((p, i) => `range.end[${i}]`);
+  const orderByArray = flatten([
+    "survey_question_id",
+    startPathOrder,
+    "range.startOffset",
+    endPathOrder,
+    "range.endOffset"
+  ]);
+  return orderBy(
+    annotationCollection,
+    flatten([
+      "survey_question_id",
+      startPathOrder,
+      "range.startOffset",
+      endPathOrder,
+      "range.endOffset"
+    ]),
+    orderByArray.map(o => "asc")
+  );
+}
+
+function sortAnnotationsByTimestamp(annotationCollection) {
+  return orderBy(
+    annotationCollection,
+    ["unix", "upvotesFrom.length"],
+    ["desc", "desc"]
+  );
+}
+
+function sortAnnotationsByUpvotes(annotationCollection) {
+  return orderBy(
+    annotationCollection,
+    ["upvotesFrom.length", "unix"],
+    ["desc", "desc"]
+  );
+}
+
+function splitRangePath(path) {
+  const paths = path.split("/").slice(1);
+  const elements = paths.map(p => {
+    var [element, order] = p.split("[");
+    order = order.replace("]", "");
+    if (element === "h5") return [1, Number(order)];
+    if (element === "div") return [2, Number(order)];
+    if (element === "p") return [3, Number(order)];
+
+  });
+  return flatten(elements);
+}
+
 export function getAllAnnotations(state) {
   const annotationType = state.scenes.project.scenes.survey.annotationType;
   const sortFn = sortFns[state.scenes.project.scenes.survey.sortBy];
@@ -203,7 +251,23 @@ export function getAllAnnotations(state) {
     annotationsById
   } = state.scenes.project.scenes.survey.data.annotations;
   const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
-  var sortedAnnotations = sortFn(values(annotationsById));
+  const annotationCollection = values(annotationsById).map(annotation => {
+    const start = splitRangePath(annotation.ranges[0].start);
+    const end = splitRangePath(annotation.ranges[0].end);
+    const range = {
+      start,
+      end,
+      startOffset: annotation.ranges[0].startOffset,
+      endOffset: annotation.ranges[0].endOffset
+    };
+    return assignIn(
+      { unix: moment(annotation.createdAt).format("X"), range },
+      annotation
+    );
+  });
+
+  var sortedAnnotations = sortFn(annotationCollection);
+  console.log(sortedAnnotations)
   var sortedAnnotationIds = sortedAnnotations.map(a => a.id);
   var filteredAnnotationIds = filterByTags({
     tagFilter,
@@ -227,4 +291,3 @@ export function getAllAnnotations(state) {
     };
   }
 }
-
