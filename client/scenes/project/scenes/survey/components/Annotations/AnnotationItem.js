@@ -224,7 +224,7 @@ class AnnotationItem extends Component {
 const mapState = (state, ownProps) => ({
   userEmail: state.data.user.email,
   admin:
-    state.data.user.roles &&
+    !!state.data.user.roles &&
     state.data.user.roles.filter(r => r.name === "admin").length,
   ...ownProps
 });

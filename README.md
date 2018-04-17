@@ -48,7 +48,9 @@
 
 [x] edit tags
 
-[ ] tag vote like slack reaction
+[ ] general comment
+
+[ ] tag vote like slack reaction?
 
 [ ] star(follow) project
 
@@ -57,8 +59,6 @@
 [ ] refactor qna with
   - "loadAnnotations"
   - $(this[`qna-${this.props.qna.id}`]).annotator("loadAnnotations", filteredAnnotations);
-
-[ ] general comment
 
 [ ] admin can pin annotation
 
