@@ -11,7 +11,9 @@ export default props => {
   const groupByUri = groupBy(props.replies, "uri");
   if (isEmpty(groupByUri))
     return (
-      <p class="profile-subroute__empty">You haven't replied to anyone yet</p>
+      <p className="profile-subroute__empty">
+        You haven't replied to anyone yet
+      </p>
     );
   return (
     <div className="profile-subroute">
@@ -25,10 +27,14 @@ export default props => {
           <div className="profile-annotation__uri">
             <div>
               <ProjectSymbolBlueBox name={`${projectSymbol}`} />
-              <span style={{marginLeft: "5px"}}>{survey}</span>
+              <span style={{ marginLeft: "5px" }}>{survey}</span>
             </div>
             {annotations.map(annotation => (
-              <AnnotationReply annotation={annotation} path={path}>
+              <AnnotationReply
+                key={`profile__annotation-reply--${annotation.id}`}
+                annotation={annotation}
+                path={path}
+              >
                 <a
                   className="see-in-context"
                   onClick={() =>

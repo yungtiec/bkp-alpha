@@ -15,7 +15,7 @@ export default class AnnotationSidebarHeader extends Component {
     if (selectedAnnotations) {
       return (
         <p
-          className="annotations-header__count reset-selection"
+          className="annotation-sidebar__engagement-tab reset-selection"
           onClick={this.props.resetSelection}
         >
           Show all Annotations ({annotationIds.length})
@@ -23,11 +23,20 @@ export default class AnnotationSidebarHeader extends Component {
       );
     } else {
       return (
-        <p className="annotations-header__count">
+        <p className="annotation-sidebar__engagement-tab">
           Annotations ({annotationIds.length})
         </p>
       );
     }
+  }
+
+  renderCommentCount({ selectedAnnotations, annotationIds, commentIds }) {
+    if (selectedAnnotations) return null;
+    return (
+      <p className="annotation-sidebar__engagement-tab">
+        Page Comments ({annotationIds.length})
+      </p>
+    );
   }
 
   handleSortByChange(selectedOption) {
@@ -38,7 +47,11 @@ export default class AnnotationSidebarHeader extends Component {
 
   renderSortBy(sortBy) {
     return (
-      <div class="btn-group" role="group" aria-label="Basic example">
+      <div
+        className="annotation-sidebar__sort-by btn-group"
+        role="group"
+        aria-label="Basic example"
+      >
         <span>sort by</span>
         <Select
           name="form-field-name"
@@ -50,7 +63,6 @@ export default class AnnotationSidebarHeader extends Component {
             { value: "upvotes", label: "upvotes" }
           ]}
         />
-
       </div>
     );
   }
@@ -75,16 +87,18 @@ export default class AnnotationSidebarHeader extends Component {
 
     return (
       <div>
-        <div className="annotation-sidebar__menu">
+        <div className="annotation-sidebar__engagement-tab-container">
           {this.renderAnnotationCount({ selectedAnnotations, annotationIds })}
-          {!selectedAnnotations && this.renderSortBy(sortBy)}
+          {this.renderCommentCount({ selectedAnnotations, annotationIds })}
         </div>
+        {!selectedAnnotations && this.renderSortBy(sortBy)}
         {!selectedAnnotations && (
           <div className="annotation-tags__filter-container">
+            <span className="select-label">filter by tag(s)</span>
             <Select
               name="annotation-tags__filter"
               className="annotation-tags__filter"
-              placeholder="Enter tag to filter annotations"
+              placeholder="select tag(s)"
               multi={true}
               value={tagFilter}
               onChange={this.handleTagFilterChange}

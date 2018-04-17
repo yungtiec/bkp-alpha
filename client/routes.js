@@ -87,6 +87,5 @@ export default withRouter(connect(mapState, mapDispatch)(Routes));
 
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
-  initEnvironment: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired
 };

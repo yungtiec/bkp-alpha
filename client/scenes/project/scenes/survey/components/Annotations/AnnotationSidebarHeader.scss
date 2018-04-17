@@ -5,7 +5,7 @@
   width: 100px;
 }
 
-.annotation-sidebar__tab-container {
+.annotation-sidebar__status-tab-container {
   z-index: 1;
   position: relative;
   left: 1px;
@@ -15,45 +15,28 @@
   background: white;
 }
 
-.annotation-sidebar__tab {
+.annotation-sidebar__status-tab {
   flex: 1;
   background: white;
   border: none;
   cursor: pointer;
 }
 
-.annotation-sidebar__tab.active {
+.annotation-sidebar__status-tab.active {
   box-shadow: #007bff 0px -4px 0px 0px inset;
 }
 
-.annotation-sidebar__menu {
+.annotation-sidebar__engagement-tab-container {
   display: flex;
-  justify-content: space-between;
   align-items: start;
   padding: 0px 5px;
   margin: 10px 0px;
 }
 
-.annotation-sidebar__menu .btn-group span {
-  line-height: 2.5;
-  margin-right: 5px;
-  color: white;
-  font-size: 14px;
-}
-
-.annotation-sidebar__menu .btn-group .btn {
-  border-radius: 0 !important;
-}
-
-.annotation-sidebar__menu .btn-group .btn.active {
-  background: inherit;
-  color: white;
-  border-color: white;
-}
-
-.annotations-header__count {
+.annotation-sidebar__engagement-tab {
   color: white;
   line-height: 2.5;
+  margin-right: 10px;
 }
 
 .annotations-header__count.reset-selection {
@@ -61,18 +44,36 @@
 }
 
 .annotation-tags__filter-container {
-  padding: 0px 5px;
   margin-bottom: 30px;
+  padding: 0 5px;
+  width: 100%;
+  display: flex;
+}
+
+.annotation-sidebar__sort-by {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0 5px;
+  display: flex;
 }
 
 .annotation-tags__filter .Select-control {
   border-radius: 0px;
 }
 
-.annotation-sidebar__menu .Select-control {
+.annotation-sidebar__sort-by .Select-control {
   border-radius: 0px;
 }
 
-.annotation-sidebar__menu .Select {
-  width: 130px;
+.annotation-sidebar__sort-by .Select,
+.annotation-tags__filter-container .Select {
+  flex: 1;
+}
+
+.annotation-sidebar__sort-by span,
+.annotation-tags__filter-container .select-label {
+  line-height: 2.5;
+  margin-right: 5px;
+  color: white;
+  font-size: 14px;
 }

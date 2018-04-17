@@ -27,6 +27,7 @@ export default class Answers extends Component {
         {answerOrder.map(id => (
           <p
             className="qna__answer"
+            key={`qna-${qnaId}__answer--${id}`}
             onClick={e => {
               handleAnnotationOnClick(e, qnaId, id);
             }}

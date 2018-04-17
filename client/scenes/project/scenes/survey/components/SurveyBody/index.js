@@ -21,7 +21,11 @@ export default ({
     <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
     {surveyQnaIds.map(id => {
       return (
-        <Element name={`qna-${id}`} ref={el => (parent[`qna-${id}`] = el)}>
+        <Element
+          name={`qna-${id}`}
+          ref={el => (parent[`qna-${id}`] = el)}
+          key={`qna-${id}`}
+        >
           <Qna
             key={`qna-${id}`}
             qna={surveyQnasById[id]}

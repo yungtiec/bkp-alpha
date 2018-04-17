@@ -40,24 +40,24 @@ class AdminPanel extends Component {
 
   renderActions(annotation, path) {
     return (
-      <div class="btn-group" role="group" aria-label="Basic example">
+      <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
-          class="btn btn-outline-danger"
+          className="btn btn-outline-danger"
           onClick={() => this.labelAsSpam(annotation.id)}
         >
           spam
         </button>
         <button
           type="button"
-          class="btn btn-outline-primary"
+          className="btn btn-outline-primary"
           onClick={() => this.labelAsNotSpam(annotation.id)}
         >
           verify
         </button>
         <button
           type="button"
-          class="btn btn-outline-secondary"
+          className="btn btn-outline-secondary"
           onClick={() =>
             history.push(
               `${path}/question/${annotation.survey_question_id}/annotation/${
@@ -83,11 +83,19 @@ class AdminPanel extends Component {
             ""
           );
           return annotationsById[aid].parentId ? (
-            <AnnotationReply annotation={annotationsById[aid]} path={path}>
+            <AnnotationReply
+              key={`admin__annotation-reply--${aid}`}
+              annotation={annotationsById[aid]}
+              path={path}
+            >
               {this.renderActions(annotationsById[aid], path)}
             </AnnotationReply>
           ) : (
-            <AnnotationMain annotation={annotationsById[aid]} path={path}>
+            <AnnotationMain
+              key={`admin__annotation-main--${aid}`}
+              annotation={annotationsById[aid]}
+              path={path}
+            >
               {this.renderActions(annotationsById[aid], path)}
             </AnnotationMain>
           );

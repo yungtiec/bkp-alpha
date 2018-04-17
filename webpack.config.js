@@ -46,6 +46,9 @@ module.exports = {
   // files. It's like `nodemon` for the front end!
   plugins: isDev
     ? [
+        new webpack.DefinePlugin({
+          "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+        }),
         new webpack.ProvidePlugin({
           $: "jquery",
           jQuery: "jquery",
@@ -62,6 +65,11 @@ module.exports = {
           "window.jQuery": "jquery",
           Tether: "tether",
           Popper: ["popper.js", "default"]
+        }),
+        new webpack.DefinePlugin({
+          "process.env": {
+            NODE_ENV: JSON.stringify("production")
+          }
         })
       ]
 };

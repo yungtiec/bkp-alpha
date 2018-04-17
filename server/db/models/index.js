@@ -3,6 +3,7 @@ const Annotation = require("./annotation");
 const Permission = require("./permission");
 const Role = require("./role");
 const Project = require("./project");
+const ProjectSurveyComment = require("./project-survey-comment");
 const Tag = require("./tag");
 
 /*=============================================

@@ -17,7 +17,7 @@ import {
   AnnotationSidebarHeader
 } from "./index";
 import { findAnnotationsInQnaByText } from "../utils";
-import { Scrollbar } from "../../../../../components";
+import { CustomScrollbar } from "../../../../../components";
 import autoBind from "react-autobind";
 
 export default class Survey extends Component {
@@ -144,11 +144,11 @@ export default class Survey extends Component {
           width={width}
           selectedAnnotations={this.state.selectedAnnotations}
         >
-          <Scrollbar
-            containerWidth={this.props.width < 767 ? "350px" : "410px"}
-            containerHeight="calc(100% - 120px)"
+          <CustomScrollbar
+            scrollbarContainerWidth={this.props.width < 767 ? "350px" : "410px"}
+            scrollbarContainerHeight="calc(100% - 120px)"
             autoHide={true}
-            thumbColor="rgb(233, 236, 239)"
+            scrollbarThumbColor="rgb(233, 236, 239)"
           >
             <Element
               name="annotation-sidebar"
@@ -174,7 +174,7 @@ export default class Survey extends Component {
                 parent={this}
               />
             </Element>
-          </Scrollbar>
+          </CustomScrollbar>
         </AnnotationSidebar>
       </div>
     );

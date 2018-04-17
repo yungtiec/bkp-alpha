@@ -42,15 +42,19 @@ class AnnotationEditModal extends Component {
       >
         <div className="annotation-item__edit">
           <p>Edit your annotation</p>
-          <hr class="my-4" />
+          <hr className="my-4" />
           <p className="annotation-item__quote">{this.props.quote}</p>
           <div className="annotation-item__tags">
             {this.props.tags.length
               ? this.props.tags.map(tag => (
-                  <button type="button" class="btn btn-light">
+                  <button
+                    key={`annotation-tag__${tag.name}`}
+                    type="button"
+                    className="btn btn-light"
+                  >
                     {tag.name}
                     <span
-                      class="badge badge-danger"
+                      className="badge badge-danger"
                       onClick={() =>
                         this.props.removeTag({
                           annotationId: this.props.id,

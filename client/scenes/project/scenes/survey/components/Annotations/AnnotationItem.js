@@ -59,17 +59,17 @@ class AnnotationItem extends Component {
 
   renderAdminActions(annotation) {
     return this.props.admin && annotation.reviewed === "pending" ? (
-      <div class="btn-group" role="group" aria-label="Basic example">
+      <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
-          class="btn btn-outline-danger btn-sm"
+          className="btn btn-outline-danger btn-sm"
           onClick={() => this.labelAsSpam(annotation.id)}
         >
           spam
         </button>
         <button
           type="button"
-          class="btn btn-outline-primary btn-sm"
+          className="btn btn-outline-primary btn-sm"
           onClick={() => this.labelAsNotSpam(annotation.id)}
         >
           verify
@@ -111,7 +111,10 @@ class AnnotationItem extends Component {
         <div className="annotation-item__tags">
           {annotation.tags.length
             ? annotation.tags.map(tag => (
-                <span class="badge badge-light">
+                <span
+                  key={`annotation-${annotation.id}__tag-${tag.name}`}
+                  className="badge badge-light"
+                >
                   {tag.name}
                   {"  "}
                 </span>
@@ -124,7 +127,7 @@ class AnnotationItem extends Component {
           <div>
             {annotation.owner.email === this.props.userEmail && (
               <i
-                class="fas fa-edit"
+                className="fas fa-edit"
                 onClick={() => this.openModal(annotation)}
               />
             )}
@@ -160,12 +163,16 @@ class AnnotationItem extends Component {
       const openModal = this.openModal.bind(null, child);
       const reply = isEmpty(child) ? (
         <CommentBox
+          key={`annotation-item__init-reply-${child.id}`}
           parentId={accessors.slice(-1)[0]}
           onSubmit={this.props.replyToAnnotation}
           onCancel={cancelReplyToThis}
         />
       ) : (
-        <div className="annotation-item__reply-item">
+        <div
+          className="annotation-item__reply-item"
+          key={`annotation-item__reply-${child.id}`}
+        >
           <div className="annotation-item__header">
             <p>{child.owner.first_name + " " + child.owner.last_name}</p>
             <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
@@ -175,7 +182,7 @@ class AnnotationItem extends Component {
             {this.renderAdminActions(child)}
             <div>
               {child.owner.email === this.props.userEmail && (
-                <i class="fas fa-edit" onClick={openModal} />
+                <i className="fas fa-edit" onClick={openModal} />
               )}
               <i className="fas fa-reply" onClick={initReplyToThis} />
               <span className={`${hasUpvoted ? "upvoted" : ""}`}>
@@ -197,7 +204,7 @@ class AnnotationItem extends Component {
       return (
         <div className="annotation-item__reply-thread">
           <div className="annotation-item__reply-edge">
-            <i class="fas fa-caret-down" />
+            <i className="fas fa-caret-down" />
             <div className="annotation-item__thread-line" />
           </div>
           <div className="annotation-item__reply-contents">

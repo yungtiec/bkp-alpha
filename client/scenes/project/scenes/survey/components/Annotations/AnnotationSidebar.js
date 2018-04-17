@@ -58,13 +58,13 @@ class AnnotationSidebar extends Component {
             className="annotations-sidebar__size-btn"
             onClick={toggleSidebar}
           >
-            <i class={`fas fa-angle-${sizeBtnAngle}`} />
+            <i className={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
           <button
             className="annotations__visibility-btn"
             onClick={this.toggleHighlights}
           >
-            <i class={`fas fa-${eye}`} />
+            <i className={`fas fa-${eye}`} />
           </button>
           {sidebarOpen && <AuthWidget />}
         </div>
@@ -78,14 +78,14 @@ class AnnotationSidebar extends Component {
             />
           </div>
           <div
-            class="annotation-sidebar__tab-container"
+            className="annotation-sidebar__status-tab-container"
             role="group"
             aria-label="Basic example"
             style={tabStyle}
           >
             <button
               type="button"
-              class={`annotation-sidebar__tab ${annotationType === "all" &&
+              className={`annotation-sidebar__status-tab ${annotationType === "all" &&
                 !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("all")}
@@ -94,7 +94,7 @@ class AnnotationSidebar extends Component {
             </button>
             <button
               type="button"
-              class={`annotation-sidebar__tab ${annotationType === "verified" &&
+              className={`annotation-sidebar__status-tab ${annotationType === "verified" &&
                 !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("verified")}
@@ -103,7 +103,7 @@ class AnnotationSidebar extends Component {
             </button>
             <button
               type="button"
-              class={`annotation-sidebar__tab ${annotationType === "pending" &&
+              className={`annotation-sidebar__status-tab ${annotationType === "pending" &&
                 !selectedAnnotations &&
                 "active"}`}
               onClick={() => updateAnnotationTypeInView("pending")}

@@ -3,8 +3,8 @@ import React from "react";
 import Avatar from "react-avatar";
 
 export default ({ name, numAnnotations, joinDate }) => (
-  <div class="profile-banner">
-    <div class="container">
+  <div className="profile-banner">
+    <div className="container">
       <div className="profile-banner__avatar-container">
         <Avatar name={name} size={120} color="#2D4DD1" fgColor="#ffffff" />
       </div>
