@@ -6,8 +6,7 @@ import data from "./data/reducer";
 import scenes from "./scenes/reducer";
 import { reducer as notificationsReducer } from "reapop";
 
-// const isDev = process.env.NODE_ENV === "development";
-const isDev = true
+const isDev = process.env.NODE_ENV === "development";
 
 const reducer = combineReducers({
   data,
