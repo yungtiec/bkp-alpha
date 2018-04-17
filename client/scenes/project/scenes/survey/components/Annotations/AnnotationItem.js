@@ -4,35 +4,26 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import moment from "moment";
 import { cloneDeep, isEmpty, find } from "lodash";
-import CommentBox from "./CommentBox";
-import {
-  replyToAnnotation,
-  initiateReplyToAnnotation,
-  cancelReplyToAnnotation,
-  upvoteAnnotation,
-  verifyAnnotationAsAdmin
-} from "../../data/annotations/actions";
-import { loadModal } from "../../../../../../data/reducer";
-import { notify } from "reapop";
+import { CommentBox } from "../index";
 
-class AnnotationItem extends Component {
+export default class AnnotationItem extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
   }
 
   reply(parent) {
-    this.props.replyToAnnotation({ parent, comment: "test" });
+    this.props.replyToItem({ parent, comment: "test" });
   }
 
   initReply(accessors, parent) {
     accessors.push(parent.id);
-    this.props.initiateReplyToAnnotation({ accessors, parent });
+    this.props.initiateReplyToItem({ accessors, parent });
   }
 
   cancelReply(accessors, parent) {
     accessors.push(parent.id);
-    this.props.cancelReplyToAnnotation({ accessors, parent });
+    this.props.cancelReplyToItem({ accessors, parent });
   }
 
   openModal(annotation) {
@@ -50,11 +41,11 @@ class AnnotationItem extends Component {
   }
 
   labelAsNotSpam(annotationId) {
-    this.props.verifyAnnotationAsAdmin(annotationId, "verified");
+    this.props.verifyItemAsAdmin(annotationId, "verified");
   }
 
   labelAsSpam(annotationId) {
-    this.props.verifyAnnotationAsAdmin(annotationId, "spam");
+    this.props.verifyItemAsAdmin(annotationId, "spam");
   }
 
   renderAdminActions(annotation) {
@@ -84,7 +75,7 @@ class AnnotationItem extends Component {
     );
   }
 
-  renderMainComment(annotation) {
+  renderMainComment(engagementTab, annotation) {
     const initReplyToThis = this.props.userEmail
       ? this.initReply.bind(this, [], annotation)
       : this.promptLoginToast;
@@ -92,8 +83,8 @@ class AnnotationItem extends Component {
       annotation.upvotesFrom,
       user => user.email === this.props.userEmail
     );
-    const upvoteAnnotation = this.props.userEmail
-      ? this.props.upvoteAnnotation.bind(this, {
+    const upvoteItem = this.props.userEmail
+      ? this.props.upvoteItem.bind(this, {
           annotationId: annotation.id,
           hasUpvoted
         })
@@ -107,9 +98,11 @@ class AnnotationItem extends Component {
           </p>
           <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
         </div>
-        <p className="annotation-item__quote">{annotation.quote}</p>
+        {engagementTab === "annotations" && (
+          <p className="annotation-item__quote">{annotation.quote}</p>
+        )}
         <div className="annotation-item__tags">
-          {annotation.tags.length
+          {annotation.tags && annotation.tags.length
             ? annotation.tags.map(tag => (
                 <span
                   key={`annotation-${annotation.id}__tag-${tag.name}`}
@@ -133,7 +126,7 @@ class AnnotationItem extends Component {
             )}
             <i className="fas fa-reply" onClick={initReplyToThis} />
             <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-              <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
+              <i className="fas fa-thumbs-up" onClick={upvoteItem} />
               {annotation.upvotesFrom ? annotation.upvotesFrom.length : 0}
             </span>
           </div>
@@ -154,8 +147,8 @@ class AnnotationItem extends Component {
         child.upvotesFrom,
         user => user.email === this.props.userEmail
       );
-      const upvoteAnnotation = this.props.userEmail
-        ? this.props.upvoteAnnotation.bind(this, {
+      const upvoteItem = this.props.userEmail
+        ? this.props.upvoteItem.bind(this, {
             annotationId: child.id,
             hasUpvoted
           })
@@ -165,7 +158,7 @@ class AnnotationItem extends Component {
         <CommentBox
           key={`annotation-item__init-reply-${child.id}`}
           parentId={accessors.slice(-1)[0]}
-          onSubmit={this.props.replyToAnnotation}
+          onSubmit={this.props.replyToItem}
           onCancel={cancelReplyToThis}
         />
       ) : (
@@ -186,7 +179,7 @@ class AnnotationItem extends Component {
               )}
               <i className="fas fa-reply" onClick={initReplyToThis} />
               <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-                <i className="fas fa-thumbs-up" onClick={upvoteAnnotation} />
+                <i className="fas fa-thumbs-up" onClick={upvoteItem} />
                 {child.upvotesFrom ? child.upvotesFrom.length : 0}
               </span>
             </div>
@@ -218,32 +211,12 @@ class AnnotationItem extends Component {
   }
 
   render() {
-    const { annotation } = this.props;
+    const { annotation, engagementTab } = this.props;
     return (
       <div className="annotation-item">
-        {this.renderMainComment(annotation)}
+        {this.renderMainComment(engagementTab, annotation)}
         {this.renderThread(annotation.children, [annotation.id])}
       </div>
     );
   }
 }
-
-const mapState = (state, ownProps) => ({
-  userEmail: state.data.user.email,
-  admin:
-    !!state.data.user.roles &&
-    state.data.user.roles.filter(r => r.name === "admin").length,
-  ...ownProps
-});
-
-const actions = {
-  replyToAnnotation,
-  initiateReplyToAnnotation,
-  cancelReplyToAnnotation,
-  verifyAnnotationAsAdmin,
-  upvoteAnnotation,
-  loadModal,
-  notify
-};
-
-export default connect(mapState, actions)(AnnotationItem);

@@ -62,7 +62,6 @@ function addEmptyAnnotationToHierarchy({ state, accessors, parent }) {
 }
 
 function addNewAnnotationSentFromServer({ state, annotation }) {
-  var sortedAnnotations;
   state.annotationsById[annotation.id] = annotation;
   state.annotationIds = keys(state.annotationsById);
   return state;
@@ -244,8 +243,8 @@ function splitRangePath(path) {
 }
 
 export function getAllAnnotations(state) {
-  const annotationType = state.scenes.project.scenes.survey.annotationType;
-  const sortFn = sortFns[state.scenes.project.scenes.survey.sortBy];
+  const verificationStatus = state.scenes.project.scenes.survey.verificationStatus;
+  const sortFn = sortFns[state.scenes.project.scenes.survey.annotationSortBy];
   var {
     annotationIds,
     annotationsById
@@ -272,7 +271,7 @@ export function getAllAnnotations(state) {
     annotationIds: sortedAnnotationIds,
     annotationsById
   });
-  if (annotationType === "all") {
+  if (verificationStatus === "all") {
     return {
       unfilteredAnnotationIds: sortedAnnotationIds,
       annotationIds: filteredAnnotationIds,
@@ -280,7 +279,7 @@ export function getAllAnnotations(state) {
     };
   } else {
     filteredAnnotationIds = filteredAnnotationIds.filter(
-      aid => annotationsById[aid].reviewed === annotationType
+      aid => annotationsById[aid].reviewed === verificationStatus
     );
     return {
       annotationIds: filteredAnnotationIds,

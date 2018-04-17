@@ -53,7 +53,7 @@ Project.belongsToMany(User, {
 ==============================================*/
 
 User.belongsToMany(Annotation, {
-  as: "upvoted",
+  as: "upvotedAnnotations",
   through: "annotation_upvote",
   foreignKey: "user_id"
 });
@@ -83,11 +83,49 @@ Annotation.belongsToMany(Tag, {
 
 /*=====  End of Annotation and Tag ========*/
 
+/*=============================================
+=            User and Page Comment              =
+==============================================*/
+
+User.belongsToMany(ProjectSurveyComment, {
+  as: "upvotedComments",
+  through: "project_survey_comment_upvote",
+  foreignKey: "user_id"
+});
+ProjectSurveyComment.belongsToMany(User, {
+  as: "upvotesFrom",
+  through: "project_survey_comment_upvote",
+  foreignKey: "project_survey_comment_id"
+});
+
+User.hasMany(ProjectSurveyComment, {
+  foreignKey: "owner_id",
+  as: "project_survey_comments"
+});
+ProjectSurveyComment.belongsTo(User, { foreignKey: "owner_id", as: "owner" });
+
+/*=====  End of User and Page Comment  ========*/
+
+/*=============================================
+=            Page Comment  and Tag             =
+==============================================*/
+
+Tag.belongsToMany(ProjectSurveyComment, {
+  through: "project_survey_comment_tag",
+  foreignKey: "tag_id"
+});
+ProjectSurveyComment.belongsToMany(Tag, {
+  through: "project_survey_comment_tag",
+  foreignKey: "project_survey_comment_id"
+});
+
+/*=====  End of Page Comment  and Tag ========*/
 module.exports = {
   User,
   Annotation,
   Permission,
   Role,
   Project,
+  ProjectSurveyComment,
   Tag
 };

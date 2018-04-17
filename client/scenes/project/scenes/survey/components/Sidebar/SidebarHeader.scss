@@ -1,11 +1,11 @@
 @import "../../../../../../breakpoint";
 
-.annotation-sidebar__logo-consensys {
+.social-sidebar__logo-consensys {
   margin: 24px auto 20px;
   width: 100px;
 }
 
-.annotation-sidebar__status-tab-container {
+.social-sidebar__status-tab-container {
   z-index: 1;
   position: relative;
   left: 1px;
@@ -15,63 +15,68 @@
   background: white;
 }
 
-.annotation-sidebar__status-tab {
+.social-sidebar__status-tab {
   flex: 1;
   background: white;
   border: none;
   cursor: pointer;
 }
 
-.annotation-sidebar__status-tab.active {
+.social-sidebar__status-tab.active {
   box-shadow: #007bff 0px -4px 0px 0px inset;
 }
 
-.annotation-sidebar__engagement-tab-container {
+.social-sidebar__engagement-tab-container {
   display: flex;
   align-items: start;
   padding: 0px 5px;
   margin: 10px 0px;
 }
 
-.annotation-sidebar__engagement-tab {
+.social-sidebar__engagement-tab {
   color: white;
   line-height: 2.5;
   margin-right: 10px;
-}
-
-.annotations-header__count.reset-selection {
   cursor: pointer;
 }
 
-.annotation-tags__filter-container {
+.social-sidebar__engagement-tab.active {
+  font-weight: 800;
+}
+
+.social-sidebar__engagement-tab.reset-selection {
+  cursor: pointer;
+}
+
+.social-sidebar__tag-filter-container {
   margin-bottom: 30px;
   padding: 0 5px;
   width: 100%;
   display: flex;
 }
 
-.annotation-sidebar__sort-by {
+.social-sidebar__sort-by {
   width: 100%;
   margin-bottom: 10px;
   padding: 0 5px;
   display: flex;
 }
 
-.annotation-tags__filter .Select-control {
+.social-sidebar__tag-filter .Select-control {
   border-radius: 0px;
 }
 
-.annotation-sidebar__sort-by .Select-control {
+.social-sidebar__sort-by .Select-control {
   border-radius: 0px;
 }
 
-.annotation-sidebar__sort-by .Select,
-.annotation-tags__filter-container .Select {
+.social-sidebar__sort-by .Select,
+.social-sidebar__tag-filter-container .Select {
   flex: 1;
 }
 
-.annotation-sidebar__sort-by span,
-.annotation-tags__filter-container .select-label {
+.social-sidebar__sort-by span,
+.social-sidebar__tag-filter-container .select-label {
   line-height: 2.5;
   margin-right: 5px;
   color: white;

@@ -24,7 +24,6 @@ class AnnotationEditModal extends Component {
   }
 
   handleTagOnChange(selected) {
-    console.log(selected);
     if (this.props.tags.indexOf(selected.value) === -1) {
       this.props.addTag({
         annotationId: this.props.id,
@@ -45,7 +44,7 @@ class AnnotationEditModal extends Component {
           <hr className="my-4" />
           <p className="annotation-item__quote">{this.props.quote}</p>
           <div className="annotation-item__tags">
-            {this.props.tags.length
+            {this.props.tags && this.props.tags.length
               ? this.props.tags.map(tag => (
                   <button
                     key={`annotation-tag__${tag.name}`}

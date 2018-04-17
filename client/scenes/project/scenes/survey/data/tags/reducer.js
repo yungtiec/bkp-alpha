@@ -50,16 +50,28 @@ export function getAllTags(state) {
 }
 
 export function getCountsByTagName(state) {
-  const {
-    annotationsById,
-    annotationIds
-  } = state.scenes.project.scenes.survey.data.annotations;
+  var itemsById, itemIds;
+  if (state.scenes.project.scenes.survey.engagementTab === "annotations") {
+    const {
+      annotationsById,
+      annotationIds
+    } = state.scenes.project.scenes.survey.data.annotations;
+    itemsById = annotationsById;
+    itemIds = annotationIds;
+  } else if (state.scenes.project.scenes.survey.engagementTab === "comments") {
+    const {
+      commentsById,
+      commentIds
+    } = state.scenes.project.scenes.survey.data.comments;
+    itemsById = commentsById;
+    itemIds = commentIds;
+  }
   const allTags = flatten(
-    annotationIds
+    itemIds
       .filter(
-        aid => annotationsById[aid].tags && annotationsById[aid].tags.length
+        aid => itemsById[aid].tags && itemsById[aid].tags.length
       )
-      .map(aid => annotationsById[aid].tags.map(tag => tag.name))
+      .map(aid => itemsById[aid].tags.map(tag => tag.name))
   );
   const countsByTagName = countBy(allTags);
   return countsByTagName;

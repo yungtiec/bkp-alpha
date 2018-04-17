@@ -1,3 +1,4 @@
+import "./annotator.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -9,12 +10,13 @@ import {
 import {
   Qna,
   SurveyBody,
-  AnnotationSidebar,
   AnnotationItem,
   Question,
   Answers,
-  AnnotationSidebarContent,
-  AnnotationSidebarHeader
+  SidebarLayout,
+  SidebarAnnotations,
+  SidebarPageComments,
+  SidebarHeader
 } from "./index";
 import { findAnnotationsInQnaByText } from "../utils";
 import { CustomScrollbar } from "../../../../../components";
@@ -117,13 +119,20 @@ export default class Survey extends Component {
       isLoggedIn,
       match,
       width,
-      sortBy,
+      annotationSortBy,
+      engagementTab,
       sortAnnotationBy,
       tags,
       tagsWithCountInSurvey,
       tagFilter,
       updateTagFilter,
-      addNewAnnotationSentFromServer
+      addNewAnnotationSentFromServer,
+      updateEngagementTabInView,
+      commentSortBy,
+      sortCommentBy,
+      commentIds,
+      commentsById,
+      projectSurveyId
     } = this.props;
 
     return (
@@ -140,7 +149,7 @@ export default class Survey extends Component {
           annotationOnClick={this.annotationOnClick}
           addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
         />
-        <AnnotationSidebar
+        <SidebarLayout
           width={width}
           selectedAnnotations={this.state.selectedAnnotations}
         >
@@ -151,31 +160,48 @@ export default class Survey extends Component {
             scrollbarThumbColor="rgb(233, 236, 239)"
           >
             <Element
-              name="annotation-sidebar"
-              id="annotation-sidebar"
-              className="annotation-contents"
+              name="sidebar-contents"
+              id="sidebar-contents"
+              className="sidebar-contents"
             >
-              <AnnotationSidebarHeader
-                sortBy={sortBy}
+              <SidebarHeader
+                engagementTab={engagementTab}
+                updateEngagementTabInView={updateEngagementTabInView}
+                annotationSortBy={annotationSortBy}
                 sortAnnotationBy={sortAnnotationBy}
                 annotationIds={annotationIds}
                 selectedAnnotations={this.state.selectedAnnotations}
+                commentSortBy={commentSortBy}
+                sortCommentBy={sortCommentBy}
+                commentIds={commentIds}
                 tagFilter={tagFilter}
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
                 isLoggedIn={isLoggedIn}
                 resetSelection={this.resetSelectedText}
               />
-              <AnnotationSidebarContent
-                annotationIds={annotationIds}
-                annotationsById={annotationsById}
-                selectedText={this.state.selectedText}
-                selectedAnnotations={this.state.selectedAnnotations}
-                parent={this}
-              />
+              {engagementTab === "annotations" && (
+                <SidebarAnnotations
+                  engagementTab={engagementTab}
+                  annotationIds={annotationIds}
+                  annotationsById={annotationsById}
+                  selectedText={this.state.selectedText}
+                  selectedAnnotations={this.state.selectedAnnotations}
+                  parent={this}
+                />
+              )}
+              {engagementTab === "comments" && (
+                <SidebarPageComments
+                  projectSurveyId={projectSurveyId}
+                  engagementTab={engagementTab}
+                  commentIds={commentIds}
+                  commentsById={commentsById}
+                  parent={this}
+                />
+              )}
             </Element>
           </CustomScrollbar>
-        </AnnotationSidebar>
+        </SidebarLayout>
       </div>
     );
   }

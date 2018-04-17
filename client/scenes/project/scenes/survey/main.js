@@ -9,12 +9,24 @@ import {
   addNewAnnotationSentFromServer,
   editAnnotationComment
 } from "./data/annotations/actions";
-import { updateTagFilter } from "./data/tags/actions"
-import { toggleSidebar, sortAnnotationBy, updateAnnotationTypeInView } from "./reducer";
+import { fetchCommentsBySurvey, addNewComment } from "./data/comments/actions";
+import { updateTagFilter } from "./data/tags/actions";
+import {
+  toggleSidebar,
+  sortAnnotationBy,
+  sortCommentBy,
+  updateVerificationStatusInView,
+  updateEngagementTabInView
+} from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
-import { getAllTags, getTagsWithCountInSurvey, getTagFilter} from "./data/tags/reducer";
+import { getAllComments } from "./data/comments/reducer";
+import {
+  getAllTags,
+  getTagsWithCountInSurvey,
+  getTagFilter
+} from "./data/tags/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
@@ -35,6 +47,7 @@ class SurveyContainer extends Component {
     this.props.fetchAnnotationsBySurvey(
       `${window.origin}${this.props.match.url}`
     );
+    this.props.fetchCommentsBySurvey(this.props.match.params.surveyId);
     Events.scrollEvent.register("begin", () => {});
     Events.scrollEvent.register("end", () => {});
     scrollSpy.update();
@@ -56,7 +69,7 @@ class SurveyContainer extends Component {
   componentWillUnmount() {
     Events.scrollEvent.remove("begin");
     Events.scrollEvent.remove("end");
-    this.props.updateAnnotationTypeInView("all")
+    this.props.updateVerificationStatusInView("all");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -76,6 +89,7 @@ class SurveyContainer extends Component {
       this.props.fetchAnnotationsBySurvey(
         `${window.origin}${nextProps.match.url}`
       );
+      this.props.fetchCommentsBySurvey(this.props.match.params.surveyId);
     }
   }
 
@@ -85,21 +99,25 @@ class SurveyContainer extends Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state, ownProps) => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const {
     annotationsById,
     annotationIds,
     unfilteredAnnotationIds
   } = getAllAnnotations(state);
+  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
+    state
+  );
   const { width } = state.data.environment;
-  const { sidebarOpen, sortBy } = state.scenes.project.scenes.survey;
+  const { sidebarOpen, annotationSortBy, commentSortBy, engagementTab } = state.scenes.project.scenes.survey;
   return {
     isLoggedIn: !!state.data.user.id,
     myUserId: state.data.user.id,
     surveyQnasById,
     surveyQnaIds,
     surveyMetadata: getSelectedSurvey(state),
+    projectSurveyId: ownProps.match.params.surveyId,
     projectMetadata: getSelectedProject(state),
     annotationsById,
     annotationIds,
@@ -109,7 +127,12 @@ const mapState = state => {
     tagsWithCountInSurvey: getTagsWithCountInSurvey(state),
     width,
     sidebarOpen,
-    sortBy
+    annotationSortBy,
+    commentSortBy,
+    engagementTab,
+    commentsById,
+    commentIds,
+    unfilteredCommentIds
   };
 };
 
@@ -121,13 +144,15 @@ const actions = {
   toggleSidebar,
   sortAnnotationBy,
   updateTagFilter,
-  updateAnnotationTypeInView
+  updateVerificationStatusInView,
+  updateEngagementTabInView,
+  fetchCommentsBySurvey,
+  addNewComment,
+  sortCommentBy
 };
 
 const onPollInterval = (props, dispatch) => {
-  return props.fetchAnnotationsBySurvey(
-    `${window.origin}${props.match.url}`
-  );
+  return props.fetchAnnotationsBySurvey(`${window.origin}${props.match.url}`);
 };
 
 export default withRouter(

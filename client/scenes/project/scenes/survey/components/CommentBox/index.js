@@ -1,4 +1,4 @@
-import "./CommentBox.scss";
+import "./index.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 
@@ -16,6 +16,8 @@ export default class CommentBox extends Component {
   handleSubmit(event) {
     if (this.state.value)
       this.props.onSubmit({
+        projectSurveyId: this.props.projectSurveyId,
+        commentId: this.props.commentId,
         annotationId: this.props.annotationId,
         parentId: this.props.parentId,
         comment: this.state.value
@@ -33,7 +35,9 @@ export default class CommentBox extends Component {
         />
         <div className="comment-box__actions">
           <button onClick={this.handleSubmit}>save</button>
-          <button onClick={this.props.onCancel}>cancel</button>
+          {this.props.onCancel && (
+            <button onClick={this.props.onCancel}>cancel</button>
+          )}
         </div>
       </div>
     );
