@@ -20,10 +20,7 @@ const SidebarAnnotation = props => {
     props.selectedAnnotations &&
     props.selectedAnnotations.length
   ) {
-    return renderSidebarWithSelectedText(
-      props.annotationsById,
-      props.selectedAnnotations
-    );
+    return renderSidebarWithSelectedText(props);
   }
   if (
     (props.annotationIds && !props.selectedText) ||
@@ -36,15 +33,42 @@ const SidebarAnnotation = props => {
   }
 };
 
-function renderSidebarWithSelectedText(annotationsById, annotations) {
+function renderSidebarWithSelectedText(props) {
+  const {
+    selectedAnnotations,
+    annotationsById,
+    selectedText,
+    parent,
+    engagementTab,
+    replyToAnnotation,
+    initiateReplyToAnnotation,
+    cancelReplyToAnnotation,
+    verifyAnnotationAsAdmin,
+    upvoteAnnotation,
+    loadModal,
+    notify,
+    userEmail,
+    admin
+  } = props;
   return (
     <div>
-      {annotations
+      {selectedAnnotations
         .filter(a => annotationsById[a.id].reviewed !== "spam")
         .map(annotation => (
           <AnnotationItem
             key={`annotation-${annotation.id}`}
             annotation={annotation}
+            ref={el => (parent[`selected-annotation-${annotation.id}`] = el)}
+            engagementTab={engagementTab}
+            replyToItem={replyToAnnotation}
+            initiateReplyToItem={initiateReplyToAnnotation}
+            cancelReplyToItem={cancelReplyToAnnotation}
+            verifyItemAsAdmin={verifyAnnotationAsAdmin}
+            upvoteItem={upvoteAnnotation}
+            loadModal={loadModal}
+            notify={notify}
+            userEmail={userEmail}
+            admin={admin}
           />
         ))}
     </div>

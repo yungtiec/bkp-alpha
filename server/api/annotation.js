@@ -48,8 +48,8 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
 router.post("/upvote", ensureAuthentication, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!req.body.hasUpvoted) await user.addUpvoted(req.body.annotationId);
-    else await user.removeUpvoted(req.body.annotationId);
+    if (!req.body.hasUpvoted) await user.addUpvotedAnnotation(req.body.annotationId);
+    else await user.removeUpvotedAnnotation(req.body.annotationId);
     const annotation = await Annotation.findOne({
       where: { id: req.body.annotationId },
       include: [
