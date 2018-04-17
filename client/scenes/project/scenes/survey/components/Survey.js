@@ -55,16 +55,10 @@ export default class Survey extends Component {
       pos = window.location.pathname.indexOf("/question/");
       qnaId = window.location.pathname.substring(pos).split("/")[2];
       if (this.props.annotationsById[Number(annotationId)]) {
-        annotations = findAnnotationsInQnaByText({
-          annotationIds: this.props.unfilteredAnnotationIds,
-          annotationsById: this.props.annotationsById,
-          text: this.props.annotationsById[Number(annotationId)].quote,
-          qnaId: Number(qnaId)
-        });
         scroller.scrollTo(`qna-${qnaId}`);
         this.setState({
           selectedText: this.props.annotationsById[Number(annotationId)].quote,
-          selectedAnnotations: annotations,
+          focusQnaId: Number(qnaId),
           focusOnce: true
         });
       }
@@ -89,13 +83,13 @@ export default class Survey extends Component {
     }
     if (annotations && annotations.length) {
       this.setState({
-        selectedText,
-        selectedAnnotations: annotations
+        focusQnaId: qnaId,
+        selectedText
       });
     } else {
       this.setState({
-        selectedText,
-        selectedAnnotations: null
+        focusQnaId: qnaId,
+        selectedText
       });
     }
   }
@@ -103,7 +97,7 @@ export default class Survey extends Component {
   resetSelectedText() {
     this.setState({
       selectedText: "",
-      selectedAnnotations: null
+      focusQnaId: ""
     });
   }
 
@@ -134,7 +128,12 @@ export default class Survey extends Component {
       commentsById,
       projectSurveyId
     } = this.props;
-
+    const selectedAnnotations = findAnnotationsInQnaByText({
+      annotationIds: unfilteredAnnotationIds,
+      annotationsById: annotationsById,
+      text: this.state.selectedText,
+      qnaId: this.state.focusQnaId
+    });
     return (
       <div>
         <SurveyBody
@@ -149,10 +148,7 @@ export default class Survey extends Component {
           annotationOnClick={this.annotationOnClick}
           addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
         />
-        <SidebarLayout
-          width={width}
-          selectedAnnotations={this.state.selectedAnnotations}
-        >
+        <SidebarLayout width={width} selectedAnnotations={selectedAnnotations}>
           <CustomScrollbar
             scrollbarContainerWidth={this.props.width < 767 ? "350px" : "410px"}
             scrollbarContainerHeight="calc(100% - 120px)"
@@ -170,7 +166,7 @@ export default class Survey extends Component {
                 annotationSortBy={annotationSortBy}
                 sortAnnotationBy={sortAnnotationBy}
                 annotationIds={annotationIds}
-                selectedAnnotations={this.state.selectedAnnotations}
+                selectedAnnotations={selectedAnnotations}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
                 commentIds={commentIds}
@@ -186,7 +182,7 @@ export default class Survey extends Component {
                   annotationIds={annotationIds}
                   annotationsById={annotationsById}
                   selectedText={this.state.selectedText}
-                  selectedAnnotations={this.state.selectedAnnotations}
+                  selectedAnnotations={selectedAnnotations}
                   parent={this}
                 />
               )}

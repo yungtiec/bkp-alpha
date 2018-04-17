@@ -76,7 +76,7 @@ export default class SidebarHeader extends Component {
 
     return (
       <div>
-        {selectedAnnotations ? (
+        {selectedAnnotations && selectedAnnotations.length ? (
           <div className="social-sidebar__engagement-tab-container">
             <p
               className="social-sidebar__engagement-tab active reset-selection"
@@ -105,13 +105,13 @@ export default class SidebarHeader extends Component {
             </p>
           </div>
         )}
-        {!selectedAnnotations &&
+        {selectedAnnotations && !selectedAnnotations.length &&
           this.renderAnnotationSortBy({
             engagementTab,
             commentSortBy,
             annotationSortBy
           })}
-        {!selectedAnnotations && (
+        {selectedAnnotations && !selectedAnnotations.length && (
           <div className="social-sidebar__tag-filter-container">
             <span className="select-label">filter by tag(s)</span>
             <Select

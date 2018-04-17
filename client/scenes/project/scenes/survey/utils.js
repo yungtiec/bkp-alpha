@@ -33,7 +33,7 @@ export const findAnnotationsInQnaByText = ({
   answerId // not in used yet
 }) => {
   text = striptags(text);
-  if (!annotationIds.length) return;
+  if (!annotationIds.length) return [];
   return annotationIds
     .map(aid => annotationsById[aid])
     .filter(
