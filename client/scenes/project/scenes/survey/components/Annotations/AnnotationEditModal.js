@@ -72,15 +72,20 @@ class AnnotationEditModal extends Component {
             <Select.Creatable
               multi={true}
               placeholder="Enter tag here"
-              options={this.props.availableTags
-                .filter(
-                  tag =>
-                    this.props.tags.map(t => t.name).indexOf(tag.name) === -1
-                )
-                .map(tag => ({
-                  value: tag.name,
-                  label: tag.name
-                }))}
+              options={
+                this.props.tags
+                  ? this.props.availableTags
+                      .filter(
+                        tag =>
+                          this.props.tags.map(t => t.name).indexOf(tag.name) ===
+                          -1
+                      )
+                      .map(tag => ({
+                        value: tag.name,
+                        label: tag.name
+                      }))
+                  : []
+              }
               onChange={this.handleTagOnChange}
               value={[]}
             />
