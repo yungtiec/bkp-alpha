@@ -170,7 +170,9 @@ export default class AnnotationItem extends Component {
             <p>{child.owner.first_name + " " + child.owner.last_name}</p>
             <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
           </div>
-          <p className="annotation-item__comment">{child.comment}</p>
+          <p className="annotation-item__comment">
+            {child.reviewed === "spam" ? "[deleted]" : child.comment}
+          </p>
           <div className="annotation-item__action--bottom">
             {this.renderAdminActions(child)}
             <div>
