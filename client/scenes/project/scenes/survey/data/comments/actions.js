@@ -38,3 +38,4 @@ export const addNewComment = ({ projectSurveyId, comment }) => {
     }
   };
 };
+

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import { cloneDeep, isEmpty, find } from "lodash";
 import { CommentBox } from "../index";
+import ActionBar from "./ActionBar";
 
 export default class AnnotationItem extends Component {
   constructor(props) {
@@ -12,8 +13,14 @@ export default class AnnotationItem extends Component {
     autoBind(this);
   }
 
-  reply(parent) {
-    this.props.replyToItem({ parent, comment: "test" });
+  render() {
+    const { annotation, engagementTab } = this.props;
+    return (
+      <div className="annotation-item">
+        {this.renderMainComment(engagementTab, annotation)}
+        {this.renderThread(annotation.children, [annotation.id])}
+      </div>
+    );
   }
 
   initReply(accessors, parent) {
@@ -48,41 +55,14 @@ export default class AnnotationItem extends Component {
     this.props.verifyItemAsAdmin(annotationId, "spam");
   }
 
-  renderAdminActions(annotation) {
-    return this.props.admin && annotation.reviewed === "pending" ? (
-      <div className="btn-group" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          className="btn btn-outline-danger btn-sm"
-          onClick={() => this.labelAsSpam(annotation.id)}
-        >
-          spam
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-primary btn-sm"
-          onClick={() => this.labelAsNotSpam(annotation.id)}
-        >
-          verify
-        </button>
-      </div>
-    ) : (
-      <div
-        className={`annotation-item__verified-message ${annotation.reviewed}`}
-      >
-        {annotation.reviewed === "verified" ? annotation.reviewed : ""}
-      </div>
-    );
-  }
-
   renderMainComment(engagementTab, annotation) {
-    const initReplyToThis = this.props.userEmail
-      ? this.initReply.bind(this, [], annotation)
-      : this.promptLoginToast;
     const hasUpvoted = find(
       annotation.upvotesFrom,
       user => user.email === this.props.userEmail
     );
+    const initReplyToThis = this.props.userEmail
+      ? this.initReply.bind(this, [], annotation)
+      : this.promptLoginToast;
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
           annotationId: annotation.id,
@@ -90,6 +70,7 @@ export default class AnnotationItem extends Component {
         })
       : this.promptLoginToast;
     const openModal = this.openModal.bind(null, annotation);
+
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -115,22 +96,17 @@ export default class AnnotationItem extends Component {
             : ""}
         </div>
         <p className="annotation-item__comment">{annotation.comment}</p>
-        <div className="annotation-item__action--bottom">
-          {this.renderAdminActions(annotation)}
-          <div>
-            {annotation.owner.email === this.props.userEmail && (
-              <i
-                className="fas fa-edit"
-                onClick={() => this.openModal(annotation)}
-              />
-            )}
-            <i className="fas fa-reply" onClick={initReplyToThis} />
-            <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-              <i className="fas fa-thumbs-up" onClick={upvoteItem} />
-              {annotation.upvotesFrom ? annotation.upvotesFrom.length : 0}
-            </span>
-          </div>
-        </div>
+        <ActionBar
+          item={annotation}
+          hasUpvoted={hasUpvoted}
+          isAdmin={this.props.admin}
+          thisUserEmail={this.props.userEmail}
+          initReplyToThis={initReplyToThis}
+          upvoteItem={upvoteItem}
+          openModal={openModal}
+          labelAsSpam={this.labelAsSpam}
+          labelAsNotSpam={this.labelAsNotSpam}
+        />
       </div>
     );
   }
@@ -173,19 +149,17 @@ export default class AnnotationItem extends Component {
           <p className="annotation-item__comment">
             {child.reviewed === "spam" ? "[deleted]" : child.comment}
           </p>
-          <div className="annotation-item__action--bottom">
-            {this.renderAdminActions(child)}
-            <div>
-              {child.owner.email === this.props.userEmail && (
-                <i className="fas fa-edit" onClick={openModal} />
-              )}
-              <i className="fas fa-reply" onClick={initReplyToThis} />
-              <span className={`${hasUpvoted ? "upvoted" : ""}`}>
-                <i className="fas fa-thumbs-up" onClick={upvoteItem} />
-                {child.upvotesFrom ? child.upvotesFrom.length : 0}
-              </span>
-            </div>
-          </div>
+          <ActionBar
+            item={child}
+            hasUpvoted={hasUpvoted}
+            isAdmin={this.props.admin}
+            thisUserEmail={this.props.userEmail}
+            initReplyToThis={initReplyToThis}
+            upvoteItem={upvoteItem}
+            openModal={openModal}
+            labelAsSpam={this.labelAsSpam}
+            labelAsNotSpam={this.labelAsNotSpam}
+          />
         </div>
       );
 
@@ -212,13 +186,5 @@ export default class AnnotationItem extends Component {
     return replies;
   }
 
-  render() {
-    const { annotation, engagementTab } = this.props;
-    return (
-      <div className="annotation-item">
-        {this.renderMainComment(engagementTab, annotation)}
-        {this.renderThread(annotation.children, [annotation.id])}
-      </div>
-    );
-  }
+
 }

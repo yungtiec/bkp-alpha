@@ -67,28 +67,6 @@ function addNewAnnotationSentFromServer({ state, annotation }) {
   return state;
 }
 
-function findAnnotationInTreeById(annotationCollection, targetId) {
-  if (find(annotationCollection, a => a.id === targetId)) {
-    return find(annotationCollection, a => a.id === targetId);
-  }
-  var result, aid;
-  for (var i = 0; i < annotationCollection.length; i++) {
-    if (
-      annotationCollection[i].children &&
-      annotationCollection[i].children.length
-    ) {
-      result = findAnnotationInTreeById(
-        annotationCollection[i].children,
-        targetId
-      );
-      if (result) {
-        return result;
-      }
-    }
-  }
-  return result;
-}
-
 function reviewAnnotation({ state, annotationId, reviewed }) {
   var target;
   if (state.annotationsById[annotationId]) {
@@ -167,6 +145,13 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
+/**
+ *
+ * filter fns
+ *
+ */
+
+
 function filterByTags({ tagFilter, annotationsById, annotationIds }) {
   var tagFilterArray = keys(tagFilter).filter(tag => tagFilter[tag]);
   if (!tagFilterArray.length) return annotationIds;
@@ -179,8 +164,15 @@ function filterByTags({ tagFilter, annotationsById, annotationIds }) {
   });
 }
 
+/**
+ *
+ * sort fns
+ *
+ */
+
+
 function sortAnnotationsByPosition(annotationCollection) {
-  if (!annotationCollection.length) return []
+  if (!annotationCollection.length) return [];
   var mostNestedStartDomPath = maxBy(
     annotationCollection,
     a => a.range.start.length
@@ -237,13 +229,20 @@ function splitRangePath(path) {
     if (element === "h5") return [1, Number(order)];
     if (element === "div") return [2, Number(order)];
     if (element === "p") return [3, Number(order)];
-
   });
   return flatten(elements);
 }
 
+/**
+ *
+ * selectors
+ *
+ */
+
+
 export function getAllAnnotations(state) {
-  const verificationStatus = state.scenes.project.scenes.survey.verificationStatus;
+  const verificationStatus =
+    state.scenes.project.scenes.survey.verificationStatus;
   const sortFn = sortFns[state.scenes.project.scenes.survey.annotationSortBy];
   var {
     annotationIds,
@@ -287,4 +286,32 @@ export function getAllAnnotations(state) {
       unfilteredAnnotationIds: sortedAnnotationIds
     };
   }
+}
+
+/**
+ *
+ * utility fns
+ *
+ */
+
+export function findAnnotationInTreeById(annotationCollection, targetId) {
+  if (find(annotationCollection, a => a.id === targetId)) {
+    return find(annotationCollection, a => a.id === targetId);
+  }
+  var result, aid;
+  for (var i = 0; i < annotationCollection.length; i++) {
+    if (
+      annotationCollection[i].children &&
+      annotationCollection[i].children.length
+    ) {
+      result = findAnnotationInTreeById(
+        annotationCollection[i].children,
+        targetId
+      );
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return result;
 }
