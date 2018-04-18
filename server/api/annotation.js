@@ -48,7 +48,8 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
 router.post("/upvote", ensureAuthentication, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!req.body.hasUpvoted) await user.addUpvotedAnnotation(req.body.annotationId);
+    if (!req.body.hasUpvoted)
+      await user.addUpvotedAnnotation(req.body.annotationId);
     else await user.removeUpvotedAnnotation(req.body.annotationId);
     const annotation = await Annotation.findOne({
       where: { id: req.body.annotationId },
@@ -60,14 +61,10 @@ router.post("/upvote", ensureAuthentication, async (req, res, next) => {
         }
       ]
     });
-    const ancestors = await annotation.getAncestors({
-      raw: true
+    res.send({
+      upvotesFrom: annotation.upvotesFrom,
+      annotationId: annotation.id
     });
-    const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-    const ancestry = await Annotation.findOneThreadByRootId(
-      rootAncestor ? rootAncestor.id : annotation.id
-    );
-    res.send(ancestry);
   } catch (err) {
     next(err);
   }

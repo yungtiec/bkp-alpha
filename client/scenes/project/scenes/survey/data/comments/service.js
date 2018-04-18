@@ -28,7 +28,7 @@ export function postUpvoteToComment({ commentId, hasUpvoted }) {
     .then(res => res.data);
 }
 
-export function postUpdatedCommentToComment({ commentId, comment }) {
+export function updateComment({ commentId, comment }) {
   return axios
     .post("/api/survey/comment/edit", { commentId, comment })
     .then(res => res.data);
@@ -36,7 +36,7 @@ export function postUpdatedCommentToComment({ commentId, comment }) {
 
 export function postPendingCommentStatus({ commentId, reviewed }) {
   return axios.post("/api/survey/comment/verify", {
-    annotationId,
+    commentId,
     reviewed
   });
 }

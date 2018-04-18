@@ -49,6 +49,8 @@
 [x] edit tags
 
 [ ] general comment
+  - (back-burner) higher order reducer and action creators for comment and annotations?? since their logics are so similar
+  - unnecessary coupling?
 
 [ ] tag vote like slack reaction?
 

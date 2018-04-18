@@ -34,7 +34,10 @@ export default class AnnotationItem extends Component {
   }
 
   openModal(annotation) {
-    this.props.loadModal("ANNOTATION_EDIT_MODAL", annotation);
+    this.props.loadModal("ANNOTATION_EDIT_MODAL", {
+      ...annotation,
+      editItem: this.props.editItem
+    });
   }
 
   promptLoginToast() {
@@ -65,7 +68,7 @@ export default class AnnotationItem extends Component {
       : this.promptLoginToast;
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
-          annotationId: annotation.id,
+          itemId: annotation.id,
           hasUpvoted
         })
       : this.promptLoginToast;
@@ -125,7 +128,7 @@ export default class AnnotationItem extends Component {
       );
       const upvoteItem = this.props.userEmail
         ? this.props.upvoteItem.bind(this, {
-            annotationId: child.id,
+            itemId: child.id,
             hasUpvoted
           })
         : this.promptLoginToast;
@@ -185,6 +188,4 @@ export default class AnnotationItem extends Component {
     });
     return replies;
   }
-
-
 }

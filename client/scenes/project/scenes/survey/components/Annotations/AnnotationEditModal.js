@@ -20,7 +20,7 @@ class AnnotationEditModal extends Component {
   }
 
   handleSubmitEditedComment(argObj) {
-    this.props.editAnnotationComment(argObj);
+    this.props.editItem(argObj);
   }
 
   handleTagOnChange(selected) {
@@ -40,11 +40,13 @@ class AnnotationEditModal extends Component {
         contentLabel="Annotation Edit Modal"
       >
         <div className="annotation-item__edit">
-          <p>Edit your annotation</p>
+          <p>Edit your comment</p>
           <hr className="my-4" />
           <p className="annotation-item__quote">{this.props.quote}</p>
           <div className="annotation-item__tags">
-            {this.props.tags && this.props.tags.length
+            {this.props.engagementTab === "annotations" &&
+            this.props.tags &&
+            this.props.tags.length
               ? this.props.tags.map(tag => (
                   <button
                     key={`annotation-tag__${tag.name}`}
@@ -67,32 +69,36 @@ class AnnotationEditModal extends Component {
                 ))
               : ""}
           </div>
-          <div className="d-flex">
-            <label>add tag(s)</label>
-            <Select.Creatable
-              multi={true}
-              placeholder="Enter tag here"
-              options={
-                this.props.tags
-                  ? this.props.availableTags
-                      .filter(
-                        tag =>
-                          this.props.tags.map(t => t.name).indexOf(tag.name) ===
-                          -1
-                      )
-                      .map(tag => ({
-                        value: tag.name,
-                        label: tag.name
-                      }))
-                  : []
-              }
-              onChange={this.handleTagOnChange}
-              value={[]}
-            />
-          </div>
+          {this.props.engagementTab === "annotations" && (
+            <div className="d-flex">
+              <label>add tag(s)</label>
+              <Select.Creatable
+                multi={true}
+                placeholder="Enter tag here"
+                options={
+                  this.props.tags
+                    ? this.props.availableTags
+                        .filter(
+                          tag =>
+                            this.props.tags
+                              .map(t => t.name)
+                              .indexOf(tag.name) === -1
+                        )
+                        .map(tag => ({
+                          value: tag.name,
+                          label: tag.name
+                        }))
+                    : []
+                }
+                onChange={this.handleTagOnChange}
+                value={[]}
+              />
+            </div>
+          )}
           <CommentBox
             initialValue={this.props.comment}
             annotationId={this.props.id}
+            commentId={this.props.id}
             onSubmit={this.handleSubmitEditedComment}
             onCancel={this.onClose}
           />

@@ -8,7 +8,8 @@ import {
   initiateReplyToAnnotation,
   cancelReplyToAnnotation,
   upvoteAnnotation,
-  verifyAnnotationAsAdmin
+  verifyAnnotationAsAdmin,
+  editAnnotationComment
 } from "../../data/annotations/actions";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
@@ -45,6 +46,7 @@ function renderSidebarWithSelectedText(props) {
     cancelReplyToAnnotation,
     verifyAnnotationAsAdmin,
     upvoteAnnotation,
+    editAnnotationComment,
     loadModal,
     notify,
     userEmail,
@@ -65,6 +67,7 @@ function renderSidebarWithSelectedText(props) {
             cancelReplyToItem={cancelReplyToAnnotation}
             verifyItemAsAdmin={verifyAnnotationAsAdmin}
             upvoteItem={upvoteAnnotation}
+            editItem={editAnnotationComment}
             loadModal={loadModal}
             notify={notify}
             userEmail={userEmail}
@@ -87,6 +90,7 @@ function renderSidebarWithAllAnnotations(props) {
     cancelReplyToAnnotation,
     verifyAnnotationAsAdmin,
     upvoteAnnotation,
+    editAnnotationComment,
     loadModal,
     notify,
     userEmail,
@@ -115,6 +119,7 @@ function renderSidebarWithAllAnnotations(props) {
             cancelReplyToItem={cancelReplyToAnnotation}
             verifyItemAsAdmin={verifyAnnotationAsAdmin}
             upvoteItem={upvoteAnnotation}
+            editItem={editAnnotationComment}
             loadModal={loadModal}
             notify={notify}
             userEmail={userEmail}
@@ -139,6 +144,7 @@ const actions = {
   cancelReplyToAnnotation,
   verifyAnnotationAsAdmin,
   upvoteAnnotation,
+  editAnnotationComment,
   loadModal,
   notify
 };

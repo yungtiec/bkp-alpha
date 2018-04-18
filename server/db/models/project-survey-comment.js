@@ -25,7 +25,11 @@ const ProjectSurveyComment = db.define(
 
 ProjectSurveyComment.findCommentsByProjectSurveyId = function(projectSurvetId) {
   return ProjectSurveyComment.findAll({
-    where: { project_survey_id: projectSurvetId },
+    where: {
+      project_survey_id: projectSurvetId,
+      parentId: null,
+      reviewed: { [Sequelize.Op.ne]: "spam" }
+    },
     include: [
       {
         model: db.model("user"),

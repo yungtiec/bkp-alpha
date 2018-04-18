@@ -9,6 +9,7 @@ import {
   filter
 } from "lodash";
 import * as types from "./actionTypes";
+import { findItemInTreeById } from "../utils";
 import moment from "moment";
 
 const initialState = {
@@ -18,8 +19,160 @@ const initialState = {
 
 const sortFns = {
   timestamp: sortCommentsByTimestamp,
-  upvotes: sortCommentsByUpvotes,
+  upvotes: sortCommentsByUpvotes
 };
+
+function addNewCommentSentFromServer({ state, comment }) {
+  state.commentsById[comment.id] = comment;
+  state.commentIds = keys(state.commentsById);
+  return state;
+}
+
+function removeEmptyCommentFromHierarchy({ state, accessors, parent }) {
+  const rootComment = state.commentsById[accessors[0]];
+  const anscestors = accessors.slice(1);
+  if (!anscestors.length) {
+    state.commentsById[accessors[0]].children = state.commentsById[
+      accessors[0]
+    ].children.filter(child => !isEmpty(child));
+  } else {
+    var current = rootComment;
+    anscestors.filter(a => a).forEach(aid => {
+      current = find(current.children, a => a.id === aid);
+    });
+    current.children = current.children.filter(child => !isEmpty(child));
+  }
+  return state;
+}
+
+function addEmptyCommentToHierarchy({ state, accessors, parent }) {
+  const rootComment = state.commentsById[accessors[0]];
+  const anscestors = accessors.slice(1);
+  if (!anscestors.length) {
+    // add empty annotation to root annotation
+    if (!state.commentsById[accessors[0]].children)
+      state.commentsById[accessors[0]].children = [];
+    state.commentsById[accessors[0]].children.push({});
+  } else {
+    var current = rootComment;
+    anscestors.forEach(aid => {
+      current = find(current.children, a => a.id === aid);
+    });
+    if (!current.children) current.children = [];
+    // add empty annotation to parent
+    current.children.push({});
+  }
+  return state;
+}
+
+function reviewComment({ state, commentId, reviewed }) {
+  var target;
+  if (state.commentsById[commentId]) {
+    // itself is root
+    state.commentsById[commentId].reviewed = reviewed;
+  } else {
+    // its descendant(reply) to another annotation
+    target = findItemInTreeById(values(state.commentsById), commentId);
+    target.reviewed = reviewed;
+  }
+  return state;
+}
+
+function updateUpvotesForComment({ state, commentId, upvotesFrom }) {
+  var target;
+  if (state.commentsById[commentId]) {
+    // itself is root
+    state.commentsById[commentId].upvotesFrom = upvotesFrom;
+  } else {
+    // its descendant(reply) to another annotation
+    target = findItemInTreeById(values(state.commentsById), commentId);
+    target.upvotesFrom = upvotesFrom;
+  }
+  return state;
+}
+
+export default function reduce(state = initialState, action = {}) {
+  switch (action.type) {
+    case types.COMMENTS_FETCH_SUCCESS:
+      return {
+        commentsById: action.commentsById,
+        commentIds: keys(action.commentsById)
+      };
+    case types.COMMENT_REPLY_INIT:
+      return addEmptyCommentToHierarchy({
+        state: cloneDeep(state),
+        accessors: action.accessors,
+        parent: action.parent
+      });
+    case types.COMMENT_REPLY_CANCEL:
+      return removeEmptyCommentFromHierarchy({
+        state: cloneDeep(state),
+        accessors: action.accessors,
+        parent: action.parent
+      });
+    case types.COMMENT_ADDED:
+      return addNewCommentSentFromServer({
+        state: cloneDeep(state),
+        comment: action.comment
+      });
+    case types.COMMENT_UPDATED:
+      return addNewCommentSentFromServer({
+        state: cloneDeep(state),
+        comment: action.rootComment
+      });
+    case types.COMMENT_UPVOTED:
+      return updateUpvotesForComment({
+        state: cloneDeep(state),
+        commentId: action.commentId,
+        upvotesFrom: action.upvotesFrom
+      });
+    case types.COMMENT_VERIFIED:
+      return reviewComment({
+        state: cloneDeep(state),
+        commentId: action.commentId,
+        reviewed: action.reviewed
+      });
+    default:
+      return state;
+  }
+}
+
+export function getAllComments(state) {
+  const verificationStatus =
+    state.scenes.project.scenes.survey.verificationStatus;
+  const sortFn = sortFns[state.scenes.project.scenes.survey.commentSortBy];
+  var {
+    commentIds,
+    commentsById
+  } = state.scenes.project.scenes.survey.data.comments;
+  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
+  const commentCollection = values(commentsById).map(comment => {
+    return assignIn({ unix: moment(comment.createdAt).format("X") }, comment);
+  });
+  var sortedComments = sortFn(commentCollection);
+  var sortedCommentIds = sortedComments.map(a => a.id);
+  var filteredCommentIds = filterByTags({
+    tagFilter,
+    commentIds: sortedCommentIds,
+    commentsById
+  });
+  if (verificationStatus === "all") {
+    return {
+      unfilteredCommentIds: sortedCommentIds,
+      commentIds: filteredCommentIds,
+      commentsById
+    };
+  } else {
+    filteredCommentIds = filteredCommentIds.filter(
+      aid => commentsById[aid].reviewed === verificationStatus
+    );
+    return {
+      commentIds: filteredCommentIds,
+      commentsById,
+      unfilteredCommentIds: sortedCommentIds
+    };
+  }
+}
 
 function sortCommentsByTimestamp(commentCollection) {
   return orderBy(
@@ -47,70 +200,4 @@ function filterByTags({ tagFilter, commentsById, commentIds }) {
       );
     }, false);
   });
-}
-
-function addNewCommentSentFromServer({ state, comment }) {
-  state.commentsById[comment.id] = comment;
-  state.commentIds = keys(state.commentsById);
-  return state;
-}
-
-export default function reduce(state = initialState, action = {}) {
-  var sortedAnnotations, annotationIds;
-  switch (action.type) {
-    case types.COMMENTS_FETCH_SUCCESS:
-      return {
-        commentsById: action.commentsById,
-        commentIds: keys(action.commentsById)
-      };
-
-    case types.COMMENT_ADDED:
-      return addNewCommentSentFromServer({
-        state: cloneDeep(state),
-        comment: action.comment
-      });
-
-    default:
-      return state;
-  }
-}
-
-export function getAllComments(state) {
-  const verificationStatus =
-    state.scenes.project.scenes.survey.verificationStatus;
-  const sortFn = sortFns[state.scenes.project.scenes.survey.commentSortBy];
-  var {
-    commentIds,
-    commentsById
-  } = state.scenes.project.scenes.survey.data.comments;
-  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
-  const commentCollection = values(commentsById).map(comment => {
-    return assignIn(
-      { unix: moment(comment.createdAt).format("X") },
-      comment
-    );
-  });
-  var sortedComments = sortFn(commentCollection);
-  var sortedCommentIds = sortedComments.map(a => a.id);
-  var filteredCommentIds = filterByTags({
-    tagFilter,
-    commentIds: sortedCommentIds,
-    commentsById
-  });
-  if (verificationStatus === "all") {
-    return {
-      unfilteredCommentIds: sortedCommentIds,
-      commentIds: filteredCommentIds,
-      commentsById
-    };
-  } else {
-    filteredCommentIds = filteredCommentIds.filter(
-      aid => commentsById[aid].reviewed === verificationStatus
-    );
-    return {
-      commentIds: filteredCommentIds,
-      commentsById,
-      unfilteredCommentIds: sortedCommentIds
-    };
-  }
 }

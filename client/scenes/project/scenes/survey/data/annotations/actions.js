@@ -2,11 +2,11 @@ import {
   getAnnotationsBySurvey,
   postReplyToAnnotation,
   postUpvoteToAnnotation,
-  postUpdatedCommentToAnnotation,
+  updateAnnotationComment,
   postPendingAnnotationStatus
 } from "./service";
 import { getAllTags } from "../tags/service";
-import { findAnnotationInTreeById } from "./reducer";
+import { findItemInTreeById } from "../utils";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";
@@ -39,7 +39,7 @@ export const initiateReplyToAnnotation = ({ accessors, parent }) => {
       annotationsById
     } = getState().scenes.project.scenes.survey.data.annotations;
     const ancestorIsSpam = accessors
-      .map(aid => findAnnotationInTreeById(values(annotationsById), aid))
+      .map(aid => findItemInTreeById(values(annotationsById), aid))
       .reduce((bool, item) => item.reviewed === "spam" || bool, false);
 
     if (!ancestorIsSpam)
@@ -84,16 +84,17 @@ export const replyToAnnotation = ({ parentId, comment }) => {
   };
 };
 
-export const upvoteAnnotation = ({ annotationId, hasUpvoted }) => {
+export const upvoteAnnotation = ({ itemId, hasUpvoted }) => {
   return async dispatch => {
     try {
-      const rootAnnotation = await postUpvoteToAnnotation({
-        annotationId,
+      const { annotationId, upvotesFrom } = await postUpvoteToAnnotation({
+        annotationId: itemId,
         hasUpvoted
       });
       dispatch({
         type: types.ANNOTATION_UPVOTED,
-        rootAnnotation
+        annotationId,
+        upvotesFrom
       });
     } catch (err) {
       console.log(err);
@@ -104,7 +105,7 @@ export const upvoteAnnotation = ({ annotationId, hasUpvoted }) => {
 export const editAnnotationComment = ({ annotationId, comment }) => {
   return async dispatch => {
     try {
-      const rootAnnotation = await postUpdatedCommentToAnnotation({
+      const rootAnnotation = await updateAnnotationComment({
         annotationId,
         comment
       });

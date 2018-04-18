@@ -4,7 +4,15 @@ import { connect } from "react-redux";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
 import { CommentBox, AnnotationItem } from "../index";
-import { addNewComment } from "../../data/comments/actions";
+import {
+  addNewComment,
+  initiateReplyToComment,
+  cancelReplyToComment,
+  replyToComment,
+  upvoteComment,
+  verifyCommentAsAdmin,
+  editComment
+} from "../../data/comments/actions";
 
 const SidebarPageComments = props => {
   const {
@@ -13,11 +21,17 @@ const SidebarPageComments = props => {
     parent,
     engagementTab,
     loadModal,
+    editComment,
     notify,
     userEmail,
     admin,
     addNewComment,
-    projectSurveyId
+    projectSurveyId,
+    initiateReplyToComment,
+    cancelReplyToComment,
+    replyToComment,
+    upvoteComment,
+    verifyCommentAsAdmin
   } = props;
 
   return (
@@ -43,12 +57,13 @@ const SidebarPageComments = props => {
             annotation={commentsById[id]}
             ref={el => (parent[`comment-${id}`] = el)}
             engagementTab={engagementTab}
-            replyToItem={() => {}}
-            initiateReplyToItem={() => {}}
-            cancelReplyToItem={() => {}}
-            verifyItemAsAdmin={() => {}}
-            upvoteItem={() => {}}
-            loadModal={() => {}}
+            replyToItem={replyToComment}
+            initiateReplyToItem={initiateReplyToComment}
+            cancelReplyToItem={cancelReplyToComment}
+            verifyItemAsAdmin={verifyCommentAsAdmin}
+            upvoteItem={upvoteComment}
+            editItem={editComment}
+            loadModal={loadModal}
             notify={notify}
             userEmail={userEmail}
             admin={admin}
@@ -69,7 +84,14 @@ const mapState = (state, ownProps) => ({
 const actions = {
   loadModal,
   notify,
-  addNewComment
+  addNewComment,
+  initiateReplyToComment,
+  cancelReplyToComment,
+  replyToComment,
+  upvoteComment,
+  verifyCommentAsAdmin,
+  editComment,
+  loadModal
 };
 
 export default connect(mapState, actions)(SidebarPageComments);

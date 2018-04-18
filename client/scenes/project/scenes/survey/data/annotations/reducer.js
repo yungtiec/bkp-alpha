@@ -12,6 +12,7 @@ import {
 } from "lodash";
 import * as types from "./actionTypes";
 import moment from "moment";
+import { findItemInTreeById } from "../utils";
 
 const initialState = {
   annotationsById: {},
@@ -74,11 +75,21 @@ function reviewAnnotation({ state, annotationId, reviewed }) {
     state.annotationsById[annotationId].reviewed = reviewed;
   } else {
     // its descendant(reply) to another annotation
-    target = findAnnotationInTreeById(
-      values(state.annotationsById),
-      annotationId
-    );
+    target = findItemInTreeById(values(state.annotationsById), annotationId);
     target.reviewed = reviewed;
+  }
+  return state;
+}
+
+function updateUpvotesForAnnotation({ state, annotationId, upvotesFrom }) {
+  var target;
+  if (state.annotationsById[annotationId]) {
+    // itself is root
+    state.annotationsById[annotationId].upvotesFrom = upvotesFrom;
+  } else {
+    // its descendant(reply) to another annotation
+    target = findItemInTreeById(values(state.annotationsById), annotationId);
+    target.upvotesFrom = upvotesFrom;
   }
   return state;
 }
@@ -94,7 +105,6 @@ function addTagToAnnotation({ state, annotation }) {
 }
 
 export default function reduce(state = initialState, action = {}) {
-  var sortedAnnotations, annotationIds;
   switch (action.type) {
     case types.ANNOTATIONS_FETCH_SUCCESS:
       return {
@@ -119,10 +129,15 @@ export default function reduce(state = initialState, action = {}) {
         annotation: action.annotation
       });
     case types.ANNOTATION_UPDATED:
-    case types.ANNOTATION_UPVOTED:
       return addNewAnnotationSentFromServer({
         state: cloneDeep(state),
         annotation: action.rootAnnotation
+      });
+    case types.ANNOTATION_UPVOTED:
+      return updateUpvotesForAnnotation({
+        state: cloneDeep(state),
+        annotationId: action.annotationId,
+        upvotesFrom: action.upvotesFrom
       });
     case types.ANNOTATION_VERIFIED:
       return reviewAnnotation({
@@ -151,7 +166,6 @@ export default function reduce(state = initialState, action = {}) {
  *
  */
 
-
 function filterByTags({ tagFilter, annotationsById, annotationIds }) {
   var tagFilterArray = keys(tagFilter).filter(tag => tagFilter[tag]);
   if (!tagFilterArray.length) return annotationIds;
@@ -169,7 +183,6 @@ function filterByTags({ tagFilter, annotationsById, annotationIds }) {
  * sort fns
  *
  */
-
 
 function sortAnnotationsByPosition(annotationCollection) {
   if (!annotationCollection.length) return [];
@@ -239,7 +252,6 @@ function splitRangePath(path) {
  *
  */
 
-
 export function getAllAnnotations(state) {
   const verificationStatus =
     state.scenes.project.scenes.survey.verificationStatus;
@@ -286,32 +298,4 @@ export function getAllAnnotations(state) {
       unfilteredAnnotationIds: sortedAnnotationIds
     };
   }
-}
-
-/**
- *
- * utility fns
- *
- */
-
-export function findAnnotationInTreeById(annotationCollection, targetId) {
-  if (find(annotationCollection, a => a.id === targetId)) {
-    return find(annotationCollection, a => a.id === targetId);
-  }
-  var result, aid;
-  for (var i = 0; i < annotationCollection.length; i++) {
-    if (
-      annotationCollection[i].children &&
-      annotationCollection[i].children.length
-    ) {
-      result = findAnnotationInTreeById(
-        annotationCollection[i].children,
-        targetId
-      );
-      if (result) {
-        return result;
-      }
-    }
-  }
-  return result;
 }
