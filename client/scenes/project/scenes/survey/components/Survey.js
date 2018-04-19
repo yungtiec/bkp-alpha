@@ -194,6 +194,7 @@ export default class Survey extends Component {
                   commentIds={commentIds}
                   commentsById={commentsById}
                   parent={this}
+                  tags={tags}
                 />
               )}
             </Element>

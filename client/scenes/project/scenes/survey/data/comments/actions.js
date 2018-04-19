@@ -26,10 +26,10 @@ export const fetchCommentsBySurvey = projectSurveyId => {
   };
 };
 
-export const addNewComment = ({ projectSurveyId, comment }) => {
+export const addNewComment = ({ projectSurveyId, comment, tags }) => {
   return async dispatch => {
     try {
-      const postedComment = await postComment({ projectSurveyId, comment });
+      const postedComment = await postComment({ projectSurveyId, comment, tags });
       dispatch({
         type: types.COMMENT_ADDED,
         comment: postedComment
@@ -109,12 +109,13 @@ export const upvoteComment = ({ itemId, hasUpvoted }) => {
   };
 };
 
-export const editComment = ({ commentId, comment }) => {
+export const editComment = ({ commentId, comment, tags}) => {
   return async dispatch => {
     try {
       const rootComment = await updateComment({
         commentId,
-        comment
+        comment,
+        tags
       });
       dispatch({
         type: types.COMMENT_UPDATED,

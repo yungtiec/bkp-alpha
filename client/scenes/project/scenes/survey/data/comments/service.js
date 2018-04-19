@@ -10,9 +10,9 @@ export function getCommentsBySurvey(projectSurveyId) {
     .then(res => res.data);
 }
 
-export function postComment({ projectSurveyId, comment }) {
+export function postComment({ projectSurveyId, comment, tags }) {
   return axios
-    .post("/api/survey/comment", { projectSurveyId, comment })
+    .post("/api/survey/comment", { projectSurveyId, comment, tags })
     .then(res => res.data);
 }
 
@@ -28,9 +28,9 @@ export function postUpvoteToComment({ commentId, hasUpvoted }) {
     .then(res => res.data);
 }
 
-export function updateComment({ commentId, comment }) {
+export function updateComment({ commentId, comment, tags }) {
   return axios
-    .post("/api/survey/comment/edit", { commentId, comment })
+    .post("/api/survey/comment/edit", { commentId, comment, tags })
     .then(res => res.data);
 }
 

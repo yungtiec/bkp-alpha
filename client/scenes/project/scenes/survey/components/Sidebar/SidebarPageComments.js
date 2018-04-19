@@ -3,7 +3,7 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
-import { CommentBox, AnnotationItem } from "../index";
+import { CommentBoxWithTagField, AnnotationItem } from "../index";
 import {
   addNewComment,
   initiateReplyToComment,
@@ -16,6 +16,7 @@ import {
 
 const SidebarPageComments = props => {
   const {
+    tags,
     commentIds,
     commentsById,
     parent,
@@ -36,15 +37,17 @@ const SidebarPageComments = props => {
 
   return (
     <div>
-      <div className="annotation-item">
+      <div className="annotation-item page-comment">
         <div className="annotation-item__main">
           <div className="annotation-item__header">
             <p>Leave a comment?</p>
           </div>
         </div>
-        <CommentBox
-          projectSurveyId={projectSurveyId}
+        <CommentBoxWithTagField
+          tags={tags}
+          selectedTags={[]}
           initialValue=""
+          projectSurveyId={projectSurveyId}
           onSubmit={addNewComment}
           onCancel={null}
         />

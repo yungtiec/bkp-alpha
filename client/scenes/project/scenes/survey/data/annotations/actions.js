@@ -102,12 +102,13 @@ export const upvoteAnnotation = ({ itemId, hasUpvoted }) => {
   };
 };
 
-export const editAnnotationComment = ({ annotationId, comment }) => {
+export const editAnnotationComment = ({ annotationId, comment, tags }) => {
   return async dispatch => {
     try {
       const rootAnnotation = await updateAnnotationComment({
         annotationId,
-        comment
+        comment,
+        tags
       });
       dispatch({
         type: types.ANNOTATION_UPDATED,

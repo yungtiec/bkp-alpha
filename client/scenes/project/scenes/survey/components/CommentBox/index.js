@@ -14,14 +14,15 @@ export default class CommentBox extends Component {
   }
 
   handleSubmit(event) {
-    if (this.state.value)
+    if (this.state.value) {
       this.props.onSubmit({
-        projectSurveyId: this.props.projectSurveyId,
-        commentId: this.props.commentId,
-        annotationId: this.props.annotationId,
-        parentId: this.props.parentId,
+        ...this.props,
         comment: this.state.value
       });
+      this.setState({
+        value: ""
+      });
+    }
   }
 
   render() {
@@ -34,9 +35,13 @@ export default class CommentBox extends Component {
           onChange={this.handleChange}
         />
         <div className="comment-box__actions">
-          <button onClick={this.handleSubmit}>save</button>
+          <button className="btn" onClick={this.handleSubmit}>
+            save
+          </button>
           {this.props.onCancel && (
-            <button onClick={this.props.onCancel}>cancel</button>
+            <button className="btn" onClick={this.props.onCancel}>
+              cancel
+            </button>
           )}
         </div>
       </div>

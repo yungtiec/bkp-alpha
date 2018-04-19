@@ -26,3 +26,11 @@
 .comment-box__actions button {
   margin-left: 3px;
 }
+
+.annotation-item.page-comment .comment-box {
+  margin-left: 0px;
+}
+
+.annotation-item__edit .comment-box {
+  margin-left: 0;
+}

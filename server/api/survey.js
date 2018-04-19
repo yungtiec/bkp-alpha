@@ -28,7 +28,15 @@ router.post("/comment", ensureAuthentication, async (req, res, next) => {
       owner_id: req.user.id,
       project_survey_id: Number(req.body.projectSurveyId),
       comment: req.body.comment
-    }).then(c => ProjectSurveyComment.findOneThreadByRootId(c.id));
+    }).then(comment => {
+      return Promise.map(req.body.tags, async addedTag => {
+        const [tag, created] = await Tag.findOrCreate({
+          where: { name: addedTag.name },
+          default: { name: addedTag.name }
+        });
+        return comment.addTag(tag.id);
+      }).then(() => ProjectSurveyComment.findOneThreadByRootId(comment.id));
+    });
     res.send(comment);
   } catch (err) {
     next(err);
@@ -101,12 +109,35 @@ router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
           model: User,
           as: "owner",
           attributes: ["first_name", "last_name", "email"]
+        },
+        {
+          model: db.model("tag"),
+          attributes: ["name", "id"]
         }
       ]
     });
+    var prevTags = comment.tags;
+    var removedTags = prevTags.filter(function(prevTag) {
+      return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
+    });
+    var addedTags = req.body.tags.filter(tag => {
+      return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
+    });
+    var removedTagPromises, addedTagPromises;
     if (comment.owner.email !== req.user.email) res.sendStatus(401);
     else {
       comment = await comment.update({ comment: req.body.comment });
+      removedTagPromises = Promise.map(removedTags, tag =>
+        comment.removeTag(tag.id)
+      );
+      addedTagPromises = Promise.map(addedTags, async addedTag => {
+        const [tag, created] = await Tag.findOrCreate({
+          where: { name: addedTag.name },
+          default: { name: addedTag.name }
+        });
+        return comment.addTag(tag.id);
+      });
+      await Promise.all([removedTagPromises, addedTagPromises]);
       const ancestors = await comment.getAncestors({
         raw: true
       });

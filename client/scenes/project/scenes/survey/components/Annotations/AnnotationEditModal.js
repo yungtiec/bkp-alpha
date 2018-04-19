@@ -6,7 +6,8 @@ import { hideModal } from "../../../../../../data/reducer";
 import { editAnnotationComment } from "../../data/annotations/actions";
 import { removeTag, addTag } from "../../data/tags/actions";
 import { getAllTags } from "../../data/tags/reducer";
-import { CommentBox } from "../index";
+import { CommentBox, CommentBoxWithTagField } from "../index";
+import { TagChip } from "../../../../../../components";
 import Select from "react-select";
 
 class AnnotationEditModal extends Component {
@@ -40,62 +41,12 @@ class AnnotationEditModal extends Component {
         contentLabel="Annotation Edit Modal"
       >
         <div className="annotation-item__edit">
-          <p>Edit your comment</p>
-          <hr className="my-4" />
-          <p className="annotation-item__quote">{this.props.quote}</p>
-          <div className="annotation-item__tags">
-            {this.props.engagementTab === "annotations" &&
-            this.props.tags &&
-            this.props.tags.length
-              ? this.props.tags.map(tag => (
-                  <button
-                    key={`annotation-tag__${tag.name}`}
-                    type="button"
-                    className="btn btn-light"
-                  >
-                    {tag.name}
-                    <span
-                      className="badge badge-danger"
-                      onClick={() =>
-                        this.props.removeTag({
-                          annotationId: this.props.id,
-                          tagId: tag.id
-                        })
-                      }
-                    >
-                      x
-                    </span>
-                  </button>
-                ))
-              : ""}
-          </div>
-          {this.props.engagementTab === "annotations" && (
-            <div className="d-flex">
-              <label>add tag(s)</label>
-              <Select.Creatable
-                multi={true}
-                placeholder="Enter tag here"
-                options={
-                  this.props.tags
-                    ? this.props.availableTags
-                        .filter(
-                          tag =>
-                            this.props.tags
-                              .map(t => t.name)
-                              .indexOf(tag.name) === -1
-                        )
-                        .map(tag => ({
-                          value: tag.name,
-                          label: tag.name
-                        }))
-                    : []
-                }
-                onChange={this.handleTagOnChange}
-                value={[]}
-              />
-            </div>
-          )}
-          <CommentBox
+          <h5>Your annotation/comment</h5>
+          <hr className="my-2" />
+          <p className="annotation-item__quote mt-4">{this.props.quote}</p>
+          <CommentBoxWithTagField
+            tags={this.props.availableTags}
+            selectedTags={this.props.tags}
             initialValue={this.props.comment}
             annotationId={this.props.id}
             commentId={this.props.id}
@@ -122,3 +73,12 @@ const actions = {
 };
 
 export default connect(mapState, actions)(AnnotationEditModal);
+
+<span
+  class="Select-value-label"
+  role="option"
+  aria-selected="true"
+  id="react-select-3--value-0"
+>
+  tag (3)<span class="Select-aria-only">&nbsp;</span>
+</span>;

@@ -10,6 +10,10 @@ export { default as SidebarPageComments } from "./Sidebar/SidebarPageComments";
 
 export { default as AnnotationItem } from "./Annotations/AnnotationItem";
 export { default as CommentBox } from "./CommentBox";
-export { default as AnnotationEditModal } from "./Annotations/AnnotationEditModal";
+export {
+  default as CommentBoxWithTagField
+} from "./CommentBox/CommentBoxWithTagField";
+export {
+  default as AnnotationEditModal
+} from "./Annotations/AnnotationEditModal";
 export { default as SurveyBody } from "./SurveyBody";
-
