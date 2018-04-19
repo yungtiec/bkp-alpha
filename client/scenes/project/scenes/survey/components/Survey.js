@@ -144,6 +144,7 @@ export default class Survey extends Component {
           numAnnotations={annotationIds.length}
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
+          tags={tags}
           tagFilter={tagFilter}
           annotationOnClick={this.annotationOnClick}
           addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
