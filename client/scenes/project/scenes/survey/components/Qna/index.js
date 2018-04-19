@@ -67,9 +67,9 @@ class QnaBox extends Component {
       this.annotator = app;
       $(".annotator__tag-container").tagsInput({
         autocomplete_url: `/api/tag/autocomplete`,
-        defaultText: "add a tag",
-        height: "100px",
-        width: "300px",
+        defaultText: "add tag(s)",
+        height: "70px",
+        width: "100%",
         interactive: true,
         'delimiter': [' '],
       });
