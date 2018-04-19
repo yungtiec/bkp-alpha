@@ -14,6 +14,7 @@ export default ({
   annotationOnClick,
   handlePollData,
   parent,
+  tags,
   tagFilter,
   addNewAnnotationSentFromServer
 }) => (
@@ -32,6 +33,7 @@ export default ({
             isLoggedIn={isLoggedIn}
             pollData={handlePollData}
             numAnnotations={numAnnotations}
+            tags={tags}
             tagFilter={tagFilter}
             addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
           >

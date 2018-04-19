@@ -1,4 +1,5 @@
 var webpack = require("webpack");
+var path = require("path");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 const isDev = process.env.NODE_ENV === "development";
 require("image-webpack-loader");
@@ -13,6 +14,7 @@ module.exports = {
     filename: "./public/bundle.js"
   },
   devtool: "source-map",
+
   module: {
     rules: [
       {

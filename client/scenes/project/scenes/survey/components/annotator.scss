@@ -41,3 +41,27 @@
 .annotator-hl.annotation-selected {
   background: rgba(10, 142, 255, 0.3);
 }
+
+// jquery ui autocomplete for tag
+.ui-widget.ui-widget-content {
+  z-index: 100020;
+  height: 160px;
+  width: 285px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tagsinput div input {
+  width: 90px !important;
+  padding: 10px 3px !important;
+}
+
+.annotator-adder,
+.annotator-outer,
+.annotator-notice {
+  z-index: 100019;
+}
+
+.annotator-filter {
+  z-index: 100010;
+}
