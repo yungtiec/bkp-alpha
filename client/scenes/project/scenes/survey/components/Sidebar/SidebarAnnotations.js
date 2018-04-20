@@ -100,8 +100,9 @@ function renderSidebarWithAllAnnotations(props) {
   return annotationIds
     .filter(id => annotationsById[id].reviewed !== "spam")
     .map(id => (
-      <Element name={`annotation-${id}`}>
+      <Element key={`annotation-${id}__element`} name={`annotation-${id}`}>
         <ScrollLink
+          key={`annotation-${id}__scrolllink`}
           className={`annotation-${id}`}
           activeClass="active"
           to={`qna-${annotationsById[id].survey_question_id}`}

@@ -38,11 +38,13 @@ export default ({
             addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
           >
             <Question
+              key={`qna-${id}__question`}
               qnaId={id}
               question={surveyQnasById[id].question}
               handleAnnotationOnClick={annotationOnClick}
             />
             <Answers
+              key={`qna-${id}__answers`}
               qnaId={id}
               answers={surveyQnasById[id].survey_answers}
               handleAnnotationOnClick={annotationOnClick}

@@ -13,14 +13,17 @@ export default props => {
     );
   return (
     <div className="profile-subroute">
-      {keys(groupByUri).map(uri => {
+      {keys(groupByUri).map((uri, i) => {
         const annotations = groupByUri[uri];
         const uriFragments = uri.substring(window.origin.length + 1).split("/");
         const projectSymbol = uriFragments[1];
         const survey = `${uriFragments[2]} ${uriFragments[3]}`;
         const path = uri.replace(window.origin, "");
         return (
-          <div className="profile-annotation__uri">
+          <div
+            className="profile-annotation__uri"
+            key={`profile-annotation__uri-${i}`}
+          >
             <div>
               <ProjectSymbolBlueBox name={`${projectSymbol}`} />
               <span style={{ marginLeft: "5px" }}>{survey}</span>
@@ -32,6 +35,7 @@ export default props => {
                 path={path}
               >
                 <a
+                  key={`profile__annotation-main--${annotation.id}`}
                   className="see-in-context"
                   onClick={() =>
                     history.push(

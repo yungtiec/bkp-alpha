@@ -32,6 +32,7 @@ import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import { Survey } from "./components";
 import autoBind from "react-autobind";
 import asyncPoll from "react-async-poll";
+import { batchActions } from "redux-batched-actions";
 
 class SurveyContainer extends Component {
   constructor(props) {
@@ -40,14 +41,6 @@ class SurveyContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchQuestionsBySurveyId({
-      projectSymbol: this.props.match.url.split("/")[2],
-      surveyId: this.props.match.params.surveyId
-    });
-    this.props.fetchAnnotationsBySurvey(
-      `${window.origin}${this.props.match.url}`
-    );
-    this.props.fetchCommentsBySurvey(this.props.match.params.surveyId);
     Events.scrollEvent.register("begin", () => {});
     Events.scrollEvent.register("end", () => {});
     scrollSpy.update();
@@ -82,14 +75,16 @@ class SurveyContainer extends Component {
       prevSurveyId &&
       (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
     ) {
-      this.props.fetchQuestionsBySurveyId({
-        projectSymbol: nextProjectSymbol,
-        surveyId: nextProps.match.params.surveyId
-      });
-      this.props.fetchAnnotationsBySurvey(
-        `${window.origin}${nextProps.match.url}`
-      );
-      this.props.fetchCommentsBySurvey(this.props.match.params.surveyId);
+      batchActions([
+        this.props.fetchQuestionsBySurveyId({
+          projectSymbol: nextProjectSymbol,
+          surveyId: nextProps.match.params.surveyId
+        }),
+        this.props.fetchAnnotationsBySurvey(
+          `${window.origin}${nextProps.match.url}`
+        ),
+        this.props.fetchCommentsBySurvey(this.props.match.params.surveyId)
+      ]);
     }
   }
 
@@ -110,7 +105,12 @@ const mapState = (state, ownProps) => {
     state
   );
   const { width } = state.data.environment;
-  const { sidebarOpen, annotationSortBy, commentSortBy, engagementTab } = state.scenes.project.scenes.survey;
+  const {
+    sidebarOpen,
+    annotationSortBy,
+    commentSortBy,
+    engagementTab
+  } = state.scenes.project.scenes.survey;
   return {
     isLoggedIn: !!state.data.user.id,
     myUserId: state.data.user.id,

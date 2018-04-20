@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
+import { fetchUserProfile } from "./data/actions";
+import { getProfile } from "./data/reducer";
 
 const LoadableProfile = Loadable({
   loader: () => import("./main"),
@@ -12,11 +15,41 @@ const LoadableProfile = Loadable({
       margin="4px"
     />
   ),
+  render(loaded, props) {
+    let Profile = loaded.default;
+    return <Profile {...props} />;
+  },
   delay: 1000
 });
 
-export default class MyComponent extends React.Component {
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.loadInitialData();
+  }
+
   render() {
-    return <LoadableProfile />;
+    return <LoadableProfile {...this.props} />;
   }
 }
+
+const mapState = state => {
+  const { about, pastActions } = getProfile(state);
+  return {
+    about,
+    pastActions
+  };
+};
+
+const actions = dispatch => {
+  return {
+    loadInitialData() {
+      dispatch(fetchUserProfile());
+    }
+  };
+};
+
+export default connect(mapState, actions)(MyComponent);

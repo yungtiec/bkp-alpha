@@ -26,10 +26,6 @@ class AdminPanel extends Component {
     autoBind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchPendingAnnotations();
-  }
-
   labelAsNotSpam(annotationId) {
     this.props.verifyPendingAnnotation(annotationId, "verified");
   }
@@ -105,8 +101,8 @@ class AdminPanel extends Component {
   }
 }
 
-const mapState = state => {
-  const { annotationsById, annotationIds } = getPendingAnnotations(state);
+const mapState = (state, ownProps) => {
+  const { annotationsById, annotationIds } = ownProps;
   return {
     annotationsById,
     annotationIds

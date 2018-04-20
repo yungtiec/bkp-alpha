@@ -34,7 +34,11 @@ export default class Answers extends Component {
           >
             {answersById[id].answer}
             {answersById[id].link && (
-              <a target="_blank" href={answersById[id].link}>
+              <a
+                key={`qna-${qnaId}__answer-a-tag--${id}`}
+                target="_blank"
+                href={answersById[id].link}
+              >
                 {answersById[id].linkLabel}
               </a>
             )}

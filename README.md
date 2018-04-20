@@ -40,19 +40,27 @@
 
 [x] delete tags
 
-[ ] tooltip next to tabs explaining admin verification
-
-[ ] stock image for emty profile annotation and reply
-
 [x] filter by tag
 
 [x] edit tags
+
+[ ] refactor loadable
+  - admin page as example
+  - load bundle and data in one place
+
+[ ] tooltip next to tabs explaining admin verification
+
+[ ] stock image for emty profile annotation and reply
 
 [ ] general comment
   - (back-burner) higher order reducer and action creators for comment and annotations?? since their logics are so similar
   - unnecessary coupling?
 
 [ ] tag vote like slack reaction?
+
+[ ] rethink reply thread.
+  - reddit is not a good example!
+  - look up to facebook
 
 [ ] star(follow) project
 

@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
+import { fetchProjectBySymbol } from "./data/actions";
+import { getAllProjectSurveys } from "./data/surveys/reducer";
+import { getSelectedProject } from "./data/metadata/reducer";
+
 
 const LoadableProject = Loadable({
   loader: () => import("./main"),
@@ -12,11 +17,38 @@ const LoadableProject = Loadable({
       margin="4px"
     />
   ),
+  render(loaded, props) {
+    let Project = loaded.default;
+    return <Project {...props} />;
+  },
   delay: 1000
 });
 
-export default class MyComponent extends React.Component {
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchProjectBySymbol(this.props.match.params.symbol);
+  }
+
   render() {
-    return <LoadableProject />;
+    return <LoadableProject  {...this.props}/>;
   }
 }
+
+const mapState = state => {
+  const { projectSurveysById, projectSurveyIds } = getAllProjectSurveys(state);
+  return {
+    projectSurveysById,
+    projectSurveyIds,
+    metadata: getSelectedProject(state)
+  };
+};
+
+const actions = {
+  fetchProjectBySymbol
+};
+
+export default connect(mapState, actions)(MyComponent);
