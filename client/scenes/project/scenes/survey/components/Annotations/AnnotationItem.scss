@@ -117,14 +117,20 @@
   margin-right: 5px;
 }
 
-.annotation-item__tags .badge-light,
+.annotation-item__tags .badge,
 .annotation-item__tags button {
   margin-right: 5px;
   margin-bottom: 5px;
+  line-height: 1.25;
 }
 
-.annotation-item__tags .badge-danger {
-  margin-left: 5px;
+.annotation-item__tags .badge.issue {
+  cursor: pointer;
+}
+
+.annotation-item__tags .badge .fas {
+  font-size: 9px;
+  margin-left: 3px;
 }
 
 .annotation-item__tags {

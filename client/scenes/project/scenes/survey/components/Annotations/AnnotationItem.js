@@ -73,7 +73,7 @@ export default class AnnotationItem extends Component {
         })
       : this.promptLoginToast;
     const openModal = this.openModal.bind(null, annotation);
-
+    const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(null, annotation.id)
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -86,6 +86,24 @@ export default class AnnotationItem extends Component {
           <p className="annotation-item__quote">{annotation.quote}</p>
         )}
         <div className="annotation-item__tags">
+          {annotation.issue &&
+            (annotation.issue.open ? (
+              <span
+                key={`annotation-${annotation.id}__tag-issue--open`}
+                className="badge badge-danger issue"
+                onClick={changeItemIssueStatus}
+              >
+                issue:open
+                <i className="fas fa-times"></i>
+              </span>
+            ) : (
+              <span
+                key={`annotation-${annotation.id}__tag-issue--close`}
+                className="badge badge-light"
+              >
+                issue:close
+              </span>
+            ))}
           {annotation.tags && annotation.tags.length
             ? annotation.tags.map(tag => (
                 <span

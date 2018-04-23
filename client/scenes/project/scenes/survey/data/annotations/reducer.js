@@ -81,6 +81,14 @@ function reviewAnnotation({ state, annotationId, reviewed }) {
   return state;
 }
 
+function updateAnnotationIssueStatus({ state, annotationId, open }) {
+  if (!state.annotationsById[annotationId].issue) {
+    state.annotationsById[annotationId].issue = {};
+  }
+  state.annotationsById[annotationId].issue.open = open;
+  return state;
+}
+
 function updateUpvotesForAnnotation({ state, annotationId, upvotesFrom }) {
   var target;
   if (state.annotationsById[annotationId]) {
@@ -144,6 +152,12 @@ export default function reduce(state = initialState, action = {}) {
         state: cloneDeep(state),
         annotationId: action.annotationId,
         reviewed: action.reviewed
+      });
+    case types.ANNOTATION_ISSUE_UPDATED:
+      return updateAnnotationIssueStatus({
+        state: cloneDeep(state),
+        annotationId: action.annotationId,
+        open: action.open
       });
     case types.ANNOTATION_TAG_REMOVED:
       return removeTagFromAnnotation({

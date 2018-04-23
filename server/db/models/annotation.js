@@ -61,6 +61,10 @@ Annotation.getAnnotationsFromUrl = function(uri) {
         attributes: ["name", "id"]
       },
       {
+        model: db.model("issue"),
+        attributes: ["open", "id"]
+      },
+      {
         model: Annotation,
         where: {
           reviewed: {
@@ -107,6 +111,10 @@ Annotation.findOneThreadByRootId = function(id) {
       {
         model: db.model("tag"),
         attributes: ["name", "id"]
+      },
+      {
+        model: db.model("issue"),
+        attributes: ["open", "id"]
       },
       {
         model: Annotation,

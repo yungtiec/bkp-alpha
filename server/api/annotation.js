@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const db = require("../db");
-const { Annotation, User, Role, Tag } = require("../db/models");
+const { Annotation, User, Role, Tag, Issue } = require("../db/models");
 const _ = require("lodash");
 const { ensureAuthentication, ensureAdminRole } = require("./utils");
 Promise = require("bluebird");
@@ -182,6 +182,40 @@ router.post(
     try {
       var annotation = await Annotation.findById(req.body.annotationId);
       annotation.update({ reviewed: req.body.reviewed });
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/issue",
+  ensureAuthentication,
+  ensureAdminRole,
+  async (req, res, next) => {
+    try {
+      var annotation = await Annotation.findOne({
+        where: { id: req.body.annotationId },
+        include: [
+          {
+            model: Issue
+          }
+        ]
+      });
+      annotation.issue
+        ? await Issue.update(
+            {
+              open: req.body.open
+            },
+            {
+              where: { id: annotation.issue.id }
+            }
+          )
+        : await Issue.create({
+            open: req.body.open,
+            annotation_id: req.body.annotationId
+          });
       res.sendStatus(200);
     } catch (err) {
       next(err);

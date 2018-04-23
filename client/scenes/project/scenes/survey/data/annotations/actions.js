@@ -3,7 +3,8 @@ import {
   postReplyToAnnotation,
   postUpvoteToAnnotation,
   updateAnnotationComment,
-  postPendingAnnotationStatus
+  postPendingAnnotationStatus,
+  updateAnnotationIssueStatus
 } from "./service";
 import { getAllTags } from "../tags/service";
 import { findItemInTreeById } from "../utils";
@@ -146,7 +147,44 @@ export const verifyAnnotationAsAdmin = (annotationId, reviewed) => {
         reviewed
       });
     } catch (err) {
-      console.log(err);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+};
+
+export const changeAnnotationIssueStatus = annotationId => {
+  return async (dispatch, getState) => {
+    try {
+      const annotation = getState().scenes.project.scenes.survey.data
+        .annotations.annotationsById[annotationId];
+      const open = annotation.issue ? !annotation.issue.open : true;
+      await updateAnnotationIssueStatus({
+        annotationId,
+        open
+      });
+      dispatch({
+        type: types.ANNOTATION_ISSUE_UPDATED,
+        annotationId,
+        open
+      });
+    } catch (err) {
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
     }
   };
 };

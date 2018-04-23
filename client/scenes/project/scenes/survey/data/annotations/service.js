@@ -34,3 +34,10 @@ export function postPendingAnnotationStatus({ annotationId, reviewed }) {
     reviewed
   });
 }
+
+export function updateAnnotationIssueStatus({ annotationId, open }) {
+  return axios.post("/api/annotation/issue", {
+    annotationId,
+    open
+  });
+}
