@@ -5,6 +5,7 @@ const Role = require("./role");
 const Project = require("./project");
 const ProjectSurveyComment = require("./project-survey-comment");
 const Tag = require("./tag");
+const Issue = require("./issue");
 
 /*=============================================
 =            role based authorization         =
@@ -84,6 +85,15 @@ Annotation.belongsToMany(Tag, {
 /*=====  End of Annotation and Tag ========*/
 
 /*=============================================
+=            Annotation and Issue             =
+==============================================*/
+
+Annotation.hasOne(Issue);
+Issue.belongsTo(Annotation);
+
+/*=====  End of Annotation and Issue ========*/
+
+/*=============================================
 =            User and Page Comment              =
 ==============================================*/
 
@@ -120,6 +130,15 @@ ProjectSurveyComment.belongsToMany(Tag, {
 });
 
 /*=====  End of Page Comment  and Tag ========*/
+
+/*=============================================
+=            Page Comment and Issue             =
+==============================================*/
+
+ProjectSurveyComment.hasOne(Issue);
+Issue.belongsTo(ProjectSurveyComment);
+
+/*=====  End of Page Comment and Issue ========*/
 module.exports = {
   User,
   Annotation,
@@ -127,5 +146,6 @@ module.exports = {
   Role,
   Project,
   ProjectSurveyComment,
-  Tag
+  Tag,
+  Issue
 };

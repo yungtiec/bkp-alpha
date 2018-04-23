@@ -11,6 +11,7 @@ async function seed() {
 
 async function seedUser() {
   const users = await Promise.all([
+    User.create({ email: "tctammychu@gmail.com", password: "12345678" }),
     User.create({ email: "cody@email.com", password: "123" }),
     User.create({ email: "murphy@email.com", password: "123" })
   ]);
@@ -61,8 +62,8 @@ async function seedProject() {
   return Promise.map(
     [
       {
-        name: "hello coin",
-        symbol: "HC"
+        name: "Virtue Poker",
+        symbol: "VPP"
       },
       {
         name: "digital gold",

@@ -43,6 +43,7 @@ class QnaBox extends Component {
         .include(annotator.ui.main, {
           element: this[`qna-${qna.id}`],
           editorExtensions: [
+            annotator.ui.issue.editorExtension,
             annotator.ui.tags.editorExtension.bind(null, {
               class: "annotator__tag-container"
             })

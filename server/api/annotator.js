@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Annotation, Tag } = require("../db/models");
+const { Annotation, Tag, Issue } = require("../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication } = require("./utils");
 const { IncomingWebhook } = require("@slack/client");
@@ -10,20 +10,21 @@ module.exports = router;
 
 function sendNotificationToSlack(annotation) {
   // Send simple text to the webhook channel
-  webhook.send(
-    `Incoming annotation at ${annotation.uri}/question/${
-      annotation.survey_question_id
-    }/annotation/${
-      annotation.id
-    }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
-    function(err, res) {
-      if (err) {
-        console.log("Error:", err);
-      } else {
-        console.log("Message sent: ", res);
+  if (process.env.NODE_ENV === "production")
+    webhook.send(
+      `Incoming annotation at ${annotation.uri}/question/${
+        annotation.survey_question_id
+      }/annotation/${
+        annotation.id
+      }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
+      function(err, res) {
+        if (err) {
+          console.log("Error:", err);
+        } else {
+          console.log("Message sent: ", res);
+        }
       }
-    }
-  );
+    );
 }
 
 router.get("/", (req, res, next) => {
@@ -42,7 +43,8 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       uri,
       annotator_schema_version,
       survey_question_id,
-      tags
+      tags,
+      issue
     } = req.body;
     var newAnnotation = await Annotation.create({
       uri,
@@ -52,6 +54,12 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       ranges,
       annotator_schema_version
     });
+    const issuePromise = issue
+      ? Issue.create({
+          open: true,
+          annotationId: newAnnotation.id
+        })
+      : null;
     const tagPromises = Promise.map(tags, async tag => {
       const [tagInstance, created] = await Tag.findOrCreate({
         where: { name: tag }
@@ -59,8 +67,8 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       return newAnnotation.addTag(tagInstance.id);
     });
     const ownerPromise = newAnnotation.setOwner(req.user.id);
-    await Promise.all([tagPromises, ownerPromise]);
-    newAnnotation = await Annotation.findOneThreadByRootId(newAnnotation.id)
+    await Promise.all([tagPromises, ownerPromise, issuePromise]);
+    newAnnotation = await Annotation.findOneThreadByRootId(newAnnotation.id);
     sendNotificationToSlack(newAnnotation);
     res.send(newAnnotation);
   } catch (err) {
