@@ -11,6 +11,7 @@ import {
   replyToComment,
   upvoteComment,
   verifyCommentAsAdmin,
+  changeCommentIssueStatus,
   editComment
 } from "../../data/comments/actions";
 
@@ -32,7 +33,8 @@ const SidebarPageComments = props => {
     cancelReplyToComment,
     replyToComment,
     upvoteComment,
-    verifyCommentAsAdmin
+    verifyCommentAsAdmin,
+    changeCommentIssueStatus
   } = props;
 
   return (
@@ -64,6 +66,7 @@ const SidebarPageComments = props => {
             initiateReplyToItem={initiateReplyToComment}
             cancelReplyToItem={cancelReplyToComment}
             verifyItemAsAdmin={verifyCommentAsAdmin}
+            changeItemIssueStatus={changeCommentIssueStatus}
             upvoteItem={upvoteComment}
             editItem={editComment}
             loadModal={loadModal}
@@ -94,6 +97,7 @@ const actions = {
   upvoteComment,
   verifyCommentAsAdmin,
   editComment,
+  changeCommentIssueStatus,
   loadModal
 };
 

@@ -2,7 +2,11 @@ const router = require("express").Router();
 const db = require("../db");
 const { Annotation, User, Role, Tag, Issue } = require("../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("./utils");
+const {
+  ensureAuthentication,
+  ensureAdminRole,
+  ensureAdminRoleOrAnnotationOwnership
+} = require("./utils");
 Promise = require("bluebird");
 module.exports = router;
 
@@ -94,7 +98,7 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
     var addedTags = req.body.tags.filter(tag => {
       return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
     });
-    var removedTagPromises, addedTagPromises;
+    var removedTagPromises, addedTagPromises, issuePromise;
     if (annotation.owner.email !== req.user.email) res.sendStatus(401);
     else {
       annotation = await annotation.update({ comment: req.body.comment });
@@ -108,7 +112,18 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
         });
         return annotation.addTag(tag.id);
       });
-      await Promise.all([removedTagPromises, addedTagPromises]);
+      issuePromise =
+        "issueOpen" in req.body
+          ? Issue.findOrCreate({
+              defaults: {
+                open: req.body.issueOpen
+              },
+              where: { annotation_id: annotation.id }
+            }).spread((issue, created) => {
+              if (!created) issue.update({ open: req.body.issueOpen });
+            })
+          : null;
+      await Promise.all([removedTagPromises, addedTagPromises, issuePromise]);
       const ancestors = await annotation.getAncestors({
         raw: true
       });
@@ -192,7 +207,7 @@ router.post(
 router.post(
   "/issue",
   ensureAuthentication,
-  ensureAdminRole,
+  ensureAdminRoleOrAnnotationOwnership,
   async (req, res, next) => {
     try {
       var annotation = await Annotation.findOne({

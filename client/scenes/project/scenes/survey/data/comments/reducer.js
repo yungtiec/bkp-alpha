@@ -91,6 +91,14 @@ function updateUpvotesForComment({ state, commentId, upvotesFrom }) {
   return state;
 }
 
+function updateCommentIssueStatus({ state, commentId, open }) {
+  if (!state.commentsById[commentId].issue) {
+    state.commentsById[commentId].issue = {};
+  }
+  state.commentsById[commentId].issue.open = open;
+  return state;
+}
+
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
     case types.COMMENTS_FETCH_SUCCESS:
@@ -131,6 +139,12 @@ export default function reduce(state = initialState, action = {}) {
         state: cloneDeep(state),
         commentId: action.commentId,
         reviewed: action.reviewed
+      });
+    case types.COMMENT_ISSUE_UPDATED:
+      return updateCommentIssueStatus({
+        state: cloneDeep(state),
+        commentId: action.commentId,
+        open: action.open
       });
     default:
       return state;

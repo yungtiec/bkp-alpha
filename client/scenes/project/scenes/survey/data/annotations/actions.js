@@ -103,13 +103,19 @@ export const upvoteAnnotation = ({ itemId, hasUpvoted }) => {
   };
 };
 
-export const editAnnotationComment = ({ annotationId, comment, tags }) => {
+export const editAnnotationComment = ({
+  annotationId,
+  comment,
+  tags,
+  issueOpen
+}) => {
   return async dispatch => {
     try {
       const rootAnnotation = await updateAnnotationComment({
         annotationId,
         comment,
-        tags
+        tags,
+        issueOpen
       });
       dispatch({
         type: types.ANNOTATION_UPDATED,
@@ -165,7 +171,14 @@ export const changeAnnotationIssueStatus = annotationId => {
     try {
       const annotation = getState().scenes.project.scenes.survey.data
         .annotations.annotationsById[annotationId];
+      const user = getState().data.user;
+      if (
+        annotation.owner_id !== user.id &&
+        !user.roles.filter(r => r.name === "admin").length
+      )
+        return;
       const open = annotation.issue ? !annotation.issue.open : true;
+
       await updateAnnotationIssueStatus({
         annotationId,
         open

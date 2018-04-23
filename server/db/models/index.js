@@ -88,8 +88,12 @@ Annotation.belongsToMany(Tag, {
 =            Annotation and Issue             =
 ==============================================*/
 
-Annotation.hasOne(Issue);
-Issue.belongsTo(Annotation);
+Annotation.hasOne(Issue, {
+  foreignKey: "annotation_id"
+});
+Issue.belongsTo(Annotation, {
+  foreignKey: "annotation_id"
+});
 
 /*=====  End of Annotation and Issue ========*/
 
@@ -135,8 +139,12 @@ ProjectSurveyComment.belongsToMany(Tag, {
 =            Page Comment and Issue             =
 ==============================================*/
 
-ProjectSurveyComment.hasOne(Issue);
-Issue.belongsTo(ProjectSurveyComment);
+ProjectSurveyComment.hasOne(Issue, {
+  foreignKey: "project_survey_comment_id"
+});
+Issue.belongsTo(ProjectSurveyComment, {
+  foreignKey: "project_survey_comment_id"
+});
 
 /*=====  End of Page Comment and Issue ========*/
 module.exports = {

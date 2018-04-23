@@ -5,7 +5,8 @@ const {
   User,
   Role,
   Tag,
-  ProjectSurveyComment
+  ProjectSurveyComment,
+  Issue
 } = require("../db/models");
 const _ = require("lodash");
 const { ensureAuthentication, ensureAdminRole } = require("./utils");
@@ -28,15 +29,24 @@ router.post("/comment", ensureAuthentication, async (req, res, next) => {
       owner_id: req.user.id,
       project_survey_id: Number(req.body.projectSurveyId),
       comment: req.body.comment
-    }).then(comment => {
-      return Promise.map(req.body.tags, async addedTag => {
-        const [tag, created] = await Tag.findOrCreate({
-          where: { name: addedTag.name },
-          default: { name: addedTag.name }
-        });
-        return comment.addTag(tag.id);
-      }).then(() => ProjectSurveyComment.findOneThreadByRootId(comment.id));
-    });
+    })
+      .then(async comment => {
+        if (req.body.issueOpen)
+          await Issue.create({
+            open: true,
+            project_survey_comment_id: comment.id
+          });
+        return comment;
+      })
+      .then(comment => {
+        return Promise.map(req.body.tags, async addedTag => {
+          const [tag, created] = await Tag.findOrCreate({
+            where: { name: addedTag.name },
+            default: { name: addedTag.name }
+          });
+          return comment.addTag(tag.id);
+        }).then(() => ProjectSurveyComment.findOneThreadByRootId(comment.id));
+      });
     res.send(comment);
   } catch (err) {
     next(err);
@@ -123,7 +133,7 @@ router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
     var addedTags = req.body.tags.filter(tag => {
       return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
     });
-    var removedTagPromises, addedTagPromises;
+    var removedTagPromises, addedTagPromises, issuePromise;
     if (comment.owner.email !== req.user.email) res.sendStatus(401);
     else {
       comment = await comment.update({ comment: req.body.comment });
@@ -137,7 +147,18 @@ router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
         });
         return comment.addTag(tag.id);
       });
-      await Promise.all([removedTagPromises, addedTagPromises]);
+      issuePromise =
+        "issueOpen" in req.body
+          ? Issue.findOrCreate({
+              defaults: {
+                open: req.body.issueOpen
+              },
+              where: { project_survey_comment_id: comment.id }
+            }).spread((issue, created) => {
+              if (!created) issue.update({ open: req.body.issueOpen });
+            })
+          : null;
+      await Promise.all([removedTagPromises, addedTagPromises, issuePromise]);
       const ancestors = await comment.getAncestors({
         raw: true
       });
@@ -160,6 +181,40 @@ router.post(
     try {
       var comment = await ProjectSurveyComment.findById(req.body.commentId);
       comment.update({ reviewed: req.body.reviewed });
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/comment/issue",
+  ensureAuthentication,
+  ensureAdminRole,
+  async (req, res, next) => {
+    try {
+      var comment = await ProjectSurveyComment.findOne({
+        where: { id: req.body.commentId },
+        include: [
+          {
+            model: Issue
+          }
+        ]
+      });
+      comment.issue
+        ? await Issue.update(
+            {
+              open: req.body.open
+            },
+            {
+              where: { id: comment.issue.id }
+            }
+          )
+        : await Issue.create({
+            open: req.body.open,
+            project_survey_comment_id: req.body.commentId
+          });
       res.sendStatus(200);
     } catch (err) {
       next(err);

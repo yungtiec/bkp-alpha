@@ -81,6 +81,9 @@ export default class Survey extends Component {
     if (!this.props.sidebarOpen && annotations && annotations.length) {
       this.props.toggleSidebar();
     }
+    if (!this.props.engagementTab !== "annotations" && annotations && annotations.length) {
+      this.props.updateEngagementTabInView("annotations");
+    }
     if (annotations && annotations.length) {
       this.setState({
         focusQnaId: qnaId,

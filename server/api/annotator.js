@@ -57,7 +57,7 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
     const issuePromise = issue
       ? Issue.create({
           open: true,
-          annotationId: newAnnotation.id
+          annotation_id: newAnnotation.id
         })
       : null;
     const tagPromises = Promise.map(tags, async tag => {

@@ -41,6 +41,10 @@ ProjectSurveyComment.findCommentsByProjectSurveyId = function(projectSurvetId) {
         attributes: ["name", "id"]
       },
       {
+        model: db.model("issue"),
+        attributes: ["open", "id"]
+      },
+      {
         model: ProjectSurveyComment,
         where: {
           reviewed: {
@@ -87,6 +91,10 @@ ProjectSurveyComment.findOneThreadByRootId = function(id) {
       {
         model: db.model("tag"),
         attributes: ["name", "id"]
+      },
+      {
+        model: db.model("issue"),
+        attributes: ["open", "id"]
       },
       {
         model: ProjectSurveyComment,

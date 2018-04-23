@@ -1,13 +1,8 @@
 import "./TagChip.scss";
 import React from "react";
 
-export default ({
-  tagValue,
-  closeIconOnClick,
-  containerClassname,
-  containerKey
-}) => (
-  <div key={containerKey} className={containerClassname}>
+export default ({ tagValue, closeIconOnClick, containerClassname }) => (
+  <div className={containerClassname}>
     <span className="close-icon" onClick={closeIconOnClick}>
       x
     </span>

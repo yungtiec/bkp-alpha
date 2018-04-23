@@ -10,7 +10,8 @@ export default class CommentBoxWithTagField extends Component {
     autoBind(this);
     this.state = {
       tags: this.props.tags,
-      selectedTags: this.props.selectedTags
+      selectedTags: this.props.selectedTags,
+      issueOpen: this.props.issueOpen
     };
   }
 
@@ -28,6 +29,14 @@ export default class CommentBoxWithTagField extends Component {
     }
   }
 
+  handleIssueCheckboxChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    this.setState({
+      issueOpen: value
+    });
+  }
+
   handleTagCloseIconOnClick(index) {
     this.setState({
       selectedTags: this.state.selectedTags.filter((tag, i) => i !== index)
@@ -36,8 +45,16 @@ export default class CommentBoxWithTagField extends Component {
 
   handleSubmitEditedCommentAndTag(argObj) {
     const { onSubmit } = this.props;
-    const newArgObj = { ...argObj, tags: this.state.selectedTags };
+    const newArgObj = {
+      ...argObj,
+      tags: this.state.selectedTags,
+      issueOpen: this.state.issueOpen
+    };
     onSubmit(newArgObj);
+    this.setState({
+      selectedTags: [],
+      issueOpen: false
+    })
   }
 
   render() {
@@ -55,17 +72,29 @@ export default class CommentBoxWithTagField extends Component {
           onChange={this.handleTagOnChange}
           value={[]}
         />
-        <div className="annotation-item__tags mt-2  mb-4">
+        <div className="annotation-item__tags mt-2 mb-2">
           {this.state.selectedTags && this.state.selectedTags.length
             ? this.state.selectedTags.map((tag, index) => (
                 <TagChip
+                  key={`annotation-tag__${tag.name}`}
                   containerClassname="annotation-item__tag"
-                  containerKey={`annotation-tag__${tag.name}`}
                   tagValue={tag.name}
                   closeIconOnClick={() => this.handleTagCloseIconOnClick(index)}
                 />
               ))
             : ""}
+        </div>
+        <div className="mt-2 mb-4">
+          <p>
+            <input
+              className="mr-2"
+              name="engagement-item__issue-checkbox"
+              type="checkbox"
+              checked={this.state.issueOpen}
+              onChange={this.handleIssueCheckboxChange}
+            />
+            Open an issue?
+          </p>
         </div>
         <CommentBox
           {...otherProps}

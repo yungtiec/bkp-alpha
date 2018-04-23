@@ -4,7 +4,8 @@ import {
   postReplyToComment,
   postUpvoteToComment,
   updateComment,
-  postPendingCommentStatus
+  postPendingCommentStatus,
+  updateCommentIssueStatus
 } from "./service";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
@@ -26,10 +27,20 @@ export const fetchCommentsBySurvey = projectSurveyId => {
   };
 };
 
-export const addNewComment = ({ projectSurveyId, comment, tags }) => {
+export const addNewComment = ({
+  projectSurveyId,
+  comment,
+  tags,
+  issueOpen
+}) => {
   return async dispatch => {
     try {
-      const postedComment = await postComment({ projectSurveyId, comment, tags });
+      const postedComment = await postComment({
+        projectSurveyId,
+        comment,
+        tags,
+        issueOpen
+      });
       dispatch({
         type: types.COMMENT_ADDED,
         comment: postedComment
@@ -109,13 +120,14 @@ export const upvoteComment = ({ itemId, hasUpvoted }) => {
   };
 };
 
-export const editComment = ({ commentId, comment, tags}) => {
+export const editComment = ({ commentId, comment, tags, issueOpen }) => {
   return async dispatch => {
     try {
       const rootComment = await updateComment({
         commentId,
         comment,
-        tags
+        tags,
+        issueOpen
       });
       dispatch({
         type: types.COMMENT_UPDATED,
@@ -154,6 +166,41 @@ export const verifyCommentAsAdmin = (commentId, reviewed) => {
       });
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const changeCommentIssueStatus = commentId => {
+  return async (dispatch, getState) => {
+    try {
+      const comment = getState().scenes.project.scenes.survey.data.comments
+        .commentsById[commentId];
+      const user = getState().data.user;
+      if (
+        comment.owner_id !== user.id &&
+        !user.roles.filter(r => r.name === "admin").length
+      )
+        return;
+      const open = comment.issue ? !comment.issue.open : true;
+      await updateCommentIssueStatus({
+        commentId,
+        open
+      });
+      dispatch({
+        type: types.COMMENT_ISSUE_UPDATED,
+        commentId,
+        open
+      });
+    } catch (err) {
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
     }
   };
 };

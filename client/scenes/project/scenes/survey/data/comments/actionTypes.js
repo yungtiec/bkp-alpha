@@ -11,3 +11,5 @@ export const COMMENT_UPVOTED = "comments.COMMENT_UPVOTED";
 export const COMMENT_VERIFIED = "comments.COMMENT_VERIFIED";
 export const COMMENT_TAG_REMOVED = "comments.COMMENT_TAG_REMOVED";
 export const COMMENT_TAG_ADDED = "comments.COMMENT_TAG_ADDED";
+export const COMMENT_ISSUE_UPDATED = "comments.COMMENT_ISSUE_UPDATED";
+

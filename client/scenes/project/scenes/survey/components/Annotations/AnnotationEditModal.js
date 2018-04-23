@@ -45,6 +45,7 @@ class AnnotationEditModal extends Component {
           <hr className="my-2" />
           <p className="annotation-item__quote mt-4">{this.props.quote}</p>
           <CommentBoxWithTagField
+            issueOpen={this.props.issue ? this.props.issue.open : false}
             tags={this.props.availableTags}
             selectedTags={this.props.tags}
             initialValue={this.props.comment}

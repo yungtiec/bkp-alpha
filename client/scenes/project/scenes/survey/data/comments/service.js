@@ -10,9 +10,9 @@ export function getCommentsBySurvey(projectSurveyId) {
     .then(res => res.data);
 }
 
-export function postComment({ projectSurveyId, comment, tags }) {
+export function postComment({ projectSurveyId, comment, tags, issueOpen }) {
   return axios
-    .post("/api/survey/comment", { projectSurveyId, comment, tags })
+    .post("/api/survey/comment", { projectSurveyId, comment, tags, issueOpen })
     .then(res => res.data);
 }
 
@@ -28,9 +28,9 @@ export function postUpvoteToComment({ commentId, hasUpvoted }) {
     .then(res => res.data);
 }
 
-export function updateComment({ commentId, comment, tags }) {
+export function updateComment({ commentId, comment, tags, issueOpen }) {
   return axios
-    .post("/api/survey/comment/edit", { commentId, comment, tags })
+    .post("/api/survey/comment/edit", { commentId, comment, tags, issueOpen })
     .then(res => res.data);
 }
 
@@ -38,5 +38,12 @@ export function postPendingCommentStatus({ commentId, reviewed }) {
   return axios.post("/api/survey/comment/verify", {
     commentId,
     reviewed
+  });
+}
+
+export function updateCommentIssueStatus({ commentId, open }) {
+  return axios.post("/api/survey/comment/issue", {
+    commentId,
+    open
   });
 }
