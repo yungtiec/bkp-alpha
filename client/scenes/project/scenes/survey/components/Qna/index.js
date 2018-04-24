@@ -18,8 +18,6 @@ class QnaBox extends Component {
 
   componentDidMount() {
     const self = this;
-    var autocompleteTags = {};
-    this.props.tags.forEach(t => (autocompleteTags[t.name] = t.name));
     if (!this.annotation) {
       const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
       var app = new annotator.App();
@@ -72,7 +70,7 @@ class QnaBox extends Component {
         height: "70px",
         width: "100%",
         interactive: true,
-        'delimiter': [' '],
+        delimiter: [" "]
       });
       $(".annotator-cancel").click(evt => {
         if (!isEmpty(self.state.temporaryHighlight))

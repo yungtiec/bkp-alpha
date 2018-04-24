@@ -15,6 +15,10 @@
     0 25px 40px -20px rgba(0, 0, 0, 0.1);
 }
 
+.project-card a:hover {
+  text-decoration: none;
+}
+
 .project-custom * {
   color: rgba(0, 0, 0, 0.7);
   letter-spacing: 0.08rem;

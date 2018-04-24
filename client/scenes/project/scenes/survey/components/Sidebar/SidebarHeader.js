@@ -28,11 +28,11 @@ export default class SidebarHeader extends Component {
       engagementTab === "annotations"
         ? [
             { value: "position", label: "position" },
-            { value: "timestamp", label: "timestamp" },
+            { value: "timestamp", label: "date" },
             { value: "upvotes", label: "upvotes" }
           ]
         : [
-            { value: "timestamp", label: "timestamp" },
+            { value: "timestamp", label: "date" },
             { value: "upvotes", label: "upvotes" }
           ];
     return (
