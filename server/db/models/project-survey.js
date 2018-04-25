@@ -15,9 +15,11 @@ const ProjectSurvey = db.define("project_survey", {
   },
   submitted: {
     type: Sequelize.BOOLEAN,
+    defaultValue: false
   },
   reviewed: {
     type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 });
 

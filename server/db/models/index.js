@@ -209,7 +209,13 @@ module.exports = {
   Permission,
   Role,
   Project,
+  ProjectSurvey,
   ProjectSurveyComment,
+  ProjectSurveyAnswer,
+  Question,
+  QuestionCategory,
+  Survey,
+  SurveyQuestion,
   Tag,
   Issue
 };
