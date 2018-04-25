@@ -163,6 +163,12 @@ ProjectSurvey.belongsTo(Survey, {
 ProjectSurvey.belongsTo(Project, {
   foreignKey: "project_id"
 });
+Project.hasMany(ProjectSurvey, {
+  foreignKey: "project_id"
+})
+Survey.hasMany(ProjectSurvey, {
+  foreignKey: "survey_id"
+})
 
 ProjectSurvey.hasMany(ProjectSurveyComment, {
   foreignKey: "project_survey_id"

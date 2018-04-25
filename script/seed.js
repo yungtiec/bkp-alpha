@@ -25,23 +25,13 @@ async function seed() {
   var projects = await seedProject();
   await seedPermission();
   await seedUser(projects);
-  var survey2 = await seedSurvey({
+  var survey2 = await seedSurveyFromMarkdown({
     project: projects[0],
     survey: {
       title: "Third-party assessment",
       creator_id: 1
     },
-    questions: [
-      {
-        question: "Project strengths"
-      },
-      {
-        question: "Project risks"
-      },
-      {
-        question: "Outstanding questions"
-      }
-    ]
+    filepath: "./data/vpp-2.md"
   });
   var survey1 = await seedSurveyFromMarkdown({
     project: projects[0],
@@ -49,7 +39,7 @@ async function seed() {
       title: "Consumer Token Disclosure (v1)",
       creator_id: 1
     },
-    filepath: "./data/vpp.md"
+    filepath: "./data/vpp-1.md"
   });
 }
 
