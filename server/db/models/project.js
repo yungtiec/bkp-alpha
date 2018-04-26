@@ -10,6 +10,9 @@ const Project = db.define("project", {
   symbol: {
     type: Sequelize.STRING,
     unique: true
+  },
+  description: {
+    type: Sequelize.TEXT
   }
 });
 

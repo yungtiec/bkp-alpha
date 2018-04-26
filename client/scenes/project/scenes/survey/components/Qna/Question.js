@@ -10,13 +10,16 @@ export default class Question extends Component {
 
   render() {
     return (
-      <ReactMarkdown
-        className="qna__question"
+      <div
         onClick={e => {
           this.props.handleAnnotationOnClick(e, this.props.qnaId);
         }}
-        source={this.props.question.markdown}
-      />
+      >
+        <ReactMarkdown
+          className="qna__question"
+          source={this.props.question.markdown}
+        />
+      </div>
     );
   }
 }

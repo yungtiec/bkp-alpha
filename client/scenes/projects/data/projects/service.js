@@ -1,6 +1,5 @@
-var projectData = require('../../../../mock-data/project')
-import { omit } from "lodash";
+import axios from "axios";
 
 export function getAllProjects() {
-  return projectData.map(p => omit(p, ['project_surveys']))
+  return axios.get("/api/project").then(res => res.data);
 }

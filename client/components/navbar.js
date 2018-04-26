@@ -28,43 +28,31 @@ class Navbar extends Component {
   render() {
     return (
       <div className="header">
-        {!this.state.showSearchBar && (
-          <nav className="navbar navbar-expand-md no-gutters navbar--logo">
-            <div className="box--left">
-              <div className="logo-header">
-                <img
-                  width="100px"
-                  height="auto"
-                  className="logo__large"
-                  src="/assets/the-brooklyn-project-logo.png"
-                />
-              </div>
+        <nav className="navbar navbar-expand-md no-gutters navbar--logo">
+          <div className="box--left">
+            <div className="logo-header">
+              <img
+                width="100px"
+                height="auto"
+                className="logo__large"
+                src="/assets/the-brooklyn-project-logo.png"
+              />
             </div>
-            <div className="box--right">
-              {this.props.isAdmin ? (
-                <Link to="/admin" className="navbar__nav-item">
-                  admin
-                </Link>
-              ) : ""}
-              <Link to="/projects" className="navbar__nav-item">
-                projects
+          </div>
+          <div className="box--right">
+            {this.props.isAdmin ? (
+              <Link to="/admin" className="navbar__nav-item">
+                admin
               </Link>
-              <div
-                className="navbar__nav-item"
-                onClick={this.handleSearchIconOnClick}
-              >
-                <i className="fas fa-search" />
-              </div>
-              <AuthWidget inNavbar={true} />
-            </div>
-          </nav>
-        )}
-        {this.state.showSearchBar && (
-          <SearchBar
-            handleSearchIconOnClick={this.handleSearchIconOnClick}
-            setSearchBarRef={this.setSearchBarRef}
-          />
-        )}
+            ) : (
+              ""
+            )}
+            <Link to="/projects" className="navbar__nav-item">
+              projects
+            </Link>
+            <AuthWidget inNavbar={true} />
+          </div>
+        </nav>
       </div>
     );
   }

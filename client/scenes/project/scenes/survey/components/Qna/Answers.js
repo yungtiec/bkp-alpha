@@ -11,14 +11,14 @@ export default class Answers extends Component {
 
   renderAnswer({ answer, qnaId, handleAnnotationOnClick }) {
     return (
-      <ReactMarkdown
-        className="qna__answer"
+      <div
         key={`qna-${qnaId}__answer--${answer.id}`}
         onClick={e => {
           handleAnnotationOnClick(e, qnaId, answer.id);
         }}
-        source={answer.markdown}
-      />
+      >
+        <ReactMarkdown className="qna__answer" source={answer.markdown} />
+      </div>
     );
   }
 

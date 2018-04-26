@@ -6,6 +6,15 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 module.exports = router;
 
+router.get("/", async (req, res, next) => {
+  try {
+    const projects = await Project.findAll();
+    res.send(projects);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/:symbol", async (req, res, next) => {
   try {
     const project = await Project.findOne({
