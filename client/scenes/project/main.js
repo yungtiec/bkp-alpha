@@ -24,7 +24,7 @@ const ProjectIndex = ({
 
   return (
     <div className={projectContainerClass}>
-      <Route path={`${match.url}/survey/:surveyId`} component={Survey} />
+      <Route path={`${match.url}/survey/:projectSurveyId`} component={Survey} />
       {match.isExact && (
         <div className={surveyContainerClass}>
           <div className="project__title d-flex align-content-center">
@@ -32,6 +32,9 @@ const ProjectIndex = ({
             <ProjectSymbolBlueBox name={metadata.symbol} />
           </div>
           <p>{metadata.description}</p>
+          {!projectSurveyIds.length && (
+            <p>{metadata.name} currently has no disclosure document.</p>
+          )}
           <ListView
             viewClassName={"row projects-container"}
             rowClassName={match.isExact ? "col-md-12" : "col-md-4"}

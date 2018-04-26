@@ -3,7 +3,7 @@ import Loadable from "react-loadable";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
-import { fetchQuestionsBySurveyId } from "./data/actions";
+import { fetchQuestionsByProjectSurveyId } from "./data/actions";
 import {
   fetchAnnotationsBySurvey
 } from "./data/annotations/actions";
@@ -30,14 +30,13 @@ const LoadableSurvey = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
-      this.props.fetchQuestionsBySurveyId({
-        projectSymbol: this.props.match.url.split("/")[2],
-        surveyId: this.props.match.params.surveyId
+      this.props.fetchQuestionsByProjectSurveyId({
+        projectSurveyId: this.props.match.params.projectSurveyId
       }),
       this.props.fetchAnnotationsBySurvey(
         `${window.origin}${this.props.match.url}`
       ),
-      this.props.fetchCommentsBySurvey(this.props.match.params.surveyId)
+      this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
     ]);
   }
 
@@ -47,7 +46,7 @@ class MyComponent extends React.Component {
 }
 
 const actions = {
-  fetchQuestionsBySurveyId,
+  fetchQuestionsByProjectSurveyId,
   fetchAnnotationsBySurvey,
   fetchCommentsBySurvey
 };

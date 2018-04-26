@@ -30,7 +30,7 @@ export default class SurveyHeader extends Component {
         </p>
         <ProjectSymbolBlueBox name={project.name} />
         <p className="survey-name__box">
-          {`${survey.name}`}
+          {`${survey.title}`}
         </p>
         <p className="survey-creator-name__box">
           {`survey created by ${creator}`}

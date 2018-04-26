@@ -1,0 +1,34 @@
+.qna__container {
+  margin-bottom: 2rem;
+}
+
+.qna__question h3 {
+  font-family: "Vollkorn", serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: left;
+  line-height: 1.58;
+}
+
+.qna__answer p {
+  font-size: 18px;
+  line-height: 1.58;
+}
+
+.qna__answer ul {
+  list-style-type: inherit;
+  padding-left: 40px;
+}
+
+.qna__answer li {
+  list-style-type: inherit;
+  font-size: 18px;
+  line-height: 1.58;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.qna__answer li:last-child {
+  border-bottom: 0;
+}

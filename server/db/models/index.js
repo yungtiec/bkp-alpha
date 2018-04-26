@@ -219,6 +219,15 @@ ProjectSurvey.hasMany(ProjectSurveyAnswer, {
   foreignKey: "project_survey_id"
 })
 
+User.hasMany(Survey, {
+  foreignKey: "creator_id",
+  as: "survey"
+});
+Survey.belongsTo(User, {
+  foreignKey: "creator_id",
+  as: "creator"
+});
+
 /*=============  End of Survey  ==============*/
 
 module.exports = {

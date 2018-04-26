@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactMarkdown from "react-markdown";
 import autoBind from "react-autobind";
 import { find, keyBy, clone } from "lodash";
 
@@ -8,42 +9,33 @@ export default class Answers extends Component {
     autoBind(this);
   }
 
+  renderAnswer({ answer, qnaId, handleAnnotationOnClick }) {
+    return (
+      <ReactMarkdown
+        className="qna__answer"
+        key={`qna-${qnaId}__answer--${answer.id}`}
+        onClick={e => {
+          handleAnnotationOnClick(e, qnaId, answer.id);
+        }}
+        source={answer.markdown}
+      />
+    );
+  }
+
   render() {
     const { answers, qnaId, handleAnnotationOnClick } = this.props;
-    const latestAnswer = find(
-      answers,
-      answer => answer.references.length === answers.length - 1
-    );
-    var answerOrder;
-    if (latestAnswer.references.length) {
-      answerOrder = clone(latestAnswer.references);
-      answerOrder.push(latestAnswer.id);
-    } else {
-      answerOrder = [latestAnswer.id];
-    }
-    const answersById = keyBy(answers, "id");
+
     return (
       <div className="qna__answer-container">
-        {answerOrder.map(id => (
-          <p
-            className="qna__answer"
-            key={`qna-${qnaId}__answer--${id}`}
-            onClick={e => {
-              handleAnnotationOnClick(e, qnaId, id);
-            }}
-          >
-            {answersById[id].answer}
-            {answersById[id].link && (
-              <a
-                key={`qna-${qnaId}__answer-a-tag--${id}`}
-                target="_blank"
-                href={answersById[id].link}
-              >
-                {answersById[id].linkLabel}
-              </a>
-            )}
-          </p>
-        ))}
+        {this.renderAnswer({
+          answer: answers[0],
+          qnaId,
+          handleAnnotationOnClick
+        })}
+        {answers.children &&
+          answers.children.map(child =>
+            this.renderAnswer({ answer: child, qnaId, handleAnnotationOnClick })
+          )}
       </div>
     );
   }

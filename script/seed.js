@@ -39,9 +39,24 @@ async function seed() {
 
 async function seedUser(projects) {
   const users = await Promise.all([
-    User.create({ email: "tctammychu@gmail.com", password: "12345678" }),
-    User.create({ email: "cody@email.com", password: "123" }),
-    User.create({ email: "murphy@email.com", password: "123" })
+    User.create({
+      email: "tctammychu@gmail.com",
+      password: "12345678",
+      first_name: "Tammy",
+      last_name: "Chu"
+    }),
+    User.create({
+      email: "leslie.knope@park.org",
+      password: "123",
+      first_name: "Leslie",
+      last_name: "Knope"
+    }),
+    User.create({
+      email: "ron.swanson@park.org",
+      password: "123",
+      first_name: "Ron",
+      last_name: "Swanson"
+    })
   ]);
   await users[0].addProject(projects[0].id);
   await users[1].addProject(projects[1].id);
@@ -139,7 +154,7 @@ async function seedSurveyFromMarkdown({
     markdownParsor.questions,
     questionObject =>
       Question.create({
-        question: `# ${questionObject.question}`
+        markdown: `### ${questionObject.question}`
       }).then(async question => {
         var answer = markdownParsor.findAnswerToQuestion(
           questionObject.order_in_survey
@@ -150,7 +165,7 @@ async function seedSurveyFromMarkdown({
           order_in_survey: questionObject.order_in_survey
         });
         await ProjectSurveyAnswer.create({
-          answer: answer.trim(),
+          markdown: answer,
           survey_question_id: surveyQuestion.id,
           project_survey_id: projectSurvey.id
         });

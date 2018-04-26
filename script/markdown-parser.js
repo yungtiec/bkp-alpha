@@ -17,7 +17,7 @@ const extractQuestions = $ => {
 
 const getAnswerToQuestion = ({ markdownToParse, question, nextQuestion }) => {
   const startIndex = markdownToParse.indexOf(question) + question.length;
-  const endIndex = markdownToParse.indexOf(`# ${nextQuestion}`);
+  const endIndex = markdownToParse.indexOf(`### ${nextQuestion}`);
   return markdownToParse.substring(startIndex, endIndex);
 };
 

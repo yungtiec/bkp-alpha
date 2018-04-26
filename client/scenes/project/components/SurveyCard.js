@@ -13,7 +13,7 @@ export default (url, surveyId, survey) => {
               <i className="fas fa-star" />
             </div>
             <div className="survey__header">
-              <p>{survey.name}</p>
+              <p>{survey.title}</p>
               <p className="survey__ticker">
                 ({`created by ${survey.creator.first_name} ${
                   survey.creator.last_name

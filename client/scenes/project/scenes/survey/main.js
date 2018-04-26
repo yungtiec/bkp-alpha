@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { fetchQuestionsBySurveyId } from "./data/actions";
+import { fetchQuestionsByProjectSurveyId } from "./data/actions";
 import {
   fetchAnnotationsBySurvey,
   addNewAnnotationSentFromServer,
@@ -49,8 +49,8 @@ class SurveyContainer extends Component {
   componentDidUpdate(prevProps) {
     const prevProjectSymbol = prevProps.match.url.split("/")[2];
     const nextProjectSymbol = this.props.match.url.split("/")[2];
-    const prevSurveyId = prevProps.match.params.surveyId;
-    const nextSurveyId = this.props.match.params.surveyId;
+    const prevSurveyId = prevProps.match.params.projectSurveyId;
+    const nextSurveyId = this.props.match.params.projectSurveyId;
     if (
       prevProjectSymbol !== nextProjectSymbol ||
       prevSurveyId !== nextSurveyId
@@ -68,22 +68,21 @@ class SurveyContainer extends Component {
   componentWillReceiveProps(nextProps) {
     const prevProjectSymbol = this.props.match.url.split("/")[2];
     const nextProjectSymbol = nextProps.match.url.split("/")[2];
-    const prevSurveyId = this.props.match.params.surveyId;
-    const nextSurveyId = nextProps.match.params.surveyId;
+    const prevSurveyId = this.props.match.params.projectSurveyId;
+    const nextSurveyId = nextProps.match.params.projectSurveyId;
     if (
       prevProjectSymbol &&
       prevSurveyId &&
       (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
     ) {
       batchActions([
-        this.props.fetchQuestionsBySurveyId({
-          projectSymbol: nextProjectSymbol,
-          surveyId: nextProps.match.params.surveyId
+        this.props.fetchQuestionsByProjectSurveyId({
+          projectSurveyId: nextProps.match.params.projectSurveyId
         }),
         this.props.fetchAnnotationsBySurvey(
           `${window.origin}${nextProps.match.url}`
         ),
-        this.props.fetchCommentsBySurvey(this.props.match.params.surveyId)
+        this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
       ]);
     }
   }
@@ -117,7 +116,7 @@ const mapState = (state, ownProps) => {
     surveyQnasById,
     surveyQnaIds,
     surveyMetadata: getSelectedSurvey(state),
-    projectSurveyId: ownProps.match.params.surveyId,
+    projectSurveyId: ownProps.match.params.projectSurveyId,
     projectMetadata: getSelectedProject(state),
     annotationsById,
     annotationIds,
@@ -137,7 +136,7 @@ const mapState = (state, ownProps) => {
 };
 
 const actions = {
-  fetchQuestionsBySurveyId,
+  fetchQuestionsByProjectSurveyId,
   fetchAnnotationsBySurvey,
   addNewAnnotationSentFromServer,
   editAnnotationComment,

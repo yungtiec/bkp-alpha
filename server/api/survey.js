@@ -27,6 +27,10 @@ router.get("/project/:projectSurveyId", async (req, res, next) => {
           model: Survey,
           include: [
             {
+              model: User,
+              as: "creator"
+            },
+            {
               model: SurveyQuestion,
               include: [
                 {
@@ -36,7 +40,18 @@ router.get("/project/:projectSurveyId", async (req, res, next) => {
                   model: ProjectSurveyAnswer,
                   where: {
                     project_survey_id: req.params.projectSurveyId
-                  }
+                  },
+                  include: [
+                    {
+                      model: ProjectSurveyAnswer,
+                      where: {
+                        project_survey_id: req.params.projectSurveyId
+                      },
+                      as: "descendents",
+                      hierarchy: true,
+                      required: false
+                    }
+                  ]
                 }
               ]
             }
@@ -44,9 +59,9 @@ router.get("/project/:projectSurveyId", async (req, res, next) => {
         }
       ]
     });
-    res.send(projectSurvey)
+    res.send(projectSurvey);
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 

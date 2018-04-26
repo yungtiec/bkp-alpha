@@ -6,12 +6,15 @@ export function fetchProjectBySymbol(symbol) {
   return async dispatch => {
     try {
       const project = await getProjectBySymbol(symbol);
-      const projectSurveys = project.project_surveys.map(s =>
-        assignIn(
-          pick(s.survey, ["creator", "description"]),
-          omit(s, ["survey"])
-        )
-      );
+      const projectSurveys =
+        project.project_surveys && project.project_surveys.length
+          ? project.project_surveys.map(s =>
+              assignIn(
+                pick(s.survey, ["creator", "title", "description"]),
+                omit(s, ["survey"])
+              )
+            )
+          : [];
       const projectMetadata = omit(project, ["project_surveys"]);
       const projectSurveysById = keyBy(projectSurveys, "id");
       const projectSurveyIds = projectSurveys.map(ps => ps.id);

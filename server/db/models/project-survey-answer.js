@@ -15,10 +15,10 @@ const ProjectSurveyAnswer = db.define(
     survey_question_id: {
       type: Sequelize.INTEGER
     },
-    answer_json: {
+    json: {
       type: Sequelize.JSON
     },
-    answer: {
+    markdown: {
       type: Sequelize.TEXT
     }
   },

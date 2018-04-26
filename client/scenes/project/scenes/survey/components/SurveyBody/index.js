@@ -46,7 +46,7 @@ export default ({
             <Answers
               key={`qna-${id}__answers`}
               qnaId={id}
-              answers={surveyQnasById[id].survey_answers}
+              answers={surveyQnasById[id].project_survey_answers}
               handleAnnotationOnClick={annotationOnClick}
             />
           </Qna>
