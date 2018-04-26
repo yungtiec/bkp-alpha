@@ -9,7 +9,7 @@ module.exports = router;
 router.get("/:symbol", async (req, res, next) => {
   try {
     const project = await Project.findOne({
-      where: { symbol: req.params.symbol },
+      where: { symbol: req.params.symbol, submitted: true, reviewed: true },
       include: [
         {
           model: ProjectSurvey,

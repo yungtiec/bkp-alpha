@@ -27,18 +27,12 @@ async function seed() {
   await seedUser(projects);
   var survey2 = await seedSurveyFromMarkdown({
     project: projects[0],
-    survey: {
-      title: "Third-party assessment",
-      creator_id: 1
-    },
+    surveyCreatorId: 1,
     filepath: "./data/vpp-2.md"
   });
   var survey1 = await seedSurveyFromMarkdown({
     project: projects[0],
-    survey: {
-      title: "Consumer Token Disclosure (v1)",
-      creator_id: 1
-    },
+    surveyCreatorId: 1,
     filepath: "./data/vpp-1.md"
   });
 }
@@ -125,13 +119,22 @@ async function seedSurvey({ project, survey, questions }) {
   return survey;
 }
 
-async function seedSurveyFromMarkdown({ project, survey, filepath }) {
-  var survey = await Survey.create(survey);
+async function seedSurveyFromMarkdown({
+  project,
+  survey,
+  surveyCreatorId,
+  filepath
+}) {
+  var markdownParsor = new MarkdownParsor({ filepath });
+  var survey = await Survey.create({
+    title: markdownParsor.title,
+    description: markdownParsor.description,
+    creator_id: surveyCreatorId
+  });
   var projectSurvey = await ProjectSurvey.create({
     project_id: project.id,
     survey_id: survey.id
   });
-  var markdownParsor = new MarkdownParsor({ filepath });
   var questionInstances = await Promise.map(
     markdownParsor.questions,
     questionObject =>

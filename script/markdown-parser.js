@@ -3,9 +3,13 @@ const cheerio = require("cheerio");
 const showdown = require("showdown");
 const converter = new showdown.Converter();
 
+const extractTitle = $ =>  $("h1").text()
+
+const extractDescription = $ =>  $("h2").text()
+
 const extractQuestions = $ => {
   var questions = [];
-  $("h1").each(function(i, h1) {
+  $("h3").each(function(i, h3) {
     questions[i] = { question: $(this).text(), order_in_survey: i };
   });
   return questions;
@@ -30,7 +34,11 @@ function MarkdownParsor({ filepath, markdown }) {
 
   this.html = converter.makeHtml(this.markdownToParse);
 
-  this.questions = extractQuestions(cheerio.load(this.html));
+  var $ = cheerio.load(this.html)
+
+  this.title = extractTitle($)
+  this.description = extractDescription($);
+  this.questions = extractQuestions($);
 
   return this;
 }

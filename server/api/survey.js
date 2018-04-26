@@ -6,11 +6,49 @@ const {
   Role,
   Tag,
   ProjectSurveyComment,
-  Issue
+  Issue,
+  Project,
+  ProjectSurvey,
+  Survey,
+  Question,
+  SurveyQuestion,
+  ProjectSurveyAnswer
 } = require("../db/models");
 const _ = require("lodash");
 const { ensureAuthentication, ensureAdminRole } = require("./utils");
 module.exports = router;
+
+router.get("/project/:projectSurveyId", async (req, res, next) => {
+  try {
+    const projectSurvey = await ProjectSurvey.findOne({
+      where: { id: req.params.projectSurveyId },
+      include: [
+        {
+          model: Survey,
+          include: [
+            {
+              model: SurveyQuestion,
+              include: [
+                {
+                  model: Question
+                },
+                {
+                  model: ProjectSurveyAnswer,
+                  where: {
+                    project_survey_id: req.params.projectSurveyId
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+    res.send(projectSurvey)
+  } catch (err) {
+    next(err)
+  }
+});
 
 router.get("/comment", async (req, res, next) => {
   try {

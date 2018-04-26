@@ -191,6 +191,12 @@ SurveyQuestion.belongsTo(Survey, {
 SurveyQuestion.belongsTo(Question, {
   foreignKey: "question_id"
 });
+Question.hasMany(SurveyQuestion, {
+  foreignKey: "question_id"
+})
+Survey.hasMany(SurveyQuestion, {
+  foreignKey: "survey_id"
+})
 
 SurveyQuestion.belongsToMany(ProjectSurvey, {
   through: ProjectSurveyAnswer,
@@ -206,6 +212,12 @@ ProjectSurveyAnswer.belongsTo(ProjectSurvey, {
 ProjectSurveyAnswer.belongsTo(SurveyQuestion, {
   foreignKey: "survey_question_id"
 });
+SurveyQuestion.hasMany(ProjectSurveyAnswer, {
+  foreignKey: "survey_question_id"
+})
+ProjectSurvey.hasMany(ProjectSurveyAnswer, {
+  foreignKey: "project_survey_id"
+})
 
 /*=============  End of Survey  ==============*/
 
