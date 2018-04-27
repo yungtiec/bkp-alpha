@@ -162,10 +162,13 @@ router.put("/tag/add", async (req, res, next) => {
   }
 });
 
-router.get("/pending", async (req, res, next) => {
+router.get("/pending/:projectSurveyId", async (req, res, next) => {
   try {
     var annotations = await Annotation.findAll({
-      where: { reviewed: "pending" },
+      where: {
+        reviewed: "pending",
+        project_survey_id: req.params.projectSurveyId
+      },
       include: [
         {
           model: User,

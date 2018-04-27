@@ -76,6 +76,9 @@ const createApp = () => {
       res.redirect(`/${req.params.file}`);
     }
   );
+   app.get("/admin/project-survey/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {

@@ -1,10 +1,27 @@
 const router = require("express").Router();
-const { Project, ProjectSurvey, Survey, User } = require("../db/models");
-const db = require("../db");
-const { ensureAuthentication } = require("./utils");
+const db = require("../../db");
+const {
+  Annotation,
+  User,
+  Role,
+  Tag,
+  ProjectSurveyComment,
+  Issue,
+  Project,
+  ProjectSurvey,
+  Survey,
+  Question,
+  SurveyQuestion,
+  ProjectSurveyAnswer
+} = require("../../db/models");
+const _ = require("lodash");
+const { ensureAuthentication, ensureAdminRole } = require("../utils");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 module.exports = router;
+
+router.use("/survey/comment", require("./comment"));
+router.use("/survey", require("./survey"));
 
 router.get("/", async (req, res, next) => {
   try {
@@ -38,3 +55,7 @@ router.get("/:symbol", async (req, res, next) => {
     next(err);
   }
 });
+
+
+
+

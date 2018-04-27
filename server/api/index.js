@@ -4,7 +4,6 @@ module.exports = router;
 router.use("/users", require("./users"));
 router.use("/annotator", require("./annotator"));
 router.use("/annotation", require("./annotation"));
-router.use("/survey", require("./survey"));
 router.use("/project", require("./project"));
 router.use("/tag", require("./tag"));
 

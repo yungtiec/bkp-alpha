@@ -98,6 +98,15 @@ Issue.belongsTo(Annotation, {
   foreignKey: "annotation_id"
 });
 
+
+/*----------  Annotation and Project Survey  ----------*/
+ProjectSurvey.hasMany(Annotation, {
+  foreignKey: "project_survey_id"
+});
+Annotation.belongsTo(ProjectSurvey, {
+  foreignKey: "project_survey_id"
+});
+
 /*=====  End of Annotation  ======*/
 
 /*=================================================
@@ -228,6 +237,12 @@ Survey.belongsTo(User, {
   as: "creator"
 });
 
+SurveyQuestion.hasMany(Annotation, {
+  foreignKey: "survey_question_id"
+});
+Annotation.belongsTo(SurveyQuestion, {
+  foreignKey: "survey_question_id"
+});
 /*=============  End of Survey  ==============*/
 
 module.exports = {

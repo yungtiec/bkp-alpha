@@ -20,7 +20,7 @@ class QnaBox extends Component {
   componentDidMount() {
     const self = this;
     if (!this.annotation) {
-      const { qna, match, isLoggedIn, pollData, tagFilter } = this.props;
+      const { qna, match, isLoggedIn, pollData, tagFilter, projectSurveyId } = this.props;
       var app = new annotator.App();
       var pageUri = function() {
         return {
@@ -31,6 +31,7 @@ class QnaBox extends Component {
             });
             ann.uri = `${window.location.origin}${match.url}`;
             ann.survey_question_id = qna.id;
+            ann.project_survey_id = projectSurveyId
           },
           annotationCreated: function(ann) {
             undraw(self.state.temporaryHighlight);

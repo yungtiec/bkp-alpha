@@ -43,12 +43,14 @@ router.post("/store", ensureAuthentication, async (req, res, next) => {
       uri,
       annotator_schema_version,
       survey_question_id,
+      project_survey_id,
       tags,
       issue
     } = req.body;
     var newAnnotation = await Annotation.create({
       uri,
       survey_question_id,
+      project_survey_id,
       quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
       comment: text,
       ranges,

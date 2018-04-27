@@ -56,8 +56,11 @@ class Routes extends Component {
             />
           )}
           {/* Displays our Login component as a fallback */}
-          <Route exact path="/" component={Login} />
-          <Route component={Login} />
+          {!isLoggedIn && <Route component={Login} />}
+          {isLoggedIn && <RouteWithLayout
+            layout={LayoutWithNav}
+            component={Projects}
+          />}
         </Switch>
       </div>
     );

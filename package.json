@@ -61,6 +61,8 @@
     "react-router-dom": "^4.1.1",
     "react-scroll": "^1.7.7",
     "react-select": "^1.2.1",
+    "react-table": "^6.8.2",
+    "react-table-hoc-fixed-columns": "^0.1.2",
     "reapop": "^1.2.0",
     "reapop-theme-wybo": "^1.0.2",
     "redux": "^3.6.0",

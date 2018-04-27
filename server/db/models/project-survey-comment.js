@@ -19,111 +19,111 @@ const ProjectSurveyComment = db.define(
     }
   },
   {
-    hierarchy: true
+    hierarchy: true,
+    scopes: {
+      allByProjectSurveyId: function(projectSurvetId) {
+        return {
+          where: {
+            project_survey_id: projectSurvetId,
+            parentId: null,
+            reviewed: { [Sequelize.Op.ne]: "spam" }
+          },
+          include: [
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("tag"),
+              attributes: ["name", "id"]
+            },
+            {
+              model: db.model("issue"),
+              attributes: ["open", "id"]
+            },
+            {
+              model: db.model("project_survey_comment"),
+              where: {
+                reviewed: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "pending" },
+                    { [Sequelize.Op.eq]: "verified" }
+                  ]
+                }
+              },
+              required: false,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                }
+              ],
+              as: "descendents",
+              hierarchy: true
+            }
+          ]
+        };
+      },
+      oneThreadByRootId: function(rootId) {
+        return {
+          where: { id: rootId, reviewed: { [Sequelize.Op.ne]: "spam" } },
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("tag"),
+              attributes: ["name", "id"]
+            },
+            {
+              model: db.model("issue"),
+              attributes: ["open", "id"]
+            },
+            {
+              model: db.model("project_survey_comment"),
+              where: {
+                reviewed: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "pending" },
+                    { [Sequelize.Op.eq]: "verified" }
+                  ]
+                }
+              },
+              required: false,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                }
+              ],
+              as: "descendents",
+              hierarchy: true
+            }
+          ]
+        };
+      }
+    }
   }
 );
-
-ProjectSurveyComment.findCommentsByProjectSurveyId = function(projectSurvetId) {
-  return ProjectSurveyComment.findAll({
-    where: {
-      project_survey_id: projectSurvetId,
-      parentId: null,
-      reviewed: { [Sequelize.Op.ne]: "spam" }
-    },
-    include: [
-      {
-        model: db.model("user"),
-        as: "owner",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("tag"),
-        attributes: ["name", "id"]
-      },
-      {
-        model: db.model("issue"),
-        attributes: ["open", "id"]
-      },
-      {
-        model: ProjectSurveyComment,
-        where: {
-          reviewed: {
-            [Sequelize.Op.or]: [
-              { [Sequelize.Op.eq]: "pending" },
-              { [Sequelize.Op.eq]: "verified" }
-            ]
-          }
-        },
-        required: false,
-        include: [
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ],
-        as: "descendents",
-        hierarchy: true
-      }
-    ]
-  });
-};
-
-ProjectSurveyComment.findOneThreadByRootId = function(id) {
-  return ProjectSurveyComment.findOne({
-    where: { id, reviewed: { [Sequelize.Op.ne]: "spam" } },
-    include: [
-      {
-        model: db.model("user"),
-        as: "upvotesFrom",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("user"),
-        as: "owner",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("tag"),
-        attributes: ["name", "id"]
-      },
-      {
-        model: db.model("issue"),
-        attributes: ["open", "id"]
-      },
-      {
-        model: ProjectSurveyComment,
-        where: {
-          reviewed: {
-            [Sequelize.Op.or]: [
-              { [Sequelize.Op.eq]: "pending" },
-              { [Sequelize.Op.eq]: "verified" }
-            ]
-          }
-        },
-        required: false,
-        include: [
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ],
-        as: "descendents",
-        hierarchy: true
-      }
-    ]
-  });
-};
 
 module.exports = ProjectSurveyComment;

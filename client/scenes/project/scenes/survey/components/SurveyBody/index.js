@@ -30,6 +30,7 @@ export default ({
           <Qna
             key={`qna-${id}`}
             qna={surveyQnasById[id]}
+            projectSurveyId={surveyMetadata.id}
             isLoggedIn={isLoggedIn}
             pollData={handlePollData}
             numAnnotations={numAnnotations}

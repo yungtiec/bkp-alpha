@@ -104,7 +104,9 @@ async function seedProject() {
     [
       {
         name: "Virtue Poker",
-        symbol: "VPP"
+        symbol: "VPP",
+        description:
+          "Virtue Poker is a privately held company headquartered in Gibraltar. It was founded in 2016, and is a Consensys backed startup."
       },
       {
         name: "digital gold",

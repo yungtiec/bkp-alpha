@@ -19,4 +19,5 @@ export { default as AnnotationReply } from "./AnnotationReply";
 export { default as CustomScrollbar } from "./CustomScrollbar";
 export { default as requiresAuthorization } from "./requiresAuthorization";
 export { default as TagChip } from "./TagChip";
+export { default as StackableTable } from "./StackableTable";
 

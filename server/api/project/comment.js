@@ -1,82 +1,28 @@
 const router = require("express").Router();
-const db = require("../db");
+const db = require("../../db");
 const {
-  Annotation,
   User,
   Role,
   Tag,
   ProjectSurveyComment,
-  Issue,
-  Project,
-  ProjectSurvey,
-  Survey,
-  Question,
-  SurveyQuestion,
-  ProjectSurveyAnswer
-} = require("../db/models");
+  Issue
+} = require("../../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("./utils");
+const { ensureAuthentication, ensureAdminRole } = require("../utils");
 module.exports = router;
 
-router.get("/project/:projectSurveyId", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const projectSurvey = await ProjectSurvey.findOne({
-      where: { id: req.params.projectSurveyId },
-      include: [
-        {
-          model: Survey,
-          include: [
-            {
-              model: User,
-              as: "creator"
-            },
-            {
-              model: SurveyQuestion,
-              include: [
-                {
-                  model: Question
-                },
-                {
-                  model: ProjectSurveyAnswer,
-                  where: {
-                    project_survey_id: req.params.projectSurveyId
-                  },
-                  include: [
-                    {
-                      model: ProjectSurveyAnswer,
-                      where: {
-                        project_survey_id: req.params.projectSurveyId
-                      },
-                      as: "descendents",
-                      hierarchy: true,
-                      required: false
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-    res.send(projectSurvey);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/comment", async (req, res, next) => {
-  try {
-    const comments = await ProjectSurveyComment.findCommentsByProjectSurveyId(
-      req.query.projectSurveyId
-    );
+    const comments = await ProjectSurveyComment.scope({
+      method: ["allByProjectSurveyId", req.query.projectSurveyId]
+    }).findAll();
     res.send(comments);
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/comment", ensureAuthentication, async (req, res, next) => {
+router.post("/", ensureAuthentication, async (req, res, next) => {
   try {
     const comment = await ProjectSurveyComment.create({
       owner_id: req.user.id,
@@ -98,7 +44,11 @@ router.post("/comment", ensureAuthentication, async (req, res, next) => {
             default: { name: addedTag.name }
           });
           return comment.addTag(tag.id);
-        }).then(() => ProjectSurveyComment.findOneThreadByRootId(comment.id));
+        }).then(() =>
+          ProjectSurveyComment.scope({
+            method: ["oneThreadByRootId", comment.id]
+          }).findOne()
+        );
       });
     res.send(comment);
   } catch (err) {
@@ -106,7 +56,7 @@ router.post("/comment", ensureAuthentication, async (req, res, next) => {
   }
 });
 
-router.post("/comment/reply", ensureAuthentication, async (req, res, next) => {
+router.post("/reply", ensureAuthentication, async (req, res, next) => {
   try {
     var ancestry;
     const parent = await ProjectSurveyComment.findById(
@@ -130,16 +80,16 @@ router.post("/comment/reply", ensureAuthentication, async (req, res, next) => {
     var reply = await ProjectSurveyComment.create(child);
     reply = await reply.setParent(parent.toJSON().id);
     reply = reply.setOwner(req.user.id);
-    ancestry = await ProjectSurveyComment.findOneThreadByRootId(
-      rootAncestor ? rootAncestor.id : parent.id
-    );
+    ancestry = await ProjectSurveyComment.scope({
+      method: ["oneThreadByRootId", rootAncestor ? rootAncestor.id : parent.id]
+    }).findOne();
     res.send(ancestry);
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/comment/upvote", ensureAuthentication, async (req, res, next) => {
+router.post("/upvote", ensureAuthentication, async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!req.body.hasUpvoted) {
@@ -163,7 +113,7 @@ router.post("/comment/upvote", ensureAuthentication, async (req, res, next) => {
   }
 });
 
-router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
+router.post("/edit", ensureAuthentication, async (req, res, next) => {
   try {
     var comment = await ProjectSurveyComment.findOne({
       where: { id: req.body.commentId },
@@ -216,9 +166,12 @@ router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
         raw: true
       });
       const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-      const ancestry = await ProjectSurveyComment.findOneThreadByRootId(
-        rootAncestor ? rootAncestor.id : comment.id
-      );
+      const ancestry = await ProjectSurveyComment.scope({
+        method: [
+          "oneThreadByRootId",
+          rootAncestor ? rootAncestor.id : comment.id
+        ]
+      }).findOne();
       res.send(ancestry);
     }
   } catch (err) {
@@ -227,7 +180,7 @@ router.post("/comment/edit", ensureAuthentication, async (req, res, next) => {
 });
 
 router.post(
-  "/comment/verify",
+  "/verify",
   ensureAuthentication,
   ensureAdminRole,
   async (req, res, next) => {
@@ -242,7 +195,7 @@ router.post(
 );
 
 router.post(
-  "/comment/issue",
+  "/issue",
   ensureAuthentication,
   ensureAdminRole,
   async (req, res, next) => {
