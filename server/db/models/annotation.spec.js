@@ -33,7 +33,6 @@ describe("Annotation thread", () => {
     var rootAnnotation = await Annotation.find({
       where: {
         uri: "http://localhost:8080/project/DG/survey/3",
-        survey_question_id: "12",
         quote:
           "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
         hierarchyLevel: 1
