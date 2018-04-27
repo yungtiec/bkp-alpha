@@ -31,7 +31,7 @@ class AdminProjectSurveyPanel extends Component {
     const data = projectSurveyIds.map(id => projectSurveysById[id]);
 
     return (
-      <div className="container admin-container">
+      <div className="container project-survey-list__container">
         <StackableTable
           columns={columns}
           data={data}

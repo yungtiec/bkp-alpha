@@ -10,6 +10,7 @@ describe("Annotation thread", () => {
     parent = await Annotation.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       survey_question_id: "12",
+      project_survey_id: "1",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
       text: "parent"
@@ -17,6 +18,7 @@ describe("Annotation thread", () => {
     child = await Annotation.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       survey_question_id: "12",
+      project_survey_id: "1",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
       text: "child"
@@ -24,6 +26,7 @@ describe("Annotation thread", () => {
     grandChild = await Annotation.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       survey_question_id: "12",
+      project_survey_id: "1",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
       text: "grand child"
