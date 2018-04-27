@@ -10,7 +10,6 @@ const Annotation = db.define(
     },
     survey_question_id: {
       type: Sequelize.INTEGER,
-      allowNull: false
     },
     survey_answer_id: {
       type: Sequelize.INTEGER
