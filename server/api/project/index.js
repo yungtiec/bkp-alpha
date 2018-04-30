@@ -34,28 +34,9 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:symbol", async (req, res, next) => {
   try {
-    const project = await Project.findOne({
-      where: { symbol: req.params.symbol },
-      include: [
-        {
-          model: ProjectSurvey,
-          where: { submitted: true, reviewed: true },
-          required: false,
-          include: [
-            {
-              model: Survey,
-              include: [{ model: User, as: "creator" }]
-            }
-          ]
-        }
-      ]
-    });
+    const project = await Project.getProjectWithStats(req.params.symbol);
     res.send(project);
   } catch (err) {
     next(err);
   }
 });
-
-
-
-

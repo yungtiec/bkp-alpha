@@ -1,19 +1,145 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
+const _ = require("lodash");
 
-const Project = db.define("project", {
-  name: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false
+const Project = db.define(
+  "project",
+  {
+    name: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false
+    },
+    symbol: {
+      type: Sequelize.STRING,
+      unique: true
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
+    logo_url: {
+      type: Sequelize.TEXT
+    },
+    website: {
+      type: Sequelize.TEXT
+    }
   },
-  symbol: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  description: {
-    type: Sequelize.TEXT
+  {
+    scopes: {
+      byProjectSymbol: function(projectSymbol) {
+        return {
+          where: { symbol: projectSymbol },
+          include: [
+            {
+              model: db.model("project_survey"),
+              where: { submitted: true, reviewed: true },
+              required: false,
+              include: [
+                {
+                  model: db.model("survey"),
+                  include: [
+                    { model: db.model("user"), as: "creator" },
+                    {
+                      model: db.model("survey_question"),
+                      include: [
+                        {
+                          model: db.model("annotation"),
+                          required: false,
+                          attributes: ["id", "reviewed"],
+                          include: [
+                            {
+                              model: db.model("issue"),
+                              required: false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  model: db.model("project_survey_comment"),
+                  attributes: ["id", "reviewed"],
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
+      }
+    }
   }
-});
+);
+
+Project.getProjectWithStats = async function(projectSymbol) {
+  const projectInstance = await Project.scope({
+    method: ["byProjectSymbol", projectSymbol]
+  }).findOne();
+  const project = projectInstance.toJSON();
+  const numSurveys = project.project_surveys.length;
+  const numAnnotation = project.project_surveys
+    .map(projectSurvey =>
+      projectSurvey.survey.survey_questions.reduce(
+        (count, surveyQuestion) =>
+          surveyQuestion.annotations.filter(a => a.reviewed !== "spam").length +
+          count,
+        0
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+  const numPageComments = project.project_surveys
+    .map(projectSurvey => projectSurvey.project_survey_comments.length)
+    .reduce((a, b) => a + b, 0);
+  const numComments = numAnnotation + numPageComments;
+  const numIssues = project.project_surveys
+    .map(projectSurvey =>
+      projectSurvey.survey.survey_questions.reduce(
+        (count, surveyQuestion) =>
+          surveyQuestion.annotations.filter(a => a.issue).length + count,
+        0
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+  const projectSurveys =
+    project.project_surveys && project.project_surveys.length
+      ? project.project_surveys.map(s => {
+          const numAnnotation = s.survey.survey_questions.reduce(
+            (count, surveyQuestion) =>
+              surveyQuestion.annotations.filter(a => a.reviewed !== "spam")
+                .length + count,
+            0
+          );
+          const numPageComments = s.project_survey_comments.length;
+          const numIssues = s.survey.survey_questions.reduce(
+            (count, surveyQuestion) =>
+              surveyQuestion.annotations.filter(a => a.issue).length + count,
+            0
+          );
+          return _.assignIn(
+            _.pick(s.survey, ["creator", "title", "description"]),
+            _.omit(
+              _.assignIn(s, {
+                num_annotations: numAnnotation,
+                num_page_comments: numPageComments,
+                num_issues: numIssues
+              }),
+              ["survey"]
+            )
+          );
+        })
+      : [];
+  return _.assignIn(project, {
+    num_surveys: numSurveys,
+    num_annotations: numAnnotation,
+    num_page_comments: numPageComments,
+    num_issues: numIssues
+  });
+};
 
 module.exports = Project;

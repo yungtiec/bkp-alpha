@@ -23,7 +23,6 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:projectSurveyId", async (req, res, next) => {
   try {
-    console.log("hey?")
     const projectSurvey = await ProjectSurvey.scope({
       method: ["byProjectSurveyId", req.params.projectSurveyId]
     }).findOne();

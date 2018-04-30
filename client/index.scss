@@ -1,3 +1,5 @@
+@import "./breakpoint";
+
 html,
 body {
   width: 100%;
@@ -19,8 +21,13 @@ li {
 }
 
 .main-container {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin: 30px 80px;
+  @include breakpoint(xl) {
+    margin: 30px 160px;
+  }
+  @include breakpoint(xs) {
+    margin: 30px 10px;
+  }
 }
 
 .route__loader div {
@@ -48,4 +55,14 @@ li {
 
 button:focus {
   outline: none;
+}
+
+a {
+  background: 0 0;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  text-decoration: none;
+  vertical-align: baseline;
 }
