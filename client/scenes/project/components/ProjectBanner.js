@@ -58,7 +58,7 @@ export default ({ metadata }) => (
           </div>
         </div>
       </div>
-      <div>
+      <div className="project-metrics__website">
         <a
           className="project-metrics__stat"
           target="_blank"

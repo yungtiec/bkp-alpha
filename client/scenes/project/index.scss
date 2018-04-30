@@ -1,3 +1,5 @@
+@import "../../breakpoint";
+
 .project-container {
   width: 100%;
   padding-right: 15px;
@@ -32,6 +34,7 @@
 
 .survey-cards {
   border: 1px solid #ccc;
+  border-width: 1px 1px 0 1px;
 }
 
 .survey-cards.row {
@@ -53,18 +56,12 @@
 }
 
 .survey-custom {
-  // margin: 15px auto;
   border: none;
-  // border-radius: 10px;
-  transition: all 0.15s ease-out;
-  // box-shadow: 0 5px 20px -5px rgba(50, 50, 93, .12), 0 3px 4px -2px rgba(0, 0, 0, .08);
   text-decoration: none !important;
   background-color: #fff;
-  // border: 1px solid #f2f2f2;
 }
 
 .survey-custom:hover {
-  // box-shadow: 0 30px 75px -15px rgba(50, 50, 93, .3), 0 25px 40px -20px rgba(0, 0, 0, .1);
   background-color: #f9f9f9;
 }
 
@@ -80,6 +77,9 @@
 
 .survey__block {
   padding: 25px 30px;
+  @include breakpoint(xs) {
+    padding: 10px;
+  }
 }
 
 .survey__header {
@@ -87,16 +87,48 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  @include breakpoint(xs) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.survey__title {
+  @include breakpoint(xs) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.survey__title span {
+  @include breakpoint(xs) {
+    display: block;
+  }
+}
+
+.survey__title .survey-ticker {
+  @include breakpoint(xs) {
+    margin-left: 0px;
+  }
 }
 
 .survey__header div {
   width: 70%;
+  @include breakpoint(xs) {
+    width: 100%;
+  }
 }
 
 .survey__action--bottom {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.survey__date {
+  @include breakpoint(xs) {
+    align-self: flex-end;
+  }
 }
 
 .survey__more {
@@ -137,18 +169,18 @@
   color: #999;
   letter-spacing: 0;
   font-size: 12px;
+  @include breakpoint(xs) {
+    font-size: 11px;
+  }
 }
 
 .survey__header {
   display: flex;
   text-transform: uppercase;
-  // margin-left: -35px;
-  // border-left: 3px solid #3f82f4;
 }
 
 .survey__header p {
   margin-bottom: 0px;
-  // margin-left: 35px;
 }
 
 .survey__ticker {
@@ -157,21 +189,9 @@
   line-height: 24px;
 }
 
-.survey__date {
-  color: #d2d5ea;
-  font-weight: 200;
-  font-size: 12px;
-  margin: 8px 0;
-}
-
 .survey__description {
   font-size: 13px;
   font-weight: 400;
   margin-top: 6px;
   margin-bottom: 10px;
-}
-
-.survey__keywords {
-  font-size: 12px;
-  font-weight: 300;
 }

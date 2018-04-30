@@ -1,8 +1,11 @@
 @import "../../../breakpoint";
 
 .project-banner {
-  padding: 20px 40px;
   background: #f2f2f2;
+  padding: 20px 40px;
+  @include breakpoint(xs) {
+    padding: 20px 10px;
+  }
 }
 
 .project-banner__info {
@@ -16,6 +19,9 @@
   -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
   padding: 20px 0px;
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
 }
 
 .project-banner__logo {
@@ -25,7 +31,9 @@
   height: 100px;
   width: 100px;
   margin-right: 25px;
-  @include breakpoint(sm) {
+  @include breakpoint(xs) {
+    height: 64px;
+    width: 64px;
     margin-right: 16px;
   }
 }
@@ -54,23 +62,18 @@
   flex-direction: column;
   justify-content: center;
   text-align: left;
-  height: 100px;
+  @include breakpoint(xs) {
+    margin-top: 35px;
+  }
 }
 
 .project-banner__title {
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
   font-weight: 600;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
   font-size: 40px;
-  @include breakpoint(sm) {
+  @include breakpoint(xs) {
     font-size: 26px;
+    text-align: center;
+    width: 100%;
   }
 }
 
@@ -79,7 +82,9 @@
   margin-top: 6px;
   font-weight: 300;
   margin-bottom: 0px;
-  @include breakpoint(sm) {
+  font-size: 18px;
+  margin-top: 6px;
+  @include breakpoint(xs) {
     font-size: 16px;
     margin-top: 4px;
   }
@@ -91,19 +96,22 @@
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
+  flex-direction: row;
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
 }
 
-.project-banner__stats {
-  display: flex;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
+.project-metrics__stats,
+.project-metrics__website {
+  @include breakpoint(xs) {
+    text-align: center;
+  }
 }
 
 .project-metrics__stat {
   height: 100%;
   margin-right: 8px;
-  padding: 0 18px;
   -webkit-box-align: center;
   -webkit-align-items: center;
   align-items: center;
@@ -121,6 +129,14 @@
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   justify-content: center;
+  padding: 0 18px;
+  @include breakpoint(sm) {
+    padding: 0 10px;
+  }
+  @include breakpoint(xs) {
+    padding: 0 10px;
+    width: 120px;
+  }
 }
 
 .project-metrics__stat-label {
@@ -128,6 +144,9 @@
   font: 400 14px/10px "Roboto", sans-serif;
   text-transform: uppercase;
   margin-bottom: 15px;
+  @include breakpoint(xs) {
+    font-size: 12px;
+  }
 }
 
 .project-metrics__stat-value {

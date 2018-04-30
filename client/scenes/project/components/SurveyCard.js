@@ -11,7 +11,7 @@ export default (url, surveyId, survey) => {
         <div className="survey-custom">
           <div className="survey__block">
             <div className="survey__header">
-              <div>
+              <div  className="survey__title">
                 <span>{survey.title}</span>
                 <span className="survey__ticker">
                   ({`by ${survey.creator.first_name} ${
@@ -19,18 +19,18 @@ export default (url, surveyId, survey) => {
                   }`})
                 </span>
               </div>
-              <p>{moment(survey.createAt).format("MMM DD YYYY")}</p>
+              <p className="survey__date">{moment(survey.createAt).format("MMM DD YYYY")}</p>
             </div>
             <div className="survey__description">{survey.description}</div>
             <div className="survey__action--bottom">
               <div className="survey__metrics-stat">
-                <span>annotation {survey.num_annotations}</span>
+                <span>annotations ({survey.num_annotations})</span>
               </div>
               <div className="survey__metrics-stat">
-                <span>comment {survey.num_page_comments}</span>
+                <span>comments ({survey.num_page_comments})</span>
               </div>
               <div className="survey__metrics-stat">
-                <span>issue {survey.num_issues}</span>
+                <span>issues ({survey.num_issues})</span>
               </div>
             </div>
           </div>
