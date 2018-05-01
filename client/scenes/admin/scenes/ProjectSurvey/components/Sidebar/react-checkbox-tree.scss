@@ -1,0 +1,180 @@
+@import "../../../../../../breakpoint";
+
+$rct-icon-color: #33c !default;
+$rct-label-hover: rgba($rct-icon-color, 0.1) !default;
+$rct-label-active: rgba($rct-icon-color, 0.15) !default;
+
+.react-checkbox-tree {
+  font-size: 16px;
+  width: 250px;
+  margin: 15px 25px 15px 0px;
+  @include breakpoint(xs) {
+    width: 100%;
+  }
+  ol {
+    margin: 0;
+    padding-left: 0;
+    list-style-type: none;
+
+    ol {
+      padding-left: 24px;
+    }
+  }
+
+  button {
+    line-height: normal;
+    color: inherit;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .rct-bare-label {
+    cursor: default;
+  }
+
+  label {
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  &:not(.rct-native-display) input {
+    display: none;
+  }
+
+  &.rct-native-display input {
+    margin: 0 5px;
+  }
+
+  .rct-icon {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 20px;
+  }
+}
+
+.rct-node.rct-node-parent {
+  margin-bottom: 5px;
+}
+
+.rct-disabled {
+  > .rct-text > label {
+    opacity: 0.75;
+    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+    }
+
+    &:active {
+      background: transparent;
+    }
+  }
+}
+
+.rct-text {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  &:hover {
+    background: $rct-label-hover;
+  }
+
+  &:active {
+    background: $rct-label-active;
+  }
+}
+
+.rct-collapse,
+.rct-checkbox,
+.rct-node-icon {
+  padding: 0 5px;
+
+  * {
+    display: inline-block;
+    margin: 0;
+    width: 14px;
+  }
+}
+
+.rct-collapse {
+  border: 0;
+  background: none;
+  line-height: normal;
+  color: inherit;
+  font-size: 12px;
+
+  &.rct-collapse-btn {
+    cursor: pointer;
+  }
+
+  > .rct-icon-expand-close {
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.rct-checkbox {
+  .rct-native-display & {
+    display: none;
+  }
+}
+
+.rct-node-icon {
+  color: $rct-icon-color;
+}
+
+.rct-title {
+  padding: 0 5px;
+}
+
+.rct-icon-expand-close::after {
+  font-style: normal;
+  content: "\f105";
+}
+
+.rct-icon-expand-open::after {
+  font-style: normal;
+  content: "\f107";
+}
+
+.rct-icon-uncheck::before {
+  font-style: normal;
+  content: "\f1ce";
+}
+
+.rct-icon-check::before {
+  font-style: normal;
+  content: "\f058";
+}
+
+.rct-icon-half-check::before {
+  font-style: normal;
+  opacity: 0.5;
+  content: "\f046";
+}
+
+.rct-icon-leaf::before {
+  content: "";
+}
+
+.rct-icon-parent-open::before {
+  content: "";
+}
+
+.rct-icon-parent-close::before {
+  content: "";
+}

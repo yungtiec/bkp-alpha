@@ -1,9 +1,18 @@
-.admin-subroute {
-  max-width: 600px;
-  margin: 0 auto;
+@import "../../../../breakpoint";
+
+.admin-project-survey-panel {
   padding: 30px 15px;
+  display: flex;
+  @include breakpoint(xs) {
+    flex-direction: column;
+    padding: 0px;
+  }
 }
 
-.admin-subroute .btn {
+.admin-project-survey-panel .btn {
   border-radius: 0;
+}
+
+.admin-project-survey-panel__item-container {
+  flex: 1;
 }

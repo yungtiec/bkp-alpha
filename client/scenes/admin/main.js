@@ -6,7 +6,7 @@ import ProjectSurveyList from "./scenes/ProjectSurveyList";
 
 const Admin = ({ match }) => {
   return (
-    <div className="admin-container">
+    <div className="admin-container main-container">
       <Switch>
         <Route
           path={`${match.url}/project-survey/:projectSurveyId`}

@@ -8,6 +8,7 @@ import {
   verifyPendingAnnotation
 } from "./data/pendingAnnotations/actions";
 import { getPendingAnnotations } from "./data/pendingAnnotations/reducer";
+import { Sidebar } from "./components";
 import {
   requiresAuthorization,
   AnnotationMain,
@@ -20,7 +21,7 @@ const onPollInterval = (props, dispatch) => {
   return props.fetchPendingAnnotations(props.match.params.projectSurveyId);
 };
 
-class AdminAnnotationPanel extends Component {
+class AdminProjectSurveyPanel extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -72,30 +73,33 @@ class AdminAnnotationPanel extends Component {
     const { annotationsById, annotationIds } = this.props;
 
     return (
-      <div className="admin-subroute">
-        {annotationIds.map(aid => {
-          const path = annotationsById[aid].uri.replace(
-            window.location.origin,
-            ""
-          );
-          return annotationsById[aid].parentId ? (
-            <AnnotationReply
-              key={`admin__annotation-reply--${aid}`}
-              annotation={annotationsById[aid]}
-              path={path}
-            >
-              {this.renderActions(annotationsById[aid], path)}
-            </AnnotationReply>
-          ) : (
-            <AnnotationMain
-              key={`admin__annotation-main--${aid}`}
-              annotation={annotationsById[aid]}
-              path={path}
-            >
-              {this.renderActions(annotationsById[aid], path)}
-            </AnnotationMain>
-          );
-        })}
+      <div className="admin-project-survey-panel">
+        <Sidebar />
+        <div class="admin-project-survey-panel__item-container">
+          {annotationIds.map(aid => {
+            const path = annotationsById[aid].uri.replace(
+              window.location.origin,
+              ""
+            );
+            return annotationsById[aid].parentId ? (
+              <AnnotationReply
+                key={`admin__annotation-reply--${aid}`}
+                annotation={annotationsById[aid]}
+                path={path}
+              >
+                {this.renderActions(annotationsById[aid], path)}
+              </AnnotationReply>
+            ) : (
+              <AnnotationMain
+                key={`admin__annotation-main--${aid}`}
+                annotation={annotationsById[aid]}
+                path={path}
+              >
+                {this.renderActions(annotationsById[aid], path)}
+              </AnnotationMain>
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -117,7 +121,7 @@ const actions = {
 export default withRouter(
   connect(mapState, actions)(
     asyncPoll(60 * 1000, onPollInterval)(
-      requiresAuthorization(AdminAnnotationPanel, "admin")
+      requiresAuthorization(AdminProjectSurveyPanel, "admin")
     )
   )
 );

@@ -106,7 +106,7 @@
   }
 }
 
-.survey__title .survey-ticker {
+.survey__title .survey__ticker {
   @include breakpoint(xs) {
     margin-left: 0px;
   }

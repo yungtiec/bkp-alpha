@@ -6,7 +6,7 @@ import autoBind from "react-autobind";
 import { requiresAuthorization, StackableTable } from "../../../../components";
 import history from "../../../../history";
 
-class AdminProjectSurveyPanel extends Component {
+class AdminProjectSurveyList extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -15,14 +15,13 @@ class AdminProjectSurveyPanel extends Component {
   render() {
     const { projectSurveyIds, projectSurveysById } = this.props;
     const columns = [
+      { Header: "survey", accessor: "id", fixed: true, width: 80 },
       {
         id: "project",
         Header: "project",
         width: 180,
-        accessor: d => `${d.project.name} (${d.project.symbol})`,
-        fixed: true
+        accessor: d => `${d.project.name} (${d.project.symbol})`
       },
-      { Header: "survey", accessor: "id", fixed: true, width: 80 },
       { Header: "title", accessor: "title", minWidth: 150 },
       { Header: "issues", accessor: "num_issues", width: 80 },
       { Header: "pending annotations", accessor: "num_pending_annotations" },
@@ -31,7 +30,7 @@ class AdminProjectSurveyPanel extends Component {
     const data = projectSurveyIds.map(id => projectSurveysById[id]);
 
     return (
-      <div className="container project-survey-list__container">
+      <div className="project-survey-list__container">
         <StackableTable
           columns={columns}
           data={data}
@@ -50,5 +49,5 @@ class AdminProjectSurveyPanel extends Component {
 }
 
 export default withRouter(
-  requiresAuthorization(AdminProjectSurveyPanel, "admin")
+  requiresAuthorization(AdminProjectSurveyList, "admin")
 );
