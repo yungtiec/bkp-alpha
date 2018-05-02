@@ -16,6 +16,18 @@ const ProjectSurveyComment = db.define(
     reviewed: {
       type: Sequelize.ENUM("pending", "spam", "verified"),
       defaultValue: "pending"
+    },
+    engagementItemType: {
+      type: Sequelize.VIRTUAL,
+      get() {
+        return "page_comment"
+      }
+    },
+    engagementItemId: {
+      type: Sequelize.VIRTUAL,
+      get() {
+        return "page_comment" + this.getDataValue("id")
+      }
     }
   },
   {

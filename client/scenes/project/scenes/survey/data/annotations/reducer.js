@@ -12,7 +12,7 @@ import {
 } from "lodash";
 import * as types from "./actionTypes";
 import moment from "moment";
-import { findItemInTreeById } from "../utils";
+import { findItemInTreeById } from "../../../../../../utils";
 
 const initialState = {
   annotationsById: {},

@@ -42,6 +42,8 @@ export default class Survey extends Component {
       window.location.pathname.indexOf("/annotation/") !== -1;
     const givenQnaContext =
       window.location.pathname.indexOf("/question/") !== -1;
+    const givenPageCommentContext =
+      window.location.pathname.indexOf("/page-comments") !== -1;
     var annotationId, qnaId, pos, annotations;
     if (
       givenAnnotationContext &&
@@ -62,7 +64,26 @@ export default class Survey extends Component {
           focusOnce: true
         });
       }
+    } else if (
+      givenPageCommentContext &&
+      this.props.annotationIds.length &&
+      this.props.surveyQnaIds.length &&
+      !this.state.focusOnce
+    ) {
+      this.props.updateEngagementTabInView("comments");
+      this.setState({
+        focusOnce: true
+      });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.updateEngagementTabInView("annotations");
+    this.setState({
+      selectedText: "",
+      selectedAnnotations: null,
+      focusOnce: false
+    });
   }
 
   annotationOnClick(evt, qnaId, answerId) {
@@ -81,7 +102,11 @@ export default class Survey extends Component {
     if (!this.props.sidebarOpen && annotations && annotations.length) {
       this.props.toggleSidebar();
     }
-    if (!this.props.engagementTab !== "annotations" && annotations && annotations.length) {
+    if (
+      !this.props.engagementTab !== "annotations" &&
+      annotations &&
+      annotations.length
+    ) {
       this.props.updateEngagementTabInView("annotations");
     }
     if (annotations && annotations.length) {

@@ -7,7 +7,7 @@ import {
   updateAnnotationIssueStatus
 } from "./service";
 import { getAllTags } from "../tags/service";
-import { findItemInTreeById } from "../utils";
+import { findItemInTreeById } from "../../../../../../utils";
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";

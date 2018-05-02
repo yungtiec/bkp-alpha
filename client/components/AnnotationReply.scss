@@ -17,22 +17,41 @@
   padding-left: 10px;
 }
 
+.reply-annotation__review {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  color: white;
+}
+
 .reply-annotation__review--pending {
-  color: #838383;
+  background: #838383;
 }
 
 .reply-annotation__review--spam {
-  color: #dc3545;
+  background: #dc3545;
 }
 
 .reply-annotation__review--verified {
-  color: #007bff;
+  background: #007bff;
 }
 
-.reply-annotation__action--bottom,
-.reply-annotation__header {
+.reply-annotation__action--bottom {
   display: flex;
   justify-content: space-between;
+}
+
+.reply-annotation__header {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .reply-annotation__action--bottom .see-in-context {
@@ -48,11 +67,53 @@
 }
 
 .reply-annotation__parent {
-  opacity: 0.6;
   color: #9a9696;
+}
+
+.reply-annotation__parent .reply-annotation__user,
+.reply-annotation__parent .reply-annotation__quote,
+.reply-annotation__parent .reply-annotation__comment,
+.reply-annotation__parent .reply-annotation__tags {
+  opacity: 0.6;
+}
+
+.reply-annotation__parent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .reply-annotation__reply {
   padding-left: 10px;
-  border-left: 3px solid #020721;
+  border-left: 3px solid #999;
+  margin-top: 30px;
+}
+
+.reply-annotation__review {
+  opacity: 1;
+}
+
+.reply-annotation__tags .badge,
+.reply-annotation__tags button {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+}
+
+.reply-annotation__tags .badge-light {
+  background: #f2f2f2 !important;
+}
+
+.reply-annotation__tags .badge.issue {
+  cursor: pointer;
+}
+
+.reply-annotation__tags .badge .fas {
+  font-size: 9px;
+  margin-left: 3px;
+}
+
+.reply-annotation__tags {
+  margin-bottom: 1rem;
 }

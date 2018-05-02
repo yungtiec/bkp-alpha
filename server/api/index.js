@@ -1,6 +1,7 @@
 const router = require("express").Router();
 module.exports = router;
 
+router.use("/admin", require("./admin"));
 router.use("/users", require("./users"));
 router.use("/annotator", require("./annotator"));
 router.use("/annotation", require("./annotation"));

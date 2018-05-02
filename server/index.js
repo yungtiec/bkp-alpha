@@ -76,6 +76,12 @@ const createApp = () => {
       res.redirect(`/${req.params.file}`);
     }
   );
+  app.get(
+    "/project/:symbol/survey/:surveyId/public/:file",
+    (req, res, next) => {
+      res.redirect(`/${req.params.file}`);
+    }
+  );
    app.get("/admin/project-survey/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });

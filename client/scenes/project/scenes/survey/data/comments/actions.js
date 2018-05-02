@@ -10,7 +10,7 @@ import {
 import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";
-import { findItemInTreeById } from "../utils";
+import { findItemInTreeById } from "../../../../../../utils";
 
 export const fetchCommentsBySurvey = projectSurveyId => {
   return async dispatch => {

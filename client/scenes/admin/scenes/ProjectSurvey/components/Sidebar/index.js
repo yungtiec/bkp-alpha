@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import CheckboxTree from "react-checkbox-tree";
-import './react-checkbox-tree.scss';
+import "./react-checkbox-tree.scss";
+import { checkSidebarFilter } from "../../reducer";
 
 const nodes = [
   {
-    value: "types",
-    label: "TYPES",
+    value: "type",
+    label: "TYPE",
     children: [
-      { value: "all", label: "All" },
-      { value: "annotations", label: "Annotations" },
-      { value: "comment", label: "Comment" }
+      { value: "annotation", label: "Annotation" },
+      { value: "page_comment", label: "Comment" }
     ]
-  },{
+  },
+  {
     value: "status",
     label: "STATUS",
     children: [
@@ -21,7 +22,8 @@ const nodes = [
       { value: "spam", label: "Spam" },
       { value: "pending", label: "Pending" }
     ]
-  },{
+  },
+  {
     value: "issue",
     label: "ISSUE",
     children: [
@@ -31,13 +33,12 @@ const nodes = [
   }
 ];
 
-export default class AdminProjectSurveySidebar extends Component {
+class AdminProjectSurveySidebar extends Component {
   constructor() {
     super();
 
     this.state = {
-      checked: [],
-      expanded: []
+      expanded: ["type", "status", "issue"]
     };
   }
 
@@ -46,11 +47,19 @@ export default class AdminProjectSurveySidebar extends Component {
       <CheckboxTree
         nodes={nodes}
         onlyLeafCheckboxes={true}
-        checked={this.state.checked}
+        checked={this.props.checked}
         expanded={this.state.expanded}
-        onCheck={checked => this.setState({ checked })}
+        onCheck={checked => this.props.checkSidebarFilter(checked)}
         onExpand={expanded => this.setState({ expanded })}
       />
     );
   }
 }
+
+const mapState = state => ({checked: state.scenes.admin.scenes.projectSurvey.checked})
+
+const actions = {
+  checkSidebarFilter
+}
+
+export default connect(mapState, actions)(AdminProjectSurveySidebar)

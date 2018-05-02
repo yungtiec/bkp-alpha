@@ -1,5 +1,11 @@
 .main-annotation__header {
   margin-bottom: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.main-annotation__user span {
+  margin-right: 10px;
 }
 
 .main-annotation__header p {
@@ -25,16 +31,49 @@
   padding-left: 10px;
 }
 
-.main-annotation__review--pending {
-  color: #838383;
+.main-annotation__review {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  color: white;
 }
 
-.main-annotation__review--spam {
-  color: #dc3545;
+.main-annotation__review--pending,
+.main-annotation__review--issue-close {
+  background: #838383;
+}
+
+.main-annotation__review--spam,
+.main-annotation__review--issue-open {
+  background: #dc3545;
 }
 
 .main-annotation__review--verified {
-  color: #007bff;
+  background: #007bff;
+}
+
+.main-annotation__review--verified {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  background: #007bff;
+  color: white;
 }
 
 .main-annotation__action--bottom,
@@ -46,4 +85,29 @@
 .main-annotation__action--bottom .see-in-context {
   cursor: pointer;
   color: #459df9;
+}
+
+.main-annotation__tags .badge,
+.main-annotation__tags button {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+}
+
+.main-annotation__tags .badge-light {
+  background: #f2f2f2 !important;
+}
+
+.main-annotation__tags .badge.issue {
+  cursor: pointer;
+}
+
+.main-annotation__tags .badge .fas {
+  font-size: 9px;
+  margin-left: 3px;
+}
+
+.main-annotation__tags {
+  margin-bottom: 1rem;
 }

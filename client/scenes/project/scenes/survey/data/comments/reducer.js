@@ -9,7 +9,7 @@ import {
   filter
 } from "lodash";
 import * as types from "./actionTypes";
-import { findItemInTreeById } from "../utils";
+import { findItemInTreeById } from "../../../../../../utils";
 import moment from "moment";
 
 const initialState = {

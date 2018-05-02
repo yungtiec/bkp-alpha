@@ -9,7 +9,7 @@ const Annotation = db.define(
       allowNull: false
     },
     survey_question_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER
     },
     survey_answer_id: {
       type: Sequelize.INTEGER
@@ -34,6 +34,18 @@ const Annotation = db.define(
     reviewed: {
       type: Sequelize.ENUM("pending", "spam", "verified"),
       defaultValue: "pending"
+    },
+    engagementItemType: {
+      type: Sequelize.VIRTUAL,
+      get() {
+        return "annotation"
+      }
+    },
+    engagementItemId: {
+      type: Sequelize.VIRTUAL,
+      get() {
+        return "annotation" + this.getDataValue("id")
+      }
     }
   },
   {

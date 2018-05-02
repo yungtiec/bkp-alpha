@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import autoBind from "react-autobind";
 import {
-  fetchPendingAnnotations,
-  verifyPendingAnnotation
-} from "./data/pendingAnnotations/actions";
-import { getPendingAnnotations } from "./data/pendingAnnotations/reducer";
+  fetchEngagementItems,
+  verifyPendingEngagementItem,
+  changeEngagementItemIssueStatus
+} from "./data/engagementItems/actions";
 import { Sidebar } from "./components";
 import {
   requiresAuthorization,
@@ -18,7 +18,7 @@ import history from "../../../../history";
 import asyncPoll from "react-async-poll";
 
 const onPollInterval = (props, dispatch) => {
-  return props.fetchPendingAnnotations(props.match.params.projectSurveyId);
+  return props.fetchEngagementItems(props.match.params.projectSurveyId);
 };
 
 class AdminProjectSurveyPanel extends Component {
@@ -27,39 +27,69 @@ class AdminProjectSurveyPanel extends Component {
     autoBind(this);
   }
 
-  labelAsNotSpam(annotationId) {
-    this.props.verifyPendingAnnotation(annotationId, "verified");
+  labelAsNotSpam(engagementItem) {
+    this.props.verifyPendingEngagementItem(engagementItem, "verified");
   }
 
-  labelAsSpam(annotationId) {
-    this.props.verifyPendingAnnotation(annotationId, "spam");
+  labelAsSpam(engagementItem) {
+    this.props.verifyPendingEngagementItem(engagementItem, "spam");
   }
 
-  renderActions(annotation, path) {
+  renderActions(engagementItem, path) {
     return (
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
           className="btn btn-outline-danger"
-          onClick={() => this.labelAsSpam(annotation.id)}
+          onClick={() => this.labelAsSpam(engagementItem)}
         >
           spam
         </button>
         <button
           type="button"
           className="btn btn-outline-primary"
-          onClick={() => this.labelAsNotSpam(annotation.id)}
+          onClick={() => this.labelAsNotSpam(engagementItem)}
         >
           verify
         </button>
+        {engagementItem.issue ? (
+          engagementItem.issue.open ? (
+            <button
+              type="button"
+              className="btn btn-outline-success"
+              onClick={() =>
+                this.props.changeEngagementItemIssueStatus(engagementItem)
+              }
+            >
+              close issue
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-outline-success"
+              onClick={() =>
+                this.props.changeEngagementItemIssueStatus(engagementItem)
+              }
+            >
+              re-open issue
+            </button>
+          )
+        ) : null}
         <button
           type="button"
           className="btn btn-outline-secondary"
+          disabled={engagementItem.reviewed === "spam"}
           onClick={() =>
             history.push(
-              `${path}/question/${annotation.survey_question_id}/annotation/${
-                annotation.id
-              }`
+              engagementItem.engagementItemType === "annotation"
+                ? engagementItem.hierarchyLevel === 1
+                  ? `${path}/question/${
+                      engagementItem.survey_question_id
+                    }/annotation/${engagementItem.id}`
+                  : `${path}/question/${
+                      engagementItem.survey_question_id
+                    }/annotation/${engagementItem.ancestors[0].id}`
+                : `${path}/page-comments`
             )
           }
         >
@@ -70,32 +100,45 @@ class AdminProjectSurveyPanel extends Component {
   }
 
   render() {
-    const { annotationsById, annotationIds } = this.props;
+    const {
+      engagementItemsById,
+      engagementItemIds,
+      changeEngagementItemIssueStatus
+    } = this.props;
 
     return (
       <div className="admin-project-survey-panel">
         <Sidebar />
         <div class="admin-project-survey-panel__item-container">
-          {annotationIds.map(aid => {
-            const path = annotationsById[aid].uri.replace(
-              window.location.origin,
-              ""
-            );
-            return annotationsById[aid].parentId ? (
+          {engagementItemIds.map(aid => {
+            const path =
+              engagementItemsById[aid].engagementItemType === "annotation"
+                ? engagementItemsById[aid].hierarchyLevel === 1
+                  ? engagementItemsById[aid].uri.replace(
+                      window.location.origin,
+                      ""
+                    )
+                  : engagementItemsById[aid].ancestors[0].uri.replace(
+                      window.location.origin,
+                      ""
+                    )
+                : `/project/${
+                    engagementItemsById[aid].project_survey.project.symbol
+                  }/survey/${engagementItemsById[aid].project_survey_id}`;
+
+            return engagementItemsById[aid].parentId ? (
               <AnnotationReply
                 key={`admin__annotation-reply--${aid}`}
-                annotation={annotationsById[aid]}
-                path={path}
+                annotation={engagementItemsById[aid]}
               >
-                {this.renderActions(annotationsById[aid], path)}
+                {this.renderActions(engagementItemsById[aid], path)}
               </AnnotationReply>
             ) : (
               <AnnotationMain
                 key={`admin__annotation-main--${aid}`}
-                annotation={annotationsById[aid]}
-                path={path}
+                annotation={engagementItemsById[aid]}
               >
-                {this.renderActions(annotationsById[aid], path)}
+                {this.renderActions(engagementItemsById[aid], path)}
               </AnnotationMain>
             );
           })}
@@ -106,16 +149,17 @@ class AdminProjectSurveyPanel extends Component {
 }
 
 const mapState = (state, ownProps) => {
-  const { annotationsById, annotationIds } = ownProps;
+  const { engagementItemsById, engagementItemIds } = ownProps;
   return {
-    annotationsById,
-    annotationIds
+    engagementItemsById,
+    engagementItemIds
   };
 };
 
 const actions = {
-  fetchPendingAnnotations,
-  verifyPendingAnnotation
+  fetchEngagementItems,
+  verifyPendingEngagementItem,
+  changeEngagementItemIssueStatus
 };
 
 export default withRouter(

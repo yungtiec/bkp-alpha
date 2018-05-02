@@ -10,36 +10,55 @@ export default ({ annotation, path, children }) => {
     <Avatar
       name={`${annotation.owner.first_name} ${annotation.owner.last_name}`}
       size={40}
+      color={"#999999"}
     />
   ) : (
     "you"
   );
 
+  const parent = annotation.ancestors.slice(-1)[0];
+
   return (
     <div className="reply-annotation__main">
-      <div className="reply-annotation__header">
-        <p>
-          <span className={`reply-annotation__review--${annotation.reviewed}`}>
-            ({annotation.reviewed})
-          </span>{"  "}
-          submitted {moment(annotation.createdAt).fromNow()}
-        </p>
-      </div>
-      <p className="reply-annotation__quote">{annotation.quote}</p>
       <div className="reply-annotation__parent">
-        <p className="reply-annotation__user">
-          <span>
-            <Avatar
-              name={`${annotation.parent.owner.first_name} ${
-                annotation.parent.owner.last_name
+        <div className="reply-annotation__parent-header">
+          <p className="reply-annotation__user">
+            <span>
+              <Avatar
+                name={`${parent.owner.first_name} ${parent.owner.last_name}`}
+                size={40}
+                color={"#999999"}
+              />
+            </span>
+            <span>{moment(parent.createdAt).fromNow()}</span>
+          </p>
+          <p>
+            <span
+              className={`reply-annotation__review reply-annotation__review reply-annotation__review--${
+                annotation.reviewed
               }`}
-              size={40}
-            />
-          </span>
-          <span>{moment(annotation.parent.createdAt).fromNow()}</span>
-        </p>
-        <p className="reply-annotation__comment">{annotation.parent.comment}</p>
+            >
+              {annotation.reviewed}
+            </span>
+          </p>
+        </div>
+        <p className="reply-annotation__quote">{annotation.quote}</p>
+        <p className="reply-annotation__comment">{parent.comment}</p>
+        <div className="reply-annotation__tags">
+          {parent.tags && parent.tags.length
+            ? parent.tags.map(tag => (
+                <span
+                  key={`annotation-${parent.id}__tag-${tag.name}`}
+                  className="badge badge-light"
+                >
+                  {tag.name}
+                  {"  "}
+                </span>
+              ))
+            : ""}
+        </div>
       </div>
+
       <div className="reply-annotation__reply">
         <p className="reply-annotation__user">
           <span>
@@ -48,6 +67,7 @@ export default ({ annotation, path, children }) => {
         </p>
         <p className="reply-annotation__comment">{annotation.comment}</p>
       </div>
+
       <div className="reply-annotation__action--bottom">
         <div />
         {children}
