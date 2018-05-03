@@ -260,23 +260,24 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [
-    numAnnoations,
-    numPageComments,
-    numAnnoationIssues,
-    numPageCommentIssues
-  ] = await Promise.map(
+  const [numAnnotations, numPageComments] = await Promise.map(
     [
-      user.getAnnotations(),
-      user.getProjectSurveyComments(),
-      user.getAnnotations({ include: [{ model: db.model("issue") }] }),
-      user.getProjectSurveyComments({ include: [{ model: db.model("issue") }] })
+      user.getAnnotations({ attributes: ["id"], raw: true }),
+      user.getProjectSurveyComments({ attributes: ["id"], raw: true })
     ],
     collections => collections.length
   );
+  const [numAnnoationIssues, numPageCommentIssues] = await Promise.map(
+    [
+      user.getAnnotations({ include: [{ model: db.model("issue") }] }),
+      user.getProjectSurveyComments({ include: [{ model: db.model("issue") }] })
+    ],
+    collections =>
+      collections.filter(item => item.issue && item.issue.open).length
+  );
   return assignIn(
     {
-      num_annotations: numAnnoations,
+      num_annotations: numAnnotations,
       num_page_comments: numPageComments,
       num_issues: numAnnoationIssues + numPageCommentIssues
     },

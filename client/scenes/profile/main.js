@@ -21,7 +21,7 @@ const Profile = ({ basicInfo, match }) => {
     <div className="profile-container">
       <ProfileBanner
         name={`${basicInfo.first_name} ${basicInfo.last_name}`}
-        numAnnotations={basicInfo.num_nnotations}
+        numAnnotations={basicInfo.num_annotations}
         numPageComments={basicInfo.num_page_comments}
         numIssues={basicInfo.num_issues}
         joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
