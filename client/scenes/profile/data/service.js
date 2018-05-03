@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export function getUserProfile() {
-  return axios.get("/api/users/profile").then(res => res.data);
+export function getUserProfile(userId) {
+  return axios.get(`/api/users/${userId}`).then(res => res.data);
 }

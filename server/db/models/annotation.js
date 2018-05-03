@@ -55,7 +55,7 @@ const Annotation = db.define(
 
 Annotation.getAnnotationsFromUrl = function(uri) {
   return Annotation.findAll({
-    where: { uri, parentId: null, reviewed: { [Sequelize.Op.ne]: "spam" } },
+    where: { uri, parentId: null },
     include: [
       {
         model: db.model("user"),
@@ -77,14 +77,6 @@ Annotation.getAnnotationsFromUrl = function(uri) {
       },
       {
         model: Annotation,
-        where: {
-          reviewed: {
-            [Sequelize.Op.or]: [
-              { [Sequelize.Op.eq]: "pending" },
-              { [Sequelize.Op.eq]: "verified" }
-            ]
-          }
-        },
         required: false,
         include: [
           {
@@ -107,7 +99,7 @@ Annotation.getAnnotationsFromUrl = function(uri) {
 
 Annotation.findOneThreadByRootId = function(id) {
   return Annotation.findOne({
-    where: { id, reviewed: { [Sequelize.Op.ne]: "spam" } },
+    where: { id },
     include: [
       {
         model: db.model("user"),
@@ -129,14 +121,6 @@ Annotation.findOneThreadByRootId = function(id) {
       },
       {
         model: Annotation,
-        where: {
-          reviewed: {
-            [Sequelize.Op.or]: [
-              { [Sequelize.Op.eq]: "pending" },
-              { [Sequelize.Op.eq]: "verified" }
-            ]
-          }
-        },
         required: false,
         include: [
           {

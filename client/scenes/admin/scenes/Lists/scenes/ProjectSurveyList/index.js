@@ -41,7 +41,7 @@ const mapState = state => {
   const {
     projectSurveysById,
     projectSurveyIds
-  } = state.scenes.admin.scenes.projectSurveyList.data.projectSurveys;
+  } = state.scenes.admin.scenes.lists.scenes.projectSurveyList.data.projectSurveys;
   return {
     projectSurveysById,
     projectSurveyIds

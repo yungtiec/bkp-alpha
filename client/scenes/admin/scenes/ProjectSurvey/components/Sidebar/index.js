@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import CheckboxTree from "react-checkbox-tree";
-import "./react-checkbox-tree.scss";
 import { checkSidebarFilter } from "../../reducer";
 
 const nodes = [

@@ -3,56 +3,36 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import { fetchUserProfile } from "./data/actions";
-import { getProfile } from "./data/reducer";
 import {
   ProfileBanner,
   ProfileNavbar,
-  About,
-  ProfileAnnotations,
   ProfileReplies
 } from "./components";
+import ProfileAbout from "./scenes/about";
+import ProfileAnnotations from "./scenes/annotations";
 import autoBind from "react-autobind";
 import moment from "moment";
 import history from "../../history";
 
-const Profile = ({ about, pastActions, match }) => {
+const Profile = ({ basicInfo, match }) => {
   const activeTab = window.location.pathname.split("/")[2];
 
   return (
     <div className="profile-container">
       <ProfileBanner
-        name={`${about.first_name} ${about.last_name}`}
-        numAnnotations={
-          pastActions.annotations && pastActions.annotations.length
-        }
-        joinDate={moment(about.createdAt).format("MMM YYYY")}
+        name={`${basicInfo.first_name} ${basicInfo.last_name}`}
+        numAnnotations={basicInfo.num_nnotations}
+        numPageComments={basicInfo.num_page_comments}
+        numIssues={basicInfo.num_issues}
+        joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
       />
       <ProfileNavbar activeTab={activeTab} url={match.url} />
       <Switch>
         <Route
           path={`${match.url}/about`}
-          render={props => <About {...about} {...props} />}
+          render={props => <ProfileAbout {...basicInfo} {...props} />}
         />
-        <Route
-          path={`${match.url}/annotations`}
-          render={props => (
-            <ProfileAnnotations
-              annotations={pastActions.annotations}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path={`${match.url}/replies`}
-          render={props => (
-            <ProfileReplies
-              about={about}
-              replies={pastActions.replies}
-              {...props}
-            />
-          )}
-        />
+        <Route path={`${match.url}/annotations`} component={ProfileAnnotations} />
         <Redirect from="/" exact to="/about" />
       </Switch>
     </div>
@@ -60,10 +40,9 @@ const Profile = ({ about, pastActions, match }) => {
 };
 
 const mapState = (state, ownProps) => {
-  const { about, pastActions } = ownProps;
+  const { basicInfo } = ownProps;
   return {
-    about,
-    pastActions
+    basicInfo
   };
 };
 

@@ -84,7 +84,8 @@ router.get("/search", async (req, res, next) => {
       where: {
         uri: req.query.uri,
         survey_question_id: req.query.survey_question_id,
-        reviewed: { $not: "spam" }
+        reviewed: { $not: "spam" },
+        hierarchyLevel: 1
       },
       include: [
         {

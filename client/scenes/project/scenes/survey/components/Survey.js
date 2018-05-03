@@ -66,7 +66,7 @@ export default class Survey extends Component {
       }
     } else if (
       givenPageCommentContext &&
-      this.props.annotationIds.length &&
+      this.props.commentIds.length &&
       this.props.surveyQnaIds.length &&
       !this.state.focusOnce
     ) {

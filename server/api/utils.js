@@ -24,6 +24,20 @@ const ensureAdminRole = async (req, res, next) => {
   }
 };
 
+const ensureAdminRoleOrOwnership = async (req, res, next) => {
+  const requestor = await User.scope({
+    method: ["roles", Number(req.params.userId)]
+  }).findOne();
+  if (
+    !requestor.roles.filter(r => r.name === "admin").length ||
+    Number(req.params.userId) !== req.user.id
+  ) {
+    res.sendStatus(401);
+  } else {
+    next();
+  }
+};
+
 const ensureAdminRoleOrAnnotationOwnership = async (req, res, next) => {
   const requestor = await User.findOne({
     where: { id: req.user.id },
@@ -47,5 +61,6 @@ const ensureAdminRoleOrAnnotationOwnership = async (req, res, next) => {
 module.exports = {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrAnnotationOwnership
+  ensureAdminRoleOrAnnotationOwnership,
+  ensureAdminRoleOrOwnership
 };

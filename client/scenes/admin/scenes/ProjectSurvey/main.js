@@ -1,7 +1,7 @@
 import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import autoBind from "react-autobind";
 import {
   fetchEngagementItems,
@@ -107,41 +107,44 @@ class AdminProjectSurveyPanel extends Component {
     } = this.props;
 
     return (
-      <div className="admin-project-survey-panel">
-        <Sidebar />
-        <div class="admin-project-survey-panel__item-container">
-          {engagementItemIds.map(aid => {
-            const path =
-              engagementItemsById[aid].engagementItemType === "annotation"
-                ? engagementItemsById[aid].hierarchyLevel === 1
-                  ? engagementItemsById[aid].uri.replace(
-                      window.location.origin,
-                      ""
-                    )
-                  : engagementItemsById[aid].ancestors[0].uri.replace(
-                      window.location.origin,
-                      ""
-                    )
-                : `/project/${
-                    engagementItemsById[aid].project_survey.project.symbol
-                  }/survey/${engagementItemsById[aid].project_survey_id}`;
+      <div className="admin-project-survey-panel  main-container">
+        <Link to="/admin/list/project-surveys">back to survey list</Link>
+        <div className="admin-project-survey-panel__content">
+          <Sidebar />
+          <div class="admin-project-survey-panel__item-container">
+            {engagementItemIds.map(aid => {
+              const path =
+                engagementItemsById[aid].engagementItemType === "annotation"
+                  ? engagementItemsById[aid].hierarchyLevel === 1
+                    ? engagementItemsById[aid].uri.replace(
+                        window.location.origin,
+                        ""
+                      )
+                    : engagementItemsById[aid].ancestors[0].uri.replace(
+                        window.location.origin,
+                        ""
+                      )
+                  : `/project/${
+                      engagementItemsById[aid].project_survey.project.symbol
+                    }/survey/${engagementItemsById[aid].project_survey_id}`;
 
-            return engagementItemsById[aid].parentId ? (
-              <AnnotationReply
-                key={`admin__annotation-reply--${aid}`}
-                annotation={engagementItemsById[aid]}
-              >
-                {this.renderActions(engagementItemsById[aid], path)}
-              </AnnotationReply>
-            ) : (
-              <AnnotationMain
-                key={`admin__annotation-main--${aid}`}
-                annotation={engagementItemsById[aid]}
-              >
-                {this.renderActions(engagementItemsById[aid], path)}
-              </AnnotationMain>
-            );
-          })}
+              return engagementItemsById[aid].parentId ? (
+                <AnnotationReply
+                  key={`admin__annotation-reply--${aid}`}
+                  annotation={engagementItemsById[aid]}
+                >
+                  {this.renderActions(engagementItemsById[aid], path)}
+                </AnnotationReply>
+              ) : (
+                <AnnotationMain
+                  key={`admin__annotation-main--${aid}`}
+                  annotation={engagementItemsById[aid]}
+                >
+                  {this.renderActions(engagementItemsById[aid], path)}
+                </AnnotationMain>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

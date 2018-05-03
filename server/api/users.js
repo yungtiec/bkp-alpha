@@ -1,68 +1,62 @@
+const Sequelize = require("sequelize");
+const db = require("../db");
 const router = require("express").Router();
 const { User, Role, Annotation } = require("../db/models");
 const { assignIn } = require("lodash");
+const {
+  ensureAuthentication,
+  ensureAdminRole,
+  ensureAdminRoleOrOwnership
+} = require("./utils");
 module.exports = router;
 
-router.get("/", async (req, res, next) => {
-  const requestor = await User.findOne({
-    where: { id: req.user.id },
-    include: [
-      {
-        model: Role
+router.get(
+  "/:userId",
+  ensureAuthentication,
+  ensureAdminRoleOrOwnership,
+  async (req, res, next) => {
+    try {
+      const profile = await User.getContributions(Number(req.params.userId));
+      res.send(profile);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.get(
+  "/:userId/annotations",
+  ensureAuthentication,
+  ensureAdminRoleOrOwnership,
+  async (req, res, next) => {
+    console.log(req.query)
+    var queryObj = {
+      userId: Number(req.params.userId),
+      limit: Number(req.query.limit),
+      offset: Number(req.query.limit) * Number(req.query.offset),
+      reviewStatus: {
+        [Sequelize.Op.or]: [
+          { [Sequelize.Op.eq]: "pending" },
+          { [Sequelize.Op.eq]: "verified" },
+          { [Sequelize.Op.eq]: "spam" }
+        ]
       }
-    ]
-  });
-  if (requestor.roles.filter(r => r.name === "admin").length) {
-    User.findAll({
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ["id", "email", "first_name", "last_name", "organization"]
-    })
-      .then(users => res.json(users))
-      .catch(next);
-  } else {
-    res.sendStatus(401);
-  }
-});
+    };
+    if (req.query.reviewStatus && req.query.reviewStatus.length) {
+      queryObj.reviewStatus = {
+        [Sequelize.Op.or]: req.query.reviewStatus.map(status => ({
+          [Sequelize.Op.eq]: status
+        }))
+      };
+    }
 
-router.get("/profile", async (req, res, next) => {
-  try {
-    var user = await User.findOne({
-      where: { id: req.user.id },
-      include: [
-        {
-          model: Annotation,
-          as: "annotations",
-          where: {
-            hierarchyLevel: 1
-          }
-        }
-      ]
-    });
-    if (!user) user = await User.findById(req.user.id);
-    const replies = await user.getAnnotations({
-      where: {
-        hierarchyLevel: { $not: 1 }
-      },
-      include: [
-        {
-          model: Annotation,
-          as: "parent",
-          include: [
-            {
-              model: User,
-              as: "owner"
-            }
-          ]
-        },
-        { model: Annotation, as: "ancestors" }
-      ]
-    });
-
-    const profile = assignIn({ replies }, user.toJSON());
-    res.send(profile);
-  } catch (err) {
-    next(err);
+    try {
+      const profile = await User.scope({
+        method: ["annotations", queryObj]
+      }).findOne();
+      res.send(profile.annotations || []);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);

@@ -127,7 +127,7 @@ ProjectSurveyComment.belongsToMany(User, {
 
 User.hasMany(ProjectSurveyComment, {
   foreignKey: "owner_id",
-  as: "project_survey_comments"
+  as: "projectSurveyComments"
 });
 ProjectSurveyComment.belongsTo(User, {
   foreignKey: "owner_id",

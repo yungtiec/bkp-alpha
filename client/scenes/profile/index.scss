@@ -1,3 +1,5 @@
+@import "../../breakpoint";
+
 .profile-subroute {
   max-width: 600px;
   margin: 0 auto;
@@ -7,4 +9,11 @@
 .profile-subroute__empty {
   width: 230px;
   margin: 100px auto;
+}
+
+.profile-enagement-items__container {
+  display: flex;
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
 }

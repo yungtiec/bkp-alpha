@@ -290,7 +290,9 @@ export function getAllAnnotations(state) {
     );
   });
   var sortedAnnotations = sortFn(annotationCollection);
-  var sortedAnnotationIds = sortedAnnotations.map(a => a.id);
+  var sortedAnnotationIds = sortedAnnotations
+    .map(a => a.id)
+    .filter(aid => annotationsById[aid].reviewed !== "spam");
   var filteredAnnotationIds = filterByTags({
     tagFilter,
     annotationIds: sortedAnnotationIds,
@@ -304,7 +306,9 @@ export function getAllAnnotations(state) {
     };
   } else {
     filteredAnnotationIds = filteredAnnotationIds.filter(
-      aid => annotationsById[aid].reviewed === verificationStatus
+      aid =>
+        annotationsById[aid].reviewed === verificationStatus &&
+        annotationsById[aid].reviewed !== "spam"
     );
     return {
       annotationIds: filteredAnnotationIds,

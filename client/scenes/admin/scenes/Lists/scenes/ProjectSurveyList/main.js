@@ -3,8 +3,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import autoBind from "react-autobind";
-import { requiresAuthorization, StackableTable } from "../../../../components";
-import history from "../../../../history";
+import {
+  requiresAuthorization,
+  StackableTable
+} from "../../../../../../components";
+import history from "../../../../../../history";
 
 class AdminProjectSurveyList extends Component {
   constructor(props) {
@@ -30,7 +33,7 @@ class AdminProjectSurveyList extends Component {
     const data = projectSurveyIds.map(id => projectSurveysById[id]);
 
     return (
-      <div className="project-survey-list__container">
+      <div className="project-survey-list__container  main-container">
         <StackableTable
           columns={columns}
           data={data}
@@ -38,7 +41,7 @@ class AdminProjectSurveyList extends Component {
           getTrProps={(state, rowInfo, column, instance) => {
             return {
               onClick: (e, t) => {
-                history.push(`project-survey/${rowInfo.row.id}`);
+                history.push(`/admin/project-survey/${rowInfo.row.id}`);
               }
             };
           }}

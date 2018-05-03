@@ -2,10 +2,15 @@
 
 .admin-project-survey-panel {
   padding: 30px 15px;
+  @include breakpoint(xs) {
+    padding: 0px;
+  }
+}
+
+.admin-project-survey-panel__content {
   display: flex;
   @include breakpoint(xs) {
     flex-direction: column;
-    padding: 0px;
   }
 }
 
@@ -15,4 +20,8 @@
 
 .admin-project-survey-panel__item-container {
   flex: 1;
+  margin-top: -35px;
+  @include breakpoint(xs) {
+    margin-top: 0px;
+  }
 }

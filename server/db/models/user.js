@@ -1,42 +1,218 @@
 const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
+const { assignIn } = require("lodash");
 
-const User = db.define("user", {
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false
-  },
-  password: {
-    type: Sequelize.STRING,
-    // Making `.password` act like a func hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue("password");
+const User = db.define(
+  "user",
+  {
+    email: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false
+    },
+    password: {
+      type: Sequelize.STRING,
+      // Making `.password` act like a func hides it when serializing to JSON.
+      // This is a hack to get around Sequelize's lack of a "private" option.
+      get() {
+        return () => this.getDataValue("password");
+      }
+    },
+    salt: {
+      type: Sequelize.STRING,
+      // Making `.salt` act like a function hides it when serializing to JSON.
+      // This is a hack to get around Sequelize's lack of a "private" option.
+      get() {
+        return () => this.getDataValue("salt");
+      }
+    },
+    googleId: {
+      type: Sequelize.STRING
+    },
+    first_name: {
+      type: Sequelize.STRING
+    },
+    last_name: {
+      type: Sequelize.STRING
+    },
+    organization: {
+      type: Sequelize.STRING
     }
   },
-  salt: {
-    type: Sequelize.STRING,
-    // Making `.salt` act like a function hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue("salt");
+  {
+    scopes: {
+      annotations: function({ userId, limit, offset, reviewStatus }) {
+        return {
+          where: { id: userId },
+          attributes: [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "organization"
+          ],
+          include: [
+            {
+              model: db.model("annotation"),
+              where: { reviewed: reviewStatus },
+              as: "annotations",
+              required: false,
+              limit: limit,
+              offset: offset,
+              subQuery: false,
+              include: [
+                {
+                  model: db.model("annotation"),
+                  as: "ancestors",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("user"),
+                      as: "owner",
+                      required: false
+                    },
+                    {
+                      model: db.model("tag"),
+                      required: false
+                    },
+                    {
+                      model: db.model("issue"),
+                      required: false
+                    }
+                  ]
+                },
+                {
+                  model: db.model("tag"),
+                  required: false
+                },
+                {
+                  model: db.model("issue"),
+                  required: false
+                },
+                {
+                  model: db.model("project_survey"),
+                  attributes: ["id"],
+                  include: [
+                    {
+                      model: db.model("project"),
+                      attributes: ["id", "symbol", "name"]
+                    },
+                    {
+                      model: db.model("survey"),
+                      attributes: ["id", "title"]
+                    }
+                  ]
+                }
+              ],
+              order: [
+                ["createdAt", "DESC"],
+                ["updatedAt", "DESC"],
+                [
+                  {
+                    model: db.model("annotation"),
+                    as: "ancestors"
+                  },
+                  "hierarchyLevel"
+                ]
+              ]
+            }
+          ]
+        };
+      },
+      pageComments: function({ userId, limit, offset }) {
+        return {
+          where: { id: userId },
+          attributes: [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "organization"
+          ],
+          include: [
+            {
+              model: db.model("project_survey_comment"),
+              as: "projectSurveyComments",
+              required: false,
+              limit,
+              offset,
+              include: [
+                {
+                  model: db.model("project_survey_comment"),
+                  as: "ancestors",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("user"),
+                      as: "owner",
+                      required: false
+                    },
+                    {
+                      model: db.model("tag"),
+                      required: false
+                    },
+                    {
+                      model: db.model("issue"),
+                      required: false
+                    }
+                  ]
+                },
+                {
+                  model: db.model("tag"),
+                  required: false
+                },
+                {
+                  model: db.model("issue"),
+                  required: false
+                },
+                {
+                  model: db.model("project_survey"),
+                  attributes: ["id"],
+                  include: [
+                    {
+                      model: db.model("project"),
+                      attributes: ["id", "symbol", "name"]
+                    },
+                    {
+                      model: db.model("survey"),
+                      attributes: ["id", "title"]
+                    }
+                  ]
+                }
+              ],
+              order: [
+                [
+                  {
+                    model: db.model("project_survey_comment"),
+                    as: "ancestors"
+                  },
+                  "hierarchyLevel"
+                ]
+              ]
+            }
+          ]
+        };
+      },
+      roles: function(userId) {
+        return {
+          where: { id: userId },
+          include: [
+            {
+              model: db.model("role")
+            }
+          ]
+        };
+      },
+      basicInfo: function(userId) {
+        return {
+          where: { id: userId },
+          attributes: ["id", "email", "first_name", "last_name", "organization"]
+        };
+      }
     }
-  },
-  googleId: {
-    type: Sequelize.STRING
-  },
-  first_name: {
-    type: Sequelize.STRING
-  },
-  last_name: {
-    type: Sequelize.STRING
-  },
-  organization: {
-    type: Sequelize.STRING
   }
-});
+);
 
 module.exports = User;
 
@@ -78,6 +254,34 @@ User.encryptPassword = function(plainText, salt) {
     .update(plainText)
     .update(salt)
     .digest("hex");
+};
+
+User.getContributions = async function(userId) {
+  const user = await User.scope({
+    method: ["basicInfo", Number(userId)]
+  }).findOne();
+  const [
+    numAnnoations,
+    numPageComments,
+    numAnnoationIssues,
+    numPageCommentIssues
+  ] = await Promise.map(
+    [
+      user.getAnnotations(),
+      user.getProjectSurveyComments(),
+      user.getAnnotations({ include: [{ model: db.model("issue") }] }),
+      user.getProjectSurveyComments({ include: [{ model: db.model("issue") }] })
+    ],
+    collections => collections.length
+  );
+  return assignIn(
+    {
+      num_annotations: numAnnoations,
+      num_page_comments: numPageComments,
+      num_issues: numAnnoationIssues + numPageCommentIssues
+    },
+    user.toJSON()
+  );
 };
 
 /**

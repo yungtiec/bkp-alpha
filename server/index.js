@@ -82,7 +82,13 @@ const createApp = () => {
       res.redirect(`/${req.params.file}`);
     }
   );
-   app.get("/admin/project-survey/public/:file", (req, res, next) => {
+  app.get("/admin/project-survey/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
+  app.get("/admin/list/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
+  app.get("/admin/list/project-surveys/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
 

@@ -8,6 +8,7 @@ import "react-select/dist/react-select.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "Tether";
 import "bootstrap/dist/js/bootstrap.min.js";
+import "./react-checkbox-tree.scss";
 import "./index.scss";
 import React from "react";
 import ReactDOM from "react-dom";

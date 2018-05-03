@@ -164,7 +164,9 @@ export function getAllComments(state) {
     return assignIn({ unix: moment(comment.createdAt).format("X") }, comment);
   });
   var sortedComments = sortFn(commentCollection);
-  var sortedCommentIds = sortedComments.map(a => a.id);
+  var sortedCommentIds = sortedComments
+    .map(a => a.id)
+    .filter(aid => commentsById[aid].reviewed !== "spam");
   var filteredCommentIds = filterByTags({
     tagFilter,
     commentIds: sortedCommentIds,
@@ -178,7 +180,9 @@ export function getAllComments(state) {
     };
   } else {
     filteredCommentIds = filteredCommentIds.filter(
-      aid => commentsById[aid].reviewed === verificationStatus
+      aid =>
+        commentsById[aid].reviewed === verificationStatus &&
+        commentsById[aid].reviewed !== "spam"
     );
     return {
       commentIds: filteredCommentIds,
