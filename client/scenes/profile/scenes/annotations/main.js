@@ -57,7 +57,7 @@ const ProfileAnnotations = ({
           }
         ]}
       />
-      <div className="profile-enagement-items__container">
+      <div className="profile-enagement-items">
         {annotationIds.map(
           aid =>
             annotationsById[aid].parentId ? (

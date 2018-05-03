@@ -29,7 +29,6 @@ router.get(
   ensureAuthentication,
   ensureAdminRoleOrOwnership,
   async (req, res, next) => {
-    console.log(req.query)
     var queryObj = {
       userId: Number(req.params.userId),
       limit: Number(req.query.limit),
