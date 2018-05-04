@@ -55,7 +55,13 @@ router.get(
         }))
       };
     }
-
+    if (req.query.issueStatus && req.query.issueStatus.length) {
+      queryObj.issueStatus = {
+        [Sequelize.Op.or]: req.query.issueStatus.map(status => ({
+          [Sequelize.Op.eq]: status === "open"
+        }))
+      };
+    }
     try {
       const {profile, annotationCount} = await User.getAnnotationsAndCount(queryObj);
       res.send({annotations: profile.annotations, annotationCount});

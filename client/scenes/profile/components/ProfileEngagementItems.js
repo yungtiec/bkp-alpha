@@ -17,7 +17,7 @@ const ancestorIsSpam = ancestors =>
   ancestors.reduce((bool, a) => a.reviewed === "spam" || bool, false);
 
 export default ({ engagementItemsById, engagementItemIds }) => (
-  <div className="profile-enagement-items">
+  <div>
     {!engagementItemIds.length && (
       <p style={{ marginTop: "15px" }}>You haven't made any annotation.</p>
     )}

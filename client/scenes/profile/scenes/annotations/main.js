@@ -28,7 +28,6 @@ class ProfileAnnotations extends Component {
   }
 
   handlePageClick(page) {
-    console.log(page);
     this.props.updatePageOffset(page.selected);
   }
 
@@ -63,6 +62,14 @@ class ProfileAnnotations extends Component {
                 { value: "spam", label: "Spam" },
                 { value: "pending", label: "Pending" }
               ]
+            },
+            {
+              value: "issue",
+              label: "ISSUE",
+              children: [
+                { value: "open", label: "Open" },
+                { value: "close", label: "Close" }
+              ]
             }
           ]}
         >
@@ -78,12 +85,12 @@ class ProfileAnnotations extends Component {
             }))}
           />
         </ProfileSidebar>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column profile-enagement-items">
           <ProfileEngagementItems
             engagementItemsById={annotationsById}
             engagementItemIds={annotationIds}
           />
-          {annotationIds.length && (
+          {annotationIds.length ? (
             <ReactPaginate
               previousLabel={"previous"}
               nextLabel={"next"}
@@ -97,7 +104,7 @@ class ProfileAnnotations extends Component {
               subContainerClassName={"pages pagination"}
               activeClassName={"active"}
             />
-          )}
+          ) : null}
         </div>
       </div>
     );

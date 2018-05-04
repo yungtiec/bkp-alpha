@@ -9,7 +9,7 @@ export default class ProfileSidebar extends Component {
     super();
 
     this.state = {
-      expanded: ["status"]
+      expanded: ["status", "issue"]
     };
   }
 

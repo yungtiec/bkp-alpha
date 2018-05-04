@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
-const { assignIn, clone } = require("lodash");
+const { assignIn, cloneDeep } = require("lodash");
 
 const User = db.define(
   "user",
@@ -42,9 +42,23 @@ const User = db.define(
   },
   {
     scopes: {
-      annotations: function({ userId, limit, offset, reviewStatus, projects }) {
+      annotations: function({
+        userId,
+        limit,
+        offset,
+        reviewStatus,
+        issueStatus,
+        projects
+      }) {
         var annotationQueryObj = getAnnotationQueryObj({
-          queryObj: { userId, limit, offset, reviewStatus, projects },
+          queryObj: {
+            userId,
+            limit,
+            offset,
+            reviewStatus,
+            projects,
+            issueStatus
+          },
           order: true
         });
         return {
@@ -64,10 +78,18 @@ const User = db.define(
         limit,
         offset,
         reviewStatus,
-        projects
+        projects,
+        issueStatus
       }) {
         var annotationQueryObj = getAnnotationQueryObj({
-          queryObj: { userId, limit, offset, reviewStatus, projects },
+          queryObj: {
+            userId,
+            limit,
+            offset,
+            reviewStatus,
+            projects,
+            issueStatus
+          },
           order: false,
           pageCount: true
         });
@@ -244,12 +266,11 @@ User.getContributions = async function(userId) {
 
 User.getAnnotationsAndCount = async function(queryObj) {
   const user = await User.scope({
-    method: ["annotations", clone(queryObj)]
+    method: ["annotations", cloneDeep(queryObj)]
   }).findOne();
   const { annotations } = await User.scope({
-    method: ["annotationCount", clone(queryObj)]
+    method: ["annotationCount", cloneDeep(queryObj)]
   }).findOne();
-  console.log(annotations.length);
   return { profile: user, annotationCount: annotations.length };
 };
 
@@ -268,7 +289,7 @@ const setSaltAndPassword = user => {
  */
 
 function getAnnotationQueryObj({
-  queryObj: { userId, limit, offset, reviewStatus, projects },
+  queryObj: { userId, limit, offset, reviewStatus, issueStatus, projects },
   order,
   pageCount
 }) {
@@ -303,6 +324,15 @@ function getAnnotationQueryObj({
           }
         ]
       };
+  var issueQuery = issueStatus
+    ? {
+        model: db.model("issue"),
+        where: { open: issueStatus }
+      }
+    : {
+        model: db.model("issue"),
+        required: false
+      };
   var annotationQueryObj = {
     model: db.model("annotation"),
     where: { reviewed: reviewStatus },
@@ -334,10 +364,7 @@ function getAnnotationQueryObj({
         model: db.model("tag"),
         required: false
       },
-      {
-        model: db.model("issue"),
-        required: false
-      },
+      issueQuery,
       projectSurveyQuery
     ]
   };
