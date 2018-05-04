@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { fetchPublishedProjectSurveyStats } from "./data/projectSurveys/actions";
+import { fetchPublishedProjectSurveyStats } from "../../../../../../data/reducer";
+import { getProjectSurveys } from "../../../../../../data/reducer";
 
 const LoadableAdminProjectSurveyList = Loadable({
   loader: () => import("./main"),
@@ -38,10 +39,7 @@ class MyComponent extends Component {
 }
 
 const mapState = state => {
-  const {
-    projectSurveysById,
-    projectSurveyIds
-  } = state.scenes.admin.scenes.lists.scenes.projectSurveyList.data.projectSurveys;
+  const { projectSurveysById, projectSurveyIds } = getProjectSurveys(state);
   return {
     projectSurveysById,
     projectSurveyIds

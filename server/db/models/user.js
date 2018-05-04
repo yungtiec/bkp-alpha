@@ -42,7 +42,39 @@ const User = db.define(
   },
   {
     scopes: {
-      annotations: function({ userId, limit, offset, reviewStatus }) {
+      annotations: function({ userId, limit, offset, reviewStatus, projects }) {
+        var projectSurveyQuery = projects
+          ? {
+              model: db.model("project_survey"),
+              attributes: ["id"],
+              required: true,
+              include: [
+                {
+                  model: db.model("project"),
+                  where: { id: projects },
+                  required: true,
+                  attributes: ["id", "symbol", "name"]
+                },
+                {
+                  model: db.model("survey"),
+                  attributes: ["id", "title"]
+                }
+              ]
+            }
+          : {
+              model: db.model("project_survey"),
+              attributes: ["id"],
+              include: [
+                {
+                  model: db.model("project"),
+                  attributes: ["id", "symbol", "name"]
+                },
+                {
+                  model: db.model("survey"),
+                  attributes: ["id", "title"]
+                }
+              ]
+            };
         return {
           where: { id: userId },
           attributes: [
@@ -57,7 +89,7 @@ const User = db.define(
               model: db.model("annotation"),
               where: { reviewed: reviewStatus },
               as: "annotations",
-              required: false,
+              // required: false,
               limit: limit,
               offset: offset,
               subQuery: false,
@@ -90,31 +122,18 @@ const User = db.define(
                   model: db.model("issue"),
                   required: false
                 },
-                {
-                  model: db.model("project_survey"),
-                  attributes: ["id"],
-                  include: [
-                    {
-                      model: db.model("project"),
-                      attributes: ["id", "symbol", "name"]
-                    },
-                    {
-                      model: db.model("survey"),
-                      attributes: ["id", "title"]
-                    }
-                  ]
-                }
+                projectSurveyQuery
               ],
               order: [
-                ["createdAt", "DESC"],
-                ["updatedAt", "DESC"],
                 [
                   {
-                    model: db.model("annotation"),
-                    as: "ancestors"
+                    model: db.model("project_survey")
                   },
-                  "hierarchyLevel"
-                ]
+                  "id",
+                  "DESC"
+                ],
+                ["createdAt", "DESC"],
+                ["updatedAt", "DESC"]
               ]
             }
           ]

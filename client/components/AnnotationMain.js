@@ -8,20 +8,29 @@ import Avatar from "react-avatar";
 export default ({ annotation, path, children }) => (
   <div className="main-annotation__main">
     <div className="main-annotation__header">
-      <p className="main-annotation__user">
-        <span>
+      {annotation.project_survey && annotation.project_survey.survey ? (
+        <div>
+          <span className="main-annotation__survey-title">
+            {annotation.project_survey.project.name}:{" "}
+            {annotation.project_survey.survey.title}
+          </span>
+        </div>
+      ) : (
+        <p className="main-annotation__user">
           {annotation.owner && (
-            <Avatar
-              name={`${annotation.owner.first_name} ${
-                annotation.owner.last_name
-              }`}
-              color={"#999999"}
-              size={40}
-            />
+            <span>
+              <Avatar
+                name={`${annotation.owner.first_name} ${
+                  annotation.owner.last_name
+                }`}
+                color={"#999999"}
+                size={40}
+              />
+            </span>
           )}
-        </span>
-        <span>{moment(parent.createdAt).fromNow()}</span>
-      </p>
+          <span>{moment(parent.createdAt).fromNow()}</span>
+        </p>
+      )}
       <p>
         {annotation.issue && (
           <span
@@ -41,6 +50,23 @@ export default ({ annotation, path, children }) => (
         </span>
       </p>
     </div>
+    {annotation.project_survey &&
+      annotation.project_survey.survey && (
+        <p className="main-annotation__user">
+          {annotation.owner && (
+            <span>
+              <Avatar
+                name={`${annotation.owner.first_name} ${
+                  annotation.owner.last_name
+                }`}
+                color={"#999999"}
+                size={40}
+              />
+            </span>
+          )}
+          <span>{moment(parent.createdAt).fromNow()}</span>
+        </p>
+      )}
     <p className="main-annotation__quote">{annotation.quote}</p>
     <p className="main-annotation__comment">{annotation.comment}</p>
     <div className="main-annotation__tags">

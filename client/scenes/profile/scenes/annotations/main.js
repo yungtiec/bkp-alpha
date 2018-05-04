@@ -1,14 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
+import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { groupBy, keys, isEmpty } from "lodash";
 import moment from "moment";
-import {
-  ProjectSymbolBlueBox,
-  AnnotationMain,
-  AnnotationReply
-} from "../../../../components";
-import { ProfileSidebar } from "../../components";
+import Select from "react-select";
+import { ProfileSidebar, ProfileEngagementItems } from "../../components";
 import {
   updatePageLimit,
   updatePageOffset,
@@ -16,97 +13,94 @@ import {
   updatePageSurveyFilter,
   checkSidebarFilter
 } from "./data/actions";
-
+import { ProjectSymbolBlueBox } from "../../../../components";
 import history from "../../../../history";
 
-const seeAnnotationContext = annotation => {
-  const path =
-    annotation.ancestors && annotation.ancestors.length
-      ? `${annotation.ancestors[0].uri.replace(window.origin, "")}/question/${
-          annotation.survey_question_id
-        }/annotation/${annotation.ancestors[0].id}`
-      : `${annotation.uri.replace(window.origin, "")}/question/${
-          annotation.survey_question_id
-        }/annotation/${annotation.id}`;
-  return history.push(path);
-};
+class ProfileAnnotations extends Component {
+  constructor(props) {
+    super(props);
+    autoBind(this);
+  }
 
-const ancestorIsSpam = ancestors =>
-  ancestors.reduce((bool, a) => a.reviewed === "spam" || bool, false);
+  handleProjectSelectChange(selected) {
+    this.props.updatePageProjectFilter(selected);
+  }
 
-const ProfileAnnotations = ({
-  annotationsById,
-  annotationIds,
-  checked,
-  checkSidebarFilter
-}) => {
-  return (
-    <div className="profile-enagement-items__container main-container">
-      <ProfileSidebar
-        checked={checked}
-        checkSidebarFilter={checkSidebarFilter}
-        nodes={[
-          {
-            value: "status",
-            label: "STATUS",
-            children: [
-              { value: "verified", label: "Verified" },
-              { value: "spam", label: "Spam" },
-              { value: "pending", label: "Pending" }
-            ]
-          }
-        ]}
-      />
-      <div className="profile-enagement-items">
-        {annotationIds.map(
-          aid =>
-            annotationsById[aid].parentId ? (
-              <AnnotationReply
-                key={`profile__annotation-reply--${aid}`}
-                annotation={annotationsById[aid]}
-              >
-                <a
-                  key={`profile__annotationreply--${aid}`}
-                  className="see-in-context"
-                  onClick={() => seeAnnotationContext(annotationsById[aid])}
-                >
-                  {annotationsById[aid].reviewed !== "spam" &&
-                    !ancestorIsSpam(annotationsById[aid].ancestors) &&
-                    "see in context"}
-                </a>
-                {annotationsById[aid].reviewed !== "spam" &&
-                  ancestorIsSpam(annotationsById[aid].ancestors) &&
-                  "reply no longer exists because the thread contains spam"}
-              </AnnotationReply>
-            ) : (
-              <AnnotationMain
-                key={`profile__annotation-main--${aid}`}
-                annotation={annotationsById[aid]}
-              >
-                <a
-                  key={`profile__annotation-main--${aid}`}
-                  className="see-in-context"
-                  onClick={() => seeAnnotationContext(annotationsById[aid])}
-                >
-                  {annotationsById[aid].reviewed !== "spam" && "see in context"}
-                </a>
-              </AnnotationMain>
-            )
-        )}
+  render() {
+    const {
+      annotationsById,
+      annotationIds,
+      projectsBySymbol,
+      projectSymbolArr,
+      projectSurveysById,
+      projectSurveyIds,
+      pageLimit,
+      pageOffset,
+      pageProjectFilter,
+      pageSurveyFilter,
+      checked,
+      checkSidebarFilter
+    } = this.props;
+
+    return (
+      <div className="profile-engagement-items__container main-container">
+        <ProfileSidebar
+          checked={checked}
+          checkSidebarFilter={checkSidebarFilter}
+          nodes={[
+            {
+              value: "status",
+              label: "STATUS",
+              children: [
+                { value: "verified", label: "Verified" },
+                { value: "spam", label: "Spam" },
+                { value: "pending", label: "Pending" }
+              ]
+            }
+          ]}
+        >
+          <span>FILTER BY PROJECT(S)</span>
+          <Select
+            name="profile-annotations__project-select"
+            multi={true}
+            value={pageProjectFilter}
+            onChange={this.handleProjectSelectChange}
+            options={projectSymbolArr.map(symbol => ({
+              label: projectsBySymbol[symbol].name.toUpperCase(),
+              value: projectsBySymbol[symbol].id
+            }))}
+          />
+        </ProfileSidebar>
+        <ProfileEngagementItems
+          engagementItemsById={annotationsById}
+          engagementItemIds={annotationIds}
+        />
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mapState = (state, ownProps) => {
+  const {
+    pageLimit,
+    pageOffset,
+    pageProjectFilter,
+    pageSurveyFilter,
+    checked
+  } = state.scenes.profile.scenes.annotations.data;
   return {
     ...ownProps,
-    checked: state.scenes.profile.scenes.annotations.data.checked
+    pageLimit,
+    pageOffset,
+    pageProjectFilter,
+    pageSurveyFilter,
+    checked
   };
 };
 
 const actions = {
-  checkSidebarFilter
+  checkSidebarFilter,
+  updatePageProjectFilter
 };
 
 export default connect(mapState, actions)(ProfileAnnotations);

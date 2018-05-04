@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import { fetchAllProjecs } from "./data/projects/actions";
-import { getAllProjects } from "./data/projects/reducer";
+import { fetchAllProjects } from "../../data/projects/actions";
+import { getAllProjects } from "../../data/projects/reducer";
 import { ProjectCard } from './components'
 import { ListView } from '../../components'
 import autoBind from "react-autobind";
@@ -47,7 +47,7 @@ const mapState = state => {
 const actions = dispatch => {
   return {
     loadInitialData() {
-      dispatch(fetchAllProjecs());
+      dispatch(fetchAllProjects());
     }
   };
 };

@@ -11,6 +11,20 @@
   border: 1px solid #f2f2f2;
 }
 
+.reply-annotation__survey-title {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
 .reply-annotation__quote {
   border-left: 3px solid #d4d4d4;
   color: #d4d4d4;
@@ -91,6 +105,10 @@
 
 .reply-annotation__review {
   opacity: 1;
+}
+
+.reply-annotation__survey-title {
+  color: #020721;
 }
 
 .reply-annotation__tags .badge,

@@ -1,6 +1,4 @@
 import { omit } from "lodash";
-import * as types from "./data/actionTypes";
-import { reducer as dataReducer } from "./data/reducer";
 import { reducer as sceneReducer } from "./scenes/reducer";
 
 const initialState = {};
@@ -11,7 +9,6 @@ export default function reduce(state = initialState, action) {
       const rest = _.omit(state, Object.keys(initialState));
       return {
         ...state,
-        data: dataReducer(rest.data, action),
         scenes: sceneReducer(rest.scenes, action)
       };
   }

@@ -48,6 +48,13 @@ router.get(
         }))
       };
     }
+    if (req.query.projects && req.query.projects.length) {
+      queryObj.projects = {
+        [Sequelize.Op.or]: req.query.projects.map(jsonString => ({
+          [Sequelize.Op.eq]: JSON.parse(jsonString).value
+        }))
+      };
+    }
 
     try {
       const profile = await User.scope({

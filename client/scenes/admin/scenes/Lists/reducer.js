@@ -10,7 +10,7 @@ export default function reduce(state = initialState, action) {
       const rest = _.omit(state, Object.keys(initialState));
       return {
         ...state,
-        scenes: sceneReducer(rest.scenes, action)
+        // scenes: sceneReducer(rest.scenes, action)
       };
   }
 }

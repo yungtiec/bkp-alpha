@@ -22,16 +22,25 @@ export default ({ annotation, path, children }) => {
     <div className="reply-annotation__main">
       <div className="reply-annotation__parent">
         <div className="reply-annotation__parent-header">
-          <p className="reply-annotation__user">
-            <span>
-              <Avatar
-                name={`${parent.owner.first_name} ${parent.owner.last_name}`}
-                size={40}
-                color={"#999999"}
-              />
-            </span>
-            <span>{moment(parent.createdAt).fromNow()}</span>
-          </p>
+          {annotation.project_survey && annotation.project_survey.survey ? (
+            <div className="reply-annotation__survey-title-container">
+              <span className="reply-annotation__survey-title">
+                {annotation.project_survey.project.name}:{" "}
+                {annotation.project_survey.survey.title}
+              </span>
+            </div>
+          ) : (
+            <p className="reply-annotation__user">
+              <span>
+                <Avatar
+                  name={`${parent.owner.first_name} ${parent.owner.last_name}`}
+                  size={40}
+                  color={"#999999"}
+                />
+              </span>
+              <span>{moment(parent.createdAt).fromNow()}</span>
+            </p>
+          )}
           <p>
             <span
               className={`reply-annotation__review reply-annotation__review reply-annotation__review--${
@@ -42,6 +51,19 @@ export default ({ annotation, path, children }) => {
             </span>
           </p>
         </div>
+        {annotation.project_survey &&
+          annotation.project_survey.survey && (
+            <p className="reply-annotation__user">
+              <span>
+                <Avatar
+                  name={`${parent.owner.first_name} ${parent.owner.last_name}`}
+                  size={40}
+                  color={"#999999"}
+                />
+              </span>
+              <span>{moment(parent.createdAt).fromNow()}</span>
+            </p>
+          )}
         <p className="reply-annotation__quote">{annotation.quote}</p>
         <p className="reply-annotation__comment">{parent.comment}</p>
         <div className="reply-annotation__tags">
