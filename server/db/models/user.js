@@ -103,7 +103,7 @@ const User = db.define(
           include: [annotationQueryObj]
         };
       },
-      pageComments: function({
+      projectSurveyComments: function({
         userId,
         limit,
         offset,
@@ -111,7 +111,7 @@ const User = db.define(
         issueStatus,
         projects
       }) {
-        var pageCommentQueryObj = getEngagementItemQueryObj({
+        var ProjectSurveyCommentQueryObj = getEngagementItemQueryObj({
           engagementItemModelName: "project_survey_comment",
           engagementItemAs: "projectSurveyComments",
           queryObj: {
@@ -133,10 +133,10 @@ const User = db.define(
             "last_name",
             "organization"
           ],
-          include: [pageCommentQueryObj]
+          include: [ProjectSurveyCommentQueryObj]
         };
       },
-      pageCommentCount: function({
+      projectSurveyCommentCount: function({
         userId,
         limit,
         offset,
@@ -144,7 +144,7 @@ const User = db.define(
         projects,
         issueStatus
       }) {
-        var pageCommentQueryObj = getEngagementItemQueryObj({
+        var ProjectSurveyCommentQueryObj = getEngagementItemQueryObj({
           engagementItemModelName: "project_survey_comment",
           engagementItemAs: "projectSurveyComments",
           queryObj: {
@@ -161,7 +161,7 @@ const User = db.define(
         return {
           where: { id: userId },
           attributes: ["id"],
-          include: [pageCommentQueryObj]
+          include: [ProjectSurveyCommentQueryObj]
         };
       },
 
@@ -231,14 +231,14 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [numAnnotations, numPageComments] = await Promise.map(
+  const [numAnnotations, numProjectSurveyComments] = await Promise.map(
     [
       user.getAnnotations({ attributes: ["id"], raw: true }),
       user.getProjectSurveyComments({ attributes: ["id"], raw: true })
     ],
     collections => collections.length
   );
-  const [numAnnoationIssues, numPageCommentIssues] = await Promise.map(
+  const [numAnnoationIssues, numProjectSurveyCommentIssues] = await Promise.map(
     [
       user.getAnnotations({ include: [{ model: db.model("issue") }] }),
       user.getProjectSurveyComments({ include: [{ model: db.model("issue") }] })
@@ -249,8 +249,8 @@ User.getContributions = async function(userId) {
   return assignIn(
     {
       num_annotations: numAnnotations,
-      num_page_comments: numPageComments,
-      num_issues: numAnnoationIssues + numPageCommentIssues
+      num_project_survey_comments: numProjectSurveyComments,
+      num_issues: numAnnoationIssues + numProjectSurveyCommentIssues
     },
     user.toJSON()
   );
@@ -266,14 +266,14 @@ User.getAnnotationsAndCount = async function(queryObj) {
   return { profile: user, annotationCount: annotations.length };
 };
 
-User.getPageCommentsAndCount = async function(queryObj) {
+User.getProjectSurveyCommentsAndCount = async function(queryObj) {
   const user = await User.scope({
-    method: ["pageComments", cloneDeep(queryObj)]
+    method: ["projectSurveyComments", cloneDeep(queryObj)]
   }).findOne();
   const { projectSurveyComments } = await User.scope({
-    method: ["pageCommentCount", cloneDeep(queryObj)]
+    method: ["projectSurveyCommentCount", cloneDeep(queryObj)]
   }).findOne();
-  return { profile: user, pageCommentCount: projectSurveyComments.length };
+  return { profile: user, projectSurveyCommentCount: projectSurveyComments.length };
 }
 
 /**

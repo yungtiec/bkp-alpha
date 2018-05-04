@@ -63,8 +63,10 @@ router.get(
       };
     }
     try {
-      const {profile, annotationCount} = await User.getAnnotationsAndCount(queryObj);
-      res.send({annotations: profile.annotations, annotationCount});
+      const { profile, annotationCount } = await User.getAnnotationsAndCount(
+        queryObj
+      );
+      res.send({ annotations: profile.annotations, annotationCount });
     } catch (err) {
       next(err);
     }
@@ -72,7 +74,7 @@ router.get(
 );
 
 router.get(
-  "/:userId/page-comments",
+  "/:userId/project-survey-comments",
   ensureAuthentication,
   ensureAdminRoleOrOwnership,
   async (req, res, next) => {
@@ -110,8 +112,14 @@ router.get(
       };
     }
     try {
-      const {profile, pageCommentCount} = await User.getPageCommentsAndCount(queryObj);
-      res.send({pageComments: profile.projectSurveyComments, pageCommentCount});
+      const {
+        profile,
+        projectSurveyCommentsCount
+      } = await User.getProjectSurveyCommentsAndCount(queryObj);
+      res.send({
+        projectSurveyComments: profile.projectSurveyComments,
+        projectSurveyCommentsCount
+      });
     } catch (err) {
       next(err);
     }

@@ -19,10 +19,10 @@ export default ({ url, activeTab }) => (
             activeTab === "annotations" ? "active" : ""
           }`}>Annotations</li>
       </Link>
-      <Link to={`${url}/replies`}>
+      <Link to={`${url}/project-survey-comments`}>
         <li className={`profile-navbar__item ${
-            activeTab === "replies" ? "active" : ""
-          }`}>Replies</li>
+            activeTab === "project-survey-comments" ? "active" : ""
+          }`}>Comments</li>
       </Link>
     </ul>
   </div>

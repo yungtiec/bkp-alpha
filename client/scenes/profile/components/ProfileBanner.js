@@ -5,7 +5,7 @@ import Avatar from "react-avatar";
 export default ({
   name,
   numAnnotations,
-  numPageComments,
+  numProjectSurveyComments,
   numIssues,
   joinDate
 }) => (
@@ -19,7 +19,7 @@ export default ({
         <p>
           <span>{numAnnotations || 0} annotation(s)</span>
           <span className="divider">|</span>
-          <span>{numPageComments || 0} comment(s)</span>
+          <span>{numProjectSurveyComments || 0} comment(s)</span>
           <span className="divider">|</span>
           <span>{numIssues || 0} issue(s)</span>
           <span className="divider">|</span>
