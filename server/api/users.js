@@ -57,10 +57,8 @@ router.get(
     }
 
     try {
-      const profile = await User.scope({
-        method: ["annotations", queryObj]
-      }).findOne();
-      res.send(profile.annotations || []);
+      const {profile, annotationCount} = await User.getAnnotationsAndCount(queryObj);
+      res.send({annotations: profile.annotations, annotationCount});
     } catch (err) {
       next(err);
     }

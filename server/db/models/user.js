@@ -43,38 +43,10 @@ const User = db.define(
   {
     scopes: {
       annotations: function({ userId, limit, offset, reviewStatus, projects }) {
-        var projectSurveyQuery = projects
-          ? {
-              model: db.model("project_survey"),
-              attributes: ["id"],
-              required: true,
-              include: [
-                {
-                  model: db.model("project"),
-                  where: { id: projects },
-                  required: true,
-                  attributes: ["id", "symbol", "name"]
-                },
-                {
-                  model: db.model("survey"),
-                  attributes: ["id", "title"]
-                }
-              ]
-            }
-          : {
-              model: db.model("project_survey"),
-              attributes: ["id"],
-              include: [
-                {
-                  model: db.model("project"),
-                  attributes: ["id", "symbol", "name"]
-                },
-                {
-                  model: db.model("survey"),
-                  attributes: ["id", "title"]
-                }
-              ]
-            };
+        var annotationQueryObj = getAnnotationQueryObj({
+          queryObj: { userId, limit, offset, reviewStatus, projects },
+          order: true
+        });
         return {
           where: { id: userId },
           attributes: [
@@ -84,59 +56,25 @@ const User = db.define(
             "last_name",
             "organization"
           ],
-          include: [
-            {
-              model: db.model("annotation"),
-              where: { reviewed: reviewStatus },
-              as: "annotations",
-              // required: false,
-              limit: limit,
-              offset: offset,
-              subQuery: false,
-              include: [
-                {
-                  model: db.model("annotation"),
-                  as: "ancestors",
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("user"),
-                      as: "owner",
-                      required: false
-                    },
-                    {
-                      model: db.model("tag"),
-                      required: false
-                    },
-                    {
-                      model: db.model("issue"),
-                      required: false
-                    }
-                  ]
-                },
-                {
-                  model: db.model("tag"),
-                  required: false
-                },
-                {
-                  model: db.model("issue"),
-                  required: false
-                },
-                projectSurveyQuery
-              ],
-              order: [
-                [
-                  {
-                    model: db.model("project_survey")
-                  },
-                  "id",
-                  "DESC"
-                ],
-                ["createdAt", "DESC"],
-                ["updatedAt", "DESC"]
-              ]
-            }
-          ]
+          include: [annotationQueryObj]
+        };
+      },
+      annotationCount: function({
+        userId,
+        limit,
+        offset,
+        reviewStatus,
+        projects
+      }) {
+        var annotationQueryObj = getAnnotationQueryObj({
+          queryObj: { userId, limit, offset, reviewStatus, projects },
+          order: false,
+          pageCount: true
+        });
+        return {
+          where: { id: userId },
+          attributes: ["id"],
+          include: [annotationQueryObj]
         };
       },
       pageComments: function({ userId, limit, offset }) {
@@ -304,6 +242,17 @@ User.getContributions = async function(userId) {
   );
 };
 
+User.getAnnotationsAndCount = async function(queryObj) {
+  const user = await User.scope({
+    method: ["annotations", queryObj]
+  }).findOne();
+  const { annotations } = await User.scope({
+    method: ["annotationCount", queryObj]
+  }).findOne();
+  console.log(annotations.length)
+  return {profile: user, annotationCount: annotations.length};
+};
+
 /**
  * hooks
  */
@@ -313,6 +262,105 @@ const setSaltAndPassword = user => {
     user.password = User.encryptPassword(user.password(), user.salt());
   }
 };
+
+/**
+ * helpers
+ */
+
+function getAnnotationQueryObj({
+  queryObj: { userId, limit, offset, reviewStatus, projects },
+  order,
+  pageCount
+}) {
+  var projectSurveyQuery = projects
+    ? {
+        model: db.model("project_survey"),
+        attributes: ["id"],
+        required: true,
+        include: [
+          {
+            model: db.model("project"),
+            where: { id: projects },
+            required: true,
+            attributes: ["id", "symbol", "name"]
+          },
+          {
+            model: db.model("survey"),
+            attributes: ["id", "title"]
+          }
+        ]
+      }
+    : {
+        model: db.model("project_survey"),
+        attributes: ["id"],
+        include: [
+          {
+            model: db.model("project"),
+            attributes: ["id", "symbol", "name"]
+          },
+          {
+            model: db.model("survey"),
+            attributes: ["id", "title"]
+          }
+        ]
+      };
+  var annotationQueryObj = {
+    model: db.model("annotation"),
+    where: { reviewed: reviewStatus },
+    as: "annotations",
+    subQuery: false,
+    duplicate: false,
+    include: [
+      {
+        model: db.model("annotation"),
+        as: "ancestors",
+        required: false,
+        include: [
+          {
+            model: db.model("user"),
+            as: "owner",
+            required: false
+          },
+          {
+            model: db.model("tag"),
+            required: false
+          },
+          {
+            model: db.model("issue"),
+            required: false
+          }
+        ]
+      },
+      {
+        model: db.model("tag"),
+        required: false
+      },
+      {
+        model: db.model("issue"),
+        required: false
+      },
+      projectSurveyQuery
+    ]
+  };
+  if (order) {
+    annotationQueryObj.order = [
+      [
+        {
+          model: db.model("project_survey")
+        },
+        "id",
+        "DESC"
+      ],
+      ["createdAt", "DESC"],
+      ["updatedAt", "DESC"]
+    ];
+  }
+  if (!pageCount) {
+    annotationQueryObj.limit = limit;
+    annotationQueryObj.offset = offset;
+  }
+  return annotationQueryObj;
+}
 
 User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);

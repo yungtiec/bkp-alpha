@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 import { groupBy, keys, isEmpty } from "lodash";
 import moment from "moment";
 import Select from "react-select";
@@ -26,6 +27,11 @@ class ProfileAnnotations extends Component {
     this.props.updatePageProjectFilter(selected);
   }
 
+  handlePageClick(page) {
+    console.log(page);
+    this.props.updatePageOffset(page.selected)
+  }
+
   render() {
     const {
       annotationsById,
@@ -34,6 +40,7 @@ class ProfileAnnotations extends Component {
       projectSymbolArr,
       projectSurveysById,
       projectSurveyIds,
+      pageCount,
       pageLimit,
       pageOffset,
       pageProjectFilter,
@@ -71,10 +78,25 @@ class ProfileAnnotations extends Component {
             }))}
           />
         </ProfileSidebar>
-        <ProfileEngagementItems
-          engagementItemsById={annotationsById}
-          engagementItemIds={annotationIds}
-        />
+        <div className="d-flex flex-column">
+          <ProfileEngagementItems
+            engagementItemsById={annotationsById}
+            engagementItemIds={annotationIds}
+          />
+          <ReactPaginate
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={<a href="">...</a>}
+            breakClassName={"break-me"}
+            pageCount={pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+          />
+        </div>
       </div>
     );
   }
@@ -84,6 +106,7 @@ const mapState = (state, ownProps) => {
   const {
     pageLimit,
     pageOffset,
+    pageCount,
     pageProjectFilter,
     pageSurveyFilter,
     checked
@@ -92,6 +115,7 @@ const mapState = (state, ownProps) => {
     ...ownProps,
     pageLimit,
     pageOffset,
+    pageCount,
     pageProjectFilter,
     pageSurveyFilter,
     checked
@@ -100,7 +124,8 @@ const mapState = (state, ownProps) => {
 
 const actions = {
   checkSidebarFilter,
-  updatePageProjectFilter
+  updatePageProjectFilter,
+  updatePageOffset
 };
 
 export default connect(mapState, actions)(ProfileAnnotations);
