@@ -50,7 +50,9 @@ const User = db.define(
         issueStatus,
         projects
       }) {
-        var annotationQueryObj = getAnnotationQueryObj({
+        var annotationQueryObj = getEngagementItemQueryObj({
+          engagementItemModelName: "annotation",
+          engagementItemAs: "annotations",
           queryObj: {
             userId,
             limit,
@@ -81,7 +83,9 @@ const User = db.define(
         projects,
         issueStatus
       }) {
-        var annotationQueryObj = getAnnotationQueryObj({
+        var annotationQueryObj = getEngagementItemQueryObj({
+          engagementItemModelName: "annotation",
+          engagementItemAs: "annotations",
           queryObj: {
             userId,
             limit,
@@ -99,7 +103,27 @@ const User = db.define(
           include: [annotationQueryObj]
         };
       },
-      pageComments: function({ userId, limit, offset }) {
+      pageComments: function({
+        userId,
+        limit,
+        offset,
+        reviewStatus,
+        issueStatus,
+        projects
+      }) {
+        var pageCommentQueryObj = getEngagementItemQueryObj({
+          engagementItemModelName: "project_survey_comment",
+          engagementItemAs: "projectSurveyComments",
+          queryObj: {
+            userId,
+            limit,
+            offset,
+            reviewStatus,
+            projects,
+            issueStatus
+          },
+          order: true
+        });
         return {
           where: { id: userId },
           attributes: [
@@ -109,70 +133,38 @@ const User = db.define(
             "last_name",
             "organization"
           ],
-          include: [
-            {
-              model: db.model("project_survey_comment"),
-              as: "projectSurveyComments",
-              required: false,
-              limit,
-              offset,
-              include: [
-                {
-                  model: db.model("project_survey_comment"),
-                  as: "ancestors",
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("user"),
-                      as: "owner",
-                      required: false
-                    },
-                    {
-                      model: db.model("tag"),
-                      required: false
-                    },
-                    {
-                      model: db.model("issue"),
-                      required: false
-                    }
-                  ]
-                },
-                {
-                  model: db.model("tag"),
-                  required: false
-                },
-                {
-                  model: db.model("issue"),
-                  required: false
-                },
-                {
-                  model: db.model("project_survey"),
-                  attributes: ["id"],
-                  include: [
-                    {
-                      model: db.model("project"),
-                      attributes: ["id", "symbol", "name"]
-                    },
-                    {
-                      model: db.model("survey"),
-                      attributes: ["id", "title"]
-                    }
-                  ]
-                }
-              ],
-              order: [
-                [
-                  {
-                    model: db.model("project_survey_comment"),
-                    as: "ancestors"
-                  },
-                  "hierarchyLevel"
-                ]
-              ]
-            }
-          ]
+          include: [pageCommentQueryObj]
         };
       },
+      pageCommentCount: function({
+        userId,
+        limit,
+        offset,
+        reviewStatus,
+        projects,
+        issueStatus
+      }) {
+        var pageCommentQueryObj = getEngagementItemQueryObj({
+          engagementItemModelName: "project_survey_comment",
+          engagementItemAs: "projectSurveyComments",
+          queryObj: {
+            userId,
+            limit,
+            offset,
+            reviewStatus,
+            projects,
+            issueStatus
+          },
+          order: false,
+          pageCount: true
+        });
+        return {
+          where: { id: userId },
+          attributes: ["id"],
+          include: [pageCommentQueryObj]
+        };
+      },
+
       roles: function(userId) {
         return {
           where: { id: userId },
@@ -274,6 +266,16 @@ User.getAnnotationsAndCount = async function(queryObj) {
   return { profile: user, annotationCount: annotations.length };
 };
 
+User.getPageCommentsAndCount = async function(queryObj) {
+  const user = await User.scope({
+    method: ["pageComments", cloneDeep(queryObj)]
+  }).findOne();
+  const { projectSurveyComments } = await User.scope({
+    method: ["pageCommentCount", cloneDeep(queryObj)]
+  }).findOne();
+  return { profile: user, pageCommentCount: projectSurveyComments.length };
+}
+
 /**
  * hooks
  */
@@ -288,7 +290,9 @@ const setSaltAndPassword = user => {
  * helpers
  */
 
-function getAnnotationQueryObj({
+function getEngagementItemQueryObj({
+  engagementItemModelName,
+  engagementItemAs,
   queryObj: { userId, limit, offset, reviewStatus, issueStatus, projects },
   order,
   pageCount
@@ -333,15 +337,15 @@ function getAnnotationQueryObj({
         model: db.model("issue"),
         required: false
       };
-  var annotationQueryObj = {
-    model: db.model("annotation"),
+  var engagementItemQueryObj = {
+    model: db.model(engagementItemModelName),
     where: { reviewed: reviewStatus },
-    as: "annotations",
+    as: engagementItemAs,
     subQuery: false,
     required: false,
     include: [
       {
-        model: db.model("annotation"),
+        model: db.model(engagementItemModelName),
         as: "ancestors",
         required: false,
         include: [
@@ -369,7 +373,7 @@ function getAnnotationQueryObj({
     ]
   };
   if (order) {
-    annotationQueryObj.order = [
+    engagementItemQueryObj.order = [
       [
         {
           model: db.model("project_survey")
@@ -382,10 +386,10 @@ function getAnnotationQueryObj({
     ];
   }
   if (!pageCount) {
-    annotationQueryObj.limit = limit;
-    annotationQueryObj.offset = offset;
+    engagementItemQueryObj.limit = limit;
+    engagementItemQueryObj.offset = offset;
   }
-  return annotationQueryObj;
+  return engagementItemQueryObj;
 }
 
 User.beforeCreate(setSaltAndPassword);
