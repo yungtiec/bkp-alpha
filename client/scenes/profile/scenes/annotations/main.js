@@ -29,7 +29,7 @@ class ProfileAnnotations extends Component {
 
   handlePageClick(page) {
     console.log(page);
-    this.props.updatePageOffset(page.selected)
+    this.props.updatePageOffset(page.selected);
   }
 
   render() {
@@ -83,19 +83,21 @@ class ProfileAnnotations extends Component {
             engagementItemsById={annotationsById}
             engagementItemIds={annotationIds}
           />
-          <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
-            breakLabel={<a href="">...</a>}
-            breakClassName={"break-me"}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={this.handlePageClick}
-            containerClassName={"pagination"}
-            subContainerClassName={"pages pagination"}
-            activeClassName={"active"}
-          />
+          {annotationIds.length && (
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={<a href="">...</a>}
+              breakClassName={"break-me"}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
+          )}
         </div>
       </div>
     );

@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
-const { assignIn } = require("lodash");
+const { assignIn, clone } = require("lodash");
 
 const User = db.define(
   "user",
@@ -244,13 +244,13 @@ User.getContributions = async function(userId) {
 
 User.getAnnotationsAndCount = async function(queryObj) {
   const user = await User.scope({
-    method: ["annotations", queryObj]
+    method: ["annotations", clone(queryObj)]
   }).findOne();
   const { annotations } = await User.scope({
-    method: ["annotationCount", queryObj]
+    method: ["annotationCount", clone(queryObj)]
   }).findOne();
-  console.log(annotations.length)
-  return {profile: user, annotationCount: annotations.length};
+  console.log(annotations.length);
+  return { profile: user, annotationCount: annotations.length };
 };
 
 /**
@@ -275,13 +275,11 @@ function getAnnotationQueryObj({
   var projectSurveyQuery = projects
     ? {
         model: db.model("project_survey"),
-        attributes: ["id"],
-        required: true,
+        where: { project_id: projects },
+        duplicating: false,
         include: [
           {
             model: db.model("project"),
-            where: { id: projects },
-            required: true,
             attributes: ["id", "symbol", "name"]
           },
           {
@@ -293,6 +291,7 @@ function getAnnotationQueryObj({
     : {
         model: db.model("project_survey"),
         attributes: ["id"],
+        required: true,
         include: [
           {
             model: db.model("project"),
@@ -309,7 +308,7 @@ function getAnnotationQueryObj({
     where: { reviewed: reviewStatus },
     as: "annotations",
     subQuery: false,
-    duplicate: false,
+    required: false,
     include: [
       {
         model: db.model("annotation"),
