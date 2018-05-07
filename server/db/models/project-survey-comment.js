@@ -20,13 +20,13 @@ const ProjectSurveyComment = db.define(
     engagementItemType: {
       type: Sequelize.VIRTUAL,
       get() {
-        return "page_comment"
+        return "page_comment";
       }
     },
     engagementItemId: {
       type: Sequelize.VIRTUAL,
       get() {
-        return "page_comment" + this.getDataValue("id")
+        return "page_comment" + this.getDataValue("id");
       }
     }
   },
@@ -44,6 +44,11 @@ const ProjectSurveyComment = db.define(
             {
               model: db.model("user"),
               as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
               attributes: ["first_name", "last_name", "email"]
             },
             {
@@ -130,6 +135,90 @@ const ProjectSurveyComment = db.define(
               ],
               as: "descendents",
               hierarchy: true
+            }
+          ]
+        };
+      },
+      upvotes: function(projectSurveyCommentId) {
+        return {
+          where: { id: projectSurveyCommentId },
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email", "id"]
+            },
+            {
+              model: db.model("project_survey"),
+              include: [
+                {
+                  model: db.model("project")
+                },
+                {
+                  model: db.model("survey")
+                }
+              ]
+            },
+            {
+              model: db.model("project_survey_comment"),
+              as: "ancestors",
+              required: false,
+              attributes: ["id", "owner_id"],
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  required: false
+                },
+                {
+                  model: db.model("project_survey"),
+                  include: [
+                    {
+                      model: db.model("project")
+                    },
+                    {
+                      model: db.model("survey")
+                    }
+                  ]
+                }
+              ],
+              order: [
+                [
+                  {
+                    model: db.model("project_survey_comment"),
+                    as: "ancestors"
+                  },
+                  "hierarchyLevel"
+                ]
+              ]
+            }
+          ]
+        };
+      },
+      withProjectSurveyInfo: function(id) {
+        return {
+          where: { id },
+          include: [
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email", "id"]
+            },
+            {
+              model: db.model("project_survey"),
+              include: [
+                {
+                  model: db.model("project")
+                },
+                {
+                  model: db.model("survey")
+                }
+              ]
             }
           ]
         };

@@ -12,6 +12,7 @@ const Survey = require("./survey");
 const SurveyQuestion = require("./survey-question");
 const Tag = require("./tag");
 const Issue = require("./issue");
+const Notification = require("./notification");
 
 /*=============================================
 =            role based authorization         =
@@ -39,6 +40,34 @@ Permission.belongsToMany(Role, {
 });
 
 /*=====  End of role based authorization  ===*/
+
+/*==============================================
+=            User and Notification            =
+==============================================*/
+
+User.hasMany(Notification, {
+  foreignKey: "recipient_id",
+  as: "notifications",
+  constraints: false
+});
+Notification.belongsTo(User, {
+  foreignKey: "recipient_id",
+  as: "recipient",
+  constraints: false
+});
+
+User.hasMany(Notification, {
+  foreignKey: "sender_id",
+  as: "activities",
+  constraints: false
+});
+Notification.belongsTo(User, {
+  foreignKey: "sender_id",
+  as: "sender",
+  constraints: false
+});
+
+/*=====  End of User and Notification  ======*/
 
 /*=============================================
 =            User and Organization            =
@@ -259,5 +288,6 @@ module.exports = {
   Survey,
   SurveyQuestion,
   Tag,
-  Issue
+  Issue,
+  Notification
 };

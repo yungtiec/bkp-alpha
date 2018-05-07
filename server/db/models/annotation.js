@@ -38,18 +38,59 @@ const Annotation = db.define(
     engagementItemType: {
       type: Sequelize.VIRTUAL,
       get() {
-        return "annotation"
+        return "annotation";
       }
     },
     engagementItemId: {
       type: Sequelize.VIRTUAL,
       get() {
-        return "annotation" + this.getDataValue("id")
+        return "annotation" + this.getDataValue("id");
       }
     }
   },
   {
-    hierarchy: true
+    hierarchy: true,
+    scopes: {
+      upvotes: function(annotationId) {
+        return {
+          where: { id: annotationId },
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email", "id"]
+            },
+            {
+              model: db.model("annotation"),
+              as: "ancestors",
+              required: false,
+              attributes: ["id", "owner_id"],
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  required: false
+                }
+              ],
+              order: [
+                [
+                  {
+                    model: Annotation,
+                    as: "ancestors"
+                  },
+                  "hierarchyLevel"
+                ]
+              ]
+            }
+          ]
+        };
+      }
+    }
   }
 );
 

@@ -45,7 +45,7 @@ class Profile extends Component {
 
   render() {
     const { basicInfo, match, isAdmin } = this.props;
-    const activeTab = window.location.pathname.split("/")[2];
+    const activeTab = window.location.pathname.split("/")[3];
     return (
       <div className="profile-container">
         <ProfileBanner

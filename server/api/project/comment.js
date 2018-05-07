@@ -5,7 +5,8 @@ const {
   Role,
   Tag,
   ProjectSurveyComment,
-  Issue
+  Issue,
+  Notification
 } = require("../../db/models");
 const _ = require("lodash");
 const { ensureAuthentication, ensureAdminRole } = require("../utils");
@@ -59,9 +60,9 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
 router.post("/reply", ensureAuthentication, async (req, res, next) => {
   try {
     var ancestry;
-    const parent = await ProjectSurveyComment.findById(
-      Number(req.body.parentId)
-    );
+    const parent = await ProjectSurveyComment.scope({
+      method: ["withProjectSurveyInfo", Number(req.body.parentId)]
+    }).findOne();
     const child = _.assignIn(
       _.omit(parent.toJSON(), [
         "id",
@@ -75,14 +76,37 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
       ]),
       { comment: req.body.comment, owner_id: req.user.id, reviewed: "pending" }
     );
-    const ancestors = await parent.getAncestors({ raw: true });
-    var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-    var reply = await ProjectSurveyComment.create(child);
+    var [ancestors, reply, user] = await Promise.all([
+      parent
+        .getAncestors({
+          include: [
+            {
+              model: db.model("user"),
+              as: "owner",
+              required: false
+            }
+          ]
+        })
+        .then(ancestors =>
+          _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
+        ),
+      ProjectSurveyComment.create(child),
+      User.findById(req.user.id)
+    ]);
+    var rootAncestor = ancestors[0];
     reply = await reply.setParent(parent.toJSON().id);
-    reply = reply.setOwner(req.user.id);
+    reply = await reply.setOwner(req.user.id);
     ancestry = await ProjectSurveyComment.scope({
       method: ["oneThreadByRootId", rootAncestor ? rootAncestor.id : parent.id]
     }).findOne();
+    await Notification.notifyAncestors({
+      sender: user,
+      engagementItem: _.assignIn(reply.toJSON(), {
+        ancestors,
+        project_survey: parent.project_survey
+      }),
+      messageFragment: "replied to your post"
+    });
     res.send(ancestry);
   } catch (err) {
     next(err);
@@ -97,16 +121,16 @@ router.post("/upvote", ensureAuthentication, async (req, res, next) => {
     } else {
       await user.removeUpvotedComment(req.body.commentId);
     }
-    const comment = await ProjectSurveyComment.findOne({
-      where: { id: req.body.commentId },
-      include: [
-        {
-          model: User,
-          as: "upvotesFrom",
-          attributes: ["first_name", "last_name", "email"]
-        }
-      ]
-    });
+    const comment = await ProjectSurveyComment.scope({
+      method: ["upvotes", req.body.commentId]
+    }).findOne();
+    if (!req.body.hasUpvoted) {
+      await Notification.notify({
+        sender: user,
+        engagementItem: comment,
+        messageFragment: "like your post"
+      });
+    }
     res.send({ upvotesFrom: comment.upvotesFrom, commentId: comment.id });
   } catch (err) {
     next(err);

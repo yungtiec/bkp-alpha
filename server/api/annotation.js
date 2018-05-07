@@ -1,6 +1,13 @@
 const router = require("express").Router();
 const db = require("../db");
-const { Annotation, User, Role, Tag, Issue } = require("../db/models");
+const {
+  Annotation,
+  User,
+  Role,
+  Tag,
+  Issue,
+  Notification
+} = require("../db/models");
 const _ = require("lodash");
 const {
   ensureAuthentication,
@@ -41,14 +48,34 @@ router.post(
         ]),
         { comment: req.body.comment, reviewed: "pending" }
       );
-      const ancestors = await parent.getAncestors({ raw: true });
-      var rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-      var reply = await Annotation.create(child);
+      var [ancestors, reply, user] = await Promise.all([
+        parent
+          .getAncestors({
+            include: [
+              {
+                model: db.model("user"),
+                as: "owner",
+                required: false
+              }
+            ]
+          })
+          .then(ancestors =>
+            _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
+          ),
+        Annotation.create(child),
+        User.findById(req.user.id)
+      ]);
+      var rootAncestor = ancestors[0];
       reply = await reply.setParent(parent.toJSON().id);
-      reply = reply.setOwner(req.user.id);
+      reply = await reply.setOwner(req.user.id);
       ancestry = await Annotation.findOneThreadByRootId(
         rootAncestor ? rootAncestor.id : parent.id
       );
+      await Notification.notifyAncestors({
+        sender: user,
+        engagementItem: _.assignIn(reply.toJSON(), { ancestors }),
+        messageFragment: "replied to your post"
+      });
       res.send(ancestry);
     } catch (err) {
       next(err);
@@ -63,19 +90,21 @@ router.post(
   async (req, res, next) => {
     try {
       const user = await User.findById(req.user.id);
-      if (!req.body.hasUpvoted)
+      if (!req.body.hasUpvoted) {
         await user.addUpvotedAnnotation(req.body.annotationId);
-      else await user.removeUpvotedAnnotation(req.body.annotationId);
-      const annotation = await Annotation.findOne({
-        where: { id: req.body.annotationId },
-        include: [
-          {
-            model: User,
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ]
-      });
+      } else {
+        await user.removeUpvotedAnnotation(req.body.annotationId);
+      }
+      const annotation = await Annotation.scope({
+        method: ["upvotes", req.body.annotationId]
+      }).findOne();
+      if (!req.body.hasUpvoted) {
+        await Notification.notify({
+          sender: user,
+          engagementItem: annotation,
+          messageFragment: "like your post"
+        });
+      }
       res.send({
         upvotesFrom: annotation.upvotesFrom,
         annotationId: annotation.id
