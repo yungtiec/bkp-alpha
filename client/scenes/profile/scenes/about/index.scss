@@ -33,3 +33,17 @@
   width: 100%;
   font-size: 13px;
 }
+
+.profile-about__restricted-access {
+  margin-bottom: 40px;
+}
+
+.profile-about__restricted-access .badge {
+  margin-bottom: 10px;
+}
+
+.profile-about__restricted-access .badge-danger {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  background: #fff;
+}

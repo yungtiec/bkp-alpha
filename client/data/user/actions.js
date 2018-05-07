@@ -1,7 +1,7 @@
 import axios from "axios";
 import history from "../../history";
 import * as types from "./actionTypes";
-import { pick } from 'lodash'
+import { pick } from "lodash";
 
 export const getUser = user => ({ type: types.GET_USER, user });
 
@@ -21,7 +21,8 @@ export const auth = (userInfo, method) => dispatch => {
     .then(
       res => {
         dispatch(getUser(res.data));
-        history.push("/projects");
+        if (res.data.restricted_access) history.push("/user/profile");
+        else history.push("/projects");
       },
       authError => {
         // rare example: a good use case for parallel (non-catch) error handler

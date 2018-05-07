@@ -7,7 +7,11 @@ export default ({
   numAnnotations,
   numProjectSurveyComments,
   numIssues,
-  joinDate
+  joinDate,
+  isAdmin,
+  restrictedAccess,
+  restrictAccess,
+  restoreAccess
 }) => (
   <div className="profile-banner">
     <div className="container">
@@ -26,6 +30,19 @@ export default ({
           <span>joined {joinDate}</span>
         </p>
       </div>
+      {isAdmin ? (
+        <div className="profile-banner__access">
+          {restrictedAccess ? (
+            <button className="btn btn-primary" onClick={restoreAccess}>
+              restore access
+            </button>
+          ) : (
+            <button className="btn btn-danger" onClick={restrictAccess}>
+              restrict access
+            </button>
+          )}
+        </div>
+      ) : null}
     </div>
   </div>
 );

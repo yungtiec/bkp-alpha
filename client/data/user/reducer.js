@@ -1,14 +1,21 @@
-import * as types from './actionTypes';
+import * as types from "./actionTypes";
 
-const defaultUser = {}
+const defaultUser = {};
 
-export default function (state = defaultUser, action) {
+export default function(state = defaultUser, action) {
   switch (action.type) {
     case types.GET_USER:
-      return action.user
+      return action.user;
     case types.REMOVE_USER:
-      return defaultUser
+      return defaultUser;
     default:
-      return state
+      return state;
   }
+}
+
+export const currentUserIsAdmin = state => {
+  return (
+    state.data.user.roles &&
+    state.data.user.roles.filter(r => r.name === "admin").length
+  );
 }

@@ -29,13 +29,12 @@ const ensureAdminRoleOrOwnership = async (req, res, next) => {
     method: ["roles", Number(req.user.id)]
   }).findOne();
   if (
-    !requestor.roles.filter(r => r.name === "admin").length ||
-    (!requestor.roles.filter(r => r.name === "admin").length &&
-      Number(req.params.userId) !== req.user.id)
+    requestor.roles.filter(r => r.name === "admin").length ||
+      Number(req.params.userId) === req.user.id
   ) {
-    res.sendStatus(401);
-  } else {
     next();
+  } else {
+    res.sendStatus(401);
   }
 };
 
@@ -59,9 +58,16 @@ const ensureAdminRoleOrAnnotationOwnership = async (req, res, next) => {
   }
 };
 
+const ensureResourceAccess = async (req, res, next) => {
+  const requestor = await User.findById(req.user.id);
+  if (requestor.restricted_access) res.sendStatus(403);
+  else next();
+};
+
 module.exports = {
   ensureAuthentication,
   ensureAdminRole,
   ensureAdminRoleOrAnnotationOwnership,
-  ensureAdminRoleOrOwnership
+  ensureAdminRoleOrOwnership,
+  ensureResourceAccess
 };

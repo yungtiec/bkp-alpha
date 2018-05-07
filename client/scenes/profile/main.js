@@ -10,8 +10,12 @@ import ProfileProjectSurveyComments from "./scenes/projectSurveyComments";
 import autoBind from "react-autobind";
 import moment from "moment";
 import history from "../../history";
-import { fetchUserBasicInfo } from "./scenes/about/data/actions";
+import {
+  fetchUserBasicInfo,
+  changeAccessStatus
+} from "./scenes/about/data/actions";
 import { getUserBasicInfo } from "./scenes/about/data/reducer";
+import { currentUserIsAdmin } from "../../data/reducer";
 
 class Profile extends Component {
   constructor(props) {
@@ -25,48 +29,69 @@ class Profile extends Component {
     }
   }
 
+  restrictAccess() {
+    this.props.changeAccessStatus({
+      userId: this.props.match.params.userId,
+      accessStatus: "restricted"
+    });
+  }
+
+  restoreAccess() {
+    this.props.changeAccessStatus({
+      userId: this.props.match.params.userId,
+      accessStatus: "restore"
+    });
+  }
+
   render() {
-    const { basicInfo, match } = this.props;
+    const { basicInfo, match, isAdmin } = this.props;
     const activeTab = window.location.pathname.split("/")[2];
     return (
-    <div className="profile-container">
-      <ProfileBanner
-        name={`${basicInfo.first_name} ${basicInfo.last_name}`}
-        numAnnotations={basicInfo.num_annotations}
-        numProjectSurveyComments={basicInfo.num_project_survey_comments}
-        numIssues={basicInfo.num_issues}
-        joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
-      />
-      <ProfileNavbar activeTab={activeTab} url={match.url} />
-      <Switch>
-        <Route
-          path={`${match.url}/about`}
-          render={props => <ProfileAbout {...basicInfo} {...props} />}
+      <div className="profile-container">
+        <ProfileBanner
+          name={`${basicInfo.first_name} ${basicInfo.last_name}`}
+          isAdmin={isAdmin}
+          restrictedAccess={basicInfo.restricted_access}
+          numAnnotations={basicInfo.num_annotations}
+          numProjectSurveyComments={basicInfo.num_project_survey_comments}
+          numIssues={basicInfo.num_issues}
+          joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
+          restrictAccess={this.restrictAccess}
+          restoreAccess={this.restoreAccess}
         />
-        <Route
-          path={`${match.url}/annotations`}
-          component={ProfileAnnotations}
-        />
-        <Route
-          path={`${match.url}/project-survey-comments`}
-          component={ProfileProjectSurveyComments}
-        />
-        <Redirect from="/" exact to="/about" />
-      </Switch>
-    </div>
-  );
+        <ProfileNavbar activeTab={activeTab} url={match.url} />
+        <Switch>
+          <Route
+            path={`${match.url}/about`}
+            render={props => <ProfileAbout {...basicInfo} {...props} />}
+          />
+          <Route
+            path={`${match.url}/annotations`}
+            component={ProfileAnnotations}
+          />
+          <Route
+            path={`${match.url}/project-survey-comments`}
+            component={ProfileProjectSurveyComments}
+          />
+          <Redirect from="/" exact to="/about" />
+        </Switch>
+      </div>
+    );
   }
 }
 
 const mapState = (state, ownProps) => {
   const { basicInfo } = ownProps;
+  const isAdmin = currentUserIsAdmin(state);
   return {
-    basicInfo
+    basicInfo,
+    isAdmin
   };
 };
 
 const actions = {
-  fetchUserBasicInfo
+  fetchUserBasicInfo,
+  changeAccessStatus
 };
 
 export default withRouter(connect(mapState, actions)(Profile));

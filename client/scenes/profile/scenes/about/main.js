@@ -4,6 +4,15 @@ import React from "react";
 export default about => {
   return (
     <div className="profile-subroute container">
+      {about.restricted_access && (
+        <div className="profile-about__restricted-access">
+          <span className="badge badge-danger">Restricted Access</span>
+          <p>
+            Due to your recent activities, admin has revoke your annotation and
+            comment privilege.
+          </p>
+        </div>
+      )}
       <div className="profile-about__field">
         <span className="profile-about__field-label">First Name</span>
         <div className="profile-about__field-value">
@@ -26,7 +35,7 @@ export default about => {
               type="text"
               disabled
               name="firstName"
-              value={about.last_name }
+              value={about.last_name}
             />
           </div>
         </div>
@@ -36,7 +45,12 @@ export default about => {
 
         <div className="profile-about__field-value">
           <div className="profile-about__input-container">
-            <input type="text" disabled name="firstName" value={about.email || ""} />
+            <input
+              type="text"
+              disabled
+              name="firstName"
+              value={about.email || ""}
+            />
           </div>
         </div>
       </div>

@@ -38,6 +38,10 @@ const User = db.define(
     },
     organization: {
       type: Sequelize.STRING
+    },
+    restricted_access: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   },
   {
@@ -177,7 +181,7 @@ const User = db.define(
       basicInfo: function(userId) {
         return {
           where: { id: userId },
-          attributes: ["id", "email", "first_name", "last_name", "organization"]
+          attributes: ["id", "email", "first_name", "last_name", "organization", "restricted_access"]
         };
       }
     }

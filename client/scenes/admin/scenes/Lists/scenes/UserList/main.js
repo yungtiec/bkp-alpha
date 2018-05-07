@@ -8,11 +8,26 @@ import {
   StackableTable
 } from "../../../../../../components";
 import history from "../../../../../../history";
+import { changeAccessStatus } from "./data/actions";
 
 class AdminUserList extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+  }
+
+  restrictAccess(userId) {
+    this.props.changeAccessStatus({
+      userId: userId,
+      accessStatus: "restricted"
+    });
+  }
+
+  restoreAccess(userId) {
+    this.props.changeAccessStatus({
+      userId: userId,
+      accessStatus: "restore"
+    });
   }
 
   render() {
@@ -26,7 +41,18 @@ class AdminUserList extends Component {
         accessor: d => d.num_annotations + d.num_project_survey_comments
       },
       { Header: "issues open", accessor: "num_issues" },
-      { Header: "id", accessor: "id", show: false }
+      { Header: "id", accessor: "id", show: false },
+      {
+        Header: "access",
+        accessor: "restricted_access",
+        Cell: rowInfo => {
+          return rowInfo.row.restricted_access ? (
+            <button className="btn btn-outline-primary">restore access</button>
+          ) : (
+            <button className="btn btn-outline-danger">restrict access</button>
+          );
+        }
+      }
     ];
     const data = userIds.map(id => usersById[id]);
 
@@ -38,8 +64,16 @@ class AdminUserList extends Component {
           defaultPageSize={10}
           getTrProps={(state, rowInfo, column, instance) => {
             return {
-              onClick: (e, t) => {
-                history.push(`/user/${rowInfo.row.id}/about`);
+              onClick: (e, handleOriginal) => {
+                if (e.target.className.indexOf("btn") === -1)
+                  history.push(`/user/${rowInfo.row.id}/about`);
+                else {
+                  if (rowInfo.row.restricted_access) {
+                    this.restoreAccess(rowInfo.row.id);
+                  } else {
+                    this.restrictAccess(rowInfo.row.id);
+                  }
+                }
               }
             };
           }}
@@ -49,4 +83,14 @@ class AdminUserList extends Component {
   }
 }
 
-export default withRouter(requiresAuthorization(AdminUserList, "admin"));
+const mapState = (state, ownProps) => {
+  return ownProps;
+};
+
+const actions = {
+  changeAccessStatus
+};
+
+export default withRouter(
+  requiresAuthorization(connect(mapState, actions)(AdminUserList), "admin")
+);

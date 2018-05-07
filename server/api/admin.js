@@ -31,6 +31,24 @@ router.get(
   }
 );
 
+router.post(
+  "/user/access",
+  ensureAuthentication,
+  ensureAdminRole,
+  async (req, res, next) => {
+    try {
+      const user = await User.update({
+        restricted_access: req.body.accessStatus === "restricted"
+      }, {
+        where: {id: req.body.userId}
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 router.get(
   "/project-survey/:projectSurveyId",
   ensureAuthentication,
