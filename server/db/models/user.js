@@ -238,19 +238,19 @@ User.getContributions = async function(userId) {
     user.getAnnotations({
       attributes: ["id", "reviewed"],
       include: [{ model: db.model("issue") }],
-      raw: true
+      required: false,
     }),
     user.getProjectSurveyComments({
       attributes: ["id", "reviewed"],
       include: [{ model: db.model("issue") }],
-      raw: true
+      required: false,
     })
   ]);
   const numAnnoationIssues = annotations.filter(
-    item => item.issue && item.issue.open
+    item => item.issue
   ).length;
   const numProjectSurveyCommentIssues = projectSurveyComments.filter(
-    item => item.issue && item.issue.open
+    item => item.issue
   ).length;
   const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam").length;
   const numProjectSurveyCommentSpam = projectSurveyComments.filter(
