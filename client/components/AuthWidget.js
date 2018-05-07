@@ -63,7 +63,7 @@ class AuthWidget extends Component {
           {this.state.dropdown && (
             <div className={`${className}__dropdown`}>
               <Link
-                to="/profile/about"
+                to="/user/profile/about"
                 style={{ display: "block", margin: "0px" }}
               >
                 <div className={`${className}__dropdown-item`}>profile</div>

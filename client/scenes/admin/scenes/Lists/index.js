@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import history from "../../../../history";
 import ProjectSurveyList from "./scenes/ProjectSurveyList";
+import UserList from "./scenes/UserList";
 import { AdminListSidebar } from "./components";
 
 const AdminList = ({ match }) => {
@@ -13,6 +14,10 @@ const AdminList = ({ match }) => {
         <Route
           path={`${match.url}/project-surveys`}
           component={ProjectSurveyList}
+        />
+        <Route
+          path={`${match.url}/users`}
+          component={UserList}
         />
         <Redirect
           from={`${match.url}`}

@@ -18,6 +18,20 @@ Promise = require("bluebird");
 module.exports = router;
 
 router.get(
+  "/users",
+  ensureAuthentication,
+  ensureAdminRole,
+  async (req, res, next) => {
+    try {
+      const users = await User.getUserListWithContributions();
+      res.send(users);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.get(
   "/project-survey/:projectSurveyId",
   ensureAuthentication,
   ensureAdminRole,

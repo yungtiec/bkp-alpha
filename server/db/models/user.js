@@ -164,7 +164,6 @@ const User = db.define(
           include: [ProjectSurveyCommentQueryObj]
         };
       },
-
       roles: function(userId) {
         return {
           where: { id: userId },
@@ -231,29 +230,44 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [numAnnotations, numProjectSurveyComments] = await Promise.map(
-    [
-      user.getAnnotations({ attributes: ["id"], raw: true }),
-      user.getProjectSurveyComments({ attributes: ["id"], raw: true })
-    ],
-    collections => collections.length
-  );
-  const [numAnnoationIssues, numProjectSurveyCommentIssues] = await Promise.map(
-    [
-      user.getAnnotations({ include: [{ model: db.model("issue") }] }),
-      user.getProjectSurveyComments({ include: [{ model: db.model("issue") }] })
-    ],
-    collections =>
-      collections.filter(item => item.issue && item.issue.open).length
-  );
+  const [annotations, projectSurveyComments] = await Promise.all([
+    user.getAnnotations({
+      attributes: ["id", "reviewed"],
+      include: [{ model: db.model("issue") }],
+      raw: true
+    }),
+    user.getProjectSurveyComments({
+      attributes: ["id", "reviewed"],
+      include: [{ model: db.model("issue") }],
+      raw: true
+    })
+  ]);
+  const numAnnoationIssues = annotations.filter(
+    item => item.issue && item.issue.open
+  ).length;
+  const numProjectSurveyCommentIssues = projectSurveyComments.filter(
+    item => item.issue && item.issue.open
+  ).length;
+  const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam").length;
+  const numProjectSurveyCommentSpam = projectSurveyComments.filter(
+    item => item.reviewed === "spam"
+  ).length;
   return assignIn(
     {
-      num_annotations: numAnnotations,
-      num_project_survey_comments: numProjectSurveyComments,
+      num_annotations: annotations.length,
+      num_project_survey_comments: projectSurveyComments.length,
+      num_spam: numAnnoationSpam + numProjectSurveyCommentSpam,
       num_issues: numAnnoationIssues + numProjectSurveyCommentIssues
     },
     user.toJSON()
   );
+};
+
+User.getUserListWithContributions = async function() {
+  const users = await Promise.map(User.findAll(), user =>
+    User.getContributions(user.id)
+  );
+  return users
 };
 
 User.getAnnotationsAndCount = async function(queryObj) {
@@ -273,8 +287,11 @@ User.getProjectSurveyCommentsAndCount = async function(queryObj) {
   const { projectSurveyComments } = await User.scope({
     method: ["projectSurveyCommentCount", cloneDeep(queryObj)]
   }).findOne();
-  return { profile: user, projectSurveyCommentCount: projectSurveyComments.length };
-}
+  return {
+    profile: user,
+    projectSurveyCommentCount: projectSurveyComments.length
+  };
+};
 
 /**
  * hooks

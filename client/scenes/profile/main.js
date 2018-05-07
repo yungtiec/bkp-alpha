@@ -10,11 +10,25 @@ import ProfileProjectSurveyComments from "./scenes/projectSurveyComments";
 import autoBind from "react-autobind";
 import moment from "moment";
 import history from "../../history";
+import { fetchUserBasicInfo } from "./scenes/about/data/actions";
+import { getUserBasicInfo } from "./scenes/about/data/reducer";
 
-const Profile = ({ basicInfo, match }) => {
-  const activeTab = window.location.pathname.split("/")[2];
+class Profile extends Component {
+  constructor(props) {
+    super(props);
+    autoBind(this);
+  }
 
-  return (
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.userId !== nextProps.match.params.userId) {
+      this.props.fetchUserBasicInfo(nextProps.match.params.userId);
+    }
+  }
+
+  render() {
+    const { basicInfo, match } = this.props;
+    const activeTab = window.location.pathname.split("/")[2];
+    return (
     <div className="profile-container">
       <ProfileBanner
         name={`${basicInfo.first_name} ${basicInfo.last_name}`}
@@ -41,7 +55,8 @@ const Profile = ({ basicInfo, match }) => {
       </Switch>
     </div>
   );
-};
+  }
+}
 
 const mapState = (state, ownProps) => {
   const { basicInfo } = ownProps;
@@ -50,4 +65,8 @@ const mapState = (state, ownProps) => {
   };
 };
 
-export default withRouter(Profile);
+const actions = {
+  fetchUserBasicInfo
+};
+
+export default withRouter(connect(mapState, actions)(Profile));

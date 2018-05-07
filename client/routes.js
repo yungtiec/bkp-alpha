@@ -44,7 +44,7 @@ class Routes extends Component {
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
-              path="/profile"
+              path="/user/:userId"
               component={Profile}
             />
           )}

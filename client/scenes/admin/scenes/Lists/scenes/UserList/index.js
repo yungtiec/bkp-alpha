@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import autoBind from "react-autobind";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { fetchUserBasicInfo } from "./scenes/about/data/actions";
-import { getUserBasicInfo } from "./scenes/about/data/reducer";
+import { fetchUsers } from "./data/actions";
+import { getUsers } from "./data/reducer";
 
-const LoadableProfile = Loadable({
+const LoadableAdminUserList = Loadable({
   loader: () => import("./main"),
   loading: () => (
     <SquareLoader
@@ -17,15 +17,16 @@ const LoadableProfile = Loadable({
     />
   ),
   render(loaded, props) {
-    let Profile = loaded.default;
-    return <Profile {...props} />;
+    let AdminUserList = loaded.default;
+    return <AdminUserList {...props} />;
   },
   delay: 1000
 });
 
-class MyComponent extends React.Component {
+class MyComponent extends Component {
   constructor(props) {
     super(props);
+    autoBind(this);
   }
 
   componentDidMount() {
@@ -33,23 +34,24 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    return <LoadableProfile {...this.props} />;
+    return <LoadableAdminUserList {...this.props} />;
   }
 }
 
 const mapState = state => {
-  const basicInfo = getUserBasicInfo(state);
+  const { usersById, userIds } = getUsers(state);
   return {
-    basicInfo
+    usersById,
+    userIds
   };
 };
 
-const actions = (dispatch, props) => {
+const actions = dispatch => {
   return {
     loadInitialData() {
-      dispatch(fetchUserBasicInfo(props.match.params.userId));
+      dispatch(fetchUsers());
     }
   };
 };
 
-export default withRouter(connect(mapState, actions)(MyComponent));
+export default connect(mapState, actions)(MyComponent);

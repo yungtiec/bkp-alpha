@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 
-// import { default as projectSurveyListReducer } from "./ProjectSurveyList/reducer";
+import { default as userListReducer } from "./UserList/reducer";
 
 
 export const reducer = combineReducers({
-  // projectSurveyList: projectSurveyListReducer
+  userList: userListReducer
 });

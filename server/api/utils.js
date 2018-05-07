@@ -26,11 +26,12 @@ const ensureAdminRole = async (req, res, next) => {
 
 const ensureAdminRoleOrOwnership = async (req, res, next) => {
   const requestor = await User.scope({
-    method: ["roles", Number(req.params.userId)]
+    method: ["roles", Number(req.user.id)]
   }).findOne();
   if (
     !requestor.roles.filter(r => r.name === "admin").length ||
-    Number(req.params.userId) !== req.user.id
+    (!requestor.roles.filter(r => r.name === "admin").length &&
+      Number(req.params.userId) !== req.user.id)
   ) {
     res.sendStatus(401);
   } else {
