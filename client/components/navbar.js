@@ -50,6 +50,13 @@ class Navbar extends Component {
             <Link to="/projects" className="navbar__nav-item">
               projects
             </Link>
+            <Link
+              to="/user/profile/notifications"
+              className="navbar__nav-item notification-count"
+              data-count={this.props.numNotifications || ""}
+            >
+              <i class="fas fa-bell" />
+            </Link>
             <AuthWidget inNavbar={true} />
           </div>
         </nav>
@@ -63,7 +70,8 @@ const mapState = state => {
     isAdmin:
       !!state.data.user.roles &&
       state.data.user.roles.filter(role => role.name === "admin").length,
-    isLoggedIn: !!state.data.user.id
+    isLoggedIn: !!state.data.user.id,
+    numNotifications: state.data.user && state.data.user.num_notifications
   };
 };
 

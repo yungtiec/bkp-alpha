@@ -187,7 +187,14 @@ const User = db.define(
             "first_name",
             "last_name",
             "organization",
-            "restricted_access"
+            "restricted_access",
+            "createdAt"
+          ],
+          include: [
+            {
+              model: db.model("role"),
+              attributes: ["name"]
+            }
           ]
         };
       }
@@ -241,18 +248,30 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [annotations, projectSurveyComments] = await Promise.all([
-    user.getAnnotations({
-      attributes: ["id", "reviewed"],
-      include: [{ model: db.model("issue") }],
-      required: false
-    }),
-    user.getProjectSurveyComments({
-      attributes: ["id", "reviewed"],
-      include: [{ model: db.model("issue") }],
-      required: false
-    })
-  ]);
+  const [annotations, projectSurveyComments, notifications] = await Promise.all(
+    [
+      user.getAnnotations({
+        attributes: ["id", "reviewed"],
+        include: [{ model: db.model("issue") }],
+        required: false
+      }),
+      user.getProjectSurveyComments({
+        attributes: ["id", "reviewed"],
+        include: [{ model: db.model("issue") }],
+        required: false
+      }),
+      user.getNotifications({
+        where: {
+          status: {
+            [Sequelize.Op.or]: [
+              { [Sequelize.Op.eq]: "unread" },
+              { [Sequelize.Op.eq]: "seen" }
+            ]
+          }
+        }
+      })
+    ]
+  );
   const numAnnoationIssues = annotations.filter(item => item.issue).length;
   const numProjectSurveyCommentIssues = projectSurveyComments.filter(
     item => item.issue
@@ -267,7 +286,8 @@ User.getContributions = async function(userId) {
       num_annotations: annotations.length,
       num_project_survey_comments: projectSurveyComments.length,
       num_spam: numAnnoationSpam + numProjectSurveyCommentSpam,
-      num_issues: numAnnoationIssues + numProjectSurveyCommentIssues
+      num_issues: numAnnoationIssues + numProjectSurveyCommentIssues,
+      num_notifications: notifications.length
     },
     user.toJSON()
   );
@@ -289,8 +309,7 @@ User.getAnnotationsAndCount = async function(queryObj) {
   }).findOne();
   annotations = annotations.map(annotation => {
     annotation = annotation.toJSON();
-    if (!annotation.parentId)
-      return assignIn({ ancestors: [] }, annotation);
+    if (!annotation.parentId) return assignIn({ ancestors: [] }, annotation);
     if (annotation.parent.ancestors.length) {
       annotation.ancestors = annotation.parent.ancestors.concat(
         annotation.parent

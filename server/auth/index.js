@@ -46,25 +46,9 @@ router.post("/logout", (req, res) => {
 });
 
 router.get("/me", async (req, res) => {
-  const user = await User.findOne({
-    where: { id: req.user.id },
-    attributes: [
-      "id",
-      "first_name",
-      "last_name",
-      "organization",
-      "email",
-      "createdAt"
-    ],
-    include: [
-      {
-        model: Role,
-        attributes: ["name"]
-      }
-    ]
-  });
-
-  res.json(user);
+  const user = await User.getContributions(req.user.id);
+  console.log(user)
+  res.send(user);
 });
 
 router.use("/google", require("./google"));

@@ -93,7 +93,7 @@ class ProfileProjectSurveyComments extends Component {
             engagementItemsById={projectSurveyCommentsById}
             engagementItemIds={projectSurveyCommentIds}
           />
-          {projectSurveyCommentIds.length ? (
+          {projectSurveyCommentIds.length && pageCount > 1 ? (
             <ReactPaginate
               previousLabel={"previous"}
               nextLabel={"next"}

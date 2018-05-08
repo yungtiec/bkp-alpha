@@ -98,7 +98,7 @@ class ProfileAnnotations extends Component {
             engagementItemsById={annotationsById}
             engagementItemIds={annotationIds}
           />
-          {annotationIds.length ? (
+          {annotationIds.length && pageCount > 1 ? (
             <ReactPaginate
               previousLabel={"previous"}
               nextLabel={"next"}
