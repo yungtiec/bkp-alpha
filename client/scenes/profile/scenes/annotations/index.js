@@ -36,8 +36,9 @@ class MyComponent extends React.Component {
   }
 
   componentDidMount() {
+    const userId = this.props.match.path.split("/")[2];
     batchActions([
-      this.props.fetchUserAnnotations(),
+      this.props.fetchUserAnnotations(userId),
       this.props.fetchAllProjects(),
       this.props.fetchPublishedProjectSurveyStats()
     ]);
@@ -48,7 +49,7 @@ class MyComponent extends React.Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state, ownProps) => {
   const { annotationsById, annotationIds } = getUserAnnotations(state);
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
   const { projectSurveysById, projectSurveyIds } = getProjectSurveys(state);
@@ -58,7 +59,8 @@ const mapState = state => {
     projectsBySymbol,
     projectSymbolArr,
     projectSurveysById,
-    projectSurveyIds
+    projectSurveyIds,
+    userId: ownProps.match.path.split("/")[2]
   };
 };
 

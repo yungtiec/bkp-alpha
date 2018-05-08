@@ -181,7 +181,14 @@ const User = db.define(
       basicInfo: function(userId) {
         return {
           where: { id: userId },
-          attributes: ["id", "email", "first_name", "last_name", "organization", "restricted_access"]
+          attributes: [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "organization",
+            "restricted_access"
+          ]
         };
       }
     }
@@ -238,21 +245,20 @@ User.getContributions = async function(userId) {
     user.getAnnotations({
       attributes: ["id", "reviewed"],
       include: [{ model: db.model("issue") }],
-      required: false,
+      required: false
     }),
     user.getProjectSurveyComments({
       attributes: ["id", "reviewed"],
       include: [{ model: db.model("issue") }],
-      required: false,
+      required: false
     })
   ]);
-  const numAnnoationIssues = annotations.filter(
-    item => item.issue
-  ).length;
+  const numAnnoationIssues = annotations.filter(item => item.issue).length;
   const numProjectSurveyCommentIssues = projectSurveyComments.filter(
     item => item.issue
   ).length;
-  const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam").length;
+  const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam")
+    .length;
   const numProjectSurveyCommentSpam = projectSurveyComments.filter(
     item => item.reviewed === "spam"
   ).length;
@@ -271,28 +277,54 @@ User.getUserListWithContributions = async function() {
   const users = await Promise.map(User.findAll(), user =>
     User.getContributions(user.id)
   );
-  return users
+  return users;
 };
 
 User.getAnnotationsAndCount = async function(queryObj) {
   const user = await User.scope({
     method: ["annotations", cloneDeep(queryObj)]
   }).findOne();
-  const { annotations } = await User.scope({
+  var { annotations } = await User.scope({
     method: ["annotationCount", cloneDeep(queryObj)]
   }).findOne();
-  return { profile: user, annotationCount: annotations.length };
+  annotations = annotations.map(annotation => {
+    annotation = annotation.toJSON();
+    if (!annotation.parentId)
+      return assignIn({ ancestors: [] }, annotation);
+    if (annotation.parent.ancestors.length) {
+      annotation.ancestors = annotation.parent.ancestors.concat(
+        annotation.parent
+      );
+    } else {
+      annotation.ancestors = [annotation.parent];
+    }
+    return annotation;
+  });
+  return { annotations, annotationCount: annotations.length };
 };
 
 User.getProjectSurveyCommentsAndCount = async function(queryObj) {
   const user = await User.scope({
     method: ["projectSurveyComments", cloneDeep(queryObj)]
   }).findOne();
-  const { projectSurveyComments } = await User.scope({
+  var { projectSurveyComments } = await User.scope({
     method: ["projectSurveyCommentCount", cloneDeep(queryObj)]
   }).findOne();
+  projectSurveyComments = projectSurveyComments.map(projectSurveyComment => {
+    projectSurveyComment = projectSurveyComment.toJSON();
+    if (!projectSurveyComment.parentId)
+      return assignIn({ ancestors: [] }, projectSurveyComment);
+    if (projectSurveyComment.parent.ancestors.length) {
+      projectSurveyComment.ancestors = projectSurveyComment.parent.ancestors.concat(
+        projectSurveyComment.parent
+      );
+    } else {
+      projectSurveyComment.ancestors = [projectSurveyComment.parent];
+    }
+    return projectSurveyComment;
+  });
   return {
-    profile: user,
+    projectSurveyComments,
     projectSurveyCommentCount: projectSurveyComments.length
   };
 };
@@ -336,7 +368,6 @@ function getEngagementItemQueryObj({
       }
     : {
         model: db.model("project_survey"),
-        attributes: ["id"],
         required: true,
         include: [
           {
@@ -366,28 +397,32 @@ function getEngagementItemQueryObj({
     required: false,
     include: [
       {
+        model: db.model("tag"),
+        required: false
+      },
+      {
         model: db.model(engagementItemModelName),
-        as: "ancestors",
+        as: "parent", // for unknown reason, include ancestors here doesn't work
         required: false,
         include: [
-          {
-            model: db.model("user"),
-            as: "owner",
-            required: false
-          },
           {
             model: db.model("tag"),
             required: false
           },
           {
+            model: db.model("user"),
+            as: "owner"
+          },
+          {
             model: db.model("issue"),
+            required: false
+          },
+          {
+            model: db.model(engagementItemModelName),
+            as: "ancestors",
             required: false
           }
         ]
-      },
-      {
-        model: db.model("tag"),
-        required: false
       },
       issueQuery,
       projectSurveyQuery
@@ -400,7 +435,7 @@ function getEngagementItemQueryObj({
           model: db.model("project_survey")
         },
         "id",
-        "DESC"
+        "ASC"
       ],
       ["createdAt", "DESC"],
       ["updatedAt", "DESC"]

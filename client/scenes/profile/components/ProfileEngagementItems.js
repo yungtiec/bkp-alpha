@@ -1,15 +1,23 @@
 import React from "react";
 import { AnnotationMain, AnnotationReply } from "../../../components";
+import history from "../../../history";
 
-const seeAnnotationContext = annotation => {
+const seeAnnotationContext = engagementItem => {
   const path =
-    annotation.ancestors && annotation.ancestors.length
-      ? `${annotation.ancestors[0].uri.replace(window.origin, "")}/question/${
-          annotation.survey_question_id
-        }/annotation/${annotation.ancestors[0].id}`
-      : `${annotation.uri.replace(window.origin, "")}/question/${
-          annotation.survey_question_id
-        }/annotation/${annotation.id}`;
+    engagementItem.engagementItemType === "annotation"
+      ? engagementItem.ancestors && engagementItem.ancestors.length
+        ? `${engagementItem.ancestors[0].uri.replace(
+            window.origin,
+            ""
+          )}/question/${engagementItem.survey_question_id}/annotation/${
+            engagementItem.ancestors[0].id
+          }`
+        : `${engagementItem.uri.replace(window.origin, "")}/question/${
+            engagementItem.survey_question_id
+          }/annotation/${engagementItem.id}`
+      : `/project/${
+          engagementItem.project_survey.project.symbol
+        }/survey/${engagementItem.project_survey.survey.id}/page-comments`;
   return history.push(path);
 };
 

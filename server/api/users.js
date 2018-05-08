@@ -63,10 +63,10 @@ router.get(
       };
     }
     try {
-      const { profile, annotationCount } = await User.getAnnotationsAndCount(
+      const { annotations, annotationCount } = await User.getAnnotationsAndCount(
         queryObj
       );
-      res.send({ annotations: profile.annotations, annotationCount });
+      res.send({ annotations, annotationCount });
     } catch (err) {
       next(err);
     }
@@ -113,12 +113,13 @@ router.get(
     }
     try {
       const {
-        profile,
-        projectSurveyCommentsCount
+        projectSurveyComments,
+        projectSurveyCommentCount
       } = await User.getProjectSurveyCommentsAndCount(queryObj);
+
       res.send({
-        projectSurveyComments: profile.projectSurveyComments,
-        projectSurveyCommentsCount
+        projectSurveyComments,
+        projectSurveyCommentCount
       });
     } catch (err) {
       next(err);

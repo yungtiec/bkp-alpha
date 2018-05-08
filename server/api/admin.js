@@ -76,6 +76,7 @@ router.get(
             {
               model: Annotation,
               as: "ancestors",
+              required: false,
               include: [
                 {
                   model: User,
@@ -121,7 +122,7 @@ router.get(
             },
             {
               model: ProjectSurveyComment,
-              as: "parent",
+              as: "ancestors",
               required: false,
               include: [
                 {
@@ -152,6 +153,15 @@ router.get(
                 }
               ]
             }
+          ],
+          order: [
+            [
+              {
+                model: ProjectSurveyComment,
+                as: "ancestors"
+              },
+              "hierarchyLevel"
+            ]
           ]
         })
       ]);

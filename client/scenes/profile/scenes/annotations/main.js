@@ -24,11 +24,14 @@ class ProfileAnnotations extends Component {
   }
 
   handleProjectSelectChange(selected) {
-    this.props.updatePageProjectFilter(selected);
+    this.props.updatePageProjectFilter(
+      this.props.userId,
+      selected
+    );
   }
 
   handlePageClick(page) {
-    this.props.updatePageOffset(page.selected);
+    this.props.updatePageOffset(this.props.userId, page.selected);
   }
 
   render() {
@@ -45,14 +48,19 @@ class ProfileAnnotations extends Component {
       pageProjectFilter,
       pageSurveyFilter,
       checked,
-      checkSidebarFilter
+      checkSidebarFilter,
+      userId
     } = this.props;
+    const checkSidebarFilterBound = checkSidebarFilter.bind(
+      null,
+      userId
+    );
 
     return (
       <div className="profile-engagement-items__container main-container">
         <ProfileSidebar
           checked={checked}
-          checkSidebarFilter={checkSidebarFilter}
+          checkSidebarFilter={checkSidebarFilterBound}
           nodes={[
             {
               value: "status",

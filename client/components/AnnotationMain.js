@@ -28,7 +28,7 @@ export default ({ annotation, path, children }) => (
               />
             </span>
           )}
-          <span>{moment(parent.createdAt).fromNow()}</span>
+          <span>{moment(annotation.createdAt).fromNow()}</span>
         </p>
       )}
       <p>
@@ -64,7 +64,7 @@ export default ({ annotation, path, children }) => (
               />
             </span>
           )}
-          <span>{moment(parent.createdAt).fromNow()}</span>
+          <span>{moment(annotation.createdAt).fromNow()}</span>
         </p>
       )}
     <p className="main-annotation__quote">{annotation.quote}</p>
