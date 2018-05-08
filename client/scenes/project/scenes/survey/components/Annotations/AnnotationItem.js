@@ -50,12 +50,12 @@ export default class AnnotationItem extends Component {
     });
   }
 
-  labelAsNotSpam(annotationId) {
-    this.props.verifyItemAsAdmin(annotationId, "verified");
+  labelAsNotSpam(annotation) {
+    this.props.verifyItemAsAdmin(annotation, "verified");
   }
 
-  labelAsSpam(annotationId) {
-    this.props.verifyItemAsAdmin(annotationId, "spam");
+  labelAsSpam(annotation) {
+    this.props.verifyItemAsAdmin(annotation, "spam");
   }
 
   renderMainComment(engagementTab, annotation) {
@@ -73,7 +73,7 @@ export default class AnnotationItem extends Component {
         })
       : this.promptLoginToast;
     const openModal = this.openModal.bind(null, annotation);
-    const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(null, annotation.id)
+    const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(null, annotation)
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">

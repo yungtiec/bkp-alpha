@@ -17,14 +17,14 @@ export default ({
         <button
           type="button"
           className="btn btn-outline-danger btn-sm"
-          onClick={() => labelAsSpam(item.id)}
+          onClick={() => labelAsSpam(item)}
         >
           spam
         </button>
         <button
           type="button"
           className="btn btn-outline-primary btn-sm"
-          onClick={() => labelAsNotSpam(item.id)}
+          onClick={() => labelAsNotSpam(item)}
         >
           verify
         </button>

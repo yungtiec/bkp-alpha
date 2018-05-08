@@ -34,16 +34,16 @@ export function updateComment({ commentId, comment, tags, issueOpen }) {
     .then(res => res.data);
 }
 
-export function postPendingCommentStatus({ commentId, reviewed }) {
-  return axios.post("/api/project/survey/comment/verify", {
-    commentId,
+export function postPendingCommentStatus({ projectSurveyComment, reviewed }) {
+  return axios.post("/api/admin/engagement-item/verify", {
+    engagementItem: projectSurveyComment,
     reviewed
   });
 }
 
-export function updateCommentIssueStatus({ commentId, open }) {
-  return axios.post("/api/project/survey/comment/issue", {
-    commentId,
+export function updateCommentIssueStatus({ projectSurveyComment, open }) {
+  return axios.post("/api/admin/engagement-item/issue", {
+    engagementItem: projectSurveyComment,
     open
   });
 }

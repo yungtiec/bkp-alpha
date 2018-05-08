@@ -152,16 +152,16 @@ export const editComment = ({ commentId, comment, tags, issueOpen }) => {
   };
 };
 
-export const verifyCommentAsAdmin = (commentId, reviewed) => {
+export const verifyCommentAsAdmin = (projectSurveyComment, reviewed) => {
   return async dispatch => {
     try {
       await postPendingCommentStatus({
-        commentId,
+        projectSurveyComment,
         reviewed
       });
       dispatch({
         type: types.COMMENT_VERIFIED,
-        commentId,
+        commentId: projectSurveyComment.id,
         reviewed
       });
     } catch (err) {
@@ -170,25 +170,23 @@ export const verifyCommentAsAdmin = (commentId, reviewed) => {
   };
 };
 
-export const changeCommentIssueStatus = commentId => {
+export const changeCommentIssueStatus = projectSurveyComment => {
   return async (dispatch, getState) => {
     try {
-      const comment = getState().scenes.project.scenes.survey.data.comments
-        .commentsById[commentId];
       const user = getState().data.user;
       if (
-        comment.owner_id !== user.id &&
+        projectSurveyComment.owner_id !== user.id &&
         !user.roles.filter(r => r.name === "admin").length
       )
         return;
-      const open = comment.issue ? !comment.issue.open : true;
+      const open = projectSurveyComment.issue ? !projectSurveyComment.issue.open : true;
       await updateCommentIssueStatus({
-        commentId,
+        projectSurveyComment,
         open
       });
       dispatch({
         type: types.COMMENT_ISSUE_UPDATED,
-        commentId,
+        commentId: projectSurveyComment.id,
         open
       });
     } catch (err) {

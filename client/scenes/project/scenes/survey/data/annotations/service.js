@@ -33,16 +33,16 @@ export function updateAnnotationComment({
     .then(res => res.data);
 }
 
-export function postPendingAnnotationStatus({ annotationId, reviewed }) {
-  return axios.post("/api/annotation/verify", {
-    annotationId,
+export function postPendingAnnotationStatus({ annotation, reviewed }) {
+  return axios.post("/api/admin/engagement-item/verify", {
+    engagementItem: annotation,
     reviewed
   });
 }
 
-export function updateAnnotationIssueStatus({ annotationId, open }) {
-  return axios.post("/api/annotation/issue", {
-    annotationId,
+export function updateAnnotationIssueStatus({ annotation, open }) {
+  return axios.post("/api/admin/engagement-item/issue", {
+    engagementItem: annotation,
     open
   });
 }

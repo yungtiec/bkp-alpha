@@ -140,16 +140,16 @@ export const editAnnotationComment = ({
   };
 };
 
-export const verifyAnnotationAsAdmin = (annotationId, reviewed) => {
+export const verifyAnnotationAsAdmin = (annotation, reviewed) => {
   return async dispatch => {
     try {
       await postPendingAnnotationStatus({
-        annotationId,
+        annotation,
         reviewed
       });
       dispatch({
         type: types.ANNOTATION_VERIFIED,
-        annotationId,
+        annotationId: annotation.id,
         reviewed
       });
     } catch (err) {
@@ -166,11 +166,9 @@ export const verifyAnnotationAsAdmin = (annotationId, reviewed) => {
   };
 };
 
-export const changeAnnotationIssueStatus = annotationId => {
+export const changeAnnotationIssueStatus = annotation => {
   return async (dispatch, getState) => {
     try {
-      const annotation = getState().scenes.project.scenes.survey.data
-        .annotations.annotationsById[annotationId];
       const user = getState().data.user;
       if (
         annotation.owner_id !== user.id &&
@@ -178,14 +176,13 @@ export const changeAnnotationIssueStatus = annotationId => {
       )
         return;
       const open = annotation.issue ? !annotation.issue.open : true;
-
       await updateAnnotationIssueStatus({
-        annotationId,
+        annotation,
         open
       });
       dispatch({
         type: types.ANNOTATION_ISSUE_UPDATED,
-        annotationId,
+        annotationId: annotation.id,
         open
       });
     } catch (err) {
