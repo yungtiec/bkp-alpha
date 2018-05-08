@@ -7,7 +7,8 @@ const {
   ProjectSurvey,
   Project,
   Tag,
-  Issue
+  Issue,
+  Notification
 } = require("../db/models");
 const {
   ensureAuthentication,
@@ -37,11 +38,14 @@ router.post(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      const user = await User.update({
-        restricted_access: req.body.accessStatus === "restricted"
-      }, {
-        where: {id: req.body.userId}
-      });
+      const user = await User.update(
+        {
+          restricted_access: req.body.accessStatus === "restricted"
+        },
+        {
+          where: { id: req.body.userId }
+        }
+      );
       res.sendStatus(200);
     } catch (err) {
       next(err);
@@ -210,7 +214,13 @@ router.post(
           ]
         });
       }
-
+      if (!req.body.open) {
+        await Notification.notify({
+          sender: "",
+          engagementItem: engagementItem,
+          messageFragment: "Admin closed your issue."
+        });
+      }
       engagementItem.issue
         ? await Issue.update(
             {

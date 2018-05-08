@@ -33,11 +33,11 @@ Notification.notifyAncestors = function({
   messageFragment
 }) {
   const uri =
-    engagementItem.engagementItem === "annotation"
+    engagementItem.engagementItemType === "annotation"
       ? engagementItem.hierarchyLevel === 1
         ? `${engagementItem.uri}/question/${
             engagementItem.survey_question_id
-          }/engagementItem/${engagementItem.id}`
+          }/${engagementItem.engagementItemType}/${engagementItem.id}`
         : `${engagementItem.uri}/question/${
             engagementItem.survey_question_id
           }/${engagementItem.engagementItemType}/${
@@ -47,7 +47,7 @@ Notification.notifyAncestors = function({
           engagementItem.project_survey.survey.id
         }`;
   var notification = {
-    sender_id: sender.id,
+    sender: sender ? sender.id : null,
     uri,
     message: `${sender.first_name} ${sender.last_name} ${messageFragment}`,
     status: "unread"
@@ -68,11 +68,11 @@ Notification.notifyAncestors = function({
 Notification.notify = function({ sender, engagementItem, messageFragment }) {
   if (sender.id === engagementItem.owner_id) return;
   const uri =
-    engagementItem.engagementItem === "annotation"
+    engagementItem.engagementItemType === "annotation"
       ? engagementItem.hierarchyLevel === 1
         ? `${engagementItem.uri}/question/${
             engagementItem.survey_question_id
-          }/engagementItem/${engagementItem.id}`
+          }/${engagementItem.engagementItemType}/${engagementItem.id}`
         : `${engagementItem.uri}/question/${
             engagementItem.survey_question_id
           }/${engagementItem.engagementItemType}/${
@@ -82,9 +82,11 @@ Notification.notify = function({ sender, engagementItem, messageFragment }) {
           engagementItem.project_survey.survey.id
         }/page-comments`;
   Notification.create({
-    sender_id: sender.id,
+    sender_id: sender ? sender.id : null,
     uri,
-    message: `${sender.first_name} ${sender.last_name} ${messageFragment}`,
+    message: sender
+      ? `${sender.first_name} ${sender.last_name} ${messageFragment}`
+      : messageFragment,
     status: "unread",
     recipient_id: engagementItem.owner_id
   });
