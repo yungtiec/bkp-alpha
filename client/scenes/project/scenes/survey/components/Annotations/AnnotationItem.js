@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import moment from "moment";
-import { cloneDeep, isEmpty, find } from "lodash";
+import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
 import ActionBar from "./ActionBar";
 
@@ -73,7 +73,10 @@ export default class AnnotationItem extends Component {
         })
       : this.promptLoginToast;
     const openModal = this.openModal.bind(null, annotation);
-    const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(null, annotation)
+    const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(
+      null,
+      annotation
+    );
     return (
       <div className="annotation-item__main">
         <div className="annotation-item__header">
@@ -94,7 +97,7 @@ export default class AnnotationItem extends Component {
                 onClick={changeItemIssueStatus}
               >
                 issue:open
-                <i className="fas fa-times"></i>
+                <i className="fas fa-times" />
               </span>
             ) : (
               <span
@@ -132,10 +135,19 @@ export default class AnnotationItem extends Component {
     );
   }
 
-  renderThread(children, parentIds) {
+  renderThread(children, ancestorId) {
     if (!children) return "";
-    var accessors = cloneDeep(parentIds);
-    const replies = children.map(child => {
+    var accessors = cloneDeep(ancestorId);
+    const replies = orderBy(
+      children.map(
+        child =>
+          isEmpty(child)
+            ? child
+            : assignIn({ unix: moment(child.createdAt).format("X") }, child)
+      ),
+      ["unix", "upvotesFrom.length"],
+      ["asc", "desc"]
+    ).map(child => {
       const initReplyToThis = this.props.userEmail
         ? this.initReply.bind(this, accessors, child)
         : this.promptLoginToast;
