@@ -7,6 +7,7 @@ import { ProfileBanner, ProfileNavbar, ProfileReplies } from "./components";
 import ProfileAbout from "./scenes/about";
 import ProfileAnnotations from "./scenes/annotations";
 import ProfileProjectSurveyComments from "./scenes/projectSurveyComments";
+import Notifications from "./scenes/notifications";
 import autoBind from "react-autobind";
 import moment from "moment";
 import history from "../../history";
@@ -44,8 +45,11 @@ class Profile extends Component {
   }
 
   render() {
-    const { basicInfo, match, isAdmin } = this.props;
+    const { basicInfo, match, isAdmin, myUserId } = this.props;
     const activeTab = window.location.pathname.split("/")[3];
+    const isMyProfile =
+      match.params.userId === "profile" || match.params.userId === myUserId;
+
     return (
       <div className="profile-container">
         <ProfileBanner
@@ -59,7 +63,11 @@ class Profile extends Component {
           restrictAccess={this.restrictAccess}
           restoreAccess={this.restoreAccess}
         />
-        <ProfileNavbar activeTab={activeTab} url={match.url} />
+        <ProfileNavbar
+          activeTab={activeTab}
+          url={match.url}
+          isMyProfile={isMyProfile}
+        />
         <Switch>
           <Route
             path={`${match.url}/about`}
@@ -73,6 +81,12 @@ class Profile extends Component {
             path={`${match.url}/project-survey-comments`}
             component={ProfileProjectSurveyComments}
           />
+          {isMyProfile && (
+            <Route
+              path={`${match.url}/notifications`}
+              component={Notifications}
+            />
+          )}
           <Redirect from="/" exact to="/about" />
         </Switch>
       </div>
@@ -85,7 +99,8 @@ const mapState = (state, ownProps) => {
   const isAdmin = currentUserIsAdmin(state);
   return {
     basicInfo,
-    isAdmin
+    isAdmin,
+    myUserId: state.data.user && state.data.user.id
   };
 };
 

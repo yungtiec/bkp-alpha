@@ -6,6 +6,7 @@ import { default as searchReducer } from "./search/reducer";
 import { default as environmentReducer } from "./environment/reducer";
 import { default as projectsReducer } from "./projects/reducer";
 import { default as projectSurveysReducer } from "./projectSurveys/reducer";
+import { default as notificationsReducer } from "./notifications/reducer";
 
 export default combineReducers({
   user: userReducer,
@@ -13,7 +14,8 @@ export default combineReducers({
   search: searchReducer,
   environment: environmentReducer,
   projects: projectsReducer,
-  projectSurveys: projectSurveysReducer
+  projectSurveys: projectSurveysReducer,
+  notifications: notificationsReducer
 });
 
 export * from "./user/reducer";
@@ -28,3 +30,5 @@ export * from "./projects/reducer";
 export * from "./projects/actions";
 export * from "./projectSurveys/reducer";
 export * from "./projectSurveys/actions";
+export * from "./notifications/reducer";
+export * from "./notifications/actions";

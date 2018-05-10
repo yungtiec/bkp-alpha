@@ -7,6 +7,7 @@ router.use("/annotator", require("./annotator"));
 router.use("/annotation", require("./annotation"));
 router.use("/project", require("./project"));
 router.use("/tag", require("./tag"));
+router.use("/notifications", require("./notifications"));
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");

@@ -128,7 +128,7 @@ router.post("/upvote", ensureAuthentication, async (req, res, next) => {
       await Notification.notify({
         sender: user,
         engagementItem: comment,
-        messageFragment: "like your post"
+        messageFragment: "liked your post"
       });
     }
     res.send({ upvotesFrom: comment.upvotesFrom, commentId: comment.id });

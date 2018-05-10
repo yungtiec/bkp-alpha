@@ -102,7 +102,7 @@ router.post(
         await Notification.notify({
           sender: user,
           engagementItem: annotation,
-          messageFragment: "like your post"
+          messageFragment: "liked your post"
         });
       }
       res.send({

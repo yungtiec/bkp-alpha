@@ -9,6 +9,7 @@ const ensureAuthentication = async (req, res, next) => {
 };
 
 const ensureAdminRole = async (req, res, next) => {
+
   const requestor = await User.findOne({
     where: { id: req.user.id },
     include: [

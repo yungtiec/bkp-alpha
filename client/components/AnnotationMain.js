@@ -7,7 +7,11 @@ import Avatar from "react-avatar";
 
 export default ({ annotation, path, children }) => (
   <div className="main-annotation__main">
-    <div className="main-annotation__header">
+    <div
+      className={`main-annotation__header ${
+        annotation.project_survey ? "main-annotation__header--mobile" : ""
+      }`}
+    >
       {annotation.project_survey && annotation.project_survey.survey ? (
         <div>
           <span className="main-annotation__survey-title">

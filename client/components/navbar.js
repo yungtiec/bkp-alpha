@@ -4,8 +4,18 @@ import autoBind from "react-autobind";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { logout } from "../data/reducer";
+import {
+  logout,
+  getUserNotificationCount,
+  currentUserIsAdmin,
+  fetchUserNotifications
+} from "../data/reducer";
 import { AuthWidget, SearchBar } from "./index";
+import asyncPoll from "react-async-poll";
+
+const onPollInterval = (props, dispatch) => {
+  return props.fetchUserNotifications();
+};
 
 class Navbar extends Component {
   constructor(props) {
@@ -55,7 +65,7 @@ class Navbar extends Component {
               className="navbar__nav-item notification-count"
               data-count={this.props.numNotifications || ""}
             >
-              <i class="fas fa-bell" />
+              <i className="fas fa-bell" />
             </Link>
             <AuthWidget inNavbar={true} />
           </div>
@@ -67,11 +77,9 @@ class Navbar extends Component {
 
 const mapState = state => {
   return {
-    isAdmin:
-      !!state.data.user.roles &&
-      state.data.user.roles.filter(role => role.name === "admin").length,
+    isAdmin: currentUserIsAdmin(state),
     isLoggedIn: !!state.data.user.id,
-    numNotifications: state.data.user && state.data.user.num_notifications
+    numNotifications: getUserNotificationCount(state)
   };
 };
 
@@ -79,11 +87,16 @@ const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout());
+    },
+    fetchUserNotifications() {
+      dispatch(fetchUserNotifications())
     }
   };
 };
 
-export default withRouter(connect(mapState, mapDispatch)(Navbar));
+export default withRouter(
+  connect(mapState, mapDispatch)(asyncPoll(60 * 1000, onPollInterval)(Navbar))
+);
 
 Navbar.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired

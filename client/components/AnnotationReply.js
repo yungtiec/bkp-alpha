@@ -21,7 +21,11 @@ export default ({ annotation, path, children }) => {
   return (
     <div className="reply-annotation__main">
       <div className="reply-annotation__parent">
-        <div className="reply-annotation__parent-header">
+        <div
+          className={`reply-annotation__parent-header ${
+            annotation.project_survey ? "reply-annotation__parent-header--mobile" : ""
+          }`}
+        >
           {annotation.project_survey && annotation.project_survey.survey ? (
             <div className="reply-annotation__survey-title-container">
               <span className="reply-annotation__survey-title">

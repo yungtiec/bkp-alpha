@@ -3,7 +3,7 @@ const { User, Role } = require("../db/models");
 
 module.exports = router;
 
-router.post("/login", (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   User.findOne({
     where: { email: req.body.email },
     include: [
@@ -19,7 +19,11 @@ router.post("/login", (req, res, next) => {
       } else if (!user.correctPassword(req.body.password)) {
         res.status(401).send("Incorrect password");
       } else {
-        req.login(user, err => (err ? next(err) : res.json(user)));
+        req.login(user, async err => {
+          if (err) next(err)
+          user = await User.getContributions(user.id);
+          res.send(user)
+        });
       }
     })
     .catch(next);
@@ -47,7 +51,6 @@ router.post("/logout", (req, res) => {
 
 router.get("/me", async (req, res) => {
   const user = await User.getContributions(req.user.id);
-  console.log(user)
   res.send(user);
 });
 

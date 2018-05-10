@@ -13,7 +13,7 @@ module.exports = router;
 router.get(
   "/:userId",
   ensureAuthentication,
-  ensureAdminRoleOrOwnership,
+  // ensureAdminRoleOrOwnership, // nothing senstiive
   async (req, res, next) => {
     try {
       const profile = await User.getContributions(Number(req.params.userId));
@@ -27,7 +27,7 @@ router.get(
 router.get(
   "/:userId/annotations",
   ensureAuthentication,
-  ensureAdminRoleOrOwnership,
+  // ensureAdminRoleOrOwnership, // nothing senstiive
   async (req, res, next) => {
     var queryObj = {
       userId: Number(req.params.userId),
@@ -63,9 +63,10 @@ router.get(
       };
     }
     try {
-      const { annotations, annotationCount } = await User.getAnnotationsAndCount(
-        queryObj
-      );
+      const {
+        annotations,
+        annotationCount
+      } = await User.getAnnotationsAndCount(queryObj);
       res.send({ annotations, annotationCount });
     } catch (err) {
       next(err);
@@ -76,7 +77,7 @@ router.get(
 router.get(
   "/:userId/project-survey-comments",
   ensureAuthentication,
-  ensureAdminRoleOrOwnership,
+  // ensureAdminRoleOrOwnership, // nothing senstiive
   async (req, res, next) => {
     var queryObj = {
       userId: Number(req.params.userId),

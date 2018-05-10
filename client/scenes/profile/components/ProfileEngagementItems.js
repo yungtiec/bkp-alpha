@@ -27,7 +27,7 @@ const ancestorIsSpam = ancestors =>
 export default ({ engagementItemsById, engagementItemIds }) => (
   <div>
     {!engagementItemIds.length && (
-      <p style={{ marginTop: "15px" }}>You haven't made any annotation.</p>
+      <p style={{ marginTop: "35px" }}>You haven't made any annotation.</p>
     )}
     {engagementItemIds.map(
       aid =>

@@ -155,7 +155,5 @@ const onPollInterval = (props, dispatch) => {
 };
 
 export default withRouter(
-  connect(mapState, actions)(
-    asyncPoll(60 * 1000, onPollInterval)(SurveyContainer)
-  )
+  connect(mapState, actions)(SurveyContainer)
 );

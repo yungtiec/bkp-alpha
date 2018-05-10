@@ -197,6 +197,40 @@ const User = db.define(
             }
           ]
         };
+      },
+      notifications: function(userId) {
+        return {
+          where: { id: userId },
+          attributes: ["id"],
+          include: [
+            {
+              model: db.model("notification"),
+              required: false,
+              as: "notifications",
+              where: {
+                status: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "unread" },
+                    { [Sequelize.Op.eq]: "seen" }
+                  ]
+                }
+              },
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "sender",
+                  attributes: [
+                    "id",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "organization"
+                  ]
+                }
+              ]
+            }
+          ]
+        };
       }
     }
   }

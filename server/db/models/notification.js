@@ -32,6 +32,7 @@ Notification.notifyAncestors = function({
   engagementItem,
   messageFragment
 }) {
+  console.log(sender)
   const uri =
     engagementItem.engagementItemType === "annotation"
       ? engagementItem.hierarchyLevel === 1
@@ -47,7 +48,7 @@ Notification.notifyAncestors = function({
           engagementItem.project_survey.survey.id
         }`;
   var notification = {
-    sender: sender ? sender.id : null,
+    sender_id: sender ? sender.id : null,
     uri,
     message: `${sender.first_name} ${sender.last_name} ${messageFragment}`,
     status: "unread"
