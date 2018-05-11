@@ -46,6 +46,8 @@ const SidebarPageComments = props => {
           </div>
         </div>
         <CommentBoxWithTagField
+          showTags={true}
+          showIssueCheckbox={true}
           tags={tags}
           selectedTags={[]}
           initialValue=""

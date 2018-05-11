@@ -47,9 +47,9 @@ export default class AnnotationItem extends Component {
         {this.state.isCommenting ? (
           <div>
             {this.state.replyTarget && (
-              <span className="ml-1">{`replying to ${this.state.replyTarget.owner.first_name} ${
-                this.state.replyTarget.owner.last_name
-              }`}</span>
+              <span className="ml-1">{`replying to ${
+                this.state.replyTarget.owner.first_name
+              } ${this.state.replyTarget.owner.last_name}`}</span>
             )}
             <CommentBox
               rootId={annotation.id}
@@ -124,6 +124,7 @@ export default class AnnotationItem extends Component {
       : this.promptLoginToast;
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
+          rootId: null,
           itemId: annotation.id,
           hasUpvoted
         })
@@ -209,6 +210,7 @@ export default class AnnotationItem extends Component {
       );
       const upvoteItem = this.props.userEmail
         ? this.props.upvoteItem.bind(this, {
+            rootId,
             itemId: reply.id,
             hasUpvoted
           })

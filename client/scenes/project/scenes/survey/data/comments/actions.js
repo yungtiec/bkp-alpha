@@ -85,10 +85,11 @@ export const cancelReplyToComment = ({ accessors, parent }) => ({
   parent
 });
 
-export const replyToComment = ({ parentId, comment }) => {
+export const replyToComment = ({ rootId, parentId, comment }) => {
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({
+        rootId,
         parentId,
         comment
       });
@@ -102,7 +103,7 @@ export const replyToComment = ({ parentId, comment }) => {
   };
 };
 
-export const upvoteComment = ({ itemId, hasUpvoted }) => {
+export const upvoteComment = ({ rootId, itemId, hasUpvoted }) => {
   return async dispatch => {
     try {
       const { upvotesFrom, commentId } = await postUpvoteToComment({
@@ -112,7 +113,8 @@ export const upvoteComment = ({ itemId, hasUpvoted }) => {
       dispatch({
         type: types.COMMENT_UPVOTED,
         upvotesFrom,
-        commentId
+        commentId,
+        rootId
       });
     } catch (err) {
       console.log(err);
@@ -152,7 +154,11 @@ export const editComment = ({ commentId, comment, tags, issueOpen }) => {
   };
 };
 
-export const verifyCommentAsAdmin = (projectSurveyComment, reviewed) => {
+export const verifyCommentAsAdmin = (
+  projectSurveyComment,
+  rootId,
+  reviewed
+) => {
   return async dispatch => {
     try {
       await postPendingCommentStatus({
@@ -162,7 +168,8 @@ export const verifyCommentAsAdmin = (projectSurveyComment, reviewed) => {
       dispatch({
         type: types.COMMENT_VERIFIED,
         commentId: projectSurveyComment.id,
-        reviewed
+        reviewed,
+        rootId
       });
     } catch (err) {
       console.log(err);
@@ -179,7 +186,9 @@ export const changeCommentIssueStatus = projectSurveyComment => {
         !user.roles.filter(r => r.name === "admin").length
       )
         return;
-      const open = projectSurveyComment.issue ? !projectSurveyComment.issue.open : true;
+      const open = projectSurveyComment.issue
+        ? !projectSurveyComment.issue.open
+        : true;
       await updateCommentIssueStatus({
         projectSurveyComment,
         open

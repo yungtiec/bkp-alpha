@@ -16,9 +16,9 @@ export function postComment({ projectSurveyId, comment, tags, issueOpen }) {
     .then(res => res.data);
 }
 
-export function postReplyToComment({ parentId, comment }) {
+export function postReplyToComment({ rootId, parentId, comment }) {
   return axios
-    .post("/api/project/survey/comment/reply", { parentId, comment })
+    .post("/api/project/survey/comment/reply", { rootId, parentId, comment })
     .then(res => res.data);
 }
 

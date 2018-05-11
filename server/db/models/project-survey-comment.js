@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
+const { assignIn } = require("lodash");
 
 // should have 1:n associations with project_survey
 // not set up yet cuz we're using client/mock-data
@@ -138,6 +139,70 @@ const ProjectSurveyComment = db.define(
             }
           ]
         };
+      },
+      flatThreadByRootId: function(options) {
+        var query = {
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("tag"),
+              attributes: ["name", "id"]
+            },
+            {
+              model: db.model("issue"),
+              attributes: ["open", "id"]
+            },
+            {
+              model: ProjectSurveyComment,
+              required: false,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: ProjectSurveyComment,
+                  as: "parent",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("user"),
+                      as: "owner",
+                      attributes: ["first_name", "last_name", "email"]
+                    }
+                  ]
+                }
+              ],
+              as: "descendents"
+            }
+          ],
+          order: [
+            [
+              {
+                model: ProjectSurveyComment,
+                as: "descendents"
+              },
+              "createdAt"
+            ]
+          ]
+        };
+        if (options) query = assignIn(options, query);
+        return query;
       },
       upvotes: function(projectSurveyCommentId) {
         return {

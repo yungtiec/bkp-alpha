@@ -86,13 +86,12 @@ export const replyToAnnotation = ({ rootId, parentId, comment }) => {
   };
 };
 
-export const upvoteAnnotation = ({ itemId, hasUpvoted }) => {
+export const upvoteAnnotation = ({ rootId, itemId, hasUpvoted }) => {
   return async dispatch => {
     try {
       const {
         annotationId,
-        upvotesFrom,
-        rootId
+        upvotesFrom
       } = await postUpvoteToAnnotation({
         annotationId: itemId,
         hasUpvoted

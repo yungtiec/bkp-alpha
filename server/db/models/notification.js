@@ -32,7 +32,6 @@ Notification.notifyAncestors = function({
   engagementItem,
   messageFragment
 }) {
-  console.log(sender)
   const uri =
     engagementItem.engagementItemType === "annotation"
       ? engagementItem.hierarchyLevel === 1

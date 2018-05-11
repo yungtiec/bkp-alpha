@@ -20,7 +20,7 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const annotations = await await Annotation.scope({
+    const annotations = await Annotation.scope({
       method: [
         "flatThreadByRootId",
         { where: { uri: req.query.uri, hierarchyLevel: 1 } }
@@ -115,11 +115,7 @@ router.post(
       }
       res.send({
         upvotesFrom: annotation.upvotesFrom,
-        annotationId: annotation.id,
-        rootId:
-          annotation.ancestors &&
-          annotation.ancestors.length &&
-          annotation.ancestors[0].id
+        annotationId: annotation.id
       });
     } catch (err) {
       next(err);

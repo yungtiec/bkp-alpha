@@ -65,27 +65,33 @@ function addEmptyCommentToHierarchy({ state, accessors, parent }) {
   return state;
 }
 
-function reviewComment({ state, commentId, reviewed }) {
+function reviewComment({ state, commentId, rootId, reviewed }) {
   var target;
   if (state.commentsById[commentId]) {
     // itself is root
     state.commentsById[commentId].reviewed = reviewed;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.commentsById), commentId);
+    target = find(
+      state.commentsById[rootId].descendents,
+      a => a.id === commentId
+    );
     target.reviewed = reviewed;
   }
   return state;
 }
 
-function updateUpvotesForComment({ state, commentId, upvotesFrom }) {
+function updateUpvotesForComment({ state, commentId, rootId, upvotesFrom }) {
   var target;
   if (state.commentsById[commentId]) {
     // itself is root
     state.commentsById[commentId].upvotesFrom = upvotesFrom;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.commentsById), commentId);
+    target = find(
+      state.commentsById[rootId].descendents,
+      a => a.id === commentId
+    );
     target.upvotesFrom = upvotesFrom;
   }
   return state;
