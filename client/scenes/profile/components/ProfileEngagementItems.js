@@ -15,9 +15,13 @@ const seeAnnotationContext = engagementItem => {
         : `${engagementItem.uri.replace(window.origin, "")}/question/${
             engagementItem.survey_question_id
           }/annotation/${engagementItem.id}`
-      : `/project/${
-          engagementItem.project_survey.project.symbol
-        }/survey/${engagementItem.project_survey.survey.id}/page-comments`;
+      : engagementItem.ancestors && engagementItem.ancestors.length
+        ? `/project/${engagementItem.project_survey.project.symbol}/survey/${
+            engagementItem.project_survey.survey.id
+          }/page-comments/${engagementItem.ancestors[0].id}`
+        : `/project/${engagementItem.project_survey.project.symbol}/survey/${
+            engagementItem.project_survey.survey.id
+          }/page-comments/${engagementItem.id}`;
   return history.push(path);
 };
 

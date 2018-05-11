@@ -17,21 +17,21 @@ export default ({
         <button
           type="button"
           className="btn btn-outline-danger btn-sm"
-          onClick={() => labelAsSpam(item)}
+          onClick={labelAsSpam}
         >
           spam
         </button>
         <button
           type="button"
           className="btn btn-outline-primary btn-sm"
-          onClick={() => labelAsNotSpam(item)}
+          onClick={labelAsNotSpam}
         >
           verify
         </button>
       </div>
     ) : (
-      <div className={`annotation-item__verified-message ${item.reviewed}`}>
-        {item.reviewed === "verified" ? item.reviewed : ""}
+      <div className={`annotation-item__verified-message`}>
+        {item.reviewed}
       </div>
     )}
     <div>

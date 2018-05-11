@@ -68,14 +68,17 @@ function addNewAnnotationSentFromServer({ state, annotation }) {
   return state;
 }
 
-function reviewAnnotation({ state, annotationId, reviewed }) {
+function reviewAnnotation({ state, annotationId, rootId, reviewed }) {
   var target;
   if (state.annotationsById[annotationId]) {
     // itself is root
     state.annotationsById[annotationId].reviewed = reviewed;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.annotationsById), annotationId);
+    target = find(
+      state.annotationsById[rootId].descendents,
+      a => a.id === annotationId
+    );
     target.reviewed = reviewed;
   }
   return state;
@@ -89,14 +92,22 @@ function updateAnnotationIssueStatus({ state, annotationId, open }) {
   return state;
 }
 
-function updateUpvotesForAnnotation({ state, annotationId, upvotesFrom }) {
+function updateUpvotesForAnnotation({
+  state,
+  annotationId,
+  rootId,
+  upvotesFrom
+}) {
   var target;
   if (state.annotationsById[annotationId]) {
     // itself is root
     state.annotationsById[annotationId].upvotesFrom = upvotesFrom;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.annotationsById), annotationId);
+    target = find(
+      state.annotationsById[rootId].descendents,
+      a => a.id === annotationId
+    );
     target.upvotesFrom = upvotesFrom;
   }
   return state;
@@ -144,6 +155,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.ANNOTATION_UPVOTED:
       return updateUpvotesForAnnotation({
         state: cloneDeep(state),
+        rootId: action.rootId,
         annotationId: action.annotationId,
         upvotesFrom: action.upvotesFrom
       });
@@ -151,7 +163,8 @@ export default function reduce(state = initialState, action = {}) {
       return reviewAnnotation({
         state: cloneDeep(state),
         annotationId: action.annotationId,
-        reviewed: action.reviewed
+        reviewed: action.reviewed,
+        rootId: action.rootId
       });
     case types.ANNOTATION_ISSUE_UPDATED:
       return updateAnnotationIssueStatus({
@@ -200,35 +213,10 @@ function filterByTags({ tagFilter, annotationsById, annotationIds }) {
 
 function sortAnnotationsByPosition(annotationCollection) {
   if (!annotationCollection.length) return [];
-  var mostNestedStartDomPath = maxBy(
-    annotationCollection,
-    a => a.range.start.length
-  ).range.start;
-  var mostNestedEndDomPath = maxBy(
-    annotationCollection,
-    a => a.range.end.length
-  ).range.end;
-  const startPathOrder = mostNestedStartDomPath.map(
-    (p, i) => `range.start[${i}]`
-  );
-  const endPathOrder = mostNestedEndDomPath.map((p, i) => `range.end[${i}]`);
-  const orderByArray = flatten([
-    "survey_question_id",
-    startPathOrder,
-    "range.startOffset",
-    endPathOrder,
-    "range.endOffset"
-  ]);
   return orderBy(
     annotationCollection,
-    flatten([
-      "survey_question_id",
-      startPathOrder,
-      "range.startOffset",
-      endPathOrder,
-      "range.endOffset"
-    ]),
-    orderByArray.map(o => "asc")
+    ["range.order_in_survey", "range.startIndex", "range.endIndex"],
+    ["asc", "asc", "asc"]
   );
 }
 
@@ -260,6 +248,24 @@ function splitRangePath(path) {
   return flatten(elements);
 }
 
+function getStartAndEndIndexInSurveyQna(state, annotation) {
+  if (!state.scenes.project.scenes.survey.data.qnas.surveyQnaIds.length) return;
+  const surveyQuestion =
+    state.scenes.project.scenes.survey.data.qnas.surveyQnasById[
+      annotation.survey_question_id
+    ];
+  const surveyQnaContent =
+    surveyQuestion.question.markdown +
+    surveyQuestion.project_survey_answers.reduce(
+      (string, answer) => answer.markdown + " ",
+      ""
+    );
+  const startIndex = surveyQnaContent.indexOf(annotation.quote);
+  const endIndex = startIndex + annotation.quote.length;
+  const order_in_survey = surveyQuestion.order_in_survey;
+  return { startIndex, endIndex, order_in_survey };
+}
+
 /**
  *
  * selectors
@@ -276,14 +282,7 @@ export function getAllAnnotations(state) {
   } = state.scenes.project.scenes.survey.data.annotations;
   const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
   const annotationCollection = values(annotationsById).map(annotation => {
-    const start = splitRangePath(annotation.ranges[0].start);
-    const end = splitRangePath(annotation.ranges[0].end);
-    const range = {
-      start,
-      end,
-      startOffset: annotation.ranges[0].startOffset,
-      endOffset: annotation.ranges[0].endOffset
-    };
+    const range = getStartAndEndIndexInSurveyQna(state, annotation);
     return assignIn(
       { unix: moment(annotation.createdAt).format("X"), range },
       annotation

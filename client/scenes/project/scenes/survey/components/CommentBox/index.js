@@ -22,6 +22,7 @@ export default class CommentBox extends Component {
       this.setState({
         value: ""
       });
+      if (typeof this.props.onCancel === "function") this.props.onCancel();
     }
   }
 

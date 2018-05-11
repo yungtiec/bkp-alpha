@@ -71,21 +71,15 @@ export default class SidebarHeader extends Component {
       commentIds,
       tagsWithCountInSurvey,
       tagFilter,
-      updateTagFilter
+      updateTagFilter,
+      selectedComment
     } = this.props;
 
     return (
       <div>
-        {selectedAnnotations && selectedAnnotations.length ? (
-          <div className="social-sidebar__engagement-tab-container">
-            <p
-              className="social-sidebar__engagement-tab active reset-selection"
-              onClick={this.props.resetSelection}
-            >
-              Show all Annotations ({annotationIds.length})
-            </p>
-          </div>
-        ) : (
+        {selectedAnnotations &&
+        !selectedAnnotations.length &&
+        !selectedComment ? (
           <div className="social-sidebar__engagement-tab-container">
             <p
               className={`social-sidebar__engagement-tab ${
@@ -104,27 +98,49 @@ export default class SidebarHeader extends Component {
               Page Comments ({commentIds.length})
             </p>
           </div>
+        ) : selectedComment ? (
+          <div className="social-sidebar__engagement-tab-container">
+            <p
+              className="social-sidebar__engagement-tab active reset-selection"
+              onClick={this.props.resetSelection}
+            >
+              Show all comments ({commentIds.length})
+            </p>
+          </div>
+        ) : (
+          <div className="social-sidebar__engagement-tab-container">
+            <p
+              className="social-sidebar__engagement-tab active reset-selection"
+              onClick={this.props.resetSelection}
+            >
+              Show all Annotations ({annotationIds.length})
+            </p>
+          </div>
         )}
-        {selectedAnnotations && !selectedAnnotations.length &&
+        {selectedAnnotations &&
+          !selectedAnnotations.length &&
+          !selectedComment &&
           this.renderAnnotationSortBy({
             engagementTab,
             commentSortBy,
             annotationSortBy
           })}
-        {selectedAnnotations && !selectedAnnotations.length && (
-          <div className="social-sidebar__tag-filter-container">
-            <span className="select-label">filter by tag(s)</span>
-            <Select
-              name="social-sidebar__tag-filter"
-              className="social-sidebar__tag-filter"
-              placeholder="select tag(s)"
-              multi={true}
-              value={tagFilter}
-              onChange={this.handleTagFilterChange}
-              options={tagsWithCountInSurvey}
-            />
-          </div>
-        )}
+        {selectedAnnotations &&
+          !selectedAnnotations.length &&
+          !selectedComment && (
+            <div className="social-sidebar__tag-filter-container">
+              <span className="select-label">filter by tag(s)</span>
+              <Select
+                name="social-sidebar__tag-filter"
+                className="social-sidebar__tag-filter"
+                placeholder="select tag(s)"
+                multi={true}
+                value={tagFilter}
+                onChange={this.handleTagFilterChange}
+                options={tagsWithCountInSurvey}
+              />
+            </div>
+          )}
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

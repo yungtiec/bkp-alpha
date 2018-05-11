@@ -20,7 +20,12 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const annotations = await Annotation.getAnnotationsFromUrl(req.query.uri);
+    const annotations = await Annotation.scope({
+      method: [
+        "flatThreadByRootId",
+        { where: { uri: req.query.uri, hierarchyLevel: 1 } }
+      ]
+    }).findAll();
     res.send(annotations);
   } catch (err) {
     next(err);
@@ -68,12 +73,16 @@ router.post(
       var rootAncestor = ancestors[0];
       reply = await reply.setParent(parent.toJSON().id);
       reply = await reply.setOwner(req.user.id);
-      ancestry = await Annotation.findOneThreadByRootId(
-        rootAncestor ? rootAncestor.id : parent.id
-      );
-      await Notification.notifyAncestors({
+      ancestry = await Annotation.scope({
+        method: [
+          "flatThreadByRootId",
+          { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
+        ]
+      }).findOne();
+      await Notification.notifyRootAndParent({
         sender: user,
         engagementItem: _.assignIn(reply.toJSON(), { ancestors }),
+        parent,
         messageFragment: "replied to your post"
       });
       res.send(ancestry);
@@ -131,21 +140,30 @@ router.post(
           },
           {
             model: db.model("tag"),
-            attributes: ["name", "id"]
+            attributes: ["name", "id"],
+            required: false
+          },
+          {
+            model: db.model("issue"),
+            required: false
           }
         ]
       });
-      var prevTags = annotation.tags;
+      var prevTags = annotation.tags || [];
       var removedTags = prevTags.filter(function(prevTag) {
         return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
       });
-      var addedTags = req.body.tags.filter(tag => {
-        return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
-      });
+      var addedTags = req.body.tags
+        ? req.body.tags.filter(tag => {
+            return (
+              prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1
+            );
+          })
+        : [];
       var removedTagPromises, addedTagPromises, issuePromise;
       if (annotation.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        annotation = await annotation.update({ comment: req.body.comment });
+        await annotation.update({ comment: req.body.comment });
         removedTagPromises = Promise.map(removedTags, tag =>
           annotation.removeTag(tag.id)
         );
@@ -157,7 +175,8 @@ router.post(
           return annotation.addTag(tag.id);
         });
         issuePromise =
-          "issueOpen" in req.body
+          "issueOpen" in req.body &&
+          (req.body.issueOpen || (!req.body.issueOpen && annotation.issue))
             ? Issue.findOrCreate({
                 defaults: {
                   open: req.body.issueOpen
@@ -176,9 +195,12 @@ router.post(
           ["hierarchyLevel"],
           ["asc"]
         )[0];
-        const ancestry = await Annotation.findOneThreadByRootId(
-          rootAncestor ? rootAncestor.id : annotation.id
-        );
+        const ancestry = await Annotation.scope({
+          method: [
+            "flatThreadByRootId",
+            { where: { id: rootAncestor ? rootAncestor.id : annotation.id } }
+          ]
+        }).findOne();
         res.send(ancestry);
       }
     } catch (err) {

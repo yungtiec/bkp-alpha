@@ -67,7 +67,9 @@ router.post(
       });
       const ownerPromise = newAnnotation.setOwner(req.user.id);
       await Promise.all([tagPromises, ownerPromise, issuePromise]);
-      newAnnotation = await Annotation.findOneThreadByRootId(newAnnotation.id);
+      newAnnotation = await Annotation.scope({
+        method: ["flatThreadByRootId", { where: { id: newAnnotation.id } }]
+      }).findOne();
       sendNotificationToSlack(newAnnotation);
       res.send(newAnnotation);
     } catch (err) {

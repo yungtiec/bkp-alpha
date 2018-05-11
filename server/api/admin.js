@@ -13,7 +13,7 @@ const {
 const {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrAnnotationOwnership
+  ensureAdminRoleOrEngagementItemOwnership
 } = require("./utils");
 Promise = require("bluebird");
 module.exports = router;
@@ -199,7 +199,7 @@ router.post(
 router.post(
   "/engagement-item/issue",
   ensureAuthentication,
-  ensureAdminRoleOrAnnotationOwnership,
+  ensureAdminRoleOrEngagementItemOwnership,
   async (req, res, next) => {
     try {
       var engagementItem;
@@ -215,12 +215,10 @@ router.post(
       } else if (
         req.body.engagementItem.engagementItemType === "page_comment"
       ) {
-        engagementItem = await ProjectSurveyComment.findOne({
-          where: { id: req.body.engagementItem.id },
-          include: [
-            {
-              model: Issue
-            }
+        engagementItem = await ProjectSurveyComment.scope({
+          method: [
+            "withProjectSurveyInfo",
+            { where: { id: req.body.engagementItem.id } }
           ]
         });
       }

@@ -15,7 +15,15 @@ module.exports = router;
 router.get("/", async (req, res, next) => {
   try {
     const comments = await ProjectSurveyComment.scope({
-      method: ["allByProjectSurveyId", req.query.projectSurveyId]
+      method: [
+        "flatThreadByRootId",
+        {
+          where: {
+            project_survey_id: req.query.projectSurveyId,
+            hierarchyLevel: 1
+          }
+        }
+      ]
     }).findAll();
     res.send(comments);
   } catch (err) {
@@ -47,7 +55,7 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
           return comment.addTag(tag.id);
         }).then(() =>
           ProjectSurveyComment.scope({
-            method: ["oneThreadByRootId", comment.id]
+            method: ["flatThreadByRootId", { where: { id: comment.id } }]
           }).findOne()
         );
       });
@@ -97,16 +105,21 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
     reply = await reply.setParent(parent.toJSON().id);
     reply = await reply.setOwner(req.user.id);
     ancestry = await ProjectSurveyComment.scope({
-      method: ["oneThreadByRootId", rootAncestor ? rootAncestor.id : parent.id]
+      method: [
+        "flatThreadByRootId",
+        { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
+      ]
     }).findOne();
-    await Notification.notifyAncestors({
+    await Notification.notifyRootAndParent({
       sender: user,
       engagementItem: _.assignIn(reply.toJSON(), {
         ancestors,
         project_survey: parent.project_survey
       }),
+      parent,
       messageFragment: "replied to your post"
     });
+    console.log("hello?");
     res.send(ancestry);
   } catch (err) {
     next(err);
@@ -149,21 +162,28 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
         },
         {
           model: db.model("tag"),
-          attributes: ["name", "id"]
+          attributes: ["name", "id"],
+          required: false
+        },
+        {
+          model: db.model("issue"),
+          required: false
         }
       ]
     });
-    var prevTags = comment.tags;
+    var prevTags = comment.tags || [];
     var removedTags = prevTags.filter(function(prevTag) {
       return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
     });
-    var addedTags = req.body.tags.filter(tag => {
-      return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
-    });
+    var addedTags = req.body.tags
+      ? req.body.tags.filter(tag => {
+          return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
+        })
+      : [];
     var removedTagPromises, addedTagPromises, issuePromise;
     if (comment.owner.email !== req.user.email) res.sendStatus(401);
     else {
-      comment = await comment.update({ comment: req.body.comment });
+      await comment.update({ comment: req.body.comment });
       removedTagPromises = Promise.map(removedTags, tag =>
         comment.removeTag(tag.id)
       );
@@ -175,7 +195,8 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
         return comment.addTag(tag.id);
       });
       issuePromise =
-        "issueOpen" in req.body
+        "issueOpen" in req.body &&
+        (req.body.issueOpen || (!req.body.issueOpen && comment.issue))
           ? Issue.findOrCreate({
               defaults: {
                 open: req.body.issueOpen
@@ -192,8 +213,8 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
       const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
       const ancestry = await ProjectSurveyComment.scope({
         method: [
-          "oneThreadByRootId",
-          rootAncestor ? rootAncestor.id : comment.id
+          "flatThreadByRootId",
+          { where: { id: rootAncestor ? rootAncestor.id : comment.id } }
         ]
       }).findOne();
       res.send(ancestry);
@@ -202,4 +223,3 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
     next(err);
   }
 });
-

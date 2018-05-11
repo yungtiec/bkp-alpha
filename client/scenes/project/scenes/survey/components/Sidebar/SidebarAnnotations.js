@@ -100,7 +100,6 @@ function renderSidebarWithAllAnnotations(props) {
     userEmail,
     admin
   } = props;
-
   return annotationIds
     .filter(id => annotationsById[id].reviewed !== "spam")
     .map(id => (
