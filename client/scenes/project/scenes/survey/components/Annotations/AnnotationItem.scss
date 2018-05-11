@@ -33,6 +33,7 @@
 }
 
 .annotation-item__comment {
+  color: white;
   @include breakpoint(xs) {
     font-size: 12px;
   }
@@ -67,7 +68,7 @@
   color: white;
 }
 
-.annotation-item__verified-message.verified {
+.annotation-item__verified-message {
   font-size: 12px;
   line-height: 30px;
 }
@@ -140,4 +141,20 @@
 .annotation-item__main,
 .annotation-item__reply-item {
   margin-bottom: 20px;
+}
+
+.annotation-item__reply-item {
+  border-bottom: 1px solid;
+}
+
+.annotation-item__at-someone {
+  background: #245271;
+  padding: 5px;
+  color: white;
+  border-radius: 3px;
+}
+
+.annotation-item__collapse-btn {
+  padding-bottom: 10px;
+  border-bottom: 1px solid;
 }

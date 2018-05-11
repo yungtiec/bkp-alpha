@@ -11,6 +11,11 @@ export default class AnnotationItem extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.state = {
+      isCommenting: false,
+      replyTarget: null,
+      showReplies: false
+    };
   }
 
   render() {
@@ -18,24 +23,69 @@ export default class AnnotationItem extends Component {
     return (
       <div className="annotation-item">
         {this.renderMainComment(engagementTab, annotation)}
-        {this.renderThread(annotation.children, [annotation.id])}
+        {this.state.showReplies && (
+          <p
+            className="mb-3 annotation-item__collapse-btn"
+            onClick={this.toggleShowReplies}
+          >
+            - Collapse replies
+          </p>
+        )}
+        {annotation.descendents.length < 3 || this.state.showReplies ? (
+          <div className="ml-3">
+            {this.renderReplies(
+              engagementTab,
+              annotation.descendents,
+              annotation.id
+            )}
+          </div>
+        ) : (
+          <p onClick={this.toggleShowReplies}>
+            + View {annotation.descendents.length} replies
+          </p>
+        )}
+        {this.state.isCommenting ? (
+          <div>
+            {this.state.replyTarget && (
+              <span className="ml-1">{`replying to ${this.state.replyTarget.owner.first_name} ${
+                this.state.replyTarget.owner.last_name
+              }`}</span>
+            )}
+            <CommentBox
+              rootId={annotation.id}
+              parentId={
+                this.state.replyTarget
+                  ? this.state.replyTarget.id
+                  : annotation.id
+              }
+              onSubmit={this.props.replyToItem}
+              onCancel={this.hideCommentBox}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
 
-  initReply(accessors, parent) {
-    accessors.push(parent.id);
-    this.props.initiateReplyToItem({ accessors, parent });
+  initReply(replyTarget) {
+    this.setState({
+      isCommenting: true,
+      replyTarget
+    });
   }
 
-  cancelReply(accessors, parent) {
-    accessors.push(parent.id);
-    this.props.cancelReplyToItem({ accessors, parent });
+  hideCommentBox(accessors, parent) {
+    this.setState({
+      isCommenting: false,
+      parentId: null
+    });
   }
 
-  openModal(annotation) {
+  openModal(annotation, showIssueCheckbox, showTags) {
     this.props.loadModal("ANNOTATION_EDIT_MODAL", {
       ...annotation,
+      showIssueCheckbox,
+      showTags,
       editItem: this.props.editItem
     });
   }
@@ -50,12 +100,18 @@ export default class AnnotationItem extends Component {
     });
   }
 
-  labelAsNotSpam(annotation) {
-    this.props.verifyItemAsAdmin(annotation, "verified");
+  labelAsNotSpam(annotation, rootId) {
+    this.props.verifyItemAsAdmin({ annotation, rootId, reviewed: "verified" });
   }
 
-  labelAsSpam(annotation) {
-    this.props.verifyItemAsAdmin(annotation, "spam");
+  labelAsSpam(annotation, rootId) {
+    this.props.verifyItemAsAdmin({ annotation, rootId, reviewed: "spam" });
+  }
+
+  toggleShowReplies() {
+    this.setState(prevState => ({
+      showReplies: !prevState.showReplies
+    }));
   }
 
   renderMainComment(engagementTab, annotation) {
@@ -64,7 +120,7 @@ export default class AnnotationItem extends Component {
       user => user.email === this.props.userEmail
     );
     const initReplyToThis = this.props.userEmail
-      ? this.initReply.bind(this, [], annotation)
+      ? this.initReply.bind(this, null)
       : this.promptLoginToast;
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
@@ -72,7 +128,7 @@ export default class AnnotationItem extends Component {
           hasUpvoted
         })
       : this.promptLoginToast;
-    const openModal = this.openModal.bind(null, annotation);
+    const openModal = this.openModal.bind(null, annotation, true, true);
     const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(
       null,
       annotation
@@ -83,7 +139,7 @@ export default class AnnotationItem extends Component {
           <p>
             {annotation.owner.first_name + " " + annotation.owner.last_name}
           </p>
-          <p>{moment(annotation.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
+          <p>{moment(annotation.createdAt).fromNow()}</p>
         </div>
         {engagementTab === "annotations" && (
           <p className="annotation-item__quote">{annotation.quote}</p>
@@ -128,94 +184,76 @@ export default class AnnotationItem extends Component {
           initReplyToThis={initReplyToThis}
           upvoteItem={upvoteItem}
           openModal={openModal}
-          labelAsSpam={this.labelAsSpam}
-          labelAsNotSpam={this.labelAsNotSpam}
+          labelAsSpam={() => this.labelAsSpam(annotation, null)}
+          labelAsNotSpam={() => this.labelAsNotSpam(annotation, null)}
         />
       </div>
     );
   }
 
-  renderThread(children, ancestorId) {
-    if (!children) return "";
-    var accessors = cloneDeep(ancestorId);
-    const replies = orderBy(
-      children.map(
-        child =>
-          isEmpty(child)
-            ? child
-            : assignIn({ unix: moment(child.createdAt).format("X") }, child)
+  renderReplies(engagementTab, replies, rootId) {
+    return orderBy(
+      replies.map(
+        reply =>
+          isEmpty(reply)
+            ? reply
+            : assignIn({ unix: moment(reply.createdAt).format("X") }, reply)
       ),
       ["unix", "upvotesFrom.length"],
       ["asc", "desc"]
-    ).map(child => {
-      const initReplyToThis = this.props.userEmail
-        ? this.initReply.bind(this, accessors, child)
-        : this.promptLoginToast;
-      const cancelReplyToThis = this.cancelReply.bind(this, accessors, child);
+    ).map(reply => {
+      if (reply.reviewed === "spam") return null;
       const hasUpvoted = find(
-        child.upvotesFrom,
+        reply.upvotesFrom,
         user => user.email === this.props.userEmail
       );
       const upvoteItem = this.props.userEmail
         ? this.props.upvoteItem.bind(this, {
-            itemId: child.id,
+            itemId: reply.id,
             hasUpvoted
           })
         : this.promptLoginToast;
-      const openModal = this.openModal.bind(null, child);
-      const reply = isEmpty(child) ? (
-        <CommentBox
-          key={`annotation-item__init-reply-${child.id}`}
-          parentId={accessors.slice(-1)[0]}
-          onSubmit={this.props.replyToItem}
-          onCancel={cancelReplyToThis}
-        />
-      ) : (
+      const openModal = this.openModal.bind(null, reply, false, false);
+      const initReplyToThis = this.props.userEmail
+        ? this.initReply.bind(this, reply)
+        : this.promptLoginToast;
+      return (
         <div
           className="annotation-item__reply-item"
-          key={`annotation-item__reply-${child.id}`}
+          key={`annotation-item__reply-${reply.id}`}
         >
           <div className="annotation-item__header">
-            <p>{child.owner.first_name + " " + child.owner.last_name}</p>
-            <p>{moment(child.createdAt).format("MMM D, YYYY  hh:mmA")}</p>
+            <p>{reply.owner.first_name + " " + reply.owner.last_name}</p>
+            <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
-          <p className="annotation-item__comment">
-            {child.reviewed === "spam" ? "[deleted]" : child.comment}
-          </p>
+          {reply.reviewed === "spam" ? (
+            <p className="annotation-item__comment">[deleted]</p>
+          ) : (
+            <p className="annotation-item__comment">
+              {reply.hierarchyLevel !== 2 && (
+                <span className="annotation-item__at-someone">
+                  {"@" +
+                    reply.parent.owner.first_name +
+                    " " +
+                    reply.parent.owner.last_name}
+                </span>
+              )}{" "}
+              {reply.comment}
+            </p>
+          )}
           <ActionBar
-            item={child}
+            item={reply}
             hasUpvoted={hasUpvoted}
             isAdmin={this.props.admin}
             thisUserEmail={this.props.userEmail}
             initReplyToThis={initReplyToThis}
             upvoteItem={upvoteItem}
             openModal={openModal}
-            labelAsSpam={this.labelAsSpam}
-            labelAsNotSpam={this.labelAsNotSpam}
+            labelAsSpam={() => this.labelAsSpam(reply, rootId)}
+            labelAsNotSpam={() => this.labelAsNotSpam(reply, rootId)}
           />
         </div>
       );
-
-      let subReplies;
-      let subAccessor = cloneDeep(accessors);
-      if (child.children && child.children.length) {
-        subAccessor.push(child.id);
-        subReplies = this.renderThread(child.children, subAccessor);
-      }
-
-      return (
-        <div className="annotation-item__reply-thread">
-          <div className="annotation-item__reply-edge">
-            <i className="fas fa-caret-down" />
-            <div className="annotation-item__thread-line" />
-          </div>
-          <div className="annotation-item__reply-contents">
-            {reply}
-            {subReplies}
-          </div>
-        </div>
-      );
     });
-    return replies;
   }
 }

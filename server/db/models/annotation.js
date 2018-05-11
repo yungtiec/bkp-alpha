@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
+const { assignIn } = require("lodash");
 
 const Annotation = db.define(
   "annotation",
@@ -89,97 +90,116 @@ const Annotation = db.define(
             }
           ]
         };
+      },
+      oneThreadByRootId: function(id) {
+        return {
+          where: { id },
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("tag"),
+              attributes: ["name", "id"]
+            },
+            {
+              model: db.model("issue"),
+              attributes: ["open", "id"]
+            },
+            {
+              model: Annotation,
+              required: false,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                }
+              ],
+              as: "descendents",
+              hierarchy: true
+            }
+          ]
+        };
+      },
+      flatThreadByRootId: function(options) {
+        var query = {
+          include: [
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "owner",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("tag"),
+              attributes: ["name", "id"]
+            },
+            {
+              model: db.model("issue"),
+              attributes: ["open", "id"]
+            },
+            {
+              model: Annotation,
+              required: false,
+              include: [
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: db.model("user"),
+                  as: "owner",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
+                  model: Annotation,
+                  as: "parent",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("user"),
+                      as: "owner",
+                      attributes: ["first_name", "last_name", "email"]
+                    }
+                  ]
+                }
+              ],
+              as: "descendents"
+            }
+          ],
+          order: [
+            [
+              {
+                model: Annotation,
+                as: "descendents"
+              },
+              "createdAt"
+            ]
+          ]
+        };
+        if (options) query = assignIn(options, query);
+        return query;
       }
     }
   }
 );
-
-Annotation.getAnnotationsFromUrl = function(uri) {
-  return Annotation.findAll({
-    where: { uri, parentId: null },
-    include: [
-      {
-        model: db.model("user"),
-        as: "upvotesFrom",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("user"),
-        as: "owner",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("tag"),
-        attributes: ["name", "id"]
-      },
-      {
-        model: db.model("issue"),
-        attributes: ["open", "id"]
-      },
-      {
-        model: Annotation,
-        required: false,
-        include: [
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ],
-        as: "descendents",
-        hierarchy: true
-      }
-    ]
-  });
-};
-
-Annotation.findOneThreadByRootId = function(id) {
-  return Annotation.findOne({
-    where: { id },
-    include: [
-      {
-        model: db.model("user"),
-        as: "upvotesFrom",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("user"),
-        as: "owner",
-        attributes: ["first_name", "last_name", "email"]
-      },
-      {
-        model: db.model("tag"),
-        attributes: ["name", "id"]
-      },
-      {
-        model: db.model("issue"),
-        attributes: ["open", "id"]
-      },
-      {
-        model: Annotation,
-        required: false,
-        include: [
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"]
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "email"]
-          }
-        ],
-        as: "descendents",
-        hierarchy: true
-      }
-    ]
-  });
-};
 
 module.exports = Annotation;

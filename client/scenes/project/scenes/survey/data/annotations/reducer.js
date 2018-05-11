@@ -68,14 +68,17 @@ function addNewAnnotationSentFromServer({ state, annotation }) {
   return state;
 }
 
-function reviewAnnotation({ state, annotationId, reviewed }) {
+function reviewAnnotation({ state, annotationId, rootId, reviewed }) {
   var target;
   if (state.annotationsById[annotationId]) {
     // itself is root
     state.annotationsById[annotationId].reviewed = reviewed;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.annotationsById), annotationId);
+    target = find(
+      state.annotationsById[rootId].descendents,
+      a => a.id === annotationId
+    );
     target.reviewed = reviewed;
   }
   return state;
@@ -89,14 +92,22 @@ function updateAnnotationIssueStatus({ state, annotationId, open }) {
   return state;
 }
 
-function updateUpvotesForAnnotation({ state, annotationId, upvotesFrom }) {
+function updateUpvotesForAnnotation({
+  state,
+  annotationId,
+  rootId,
+  upvotesFrom
+}) {
   var target;
   if (state.annotationsById[annotationId]) {
     // itself is root
     state.annotationsById[annotationId].upvotesFrom = upvotesFrom;
   } else {
     // its descendant(reply) to another annotation
-    target = findItemInTreeById(values(state.annotationsById), annotationId);
+    target = find(
+      state.annotationsById[rootId].descendents,
+      a => a.id === annotationId
+    );
     target.upvotesFrom = upvotesFrom;
   }
   return state;
@@ -144,6 +155,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.ANNOTATION_UPVOTED:
       return updateUpvotesForAnnotation({
         state: cloneDeep(state),
+        rootId: action.rootId,
         annotationId: action.annotationId,
         upvotesFrom: action.upvotesFrom
       });
@@ -151,7 +163,8 @@ export default function reduce(state = initialState, action = {}) {
       return reviewAnnotation({
         state: cloneDeep(state),
         annotationId: action.annotationId,
-        reviewed: action.reviewed
+        reviewed: action.reviewed,
+        rootId: action.rootId
       });
     case types.ANNOTATION_ISSUE_UPDATED:
       return updateAnnotationIssueStatus({

@@ -50,6 +50,8 @@ class AnnotationEditModal extends Component {
             selectedTags={this.props.tags}
             initialValue={this.props.comment}
             annotationId={this.props.id}
+            showTags={this.props.showTags}
+            showIssueCheckbox={this.props.showIssueCheckbox}
             commentId={this.props.id}
             onSubmit={this.handleSubmitEditedComment}
             onCancel={this.onClose}

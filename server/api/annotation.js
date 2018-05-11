@@ -20,7 +20,12 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const annotations = await Annotation.getAnnotationsFromUrl(req.query.uri);
+    const annotations = await await Annotation.scope({
+      method: [
+        "flatThreadByRootId",
+        { where: { uri: req.query.uri, hierarchyLevel: 1 } }
+      ]
+    }).findAll();
     res.send(annotations);
   } catch (err) {
     next(err);
@@ -68,9 +73,12 @@ router.post(
       var rootAncestor = ancestors[0];
       reply = await reply.setParent(parent.toJSON().id);
       reply = await reply.setOwner(req.user.id);
-      ancestry = await Annotation.findOneThreadByRootId(
-        rootAncestor ? rootAncestor.id : parent.id
-      );
+      ancestry = await Annotation.scope({
+        method: [
+          "flatThreadByRootId",
+          { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
+        ]
+      }).findOne();
       await Notification.notifyAncestors({
         sender: user,
         engagementItem: _.assignIn(reply.toJSON(), { ancestors }),
@@ -107,7 +115,11 @@ router.post(
       }
       res.send({
         upvotesFrom: annotation.upvotesFrom,
-        annotationId: annotation.id
+        annotationId: annotation.id,
+        rootId:
+          annotation.ancestors &&
+          annotation.ancestors.length &&
+          annotation.ancestors[0].id
       });
     } catch (err) {
       next(err);
@@ -135,13 +147,17 @@ router.post(
           }
         ]
       });
-      var prevTags = annotation.tags;
+      var prevTags = annotation.tags || [];
       var removedTags = prevTags.filter(function(prevTag) {
         return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
       });
-      var addedTags = req.body.tags.filter(tag => {
-        return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
-      });
+      var addedTags = req.body.tags
+        ? req.body.tags.filter(tag => {
+            return (
+              prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1
+            );
+          })
+        : [];
       var removedTagPromises, addedTagPromises, issuePromise;
       if (annotation.owner.email !== req.user.email) res.sendStatus(401);
       else {
@@ -176,9 +192,12 @@ router.post(
           ["hierarchyLevel"],
           ["asc"]
         )[0];
-        const ancestry = await Annotation.findOneThreadByRootId(
-          rootAncestor ? rootAncestor.id : annotation.id
-        );
+        const ancestry = await Annotation.scope({
+          method: [
+            "flatThreadByRootId",
+            { where: { id: rootAncestor ? rootAncestor.id : annotation.id } }
+          ]
+        }).findOne();
         res.send(ancestry);
       }
     } catch (err) {

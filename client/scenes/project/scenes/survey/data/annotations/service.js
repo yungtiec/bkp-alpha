@@ -10,9 +10,9 @@ export function getAnnotationsBySurvey(uri) {
     .then(res => res.data);
 }
 
-export function postReplyToAnnotation({ parentId, comment }) {
+export function postReplyToAnnotation({ rootId, parentId, comment }) {
   return axios
-    .post("/api/annotation/reply", { parentId, comment })
+    .post("/api/annotation/reply", { rootId, parentId, comment })
     .then(res => res.data);
 }
 

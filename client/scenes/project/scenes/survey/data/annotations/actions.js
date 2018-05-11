@@ -68,10 +68,11 @@ export const cancelReplyToAnnotation = ({ accessors, parent }) => ({
   parent
 });
 
-export const replyToAnnotation = ({ parentId, comment }) => {
+export const replyToAnnotation = ({ rootId, parentId, comment }) => {
   return async (dispatch, getState) => {
     try {
       const rootAnnotation = await postReplyToAnnotation({
+        rootId,
         parentId,
         comment
       });
@@ -88,13 +89,18 @@ export const replyToAnnotation = ({ parentId, comment }) => {
 export const upvoteAnnotation = ({ itemId, hasUpvoted }) => {
   return async dispatch => {
     try {
-      const { annotationId, upvotesFrom } = await postUpvoteToAnnotation({
+      const {
+        annotationId,
+        upvotesFrom,
+        rootId
+      } = await postUpvoteToAnnotation({
         annotationId: itemId,
         hasUpvoted
       });
       dispatch({
         type: types.ANNOTATION_UPVOTED,
         annotationId,
+        rootId,
         upvotesFrom
       });
     } catch (err) {
@@ -140,7 +146,7 @@ export const editAnnotationComment = ({
   };
 };
 
-export const verifyAnnotationAsAdmin = (annotation, reviewed) => {
+export const verifyAnnotationAsAdmin = ({ annotation, rootId, reviewed }) => {
   return async dispatch => {
     try {
       await postPendingAnnotationStatus({
@@ -150,7 +156,8 @@ export const verifyAnnotationAsAdmin = (annotation, reviewed) => {
       dispatch({
         type: types.ANNOTATION_VERIFIED,
         annotationId: annotation.id,
-        reviewed
+        reviewed,
+        rootId
       });
     } catch (err) {
       dispatch(
