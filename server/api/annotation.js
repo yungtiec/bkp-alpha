@@ -79,9 +79,10 @@ router.post(
           { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
         ]
       }).findOne();
-      await Notification.notifyAncestors({
+      await Notification.notifyRootAndParent({
         sender: user,
         engagementItem: _.assignIn(reply.toJSON(), { ancestors }),
+        parent,
         messageFragment: "replied to your post"
       });
       res.send(ancestry);

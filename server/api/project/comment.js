@@ -110,14 +110,16 @@ router.post("/reply", ensureAuthentication, async (req, res, next) => {
         { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
       ]
     }).findOne();
-    await Notification.notifyAncestors({
+    await Notification.notifyRootAndParent({
       sender: user,
       engagementItem: _.assignIn(reply.toJSON(), {
         ancestors,
         project_survey: parent.project_survey
       }),
+      parent,
       messageFragment: "replied to your post"
     });
+    console.log("hello?");
     res.send(ancestry);
   } catch (err) {
     next(err);
