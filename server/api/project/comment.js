@@ -160,7 +160,12 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
         },
         {
           model: db.model("tag"),
-          attributes: ["name", "id"]
+          attributes: ["name", "id"],
+          required: false
+        },
+        {
+          model: db.model("issue"),
+          required: false
         }
       ]
     });
@@ -176,7 +181,7 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
     var removedTagPromises, addedTagPromises, issuePromise;
     if (comment.owner.email !== req.user.email) res.sendStatus(401);
     else {
-      comment = await comment.update({ comment: req.body.comment });
+      await comment.update({ comment: req.body.comment });
       removedTagPromises = Promise.map(removedTags, tag =>
         comment.removeTag(tag.id)
       );
@@ -188,7 +193,8 @@ router.post("/edit", ensureAuthentication, async (req, res, next) => {
         return comment.addTag(tag.id);
       });
       issuePromise =
-        "issueOpen" in req.body
+        "issueOpen" in req.body &&
+        (req.body.issueOpen || (!req.body.issueOpen && comment.issue))
           ? Issue.findOrCreate({
               defaults: {
                 open: req.body.issueOpen

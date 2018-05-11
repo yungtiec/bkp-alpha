@@ -139,7 +139,12 @@ router.post(
           },
           {
             model: db.model("tag"),
-            attributes: ["name", "id"]
+            attributes: ["name", "id"],
+            required: false
+          },
+          {
+            model: db.model("issue"),
+            required: false
           }
         ]
       });
@@ -157,7 +162,7 @@ router.post(
       var removedTagPromises, addedTagPromises, issuePromise;
       if (annotation.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        annotation = await annotation.update({ comment: req.body.comment });
+        await annotation.update({ comment: req.body.comment });
         removedTagPromises = Promise.map(removedTags, tag =>
           annotation.removeTag(tag.id)
         );
@@ -169,7 +174,8 @@ router.post(
           return annotation.addTag(tag.id);
         });
         issuePromise =
-          "issueOpen" in req.body
+          "issueOpen" in req.body &&
+          (req.body.issueOpen || (!req.body.issueOpen && annotation.issue))
             ? Issue.findOrCreate({
                 defaults: {
                   open: req.body.issueOpen

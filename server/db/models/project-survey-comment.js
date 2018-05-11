@@ -270,6 +270,9 @@ const ProjectSurveyComment = db.define(
           where: { id },
           include: [
             {
+              model: db.model("issue")
+            },
+            {
               model: db.model("user"),
               as: "owner",
               attributes: ["first_name", "last_name", "email", "id"]
