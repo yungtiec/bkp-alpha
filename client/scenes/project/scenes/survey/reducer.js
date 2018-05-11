@@ -3,17 +3,19 @@ import * as types from "./data/actionTypes";
 import { reducer as dataReducer } from "./data/reducer";
 
 const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
-const ENGAGEMEN_TAB_IN_VIEW = "survey.ENGAGEMEN_TAB_IN_VIEW";
+const ENGAGEMENT_TAB_IN_VIEW = "survey.ENGAGEMENT_TAB_IN_VIEW";
 const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
 const ANNOTATION_SORT_BY = "survey.ANNOTATION_SORT_BY";
 const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
+const ENGAGEMENT_ITEM_CONTEXT_UPDATED =
+  "survey.ENGAGEMENT_ITEM_CONTEXT_UPDATED";
 
 export const toggleSidebar = () => ({
   type: "survey.SIDEBAR_OPEN_TOGGLE"
 });
 
 export const updateEngagementTabInView = engagementTab => ({
-  type: "survey.ENGAGEMEN_TAB_IN_VIEW",
+  type: "survey.ENGAGEMENT_TAB_IN_VIEW",
   engagementTab
 });
 
@@ -32,17 +34,28 @@ export const sortCommentBy = commentSortBy => ({
   commentSortBy
 });
 
+export const updateSidebarContext = sidebarContext => ({
+  type: ENGAGEMENT_ITEM_CONTEXT_UPDATED,
+  sidebarContext
+});
+
 const initialState = {
   sidebarOpen: true,
   verificationStatus: "all",
   engagementTab: "annotations",
   annotationSortBy: "position",
-  commentSortBy: "timestamp"
+  commentSortBy: "timestamp",
+  sidebarContext: {
+    selectedText: "",
+    selectedAnnotations: null,
+    focusOnce: false,
+    selectedCommentId: null
+  }
 };
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
-    case ENGAGEMEN_TAB_IN_VIEW:
+    case ENGAGEMENT_TAB_IN_VIEW:
       return { ...state, engagementTab: action.engagementTab };
     case VERIFICATION_STATUS_IN_VIEW:
       return { ...state, verificationStatus: action.verificationStatus };
@@ -52,6 +65,11 @@ export default function reduce(state = initialState, action) {
       return { ...state, annotationSortBy: action.annotationSortBy };
     case COMMENT_SORT_BY:
       return { ...state, commentSortBy: action.commentSortBy };
+    case ENGAGEMENT_ITEM_CONTEXT_UPDATED:
+      return {
+        ...state,
+        sidebarContext: { ...state.sidebarContext, ...action.sidebarContext }
+      };
     default:
       const rest = _.omit(state, Object.keys(initialState));
       return {
@@ -60,3 +78,6 @@ export default function reduce(state = initialState, action) {
       };
   }
 }
+
+export const getSidebarContext = state =>
+  state.scenes.project.scenes.survey.sidebarContext;

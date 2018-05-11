@@ -34,9 +34,29 @@ const SidebarPageComments = props => {
     replyToComment,
     upvoteComment,
     verifyCommentAsAdmin,
-    changeCommentIssueStatus
+    changeCommentIssueStatus,
+    selectedComment
   } = props;
-
+  if (selectedComment)
+    return (
+      <AnnotationItem
+        key={`comment-${selectedComment.id}`}
+        annotation={selectedComment}
+        ref={el => (parent[`comment-${selectedComment.id}`] = el)}
+        engagementTab={engagementTab}
+        replyToItem={replyToComment}
+        initiateReplyToItem={initiateReplyToComment}
+        cancelReplyToItem={cancelReplyToComment}
+        verifyItemAsAdmin={verifyCommentAsAdmin}
+        changeItemIssueStatus={changeCommentIssueStatus}
+        upvoteItem={upvoteComment}
+        editItem={editComment}
+        loadModal={loadModal}
+        notify={notify}
+        userEmail={userEmail}
+        admin={admin}
+      />
+    );
   return (
     <div>
       <div className="annotation-item page-comment">

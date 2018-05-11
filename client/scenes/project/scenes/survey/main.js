@@ -16,7 +16,9 @@ import {
   sortAnnotationBy,
   sortCommentBy,
   updateVerificationStatusInView,
-  updateEngagementTabInView
+  updateEngagementTabInView,
+  getSidebarContext,
+  updateSidebarContext
 } from "./reducer";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
@@ -113,6 +115,7 @@ const mapState = (state, ownProps) => {
   return {
     isLoggedIn: !!state.data.user.id,
     myUserId: state.data.user.id,
+    sidebarContext: getSidebarContext(state),
     surveyQnasById,
     surveyQnaIds,
     surveyMetadata: getSelectedSurvey(state),
@@ -147,7 +150,8 @@ const actions = {
   updateEngagementTabInView,
   fetchCommentsBySurvey,
   addNewComment,
-  sortCommentBy
+  sortCommentBy,
+  updateSidebarContext
 };
 
 const onPollInterval = (props, dispatch) => {

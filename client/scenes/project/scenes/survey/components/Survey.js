@@ -21,6 +21,7 @@ import {
 import { findAnnotationsInQnaByText } from "../utils";
 import { CustomScrollbar } from "../../../../../components";
 import autoBind from "react-autobind";
+import { batchActions } from "redux-batched-actions";
 
 export default class Survey extends Component {
   constructor(props) {
@@ -29,7 +30,8 @@ export default class Survey extends Component {
     this.state = {
       selectedText: "",
       selectedAnnotations: null,
-      focusOnce: false
+      focusOnce: false,
+      selectedCommentId: ""
     };
   }
 
@@ -44,13 +46,13 @@ export default class Survey extends Component {
       window.location.pathname.indexOf("/question/") !== -1;
     const givenPageCommentContext =
       window.location.pathname.indexOf("/page-comments") !== -1;
-    var annotationId, qnaId, pos, annotations;
+    var annotationId, qnaId, pos, annotations, commentId;
     if (
       givenAnnotationContext &&
       givenQnaContext &&
       this.props.annotationIds.length &&
       this.props.surveyQnaIds.length &&
-      !this.state.focusOnce
+      !this.props.sidebarContext.focusOnce
     ) {
       pos = window.location.pathname.indexOf("/annotation/");
       annotationId = window.location.pathname.substring(pos).split("/")[2];
@@ -58,31 +60,40 @@ export default class Survey extends Component {
       qnaId = window.location.pathname.substring(pos).split("/")[2];
       if (this.props.annotationsById[Number(annotationId)]) {
         scroller.scrollTo(`qna-${qnaId}`);
-        this.setState({
-          selectedText: this.props.annotationsById[Number(annotationId)].quote,
-          focusQnaId: Number(qnaId),
-          focusOnce: true
-        });
+        batchActions([
+          this.props.updateEngagementTabInView("annotations"),
+          this.props.updateSidebarContext({
+            selectedText: this.props.annotationsById[Number(annotationId)]
+              .quote,
+            focusQnaId: Number(qnaId),
+            focusOnce: true
+          })
+        ]);
       }
     } else if (
       givenPageCommentContext &&
       this.props.commentIds.length &&
-      this.props.surveyQnaIds.length &&
-      !this.state.focusOnce
+      !this.props.sidebarContext.focusOnce
     ) {
-      this.props.updateEngagementTabInView("comments");
-      this.setState({
-        focusOnce: true
-      });
+      pos = window.location.pathname.indexOf("/page-comments/");
+      commentId = window.location.pathname.substring(pos).split("/")[2];
+      batchActions([
+        this.props.updateEngagementTabInView("comments"),
+        this.props.updateSidebarContext({
+          selectedCommentId: commentId,
+          focusOnce: true
+        })
+      ]);
     }
   }
 
   componentWillUnmount() {
     this.props.updateEngagementTabInView("annotations");
-    this.setState({
+    this.props.updateSidebarContext({
       selectedText: "",
       selectedAnnotations: null,
-      focusOnce: false
+      focusOnce: false,
+      selectedCommentId: ""
     });
   }
 
@@ -110,22 +121,23 @@ export default class Survey extends Component {
       this.props.updateEngagementTabInView("annotations");
     }
     if (annotations && annotations.length) {
-      this.setState({
+      this.props.updateSidebarContext({
         focusQnaId: qnaId,
         selectedText
       });
     } else {
-      this.setState({
+      this.props.updateSidebarContext({
         focusQnaId: qnaId,
         selectedText
       });
     }
   }
 
-  resetSelectedText() {
-    this.setState({
+  resetContext() {
+    this.props.updateSidebarContext({
       selectedText: "",
-      focusQnaId: ""
+      focusQnaId: "",
+      selectedCommentId: ""
     });
   }
 
@@ -154,14 +166,16 @@ export default class Survey extends Component {
       sortCommentBy,
       commentIds,
       commentsById,
-      projectSurveyId
+      projectSurveyId,
+      sidebarContext
     } = this.props;
     const selectedAnnotations = findAnnotationsInQnaByText({
       annotationIds: unfilteredAnnotationIds,
       annotationsById: annotationsById,
-      text: this.state.selectedText,
-      qnaId: this.state.focusQnaId
+      text: sidebarContext.selectedText,
+      qnaId: sidebarContext.focusQnaId
     });
+    const selectedComment = commentsById[sidebarContext.selectedCommentId];
     return (
       <div>
         <SurveyBody
@@ -203,14 +217,15 @@ export default class Survey extends Component {
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
                 isLoggedIn={isLoggedIn}
-                resetSelection={this.resetSelectedText}
+                resetSelection={this.resetContext}
+                selectedComment={selectedComment}
               />
               {engagementTab === "annotations" && (
                 <SidebarAnnotations
                   engagementTab={engagementTab}
                   annotationIds={annotationIds}
                   annotationsById={annotationsById}
-                  selectedText={this.state.selectedText}
+                  selectedText={sidebarContext.selectedText}
                   selectedAnnotations={selectedAnnotations}
                   parent={this}
                 />
@@ -221,6 +236,7 @@ export default class Survey extends Component {
                   engagementTab={engagementTab}
                   commentIds={commentIds}
                   commentsById={commentsById}
+                  selectedComment={selectedComment}
                   parent={this}
                   tags={tags}
                 />
