@@ -84,27 +84,35 @@ class SurveyContainer extends Component {
         this.props.fetchAnnotationsBySurvey(
           `${window.origin}${nextProps.match.url}`
         ),
-        this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
+        this.props.fetchCommentsBySurvey(
+          this.props.match.params.projectSurveyId
+        )
       ]);
     }
   }
 
   render() {
-    if (!this.props.surveyQnaIds.length) return "loading";
+    if (
+      !this.props.surveyQnaIds.length ||
+      !this.props.annotationIds.length ||
+      !this.props.commentIds.length
+    )
+      return null;
     return <Survey {...this.props} />;
   }
 }
 
 const mapState = (state, ownProps) => {
-  const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const {
+    surveyQnasById,
+    surveyQnaIds,
     annotationsById,
     annotationIds,
-    unfilteredAnnotationIds
-  } = getAllAnnotations(state);
-  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
-    state
-  );
+    unfilteredAnnotationIds,
+    commentsById,
+    commentIds,
+    unfilteredCommentIds
+  } = ownProps;
   const { width } = state.data.environment;
   const {
     sidebarOpen,
@@ -158,6 +166,4 @@ const onPollInterval = (props, dispatch) => {
   return props.fetchAnnotationsBySurvey(`${window.origin}${props.match.url}`);
 };
 
-export default withRouter(
-  connect(mapState, actions)(SurveyContainer)
-);
+export default withRouter(connect(mapState, actions)(SurveyContainer));

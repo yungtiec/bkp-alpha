@@ -35,7 +35,7 @@ export default class Survey extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount(nextProps) {
     this.focusOnContext();
   }
 
@@ -50,8 +50,8 @@ export default class Survey extends Component {
     if (
       givenAnnotationContext &&
       givenQnaContext &&
-      this.props.annotationIds.length &&
-      this.props.surveyQnaIds.length &&
+      // this.props.annotationIds.length &&
+      // this.props.surveyQnaIds.length &&
       !this.props.sidebarContext.focusOnce
     ) {
       pos = window.location.pathname.indexOf("/annotation/");
@@ -63,16 +63,13 @@ export default class Survey extends Component {
         batchActions([
           this.props.updateEngagementTabInView("annotations"),
           this.props.updateSidebarContext({
-            selectedText: this.props.annotationsById[Number(annotationId)]
-              .quote,
-            focusQnaId: Number(qnaId),
-            focusOnce: true
+            selectedAnnotationId: Number(annotationId)
           })
         ]);
       }
     } else if (
       givenPageCommentContext &&
-      this.props.commentIds.length &&
+      // this.props.commentIds.length &&
       !this.props.sidebarContext.focusOnce
     ) {
       pos = window.location.pathname.indexOf("/page-comments/");
@@ -80,8 +77,7 @@ export default class Survey extends Component {
       batchActions([
         this.props.updateEngagementTabInView("comments"),
         this.props.updateSidebarContext({
-          selectedCommentId: commentId,
-          focusOnce: true
+          selectedCommentId: commentId
         })
       ]);
     }
@@ -133,11 +129,33 @@ export default class Survey extends Component {
     }
   }
 
+  getSelectedAnnotations() {
+    const {
+      sidebarContext,
+      unfilteredAnnotationIds,
+      annotationsById
+    } = this.props;
+    if (sidebarContext.selectedText)
+      return findAnnotationsInQnaByText({
+        annotationIds: unfilteredAnnotationIds,
+        annotationsById: annotationsById,
+        text: sidebarContext.selectedText,
+        qnaId: sidebarContext.focusQnaId
+      });
+    else if (
+      sidebarContext.selectedAnnotationId &&
+      annotationsById[sidebarContext.selectedAnnotationId]
+    )
+      return [annotationsById[sidebarContext.selectedAnnotationId]];
+    else return [];
+  }
+
   resetContext() {
     this.props.updateSidebarContext({
       selectedText: "",
       focusQnaId: "",
-      selectedCommentId: ""
+      selectedCommentId: "",
+      selectedAnnotationId: ""
     });
   }
 
@@ -169,12 +187,7 @@ export default class Survey extends Component {
       projectSurveyId,
       sidebarContext
     } = this.props;
-    const selectedAnnotations = findAnnotationsInQnaByText({
-      annotationIds: unfilteredAnnotationIds,
-      annotationsById: annotationsById,
-      text: sidebarContext.selectedText,
-      qnaId: sidebarContext.focusQnaId
-    });
+    const selectedAnnotations = this.getSelectedAnnotations();
     const selectedComment = commentsById[sidebarContext.selectedCommentId];
     return (
       <div>

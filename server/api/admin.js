@@ -8,7 +8,8 @@ const {
   Project,
   Tag,
   Issue,
-  Notification
+  Notification,
+  Survey
 } = require("../db/models");
 const {
   ensureAuthentication,
@@ -95,6 +96,18 @@ router.get(
             {
               model: Issue,
               required: false
+            },
+            {
+              model: ProjectSurvey,
+              attributes: ["id"],
+              include: [
+                {
+                  model: Project
+                },
+                {
+                  model: Survey
+                }
+              ]
             }
           ],
           order: [
@@ -148,8 +161,10 @@ router.get(
               attributes: ["id"],
               include: [
                 {
-                  model: Project,
-                  attributes: ["symbol"]
+                  model: Project
+                },
+                {
+                  model: Survey
                 }
               ]
             }

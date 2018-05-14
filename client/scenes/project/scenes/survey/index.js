@@ -4,11 +4,12 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { fetchQuestionsByProjectSurveyId } from "./data/actions";
-import {
-  fetchAnnotationsBySurvey
-} from "./data/annotations/actions";
+import { fetchAnnotationsBySurvey } from "./data/annotations/actions";
 import { fetchCommentsBySurvey } from "./data/comments/actions";
 import { batchActions } from "redux-batched-actions";
+import { getAllSurveyQuestions } from "./data/qnas/reducer";
+import { getAllAnnotations } from "./data/annotations/reducer";
+import { getAllComments } from "./data/comments/reducer";
 
 const LoadableSurvey = Loadable({
   loader: () => import("./main"),
@@ -41,9 +42,31 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    return <LoadableSurvey />;
+    return <LoadableSurvey {...this.props} />;
   }
 }
+
+const mapState = state => {
+  const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
+  const {
+    annotationsById,
+    annotationIds,
+    unfilteredAnnotationIds
+  } = getAllAnnotations(state);
+  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
+    state
+  );
+  return {
+    surveyQnasById,
+    surveyQnaIds,
+    annotationsById,
+    annotationIds,
+    unfilteredAnnotationIds,
+    commentsById,
+    commentIds,
+    unfilteredCommentIds
+  };
+};
 
 const actions = {
   fetchQuestionsByProjectSurveyId,
@@ -51,5 +74,4 @@ const actions = {
   fetchCommentsBySurvey
 };
 
-
-export default withRouter(connect(() => ({}), actions)(MyComponent));
+export default withRouter(connect(mapState, actions)(MyComponent));

@@ -18,24 +18,22 @@ import { notify } from "reapop";
 const SidebarAnnotation = props => {
   if (
     props.annotationIds &&
-    props.selectedText &&
+    // props.selectedText &&
     props.selectedAnnotations &&
     props.selectedAnnotations.length
   ) {
-    return renderSidebarWithSelectedText(props);
+    return renderSidebarWithSelectedAnnotations(props);
   }
   if (
-    (props.annotationIds && !props.selectedText) ||
-    (props.annotationIds &&
-      props.selectedText &&
-      (!props.selectedAnnotations ||
-        (props.selectedAnnotations && !props.selectedAnnotations.length)))
+    props.annotationIds &&
+    (!props.selectedAnnotations ||
+      (props.selectedAnnotations && !props.selectedAnnotations.length))
   ) {
     return renderSidebarWithAllAnnotations(props);
   }
 };
 
-function renderSidebarWithSelectedText(props) {
+function renderSidebarWithSelectedAnnotations(props) {
   const {
     selectedAnnotations,
     annotationsById,
