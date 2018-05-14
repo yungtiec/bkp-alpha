@@ -93,9 +93,9 @@ class SurveyContainer extends Component {
 
   render() {
     if (
-      !this.props.surveyQnaIds.length ||
-      !this.props.annotationIds.length ||
-      !this.props.commentIds.length
+      !this.props.surveyQnaIds ||
+      !this.props.annotationIds ||
+      !this.props.commentIds
     )
       return null;
     return <Survey {...this.props} />;

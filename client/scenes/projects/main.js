@@ -25,8 +25,8 @@ class ProjectList extends Component {
     return (
       <div className="main-container">
         <ListView
-          viewClassName={"row projects-container"}
-          rowClassName={"col-md-12"}
+          viewClassName={"row entity-cards"}
+          rowClassName={"col-md-12 entity-card__container"}
           rowsIdArray={projectSymbolArr}
           rowsById={projectsBySymbol}
           renderRow={ProjectCard}

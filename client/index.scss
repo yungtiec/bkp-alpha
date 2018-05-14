@@ -1,6 +1,7 @@
 @import "./breakpoint";
-@import "./pagination";
-@import "./react-checkbox-tree";
+@import "./global-scss/pagination";
+@import "./global-scss/react-checkbox-tree";
+@import "./global-scss/card";
 
 html,
 body {

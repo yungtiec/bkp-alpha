@@ -26,9 +26,8 @@ const Project = db.define(
   },
   {
     scopes: {
-      byProjectSymbol: function(projectSymbol) {
-        return {
-          where: { symbol: projectSymbol },
+      withStats: function(projectSymbol) {
+        var query = {
           include: [
             {
               model: db.model("project_survey"),
@@ -72,6 +71,10 @@ const Project = db.define(
             }
           ]
         };
+        if (projectSymbol) {
+          query.where = { symbol: projectSymbol };
+        }
+        return query;
       }
     }
   }
@@ -79,8 +82,25 @@ const Project = db.define(
 
 Project.getProjectWithStats = async function(projectSymbol) {
   const projectInstance = await Project.scope({
-    method: ["byProjectSymbol", projectSymbol]
+    method: ["withStats", projectSymbol]
   }).findOne();
+  return getProjectStats(projectInstance);
+};
+
+Project.getProjects = async function() {
+  const projectInstances = await Project.scope("withStats").findAll();
+  return Promise.map(projectInstances, i => getProjectStats(i));
+};
+
+module.exports = Project;
+
+/**
+ *
+ * helpers
+ *
+ */
+
+function getProjectStats(projectInstance) {
   const project = projectInstance.toJSON();
   const numSurveys = project.project_surveys.length;
   const numAnnotation = project.project_surveys
@@ -140,6 +160,4 @@ Project.getProjectWithStats = async function(projectSymbol) {
     num_page_comments: numPageComments,
     num_issues: numIssues
   });
-};
-
-module.exports = Project;
+}

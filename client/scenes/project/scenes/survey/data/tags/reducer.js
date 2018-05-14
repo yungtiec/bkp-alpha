@@ -50,6 +50,7 @@ export function getAllTags(state) {
 }
 
 export function getCountsByTagName(state) {
+  if (!itemIds) return {}
   var itemsById, itemIds;
   if (state.scenes.project.scenes.survey.engagementTab === "annotations") {
     const {

@@ -14,7 +14,7 @@ import moment from "moment";
 
 const initialState = {
   commentsById: {},
-  commentIds: []
+  commentIds: null
 };
 
 const sortFns = {

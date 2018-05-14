@@ -3,7 +3,7 @@ import * as types from "../actionTypes";
 
 const initialState = {
   surveyQnasById: {},
-  surveyQnaIds: []
+  surveyQnaIds: null
 };
 
 export default function reduce(state = initialState, action = {}) {

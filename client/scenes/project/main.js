@@ -27,8 +27,8 @@ const ProjectIndex = ({
           </span>
           {projectSurveyIds.length ? (
             <ListView
-              viewClassName={"row survey-cards"}
-              rowClassName="col-md-12 survey-card__container"
+              viewClassName={"row entity-cards"}
+              rowClassName="col-md-12 entity-card__container"
               rowsIdArray={projectSurveyIds}
               rowsById={projectSurveysById}
               renderRow={ThisSurveyCard}

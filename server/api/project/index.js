@@ -25,7 +25,7 @@ router.use("/survey", require("./survey"));
 
 router.get("/", async (req, res, next) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await Project.getProjects();
     res.send(projects);
   } catch (err) {
     next(err);

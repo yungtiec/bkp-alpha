@@ -16,7 +16,7 @@ import { findItemInTreeById } from "../../../../../../utils";
 
 const initialState = {
   annotationsById: {},
-  annotationIds: []
+  annotationIds: null
 };
 
 const sortFns = {
