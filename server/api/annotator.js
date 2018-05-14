@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Annotation, Tag, Issue } = require("../db/models");
+const { Annotation, Tag, Issue, User, Role } = require("../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication, ensureResourceAccess } = require("./utils");
 const { IncomingWebhook } = require("@slack/client");
@@ -44,6 +44,16 @@ router.post(
         tags,
         issue
       } = req.body;
+      const isAdmin = await User.findOne({
+        where: { id: req.user.id },
+        include: [
+          {
+            model: Role
+          }
+        ]
+      }).then(
+        requestor => requestor.roles.filter(r => r.name === "admin").length
+      );
       var newAnnotation = await Annotation.create({
         uri,
         survey_question_id,
@@ -51,7 +61,8 @@ router.post(
         quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
         comment: text,
         ranges,
-        annotator_schema_version
+        annotator_schema_version,
+        reviewed: isAdmin ? "verified" : "pending;"
       });
       const issuePromise = issue
         ? Issue.create({

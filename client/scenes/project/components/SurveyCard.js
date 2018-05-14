@@ -23,7 +23,7 @@ export default (url, surveyId, survey) => {
             </div>
             <div className="entity__description">{survey.description}</div>
             <div className="entity__action--bottom">
-              <div className="survey__metrics-stat">
+              <div className="entity__metrics-stat">
                 <span>annotations ({survey.num_annotations})</span>
               </div>
               <div className="entity__metrics-stat">

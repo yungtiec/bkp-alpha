@@ -75,6 +75,16 @@ class AdminProjectSurveyPanel extends Component {
               re-open issue
             </button>
           )
+        ) : engagementItem.hierarchyLevel === 1 ? (
+          <button
+            type="button"
+            className="btn btn-outline-success"
+            onClick={() =>
+              this.props.changeEngagementItemIssueStatus(engagementItem)
+            }
+          >
+            open issue
+          </button>
         ) : null}
         <button
           type="button"
