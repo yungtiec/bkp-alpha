@@ -16,6 +16,7 @@ import {
 } from "../../../../components";
 import history from "../../../../history";
 import asyncPoll from "react-async-poll";
+import { seeAnnotationContext } from "../../../../utils";
 
 const onPollInterval = (props, dispatch) => {
   return props.fetchEngagementItems(props.match.params.projectSurveyId);
@@ -79,19 +80,7 @@ class AdminProjectSurveyPanel extends Component {
           type="button"
           className="btn btn-outline-secondary"
           disabled={engagementItem.reviewed === "spam"}
-          onClick={() =>
-            history.push(
-              engagementItem.engagementItemType === "annotation"
-                ? engagementItem.hierarchyLevel === 1
-                  ? `${path}/question/${
-                      engagementItem.survey_question_id
-                    }/annotation/${engagementItem.id}`
-                  : `${path}/question/${
-                      engagementItem.survey_question_id
-                    }/annotation/${engagementItem.ancestors[0].id}`
-                : `${path}/page-comments`
-            )
-          }
+          onClick={() => seeAnnotationContext(engagementItem)}
         >
           see in context
         </button>

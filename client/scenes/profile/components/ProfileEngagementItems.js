@@ -1,30 +1,8 @@
 import React from "react";
 import { AnnotationMain, AnnotationReply } from "../../../components";
 import history from "../../../history";
-
-const seeAnnotationContext = engagementItem => {
-  const path =
-    engagementItem.engagementItemType === "annotation"
-      ? engagementItem.ancestors && engagementItem.ancestors.length
-        ? `${engagementItem.ancestors[0].uri.replace(
-            window.origin,
-            ""
-          )}/question/${engagementItem.survey_question_id}/annotation/${
-            engagementItem.ancestors[0].id
-          }`
-        : `${engagementItem.uri.replace(window.origin, "")}/question/${
-            engagementItem.survey_question_id
-          }/annotation/${engagementItem.id}`
-      : engagementItem.ancestors && engagementItem.ancestors.length
-        ? `/project/${engagementItem.project_survey.project.symbol}/survey/${
-            engagementItem.project_survey.survey.id
-          }/page-comments/${engagementItem.ancestors[0].id}`
-        : `/project/${engagementItem.project_survey.project.symbol}/survey/${
-            engagementItem.project_survey.survey.id
-          }/page-comments/${engagementItem.id}`;
-  console.log("?", engagementItem.hierarchyLevel, path)
-  return history.push(path);
-};
+import { find } from "lodash";
+import { seeAnnotationContext } from "../../../utils";
 
 const ancestorIsSpam = ancestors =>
   ancestors.reduce((bool, a) => a.reviewed === "spam" || bool, false);

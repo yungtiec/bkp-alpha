@@ -8,7 +8,8 @@ const {
   Project,
   Tag,
   Issue,
-  Notification
+  Notification,
+  Survey
 } = require("../db/models");
 const {
   ensureAuthentication,
@@ -150,6 +151,8 @@ router.get(
                 {
                   model: Project,
                   attributes: ["symbol"]
+                },{
+                  model: Survey
                 }
               ]
             }
