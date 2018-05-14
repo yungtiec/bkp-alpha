@@ -74,7 +74,6 @@ export default class SidebarHeader extends Component {
       updateTagFilter,
       selectedComment
     } = this.props;
-
     return (
       <div>
         {selectedAnnotations &&
@@ -98,7 +97,9 @@ export default class SidebarHeader extends Component {
               Page Comments ({commentIds.length})
             </p>
           </div>
-        ) : selectedComment ? (
+        ) : selectedComment &&
+        selectedAnnotations &&
+        !selectedAnnotations.length ? (
           <div className="social-sidebar__engagement-tab-container">
             <p
               className="social-sidebar__engagement-tab active reset-selection"

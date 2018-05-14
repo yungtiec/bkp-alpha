@@ -47,9 +47,8 @@ const initialState = {
   commentSortBy: "timestamp",
   sidebarContext: {
     selectedText: "",
-    selectedAnnotations: null,
-    focusOnce: false,
-    selectedCommentId: null
+    selectedCommentId: null,
+    selectedAnnotationId: null
   }
 };
 

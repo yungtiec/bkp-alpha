@@ -22,6 +22,7 @@ const seeAnnotationContext = engagementItem => {
         : `/project/${engagementItem.project_survey.project.symbol}/survey/${
             engagementItem.project_survey.survey.id
           }/page-comments/${engagementItem.id}`;
+  console.log("?", engagementItem.hierarchyLevel, path)
   return history.push(path);
 };
 
