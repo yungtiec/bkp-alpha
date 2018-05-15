@@ -7,10 +7,7 @@ import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
 import { fetchUserAnnotations } from "./data/actions";
 import { getUserAnnotations } from "./data/reducer";
-import {
-  fetchAllProjects,
-  fetchPublishedProjectSurveyStats
-} from "../../../../data/reducer";
+import { fetchAllProjects } from "../../../../data/reducer";
 import { getAllProjects, getProjectSurveys } from "../../../../data/reducer";
 
 const LoadableUserAnnotations = Loadable({
@@ -39,8 +36,7 @@ class MyComponent extends React.Component {
     const userId = this.props.match.path.split("/")[2];
     batchActions([
       this.props.fetchUserAnnotations(userId),
-      this.props.fetchAllProjects(),
-      this.props.fetchPublishedProjectSurveyStats()
+      this.props.fetchAllProjects()
     ]);
   }
 
@@ -52,22 +48,18 @@ class MyComponent extends React.Component {
 const mapState = (state, ownProps) => {
   const { annotationsById, annotationIds } = getUserAnnotations(state);
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
-  const { projectSurveysById, projectSurveyIds } = getProjectSurveys(state);
   return {
     annotationsById,
     annotationIds,
     projectsBySymbol,
     projectSymbolArr,
-    projectSurveysById,
-    projectSurveyIds,
     userId: ownProps.match.path.split("/")[2]
   };
 };
 
 const actions = {
   fetchUserAnnotations,
-  fetchAllProjects,
-  fetchPublishedProjectSurveyStats
+  fetchAllProjects
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

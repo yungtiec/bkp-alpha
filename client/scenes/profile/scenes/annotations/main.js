@@ -40,8 +40,6 @@ class ProfileAnnotations extends Component {
       annotationIds,
       projectsBySymbol,
       projectSymbolArr,
-      projectSurveysById,
-      projectSurveyIds,
       pageCount,
       pageLimit,
       pageOffset,

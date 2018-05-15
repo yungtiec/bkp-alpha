@@ -8,10 +8,9 @@ import { SquareLoader } from "halogenium";
 import { fetchUserProjectSurveyComments } from "./data/actions";
 import { getUserProjectSurveyComments } from "./data/reducer";
 import {
-  fetchAllProjects,
-  fetchPublishedProjectSurveyStats
+  fetchAllProjects
 } from "../../../../data/reducer";
-import { getAllProjects, getProjectSurveys } from "../../../../data/reducer";
+import { getAllProjects } from "../../../../data/reducer";
 
 const LoadableUserProjectSurveyComments = Loadable({
   loader: () => import("./main"),
@@ -40,8 +39,7 @@ class MyComponent extends React.Component {
     console.log(userId)
     batchActions([
       this.props.fetchUserProjectSurveyComments(userId),
-      this.props.fetchAllProjects(),
-      this.props.fetchPublishedProjectSurveyStats()
+      this.props.fetchAllProjects()
     ]);
   }
 
@@ -53,22 +51,18 @@ class MyComponent extends React.Component {
 const mapState = (state, ownProps) => {
   const { projectSurveyCommentsById, projectSurveyCommentIds } = getUserProjectSurveyComments(state);
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
-  const { projectSurveysById, projectSurveyIds } = getProjectSurveys(state);
   return {
     projectSurveyCommentsById,
     projectSurveyCommentIds,
     projectsBySymbol,
     projectSymbolArr,
-    projectSurveysById,
-    projectSurveyIds,
     userId: ownProps.match.path.split("/")[2]
   };
 };
 
 const actions = {
   fetchUserProjectSurveyComments,
-  fetchAllProjects,
-  fetchPublishedProjectSurveyStats
+  fetchAllProjects
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

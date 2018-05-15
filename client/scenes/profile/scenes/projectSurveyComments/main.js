@@ -37,8 +37,6 @@ class ProfileProjectSurveyComments extends Component {
       projectSurveyCommentIds,
       projectsBySymbol,
       projectSymbolArr,
-      projectSurveysById,
-      projectSurveyIds,
       pageCount,
       pageLimit,
       pageOffset,

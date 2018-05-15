@@ -1,13 +1,17 @@
-import './index.scss'
+import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { fetchAllProjects } from "../../data/projects/actions";
 import { getAllProjects } from "../../data/projects/reducer";
-import { ProjectCard } from './components'
-import { ListView } from '../../components'
+import {
+  fetchPublishedProjectSurveyStats,
+  getProjectSurveys
+} from "../../data/reducer";
+import { ListView, ProjectCard, SurveyCard } from "../../components";
 import autoBind from "react-autobind";
+import { batchActions } from "redux-batched-actions";
 
 class ProjectList extends Component {
   constructor(props) {
@@ -20,10 +24,24 @@ class ProjectList extends Component {
   }
 
   render() {
-    const { projectsBySymbol, projectSymbolArr } = this.props
+    const {
+      projectsBySymbol,
+      projectSymbolArr,
+      projectSurveysById,
+      latestProjectSurveyIds
+    } = this.props;
 
     return (
       <div className="main-container">
+        <span className="projects-container__sub-header">Recent Disclosures</span>
+        <ListView
+          viewClassName={"row entity-cards"}
+          rowClassName={"col-md-12 entity-card__container"}
+          rowsIdArray={latestProjectSurveyIds}
+          rowsById={projectSurveysById}
+          renderRow={SurveyCard}
+        />
+        <span className="projects-container__sub-header">Projects</span>
         <ListView
           viewClassName={"row entity-cards"}
           rowClassName={"col-md-12 entity-card__container"}
@@ -38,16 +56,24 @@ class ProjectList extends Component {
 
 const mapState = state => {
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
+  const { projectSurveysById, latestProjectSurveyIds } = getProjectSurveys(
+    state
+  );
   return {
     projectsBySymbol,
-    projectSymbolArr
+    projectSymbolArr,
+    projectSurveysById,
+    latestProjectSurveyIds
   };
 };
 
 const actions = dispatch => {
   return {
     loadInitialData() {
-      dispatch(fetchAllProjects());
+      batchActions([
+        dispatch(fetchAllProjects()),
+        dispatch(fetchPublishedProjectSurveyStats())
+      ]);
     }
   };
 };

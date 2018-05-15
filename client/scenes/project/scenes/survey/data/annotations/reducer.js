@@ -248,22 +248,25 @@ function splitRangePath(path) {
   return flatten(elements);
 }
 
-function getStartAndEndIndexInSurveyQna(state, annotation) {
-  if (!state.scenes.project.scenes.survey.data.qnas.surveyQnaIds.length) return;
-  const surveyQuestion =
-    state.scenes.project.scenes.survey.data.qnas.surveyQnasById[
-      annotation.survey_question_id
-    ];
-  const surveyQnaContent =
-    surveyQuestion.question.markdown +
-    surveyQuestion.project_survey_answers.reduce(
-      (string, answer) => answer.markdown + " ",
-      ""
-    );
-  const startIndex = surveyQnaContent.indexOf(annotation.quote);
-  const endIndex = startIndex + annotation.quote.length;
-  const order_in_survey = surveyQuestion.order_in_survey;
-  return { startIndex, endIndex, order_in_survey };
+function getStartAndEndIndexInSurveyQna(
+  surveyQnaIds,
+  surveyQnasById,
+  annotation
+) {
+  try {
+    if (!surveyQnaIds.length) return;
+    const surveyQuestion = surveyQnasById[annotation.survey_question_id];
+    const surveyQnaContent =
+      surveyQuestion.question.markdown +
+      surveyQuestion.project_survey_answers.reduce(
+        (string, answer) => answer.markdown + " ",
+        ""
+      );
+    const startIndex = surveyQnaContent.indexOf(annotation.quote);
+    const endIndex = startIndex + annotation.quote.length;
+    const order_in_survey = surveyQuestion.order_in_survey;
+    return { startIndex, endIndex, order_in_survey };
+  } catch (err) {}
 }
 
 /**
@@ -281,8 +284,16 @@ export function getAllAnnotations(state) {
     annotationsById
   } = state.scenes.project.scenes.survey.data.annotations;
   const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
+  const {
+    surveyQnaIds,
+    surveyQnasById
+  } = state.scenes.project.scenes.survey.data.qnas;
   const annotationCollection = values(annotationsById).map(annotation => {
-    const range = getStartAndEndIndexInSurveyQna(state, annotation);
+    const range = getStartAndEndIndexInSurveyQna(
+      surveyQnaIds,
+      surveyQnasById,
+      annotation
+    );
     return assignIn(
       { unix: moment(annotation.createdAt).format("X"), range },
       annotation

@@ -14,12 +14,22 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const projectSurveys = await ProjectSurvey.getPublishedSurveysWithStats()
+    const projectSurveys = await ProjectSurvey.getAllPublishedSurveysWithStats()
     res.send(projectSurveys)
   } catch (err) {
     next(err);
   }
 });
+
+
+router.get("/latest", async (req, res, next) => {
+  try {
+    const projectSurveys = await ProjectSurvey.getLatestPublishedSurveysWithStats()
+    res.send(projectSurveys)
+  } catch (err) {
+
+  }
+})
 
 router.get("/:projectSurveyId", async (req, res, next) => {
   try {

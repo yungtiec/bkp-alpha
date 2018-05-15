@@ -1,8 +1,8 @@
 import "./index.scss";
 import React, { Component } from "react";
 import { withRouter, Route } from "react-router-dom";
-import { SurveyCard, ProjectBanner } from "./components";
-import { ListView, ProjectSymbolBlueBox } from "../../components";
+import { ProjectBanner } from "./components";
+import { ListView, ProjectSymbolBlueBox, SurveyCard } from "../../components";
 import Survey from "./scenes/survey";
 
 const ProjectIndex = ({
@@ -12,8 +12,6 @@ const ProjectIndex = ({
   match,
   children
 }) => {
-  const ThisSurveyCard = SurveyCard.bind(SurveyCard, match.url);
-
   return (
     <div className="main-container">
       <Route path={`${match.url}/survey/:projectSurveyId`} component={Survey} />
@@ -31,7 +29,7 @@ const ProjectIndex = ({
               rowClassName="col-md-12 entity-card__container"
               rowsIdArray={projectSurveyIds}
               rowsById={projectSurveysById}
-              renderRow={ThisSurveyCard}
+              renderRow={SurveyCard}
             />
           ) : null}
         </div>

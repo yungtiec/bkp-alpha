@@ -147,7 +147,8 @@ function getProjectStats(projectInstance) {
               _.assignIn(s, {
                 num_annotations: numAnnotation,
                 num_page_comments: numPageComments,
-                num_issues: numIssues
+                num_issues: numIssues,
+                project_symbol: project.symbol
               }),
               ["survey"]
             )
@@ -158,6 +159,7 @@ function getProjectStats(projectInstance) {
     num_surveys: numSurveys,
     num_annotations: numAnnotation,
     num_page_comments: numPageComments,
-    num_issues: numIssues
+    num_issues: numIssues,
+    project_surveys: projectSurveys
   });
 }

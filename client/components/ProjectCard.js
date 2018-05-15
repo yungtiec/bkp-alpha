@@ -1,5 +1,5 @@
 import React from "react";
-import { ListRow } from "../../../components";
+import { ListRow } from "../components";
 import { keys } from "lodash";
 import { Link } from "react-router-dom";
 

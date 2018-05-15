@@ -123,17 +123,36 @@ const ProjectSurvey = db.define(
             {
               model: db.model("project")
             }
-          ]
+          ],
+          order: [["createdAt", "DESC"]]
         };
       }
     }
   }
 );
 
-ProjectSurvey.getPublishedSurveysWithStats = async function() {
+ProjectSurvey.getAllPublishedSurveysWithStats = async function() {
   const projectSurveys = await ProjectSurvey.scope(
     "allPublishedSurveys"
   ).findAll();
+  return getPublishedSurveysStats(projectSurveys);
+};
+
+ProjectSurvey.getLatestPublishedSurveysWithStats = async function() {
+  return await ProjectSurvey.scope(
+    "allPublishedSurveys"
+  ).find({ limit: 10 });
+};
+
+module.exports = ProjectSurvey;
+
+/**
+ *
+ * helpers
+ *
+ */
+
+function getPublishedSurveysStats(projectSurveys) {
   return Promise.map(projectSurveys, projectSurveyInstance => {
     const rawProjectSurvey = projectSurveyInstance.toJSON();
     const annotations = rawProjectSurvey.survey.survey_questions.reduce(
@@ -184,6 +203,4 @@ ProjectSurvey.getPublishedSurveysWithStats = async function() {
     );
     return projectSurvey;
   });
-};
-
-module.exports = ProjectSurvey;
+}

@@ -62,7 +62,7 @@ router.post(
         comment: text,
         ranges,
         annotator_schema_version,
-        reviewed: isAdmin ? "verified" : "pending;"
+        reviewed: isAdmin ? "verified" : "pending"
       });
       const issuePromise = issue
         ? Issue.create({

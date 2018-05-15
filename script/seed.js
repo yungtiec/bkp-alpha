@@ -1,3 +1,4 @@
+Promise = require("bluebird");
 const db = require("../server/db");
 const {
   User,
@@ -17,7 +18,8 @@ const fs = require("fs");
 const cheerio = require("cheerio");
 const showdown = require("showdown");
 const converter = new showdown.Converter();
-Promise = require("bluebird");
+const csv_parse = require("csv-parse");
+const parse = Promise.promisify(csv_parse);
 
 async function seed() {
   await db.sync({ force: true });
@@ -38,34 +40,32 @@ async function seed() {
 }
 
 async function seedUser(projects) {
-  const users = await Promise.all([
-    User.create({
-      email: "tctammychu@gmail.com",
-      password: "12345678",
-      first_name: "Tammy",
-      last_name: "Chu"
-    }),
-    User.create({
-      email: "leslie.knope@park.org",
-      password: "123",
-      first_name: "Leslie",
-      last_name: "Knope"
-    }),
-    User.create({
-      email: "ron.swanson@park.org",
-      password: "123",
-      first_name: "Ron",
-      last_name: "Swanson"
-    })
-  ]);
-  await users[0].addProject(projects[0].id);
-  await users[1].addProject(projects[1].id);
-
+  const userCsv = fs.readFileSync("./data/users.csv", "utf8");
   const adminRole = await Role.findOne({ where: { name: "admin" } });
-  await users[0].addRole(adminRole.id);
+  await parse(userCsv, {
+    columns: true,
+    auto_parse: true
+  }).then(rows => {
+    return Promise.map(
+      rows,
+      entry => {
+        for (let k in entry) {
+          if (entry[k] == "") entry[k] = null;
+        }
 
-  console.log(`seeded ${users.length} users`);
-  console.log(`seeded successfully`);
+        return User.create(entry)
+          .then(async user => {
+            if (user.first_name === "Admin")
+              return await user.addRole(adminRole.id);
+            else return user;
+          })
+          .catch(err => {
+            console.log(chalk.red(err));
+          });
+      },
+      { concurrency: 1000 }
+    );
+  });
 }
 
 async function seedPermission() {
@@ -106,7 +106,9 @@ async function seedProject() {
         name: "Virtue Poker",
         symbol: "VPP",
         description:
-          "Virtue Poker is a privately held company headquartered in Gibraltar. It was founded in 2016, and is a Consensys backed startup."
+          "Virtue Poker is a privately held company headquartered in Gibraltar. It was founded in 2016, and is a Consensys backed startup.",
+        website: "https://virtue.poker/",
+        logo_url: "https://virtue.poker/css/img/logo.png"
       },
       {
         name: "digital gold",

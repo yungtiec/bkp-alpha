@@ -9,7 +9,11 @@ const {
   Notification
 } = require("../../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("../utils");
+const {
+  ensureAuthentication,
+  ensureAdminRole,
+  ensureResourceAccess
+} = require("../utils");
 module.exports = router;
 
 router.get("/", async (req, res, next) => {
@@ -31,195 +35,236 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/", ensureAuthentication, async (req, res, next) => {
-  try {
-    const comment = await ProjectSurveyComment.create({
-      owner_id: req.user.id,
-      project_survey_id: Number(req.body.projectSurveyId),
-      comment: req.body.comment
-    })
-      .then(async comment => {
-        if (req.body.issueOpen)
-          await Issue.create({
-            open: true,
-            project_survey_comment_id: comment.id
-          });
-        return comment;
+router.post(
+  "/",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      const isAdmin = await User.findOne({
+        where: { id: req.user.id },
+        include: [
+          {
+            model: Role
+          }
+        ]
+      }).then(
+        requestor => requestor.roles.filter(r => r.name === "admin").length
+      );
+      const comment = await ProjectSurveyComment.create({
+        owner_id: req.user.id,
+        project_survey_id: Number(req.body.projectSurveyId),
+        comment: req.body.comment,
+        reviewed: isAdmin ? "verified" : "pending"
       })
-      .then(comment => {
-        return Promise.map(req.body.tags, async addedTag => {
+        .then(async comment => {
+          if (req.body.issueOpen)
+            await Issue.create({
+              open: true,
+              project_survey_comment_id: comment.id
+            });
+          return comment;
+        })
+        .then(comment => {
+          return Promise.map(req.body.tags, async addedTag => {
+            const [tag, created] = await Tag.findOrCreate({
+              where: { name: addedTag.name },
+              default: { name: addedTag.name }
+            });
+            return comment.addTag(tag.id);
+          }).then(() =>
+            ProjectSurveyComment.scope({
+              method: ["flatThreadByRootId", { where: { id: comment.id } }]
+            }).findOne()
+          );
+        });
+      res.send(comment);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/reply",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      var ancestry;
+      const parent = await ProjectSurveyComment.scope({
+        method: ["withProjectSurveyInfo", Number(req.body.parentId)]
+      }).findOne();
+      const child = _.assignIn(
+        _.omit(parent.toJSON(), [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "hierarchyLevel",
+          "parentId",
+          "comment",
+          "reviewed",
+          "owner"
+        ]),
+        {
+          comment: req.body.comment,
+          owner_id: req.user.id,
+          reviewed: "pending"
+        }
+      );
+      var [ancestors, reply, user] = await Promise.all([
+        parent
+          .getAncestors({
+            include: [
+              {
+                model: db.model("user"),
+                as: "owner",
+                required: false
+              }
+            ]
+          })
+          .then(ancestors =>
+            _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
+          ),
+        ProjectSurveyComment.create(child),
+        User.findById(req.user.id)
+      ]);
+      var rootAncestor = ancestors[0];
+      reply = await reply.setParent(parent.toJSON().id);
+      reply = await reply.setOwner(req.user.id);
+      ancestry = await ProjectSurveyComment.scope({
+        method: [
+          "flatThreadByRootId",
+          { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
+        ]
+      }).findOne();
+      await Notification.notifyRootAndParent({
+        sender: user,
+        engagementItem: _.assignIn(reply.toJSON(), {
+          ancestors,
+          project_survey: parent.project_survey
+        }),
+        parent,
+        messageFragment: "replied to your post"
+      });
+      console.log("hello?");
+      res.send(ancestry);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/upvote",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!req.body.hasUpvoted) {
+        await user.addUpvotedComment(req.body.commentId);
+      } else {
+        await user.removeUpvotedComment(req.body.commentId);
+      }
+      const comment = await ProjectSurveyComment.scope({
+        method: ["upvotes", req.body.commentId]
+      }).findOne();
+      if (!req.body.hasUpvoted) {
+        await Notification.notify({
+          sender: user,
+          engagementItem: comment,
+          messageFragment: "liked your post"
+        });
+      }
+      res.send({ upvotesFrom: comment.upvotesFrom, commentId: comment.id });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/edit",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      var comment = await ProjectSurveyComment.findOne({
+        where: { id: req.body.commentId },
+        include: [
+          {
+            model: User,
+            as: "owner",
+            attributes: ["first_name", "last_name", "email"]
+          },
+          {
+            model: db.model("tag"),
+            attributes: ["name", "id"],
+            required: false
+          },
+          {
+            model: db.model("issue"),
+            required: false
+          }
+        ]
+      });
+      var prevTags = comment.tags || [];
+      var removedTags = prevTags.filter(function(prevTag) {
+        return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
+      });
+      var addedTags = req.body.tags
+        ? req.body.tags.filter(tag => {
+            return (
+              prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1
+            );
+          })
+        : [];
+      var removedTagPromises, addedTagPromises, issuePromise;
+      if (comment.owner.email !== req.user.email) res.sendStatus(401);
+      else {
+        await comment.update({ comment: req.body.comment });
+        removedTagPromises = Promise.map(removedTags, tag =>
+          comment.removeTag(tag.id)
+        );
+        addedTagPromises = Promise.map(addedTags, async addedTag => {
           const [tag, created] = await Tag.findOrCreate({
             where: { name: addedTag.name },
             default: { name: addedTag.name }
           });
           return comment.addTag(tag.id);
-        }).then(() =>
-          ProjectSurveyComment.scope({
-            method: ["flatThreadByRootId", { where: { id: comment.id } }]
-          }).findOne()
-        );
-      });
-    res.send(comment);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post("/reply", ensureAuthentication, async (req, res, next) => {
-  try {
-    var ancestry;
-    const parent = await ProjectSurveyComment.scope({
-      method: ["withProjectSurveyInfo", Number(req.body.parentId)]
-    }).findOne();
-    const child = _.assignIn(
-      _.omit(parent.toJSON(), [
-        "id",
-        "createdAt",
-        "updatedAt",
-        "hierarchyLevel",
-        "parentId",
-        "comment",
-        "reviewed",
-        "owner"
-      ]),
-      { comment: req.body.comment, owner_id: req.user.id, reviewed: "pending" }
-    );
-    var [ancestors, reply, user] = await Promise.all([
-      parent
-        .getAncestors({
-          include: [
-            {
-              model: db.model("user"),
-              as: "owner",
-              required: false
-            }
-          ]
-        })
-        .then(ancestors =>
-          _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
-        ),
-      ProjectSurveyComment.create(child),
-      User.findById(req.user.id)
-    ]);
-    var rootAncestor = ancestors[0];
-    reply = await reply.setParent(parent.toJSON().id);
-    reply = await reply.setOwner(req.user.id);
-    ancestry = await ProjectSurveyComment.scope({
-      method: [
-        "flatThreadByRootId",
-        { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
-      ]
-    }).findOne();
-    await Notification.notifyRootAndParent({
-      sender: user,
-      engagementItem: _.assignIn(reply.toJSON(), {
-        ancestors,
-        project_survey: parent.project_survey
-      }),
-      parent,
-      messageFragment: "replied to your post"
-    });
-    console.log("hello?");
-    res.send(ancestry);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post("/upvote", ensureAuthentication, async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id);
-    if (!req.body.hasUpvoted) {
-      await user.addUpvotedComment(req.body.commentId);
-    } else {
-      await user.removeUpvotedComment(req.body.commentId);
-    }
-    const comment = await ProjectSurveyComment.scope({
-      method: ["upvotes", req.body.commentId]
-    }).findOne();
-    if (!req.body.hasUpvoted) {
-      await Notification.notify({
-        sender: user,
-        engagementItem: comment,
-        messageFragment: "liked your post"
-      });
-    }
-    res.send({ upvotesFrom: comment.upvotesFrom, commentId: comment.id });
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post("/edit", ensureAuthentication, async (req, res, next) => {
-  try {
-    var comment = await ProjectSurveyComment.findOne({
-      where: { id: req.body.commentId },
-      include: [
-        {
-          model: User,
-          as: "owner",
-          attributes: ["first_name", "last_name", "email"]
-        },
-        {
-          model: db.model("tag"),
-          attributes: ["name", "id"],
-          required: false
-        },
-        {
-          model: db.model("issue"),
-          required: false
-        }
-      ]
-    });
-    var prevTags = comment.tags || [];
-    var removedTags = prevTags.filter(function(prevTag) {
-      return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
-    });
-    var addedTags = req.body.tags
-      ? req.body.tags.filter(tag => {
-          return prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1;
-        })
-      : [];
-    var removedTagPromises, addedTagPromises, issuePromise;
-    if (comment.owner.email !== req.user.email) res.sendStatus(401);
-    else {
-      await comment.update({ comment: req.body.comment });
-      removedTagPromises = Promise.map(removedTags, tag =>
-        comment.removeTag(tag.id)
-      );
-      addedTagPromises = Promise.map(addedTags, async addedTag => {
-        const [tag, created] = await Tag.findOrCreate({
-          where: { name: addedTag.name },
-          default: { name: addedTag.name }
         });
-        return comment.addTag(tag.id);
-      });
-      issuePromise =
-        "issueOpen" in req.body &&
-        (req.body.issueOpen || (!req.body.issueOpen && comment.issue))
-          ? Issue.findOrCreate({
-              defaults: {
-                open: req.body.issueOpen
-              },
-              where: { project_survey_comment_id: comment.id }
-            }).spread((issue, created) => {
-              if (!created) issue.update({ open: req.body.issueOpen });
-            })
-          : null;
-      await Promise.all([removedTagPromises, addedTagPromises, issuePromise]);
-      const ancestors = await comment.getAncestors({
-        raw: true
-      });
-      const rootAncestor = _.orderBy(ancestors, ["hierarchyLevel"], ["asc"])[0];
-      const ancestry = await ProjectSurveyComment.scope({
-        method: [
-          "flatThreadByRootId",
-          { where: { id: rootAncestor ? rootAncestor.id : comment.id } }
-        ]
-      }).findOne();
-      res.send(ancestry);
+        issuePromise =
+          "issueOpen" in req.body &&
+          (req.body.issueOpen || (!req.body.issueOpen && comment.issue))
+            ? Issue.findOrCreate({
+                defaults: {
+                  open: req.body.issueOpen
+                },
+                where: { project_survey_comment_id: comment.id }
+              }).spread((issue, created) => {
+                if (!created) issue.update({ open: req.body.issueOpen });
+              })
+            : null;
+        await Promise.all([removedTagPromises, addedTagPromises, issuePromise]);
+        const ancestors = await comment.getAncestors({
+          raw: true
+        });
+        const rootAncestor = _.orderBy(
+          ancestors,
+          ["hierarchyLevel"],
+          ["asc"]
+        )[0];
+        const ancestry = await ProjectSurveyComment.scope({
+          method: [
+            "flatThreadByRootId",
+            { where: { id: rootAncestor ? rootAncestor.id : comment.id } }
+          ]
+        }).findOne();
+        res.send(ancestry);
+      }
+    } catch (err) {
+      next(err);
     }
-  } catch (err) {
-    next(err);
   }
-});
+);
