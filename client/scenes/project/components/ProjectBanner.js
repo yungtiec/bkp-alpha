@@ -26,7 +26,7 @@ export default ({ metadata }) => (
     <div className="project-banner__metrics">
       <div className="project-metrics__stats">
         <div className="project-metrics__stat">
-          <span class="project-metrics__stat-label">Surveys</span>
+          <span class="project-metrics__stat-label">Disclosures</span>
           <div class="project-metrics__stat-value">
             <span class="project-metrics__stat-number">
               {metadata.num_surveys}
