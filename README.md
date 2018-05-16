@@ -1,12 +1,18 @@
 ## Disclosure markdown format
 
+If you have no experience writing markdown files
+
 - checkout two markdown files in the data folder
 - checkout [github markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for how to write a markdown file that gets rendered with links, image, quotes...etc.
 
+
+
 ### strict rules
 
-H1 (#  disclosure title) is reserved for disclosure title
-H3 (### section title) is reserved for section title
+These are the rules specific to our application. Please follow them when writing disclosures so that our server can parse and store your works!
+
+- H1 (#  disclosure title) is reserved for disclosure title
+- H3 (### section title) is reserved for section title
 
 
 ## Config
