@@ -37,7 +37,7 @@ export default ({ metadata }) => (
           <span class="project-metrics__stat-label">Comments</span>
           <div class="project-metrics__stat-value">
             <span class="project-metrics__stat-number">
-              {metadata.num_page_comments}
+              {metadata.num_total_page_comments}
             </span>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default ({ metadata }) => (
           <span class="project-metrics__stat-label">Annotations</span>
           <div class="project-metrics__stat-value">
             <span class="project-metrics__stat-number">
-              {metadata.num_annotations}
+              {metadata.num_total_annotations}
             </span>
           </div>
         </div>

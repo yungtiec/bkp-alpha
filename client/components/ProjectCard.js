@@ -20,16 +20,16 @@ export default (projectId, project) => {
             </div>
             <div className="entity__action--bottom">
               <div className="entity__metrics-stat">
-                <span>disclosures ({project.num_surveys})</span>
+                <span>disclosures ({project.num_surveys || 0})</span>
               </div>
               <div className="entity__metrics-stat">
-                <span>annotations ({project.num_annotations})</span>
+                <span>annotations ({project.num_total_annotations || 0})</span>
               </div>
               <div className="entity__metrics-stat">
-                <span>comments ({project.num_page_comments})</span>
+                <span>comments ({project.num_total_page_comments || 0})</span>
               </div>
               <div className="entity__metrics-stat">
-                <span>issues ({project.num_issues})</span>
+                <span>issues ({project.num_issues || 0})</span>
               </div>
             </div>
           </div>

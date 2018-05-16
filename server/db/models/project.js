@@ -113,15 +113,26 @@ function getProjectStats(projectInstance) {
       )
     )
     .reduce((a, b) => a + b, 0);
-  const numPageComments = project.project_surveys
+  const numProjectSurveyComments = project.project_surveys
     .map(projectSurvey => projectSurvey.project_survey_comments.length)
     .reduce((a, b) => a + b, 0);
-  const numComments = numAnnotation + numPageComments;
-  const numIssues = project.project_surveys
+  const numAnnotationIssues = project.project_surveys
     .map(projectSurvey =>
       projectSurvey.survey.survey_questions.reduce(
         (count, surveyQuestion) =>
-          surveyQuestion.annotations.filter(a => a.issue).length + count,
+          surveyQuestion.annotations.filter(a => a.issue && a.issue.open)
+            .length + count,
+        0
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+  const numProjectSurveyCommentIssues = project.project_surveys
+    .map(projectSurvey =>
+      projectSurvey.project_survey_comments.reduce(
+        (count, projectSurveyComment) =>
+          projectSurveyComment.issue && projectSurveyComment.issue.open
+            ? count + 1
+            : count,
         0
       )
     )
@@ -135,19 +146,26 @@ function getProjectStats(projectInstance) {
                 .length + count,
             0
           );
-          const numPageComments = s.project_survey_comments.length;
-          const numIssues = s.survey.survey_questions.reduce(
+          const numProjectSurveyComments = s.project_survey_comments.length;
+          const numAnnotationIssues = s.survey.survey_questions.reduce(
             (count, surveyQuestion) =>
               surveyQuestion.annotations.filter(a => a.issue).length + count,
+            0
+          );
+          const numProjectSurveyCommentIssues = s.project_survey_comments.reduce(
+            (count, projectSurveyComment) =>
+              projectSurveyComment.issue && projectSurveyComment.issue.open
+                ? count + 1
+                : count,
             0
           );
           return _.assignIn(
             _.pick(s.survey, ["creator", "title", "description"]),
             _.omit(
               _.assignIn(s, {
-                num_annotations: numAnnotation,
-                num_page_comments: numPageComments,
-                num_issues: numIssues,
+                num_total_annotations: numAnnotation,
+                num_total_page_comments: numProjectSurveyComments,
+                num_issues: numAnnotationIssues + numProjectSurveyCommentIssues,
                 project_symbol: project.symbol
               }),
               ["survey"]
@@ -157,9 +175,9 @@ function getProjectStats(projectInstance) {
       : [];
   return _.assignIn(project, {
     num_surveys: numSurveys,
-    num_annotations: numAnnotation,
-    num_page_comments: numPageComments,
-    num_issues: numIssues,
+    num_total_annotations: numAnnotation,
+    num_total_page_comments: numProjectSurveyComments,
+    num_issues: numProjectSurveyCommentIssues + numAnnotationIssues,
     project_surveys: projectSurveys
   });
 }
