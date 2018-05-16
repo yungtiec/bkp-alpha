@@ -20,7 +20,7 @@ const ProjectIndex = ({
           <ProjectBanner metadata={metadata} />
           <span className="surveys-container__sub-header">
             {projectSurveyIds.length
-              ? "Browse Surveys"
+              ? "Browse disclosures"
               : `${metadata.name} currently has no disclosure document`}
           </span>
           {projectSurveyIds.length ? (
