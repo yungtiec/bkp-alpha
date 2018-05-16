@@ -40,6 +40,11 @@ class AdminUserList extends Component {
         Header: "contributions",
         accessor: d => d.num_annotations + d.num_project_survey_comments
       },
+      {
+        id: "upvotes",
+        Header: "upvotes",
+        accessor: "num_upvotes"
+      },
       { Header: "issues open", accessor: "num_issues" },
       { Header: "id", accessor: "id", show: false },
       {

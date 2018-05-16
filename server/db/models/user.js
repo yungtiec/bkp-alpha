@@ -286,13 +286,33 @@ User.getContributions = async function(userId) {
     [
       user.getAnnotations({
         attributes: ["id", "reviewed"],
-        include: [{ model: db.model("issue") }],
-        required: false
+        include: [
+          {
+            model: db.model("issue"),
+            required: false
+          },
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "email"],
+            required: false
+          }
+        ]
       }),
       user.getProjectSurveyComments({
         attributes: ["id", "reviewed"],
-        include: [{ model: db.model("issue") }],
-        required: false
+        include: [
+          {
+            model: db.model("issue"),
+            required: false
+          },
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "email"],
+            required: false
+          }
+        ]
       }),
       user.getNotifications({
         where: {
@@ -307,9 +327,19 @@ User.getContributions = async function(userId) {
     ]
   );
   const numAnnoationIssues = annotations.filter(item => item.issue).length;
+  const numAnnotationUpvotes = annotations.reduce(
+    (count, item) =>
+      item.upvotesFrom ? item.upvotesFrom.length + count : count,
+    0
+  );
   const numProjectSurveyCommentIssues = projectSurveyComments.filter(
     item => item.issue
   ).length;
+  const numProjectSurveyUpvotes = projectSurveyComments.reduce(
+    (count, item) =>
+      item.upvotesFrom ? item.upvotesFrom.length + count : count,
+    0
+  );
   const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam")
     .length;
   const numProjectSurveyCommentSpam = projectSurveyComments.filter(
@@ -321,7 +351,8 @@ User.getContributions = async function(userId) {
       num_project_survey_comments: projectSurveyComments.length,
       num_spam: numAnnoationSpam + numProjectSurveyCommentSpam,
       num_issues: numAnnoationIssues + numProjectSurveyCommentIssues,
-      num_notifications: notifications.length
+      num_notifications: notifications.length,
+      num_upvotes: numProjectSurveyUpvotes + numAnnotationUpvotes
     },
     user.toJSON()
   );
