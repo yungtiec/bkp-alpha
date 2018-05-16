@@ -1,4 +1,15 @@
-## Customize
+## Disclosure markdown format
+
+- checkout two markdown files in the data folder
+- checkout [github markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for how to write a markdown file that gets rendered with links, image, quotes...etc.
+
+### strict rules
+
+H1 (#  disclosure title) is reserved for disclosure title
+H3 (### section title) is reserved for section title
+
+
+## Config
 
 Now that you've got the code, follow these steps to get acclimated:
 
@@ -50,7 +61,22 @@ Either way, you'll need to set up your deployment server to start:
 
 ### When you're ready to deploy
 
-#### Option A: Automatic Deployment via Continuous Integration
+#### Manual Deployment from your Local Machine
+
+Some developers may prefer to control deployment rather than rely on automation. Your local copy of the application can be pushed up to Heroku at will, using Boilermaker's handy deployment script:
+
+1. Make sure that all your work is fully committed and pushed to your master branch on Github.
+2. If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
+3. `npm run deploy` - this will cause the following commands to happen in order:
+  - `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
+  - `webpack -p`: webpack will run in "production mode"
+  - `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
+  - `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
+  - `git push --force heroku deploy:master`: push your local "deploy" branch to the "master" branch on heroku
+  - `git checkout master`: return to your master branch
+  - `git branch -D deploy`: remove the deploy branch
+
+#### TODO: Automatic Deployment via Continuous Integration
 
 (_**NOTE**: This step assumes that you already have Travis-CI testing your code._)
 
@@ -66,21 +92,6 @@ CI is not about testing per se – it's about _continuously integrating_ your ch
 8. Make a PR for the new branch, get it approved, and merge it into master.
 
 That's it! From now on, whenever `master` is updated on GitHub, Travis will automatically push the app to Heroku for you.
-
-#### Option B: Manual Deployment from your Local Machine
-
-Some developers may prefer to control deployment rather than rely on automation. Your local copy of the application can be pushed up to Heroku at will, using Boilermaker's handy deployment script:
-
-1. Make sure that all your work is fully committed and pushed to your master branch on Github.
-2. If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
-3. `npm run deploy` - this will cause the following commands to happen in order:
-  - `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
-  - `webpack -p`: webpack will run in "production mode"
-  - `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
-  - `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
-  - `git push --force heroku deploy:master`: push your local "deploy" branch to the "master" branch on heroku
-  - `git checkout master`: return to your master branch
-  - `git branch -D deploy`: remove the deploy branch
 
 Now, you should be deployed!
 
