@@ -59,6 +59,13 @@ export default class SidebarHeader extends Component {
     }
   }
 
+  handleIssueFilterChange(selectedOptions) {
+    const { updateIssueFilter } = this.props;
+    if (selectedOptions) {
+      updateIssueFilter(selectedOptions.map(s => s.value));
+    }
+  }
+
   render() {
     const {
       isLoggedIn,
@@ -72,7 +79,9 @@ export default class SidebarHeader extends Component {
       tagsWithCountInSurvey,
       tagFilter,
       updateTagFilter,
-      selectedComment
+      selectedComment,
+      annotationIssueFilter,
+      commentIssueFilter
     } = this.props;
 
     return (
@@ -130,6 +139,29 @@ export default class SidebarHeader extends Component {
         {selectedAnnotations &&
           !selectedAnnotations.length &&
           !selectedComment && (
+            <div className="social-sidebar__issue-filter-container">
+              <span className="select-label">filter by issue</span>
+              <Select
+                name="social-sidebar__issue-filter"
+                className="social-sidebar__issue-filter"
+                placeholder="select issue status"
+                multi={true}
+                value={
+                  engagementTab === "annotations"
+                    ? annotationIssueFilter
+                    : commentIssueFilter
+                }
+                onChange={this.handleIssueFilterChange}
+                options={[
+                  { value: "open", label: "open" },
+                  { value: "closed", label: "closed" }
+                ]}
+              />
+            </div>
+          )}
+        {selectedAnnotations &&
+          !selectedAnnotations.length &&
+          !selectedComment && (
             <div className="social-sidebar__tag-filter-container">
               <span className="select-label">filter by tag(s)</span>
               <Select
@@ -143,6 +175,7 @@ export default class SidebarHeader extends Component {
               />
             </div>
           )}
+
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

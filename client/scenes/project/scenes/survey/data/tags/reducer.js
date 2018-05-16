@@ -4,20 +4,25 @@ import * as types from "./actionTypes";
 
 const initialState = {
   allInServer: [],
-  filter: {}
+  annotationFilter: {},
+  commentFilter: {}
 };
 
 const updateFilter = (state, action) => {
+  const filter =
+    action.engagementTab === "annotations"
+      ? "annotationFilter"
+      : "commentFilter";
   if (action.tags.length) {
-    keys(state.filter).forEach(tag => {
-      state.filter[tag] = false;
+    keys(state[filter]).forEach(tag => {
+      state[filter][tag] = false;
     });
     action.tags.forEach(tag => {
-      state.filter[tag.value] = true;
+      state[filter][tag.value] = true;
     });
   } else {
-    keys(state.filter).forEach(tag => {
-      state.filter[tag] = false;
+    keys(state[filter]).forEach(tag => {
+      state[filter][tag] = false;
     });
   }
   return state;
@@ -38,7 +43,7 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state
       };
-    case types.TAG_FILTER_UPDATE:
+    case types.TAG_FILTER_UPDATED:
       return updateFilter(cloneDeep(state), action);
     default:
       return state;
@@ -66,12 +71,10 @@ export function getCountsByTagName(state) {
     itemsById = commentsById;
     itemIds = commentIds;
   }
-  if (!itemIds) return {}
+  if (!itemIds) return {};
   const allTags = flatten(
     itemIds
-      .filter(
-        aid => itemsById[aid].tags && itemsById[aid].tags.length
-      )
+      .filter(aid => itemsById[aid].tags && itemsById[aid].tags.length)
       .map(aid => itemsById[aid].tags.map(tag => tag.name))
   );
   const countsByTagName = countBy(allTags);
@@ -87,12 +90,15 @@ export function getTagsWithCountInSurvey(state) {
 }
 
 export function getTagFilter(state) {
+  const engagementTab = state.scenes.project.scenes.survey.engagementTab;
+  const filter =
+    engagementTab === "annotations" ? "annotationFilter" : "commentFilter";
   const countsByTagName = getCountsByTagName(state);
-  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
+  const tagFilter = state.scenes.project.scenes.survey.data.tags[filter];
   return keys(tagFilter)
     .filter(tagName => tagFilter[tagName])
     .map(tagName => ({
-      label: `${tagName} (${countsByTagName[tagName]})`,
+      label: `${tagName} (${countsByTagName[tagName] || "0"})`,
       value: tagName
     }));
 }

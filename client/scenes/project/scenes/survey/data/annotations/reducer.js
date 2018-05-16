@@ -189,7 +189,7 @@ export default function reduce(state = initialState, action = {}) {
 
 /**
  *
- * filter fns
+ * filter tags
  *
  */
 
@@ -201,6 +201,27 @@ function filterByTags({ tagFilter, annotationsById, annotationIds }) {
       return (
         bool || annotationsById[aid].tags.map(t => t.name).indexOf(tag) !== -1
       );
+    }, false);
+  });
+}
+
+/**
+ *
+ * filter issue
+ *
+ */
+
+function filterByIssue({
+  annotationIssueFilter,
+  annotationsById,
+  annotationIds
+}) {
+  if (!annotationIssueFilter.length) return annotationIds;
+  return filter(annotationIds, aid => {
+    return annotationIssueFilter.reduce((bool, issueStatus) => {
+      return bool || issueStatus === "open"
+        ? annotationsById[aid].issue && annotationsById[aid].issue.open
+        : annotationsById[aid].issue && !annotationsById[aid].issue.open;
     }, false);
   });
 }
@@ -276,6 +297,7 @@ function getStartAndEndIndexInSurveyQna(
  */
 
 export function getAllAnnotations(state) {
+  var filteredAnnotationIds;
   const verificationStatus =
     state.scenes.project.scenes.survey.verificationStatus;
   const sortFn = sortFns[state.scenes.project.scenes.survey.annotationSortBy];
@@ -283,7 +305,12 @@ export function getAllAnnotations(state) {
     annotationIds,
     annotationsById
   } = state.scenes.project.scenes.survey.data.annotations;
-  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
+  const engagementTab = state.scenes.project.scenes.survey.engagementTab;
+  const tagFilterKey =
+    engagementTab === "annotations" ? "annotationFilter" : "commentFilter";
+  const tagFilter = state.scenes.project.scenes.survey.data.tags[tagFilterKey];
+  const annotationIssueFilter =
+    state.scenes.project.scenes.survey.annotationIssueFilter;
   const {
     surveyQnaIds,
     surveyQnasById
@@ -303,10 +330,15 @@ export function getAllAnnotations(state) {
   var sortedAnnotationIds = sortedAnnotations
     .map(a => a.id)
     .filter(aid => annotationsById[aid].reviewed !== "spam");
-  var filteredAnnotationIds = filterByTags({
+  filteredAnnotationIds = filterByTags({
     tagFilter,
     annotationIds: sortedAnnotationIds,
     annotationsById
+  });
+  filteredAnnotationIds = filterByIssue({
+    annotationIssueFilter,
+    annotationsById,
+    annotationIds: filteredAnnotationIds
   });
   if (verificationStatus === "all") {
     return {

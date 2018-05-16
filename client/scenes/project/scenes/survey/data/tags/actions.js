@@ -3,10 +3,16 @@ import * as types from "./actionTypes";
 import { deleteTag, putTag } from "./service";
 import { cloneDeep } from "lodash";
 
-export const updateTagFilter = tags => ({
-  type: types.TAG_FILTER_UPDATE,
-  tags
-});
+export const updateTagFilter = tags => {
+  return (dispatch, getState) => {
+    const engagementTab = getState().scenes.project.scenes.survey.engagementTab;
+    dispatch({
+      type: types.TAG_FILTER_UPDATED,
+      tags,
+      engagementTab
+    });
+  };
+};
 
 export const removeTag = ({ annotationId, tagId }) => {
   return async (dispatch, getState) => {

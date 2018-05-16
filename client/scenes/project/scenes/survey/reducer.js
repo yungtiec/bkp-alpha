@@ -9,28 +9,29 @@ const ANNOTATION_SORT_BY = "survey.ANNOTATION_SORT_BY";
 const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
 const ENGAGEMENT_ITEM_CONTEXT_UPDATED =
   "survey.ENGAGEMENT_ITEM_CONTEXT_UPDATED";
+const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
 
 export const toggleSidebar = () => ({
-  type: "survey.SIDEBAR_OPEN_TOGGLE"
+  type: SIDEBAR_OPEN_TOGGLE
 });
 
 export const updateEngagementTabInView = engagementTab => ({
-  type: "survey.ENGAGEMENT_TAB_IN_VIEW",
+  type: ENGAGEMENT_TAB_IN_VIEW,
   engagementTab
 });
 
 export const updateVerificationStatusInView = verificationStatus => ({
-  type: "survey.VERIFICATION_STATUS_IN_VIEW",
+  type: VERIFICATION_STATUS_IN_VIEW,
   verificationStatus
 });
 
 export const sortAnnotationBy = annotationSortBy => ({
-  type: "survey.ANNOTATION_SORT_BY",
+  type: ANNOTATION_SORT_BY,
   annotationSortBy
 });
 
 export const sortCommentBy = commentSortBy => ({
-  type: "survey.COMMENT_SORT_BY",
+  type: COMMENT_SORT_BY,
   commentSortBy
 });
 
@@ -39,12 +40,19 @@ export const updateSidebarContext = sidebarContext => ({
   sidebarContext
 });
 
+export const updateIssueFilter = issueFilter => ({
+  type: ISSUE_FILTER_UPDATED,
+  issueFilter
+});
+
 const initialState = {
   sidebarOpen: true,
   verificationStatus: "all",
   engagementTab: "annotations",
   annotationSortBy: "position",
   commentSortBy: "timestamp",
+  annotationIssueFilter: [],
+  commentIssueFilter: [],
   sidebarContext: {
     selectedText: "",
     selectedCommentId: null,
@@ -69,6 +77,18 @@ export default function reduce(state = initialState, action) {
         ...state,
         sidebarContext: { ...state.sidebarContext, ...action.sidebarContext }
       };
+    case ISSUE_FILTER_UPDATED:
+      if (state.engagementTab === "annotations") {
+        return {
+          ...state,
+          annotationIssueFilter: action.issueFilter
+        };
+      } else {
+        return {
+          ...state,
+          commentIssueFilter: action.issueFilter
+        };
+      }
     default:
       const rest = _.omit(state, Object.keys(initialState));
       return {

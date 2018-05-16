@@ -15,6 +15,7 @@ import {
   toggleSidebar,
   sortAnnotationBy,
   sortCommentBy,
+  updateIssueFilter,
   updateVerificationStatusInView,
   updateEngagementTabInView,
   getSidebarContext,
@@ -118,6 +119,8 @@ const mapState = (state, ownProps) => {
     sidebarOpen,
     annotationSortBy,
     commentSortBy,
+    annotationIssueFilter,
+    commentIssueFilter,
     engagementTab
   } = state.scenes.project.scenes.survey;
   return {
@@ -139,6 +142,8 @@ const mapState = (state, ownProps) => {
     sidebarOpen,
     annotationSortBy,
     commentSortBy,
+    annotationIssueFilter,
+    commentIssueFilter,
     engagementTab,
     commentsById,
     commentIds,
@@ -159,6 +164,7 @@ const actions = {
   fetchCommentsBySurvey,
   addNewComment,
   sortCommentBy,
+  updateIssueFilter,
   updateSidebarContext
 };
 

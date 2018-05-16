@@ -185,7 +185,10 @@ export default class Survey extends Component {
       commentIds,
       commentsById,
       projectSurveyId,
-      sidebarContext
+      sidebarContext,
+      annotationIssueFilter,
+      commentIssueFilter,
+      updateIssueFilter
     } = this.props;
     const selectedAnnotations = this.getSelectedAnnotations();
     const selectedComment = commentsById[sidebarContext.selectedCommentId];
@@ -232,6 +235,9 @@ export default class Survey extends Component {
                 isLoggedIn={isLoggedIn}
                 resetSelection={this.resetContext}
                 selectedComment={selectedComment}
+                annotationIssueFilter={annotationIssueFilter}
+                commentIssueFilter={commentIssueFilter}
+                updateIssueFilter={updateIssueFilter}
               />
               {engagementTab === "annotations" && (
                 <SidebarAnnotations

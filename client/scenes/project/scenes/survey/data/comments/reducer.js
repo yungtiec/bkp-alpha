@@ -158,6 +158,7 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getAllComments(state) {
+  var filteredCommentIds;
   const verificationStatus =
     state.scenes.project.scenes.survey.verificationStatus;
   const sortFn = sortFns[state.scenes.project.scenes.survey.commentSortBy];
@@ -165,7 +166,12 @@ export function getAllComments(state) {
     commentIds,
     commentsById
   } = state.scenes.project.scenes.survey.data.comments;
-  const tagFilter = state.scenes.project.scenes.survey.data.tags.filter;
+  const engagementTab = state.scenes.project.scenes.survey.engagementTab;
+  const tagFilterKey =
+    engagementTab === "annotations" ? "annotationFilter" : "commentFilter";
+  const tagFilter = state.scenes.project.scenes.survey.data.tags[tagFilterKey];
+  const commentIssueFilter =
+    state.scenes.project.scenes.survey.commentIssueFilter;
   const commentCollection = values(commentsById).map(comment => {
     return assignIn({ unix: moment(comment.createdAt).format("X") }, comment);
   });
@@ -173,10 +179,15 @@ export function getAllComments(state) {
   var sortedCommentIds = sortedComments
     .map(a => a.id)
     .filter(aid => commentsById[aid].reviewed !== "spam");
-  var filteredCommentIds = filterByTags({
+  filteredCommentIds = filterByTags({
     tagFilter,
     commentIds: sortedCommentIds,
     commentsById
+  });
+  filteredCommentIds = filterByIssue({
+    commentIssueFilter,
+    commentsById,
+    commentIds: filteredCommentIds
   });
   if (verificationStatus === "all") {
     return {
@@ -222,6 +233,21 @@ function filterByTags({ tagFilter, commentsById, commentIds }) {
       return (
         bool || commentsById[cid].tags.map(t => t.name).indexOf(tag) !== -1
       );
+    }, false);
+  });
+}
+
+function filterByIssue({
+  commentIssueFilter,
+  commentsById,
+  commentIds
+}) {
+  if (!commentIssueFilter.length) return commentIds;
+  return filter(commentIds, aid => {
+    return commentIssueFilter.reduce((bool, issueStatus) => {
+      return bool || issueStatus === "open"
+        ? commentsById[aid].issue && commentsById[aid].issue.open
+        : commentsById[aid].issue && !commentsById[aid].issue.open;
     }, false);
   });
 }
