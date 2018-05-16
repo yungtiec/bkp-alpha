@@ -71,6 +71,7 @@ const mapState = state => {
   const { height, isMobile, width } = state.data.environment;
   return {
     isLoggedIn: !!state.data.user.id,
+    userEmail: state.data.user && state.data.user.email,
     height,
     isMobile,
     width

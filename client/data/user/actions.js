@@ -2,8 +2,15 @@ import axios from "axios";
 import history from "../../history";
 import * as types from "./actionTypes";
 import { pick } from "lodash";
+import ReactGA from "react-ga";
+const isProduction = process.env.NODE_ENV === "production";
 
-export const getUser = user => ({ type: types.GET_USER, user });
+export const getUser = user => {
+  return dispatch => {
+    if (isProduction && user && user.email) ReactGA.set({ user: user.email });
+    dispatch({ type: types.GET_USER, user });
+  };
+};
 
 export const removeUser = () => ({ type: types.REMOVE_USER });
 

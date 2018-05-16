@@ -17,6 +17,7 @@ import history from "./history";
 import store from "./store";
 import App from "./app";
 
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
