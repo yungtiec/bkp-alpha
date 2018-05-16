@@ -33,7 +33,7 @@ class AdminUserList extends Component {
   render() {
     const { userIds, usersById } = this.props;
     const columns = [
-      { Header: "user", accessor: "email", fixed: true, width: 200 },
+      { Header: "user", accessor: "email", fixed: true, width: 270 },
       { Header: "spam", accessor: "num_spam" },
       {
         id: "contributions",

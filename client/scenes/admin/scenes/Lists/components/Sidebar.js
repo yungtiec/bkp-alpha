@@ -22,7 +22,7 @@ const AdminListSidebar = () => (
               : ""
           }`}
         >
-          surveys
+          disclosures
         </li>
       </Link>
     </ul>

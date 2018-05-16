@@ -7,5 +7,4 @@ secrets.js
 .DS_Store
 npm-debug.log
 yarn-error.log
-data
 data/users.csv

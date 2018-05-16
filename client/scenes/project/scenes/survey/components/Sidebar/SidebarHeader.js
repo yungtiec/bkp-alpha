@@ -74,6 +74,7 @@ export default class SidebarHeader extends Component {
       updateTagFilter,
       selectedComment
     } = this.props;
+
     return (
       <div>
         {selectedAnnotations &&

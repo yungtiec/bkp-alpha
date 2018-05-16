@@ -18,7 +18,7 @@ class AdminProjectSurveyList extends Component {
   render() {
     const { projectSurveyIds, projectSurveysById } = this.props;
     const columns = [
-      { Header: "survey", accessor: "id", fixed: true, width: 80 },
+      { Header: "disclosure", accessor: "id", fixed: true, width: 110 },
       {
         id: "project",
         Header: "project",
