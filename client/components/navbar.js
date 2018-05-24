@@ -60,13 +60,15 @@ class Navbar extends Component {
             <Link to="/projects" className="navbar__nav-item">
               projects
             </Link>
-            <Link
-              to="/user/profile/notifications"
-              className="navbar__nav-item notification-count"
-              data-count={this.props.numNotifications || ""}
-            >
-              <i className="fas fa-bell" />
-            </Link>
+            {this.props.isLoggedIn ? (
+              <Link
+                to="/user/profile/notifications"
+                className="navbar__nav-item notification-count"
+                data-count={this.props.numNotifications || ""}
+              >
+                <i className="fas fa-bell" />
+              </Link>
+            ) : null}
             <AuthWidget inNavbar={true} />
           </div>
         </nav>
@@ -89,7 +91,7 @@ const mapDispatch = dispatch => {
       dispatch(logout());
     },
     fetchUserNotifications() {
-      dispatch(fetchUserNotifications())
+      dispatch(fetchUserNotifications());
     }
   };
 };

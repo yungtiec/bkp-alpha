@@ -63,7 +63,8 @@
   justify-content: center;
   text-align: left;
   @include breakpoint(xs) {
-    margin-top: 35px;
+    margin-top: 60px;
+    text-align: center;
   }
 }
 
