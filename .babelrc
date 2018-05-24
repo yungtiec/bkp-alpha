@@ -1,8 +1,25 @@
 {
-  presets: ['@babel/react', '@babel/env', '@babel/stage-2'],
+  "presets": [
+    "@babel/react",
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
+        },
+        debug: true
+      }
+    ],
+    ["@babel/stage-2", { "decoratorsLegacy": true }]
+  ],
   "plugins": [
-  "react-loadable/babel",
-  "syntax-dynamic-import"
+    "react-loadable/babel",
+    "syntax-dynamic-import",
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      { "loose": true, "useBuiltIns": true }
+    ],
+    "@babel/plugin-transform-destructuring"
   ]
   /*
     Babel uses these "presets" to know how to transpile your Javascript code. Here's what we're saying with these:
