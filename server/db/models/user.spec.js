@@ -35,7 +35,7 @@ describe("User model", () => {
     }); // end describe('correctPassword')
 
     describe("role and permission", async () => {
-      let permissions, role, cody;
+      let permissions, roles, cody;
       before(async () => {
         cody = await User.findOne({
           where: { email: "cody@puppybook.com" }
