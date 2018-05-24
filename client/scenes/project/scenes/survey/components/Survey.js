@@ -209,7 +209,11 @@ export default class Survey extends Component {
         />
         <SidebarLayout width={width} selectedAnnotations={selectedAnnotations}>
           <CustomScrollbar
-            scrollbarContainerWidth={this.props.width < 767 ? "350px" : "410px"}
+            scrollbarContainerWidth={
+              this.props.width < 767
+                ? "350px"
+                : this.props.width > 1300 ? "450px" : "410px"
+            }
             scrollbarContainerHeight="calc(100% - 120px)"
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"

@@ -38,7 +38,8 @@ class Sidebar extends Component {
     } = this.props;
     var style = sidebarOpen
       ? {
-          marginLeft: width < 767 ? "-350px" : "-410px"
+          marginLeft:
+            width < 767 ? "-350px" : width > 1300 ? "-450px" : "-410px"
         }
       : {
           marginLeft: "-10px"
@@ -46,7 +47,7 @@ class Sidebar extends Component {
     var sizeBtnAngle = sidebarOpen ? "right" : "left";
     var eye = this.state.showHighlights ? "eye" : "eye-slash";
     var tabStyle = {
-      width: width < 767 ? "348px" : "408px"
+      width: width < 767 ? "348px" : width > 1300 ? "-448px" : "408px"
     };
 
     return (
@@ -100,7 +101,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "all" &&
-            selectedAnnotations && !selectedAnnotations.length &&
+            selectedAnnotations &&
+            !selectedAnnotations.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("all")}
         >
@@ -110,7 +112,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "verified" &&
-            selectedAnnotations && !selectedAnnotations.length &&
+            selectedAnnotations &&
+            !selectedAnnotations.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("verified")}
         >
@@ -120,7 +123,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "pending" &&
-            selectedAnnotations && !selectedAnnotations.length &&
+            selectedAnnotations &&
+            !selectedAnnotations.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("pending")}
         >
