@@ -68,7 +68,11 @@ class Navbar extends Component {
               >
                 <i className="fas fa-bell" />
               </Link>
-            ) : null}
+            ) : (
+              <Link to="/login" className="navbar__nav-item last">
+                login
+              </Link>
+            )}
             <AuthWidget inNavbar={true} />
           </div>
         </nav>

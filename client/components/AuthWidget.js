@@ -79,11 +79,7 @@ class AuthWidget extends Component {
         </div>
       );
     else
-      return (
-        <Link to="/login" className="navbar__nav-item last">
-          login
-        </Link>
-      );
+      return <div />;
   }
 }
 
