@@ -20,9 +20,9 @@ router.post("/login", async (req, res, next) => {
         res.status(401).send("Incorrect password");
       } else {
         req.login(user, async err => {
-          if (err) next(err)
+          if (err) next(err);
           user = await User.getContributions(user.id);
-          res.send(user)
+          res.send(user);
         });
       }
     })
@@ -50,8 +50,12 @@ router.post("/logout", (req, res) => {
 });
 
 router.get("/me", async (req, res) => {
-  const user = await User.getContributions(req.user.id);
-  res.send(user);
+  if (req.user) {
+    const user = await User.getContributions(req.user.id);
+    res.send(user);
+  } else {
+    res.sendStatus(401)
+  }
 });
 
 router.use("/google", require("./google"));

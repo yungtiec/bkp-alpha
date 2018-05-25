@@ -27,7 +27,7 @@ export default (surveyId, survey) => {
                 </span>
               </div>
               <p className="entity__date">
-                {moment(survey.createAt).format("MMM DD YYYY")}
+                {moment(survey.createdAt).format("MMM DD YYYY")}
               </p>
             </div>
             <div className="entity__description">{survey.description}</div>

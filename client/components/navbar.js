@@ -14,6 +14,7 @@ import { AuthWidget, SearchBar } from "./index";
 import asyncPoll from "react-async-poll";
 
 const onPollInterval = (props, dispatch) => {
+  if (!props.isLoggedIn) return;
   return props.fetchUserNotifications();
 };
 
