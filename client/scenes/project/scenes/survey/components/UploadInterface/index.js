@@ -70,7 +70,13 @@ export default class UploadInterface extends Component {
           surveyQnaIds={surveyQnaIds}
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
-          showVersionToolbar={true}
+          uploadMode={true}
+          uploaded={!!this.state.uploadedMarkdown}
+          resetUpload={() =>
+            this.setState({
+              uploadedMarkdown: null
+            })
+          }
         />
         {this.state.uploadedMarkdown ? null : (
           <div className="project-survey__upload-dropzone">

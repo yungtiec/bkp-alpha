@@ -20,7 +20,9 @@ export default class SurveyHeader extends Component {
       projectMetadata,
       surveyQnasById,
       surveyQnaIds,
-      showVersionToolbar
+      uploadMode,
+      uploaded,
+      resetUpload
     } = this.props;
     const creatorFirstName =
       surveyMetadata.creator.first_name &&
@@ -42,28 +44,15 @@ export default class SurveyHeader extends Component {
         <p className="survey-creator-name__box">
           {`disclosure created by ${creator}`}
         </p>
-        {showVersionToolbar ? (
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={() =>
-              history.push(
-                `/project/${this.props.projectMetadata.symbol}/survey/${
-                  surveyMetadata.id
-                }`
-              )
-            }
-          >
-            view disclosure
-          </button>
-        ) : (
-          <VersionToolbar
-            projectMetadata={projectMetadata}
-            surveyMetadata={surveyMetadata}
-            surveyQnasById={surveyQnasById}
-            surveyQnaIds={surveyQnaIds}
-          />
-        )}
+        <VersionToolbar
+          resetUpload={resetUpload}
+          uploaded={uploaded}
+          uploadMode={uploadMode}
+          projectMetadata={projectMetadata}
+          surveyMetadata={surveyMetadata}
+          surveyQnasById={surveyQnasById}
+          surveyQnaIds={surveyQnaIds}
+        />
       </div>
     );
   }
