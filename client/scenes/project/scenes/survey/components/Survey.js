@@ -9,7 +9,7 @@ import {
 } from "react-scroll";
 import {
   Qna,
-  SurveyBody,
+  SurveyContent,
   AnnotationItem,
   Question,
   Answers,
@@ -194,7 +194,7 @@ export default class Survey extends Component {
     const selectedComment = commentsById[sidebarContext.selectedCommentId];
     return (
       <div>
-        <SurveyBody
+        <SurveyContent
           parent={this}
           isLoggedIn={isLoggedIn}
           surveyQnasById={surveyQnasById}

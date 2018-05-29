@@ -16,4 +16,5 @@ export {
 export {
   default as AnnotationEditModal
 } from "./Annotations/AnnotationEditModal";
-export { default as SurveyBody } from "./SurveyBody";
+
+export { default as SurveyContent } from "./SurveyContent";

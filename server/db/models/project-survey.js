@@ -32,12 +32,12 @@ const ProjectSurvey = db.define(
           where: { id: projectSurveyId },
           include: [
             {
+              model: db.model("user"),
+              as: "creator"
+            },
+            {
               model: db.model("survey"),
               include: [
-                {
-                  model: db.model("user"),
-                  as: "creator"
-                },
                 {
                   model: db.model("survey_question"),
                   include: [
@@ -73,12 +73,12 @@ const ProjectSurvey = db.define(
           where: { submitted: true, reviewed: true },
           include: [
             {
+              model: db.model("user"),
+              as: "creator"
+            },
+            {
               model: db.model("survey"),
               include: [
-                {
-                  model: db.model("user"),
-                  as: "creator"
-                },
                 {
                   model: db.model("survey_question"),
                   include: [
@@ -139,9 +139,7 @@ ProjectSurvey.getAllPublishedSurveysWithStats = async function() {
 };
 
 ProjectSurvey.getLatestPublishedSurveysWithStats = async function() {
-  return await ProjectSurvey.scope(
-    "allPublishedSurveys"
-  ).find({ limit: 10 });
+  return await ProjectSurvey.scope("allPublishedSurveys").find({ limit: 10 });
 };
 
 module.exports = ProjectSurvey;
@@ -191,7 +189,7 @@ function getPublishedSurveysStats(projectSurveys) {
       {
         title: rawProjectSurvey.survey.title,
         description: rawProjectSurvey.survey.description,
-        creator: rawProjectSurvey.survey.creator,
+        creator: rawProjectSurvey.creator,
         num_pending_annotations: numPendingAnnotations,
         num_total_annotations: numTotalAnnotations,
         num_pending_page_comments: numPendingPageComments,

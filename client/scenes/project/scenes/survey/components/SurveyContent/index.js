@@ -19,7 +19,12 @@ export default ({
   addNewAnnotationSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
-    <SurveyHeader survey={surveyMetadata} project={projectMetadata} />
+    <SurveyHeader
+      surveyQnasById={surveyQnasById}
+      surveyQnaIds={surveyQnaIds}
+      surveyMetadata={surveyMetadata}
+      projectMetadata={projectMetadata}
+    />
     {surveyQnaIds.map(id => {
       return (
         <Element

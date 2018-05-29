@@ -257,11 +257,11 @@ ProjectSurvey.hasMany(ProjectSurveyAnswer, {
   foreignKey: "project_survey_id"
 })
 
-User.hasMany(Survey, {
+User.hasMany(ProjectSurvey, {
   foreignKey: "creator_id",
-  as: "survey"
+  as: "projectSurveys"
 });
-Survey.belongsTo(User, {
+ProjectSurvey.belongsTo(User, {
   foreignKey: "creator_id",
   as: "creator"
 });

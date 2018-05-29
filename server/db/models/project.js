@@ -34,10 +34,10 @@ const Project = db.define(
               where: { submitted: true, reviewed: true },
               required: false,
               include: [
+                { model: db.model("user"), as: "creator" },
                 {
                   model: db.model("survey"),
                   include: [
-                    { model: db.model("user"), as: "creator" },
                     {
                       model: db.model("survey_question"),
                       include: [

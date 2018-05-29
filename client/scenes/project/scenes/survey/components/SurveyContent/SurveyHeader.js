@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import history from "../../../../../../history";
 import { ProjectSymbolBlueBox } from "../../../../../../components";
+import VersionToolbar from "./VersionToolbar";
 
 export default class SurveyHeader extends Component {
   constructor(props) {
@@ -10,15 +11,22 @@ export default class SurveyHeader extends Component {
   }
 
   goBack() {
-    history.push("/project/" + this.props.project.symbol);
+    history.push("/project/" + this.props.projectMetadata.symbol);
   }
 
   render() {
-    const { survey, project } = this.props;
+    const {
+      surveyMetadata,
+      projectMetadata,
+      surveyQnasById,
+      surveyQnaIds
+    } = this.props;
     const creatorFirstName =
-      survey.creator.first_name && survey.creator.first_name.toLowerCase();
+      surveyMetadata.creator.first_name &&
+      surveyMetadata.creator.first_name.toLowerCase();
     const creatorLastName =
-      survey.creator.last_name && survey.creator.last_name.toLowerCase();
+      surveyMetadata.creator.last_name &&
+      surveyMetadata.creator.last_name.toLowerCase();
     const creator = creatorFirstName
       ? `${creatorFirstName} ${creatorLastName}`
       : creatorLastName;
@@ -28,13 +36,17 @@ export default class SurveyHeader extends Component {
         <p className="project-survey__back-btn" onClick={this.goBack}>
           back to project page
         </p>
-        <ProjectSymbolBlueBox name={project.name} />
-        <p className="survey-name__box">
-          {`${survey.title}`}
-        </p>
+        <ProjectSymbolBlueBox name={projectMetadata.name} />
+        <p className="survey-name__box">{`${surveyMetadata.title}`}</p>
         <p className="survey-creator-name__box">
           {`survey created by ${creator}`}
         </p>
+        <VersionToolbar
+          projectMetadata={projectMetadata}
+          surveyMetadata={surveyMetadata}
+          surveyQnasById={surveyQnasById}
+          surveyQnaIds={surveyQnaIds}
+        />
       </div>
     );
   }
