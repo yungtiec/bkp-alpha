@@ -1,7 +1,7 @@
 import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, route, Switch, Route, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { fetchQuestionsByProjectSurveyId } from "./data/actions";
 import {
@@ -32,7 +32,7 @@ import {
 } from "./data/tags/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import { Survey } from "./components";
+import { Survey, SurveyUpload } from "./components";
 import autoBind from "react-autobind";
 import asyncPoll from "react-async-poll";
 import { batchActions } from "redux-batched-actions";
@@ -99,7 +99,17 @@ class SurveyContainer extends Component {
       !this.props.commentIds
     )
       return null;
-    return <Survey {...this.props} />;
+    return (
+      <Switch>
+        <Route
+          path={`${this.props.match.url}/upload`}
+          render={props => <SurveyUpload {...this.props} />}
+        />
+        <Route
+          render={props => <Survey {...this.props} />}
+        />
+      </Switch>
+    );
   }
 }
 

@@ -19,7 +19,8 @@ export default class SurveyHeader extends Component {
       surveyMetadata,
       projectMetadata,
       surveyQnasById,
-      surveyQnaIds
+      surveyQnaIds,
+      showVersionToolbar
     } = this.props;
     const creatorFirstName =
       surveyMetadata.creator.first_name &&
@@ -39,14 +40,30 @@ export default class SurveyHeader extends Component {
         <ProjectSymbolBlueBox name={projectMetadata.name} />
         <p className="survey-name__box">{`${surveyMetadata.title}`}</p>
         <p className="survey-creator-name__box">
-          {`survey created by ${creator}`}
+          {`disclosure created by ${creator}`}
         </p>
-        <VersionToolbar
-          projectMetadata={projectMetadata}
-          surveyMetadata={surveyMetadata}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-        />
+        {showVersionToolbar ? (
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={() =>
+              history.push(
+                `/project/${this.props.projectMetadata.symbol}/survey/${
+                  surveyMetadata.id
+                }`
+              )
+            }
+          >
+            view disclosure
+          </button>
+        ) : (
+          <VersionToolbar
+            projectMetadata={projectMetadata}
+            surveyMetadata={surveyMetadata}
+            surveyQnasById={surveyQnasById}
+            surveyQnaIds={surveyQnaIds}
+          />
+        )}
       </div>
     );
   }

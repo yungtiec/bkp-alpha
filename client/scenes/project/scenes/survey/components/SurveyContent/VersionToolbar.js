@@ -4,6 +4,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { notify } from "reapop";
 import { connect } from "react-redux";
 import download from "downloadjs";
+import { Link } from "react-router-dom";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -39,7 +40,13 @@ class VersionToolbar extends Component {
     return (
       <div className="btn-group" role="group" aria-label="Basic example">
         <button type="button" className="btn btn-outline-primary">
-          Upload new version
+          <Link
+            to={`/project/${projectMetadata.symbol}/survey/${
+              surveyMetadata.id
+            }/upload`}
+          >
+            Upload new version
+          </Link>
         </button>
         <div className="btn-group">
           <button
