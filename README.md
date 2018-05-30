@@ -1,3 +1,10 @@
+## Concerns
+
+fork and issues don't play well with each other.
+say you write civil disclosure v1 and the community points out issue 1, 2 and 3. I fork the disclosure. my version is civil diclosure tc v1 and it resolves issue 1. Pat also forks the disclosure. his version is civil disclosure pb v1 and it resolves issue 2 and 3.
+
+It's difficult to keep track of issues and disclosures this way.
+
 ## Disclosure markdown format
 
 If you have no experience writing markdown files

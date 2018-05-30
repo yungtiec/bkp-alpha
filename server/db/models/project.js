@@ -31,7 +31,7 @@ const Project = db.define(
           include: [
             {
               model: db.model("project_survey"),
-              where: { submitted: true, reviewed: true },
+              where: { hierarchyLevel: 1 },
               required: false,
               include: [
                 { model: db.model("user"), as: "creator" },

@@ -56,6 +56,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.0.0",
+    "react-dropzone": "^4.2.10",
     "react-ga": "^2.5.2",
     "react-loadable": "^5.3.1",
     "react-markdown": "^3.3.0",
@@ -73,11 +74,13 @@
     "redux-batched-actions": "^0.2.1",
     "redux-logger": "^2.8.1",
     "redux-thunk": "^2.2.0",
+    "sanitize-html": "^1.18.2",
     "sequelize": "^4.3.1",
     "sequelize-hierarchy": "^1.3.2",
     "showdown": "^1.8.6",
     "striptags": "^3.1.1",
     "tether": "^1.4.3",
+    "text-diff": "^1.0.1",
     "xpath-range": "0.0.5"
   },
   "devDependencies": {

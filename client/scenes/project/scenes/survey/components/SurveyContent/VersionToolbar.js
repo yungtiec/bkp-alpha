@@ -4,6 +4,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { notify } from "reapop";
 import { connect } from "react-redux";
 import download from "downloadjs";
+import { Link } from "react-router-dom";
+import history from "../../../../../../history";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -29,8 +31,13 @@ class VersionToolbar extends Component {
       projectMetadata,
       surveyMetadata,
       surveyQnasById,
-      surveyQnaIds
+      surveyQnaIds,
+      uploadMode,
+      uploaded,
+      resetUpload,
+      uploadMarkdownToServer
     } = this.props;
+
     const surveyMarkdown = getSurveyMarkdown({
       surveyTitle: surveyMetadata.title,
       surveyQnaIds,
@@ -38,77 +45,121 @@ class VersionToolbar extends Component {
     });
     return (
       <div className="btn-group" role="group" aria-label="Basic example">
-        <button type="button" className="btn btn-outline-primary">
-          Upload new version
-        </button>
-        <div className="btn-group">
+        {uploadMode ? (
           <button
             type="button"
-            className="btn btn-outline-primary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
+            className="btn btn-outline-primary"
+            onClick={() =>
+              history.push(
+                `/project/${this.props.projectMetadata.symbol}/survey/${
+                  surveyMetadata.id
+                }`
+              )
+            }
           >
-            Copy or download
+            View disclosure
           </button>
-          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <div className="card-body" style={{ width: "18rem" }}>
-              <h6 className="card-subtitle mb-4 text-secondary">
-                Edit disclosure in the markdown editor of your choice
-              </h6>
-              <p className="card-text">
-                Don't have an editor in mind?{" "}
-                <a
-                  href="https://dillinger.io/"
-                  target="_blank"
-                  className="font-weight-bold text-primary"
+        ) : null}
+        {uploadMode ? (
+          uploaded ? (
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={resetUpload}
+            >
+              Import another file
+            </button>
+          ) : null
+        ) : (
+          <button type="button" className="btn btn-outline-primary">
+            <Link
+              to={`/project/${projectMetadata.symbol}/survey/${
+                surveyMetadata.id
+              }/upload`}
+            >
+              Import new version
+            </Link>
+          </button>
+        )}
+        {uploadMode && uploaded ? (
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={uploadMarkdownToServer}
+          >
+            Upload
+          </button>
+        ) : null}
+        {uploadMode ? null : (
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-primary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Copy or download
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div className="card-body" style={{ width: "18rem" }}>
+                <h6 className="card-subtitle mb-4 text-secondary">
+                  Edit disclosure in the markdown editor of your choice
+                </h6>
+                <p className="card-text">
+                  Don't have an editor in mind?{" "}
+                  <a
+                    href="https://dillinger.io/"
+                    target="_blank"
+                    className="font-weight-bold text-primary"
+                  >
+                    Here's a place to start.
+                  </a>
+                </p>
+                <p className="card-text">
+                  Need some pointers on writing markdown file?{" "}
+                  <a
+                    href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
+                    target="_blank"
+                    className="font-weight-bold text-primary"
+                  >
+                    check out this cheatsheet.
+                  </a>
+                </p>
+                <CopyToClipboard
+                  text={surveyMarkdown}
+                  onCopy={() =>
+                    this.props.notify({
+                      title: "Copied to clipboard",
+                      message: "Paste in the editor of your choice",
+                      status: "success",
+                      dismissible: true,
+                      dismissAfter: 3000
+                    })
+                  }
                 >
-                  Here's a place to start.
-                </a>
-              </p>
-              <p className="card-text">
-                Need some pointers on writing markdown file?{" "}
+                  <a className="card-link text-primary mr-3">Copy markdown</a>
+                </CopyToClipboard>
                 <a
-                  href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                  target="_blank"
-                  className="font-weight-bold text-primary"
+                  className="card-link text-primary mr-3"
+                  onClick={() =>
+                    download(
+                      surveyMarkdown,
+                      `${projectMetadata.symbol.toLowerCase()}-${
+                        surveyMetadata.id
+                      }.md`,
+                      "text/markdown"
+                    )
+                  }
                 >
-                  check out this cheatsheet.
+                  Download
                 </a>
-              </p>
-              <CopyToClipboard
-                text={surveyMarkdown}
-                onCopy={() =>
-                  this.props.notify({
-                    title: "Copied to clipboard",
-                    message: "Paste in the editor of your choice",
-                    status: "success",
-                    dismissible: true,
-                    dismissAfter: 3000
-                  })
-                }
-              >
-                <a className="card-link text-primary mr-3">Copy markdown</a>
-              </CopyToClipboard>
-              <a
-                className="card-link text-primary mr-3"
-                onClick={() =>
-                  download(
-                    surveyMarkdown,
-                    `${projectMetadata.symbol.toLowerCase()}-${
-                      surveyMetadata.id
-                    }.md`,
-                    "text/markdown"
-                  )
-                }
-              >
-                Download
-              </a>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

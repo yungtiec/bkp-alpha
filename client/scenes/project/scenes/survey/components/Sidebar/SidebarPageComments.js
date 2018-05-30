@@ -3,7 +3,7 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
-import { CommentBoxWithTagField, AnnotationItem } from "../index";
+import { CommentBoxWithTagField, EngagementItem } from "../index";
 import {
   addNewComment,
   initiateReplyToComment,
@@ -39,11 +39,9 @@ const SidebarPageComments = props => {
   } = props;
   if (selectedComment)
     return (
-      <AnnotationItem
+      <EngagementItem
         key={`comment-${selectedComment.id}`}
-        annotation={selectedComment}
-        ref={el => (parent[`comment-${selectedComment.id}`] = el)}
-        engagementTab={engagementTab}
+        engagementItem={selectedComment}
         replyToItem={replyToComment}
         initiateReplyToItem={initiateReplyToComment}
         cancelReplyToItem={cancelReplyToComment}
@@ -79,11 +77,9 @@ const SidebarPageComments = props => {
       {commentIds
         .filter(id => commentsById[id].reviewed !== "spam")
         .map(id => (
-          <AnnotationItem
+          <EngagementItem
             key={`comment-${id}`}
-            annotation={commentsById[id]}
-            ref={el => (parent[`comment-${id}`] = el)}
-            engagementTab={engagementTab}
+            engagementItem={commentsById[id]}
             replyToItem={replyToComment}
             initiateReplyToItem={initiateReplyToComment}
             cancelReplyToItem={cancelReplyToComment}

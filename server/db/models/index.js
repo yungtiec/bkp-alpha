@@ -127,6 +127,15 @@ Issue.belongsTo(Annotation, {
   foreignKey: "annotation_id"
 });
 
+/*----------  Issue and Project Survey  ----------*/
+ProjectSurvey.hasMany(Issue, {
+  foreignKey: "resolving_project_survey_id"
+});
+Issue.belongsTo(ProjectSurvey, {
+  foreignKey: "resolving_project_survey_id",
+  as: "resolvingProjectSurvey",
+});
+
 
 /*----------  Annotation and Project Survey  ----------*/
 ProjectSurvey.hasMany(Annotation, {
@@ -271,6 +280,15 @@ SurveyQuestion.hasMany(Annotation, {
 });
 Annotation.belongsTo(SurveyQuestion, {
   foreignKey: "survey_question_id"
+});
+
+/*----------  Issue and Project Survey  ----------*/
+ProjectSurvey.hasOne(ProjectSurvey, {
+  foreignKey: "original_id"
+});
+Issue.belongsTo(ProjectSurvey, {
+  foreignKey: "original_id",
+  as: "forkFrom",
 });
 /*=============  End of Survey  ==============*/
 

@@ -34,7 +34,8 @@ class Sidebar extends Component {
       selectedAnnotations,
       verificationStatus,
       width,
-      children
+      children,
+      uploadMode
     } = this.props;
     var style = sidebarOpen
       ? {
@@ -74,11 +75,13 @@ class Sidebar extends Component {
               src="/assets/consensys-logo-white-transparent.png"
             />
           </div>
-          {this.renderVerificationStatusTab({
-            tabStyle,
-            verificationStatus,
-            selectedAnnotations
-          })}
+          {uploadMode
+            ? null
+            : this.renderVerificationStatusTab({
+                tabStyle,
+                verificationStatus,
+                selectedAnnotations
+              })}
         </div>
         {children}
       </div>

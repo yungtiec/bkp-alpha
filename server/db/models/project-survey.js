@@ -23,9 +23,17 @@ const ProjectSurvey = db.define(
     reviewed: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
+    },
+    forked: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    original_id: {
+      type: Sequelize.INTEGER
     }
   },
   {
+    hierarchy: true,
     scopes: {
       byProjectSurveyId: function(projectSurveyId) {
         return {
@@ -64,13 +72,16 @@ const ProjectSurvey = db.define(
                   ]
                 }
               ]
+            },
+            {
+              model: db.model("project")
             }
           ]
         };
       },
       allPublishedSurveys: function() {
         return {
-          where: { submitted: true, reviewed: true },
+          where: { hierarchyLevel: 1 },
           include: [
             {
               model: db.model("user"),

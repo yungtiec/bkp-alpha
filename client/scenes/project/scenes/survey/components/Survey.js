@@ -27,12 +27,6 @@ export default class Survey extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    this.state = {
-      selectedText: "",
-      selectedAnnotations: null,
-      focusOnce: false,
-      selectedCommentId: ""
-    };
   }
 
   componentDidMount(nextProps) {
