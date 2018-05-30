@@ -11,6 +11,7 @@ import {
 } from "./data/annotations/actions";
 import { fetchCommentsBySurvey, addNewComment } from "./data/comments/actions";
 import { updateTagFilter } from "./data/tags/actions";
+import { importMarkdown, uploadMarkdownToServer } from "./data/upload/actions";
 import {
   toggleSidebar,
   sortAnnotationBy,
@@ -25,6 +26,7 @@ import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getAllComments } from "./data/comments/reducer";
+import { getImportedMarkdown } from "./data/upload/reducer";
 import {
   getAllTags,
   getTagsWithCountInSurvey,
@@ -105,9 +107,7 @@ class SurveyContainer extends Component {
           path={`${this.props.match.url}/upload`}
           render={props => <SurveyUpload {...this.props} />}
         />
-        <Route
-          render={props => <Survey {...this.props} />}
-        />
+        <Route render={props => <Survey {...this.props} />} />
       </Switch>
     );
   }
@@ -122,7 +122,8 @@ const mapState = (state, ownProps) => {
     unfilteredAnnotationIds,
     commentsById,
     commentIds,
-    unfilteredCommentIds
+    unfilteredCommentIds,
+    outstandingIssues
   } = ownProps;
   const { width } = state.data.environment;
   const {
@@ -157,7 +158,9 @@ const mapState = (state, ownProps) => {
     engagementTab,
     commentsById,
     commentIds,
-    unfilteredCommentIds
+    unfilteredCommentIds,
+    outstandingIssues,
+    importedMarkdown: getImportedMarkdown(state)
   };
 };
 
@@ -175,7 +178,9 @@ const actions = {
   addNewComment,
   sortCommentBy,
   updateIssueFilter,
-  updateSidebarContext
+  updateSidebarContext,
+  importMarkdown,
+  uploadMarkdownToServer
 };
 
 const onPollInterval = (props, dispatch) => {

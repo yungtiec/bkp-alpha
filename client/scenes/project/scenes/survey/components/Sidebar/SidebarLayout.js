@@ -35,7 +35,7 @@ class Sidebar extends Component {
       verificationStatus,
       width,
       children,
-      hideEngagementTabs
+      uploadMode
     } = this.props;
     var style = sidebarOpen
       ? {
@@ -75,7 +75,7 @@ class Sidebar extends Component {
               src="/assets/consensys-logo-white-transparent.png"
             />
           </div>
-          {hideEngagementTabs
+          {uploadMode
             ? null
             : this.renderVerificationStatusTab({
                 tabStyle,

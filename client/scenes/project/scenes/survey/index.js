@@ -10,6 +10,7 @@ import { batchActions } from "redux-batched-actions";
 import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getAllComments } from "./data/comments/reducer";
+import { getOutstandingIssues } from "./data/reducer";
 
 const LoadableSurvey = Loadable({
   loader: () => import("./main"),
@@ -64,7 +65,8 @@ const mapState = state => {
     unfilteredAnnotationIds,
     commentsById,
     commentIds,
-    unfilteredCommentIds
+    unfilteredCommentIds,
+    outstandingIssues: getOutstandingIssues(state)
   };
 };
 

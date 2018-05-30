@@ -1,4 +1,4 @@
-import "./AnnotationItem.scss";
+import "./EngagementItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
@@ -7,7 +7,7 @@ import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
 import ActionBar from "./ActionBar";
 
-export default class AnnotationItem extends Component {
+export default class EngagementItem extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -19,29 +19,25 @@ export default class AnnotationItem extends Component {
   }
 
   render() {
-    const { annotation, engagementTab } = this.props;
+    const { engagementItem, engagementTab } = this.props;
     return (
-      <div className="annotation-item">
-        {this.renderMainComment(engagementTab, annotation)}
+      <div className="engagement-item">
+        {this.renderMainComment(engagementItem)}
         {this.state.showReplies && (
           <p
-            className="mb-3 annotation-item__collapse-btn"
+            className="mb-3 engagement-item__collapse-btn"
             onClick={this.toggleShowReplies}
           >
             - Collapse replies
           </p>
         )}
-        {annotation.descendents.length < 3 || this.state.showReplies ? (
+        {engagementItem.descendents.length < 3 || this.state.showReplies ? (
           <div className="ml-3">
-            {this.renderReplies(
-              engagementTab,
-              annotation.descendents,
-              annotation.id
-            )}
+            {this.renderReplies(engagementItem.descendents, engagementItem.id)}
           </div>
         ) : (
           <p onClick={this.toggleShowReplies}>
-            + View {annotation.descendents.length} replies
+            + View {engagementItem.descendents.length} replies
           </p>
         )}
         {this.state.isCommenting ? (
@@ -52,11 +48,11 @@ export default class AnnotationItem extends Component {
               } ${this.state.replyTarget.owner.last_name}`}</span>
             )}
             <CommentBox
-              rootId={annotation.id}
+              rootId={engagementItem.id}
               parentId={
                 this.state.replyTarget
                   ? this.state.replyTarget.id
-                  : annotation.id
+                  : engagementItem.id
               }
               onSubmit={this.props.replyToItem}
               onCancel={this.hideCommentBox}
@@ -81,9 +77,9 @@ export default class AnnotationItem extends Component {
     });
   }
 
-  openModal(annotation, showIssueCheckbox, showTags) {
+  openModal(engagementItem, showIssueCheckbox, showTags) {
     this.props.loadModal("ANNOTATION_EDIT_MODAL", {
-      ...annotation,
+      ...engagementItem,
       showIssueCheckbox,
       showTags,
       editItem: this.props.editItem
@@ -100,12 +96,16 @@ export default class AnnotationItem extends Component {
     });
   }
 
-  labelAsNotSpam(annotation, rootId) {
-    this.props.verifyItemAsAdmin({ annotation, rootId, reviewed: "verified" });
+  labelAsNotSpam(engagementItem, rootId) {
+    this.props.verifyItemAsAdmin({
+      engagementItem,
+      rootId,
+      reviewed: "verified"
+    });
   }
 
-  labelAsSpam(annotation, rootId) {
-    this.props.verifyItemAsAdmin({ annotation, rootId, reviewed: "spam" });
+  labelAsSpam(engagementItem, rootId) {
+    this.props.verifyItemAsAdmin({ engagementItem, rootId, reviewed: "spam" });
   }
 
   toggleShowReplies() {
@@ -114,9 +114,9 @@ export default class AnnotationItem extends Component {
     }));
   }
 
-  renderMainComment(engagementTab, annotation) {
+  renderMainComment(engagementItem) {
     const hasUpvoted = find(
-      annotation.upvotesFrom,
+      engagementItem.upvotesFrom,
       user => user.email === this.props.userEmail
     );
     const initReplyToThis = this.props.userEmail
@@ -125,31 +125,33 @@ export default class AnnotationItem extends Component {
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
           rootId: null,
-          itemId: annotation.id,
+          itemId: engagementItem.id,
           hasUpvoted
         })
       : this.promptLoginToast;
-    const openModal = this.openModal.bind(null, annotation, true, true);
+    const openModal = this.openModal.bind(null, engagementItem, true, true);
     const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(
       null,
-      annotation
+      engagementItem
     );
     return (
-      <div className="annotation-item__main">
-        <div className="annotation-item__header">
+      <div className="engagement-item__main">
+        <div className="engagement-item__header">
           <p>
-            {annotation.owner.first_name + " " + annotation.owner.last_name}
+            {engagementItem.owner.first_name +
+              " " +
+              engagementItem.owner.last_name}
           </p>
-          <p>{moment(annotation.createdAt).fromNow()}</p>
+          <p>{moment(engagementItem.createdAt).fromNow()}</p>
         </div>
-        {engagementTab === "annotations" && (
-          <p className="annotation-item__quote">{annotation.quote}</p>
+        {engagementItem.engagementItemType === "annotation" && (
+          <p className="engagement-item__quote">{engagementItem.quote}</p>
         )}
-        <div className="annotation-item__tags">
-          {annotation.issue &&
-            (annotation.issue.open ? (
+        <div className="engagement-item__tags">
+          {engagementItem.issue &&
+            (engagementItem.issue.open ? (
               <span
-                key={`annotation-${annotation.id}__tag-issue--open`}
+                key={`engagement-${engagementItem.id}__tag-issue--open`}
                 className="badge badge-danger issue"
                 onClick={changeItemIssueStatus}
               >
@@ -158,16 +160,16 @@ export default class AnnotationItem extends Component {
               </span>
             ) : (
               <span
-                key={`annotation-${annotation.id}__tag-issue--close`}
+                key={`engagement-${engagementItem.id}__tag-issue--close`}
                 className="badge badge-light"
               >
                 issue:close
               </span>
             ))}
-          {annotation.tags && annotation.tags.length
-            ? annotation.tags.map(tag => (
+          {engagementItem.tags && engagementItem.tags.length
+            ? engagementItem.tags.map(tag => (
                 <span
-                  key={`annotation-${annotation.id}__tag-${tag.name}`}
+                  key={`engagement-${engagementItem.id}__tag-${tag.name}`}
                   className="badge badge-light"
                 >
                   {tag.name}
@@ -176,23 +178,23 @@ export default class AnnotationItem extends Component {
               ))
             : ""}
         </div>
-        <p className="annotation-item__comment">{annotation.comment}</p>
+        <p className="engagement-item__comment">{engagementItem.comment}</p>
         <ActionBar
-          item={annotation}
+          item={engagementItem}
           hasUpvoted={hasUpvoted}
           isAdmin={this.props.admin}
           thisUserEmail={this.props.userEmail}
           initReplyToThis={initReplyToThis}
           upvoteItem={upvoteItem}
           openModal={openModal}
-          labelAsSpam={() => this.labelAsSpam(annotation, null)}
-          labelAsNotSpam={() => this.labelAsNotSpam(annotation, null)}
+          labelAsSpam={() => this.labelAsSpam(engagementItem, null)}
+          labelAsNotSpam={() => this.labelAsNotSpam(engagementItem, null)}
         />
       </div>
     );
   }
 
-  renderReplies(engagementTab, replies, rootId) {
+  renderReplies(replies, rootId) {
     return orderBy(
       replies.map(
         reply =>
@@ -221,19 +223,19 @@ export default class AnnotationItem extends Component {
         : this.promptLoginToast;
       return (
         <div
-          className="annotation-item__reply-item"
-          key={`annotation-item__reply-${reply.id}`}
+          className="engagement-item__reply-item"
+          key={`engagement-item__reply-${reply.id}`}
         >
-          <div className="annotation-item__header">
+          <div className="engagement-item__header">
             <p>{reply.owner.first_name + " " + reply.owner.last_name}</p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (
-            <p className="annotation-item__comment">[deleted]</p>
+            <p className="engagement-item__comment">[deleted]</p>
           ) : (
-            <p className="annotation-item__comment">
+            <p className="engagement-item__comment">
               {reply.hierarchyLevel !== 2 && (
-                <span className="annotation-item__at-someone">
+                <span className="engagement-item__at-someone">
                   {"@" +
                     reply.parent.owner.first_name +
                     " " +

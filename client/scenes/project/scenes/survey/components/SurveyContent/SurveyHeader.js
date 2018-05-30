@@ -22,7 +22,8 @@ export default class SurveyHeader extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      resetUpload
+      resetUpload,
+      uploadMarkdownToServer
     } = this.props;
     const creatorFirstName =
       surveyMetadata.creator.first_name &&
@@ -46,6 +47,7 @@ export default class SurveyHeader extends Component {
         </p>
         <VersionToolbar
           resetUpload={resetUpload}
+          uploadMarkdownToServer={uploadMarkdownToServer}
           uploaded={uploaded}
           uploadMode={uploadMode}
           projectMetadata={projectMetadata}

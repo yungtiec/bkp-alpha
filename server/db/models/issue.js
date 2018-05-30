@@ -14,6 +14,9 @@ const Issue = db.define("issue", {
   },
   type: {
     type: Sequelize.STRING,
+  },
+  resolving_project_survey_id: {
+    type: Sequelize.INTEGER
   }
 });
 

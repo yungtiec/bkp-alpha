@@ -11,7 +11,7 @@ export default ({
   labelAsSpam,
   labelAsNotSpam
 }) => (
-  <div className="annotation-item__action--bottom">
+  <div className="engagement-item__action--bottom">
     {isAdmin && item.reviewed === "pending" ? (
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
@@ -30,7 +30,7 @@ export default ({
         </button>
       </div>
     ) : (
-      <div className={`annotation-item__verified-message`}>
+      <div className={`engagement-item__verified-message`}>
         {item.reviewed}
       </div>
     )}

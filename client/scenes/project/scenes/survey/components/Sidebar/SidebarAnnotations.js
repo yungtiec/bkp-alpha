@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import AnnotationItem from "../Annotations/AnnotationItem";
+import { EngagementItem } from "../index";
 import { Link as ScrollLink, Element } from "react-scroll";
 import {
   replyToAnnotation,
@@ -57,11 +57,9 @@ function renderSidebarWithSelectedAnnotations(props) {
       {selectedAnnotations
         .filter(a => annotationsById[a.id].reviewed !== "spam")
         .map(annotation => (
-          <AnnotationItem
+          <EngagementItem
             key={`annotation-${annotation.id}`}
-            annotation={annotation}
-            ref={el => (parent[`selected-annotation-${annotation.id}`] = el)}
-            engagementTab={engagementTab}
+            engagementItem={annotation}
             replyToItem={replyToAnnotation}
             initiateReplyToItem={initiateReplyToAnnotation}
             cancelReplyToItem={cancelReplyToAnnotation}
@@ -111,11 +109,9 @@ function renderSidebarWithAllAnnotations(props) {
           duration={300}
           spy={true}
         >
-          <AnnotationItem
+          <EngagementItem
             key={`annotation-${id}`}
-            annotation={annotationsById[id]}
-            ref={el => (parent[`annotation-${id}`] = el)}
-            engagementTab={engagementTab}
+            engagementItem={annotationsById[id]}
             replyToItem={replyToAnnotation}
             initiateReplyToItem={initiateReplyToAnnotation}
             cancelReplyToItem={cancelReplyToAnnotation}

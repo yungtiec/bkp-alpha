@@ -34,8 +34,10 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      resetUpload
+      resetUpload,
+      uploadMarkdownToServer
     } = this.props;
+
     const surveyMarkdown = getSurveyMarkdown({
       surveyTitle: surveyMetadata.title,
       surveyQnaIds,
@@ -65,7 +67,7 @@ class VersionToolbar extends Component {
               className="btn btn-outline-primary"
               onClick={resetUpload}
             >
-              Upload another file
+              Import another file
             </button>
           ) : null
         ) : (
@@ -75,10 +77,19 @@ class VersionToolbar extends Component {
                 surveyMetadata.id
               }/upload`}
             >
-              Upload new version
+              Import new version
             </Link>
           </button>
         )}
+        {uploadMode && uploaded ? (
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={uploadMarkdownToServer}
+          >
+            Upload
+          </button>
+        ) : null}
         {uploadMode ? null : (
           <div className="btn-group">
             <button

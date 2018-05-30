@@ -8,9 +8,6 @@ const Survey = db.define("survey", {
   },
   description: {
     type: Sequelize.STRING
-  },
-  creator_id: {
-    type: Sequelize.INTEGER
   }
 });
 

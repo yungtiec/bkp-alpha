@@ -28,12 +28,9 @@ export default class UploadInterface extends Component {
     autoBind(this);
 
     const self = this;
-    this.state = { uploadedMarkdown: null };
     this.fileReader = new FileReader();
     this.fileReader.onload = function(e) {
-      self.setState({
-        uploadedMarkdown: self.fileReader.result
-      });
+      self.props.importMarkdown(self.fileReader.result);
     };
     this.diff = new Diff();
   }
@@ -51,17 +48,20 @@ export default class UploadInterface extends Component {
       surveyQnasById,
       surveyQnaIds,
       surveyMetadata,
-      projectMetadata
+      projectMetadata,
+      importedMarkdown,
+      importMarkdown,
+      uploadMarkdownToServer
     } = this.props;
     const originalMarkdown = getSurveyMarkdown({
       surveyTitle: surveyMetadata.title,
       surveyQnaIds,
       surveyQnasById
     });
-    var textDiff = this.state.uploadedMarkdown
-      ? this.diff.main(originalMarkdown, this.state.uploadedMarkdown)
+    var textDiff = importedMarkdown
+      ? this.diff.main(originalMarkdown, importedMarkdown)
       : null;
-    if (this.state.uploadedMarkdown) this.diff.cleanupSemantic(textDiff);
+    if (importedMarkdown) this.diff.cleanupSemantic(textDiff);
 
     return (
       <div className="project-survey" id="project-survey">
@@ -71,14 +71,11 @@ export default class UploadInterface extends Component {
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
           uploadMode={true}
-          uploaded={!!this.state.uploadedMarkdown}
-          resetUpload={() =>
-            this.setState({
-              uploadedMarkdown: null
-            })
-          }
+          uploaded={!!importedMarkdown}
+          resetUpload={() => this.props.importMarkdown(null)}
+          uploadMarkdownToServer={uploadMarkdownToServer}
         />
-        {this.state.uploadedMarkdown ? null : (
+        {importedMarkdown ? null : (
           <div className="project-survey__upload-dropzone">
             <Dropzone
               onDrop={this.onDrop}
@@ -102,7 +99,7 @@ export default class UploadInterface extends Component {
             </Dropzone>
           </div>
         )}
-        {this.state.uploadedMarkdown ? (
+        {importedMarkdown ? (
           <div
             className="project-survey__upload-diff"
             dangerouslySetInnerHTML={{

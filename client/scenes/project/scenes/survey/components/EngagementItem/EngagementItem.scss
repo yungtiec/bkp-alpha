@@ -1,6 +1,6 @@
 @import "../../../../../../breakpoint";
 
-.annotation-item {
+.engagement-item {
   background: #0d3048;
   padding: 20px;
   margin-bottom: 30px;
@@ -9,7 +9,7 @@
   }
 }
 
-.annotation-item__header {
+.engagement-item__header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -23,7 +23,7 @@
   }
 }
 
-.annotation-item__quote {
+.engagement-item__quote {
   border-left: 3px solid white;
   color: white;
   padding-left: 10px;
@@ -32,66 +32,66 @@
   }
 }
 
-.annotation-item__comment {
+.engagement-item__comment {
   color: white;
   @include breakpoint(xs) {
     font-size: 12px;
   }
 }
 
-.annotation-item__edit .annotation-item__quote {
+.engagement-item__edit .engagement-item__quote {
   border-left: 3px solid #0057ff;
   color: black;
   padding-left: 10px;
 }
 
-.active .annotation-item__quote {
+.active .engagement-item__quote {
   border-left: 3px solid #0057ff;
 }
 
-.annotation-item__action--bottom {
+.engagement-item__action--bottom {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.annotation-item__action--bottom .btn {
+.engagement-item__action--bottom .btn {
   border-radius: 0;
 }
 
-.annotation-item__action--bottom .fas {
+.engagement-item__action--bottom .fas {
   padding: 5px;
   cursor: pointer;
 }
 
-.annotation-item__action--bottom .upvoted {
+.engagement-item__action--bottom .upvoted {
   color: white;
 }
 
-.annotation-item__verified-message {
+.engagement-item__verified-message {
   font-size: 12px;
   line-height: 30px;
 }
 
-.annotation-item__reply-thread {
+.engagement-item__reply-thread {
   display: flex;
 }
 
-.annotation-item__reply-contents {
+.engagement-item__reply-contents {
   width: 100%;
 }
 
-.annotation-item__reply-edge {
+.engagement-item__reply-edge {
   display: flex;
   flex-direction: column;
 }
 
-.annotation-item__reply-edge .fa-caret-down {
+.engagement-item__reply-edge .fa-caret-down {
   height: 24px;
   margin: 0 8px;
 }
 
-.annotation-item__thread-line {
+.engagement-item__thread-line {
   border-right: 1px dashed #dbdbdb;
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
@@ -100,7 +100,7 @@
   right: 12px;
 }
 
-.annotation-item__edit {
+.engagement-item__edit {
   width: 400px;
   margin: 0 auto;
   position: relative;
@@ -109,52 +109,52 @@
   height: 100%;
 }
 
-.annotation-item__edit .Select {
+.engagement-item__edit .Select {
   flex: 1;
 }
 
-.annotation-item__edit label {
+.engagement-item__edit label {
   line-height: 2;
   margin-right: 5px;
 }
 
-.annotation-item__tags .badge,
-.annotation-item__tags button {
+.engagement-item__tags .badge,
+.engagement-item__tags button {
   margin-right: 5px;
   margin-bottom: 5px;
   line-height: 1.25;
 }
 
-.annotation-item__tags .badge.issue {
+.engagement-item__tags .badge.issue {
   cursor: pointer;
 }
 
-.annotation-item__tags .badge .fas {
+.engagement-item__tags .badge .fas {
   font-size: 9px;
   margin-left: 3px;
 }
 
-.annotation-item__tags {
+.engagement-item__tags {
   margin-bottom: 1rem;
 }
 
-.annotation-item__main,
-.annotation-item__reply-item {
+.engagement-item__main,
+.engagement-item__reply-item {
   margin-bottom: 20px;
 }
 
-.annotation-item__reply-item {
+.engagement-item__reply-item {
   border-bottom: 1px solid;
 }
 
-.annotation-item__at-someone {
+.engagement-item__at-someone {
   background: #245271;
   padding: 5px;
   color: white;
   border-radius: 3px;
 }
 
-.annotation-item__collapse-btn {
+.engagement-item__collapse-btn {
   padding-bottom: 10px;
   border-bottom: 1px solid;
 }
