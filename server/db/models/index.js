@@ -282,11 +282,10 @@ Annotation.belongsTo(SurveyQuestion, {
   foreignKey: "survey_question_id"
 });
 
-/*----------  Issue and Project Survey  ----------*/
-ProjectSurvey.hasOne(ProjectSurvey, {
+ProjectSurvey.hasMany(ProjectSurvey, {
   foreignKey: "original_id"
 });
-Issue.belongsTo(ProjectSurvey, {
+ProjectSurvey.belongsTo(ProjectSurvey, {
   foreignKey: "original_id",
   as: "forkFrom",
 });

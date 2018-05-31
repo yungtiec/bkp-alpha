@@ -21,13 +21,18 @@ export default (surveyId, survey) => {
                     : survey.title}
                 </span>
                 <span className="entity__ticker">
-                  ({`by ${survey.creator.first_name} ${
+                  ({`v${survey.hierarchyLevel} `}
+                  {`by ${survey.creator.first_name} ${
                     survey.creator.last_name
                   }`})
                 </span>
               </div>
               <p className="entity__date">
-                {moment(survey.createdAt).format("MMM DD YYYY")}
+                {moment(
+                  survey.hierarchyLevel === 1
+                    ? survey.createdAt
+                    : survey.updatedAt
+                ).format("MMM DD YYYY")}
               </p>
             </div>
             <div className="entity__description">{survey.description}</div>
