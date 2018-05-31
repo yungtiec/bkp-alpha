@@ -40,6 +40,16 @@ const ProjectSurvey = db.define(
           where: { id: projectSurveyId },
           include: [
             {
+              model: db.model("project_survey"),
+              as: "ancestors",
+              attributes: ["id", "hierarchyLevel"]
+            },
+            {
+              model: db.model("project_survey"),
+              as: "descendents",
+              attributes: ["id", "hierarchyLevel"]
+            },
+            {
               model: db.model("user"),
               as: "creator"
             },
@@ -76,6 +86,16 @@ const ProjectSurvey = db.define(
             {
               model: db.model("project")
             }
+          ],
+          order: [
+            [
+              { model: db.model("project_survey"), as: "ancestors" },
+              "hierarchyLevel"
+            ],
+            [
+              { model: db.model("project_survey"), as: "descendents" },
+              "hierarchyLevel"
+            ]
           ]
         };
       },
