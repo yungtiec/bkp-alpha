@@ -66,7 +66,7 @@ class Sidebar extends Component {
           </button>
           {sidebarOpen && <AuthWidget />}
         </div>
-        <div style={{ height: "100px" }}>
+        <div>
           <div className="social-sidebar__logo-consensys">
             <img
               width="100px"

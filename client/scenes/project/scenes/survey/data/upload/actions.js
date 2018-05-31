@@ -23,3 +23,28 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
+
+export const selectIssueToResolve = issueId => ({
+  type: types.ISSUE_SELECTED,
+  issueId
+});
+
+export const addNewCollaborator = collaboratorEmail => ({
+  type: types.COLLABORATOR_ADDED,
+  collaboratorEmail
+});
+
+export const removeCollaborator = collaboratorEmail => ({
+  type: types.COLLABORATOR_DELETED,
+  collaboratorEmail
+});
+
+export const addNewIssue = issue => ({
+  type: types.ISSUE_ADDED,
+  issue
+});
+
+export const removeIssue = issue => ({
+  type: types.ISSUE_DELETED,
+  issue
+});

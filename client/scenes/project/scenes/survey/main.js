@@ -11,7 +11,15 @@ import {
 } from "./data/annotations/actions";
 import { fetchCommentsBySurvey, addNewComment } from "./data/comments/actions";
 import { updateTagFilter } from "./data/tags/actions";
-import { importMarkdown, uploadMarkdownToServer } from "./data/upload/actions";
+import {
+  importMarkdown,
+  uploadMarkdownToServer,
+  selectIssueToResolve,
+  addNewCollaborator,
+  removeCollaborator,
+  addNewIssue,
+  removeIssue
+} from "./data/upload/actions";
 import {
   toggleSidebar,
   sortAnnotationBy,
@@ -26,7 +34,12 @@ import { getAllSurveyQuestions } from "./data/qnas/reducer";
 import { getSelectedSurvey } from "./data/metadata/reducer";
 import { getAllAnnotations } from "./data/annotations/reducer";
 import { getAllComments } from "./data/comments/reducer";
-import { getImportedMarkdown } from "./data/upload/reducer";
+import {
+  getImportedMarkdown,
+  getResolvedIssueId,
+  getCollaboratorEmails,
+  getNewIssues
+} from "./data/upload/reducer";
 import {
   getAllTags,
   getTagsWithCountInSurvey,
@@ -160,7 +173,10 @@ const mapState = (state, ownProps) => {
     commentIds,
     unfilteredCommentIds,
     outstandingIssues,
-    importedMarkdown: getImportedMarkdown(state)
+    importedMarkdown: getImportedMarkdown(state),
+    resolvedIssueIds: getResolvedIssueId(state),
+    collaboratorEmails: getCollaboratorEmails(state),
+    newIssues: getNewIssues(state)
   };
 };
 
@@ -180,7 +196,12 @@ const actions = {
   updateIssueFilter,
   updateSidebarContext,
   importMarkdown,
-  uploadMarkdownToServer
+  uploadMarkdownToServer,
+  selectIssueToResolve,
+  addNewCollaborator,
+  removeCollaborator,
+  addNewIssue,
+  removeIssue
 };
 
 const onPollInterval = (props, dispatch) => {

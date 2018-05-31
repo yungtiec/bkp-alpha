@@ -1,6 +1,50 @@
-.social-sidebar__issue-header {
-  padding: 10px 40px;
+.social-sidebar__upload-header {
   color: white;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
+}
+
+.social-sidebar__collaborator-input input,
+.social-sidebar__collaborator-input button {
+  border-radius: 0;
+}
+
+.social-sidebar__add-issue-btn {
+  cursor: pointer;
+}
+
+.social-sidebar__upload-subheader {
+  color: white;
+  font-size: 14px;
+}
+
+.collaborator-email {
+  color: white;
+}
+
+.social-sidebar__issue-input textarea {
+  border-radius: 0;
+  height: 80px;
+}
+
+.social-sidebar__issue-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.issue-input__actions {
+  margin: 0;
+  background: #d4d4d4;
+}
+
+.issue-input__actions {
+  background: #d4d4d4;
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.issue-input__actions button {
+  margin-left: 3px;
 }

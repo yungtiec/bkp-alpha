@@ -17,10 +17,19 @@ export default class OutstandingIssue extends Component {
   }
 
   render() {
-    const { engagementItem, engagementTab } = this.props;
+    const {
+      engagementItem,
+      resolvedIssueIds,
+      selectIssueToResolve
+    } = this.props;
+
     return (
-      <div className="engagement-item">
-        {this.renderMainComment(engagementItem)}
+      <div
+        className="engagement-item"
+        style={{ cursor: "pointer" }}
+        onClick={() => selectIssueToResolve(engagementItem.issue.id)}
+      >
+        {this.renderMainComment(engagementItem, resolvedIssueIds)}
         {this.state.showReplies && (
           <p
             className="mb-3 engagement-item__collapse-btn"
@@ -58,7 +67,7 @@ export default class OutstandingIssue extends Component {
     }));
   }
 
-  renderMainComment(engagementItem) {
+  renderMainComment(engagementItem, resolvedIssueIds) {
     return (
       <div className="engagement-item__main">
         <div className="engagement-item__header">
@@ -67,7 +76,12 @@ export default class OutstandingIssue extends Component {
               " " +
               engagementItem.owner.last_name}
           </p>
-          <p>{moment(engagementItem.createdAt).fromNow()}</p>
+          <p>
+            {moment(engagementItem.createdAt).fromNow()}
+            {resolvedIssueIds.indexOf(engagementItem.issue.id) !== -1 ? (
+              <i className="ml-2 fas fa-check-circle text-right" />
+            ) : null}
+          </p>
         </div>
         {engagementItem.engagementItemType === "annotation" && (
           <p className="engagement-item__quote">{engagementItem.quote}</p>
