@@ -73,7 +73,7 @@ router.post("/:parentProjectSurveyId", async (req, res, next) => {
           return question;
         })
     );
-    res.sendStatus(200);
+    res.send(projectSurvey);
   } catch (err) {
     next(err);
   }

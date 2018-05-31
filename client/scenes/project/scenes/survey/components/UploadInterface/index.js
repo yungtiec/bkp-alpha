@@ -82,7 +82,7 @@ export default class UploadInterface extends Component {
               multiple={false}
               style={{
                 width: "100%",
-                height: "35vh",
+                height: "500px",
                 borderWidth: "0px",
                 background: "#f2f2f2",
                 borderRadius: "5px",

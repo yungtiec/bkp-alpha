@@ -44,18 +44,20 @@ class ProfileNotifications extends Component {
               </button>
             </div>
           ) : null}
-          {notificationIds.map(nid => (
-            <NotificationItem
-              key={`notification-item__${nid}`}
-              handleClick={() =>
-                this.handleNotificationOnClick(notificationsById[nid])
-              }
-              message={notificationsById[nid].message}
-              createdAt={notificationsById[nid].createdAt}
-              sender={notificationsById[nid].sender}
-              status={notificationsById[nid].status}
-            />
-          ))}
+          {notificationIds && notificationIds.length
+            ? notificationIds.map(nid => (
+                <NotificationItem
+                  key={`notification-item__${nid}`}
+                  handleClick={() =>
+                    this.handleNotificationOnClick(notificationsById[nid])
+                  }
+                  message={notificationsById[nid].message}
+                  createdAt={notificationsById[nid].createdAt}
+                  sender={notificationsById[nid].sender}
+                  status={notificationsById[nid].status}
+                />
+              ))
+            : null}
         </div>
       </div>
     );

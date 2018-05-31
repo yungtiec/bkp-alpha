@@ -40,6 +40,16 @@ const ProjectSurvey = db.define(
           where: { id: projectSurveyId },
           include: [
             {
+              model: db.model("project_survey"),
+              as: "ancestors",
+              attributes: ["id", "hierarchyLevel"]
+            },
+            {
+              model: db.model("project_survey"),
+              as: "descendents",
+              attributes: ["id", "hierarchyLevel"]
+            },
+            {
               model: db.model("user"),
               as: "creator"
             },
@@ -76,6 +86,16 @@ const ProjectSurvey = db.define(
             {
               model: db.model("project")
             }
+          ],
+          order: [
+            [
+              { model: db.model("project_survey"), as: "ancestors" },
+              "hierarchyLevel"
+            ],
+            [
+              { model: db.model("project_survey"), as: "descendents" },
+              "hierarchyLevel"
+            ]
           ]
         };
       },
@@ -83,6 +103,7 @@ const ProjectSurvey = db.define(
         return {
           where: { hierarchyLevel: 1 },
           include: [
+            { model: db.model("project_survey"), as: "descendents" },
             {
               model: db.model("user"),
               as: "creator"
@@ -135,7 +156,13 @@ const ProjectSurvey = db.define(
               model: db.model("project")
             }
           ],
-          order: [["createdAt", "DESC"]]
+          order: [
+            ["createdAt", "DESC"],
+            [
+              { model: db.model("project_survey"), as: "descendents" },
+              "hierarchyLevel"
+            ]
+          ]
         };
       }
     }
@@ -162,8 +189,63 @@ module.exports = ProjectSurvey;
  */
 
 function getPublishedSurveysStats(projectSurveys) {
-  return Promise.map(projectSurveys, projectSurveyInstance => {
-    const rawProjectSurvey = projectSurveyInstance.toJSON();
+  return Promise.map(projectSurveys, async projectSurveyInstance => {
+    var rawProjectSurvey = projectSurveyInstance.toJSON();
+    if (rawProjectSurvey.descendents.length) {
+      projectSurveyInstance = await ProjectSurvey.findOne({
+        where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
+        include: [
+          {
+            model: db.model("survey"),
+            include: [
+              {
+                model: db.model("survey_question"),
+                include: [
+                  {
+                    model: db.model("annotation"),
+                    required: false,
+                    attributes: ["id", "reviewed"],
+                    include: [
+                      {
+                        model: db.model("issue"),
+                        required: false
+                      },
+                      {
+                        model: db.model("user"),
+                        as: "upvotesFrom",
+                        attributes: ["id"],
+                        required: false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: db.model("project_survey_comment"),
+            attributes: ["id", "reviewed"],
+            required: false,
+            include: [
+              {
+                model: db.model("issue"),
+                required: false
+              },
+              {
+                model: db.model("user"),
+                as: "upvotesFrom",
+                attributes: ["id"],
+                required: false
+              }
+            ]
+          }
+        ]
+      });
+      rawProjectSurvey = _.assignIn(
+        _.pick(rawProjectSurvey, ["creator", "project"]),
+        projectSurveyInstance.toJSON()
+      );
+    }
     const annotations = rawProjectSurvey.survey.survey_questions.reduce(
       (aggregatedAnnotation, surveyQuestion) => {
         return aggregatedAnnotation.concat(surveyQuestion.annotations);

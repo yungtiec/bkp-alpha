@@ -36,6 +36,12 @@ const Project = db.define(
               include: [
                 { model: db.model("user"), as: "creator" },
                 {
+                  model: db.model("project_survey"),
+                  as: "forkFrom",
+                  include: [{ model: db.model("user"), as: "creator" }]
+                },
+                { model: db.model("project_survey"), as: "descendents" },
+                {
                   model: db.model("survey"),
                   include: [
                     {
@@ -67,6 +73,13 @@ const Project = db.define(
                     }
                   ]
                 }
+              ],
+              order: [
+                ["createdAt", "DESC"],
+                [
+                  { model: db.model("project_survey"), as: "descendents" },
+                  "hierarchyLevel"
+                ]
               ]
             }
           ]
@@ -84,12 +97,12 @@ Project.getProjectWithStats = async function(projectSymbol) {
   const projectInstance = await Project.scope({
     method: ["withStats", projectSymbol]
   }).findOne();
-  return getProjectStats(projectInstance);
+  return getProjectStats(projectInstance, true);
 };
 
 Project.getProjects = async function() {
   const projectInstances = await Project.scope("withStats").findAll();
-  return Promise.map(projectInstances, i => getProjectStats(i));
+  return Promise.map(projectInstances, i => getProjectStats(i, false));
 };
 
 module.exports = Project;
@@ -100,10 +113,72 @@ module.exports = Project;
  *
  */
 
-function getProjectStats(projectInstance) {
-  const project = projectInstance.toJSON();
-  const numSurveys = project.project_surveys.length;
-  const numAnnotation = project.project_surveys
+async function getProjectStats(projectInstance, includeProjectSurveys) {
+  var project = projectInstance.toJSON();
+  var projectSurveys = await Promise.map(
+    project.project_surveys,
+    async rawProjectSurvey => {
+      if (rawProjectSurvey.descendents.length) {
+        projectSurvey = await db.model("project_survey").findOne({
+          where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
+          include: [
+            {
+              model: db.model("survey"),
+              include: [
+                {
+                  model: db.model("survey_question"),
+                  include: [
+                    {
+                      model: db.model("annotation"),
+                      required: false,
+                      attributes: ["id", "reviewed"],
+                      include: [
+                        {
+                          model: db.model("issue"),
+                          required: false
+                        },
+                        {
+                          model: db.model("user"),
+                          as: "upvotesFrom",
+                          attributes: ["id"],
+                          required: false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              model: db.model("project_survey_comment"),
+              attributes: ["id", "reviewed"],
+              required: false,
+              include: [
+                {
+                  model: db.model("issue"),
+                  required: false
+                },
+                {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["id"],
+                  required: false
+                }
+              ]
+            }
+          ]
+        });
+        return _.assignIn(
+          _.pick(rawProjectSurvey, ["creator", "project"]),
+          projectSurvey.toJSON()
+        );
+      } else {
+        return rawProjectSurvey;
+      }
+    }
+  );
+  const numSurveys = projectSurveys.length;
+  const numAnnotation = projectSurveys
     .map(projectSurvey =>
       projectSurvey.survey.survey_questions.reduce(
         (count, surveyQuestion) =>
@@ -113,10 +188,10 @@ function getProjectStats(projectInstance) {
       )
     )
     .reduce((a, b) => a + b, 0);
-  const numProjectSurveyComments = project.project_surveys
+  const numProjectSurveyComments = projectSurveys
     .map(projectSurvey => projectSurvey.project_survey_comments.length)
     .reduce((a, b) => a + b, 0);
-  const numAnnotationIssues = project.project_surveys
+  const numAnnotationIssues = projectSurveys
     .map(projectSurvey =>
       projectSurvey.survey.survey_questions.reduce(
         (count, surveyQuestion) =>
@@ -126,7 +201,7 @@ function getProjectStats(projectInstance) {
       )
     )
     .reduce((a, b) => a + b, 0);
-  const numProjectSurveyCommentIssues = project.project_surveys
+  const numProjectSurveyCommentIssues = projectSurveys
     .map(projectSurvey =>
       projectSurvey.project_survey_comments.reduce(
         (count, projectSurveyComment) =>
@@ -137,9 +212,9 @@ function getProjectStats(projectInstance) {
       )
     )
     .reduce((a, b) => a + b, 0);
-  const projectSurveys =
-    project.project_surveys && project.project_surveys.length
-      ? project.project_surveys.map(s => {
+  const projectSurveysWithStats =
+    projectSurveys && projectSurveys.length
+      ? projectSurveys.map(s => {
           const numAnnotation = s.survey.survey_questions.reduce(
             (count, surveyQuestion) =>
               surveyQuestion.annotations.filter(a => a.reviewed !== "spam")
@@ -173,11 +248,13 @@ function getProjectStats(projectInstance) {
           );
         })
       : [];
-  return _.assignIn(project, {
+  var assignees = {
     num_surveys: numSurveys,
     num_total_annotations: numAnnotation,
     num_total_page_comments: numProjectSurveyComments,
-    num_issues: numProjectSurveyCommentIssues + numAnnotationIssues,
-    project_surveys: projectSurveys
-  });
+    num_issues: numProjectSurveyCommentIssues + numAnnotationIssues
+  };
+  if (includeProjectSurveys)
+    assignees.project_surveys = projectSurveysWithStats;
+  return _.assignIn(_.omit(project, ["project_surveys"]), assignees);
 }

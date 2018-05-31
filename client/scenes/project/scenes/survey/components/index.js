@@ -23,3 +23,9 @@ export { default as SurveyContent } from "./SurveyContent";
 export { default as SurveyHeader } from "./SurveyContent/SurveyHeader";
 
 export { default as UploadInterface } from "./UploadInterface";
+export {
+  default as CollaboratorControl
+} from "./UploadSettings/CollaboratorControl";
+export {
+  default as IssueInput
+} from "./UploadSettings/IssueInput";

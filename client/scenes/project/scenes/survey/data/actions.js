@@ -5,7 +5,7 @@ import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
   return async (dispatch, getState) => {
     try {
-      const projectSurvey = await getSurveyByProjectSurveyId(projectSurveyId);
+      var projectSurvey = await getSurveyByProjectSurveyId(projectSurveyId);
       const surveyQnas = sortBy(
         projectSurvey.survey.survey_questions,
         ["order_in_survey"],
@@ -13,8 +13,19 @@ export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
       );
       const surveyQnasById = keyBy(surveyQnas, "id");
       const surveyQnaIds = surveyQnas.map(qna => qna.id);
+      const surveyVersions = projectSurvey.ancestors
+        .concat([pick(projectSurvey, ["id", "hierarchyLevel"])])
+        .concat(projectSurvey.descendents);
+      projectSurvey.versions = surveyVersions;
       const surveyMetadata = assignIn(
-        pick(projectSurvey, ["title", "description", "id", "creator"]),
+        pick(projectSurvey, [
+          "title",
+          "description",
+          "id",
+          "creator",
+          "versions",
+          "hierarchyLevel"
+        ]),
         omit(projectSurvey.survey, ["survey_questions"])
       );
       dispatch({
