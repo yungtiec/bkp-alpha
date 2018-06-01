@@ -4,11 +4,6 @@
   font-size: 14px;
 }
 
-.social-sidebar__collaborator-input input,
-.social-sidebar__collaborator-input button {
-  border-radius: 0;
-}
-
 .social-sidebar__add-issue-btn {
   cursor: pointer;
 }
@@ -23,8 +18,8 @@
 }
 
 .social-sidebar__issue-input textarea {
-  border-radius: 0;
   height: 80px;
+  border-radius: 5px 5px 0 0;
 }
 
 .social-sidebar__issue-input {
@@ -43,6 +38,7 @@
   padding: 8px;
   display: flex;
   justify-content: flex-end;
+  border-radius: 0 0 5px 5px;
 }
 
 .issue-input__actions button {

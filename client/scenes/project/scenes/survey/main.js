@@ -47,7 +47,7 @@ import {
 } from "./data/tags/reducer";
 import { getSelectedProject } from "../../data/metadata/reducer";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import { Survey, SurveyUpload } from "./components";
+import { Survey, SurveyUpload, SurveyProgress } from "./components";
 import autoBind from "react-autobind";
 import asyncPoll from "react-async-poll";
 import { batchActions } from "redux-batched-actions";
@@ -95,14 +95,12 @@ class SurveyContainer extends Component {
     ) {
       batchActions([
         this.props.fetchQuestionsByProjectSurveyId({
-          projectSurveyId: nextProps.match.params.projectSurveyId
+          projectSurveyId: nextSurveyId
         }),
         this.props.fetchAnnotationsBySurvey(
           `${window.origin}${nextProps.match.url}`
         ),
-        this.props.fetchCommentsBySurvey(
-          this.props.match.params.projectSurveyId
-        )
+        this.props.fetchCommentsBySurvey(nextSurveyId)
       ]);
     }
   }
@@ -111,18 +109,25 @@ class SurveyContainer extends Component {
     if (
       !this.props.surveyQnaIds ||
       !this.props.annotationIds ||
-      !this.props.commentIds
+      !this.props.commentIds ||
+      !this.props.annotationsById ||
+      !this.props.commentsById
     )
       return null;
-    return (
-      <Switch>
-        <Route
-          path={`${this.props.match.url}/upload`}
-          render={props => <SurveyUpload {...this.props} />}
-        />
-        <Route render={props => <Survey {...this.props} />} />
-      </Switch>
-    );
+    else
+      return (
+        <Switch>
+          <Route
+            path={`${this.props.match.url}/upload`}
+            render={props => <SurveyUpload {...this.props} />}
+          />
+          <Route
+            path={`${this.props.match.url}/progress`}
+            render={props => <SurveyProgress {...this.props} />}
+          />
+          <Route render={props => <Survey {...this.props} />} />
+        </Switch>
+      );
   }
 }
 

@@ -159,7 +159,19 @@ const ProjectSurveyComment = db.define(
             },
             {
               model: db.model("issue"),
-              attributes: ["open", "id"]
+              attributes: ["open", "id"],
+              include: [
+                {
+                  model: db.model("project_survey"),
+                  as: "resolvingProjectSurvey",
+                  include: [
+                    {
+                      model: db.model("project"),
+                      attributes: ["symbol"]
+                    }
+                  ]
+                }
+              ]
             },
             {
               model: ProjectSurveyComment,

@@ -13,8 +13,19 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     const parentProjectSurveyId =
       state.scenes.project.scenes.survey.data.metadata.id;
     const projectSymbol = state.scenes.project.data.metadata.symbol;
-    const markdown = state.scenes.project.scenes.survey.data.upload.markdown;
-    const projectSurvey = await postMarkdown(parentProjectSurveyId, markdown);
+    const {
+      markdown,
+      resolvedIssueIds,
+      newIssues,
+      collaboratorEmails
+    } = state.scenes.project.scenes.survey.data.upload;
+    const projectSurvey = await postMarkdown({
+      parentProjectSurveyId,
+      markdown,
+      resolvedIssueIds,
+      newIssues,
+      collaboratorEmails
+    });
     history.push(`/project/${projectSymbol}/survey/${projectSurvey.id}`);
     dispatch({
       type: types.MARKDOWN_UPLOADED

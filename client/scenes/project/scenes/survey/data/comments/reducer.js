@@ -13,7 +13,7 @@ import { findItemInTreeById } from "../../../../../../utils";
 import moment from "moment";
 
 const initialState = {
-  commentsById: {},
+  commentsById: null,
   commentIds: null
 };
 

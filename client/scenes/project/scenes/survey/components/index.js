@@ -3,6 +3,7 @@ export { default as Question } from "./Qna/Question";
 export { default as Answers } from "./Qna/Answers";
 export { default as Survey } from "./Survey";
 export { default as SurveyUpload } from "./SurveyUpload";
+export { default as SurveyProgress } from "./SurveyProgress";
 
 export { default as SidebarLayout } from "./Sidebar/SidebarLayout";
 export { default as SidebarHeader } from "./Sidebar/SidebarHeader";

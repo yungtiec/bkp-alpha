@@ -49,7 +49,6 @@ class SurveyUpload extends Component {
     return (
       <div>
         <UploadInterface
-          uploadMarkdownToServer={uploadMarkdownToServer}
           importedMarkdown={importedMarkdown}
           importMarkdown={importMarkdown}
           isLoggedIn={isLoggedIn}
@@ -63,11 +62,20 @@ class SurveyUpload extends Component {
             scrollbarContainerWidth={
               width < 767 ? "350px" : width > 1300 ? "450px" : "410px"
             }
-            scrollbarContainerHeight="calc(100% - 120px)"
+            scrollbarContainerHeight="calc(100% - 75px)"
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"
           >
             <div className="sidebar-contents">
+              <div className="mb-5 mt-2 px-2">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block "
+                  onClick={uploadMarkdownToServer}
+                >
+                  Upload
+                </button>
+              </div>
               <CollaboratorControl
                 creator={surveyMetadata.creator}
                 collaboratorEmails={collaboratorEmails}

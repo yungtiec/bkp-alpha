@@ -14,7 +14,13 @@ export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
       const surveyQnasById = keyBy(surveyQnas, "id");
       const surveyQnaIds = surveyQnas.map(qna => qna.id);
       const surveyVersions = projectSurvey.ancestors
-        .concat([pick(projectSurvey, ["id", "hierarchyLevel"])])
+        .concat([
+          omit(projectSurvey, [
+            "ancestors",
+            "descendents",
+            "survey.survey_questions"
+          ])
+        ])
         .concat(projectSurvey.descendents);
       projectSurvey.versions = surveyVersions;
       const surveyMetadata = assignIn(
@@ -23,10 +29,12 @@ export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
           "description",
           "id",
           "creator",
+          "collaborators",
           "versions",
-          "hierarchyLevel"
+          "hierarchyLevel",
+          "resolvedIssues"
         ]),
-        omit(projectSurvey.survey, ["survey_questions"])
+        omit(projectSurvey.survey, ["survey_questions", "id"])
       );
       dispatch({
         type: types.SURVEY_FETCH_SUCCESS,

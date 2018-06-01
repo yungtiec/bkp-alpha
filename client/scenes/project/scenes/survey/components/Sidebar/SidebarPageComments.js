@@ -57,9 +57,9 @@ const SidebarPageComments = props => {
     );
   return (
     <div>
-      <div className="annotation-item page-comment">
-        <div className="annotation-item__main">
-          <div className="annotation-item__header">
+      <div className="engagement-item page-comment">
+        <div className="engagement-item__main">
+          <div className="engagement-item__header">
             <p>Leave a comment?</p>
           </div>
         </div>
