@@ -83,7 +83,9 @@ export default function reduce(state = initialState, action = {}) {
     case types.MARKDOWN_UPLOADED:
       return {
         ...state,
-        markdown: null
+        markdown: null,
+        resolvedIssueIds: [],
+        newIssues: []
       };
     case types.ISSUE_SELECTED:
       return updateResolvedIssues(state, action);

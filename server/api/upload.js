@@ -80,7 +80,7 @@ router.post("/:parentProjectSurveyId", async (req, res, next) => {
       async email =>
         await User.findOne({ where: { email } }).then(user =>
           Collaborator.create({
-            user_id: user.id,
+            user_id: user ? user.id : null,
             email,
             project_survey_id: projectSurvey.id
           })
