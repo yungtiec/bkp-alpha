@@ -56,7 +56,8 @@ const initialState = {
   sidebarContext: {
     selectedText: "",
     selectedCommentId: null,
-    selectedAnnotationId: null
+    selectedAnnotationId: null,
+    focusOnce: false
   }
 };
 

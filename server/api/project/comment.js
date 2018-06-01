@@ -18,6 +18,7 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
+    console.log(req.query.projectSurveyId)
     const comments = await ProjectSurveyComment.scope({
       method: [
         "flatThreadByRootId",

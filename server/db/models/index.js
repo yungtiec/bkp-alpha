@@ -13,6 +13,7 @@ const SurveyQuestion = require("./survey-question");
 const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
+const Collaborator = require("./collaborator");
 
 /*=============================================
 =            role based authorization         =
@@ -129,13 +130,13 @@ Issue.belongsTo(Annotation, {
 
 /*----------  Issue and Project Survey  ----------*/
 ProjectSurvey.hasMany(Issue, {
-  foreignKey: "resolving_project_survey_id"
+  foreignKey: "resolving_project_survey_id",
+  as: "resolvedIssues"
 });
 Issue.belongsTo(ProjectSurvey, {
   foreignKey: "resolving_project_survey_id",
-  as: "resolvingProjectSurvey",
+  as: "resolvingProjectSurvey"
 });
-
 
 /*----------  Annotation and Project Survey  ----------*/
 ProjectSurvey.hasMany(Annotation, {
@@ -212,10 +213,10 @@ ProjectSurvey.belongsTo(Project, {
 });
 Project.hasMany(ProjectSurvey, {
   foreignKey: "project_id"
-})
+});
 Survey.hasMany(ProjectSurvey, {
   foreignKey: "survey_id"
-})
+});
 
 ProjectSurvey.hasMany(ProjectSurveyComment, {
   foreignKey: "project_survey_id"
@@ -240,10 +241,10 @@ SurveyQuestion.belongsTo(Question, {
 });
 Question.hasMany(SurveyQuestion, {
   foreignKey: "question_id"
-})
+});
 Survey.hasMany(SurveyQuestion, {
   foreignKey: "survey_id"
-})
+});
 
 SurveyQuestion.belongsToMany(ProjectSurvey, {
   through: ProjectSurveyAnswer,
@@ -261,10 +262,10 @@ ProjectSurveyAnswer.belongsTo(SurveyQuestion, {
 });
 SurveyQuestion.hasMany(ProjectSurveyAnswer, {
   foreignKey: "survey_question_id"
-})
+});
 ProjectSurvey.hasMany(ProjectSurveyAnswer, {
   foreignKey: "project_survey_id"
-})
+});
 
 User.hasMany(ProjectSurvey, {
   foreignKey: "creator_id",
@@ -287,7 +288,17 @@ ProjectSurvey.hasMany(ProjectSurvey, {
 });
 ProjectSurvey.belongsTo(ProjectSurvey, {
   foreignKey: "original_id",
-  as: "forkFrom",
+  as: "forkFrom"
+});
+
+ProjectSurvey.belongsToMany(User, {
+  through: "collaborator",
+  foreignKey: "project_survey_id",
+  as: "collaborators"
+});
+User.belongsToMany(ProjectSurvey, {
+  through: "collaborator",
+  foreignKey: "user_id"
 });
 /*=============  End of Survey  ==============*/
 
@@ -306,5 +317,6 @@ module.exports = {
   SurveyQuestion,
   Tag,
   Issue,
-  Notification
+  Notification,
+  Collaborator
 };

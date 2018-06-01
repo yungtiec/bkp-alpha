@@ -1,4 +1,5 @@
 import * as types from "./actionTypes";
+import { SURVEY_FETCH_SUCCESS } from "../actionTypes";
 import { uniq } from "lodash";
 
 const initialState = {
@@ -50,14 +51,10 @@ function updateNewIssues(state, action) {
   var newIssues;
   switch (action.type) {
     case types.ISSUE_ADDED:
-      newIssues = [action.issue].concat(
-        state.newIssues
-      );
+      newIssues = [action.issue].concat(state.newIssues);
       break;
     case types.ISSUE_DELETED:
-      newIssues = state.newIssues.filter(
-        issue => issue !== action.issue
-      );
+      newIssues = state.newIssues.filter(issue => issue !== action.issue);
       break;
     default:
       newIssues = state.newIssues;
@@ -71,6 +68,13 @@ function updateNewIssues(state, action) {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    case SURVEY_FETCH_SUCCESS:
+      return {
+        ...state,
+        collaboratorEmails: action.surveyMetadata.collaborators.map(
+          c => c.email
+        )
+      };
     case types.MARKDOWN_IMPORTED:
       return {
         ...state,

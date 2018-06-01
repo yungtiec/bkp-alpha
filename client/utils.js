@@ -32,7 +32,7 @@ export function seeAnnotationContext(engagementItem) {
           engagementItem.survey_question_id
         }/annotation/${rootItem.id}`
       : `/project/${engagementItem.project_survey.project.symbol}/survey/${
-          engagementItem.project_survey.survey.id
+          engagementItem.project_survey.id
         }/page-comments/${rootItem.id}`;
   return history.push(path);
 }

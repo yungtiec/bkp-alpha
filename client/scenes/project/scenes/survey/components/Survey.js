@@ -44,8 +44,6 @@ export default class Survey extends Component {
     if (
       givenAnnotationContext &&
       givenQnaContext &&
-      // this.props.annotationIds.length &&
-      // this.props.surveyQnaIds.length &&
       !this.props.sidebarContext.focusOnce
     ) {
       pos = window.location.pathname.indexOf("/annotation/");
@@ -53,17 +51,18 @@ export default class Survey extends Component {
       pos = window.location.pathname.indexOf("/question/");
       qnaId = window.location.pathname.substring(pos).split("/")[2];
       if (this.props.annotationsById[Number(annotationId)]) {
+        console.log("???");
         scroller.scrollTo(`qna-${qnaId}`);
         batchActions([
           this.props.updateEngagementTabInView("annotations"),
           this.props.updateSidebarContext({
-            selectedAnnotationId: Number(annotationId)
+            selectedAnnotationId: Number(annotationId),
+            focusOnce: true
           })
         ]);
       }
     } else if (
       givenPageCommentContext &&
-      // this.props.commentIds.length &&
       !this.props.sidebarContext.focusOnce
     ) {
       pos = window.location.pathname.indexOf("/page-comments/");
@@ -71,20 +70,42 @@ export default class Survey extends Component {
       batchActions([
         this.props.updateEngagementTabInView("comments"),
         this.props.updateSidebarContext({
-          selectedCommentId: commentId
+          selectedCommentId: commentId,
+          focusOnce: true
         })
       ]);
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const prevProjectSymbol = this.props.match.url.split("/")[2];
+    const nextProjectSymbol = nextProps.match.url.split("/")[2];
+    const prevSurveyId = this.props.match.params.projectSurveyId;
+    const nextSurveyId = nextProps.match.params.projectSurveyId;
+    if (
+      prevProjectSymbol &&
+      prevSurveyId &&
+      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
+    ) {
+      this.resetSidebarContext();
+    }
+  }
+
   componentWillUnmount() {
-    this.props.updateEngagementTabInView("annotations");
-    this.props.updateSidebarContext({
-      selectedText: "",
-      selectedAnnotations: null,
-      focusOnce: false,
-      selectedCommentId: ""
-    });
+    this.resetSidebarContext();
+  }
+
+  resetSidebarContext() {
+    batchActions([
+      this.props.updateEngagementTabInView("annotations"),
+      this.props.updateSidebarContext({
+        selectedText: "",
+        selectedAnnotations: null,
+        focusOnce: false,
+        selectedCommentId: "",
+        selectedAnnotationId: null
+      })
+    ]);
   }
 
   annotationOnClick(evt, qnaId, answerId) {

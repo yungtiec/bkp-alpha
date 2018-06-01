@@ -3,6 +3,7 @@ import autoBind from "react-autobind";
 import history from "../../../../../../history";
 import { ProjectSymbolBlueBox } from "../../../../../../components";
 import VersionToolbar from "./VersionToolbar";
+import { getFullNameFromUserObject } from "../utils";
 
 export default class SurveyHeader extends Component {
   constructor(props) {
@@ -25,15 +26,18 @@ export default class SurveyHeader extends Component {
       resetUpload,
       uploadMarkdownToServer
     } = this.props;
-    const creatorFirstName =
-      surveyMetadata.creator.first_name &&
-      surveyMetadata.creator.first_name.toLowerCase();
-    const creatorLastName =
-      surveyMetadata.creator.last_name &&
-      surveyMetadata.creator.last_name.toLowerCase();
-    const creator = creatorFirstName
-      ? `${creatorFirstName} ${creatorLastName}`
-      : creatorLastName;
+    const creator = getFullNameFromUserObject(surveyMetadata.creator);
+    const collaborators = surveyMetadata.collaborators
+      .map((c, i) => {
+        if (
+          i === surveyMetadata.collaborators.length - 1 &&
+          surveyMetadata.collaborators.length > 1
+        )
+          return `and ${getFullNameFromUserObject(c)}`;
+        else if (i === 0) return `with ${getFullNameFromUserObject(c)}`;
+        else return `, ${getFullNameFromUserObject(c)}`;
+      })
+      .join("");
 
     return (
       <div className="project-survey__header">
@@ -41,9 +45,9 @@ export default class SurveyHeader extends Component {
           back to project page
         </p>
         <ProjectSymbolBlueBox name={projectMetadata.name} />
-        <p className="survey-name__box">{`${surveyMetadata.title}`}</p>
-        <p className="survey-creator-name__box">
-          {`disclosure created by ${creator}`}
+        <p className="survey-title">{`${surveyMetadata.title}`}</p>
+        <p className="survey-subtitle">
+          {`disclosure created by ${creator} ${collaborators}`}
         </p>
         <VersionToolbar
           resetUpload={resetUpload}

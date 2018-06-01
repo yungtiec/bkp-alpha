@@ -147,6 +147,10 @@
   border-bottom: 1px solid;
 }
 
+.engagement-item__reply-item.last-item {
+  border-bottom: 0px;
+}
+
 .engagement-item__at-someone {
   background: #245271;
   padding: 5px;
@@ -157,4 +161,8 @@
 .engagement-item__collapse-btn {
   padding-bottom: 10px;
   border-bottom: 1px solid;
+}
+
+.engagement-item__issue-resolved {
+  font-size: 12px;
 }

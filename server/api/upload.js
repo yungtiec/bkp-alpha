@@ -9,7 +9,10 @@ const {
   SurveyQuestion,
   ProjectSurveyAnswer,
   Notification,
-  Question
+  Question,
+  Collaborator,
+  Issue,
+  ProjectSurveyComment
 } = require("../db/models");
 const {
   ensureAuthentication,
@@ -27,13 +30,13 @@ router.post("/", (req, res, next) => {
 
 router.post("/:parentProjectSurveyId", async (req, res, next) => {
   try {
-    var parentProjectSurvey = await ProjectSurvey.scope({
-      method: ["byProjectSurveyId", Number(req.params.parentProjectSurveyId)]
-    }).findOne();
     var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
     var survey = await Survey.create({
       title: markdownParsor.title
     });
+    var parentProjectSurvey = await ProjectSurvey.scope({
+      method: ["byProjectSurveyId", Number(req.params.parentProjectSurveyId)]
+    }).findOne();
     var projectSurvey = await ProjectSurvey.create({
       project_id: parentProjectSurvey.project.id,
       survey_id: survey.id,
@@ -72,6 +75,39 @@ router.post("/:parentProjectSurveyId", async (req, res, next) => {
           });
           return question;
         })
+    );
+    var collaborators = req.body.collaboratorEmails.map(
+      async email =>
+        await User.findOne({ where: { email } }).then(user =>
+          Collaborator.create({
+            user_id: user.id,
+            email,
+            project_survey_id: projectSurvey.id
+          })
+        )
+    );
+    var resolvedCurrentIssues = req.body.resolvedIssueIds.map(async issueId =>
+      Issue.update(
+        { open: false, resolving_project_survey_id: projectSurvey.id },
+        { where: { id: Number(issueId) } }
+      )
+    );
+    var resolvedAddedIssues = req.body.newIssues.map(async newIssue =>
+      ProjectSurveyComment.create({
+        comment: newIssue,
+        reviewed: "verified",
+        project_survey_id: req.params.parentProjectSurveyId,
+        owner_id: req.user.id
+      }).then(comment =>
+        Issue.create({
+          open: false,
+          project_survey_comment_id: comment.id,
+          resolving_project_survey_id: projectSurvey.id
+        })
+      )
+    );
+    await Promise.all(
+      collaborators.concat(resolvedCurrentIssues).concat(resolvedAddedIssues)
     );
     res.send(projectSurvey);
   } catch (err) {

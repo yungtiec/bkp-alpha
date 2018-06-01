@@ -40,18 +40,92 @@ const ProjectSurvey = db.define(
           where: { id: projectSurveyId },
           include: [
             {
+              model: db.model("issue"),
+              as: "resolvedIssues",
+              required: false,
+              include: [
+                {
+                  model: db.model("annotation"),
+                  required: false
+                },
+                {
+                  model: db.model("project_survey_comment"),
+                  required: false
+                }
+              ]
+            },
+            {
               model: db.model("project_survey"),
               as: "ancestors",
-              attributes: ["id", "hierarchyLevel"]
+              attributes: ["id", "hierarchyLevel", "creator_id", "createdAt"],
+              include: [
+                { model: db.model("survey") },
+                {
+                  model: db.model("user"),
+                  as: "creator"
+                },
+                {
+                  model: db.model("user"),
+                  as: "collaborators",
+                  required: false
+                },
+                {
+                  model: db.model("issue"),
+                  as: "resolvedIssues",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("annotation"),
+                      required: false
+                    },
+                    {
+                      model: db.model("project_survey_comment"),
+                      required: false
+                    }
+                  ]
+                }
+              ]
             },
             {
               model: db.model("project_survey"),
               as: "descendents",
-              attributes: ["id", "hierarchyLevel"]
+              attributes: ["id", "hierarchyLevel", "creator_id", "createdAt"],
+              include: [
+                { model: db.model("survey") },
+                {
+                  model: db.model("user"),
+                  as: "creator"
+                },
+                {
+                  model: db.model("user"),
+                  as: "collaborators",
+                  required: false
+                },
+                {
+                  model: db.model("issue"),
+                  as: "resolvedIssues",
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("annotation"),
+                      required: false
+                    },
+                    {
+                      model: db.model("project_survey_comment"),
+                      required: false
+                    }
+                  ]
+                }
+              ]
             },
             {
               model: db.model("user"),
               as: "creator"
+            },
+            {
+              model: db.model("user"),
+              as: "collaborators",
+              required: false
             },
             {
               model: db.model("survey"),
@@ -107,6 +181,11 @@ const ProjectSurvey = db.define(
             {
               model: db.model("user"),
               as: "creator"
+            },
+            {
+              model: db.model("user"),
+              as: "collaborators",
+              required: false
             },
             {
               model: db.model("survey"),

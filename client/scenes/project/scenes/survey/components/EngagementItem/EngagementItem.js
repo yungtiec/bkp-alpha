@@ -2,6 +2,7 @@ import "./EngagementItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import moment from "moment";
 import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
@@ -135,7 +136,12 @@ export default class EngagementItem extends Component {
       engagementItem
     );
     return (
-      <div className="engagement-item__main">
+      <div
+        className="engagement-item__main"
+        style={
+          engagementItem.descendents.length ? { borderBottom: "1px solid" } : {}
+        }
+      >
         <div className="engagement-item__header">
           <p>
             {engagementItem.owner.first_name +
@@ -179,6 +185,17 @@ export default class EngagementItem extends Component {
             : ""}
         </div>
         <p className="engagement-item__comment">{engagementItem.comment}</p>
+        {engagementItem.issue && engagementItem.issue.resolvingProjectSurvey ? (
+          <span className="engagement-item__issue-resolved">
+            <Link
+              to={`/project/${
+                engagementItem.issue.resolvingProjectSurvey.project.symbol
+              }/survey/${engagementItem.issue.resolvingProjectSurvey.id}`}
+            >{`issue resolved in disclosure v${
+              engagementItem.issue.resolvingProjectSurvey.hierarchyLevel
+            }`}</Link>
+          </span>
+        ) : null}
         <ActionBar
           item={engagementItem}
           hasUpvoted={hasUpvoted}
@@ -204,7 +221,7 @@ export default class EngagementItem extends Component {
       ),
       ["unix", "upvotesFrom.length"],
       ["asc", "desc"]
-    ).map(reply => {
+    ).map((reply, i) => {
       if (reply.reviewed === "spam") return null;
       const hasUpvoted = find(
         reply.upvotesFrom,
@@ -223,7 +240,9 @@ export default class EngagementItem extends Component {
         : this.promptLoginToast;
       return (
         <div
-          className="engagement-item__reply-item"
+          className={`engagement-item__reply-item ${
+            i === replies.length - 1 ? "last-item" : ""
+          }`}
           key={`engagement-item__reply-${reply.id}`}
         >
           <div className="engagement-item__header">

@@ -15,7 +15,7 @@ import moment from "moment";
 import { findItemInTreeById } from "../../../../../../utils";
 
 const initialState = {
-  annotationsById: {},
+  annotationsById: null,
   annotationIds: null
 };
 

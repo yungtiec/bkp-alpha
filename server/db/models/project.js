@@ -36,6 +36,11 @@ const Project = db.define(
               include: [
                 { model: db.model("user"), as: "creator" },
                 {
+                  model: db.model("user"),
+                  as: "collaborators",
+                  required: false
+                },
+                {
                   model: db.model("project_survey"),
                   as: "forkFrom",
                   include: [{ model: db.model("user"), as: "creator" }]
@@ -122,6 +127,11 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
         projectSurvey = await db.model("project_survey").findOne({
           where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
           include: [
+            {
+              model: db.model("user"),
+              as: "collaborators",
+              required: false
+            },
             {
               model: db.model("survey"),
               include: [

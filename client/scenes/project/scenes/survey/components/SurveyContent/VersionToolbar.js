@@ -34,8 +34,7 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      resetUpload,
-      uploadMarkdownToServer
+      resetUpload
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -81,13 +80,6 @@ class VersionToolbar extends Component {
         >
           Import another file
         </button>
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={this.props.uploadMarkdownToServer}
-        >
-          Upload
-        </button>
       </div>
     );
   }
@@ -132,10 +124,12 @@ class VersionToolbar extends Component {
               <Link
                 key={`version-dropdown__item-${v.id}`}
                 class="dropdown-item"
-                to={`${v.id}`}
+                to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                  v.id
+                }`}
                 style={
                   v.hierarchyLevel === this.props.surveyMetadata.hierarchyLevel
-                    ? { fontWeight: 799 }
+                    ? { fontWeight: 700 }
                     : {}
                 }
               >
@@ -144,6 +138,28 @@ class VersionToolbar extends Component {
             ))}
           </div>
         </div>
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={() =>
+            history.push(
+              `/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }`
+            )
+          }
+        >
+          View disclosure
+        </button>
+        <button type="button" className="btn btn-outline-primary">
+          <Link
+            to={`/project/${this.props.projectMetadata.symbol}/survey/${
+              this.props.surveyMetadata.id
+            }/progress`}
+          >
+            View progress
+          </Link>
+        </button>
         <button type="button" className="btn btn-outline-primary">
           <Link
             to={`/project/${this.props.projectMetadata.symbol}/survey/${
