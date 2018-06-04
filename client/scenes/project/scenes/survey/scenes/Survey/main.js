@@ -1,4 +1,3 @@
-import "./annotator.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -7,23 +6,25 @@ import {
   animateScroll as scroll,
   scroller
 } from "react-scroll";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
   Qna,
   SurveyContent,
-  AnnotationItem,
   Question,
   Answers,
   SidebarLayout,
   SidebarAnnotations,
   SidebarPageComments,
   SidebarHeader
-} from "./index";
-import { findAnnotationsInQnaByText } from "../utils";
-import { CustomScrollbar } from "../../../../../components";
+} from "../../components/index";
+import { findAnnotationsInQnaByText } from "../../utils";
+import { CustomScrollbar } from "../../../../../../components";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
+import { SquareLoader } from "halogenium";
 
-export default class Survey extends Component {
+class Survey extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -51,7 +52,6 @@ export default class Survey extends Component {
       pos = window.location.pathname.indexOf("/question/");
       qnaId = window.location.pathname.substring(pos).split("/")[2];
       if (this.props.annotationsById[Number(annotationId)]) {
-        console.log("???");
         scroller.scrollTo(`qna-${qnaId}`);
         batchActions([
           this.props.updateEngagementTabInView("annotations"),
@@ -286,3 +286,7 @@ export default class Survey extends Component {
     );
   }
 }
+
+const mapState = (state, ownProps) => ({ ...ownProps });
+
+export default connect(mapState, {})(Survey);

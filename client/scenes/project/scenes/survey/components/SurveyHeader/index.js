@@ -3,7 +3,7 @@ import autoBind from "react-autobind";
 import history from "../../../../../../history";
 import { ProjectSymbolBlueBox } from "../../../../../../components";
 import VersionToolbar from "./VersionToolbar";
-import { getFullNameFromUserObject } from "../utils";
+import { getFullNameFromUserObject } from "../../utils";
 
 export default class SurveyHeader extends Component {
   constructor(props) {

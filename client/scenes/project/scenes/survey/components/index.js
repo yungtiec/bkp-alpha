@@ -1,9 +1,6 @@
 export { default as Qna } from "./Qna";
 export { default as Question } from "./Qna/Question";
 export { default as Answers } from "./Qna/Answers";
-export { default as Survey } from "./Survey";
-export { default as SurveyUpload } from "./SurveyUpload";
-export { default as SurveyProgress } from "./SurveyProgress";
 
 export { default as SidebarLayout } from "./Sidebar/SidebarLayout";
 export { default as SidebarHeader } from "./Sidebar/SidebarHeader";
@@ -21,12 +18,4 @@ export {
 } from "./EngagementItem/AnnotationEditModal";
 
 export { default as SurveyContent } from "./SurveyContent";
-export { default as SurveyHeader } from "./SurveyContent/SurveyHeader";
-
-export { default as UploadInterface } from "./UploadInterface";
-export {
-  default as CollaboratorControl
-} from "./UploadSettings/CollaboratorControl";
-export {
-  default as IssueInput
-} from "./UploadSettings/IssueInput";
+export { default as SurveyHeader } from "./SurveyHeader";

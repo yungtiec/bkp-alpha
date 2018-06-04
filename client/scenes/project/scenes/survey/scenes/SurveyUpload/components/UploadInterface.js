@@ -1,8 +1,8 @@
-import "./index.scss";
+import "./UploadInterface.scss";
 import React, { Component } from "react";
 import { Element } from "react-scroll";
 import autoBind from "react-autobind";
-import { SurveyHeader } from "../index";
+import { SurveyHeader } from "../../../components/index";
 import Dropzone from "react-dropzone";
 import ReactMarkdown from "react-markdown";
 import Diff from "text-diff";

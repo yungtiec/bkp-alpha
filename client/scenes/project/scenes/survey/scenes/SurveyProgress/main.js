@@ -1,6 +1,6 @@
-import "./annotator.scss";
 import moment from "moment";
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { assignIn, pick, omit } from "lodash";
 import {
@@ -20,16 +20,18 @@ import {
   SidebarPageComments,
   SidebarHeader,
   SurveyHeader
-} from "./index";
-import { findAnnotationsInQnaByText } from "../utils";
-import { CustomScrollbar } from "../../../../../components";
+} from "../../components/index";
+import {
+  findAnnotationsInQnaByText,
+  getFullNameFromUserObject
+} from "../../utils";
+import { CustomScrollbar } from "../../../../../../components";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
 import { Timeline, TimelineEvent } from "react-event-timeline";
-import { getFullNameFromUserObject } from "./utils";
-import { seeAnnotationContext } from "../../../../../utils";
+import { seeAnnotationContext } from "../../../../../../utils";
 
-export default class SurveyProgress extends Component {
+class SurveyProgress extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -43,7 +45,6 @@ export default class SurveyProgress extends Component {
       surveyQnaIds,
       annotationsById,
       annotationIds,
-      unfilteredAnnotationIds,
       isLoggedIn,
       match,
       width,
@@ -59,8 +60,6 @@ export default class SurveyProgress extends Component {
       sortCommentBy,
       commentIds,
       commentsById,
-      projectSurveyId,
-      sidebarContext,
       annotationIssueFilter,
       commentIssueFilter,
       updateIssueFilter
@@ -206,7 +205,7 @@ export default class SurveyProgress extends Component {
               )}
               {engagementTab === "comments" && (
                 <SidebarPageComments
-                  projectSurveyId={projectSurveyId}
+                  projectSurveyId={match.params.projectSurveyId}
                   engagementTab={engagementTab}
                   commentIds={commentIds}
                   commentsById={commentsById}
@@ -222,3 +221,7 @@ export default class SurveyProgress extends Component {
     );
   }
 }
+
+const mapState = (state, ownProps) => ({ ...ownProps });
+
+export default connect(mapState, {})(SurveyProgress);
