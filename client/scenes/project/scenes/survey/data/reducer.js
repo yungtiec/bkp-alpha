@@ -19,14 +19,15 @@ export const reducer = combineReducers({
 });
 
 export const getOutstandingIssues = state => {
-  const annotations = values(
-    state.scenes.project.scenes.survey.data.annotations.annotationsById
-  )
+  const annotationsById =
+    state.scenes.project.scenes.survey.data.annotations.annotationsById;
+  const commentsById =
+    state.scenes.project.scenes.survey.data.comments.commentsById;
+  if (!annotationsById || !commentsById) return null;
+  const annotations = values(annotationsById)
     .filter(item => item.issue && item.issue.open)
     .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
-  const comments = values(
-    state.scenes.project.scenes.survey.data.comments.commentsById
-  )
+  const comments = values(commentsById)
     .filter(item => item.issue && item.issue.open)
     .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
   const outstandingIssues = orderBy(

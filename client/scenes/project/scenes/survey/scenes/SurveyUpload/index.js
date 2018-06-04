@@ -4,35 +4,31 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
-import {
-  sortAnnotationBy,
-  sortCommentBy,
-  updateIssueFilter,
-  updateVerificationStatusInView,
-  updateEngagementTabInView,
-  getSidebarContext,
-  updateSidebarContext
-} from "../../reducer";
+import { getOutstandingIssues } from "../../data/reducer";
 import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
-import { getAllAnnotations } from "../../data/annotations/reducer";
-import {
-  fetchAnnotationsBySurvey,
-  addNewAnnotationSentFromServer,
-  editAnnotationComment
-} from "../../data/annotations/actions";
-import { getAllComments } from "../../data/comments/reducer";
+import { fetchAnnotationsBySurvey } from "../../data/annotations/actions";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
 import { getSelectedProject } from "../../../../data/metadata/reducer";
 import {
-  getAllTags,
-  getTagsWithCountInSurvey,
-  getTagFilter
-} from "../../data/tags/reducer";
-import { updateTagFilter } from "../../data/tags/actions";
+  getImportedMarkdown,
+  getResolvedIssueId,
+  getCollaboratorEmails,
+  getNewIssues
+} from "../../data/upload/reducer";
+import {
+  importMarkdown,
+  uploadMarkdownToServer,
+  selectIssueToResolve,
+  addNewCollaborator,
+  removeCollaborator,
+  addNewIssue,
+  removeIssue
+} from "../../data/upload/actions";
+import { notify } from "reapop";
 
-const LoadableSurveyProgress = Loadable({
+const LoadableSurveyUpload = Loadable({
   loader: () => import("./main"),
   loading: () => (
     <SquareLoader
@@ -66,28 +62,15 @@ class MyComponent extends React.Component {
     if (
       !this.props.surveyMetadata.id ||
       !this.props.surveyQnaIds ||
-      !this.props.annotationIds ||
-      !this.props.commentIds ||
-      !this.props.annotationsById ||
-      !this.props.commentsById
+      !this.props.outstandingIssues
     )
       return null;
-    else return <LoadableSurveyProgress {...this.props} />;
+    else return <LoadableSurveyUpload {...this.props} />;
   }
 }
 
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
-  const { annotationsById, annotationIds } = getAllAnnotations(state);
-  const { commentsById, commentIds } = getAllComments(state);
-  const {
-    sidebarOpen,
-    annotationSortBy,
-    commentSortBy,
-    annotationIssueFilter,
-    commentIssueFilter,
-    engagementTab
-  } = state.scenes.project.scenes.survey;
   return {
     // global metadata
     width: state.data.environment.width,
@@ -98,24 +81,12 @@ const mapState = state => {
     // survey data
     surveyQnasById,
     surveyQnaIds,
-    // ann
-    annotationsById,
-    annotationIds,
-    //comment
-    commentsById,
-    commentIds,
-    // tab, sort, filter
-    sidebarOpen,
-    annotationSortBy,
-    commentSortBy,
-    annotationIssueFilter,
-    commentIssueFilter,
-    engagementTab,
-    sidebarContext: getSidebarContext(state),
-    // tags
-    tags: getAllTags(state),
-    tagFilter: getTagFilter(state),
-    tagsWithCountInSurvey: getTagsWithCountInSurvey(state)
+    // outstanding issues
+    outstandingIssues: getOutstandingIssues(state),
+    importedMarkdown: getImportedMarkdown(state),
+    resolvedIssueIds: getResolvedIssueId(state),
+    collaboratorEmails: getCollaboratorEmails(state),
+    newIssues: getNewIssues(state)
   };
 };
 
@@ -123,11 +94,14 @@ const actions = {
   fetchQuestionsByProjectSurveyId,
   fetchAnnotationsBySurvey,
   fetchCommentsBySurvey,
-  updateEngagementTabInView,
-  sortAnnotationBy,
-  sortCommentBy,
-  updateTagFilter,
-  updateIssueFilter
+  importMarkdown,
+  uploadMarkdownToServer,
+  selectIssueToResolve,
+  addNewCollaborator,
+  removeCollaborator,
+  addNewIssue,
+  removeIssue,
+  notify
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

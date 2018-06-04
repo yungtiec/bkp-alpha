@@ -1,14 +1,15 @@
 import "./SurveyUpload.scss";
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { CustomScrollbar } from "../../../../../components";
+import { CustomScrollbar } from "../../../../../../components";
 import {
   SidebarLayout,
   UploadInterface,
   OutstandingIssue,
   CollaboratorControl,
   IssueInput
-} from "./index";
+} from "../../components/index";
 
 class SurveyUpload extends Component {
   constructor(props) {
@@ -24,11 +25,6 @@ class SurveyUpload extends Component {
       surveyQnaIds,
       surveyMetadata,
       projectMetadata,
-      annotationsById,
-      annotationIds,
-      commentIds,
-      commentsById,
-      projectSurveyId,
       outstandingIssues,
       notify,
       importedMarkdown,
@@ -127,4 +123,6 @@ class SurveyUpload extends Component {
   }
 }
 
-export default SurveyUpload;
+const mapState = (state, ownProps) => ({ ...ownProps });
+
+export default connect(mapState, {})(SurveyUpload);

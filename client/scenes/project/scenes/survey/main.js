@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { withRouter, route, Switch, Route, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import { SurveyUpload } from "./components";
+import SurveyUpload from "./scenes/SurveyUpload";
 import Survey from "./scenes/Survey";
 import SurveyProgress from "./scenes/SurveyProgress";
 import autoBind from "react-autobind";
@@ -43,7 +43,6 @@ class SurveyContainer extends Component {
   }
 
   render() {
-    console.log("?", this.props.match);
     return (
       <Switch>
         <Route
