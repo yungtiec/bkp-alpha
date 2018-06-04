@@ -32,7 +32,7 @@ import {
 } from "../../data/tags/reducer";
 import { updateTagFilter } from "../../data/tags/actions";
 
-const LoadableSurvey = Loadable({
+const LoadableSurveyProgress = Loadable({
   loader: () => import("./main"),
   loading: () => (
     <SquareLoader
@@ -43,14 +43,15 @@ const LoadableSurvey = Loadable({
     />
   ),
   render(loaded, props) {
-    let Survey = loaded.default;
-    return <Survey {...props} />;
+    let SurveyProgress = loaded.default;
+    return <SurveyProgress {...props} />;
   },
   delay: 1000
 });
 
 class MyComponent extends React.Component {
   componentDidMount() {
+    console.log(this.props.match)
     batchActions([
       this.props.fetchQuestionsByProjectSurveyId({
         projectSurveyId: this.props.match.params.projectSurveyId
@@ -64,6 +65,7 @@ class MyComponent extends React.Component {
 
   render() {
     if (
+      !this.props.surveyMetadata.id ||
       !this.props.surveyQnaIds ||
       !this.props.annotationIds ||
       !this.props.commentIds ||
@@ -71,20 +73,14 @@ class MyComponent extends React.Component {
       !this.props.commentsById
     )
       return null;
-    else return <LoadableSurvey {...this.props} />;
+    else return <LoadableSurveyProgress {...this.props} />;
   }
 }
 
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
-  const {
-    annotationsById,
-    annotationIds,
-    unfilteredAnnotationIds
-  } = getAllAnnotations(state);
-  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
-    state
-  );
+  const { annotationsById, annotationIds } = getAllAnnotations(state);
+  const { commentsById, commentIds } = getAllComments(state);
   const {
     sidebarOpen,
     annotationSortBy,
@@ -106,11 +102,9 @@ const mapState = state => {
     // ann
     annotationsById,
     annotationIds,
-    unfilteredAnnotationIds,
     //comment
     commentsById,
     commentIds,
-    unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
     annotationSortBy,
@@ -130,13 +124,11 @@ const actions = {
   fetchQuestionsByProjectSurveyId,
   fetchAnnotationsBySurvey,
   fetchCommentsBySurvey,
-  addNewAnnotationSentFromServer,
   updateEngagementTabInView,
   sortAnnotationBy,
   sortCommentBy,
   updateTagFilter,
-  updateIssueFilter,
-  updateSidebarContext
+  updateIssueFilter
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

@@ -1,11 +1,13 @@
 import "./index.scss";
+import "./annotator.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, route, Switch, Route, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import { SurveyUpload, SurveyProgress } from "./components";
+import { SurveyUpload } from "./components";
 import Survey from "./scenes/Survey";
+import SurveyProgress from "./scenes/SurveyProgress";
 import autoBind from "react-autobind";
 import { updateVerificationStatusInView } from "./reducer";
 
@@ -41,15 +43,15 @@ class SurveyContainer extends Component {
   }
 
   render() {
-    console.log("?");
+    console.log("?", this.props.match);
     return (
       <Switch>
         <Route
-          path={`${this.props.match.url}/upload`}
+          path={`${this.props.match.path}/upload`}
           render={props => <SurveyUpload />}
         />
         <Route
-          path={`${this.props.match.url}/progress`}
+          path={`${this.props.match.path}/progress`}
           render={props => <SurveyProgress />}
         />
         <Route render={props => <Survey />} />
