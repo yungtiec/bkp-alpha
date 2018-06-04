@@ -1,0 +1,62 @@
+@import "../../../../../../breakpoint";
+
+.annotator-notice.annotator-notice-show.annotator-notice-error {
+  border-bottom: 4px solid #ec7063;
+}
+
+// remove annotatorjs tooltip on hober
+.annotator-annotation.annotator-item {
+  display: none;
+}
+
+.annotator-listing:after {
+  display: none;
+}
+
+.annotator-listing {
+  border: none;
+}
+
+.annotator-filter,
+.annotator-filter .annotator-filter-navigation button,
+.annotator-editor .annotator-controls {
+  width: 100%;
+}
+
+.annotator-widget .annotator-listing,
+.annotator-widget .annotator-controls,
+.annotator-widget .annotator-controls a {
+  background-image: none;
+  text-shadow: none;
+  box-shadow: none;
+  border-radius: none;
+}
+
+// hide annotatorjs highlights
+.annotator-hl.hidden {
+  background: transparent;
+}
+
+// change highlight color of selected annotation
+.annotator-hl.annotation-selected {
+  background: rgba(10, 142, 255, 0.3);
+}
+
+// jquery ui autocomplete for tag
+.ui-widget.ui-widget-content {
+  z-index: 100020;
+  height: 160px;
+  width: 285px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.annotator-adder,
+.annotator-outer,
+.annotator-notice {
+  z-index: 100019;
+}
+
+.annotator-filter {
+  z-index: 100010;
+}

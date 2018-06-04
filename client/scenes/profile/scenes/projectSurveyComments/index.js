@@ -36,7 +36,6 @@ class MyComponent extends React.Component {
 
   componentDidMount() {
     const userId = this.props.match.path.split("/")[2];
-    console.log(userId)
     batchActions([
       this.props.fetchUserProjectSurveyComments(userId),
       this.props.fetchAllProjects()
