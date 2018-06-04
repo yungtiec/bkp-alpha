@@ -2,14 +2,9 @@ import "./SurveyUpload.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
+import { UploadInterface, CollaboratorControl, IssueInput } from "./components";
 import { CustomScrollbar } from "../../../../../../components";
-import {
-  SidebarLayout,
-  UploadInterface,
-  OutstandingIssue,
-  CollaboratorControl,
-  IssueInput
-} from "../../components/index";
+import { SidebarLayout, OutstandingIssue } from "../../components";
 
 class SurveyUpload extends Component {
   constructor(props) {

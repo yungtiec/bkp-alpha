@@ -11,7 +11,6 @@ import { withRouter } from "react-router-dom";
 import {
   Qna,
   SurveyContent,
-  AnnotationItem,
   Question,
   Answers,
   SidebarLayout,
