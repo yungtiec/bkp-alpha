@@ -97,5 +97,10 @@ const actions = {
 };
 
 export default withRouter(
-  requiresAuthorization(connect(mapState, actions)(AdminUserList), "admin")
+  connect(mapState, actions)(
+    requiresAuthorization({
+      Component: AdminUserList,
+      roleRequired: "admin"
+    })
+  )
 );

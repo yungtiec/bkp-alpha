@@ -46,6 +46,7 @@ class SurveyProgress extends Component {
       annotationsById,
       annotationIds,
       isLoggedIn,
+      userEmail,
       match,
       width,
       annotationSortBy,
@@ -73,6 +74,7 @@ class SurveyProgress extends Component {
             surveyQnaIds={surveyQnaIds}
             surveyMetadata={surveyMetadata}
             projectMetadata={projectMetadata}
+            userEmail={userEmail}
           />
           <Timeline style={{ margin: 0, fontWeight: 400, fontSize: "14px" }}>
             {surveyMetadata.versions.map(verison => {

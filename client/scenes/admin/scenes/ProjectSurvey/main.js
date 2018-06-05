@@ -167,7 +167,10 @@ const actions = {
 export default withRouter(
   connect(mapState, actions)(
     asyncPoll(60 * 1000, onPollInterval)(
-      requiresAuthorization(AdminProjectSurveyPanel, "admin")
+      requiresAuthorization({
+        Component: AdminProjectSurveyPanel,
+        roleRequired: "admin"
+      })
     )
   )
 );

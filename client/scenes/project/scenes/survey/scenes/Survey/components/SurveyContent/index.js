@@ -6,6 +6,7 @@ import { SurveyHeader } from "../../../../components";
 
 export default ({
   isLoggedIn,
+  userEmail,
   surveyQnasById,
   surveyQnaIds,
   numAnnotations,
@@ -20,6 +21,7 @@ export default ({
 }) => (
   <div className="project-survey" id="project-survey">
     <SurveyHeader
+      userEmail={userEmail}
       surveyQnasById={surveyQnasById}
       surveyQnaIds={surveyQnaIds}
       surveyMetadata={surveyMetadata}

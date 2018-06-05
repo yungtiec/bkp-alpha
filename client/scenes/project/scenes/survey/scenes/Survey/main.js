@@ -181,6 +181,7 @@ class Survey extends Component {
       annotationIds,
       unfilteredAnnotationIds,
       isLoggedIn,
+      userEmail,
       match,
       width,
       annotationSortBy,
@@ -209,6 +210,7 @@ class Survey extends Component {
         <SurveyContent
           parent={this}
           isLoggedIn={isLoggedIn}
+          userEmail={userEmail}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
           numAnnotations={annotationIds.length}
