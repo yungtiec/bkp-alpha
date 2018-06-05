@@ -24,7 +24,8 @@ export default class SurveyHeader extends Component {
       uploadMode,
       uploaded,
       resetUpload,
-      uploadMarkdownToServer
+      uploadMarkdownToServer,
+      userEmail
     } = this.props;
     const creator = getFullNameFromUserObject(surveyMetadata.creator);
     const collaborators = surveyMetadata.collaborators
@@ -58,6 +59,7 @@ export default class SurveyHeader extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
+          userEmail={userEmail}
         />
       </div>
     );

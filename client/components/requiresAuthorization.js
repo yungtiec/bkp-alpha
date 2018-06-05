@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import history from "../history";
 
-export default function requiresAuthorization(Component, roleRequired) {
+export default function requiresAuthorization({
+  Component,
+  roleRequired,
+  checkSurveyEditRight
+}) {
   class AuthorizationComponent extends React.Component {
     componentDidMount() {
       this.checkAndRedirect();
@@ -15,8 +19,15 @@ export default function requiresAuthorization(Component, roleRequired) {
     checkAndRedirect() {
       if (
         !this.props.user ||
-        (this.props.user &&
-          !this.props.user.roles.filter(r => r.name === roleRequired).length)
+        (roleRequired &&
+          this.props.user &&
+          !this.props.user.roles.filter(r => r.name === roleRequired).length) ||
+        (checkSurveyEditRight &&
+          (this.props.user.email !== this.props.surveyMetadata.creator.email &&
+            !this.props.surveyMetadata.collaborators.reduce(
+              (bool, c) => c.email === this.props.user.email || bool,
+              false
+            )))
       ) {
         history.push("/unauthorized");
       }
@@ -25,10 +36,7 @@ export default function requiresAuthorization(Component, roleRequired) {
     render() {
       return (
         <div className="authorized">
-          {this.props.user &&
-          this.props.user.roles.filter(r => r.name === roleRequired).length ? (
-            <Component {...this.props} />
-          ) : ''}
+          <Component {...this.props} />
         </div>
       );
     }
@@ -36,7 +44,8 @@ export default function requiresAuthorization(Component, roleRequired) {
 
   const mapStateToProps = state => {
     return {
-      user: state.data.user
+      user: state.data.user,
+      surveyMetadata: state.scenes.project.scenes.survey.data.metadata
     };
   };
 

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Element } from "react-scroll";
 import autoBind from "react-autobind";
-import { Qna, Question, Answers, SurveyHeader } from "../index";
+import { Qna, Question, Answers } from "../index";
+import { SurveyHeader } from "../../../../components";
 
 export default ({
   isLoggedIn,
+  userEmail,
   surveyQnasById,
   surveyQnaIds,
   numAnnotations,
@@ -19,6 +21,7 @@ export default ({
 }) => (
   <div className="project-survey" id="project-survey">
     <SurveyHeader
+      userEmail={userEmail}
       surveyQnasById={surveyQnasById}
       surveyQnaIds={surveyQnaIds}
       surveyMetadata={surveyMetadata}

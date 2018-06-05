@@ -92,6 +92,7 @@ const mapState = state => {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
+    userEmail: !!state.data.user.id && state.data.user.email,
     // project metadata
     projectMetadata: getSelectedProject(state),
     surveyMetadata: getSelectedSurvey(state),

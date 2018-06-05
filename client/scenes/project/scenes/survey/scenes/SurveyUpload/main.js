@@ -3,7 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { UploadInterface, CollaboratorControl, IssueInput } from "./components";
-import { CustomScrollbar } from "../../../../../../components";
+import {
+  CustomScrollbar,
+  requiresAuthorization
+} from "../../../../../../components";
 import { SidebarLayout, OutstandingIssue } from "../../components";
 
 class SurveyUpload extends Component {
@@ -15,6 +18,7 @@ class SurveyUpload extends Component {
   render() {
     const {
       isLoggedIn,
+      userEmail,
       width,
       surveyQnasById,
       surveyQnaIds,
@@ -38,6 +42,7 @@ class SurveyUpload extends Component {
     return (
       <div>
         <UploadInterface
+          userEmail={userEmail}
           importedMarkdown={importedMarkdown}
           importMarkdown={importMarkdown}
           isLoggedIn={isLoggedIn}
@@ -120,4 +125,9 @@ class SurveyUpload extends Component {
 
 const mapState = (state, ownProps) => ({ ...ownProps });
 
-export default connect(mapState, {})(SurveyUpload);
+export default connect(mapState, {})(
+  requiresAuthorization({
+    Component: SurveyUpload,
+    checkSurveyEditRight: true
+  })
+);

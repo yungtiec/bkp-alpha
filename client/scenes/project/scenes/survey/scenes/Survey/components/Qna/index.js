@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import Question from "./Question";
 import Answers from "./Answers";
 import annotator from "annotator";
-import { draw, undraw } from "../../../../../../annotator/highlight";
+import { draw, undraw } from "../../../../../../../../annotator/highlight";
 import { isEmpty } from "lodash";
 
 class QnaBox extends Component {
