@@ -9,15 +9,12 @@ import {
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import {
-  Qna,
-  SurveyContent,
-  Question,
-  Answers,
   SidebarLayout,
   SidebarAnnotations,
   SidebarPageComments,
   SidebarHeader
-} from "../../components/index";
+} from "../../components";
+import { SurveyContent } from "./components";
 import { findAnnotationsInQnaByText } from "../../utils";
 import { CustomScrollbar } from "../../../../../../components";
 import autoBind from "react-autobind";
