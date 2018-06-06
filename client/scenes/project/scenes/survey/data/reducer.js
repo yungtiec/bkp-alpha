@@ -6,7 +6,6 @@ import { default as metadataReducer } from "./metadata/reducer";
 import { default as qnasReducer } from "./qnas/reducer";
 import { default as annotationsReducer } from "./annotations/reducer";
 import { default as tagsReducer } from "./tags/reducer";
-import { default as commentsReducer } from "./comments/reducer";
 import { default as uploadReducer } from "./upload/reducer";
 
 export const reducer = combineReducers({
@@ -14,26 +13,5 @@ export const reducer = combineReducers({
   qnas: qnasReducer,
   annotations: annotationsReducer,
   tags: tagsReducer,
-  comments: commentsReducer,
   upload: uploadReducer
 });
-
-export const getOutstandingIssues = state => {
-  const annotationsById =
-    state.scenes.project.scenes.survey.data.annotations.annotationsById;
-  const commentsById =
-    state.scenes.project.scenes.survey.data.comments.commentsById;
-  if (!annotationsById || !commentsById) return null;
-  const annotations = values(annotationsById)
-    .filter(item => item.issue && item.issue.open)
-    .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
-  const comments = values(commentsById)
-    .filter(item => item.issue && item.issue.open)
-    .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
-  const outstandingIssues = orderBy(
-    annotations.concat(comments),
-    ["upvotesFrom.length", "unix"],
-    ["desc", "desc"]
-  );
-  return outstandingIssues;
-};

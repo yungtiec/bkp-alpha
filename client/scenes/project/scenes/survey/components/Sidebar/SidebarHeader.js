@@ -2,6 +2,7 @@ import "./SidebarHeader.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
+import { CommentBoxWithTagField } from "../index";
 import { findAnnotationsInQnaByText } from "../../utils";
 import Select from "react-select";
 import { keys } from "lodash";
@@ -14,27 +15,11 @@ export default class SidebarHeader extends Component {
 
   handleSortByChange(selectedOption) {
     if (selectedOption.value !== this.props.annotationSortBy) {
-      this.props.engagementTab === "annotations" &&
-        this.props.sortAnnotationBy(selectedOption.value);
-      this.props.engagementTab === "comments" &&
-        this.props.sortCommentBy(selectedOption.value);
+      this.props.sortAnnotationBy(selectedOption.value);
     }
   }
 
-  renderAnnotationSortBy({ engagementTab, commentSortBy, annotationSortBy }) {
-    const sortBy =
-      engagementTab === "annotations" ? annotationSortBy : commentSortBy;
-    const options =
-      engagementTab === "annotations"
-        ? [
-            { value: "position", label: "position" },
-            { value: "timestamp", label: "date" },
-            { value: "upvotes", label: "upvotes" }
-          ]
-        : [
-            { value: "timestamp", label: "date" },
-            { value: "upvotes", label: "upvotes" }
-          ];
+  renderAnnotationSortBy({ annotationSortBy }) {
     return (
       <div
         className="social-sidebar__sort-by btn-group"
@@ -44,9 +29,13 @@ export default class SidebarHeader extends Component {
         <span>sort by</span>
         <Select
           name="form-field-name"
-          value={sortBy}
+          value={annotationSortBy}
           onChange={this.handleSortByChange}
-          options={options}
+          options={[
+            { value: "position", label: "position" },
+            { value: "timestamp", label: "date" },
+            { value: "upvotes", label: "upvotes" }
+          ]}
         />
       </div>
     );
@@ -69,53 +58,25 @@ export default class SidebarHeader extends Component {
   render() {
     const {
       isLoggedIn,
-      engagementTab,
-      updateEngagementTabInView,
       selectedAnnotations,
       annotationIds,
       annotationSortBy,
-      commentSortBy,
-      commentIds,
       tagsWithCountInSurvey,
       tagFilter,
       updateTagFilter,
-      selectedComment,
       annotationIssueFilter,
-      commentIssueFilter
+      commentIssueFilter,
+      tags,
+      surveyMetadata,
+      addNewComment
     } = this.props;
 
     return (
       <div>
-        {selectedAnnotations &&
-        !selectedAnnotations.length &&
-        !selectedComment ? (
+        {selectedAnnotations && !selectedAnnotations.length ? (
           <div className="social-sidebar__engagement-tab-container">
-            <p
-              className={`social-sidebar__engagement-tab ${
-                engagementTab === "annotations" ? "active" : ""
-              }`}
-              onClick={() => updateEngagementTabInView("annotations")}
-            >
+            <p className="social-sidebar__engagement-tab">
               Annotations ({annotationIds.length})
-            </p>
-            <p
-              className={`social-sidebar__engagement-tab ${
-                engagementTab === "comments" ? "active" : ""
-              }`}
-              onClick={() => updateEngagementTabInView("comments")}
-            >
-              Page Comments ({commentIds.length})
-            </p>
-          </div>
-        ) : selectedComment &&
-        selectedAnnotations &&
-        !selectedAnnotations.length ? (
-          <div className="social-sidebar__engagement-tab-container">
-            <p
-              className="social-sidebar__engagement-tab active reset-selection"
-              onClick={this.props.resetSelection}
-            >
-              Show all comments ({commentIds.length})
             </p>
           </div>
         ) : (
@@ -130,15 +91,11 @@ export default class SidebarHeader extends Component {
         )}
         {selectedAnnotations &&
           !selectedAnnotations.length &&
-          !selectedComment &&
           this.renderAnnotationSortBy({
-            engagementTab,
-            commentSortBy,
             annotationSortBy
           })}
         {selectedAnnotations &&
-          !selectedAnnotations.length &&
-          !selectedComment && (
+          !selectedAnnotations.length && (
             <div className="social-sidebar__issue-filter-container">
               <span className="select-label">filter by issue</span>
               <Select
@@ -146,11 +103,7 @@ export default class SidebarHeader extends Component {
                 className="social-sidebar__issue-filter"
                 placeholder="select issue status"
                 multi={true}
-                value={
-                  engagementTab === "annotations"
-                    ? annotationIssueFilter
-                    : commentIssueFilter
-                }
+                value={annotationIssueFilter}
                 onChange={this.handleIssueFilterChange}
                 options={[
                   { value: "open", label: "open" },
@@ -160,8 +113,7 @@ export default class SidebarHeader extends Component {
             </div>
           )}
         {selectedAnnotations &&
-          !selectedAnnotations.length &&
-          !selectedComment && (
+          !selectedAnnotations.length && (
             <div className="social-sidebar__tag-filter-container">
               <span className="select-label">filter by tag(s)</span>
               <Select
@@ -175,7 +127,25 @@ export default class SidebarHeader extends Component {
               />
             </div>
           )}
-
+        {selectedAnnotations && !selectedAnnotations.length ? (
+          <div className="engagement-item page-comment">
+            <div className="engagement-item__main">
+              <div className="engagement-item__header">
+                <p>Leave a comment?</p>
+              </div>
+            </div>
+            <CommentBoxWithTagField
+              showTags={true}
+              showIssueCheckbox={true}
+              tags={tags}
+              selectedTags={[]}
+              initialValue=""
+              projectSurveyId={surveyMetadata.id}
+              onSubmit={addNewComment}
+              onCancel={null}
+            />
+          </div>
+        ) : null}
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

@@ -14,15 +14,14 @@ import {
   updateSidebarContext
 } from "../../reducer";
 import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
-import { getAllSurveyQuestions } from "../../data/qnas/reducer";
-import { getAllAnnotations } from "../../data/annotations/reducer";
 import {
   fetchAnnotationsBySurvey,
   addNewAnnotationSentFromServer,
-  editAnnotationComment
+  editAnnotationComment,
+  addNewComment
 } from "../../data/annotations/actions";
-import { getAllComments } from "../../data/comments/reducer";
-import { fetchCommentsBySurvey } from "../../data/comments/actions";
+import { getAllSurveyQuestions } from "../../data/qnas/reducer";
+import { getAllAnnotations } from "../../data/annotations/reducer";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
 import { getSelectedProject } from "../../../../data/metadata/reducer";
 import {
@@ -56,9 +55,8 @@ class MyComponent extends React.Component {
         projectSurveyId: this.props.match.params.projectSurveyId
       }),
       this.props.fetchAnnotationsBySurvey(
-        `${window.origin}${this.props.match.url}`
-      ),
-      this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
+        this.props.match.params.projectSurveyId
+      )
     ]);
   }
 
@@ -66,9 +64,7 @@ class MyComponent extends React.Component {
     if (
       !this.props.surveyQnaIds ||
       !this.props.annotationIds ||
-      !this.props.commentIds ||
-      !this.props.annotationsById ||
-      !this.props.commentsById
+      !this.props.annotationsById
     )
       return null;
     else return <LoadableSurvey {...this.props} />;
@@ -82,16 +78,10 @@ const mapState = state => {
     annotationIds,
     unfilteredAnnotationIds
   } = getAllAnnotations(state);
-  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
-    state
-  );
   const {
     sidebarOpen,
     annotationSortBy,
-    commentSortBy,
-    annotationIssueFilter,
-    commentIssueFilter,
-    engagementTab
+    annotationIssueFilter
   } = state.scenes.project.scenes.survey;
   return {
     // global metadata
@@ -108,17 +98,10 @@ const mapState = state => {
     annotationsById,
     annotationIds,
     unfilteredAnnotationIds,
-    //comment
-    commentsById,
-    commentIds,
-    unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
     annotationSortBy,
-    commentSortBy,
     annotationIssueFilter,
-    commentIssueFilter,
-    engagementTab,
     sidebarContext: getSidebarContext(state),
     // tags
     tags: getAllTags(state),
@@ -130,11 +113,9 @@ const mapState = state => {
 const actions = {
   fetchQuestionsByProjectSurveyId,
   fetchAnnotationsBySurvey,
-  fetchCommentsBySurvey,
+  addNewComment,
   addNewAnnotationSentFromServer,
-  updateEngagementTabInView,
   sortAnnotationBy,
-  sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
   updateSidebarContext

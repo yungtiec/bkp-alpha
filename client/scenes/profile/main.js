@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 import { ProfileBanner, ProfileNavbar, ProfileReplies } from "./components";
 import ProfileAbout from "./scenes/about";
 import ProfileAnnotations from "./scenes/annotations";
-import ProfileProjectSurveyComments from "./scenes/projectSurveyComments";
 import Notifications from "./scenes/notifications";
 import autoBind from "react-autobind";
 import moment from "moment";
@@ -76,10 +75,6 @@ class Profile extends Component {
           <Route
             path={`${match.url}/annotations`}
             component={ProfileAnnotations}
-          />
-          <Route
-            path={`${match.url}/project-survey-comments`}
-            component={ProfileProjectSurveyComments}
           />
           {isMyProfile && (
             <Route

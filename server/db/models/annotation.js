@@ -6,8 +6,7 @@ const Annotation = db.define(
   "annotation",
   {
     uri: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     survey_question_id: {
       type: Sequelize.INTEGER
@@ -16,8 +15,7 @@ const Annotation = db.define(
       type: Sequelize.INTEGER
     },
     quote: {
-      type: Sequelize.TEXT,
-      allowNull: false
+      type: Sequelize.TEXT
     },
     comment: {
       type: Sequelize.TEXT

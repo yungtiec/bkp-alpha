@@ -34,15 +34,6 @@ export default ({ url, activeTab, isMyProfile }) => (
           Annotations
         </li>
       </Link>
-      <Link to={`${url}/project-survey-comments`}>
-        <li
-          className={`profile-navbar__item ${
-            activeTab === "project-survey-comments" ? "active" : ""
-          }`}
-        >
-          Comments
-        </li>
-      </Link>
     </ul>
   </div>
 );

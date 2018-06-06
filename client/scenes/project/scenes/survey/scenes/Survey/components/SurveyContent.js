@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import { Element } from "react-scroll";
 import autoBind from "react-autobind";
-import { Qna, Question, Answers } from "../index";
-import { SurveyHeader } from "../../../../components";
+import { Qna, Question, Answers } from "./index";
 
 export default ({
   isLoggedIn,
-  userEmail,
   surveyQnasById,
   surveyQnaIds,
   numAnnotations,
   surveyMetadata,
-  projectMetadata,
   annotationOnClick,
   handlePollData,
   parent,
@@ -20,14 +17,6 @@ export default ({
   addNewAnnotationSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
-    <SurveyHeader
-      userEmail={userEmail}
-      surveyQnasById={surveyQnasById}
-      surveyQnaIds={surveyQnaIds}
-      surveyMetadata={surveyMetadata}
-      projectMetadata={projectMetadata}
-    />
-
     {surveyQnaIds.map(id => {
       return (
         <Element

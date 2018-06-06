@@ -6,14 +6,6 @@ import { checkSidebarFilter } from "../../reducer";
 
 const nodes = [
   {
-    value: "type",
-    label: "TYPE",
-    children: [
-      { value: "annotation", label: "Annotation" },
-      { value: "page_comment", label: "Comment" }
-    ]
-  },
-  {
     value: "status",
     label: "STATUS",
     children: [
@@ -37,7 +29,7 @@ class AdminProjectSurveySidebar extends Component {
     super();
 
     this.state = {
-      expanded: ["type", "status", "issue"]
+      expanded: ["status", "issue"]
     };
   }
 

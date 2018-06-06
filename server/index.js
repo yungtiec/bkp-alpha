@@ -83,7 +83,7 @@ const createApp = () => {
     }
   );
   app.get(
-    "/project/:symbol/survey/:surveyId/page-comments/public/:file",
+    "/project/:symbol/survey/:surveyId/annotation/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }

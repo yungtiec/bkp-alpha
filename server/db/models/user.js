@@ -282,77 +282,50 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [annotations, projectSurveyComments, notifications] = await Promise.all(
-    [
-      user.getAnnotations({
-        attributes: ["id", "reviewed"],
-        include: [
-          {
-            model: db.model("issue"),
-            required: false
-          },
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"],
-            required: false
-          }
-        ]
-      }),
-      user.getProjectSurveyComments({
-        attributes: ["id", "reviewed"],
-        include: [
-          {
-            model: db.model("issue"),
-            required: false
-          },
-          {
-            model: db.model("user"),
-            as: "upvotesFrom",
-            attributes: ["first_name", "last_name", "email"],
-            required: false
-          }
-        ]
-      }),
-      user.getNotifications({
-        where: {
-          status: {
-            [Sequelize.Op.or]: [
-              { [Sequelize.Op.eq]: "unread" },
-              { [Sequelize.Op.eq]: "seen" }
-            ]
-          }
+  const [annotations, notifications] = await Promise.all([
+    user.getAnnotations({
+      attributes: ["id", "reviewed"],
+      include: [
+        {
+          model: db.model("issue"),
+          required: false
+        },
+        {
+          model: db.model("user"),
+          as: "upvotesFrom",
+          attributes: ["first_name", "last_name", "email"],
+          required: false
         }
-      })
-    ]
-  );
+      ]
+    }),
+    user.getNotifications({
+      where: {
+        status: {
+          [Sequelize.Op.or]: [
+            { [Sequelize.Op.eq]: "unread" },
+            { [Sequelize.Op.eq]: "seen" }
+          ]
+        }
+      }
+    })
+  ]);
   const numAnnoationIssues = annotations.filter(item => item.issue).length;
   const numAnnotationUpvotes = annotations.reduce(
     (count, item) =>
       item.upvotesFrom ? item.upvotesFrom.length + count : count,
     0
   );
-  const numProjectSurveyCommentIssues = projectSurveyComments.filter(
-    item => item.issue
-  ).length;
-  const numProjectSurveyUpvotes = projectSurveyComments.reduce(
-    (count, item) =>
-      item.upvotesFrom ? item.upvotesFrom.length + count : count,
-    0
-  );
+
   const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam")
     .length;
-  const numProjectSurveyCommentSpam = projectSurveyComments.filter(
-    item => item.reviewed === "spam"
-  ).length;
+
   return assignIn(
     {
       num_annotations: annotations.length,
-      num_project_survey_comments: projectSurveyComments.length,
-      num_spam: numAnnoationSpam + numProjectSurveyCommentSpam,
-      num_issues: numAnnoationIssues + numProjectSurveyCommentIssues,
+      num_spam: numAnnoationSpam,
+      num_issues: numAnnoationIssues,
       num_notifications: notifications.length,
-      num_upvotes: numProjectSurveyUpvotes + numAnnotationUpvotes
+      num_upvotes: numAnnotationUpvotes
     },
     user.toJSON()
   );

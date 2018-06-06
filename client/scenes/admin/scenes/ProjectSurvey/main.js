@@ -36,7 +36,7 @@ class AdminProjectSurveyPanel extends Component {
     this.props.verifyPendingEngagementItem(engagementItem, "spam");
   }
 
-  renderActions(engagementItem, path) {
+  renderActions(engagementItem) {
     return (
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
@@ -104,7 +104,6 @@ class AdminProjectSurveyPanel extends Component {
       engagementItemIds,
       changeEngagementItemIssueStatus
     } = this.props;
-
     return (
       <div className="admin-project-survey-panel  main-container">
         <Link to="/admin/list/project-surveys">back to survey list</Link>
@@ -112,34 +111,19 @@ class AdminProjectSurveyPanel extends Component {
           <Sidebar />
           <div class="admin-project-survey-panel__item-container">
             {engagementItemIds.map(aid => {
-              const path =
-                engagementItemsById[aid].engagementItemType === "annotation"
-                  ? engagementItemsById[aid].hierarchyLevel === 1
-                    ? engagementItemsById[aid].uri.replace(
-                        window.location.origin,
-                        ""
-                      )
-                    : engagementItemsById[aid].ancestors[0].uri.replace(
-                        window.location.origin,
-                        ""
-                      )
-                  : `/project/${
-                      engagementItemsById[aid].project_survey.project.symbol
-                    }/survey/${engagementItemsById[aid].project_survey_id}`;
-
               return engagementItemsById[aid].parentId ? (
                 <AnnotationReply
                   key={`admin__annotation-reply--${aid}`}
                   annotation={engagementItemsById[aid]}
                 >
-                  {this.renderActions(engagementItemsById[aid], path)}
+                  {this.renderActions(engagementItemsById[aid])}
                 </AnnotationReply>
               ) : (
                 <AnnotationMain
                   key={`admin__annotation-main--${aid}`}
                   annotation={engagementItemsById[aid]}
                 >
-                  {this.renderActions(engagementItemsById[aid], path)}
+                  {this.renderActions(engagementItemsById[aid])}
                 </AnnotationMain>
               );
             })}

@@ -1,12 +1,18 @@
 import axios from "axios";
 
-export function getAnnotationsBySurvey(uri) {
+export function getAnnotationsBySurvey(projectSurveyId) {
   return axios
     .get("/api/annotation", {
       params: {
-        uri
+        projectSurveyId
       }
     })
+    .then(res => res.data);
+}
+
+export function postComment({ projectSurveyId, comment, tags, issueOpen }) {
+  return axios
+    .post("/api/annotation", { projectSurveyId, comment, tags, issueOpen })
     .then(res => res.data);
 }
 
@@ -33,9 +39,9 @@ export function updateAnnotationComment({
     .then(res => res.data);
 }
 
-export function postPendingAnnotationStatus({ annotation, reviewed }) {
+export function postPendingAnnotationStatus({ engagementItem, reviewed }) {
   return axios.post("/api/admin/engagement-item/verify", {
-    engagementItem: annotation,
+    engagementItem: engagementItem,
     reviewed
   });
 }
