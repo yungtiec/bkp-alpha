@@ -17,7 +17,7 @@ import {
 import { ProjectSymbolBlueBox } from "../../../../components";
 import history from "../../../../history";
 
-class ProfileAnnotations extends Component {
+class ProfileComments extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -36,8 +36,8 @@ class ProfileAnnotations extends Component {
 
   render() {
     const {
-      annotationsById,
-      annotationIds,
+      commentsById,
+      commentIds,
       projectsBySymbol,
       projectSymbolArr,
       pageCount,
@@ -93,10 +93,10 @@ class ProfileAnnotations extends Component {
         </ProfileSidebar>
         <div className="d-flex flex-column profile-enagement-items">
           <ProfileEngagementItems
-            engagementItemsById={annotationsById}
-            engagementItemIds={annotationIds}
+            engagementItemsById={commentsById}
+            engagementItemIds={commentIds}
           />
-          {annotationIds.length && pageCount > 1 ? (
+          {commentIds.length && pageCount > 1 ? (
             <ReactPaginate
               previousLabel={"previous"}
               nextLabel={"next"}
@@ -125,7 +125,7 @@ const mapState = (state, ownProps) => {
     pageProjectFilter,
     pageSurveyFilter,
     checked
-  } = state.scenes.profile.scenes.annotations.data;
+  } = state.scenes.profile.scenes.comments.data;
   return {
     ...ownProps,
     pageLimit,
@@ -143,4 +143,4 @@ const actions = {
   updatePageOffset
 };
 
-export default connect(mapState, actions)(ProfileAnnotations);
+export default connect(mapState, actions)(ProfileComments);

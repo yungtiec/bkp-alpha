@@ -54,9 +54,7 @@ const User = db.define(
         issueStatus,
         projects
       }) {
-        var annotationQueryObj = getEngagementItemQueryObj({
-          engagementItemModelName: "annotation",
-          engagementItemAs: "annotations",
+        var annotationQueryObj = getAnnotationQueryObj({
           queryObj: {
             userId,
             limit,
@@ -87,9 +85,7 @@ const User = db.define(
         projects,
         issueStatus
       }) {
-        var annotationQueryObj = getEngagementItemQueryObj({
-          engagementItemModelName: "annotation",
-          engagementItemAs: "annotations",
+        var annotationQueryObj = getAnnotationQueryObj({
           queryObj: {
             userId,
             limit,
@@ -105,67 +101,6 @@ const User = db.define(
           where: { id: userId },
           attributes: ["id"],
           include: [annotationQueryObj]
-        };
-      },
-      projectSurveyComments: function({
-        userId,
-        limit,
-        offset,
-        reviewStatus,
-        issueStatus,
-        projects
-      }) {
-        var ProjectSurveyCommentQueryObj = getEngagementItemQueryObj({
-          engagementItemModelName: "project_survey_comment",
-          engagementItemAs: "projectSurveyComments",
-          queryObj: {
-            userId,
-            limit,
-            offset,
-            reviewStatus,
-            projects,
-            issueStatus
-          },
-          order: true
-        });
-        return {
-          where: { id: userId },
-          attributes: [
-            "id",
-            "email",
-            "first_name",
-            "last_name",
-            "organization"
-          ],
-          include: [ProjectSurveyCommentQueryObj]
-        };
-      },
-      projectSurveyCommentCount: function({
-        userId,
-        limit,
-        offset,
-        reviewStatus,
-        projects,
-        issueStatus
-      }) {
-        var ProjectSurveyCommentQueryObj = getEngagementItemQueryObj({
-          engagementItemModelName: "project_survey_comment",
-          engagementItemAs: "projectSurveyComments",
-          queryObj: {
-            userId,
-            limit,
-            offset,
-            reviewStatus,
-            projects,
-            issueStatus
-          },
-          order: false,
-          pageCount: true
-        });
-        return {
-          where: { id: userId },
-          attributes: ["id"],
-          include: [ProjectSurveyCommentQueryObj]
         };
       },
       roles: function(userId) {
@@ -360,32 +295,6 @@ User.getAnnotationsAndCount = async function(queryObj) {
   return { annotations, annotationCount: annotations.length };
 };
 
-User.getProjectSurveyCommentsAndCount = async function(queryObj) {
-  const user = await User.scope({
-    method: ["projectSurveyComments", cloneDeep(queryObj)]
-  }).findOne();
-  var { projectSurveyComments } = await User.scope({
-    method: ["projectSurveyCommentCount", cloneDeep(queryObj)]
-  }).findOne();
-  projectSurveyComments = projectSurveyComments.map(projectSurveyComment => {
-    projectSurveyComment = projectSurveyComment.toJSON();
-    if (!projectSurveyComment.parentId)
-      return assignIn({ ancestors: [] }, projectSurveyComment);
-    if (projectSurveyComment.parent.ancestors.length) {
-      projectSurveyComment.ancestors = projectSurveyComment.parent.ancestors.concat(
-        projectSurveyComment.parent
-      );
-    } else {
-      projectSurveyComment.ancestors = [projectSurveyComment.parent];
-    }
-    return projectSurveyComment;
-  });
-  return {
-    projectSurveyComments,
-    projectSurveyCommentCount: projectSurveyComments.length
-  };
-};
-
 /**
  * hooks
  */
@@ -400,9 +309,7 @@ const setSaltAndPassword = user => {
  * helpers
  */
 
-function getEngagementItemQueryObj({
-  engagementItemModelName,
-  engagementItemAs,
+function getAnnotationQueryObj({
   queryObj: { userId, limit, offset, reviewStatus, issueStatus, projects },
   order,
   pageCount
@@ -446,10 +353,10 @@ function getEngagementItemQueryObj({
         model: db.model("issue"),
         required: false
       };
-  var engagementItemQueryObj = {
-    model: db.model(engagementItemModelName),
+  var annotationQueryObj = {
+    model: db.model("annotation"),
     where: { reviewed: reviewStatus },
-    as: engagementItemAs,
+    as: "annotations",
     subQuery: false,
     required: false,
     include: [
@@ -458,7 +365,7 @@ function getEngagementItemQueryObj({
         required: false
       },
       {
-        model: db.model(engagementItemModelName),
+        model: db.model("annotation"),
         as: "parent", // for unknown reason, include ancestors here doesn't work
         required: false,
         include: [
@@ -475,7 +382,7 @@ function getEngagementItemQueryObj({
             required: false
           },
           {
-            model: db.model(engagementItemModelName),
+            model: db.model("annotation"),
             as: "ancestors",
             required: false
           }
@@ -486,7 +393,7 @@ function getEngagementItemQueryObj({
     ]
   };
   if (order) {
-    engagementItemQueryObj.order = [
+    annotationQueryObj.order = [
       [
         {
           model: db.model("project_survey")
@@ -499,10 +406,10 @@ function getEngagementItemQueryObj({
     ];
   }
   if (!pageCount) {
-    engagementItemQueryObj.limit = limit;
-    engagementItemQueryObj.offset = offset;
+    annotationQueryObj.limit = limit;
+    annotationQueryObj.offset = offset;
   }
-  return engagementItemQueryObj;
+  return annotationQueryObj;
 }
 
 User.beforeCreate(setSaltAndPassword);

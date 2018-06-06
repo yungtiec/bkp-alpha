@@ -20,7 +20,6 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 module.exports = router;
 
-router.use("/survey/comment", require("./comment"));
 router.use("/survey", require("./survey"));
 
 router.get("/", async (req, res, next) => {

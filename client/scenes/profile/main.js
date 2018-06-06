@@ -5,7 +5,7 @@ import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ProfileBanner, ProfileNavbar, ProfileReplies } from "./components";
 import ProfileAbout from "./scenes/about";
-import ProfileAnnotations from "./scenes/annotations";
+import ProfileComments from "./scenes/comments";
 import Notifications from "./scenes/notifications";
 import autoBind from "react-autobind";
 import moment from "moment";
@@ -74,7 +74,7 @@ class Profile extends Component {
           />
           <Route
             path={`${match.url}/annotations`}
-            component={ProfileAnnotations}
+            component={ProfileComments}
           />
           {isMyProfile && (
             <Route

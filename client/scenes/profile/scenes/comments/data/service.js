@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function getUserAnnotations({
+export function getUserComments({
   userId,
   offset,
   limit,
@@ -10,7 +10,7 @@ export function getUserAnnotations({
   issueStatus = []
 } = {}) {
   return axios
-    .get(`/api/users/${userId}/annotations`, {
+    .get(`/api/users/${userId}/comments`, {
       params: {
         offset,
         limit,

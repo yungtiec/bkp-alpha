@@ -5,7 +5,6 @@ const Role = require("./role");
 const Project = require("./project");
 const ProjectSurvey = require("./project-survey");
 const ProjectSurveyAnswer = require("./project-survey-answer");
-const ProjectSurveyComment = require("./project-survey-comment");
 const Question = require("./question");
 const QuestionCategory = require("./question-category");
 const Survey = require("./survey");
@@ -148,51 +147,6 @@ Annotation.belongsTo(ProjectSurvey, {
 
 /*=====  End of Annotation  ======*/
 
-/*=================================================
-=                Page Comment                  =
-==================================================*/
-
-/*----------  User and Page Comment  ----------*/
-User.belongsToMany(ProjectSurveyComment, {
-  as: "upvotedComments",
-  through: "project_survey_comment_upvote",
-  foreignKey: "user_id"
-});
-ProjectSurveyComment.belongsToMany(User, {
-  as: "upvotesFrom",
-  through: "project_survey_comment_upvote",
-  foreignKey: "project_survey_comment_id"
-});
-
-User.hasMany(ProjectSurveyComment, {
-  foreignKey: "owner_id",
-  as: "projectSurveyComments"
-});
-ProjectSurveyComment.belongsTo(User, {
-  foreignKey: "owner_id",
-  as: "owner"
-});
-
-/*----------  Page Comment  and Tag  ----------*/
-Tag.belongsToMany(ProjectSurveyComment, {
-  through: "project_survey_comment_tag",
-  foreignKey: "tag_id"
-});
-ProjectSurveyComment.belongsToMany(Tag, {
-  through: "project_survey_comment_tag",
-  foreignKey: "project_survey_comment_id"
-});
-
-/*----------  Page Comment and Issue  --------*/
-ProjectSurveyComment.hasOne(Issue, {
-  foreignKey: "project_survey_comment_id"
-});
-Issue.belongsTo(ProjectSurveyComment, {
-  foreignKey: "project_survey_comment_id"
-});
-
-/*===========  End of Page Comment  ==========*/
-
 /*==============================================
 =                    Survey                    =
 ==============================================*/
@@ -216,13 +170,6 @@ Project.hasMany(ProjectSurvey, {
 });
 Survey.hasMany(ProjectSurvey, {
   foreignKey: "survey_id"
-});
-
-ProjectSurvey.hasMany(ProjectSurveyComment, {
-  foreignKey: "project_survey_id"
-});
-ProjectSurveyComment.belongsTo(ProjectSurvey, {
-  foreignKey: "project_survey_id"
 });
 
 Question.belongsToMany(Survey, {
@@ -309,7 +256,6 @@ module.exports = {
   Role,
   Project,
   ProjectSurvey,
-  ProjectSurveyComment,
   ProjectSurveyAnswer,
   Question,
   QuestionCategory,

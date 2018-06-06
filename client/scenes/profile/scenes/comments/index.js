@@ -5,12 +5,12 @@ import { batchActions } from "redux-batched-actions";
 import { withRouter } from "react-router-dom";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { fetchUserAnnotations } from "./data/actions";
-import { getUserAnnotations } from "./data/reducer";
+import { fetchUserComments } from "./data/actions";
+import { getUserComments } from "./data/reducer";
 import { fetchAllProjects } from "../../../../data/reducer";
 import { getAllProjects, getProjectSurveys } from "../../../../data/reducer";
 
-const LoadableUserAnnotations = Loadable({
+const LoadableUserComments = Loadable({
   loader: () => import("./main"),
   loading: () => (
     <SquareLoader
@@ -21,8 +21,8 @@ const LoadableUserAnnotations = Loadable({
     />
   ),
   render(loaded, props) {
-    let UserAnnotations = loaded.default;
-    return <UserAnnotations {...props} />;
+    let UserComments = loaded.default;
+    return <UserComments {...props} />;
   },
   delay: 1000
 });
@@ -35,22 +35,22 @@ class MyComponent extends React.Component {
   componentDidMount() {
     const userId = this.props.match.path.split("/")[2];
     batchActions([
-      this.props.fetchUserAnnotations(userId),
+      this.props.fetchUserComments(userId),
       this.props.fetchAllProjects()
     ]);
   }
 
   render() {
-    return <LoadableUserAnnotations {...this.props} />;
+    return <LoadableUserComments {...this.props} />;
   }
 }
 
 const mapState = (state, ownProps) => {
-  const { annotationsById, annotationIds } = getUserAnnotations(state);
+  const { commentsById, commentIds } = getUserComments(state);
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
   return {
-    annotationsById,
-    annotationIds,
+    commentsById,
+    commentIds,
     projectsBySymbol,
     projectSymbolArr,
     userId: ownProps.match.path.split("/")[2]
@@ -58,7 +58,7 @@ const mapState = (state, ownProps) => {
 };
 
 const actions = {
-  fetchUserAnnotations,
+  fetchUserComments,
   fetchAllProjects
 };
 

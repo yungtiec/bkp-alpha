@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import { keyBy } from "lodash";
-import { getUserAnnotations } from "./service";
+import { getUserComments } from "./service";
 import { batchActions } from "redux-batched-actions";
 
 const FILTER_DICT = {
@@ -28,7 +28,7 @@ const extractReviewAndIssueStats = checked => {
   };
 };
 
-export function fetchUserAnnotations(userId) {
+export function fetchUserComments(userId) {
   return async (dispatch, getState) => {
     try {
       userId = userId === "profile" ? getState().data.user.id : userId;
@@ -38,20 +38,20 @@ export function fetchUserAnnotations(userId) {
         pageOffset,
         pageProjectFilter,
         pageSurveyFilter
-      } = state.scenes.profile.scenes.annotations.data;
-      const { annotations, annotationCount } = await getUserAnnotations({
+      } = state.scenes.profile.scenes.comments.data;
+      const { comments, commentCount } = await getUserComments({
         userId,
         offset: pageOffset,
         limit: pageLimit,
         projects: pageProjectFilter,
         surveys: pageSurveyFilter
       });
-      const annotationsById = keyBy(annotations, "id");
+      const commentsById = keyBy(comments, "id");
       dispatch({
-        type: types.USER_ANNOTATIONS_FETCH_SUCCESS,
-        annotationsById,
-        annotationIds: annotations.map(a => a.id),
-        annotationCount
+        type: types.USER_COMMENTS_FETCH_SUCCESS,
+        commentsById,
+        commentIds: comments.map(a => a.id),
+        commentCount
       });
     } catch (error) {
       console.error(error);
@@ -74,9 +74,9 @@ export const updatePageOffset = (userId, pageOffset) => {
         pageProjectFilter,
         pageSurveyFilter,
         checked
-      } = state.scenes.profile.scenes.annotations.data;
+      } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
-      const { annotations, annotationCount } = await getUserAnnotations({
+      const { comments, commentCount } = await getUserComments({
         userId,
         offset: pageOffset,
         limit: pageLimit,
@@ -85,14 +85,14 @@ export const updatePageOffset = (userId, pageOffset) => {
         reviewStatus,
         issueStatus
       });
-      const annotationsById = keyBy(annotations, "id");
+      const commentsById = keyBy(comments, "id");
       dispatch(
         batchActions([
           {
-            type: types.USER_ANNOTATIONS_FETCH_SUCCESS,
-            annotationsById,
-            annotationCount,
-            annotationIds: annotations.map(a => a.id)
+            type: types.USER_COMMENTS_FETCH_SUCCESS,
+            commentsById,
+            commentCount,
+            commentIds: comments.map(a => a.id)
           },
           {
             type: types.PAGE_OFFSET_UPDATED,
@@ -114,9 +114,9 @@ export const updatePageProjectFilter = (userId, pageProjectFilter) => {
         pageOffset,
         pageSurveyFilter,
         checked
-      } = state.scenes.profile.scenes.annotations.data;
+      } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
-      const { annotations, annotationCount } = await getUserAnnotations({
+      const { comments, commentCount } = await getUserComments({
         userId,
         offset: pageOffset,
         limit: pageLimit,
@@ -125,14 +125,14 @@ export const updatePageProjectFilter = (userId, pageProjectFilter) => {
         reviewStatus,
         issueStatus
       });
-      const annotationsById = keyBy(annotations, "id");
+      const commentsById = keyBy(comments, "id");
       dispatch(
         batchActions([
           {
-            type: types.USER_ANNOTATIONS_FETCH_SUCCESS,
-            annotationsById,
-            annotationCount,
-            annotationIds: annotations.map(a => a.id)
+            type: types.USER_COMMENTS_FETCH_SUCCESS,
+            commentsById,
+            commentCount,
+            commentIds: comments.map(a => a.id)
           },
           {
             type: types.PAGE_PROJECT_FILTER_UPDATED,
@@ -159,9 +159,9 @@ export const checkSidebarFilter = (userId, checked) => {
         pageOffset,
         pageProjectFilter,
         pageSurveyFilter
-      } = state.scenes.profile.scenes.annotations.data;
+      } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
-      const { annotations, annotationCount } = await getUserAnnotations({
+      const { comments, commentCount } = await getUserComments({
         userId,
         offset: pageOffset,
         limit: pageLimit,
@@ -170,14 +170,14 @@ export const checkSidebarFilter = (userId, checked) => {
         reviewStatus,
         issueStatus
       });
-      const annotationsById = keyBy(annotations, "id");
+      const commentsById = keyBy(comments, "id");
       dispatch(
         batchActions([
           {
-            type: types.USER_ANNOTATIONS_FETCH_SUCCESS,
-            annotationsById,
-            annotationCount,
-            annotationIds: annotations.map(a => a.id)
+            type: types.USER_COMMENTS_FETCH_SUCCESS,
+            commentsById,
+            commentCount,
+            commentIds: comments.map(a => a.id)
           },
           {
             type: types.SIDEBAR_FILTER_CHECKED,
