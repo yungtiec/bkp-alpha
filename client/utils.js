@@ -22,18 +22,20 @@ export function findItemInTreeById(itemCollection, targetId, idKey = "id") {
   return result;
 }
 
-export function seeAnnotationContext(engagementItem) {
+export function getAnnotationContextPath(engagementItem) {
   var rootItem =
     engagementItem.ancestors && engagementItem.ancestors.length
       ? find(engagementItem.ancestors, a => a.hierarchyLevel === 1)
       : engagementItem;
-  const path =
-    engagementItem.uri
-      ? `${rootItem.uri.replace(window.origin, "")}/question/${
-          engagementItem.survey_question_id
-        }/annotation/${rootItem.id}`
-      : `/project/${engagementItem.project_survey.project.symbol}/survey/${
-          engagementItem.project_survey.id
-        }/annotation/${rootItem.id}`;
-  return history.push(path);
+  return engagementItem.uri
+    ? `${rootItem.uri.replace(window.origin, "")}/question/${
+        engagementItem.survey_question_id
+      }/annotation/${rootItem.id}`
+    : `/project/${engagementItem.project_survey.project.symbol}/survey/${
+        engagementItem.project_survey.id
+      }/annotation/${rootItem.id}`;
+}
+
+export function seeAnnotationContext(engagementItem) {
+  return history.push(getAnnotationContextPath(engagementItem));
 }

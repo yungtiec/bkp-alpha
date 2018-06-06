@@ -2,6 +2,7 @@ import "./SidebarHeader.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
+import { CommentBoxWithTagField } from "../index";
 import { findAnnotationsInQnaByText } from "../../utils";
 import Select from "react-select";
 import { keys } from "lodash";
@@ -64,7 +65,10 @@ export default class SidebarHeader extends Component {
       tagFilter,
       updateTagFilter,
       annotationIssueFilter,
-      commentIssueFilter
+      commentIssueFilter,
+      tags,
+      surveyMetadata,
+      addNewComment
     } = this.props;
 
     return (
@@ -123,6 +127,25 @@ export default class SidebarHeader extends Component {
               />
             </div>
           )}
+        {selectedAnnotations && !selectedAnnotations.length ? (
+          <div className="engagement-item page-comment">
+            <div className="engagement-item__main">
+              <div className="engagement-item__header">
+                <p>Leave a comment?</p>
+              </div>
+            </div>
+            <CommentBoxWithTagField
+              showTags={true}
+              showIssueCheckbox={true}
+              tags={tags}
+              selectedTags={[]}
+              initialValue=""
+              projectSurveyId={surveyMetadata.id}
+              onSubmit={addNewComment}
+              onCancel={null}
+            />
+          </div>
+        ) : null}
         {!isLoggedIn && (
           <div className="annotation-item">
             <div className="annotation-item__main">

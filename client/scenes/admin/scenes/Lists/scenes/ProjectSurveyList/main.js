@@ -27,8 +27,7 @@ class AdminProjectSurveyList extends Component {
       },
       { Header: "title", accessor: "title", minWidth: 150 },
       { Header: "issues", accessor: "num_issues", width: 80 },
-      { Header: "pending annotations", accessor: "num_pending_annotations" },
-      { Header: "pending comments", accessor: "num_pending_page_comments" }
+      { Header: "pending annotations", accessor: "num_pending_annotations" }
     ];
     const data = projectSurveyIds.map(id => projectSurveysById[id]);
 
@@ -52,10 +51,8 @@ class AdminProjectSurveyList extends Component {
 }
 
 export default withRouter(
-  requiresAuthorization(
-    requiresAuthorization({
-      Component: AdminProjectSurveyList,
-      roleRequired: "admin"
-    })
-  )
+  requiresAuthorization({
+    Component: AdminProjectSurveyList,
+    roleRequired: "admin"
+  })
 );

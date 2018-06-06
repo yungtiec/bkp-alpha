@@ -170,16 +170,16 @@ export const editAnnotationComment = ({
   };
 };
 
-export const verifyAnnotationAsAdmin = ({ annotation, rootId, reviewed }) => {
+export const verifyAnnotationAsAdmin = ({ engagementItem, rootId, reviewed }) => {
   return async dispatch => {
     try {
       await postPendingAnnotationStatus({
-        annotation,
+        engagementItem,
         reviewed
       });
       dispatch({
         type: types.ANNOTATION_VERIFIED,
-        annotationId: annotation.id,
+        annotationId: engagementItem.id,
         reviewed,
         rootId
       });

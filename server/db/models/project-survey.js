@@ -47,10 +47,6 @@ const ProjectSurvey = db.define(
                 {
                   model: db.model("annotation"),
                   required: false
-                },
-                {
-                  model: db.model("project_survey_comment"),
-                  required: false
                 }
               ]
             },
@@ -76,10 +72,6 @@ const ProjectSurvey = db.define(
                   include: [
                     {
                       model: db.model("annotation"),
-                      required: false
-                    },
-                    {
-                      model: db.model("project_survey_comment"),
                       required: false
                     }
                   ]
@@ -108,10 +100,6 @@ const ProjectSurvey = db.define(
                   include: [
                     {
                       model: db.model("annotation"),
-                      required: false
-                    },
-                    {
-                      model: db.model("project_survey_comment"),
                       required: false
                     }
                   ]
@@ -188,36 +176,9 @@ const ProjectSurvey = db.define(
               required: false
             },
             {
-              model: db.model("survey"),
-              include: [
-                {
-                  model: db.model("survey_question"),
-                  include: [
-                    {
-                      model: db.model("annotation"),
-                      required: false,
-                      attributes: ["id", "reviewed"],
-                      include: [
-                        {
-                          model: db.model("issue"),
-                          required: false
-                        },
-                        {
-                          model: db.model("user"),
-                          as: "upvotesFrom",
-                          attributes: ["id"],
-                          required: false
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              model: db.model("project_survey_comment"),
-              attributes: ["id", "reviewed"],
+              model: db.model("annotation"),
               required: false,
+              attributes: ["id", "reviewed"],
               include: [
                 {
                   model: db.model("issue"),
@@ -230,6 +191,9 @@ const ProjectSurvey = db.define(
                   required: false
                 }
               ]
+            },
+            {
+              model: db.model("survey")
             },
             {
               model: db.model("project")
@@ -275,36 +239,9 @@ function getPublishedSurveysStats(projectSurveys) {
         where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
         include: [
           {
-            model: db.model("survey"),
-            include: [
-              {
-                model: db.model("survey_question"),
-                include: [
-                  {
-                    model: db.model("annotation"),
-                    required: false,
-                    attributes: ["id", "reviewed"],
-                    include: [
-                      {
-                        model: db.model("issue"),
-                        required: false
-                      },
-                      {
-                        model: db.model("user"),
-                        as: "upvotesFrom",
-                        attributes: ["id"],
-                        required: false
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            model: db.model("project_survey_comment"),
-            attributes: ["id", "reviewed"],
+            model: db.model("annotation"),
             required: false,
+            attributes: ["id", "reviewed"],
             include: [
               {
                 model: db.model("issue"),
@@ -317,6 +254,9 @@ function getPublishedSurveysStats(projectSurveys) {
                 required: false
               }
             ]
+          },
+          {
+            model: db.model("survey")
           }
         ]
       });
@@ -325,12 +265,7 @@ function getPublishedSurveysStats(projectSurveys) {
         projectSurveyInstance.toJSON()
       );
     }
-    const annotations = rawProjectSurvey.survey.survey_questions.reduce(
-      (aggregatedAnnotation, surveyQuestion) => {
-        return aggregatedAnnotation.concat(surveyQuestion.annotations);
-      },
-      []
-    );
+    const annotations = rawProjectSurvey.annotations;
     const numPendingAnnotations = annotations.filter(
       a => a.reviewed === "pending"
     ).length;
@@ -341,22 +276,6 @@ function getPublishedSurveysStats(projectSurveys) {
       []
     );
     const numAnnotationIssues = annotations.filter(a => !!a.issue).length;
-    const numPendingPageComments = rawProjectSurvey.project_survey_comments.filter(
-      a => a.reviewed === "pending"
-    ).length;
-    const numTotalPageComments = rawProjectSurvey.project_survey_comments.filter(
-      a => a.reviewed !== "spam"
-    ).length;
-    const numPageCommentUpvotes = rawProjectSurvey.project_survey_comments.reduce(
-      (upvotes, comment) => upvotes.concat(comment.upvotesFrom),
-      []
-    );
-    const numPageCommentIssues = rawProjectSurvey.project_survey_comments.filter(
-      a => !!a.issue
-    ).length;
-    const numReactions =
-      numAnnotationUpvotes.length + numPageCommentUpvotes.length;
-    const numIssues = numAnnotationIssues + numPageCommentIssues;
     const projectSurvey = _.assignIn(
       {
         title: rawProjectSurvey.survey.title,
@@ -364,12 +283,10 @@ function getPublishedSurveysStats(projectSurveys) {
         creator: rawProjectSurvey.creator,
         num_pending_annotations: numPendingAnnotations,
         num_total_annotations: numTotalAnnotations,
-        num_pending_page_comments: numPendingPageComments,
-        num_total_page_comments: numTotalPageComments,
-        num_reaction: numReactions,
-        num_issues: numIssues
+        num_reaction: numAnnotationUpvotes.length,
+        num_issues: numAnnotationIssues
       },
-      _.omit(rawProjectSurvey, ["survey", "project_survey_comments"])
+      _.omit(rawProjectSurvey, ["survey"])
     );
     return projectSurvey;
   });

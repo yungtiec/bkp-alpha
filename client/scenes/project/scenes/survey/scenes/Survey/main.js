@@ -16,7 +16,6 @@ import {
   SidebarAnnotations,
   SidebarPageComments,
   SidebarHeader,
-  CommentBoxWithTagField,
   SurveyHeader
 } from "../../components";
 import { findAnnotationsInQnaByText } from "../../utils";
@@ -98,19 +97,7 @@ class Survey extends Component {
     if (!this.props.sidebarOpen && annotations && annotations.length) {
       this.props.toggleSidebar();
     }
-    if (
-      !this.props.engagementTab !== "annotations" &&
-      annotations &&
-      annotations.length
-    ) {
-      this.props.updateEngagementTabInView("annotations");
-    }
     if (annotations && annotations.length) {
-      this.props.updateSidebarContext({
-        focusQnaId: qnaId,
-        selectedText
-      });
-    } else {
       this.props.updateSidebarContext({
         focusQnaId: qnaId,
         selectedText
@@ -222,23 +209,6 @@ class Survey extends Component {
               id="sidebar-contents"
               className="sidebar-contents"
             >
-              <div className="engagement-item page-comment">
-                <div className="engagement-item__main">
-                  <div className="engagement-item__header">
-                    <p>Leave a comment?</p>
-                  </div>
-                </div>
-                <CommentBoxWithTagField
-                  showTags={true}
-                  showIssueCheckbox={true}
-                  tags={tags}
-                  selectedTags={[]}
-                  initialValue=""
-                  projectSurveyId={surveyMetadata.id}
-                  onSubmit={addNewComment}
-                  onCancel={null}
-                />
-              </div>
               <SidebarHeader
                 annotationSortBy={annotationSortBy}
                 sortAnnotationBy={sortAnnotationBy}
@@ -251,6 +221,9 @@ class Survey extends Component {
                 resetSelection={this.resetContext}
                 annotationIssueFilter={annotationIssueFilter}
                 updateIssueFilter={updateIssueFilter}
+                tags={tags}
+                surveyMetadata={surveyMetadata}
+                addNewComment={addNewComment}
               />
               <SidebarAnnotations
                 annotationIds={annotationIds}

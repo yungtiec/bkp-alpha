@@ -39,9 +39,9 @@ export function updateAnnotationComment({
     .then(res => res.data);
 }
 
-export function postPendingAnnotationStatus({ annotation, reviewed }) {
+export function postPendingAnnotationStatus({ engagementItem, reviewed }) {
   return axios.post("/api/admin/engagement-item/verify", {
-    engagementItem: annotation,
+    engagementItem: engagementItem,
     reviewed
   });
 }

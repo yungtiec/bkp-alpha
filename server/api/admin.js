@@ -60,127 +60,66 @@ router.get(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      var [annotations, pageComments] = await Promise.all([
-        Annotation.findAll({
-          where: {
-            project_survey_id: req.params.projectSurveyId
+      var annotations = await Annotation.findAll({
+        where: {
+          project_survey_id: req.params.projectSurveyId
+        },
+        include: [
+          {
+            model: User,
+            as: "owner"
           },
-          include: [
-            {
-              model: User,
-              as: "owner"
-            },
-            {
-              model: Tag,
-              required: false
-            },
+          {
+            model: Tag,
+            required: false
+          },
+          {
+            model: Annotation,
+            as: "ancestors",
+            required: false,
+            include: [
+              {
+                model: User,
+                as: "owner"
+              },
+              {
+                model: Tag,
+                required: false
+              },
+              {
+                model: Issue,
+                required: false
+              }
+            ]
+          },
+          {
+            model: Issue,
+            required: false
+          },
+          {
+            model: ProjectSurvey,
+            attributes: ["id"],
+            include: [
+              {
+                model: Project
+              },
+              {
+                model: Survey
+              }
+            ]
+          }
+        ],
+        order: [
+          [
             {
               model: Annotation,
-              as: "ancestors",
-              required: false,
-              include: [
-                {
-                  model: User,
-                  as: "owner"
-                },
-                {
-                  model: Tag,
-                  required: false
-                },
-                {
-                  model: Issue,
-                  required: false
-                }
-              ]
+              as: "ancestors"
             },
-            {
-              model: Issue,
-              required: false
-            },
-            {
-              model: ProjectSurvey,
-              attributes: ["id"],
-              include: [
-                {
-                  model: Project
-                },
-                {
-                  model: Survey
-                }
-              ]
-            }
-          ],
-          order: [
-            [
-              {
-                model: Annotation,
-                as: "ancestors"
-              },
-              "hierarchyLevel"
-            ]
+            "hierarchyLevel"
           ]
-        }),
-        ProjectSurveyComment.findAll({
-          where: {
-            project_survey_id: req.params.projectSurveyId
-          },
-          include: [
-            {
-              model: User,
-              as: "owner"
-            },
-            {
-              model: Tag,
-              required: false
-            },
-            {
-              model: ProjectSurveyComment,
-              as: "ancestors",
-              required: false,
-              include: [
-                {
-                  model: User,
-                  as: "owner"
-                },
-                {
-                  model: Tag,
-                  required: false
-                },
-                {
-                  model: Issue,
-                  required: false
-                }
-              ]
-            },
-            {
-              model: Issue,
-              required: false
-            },
-            {
-              model: ProjectSurvey,
-              attributes: ["id"],
-              include: [
-                {
-                  model: Project
-                },
-                {
-                  model: Survey
-                }
-              ]
-            }
-          ],
-          order: [
-            [
-              {
-                model: ProjectSurveyComment,
-                as: "ancestors"
-              },
-              "hierarchyLevel"
-            ]
-          ]
-        })
-      ]);
-      res.send(annotations.concat(pageComments));
+        ]
+      });
+      res.send(annotations);
     } catch (err) {
       next(err);
     }

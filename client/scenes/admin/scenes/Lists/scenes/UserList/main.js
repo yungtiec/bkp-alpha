@@ -36,9 +36,9 @@ class AdminUserList extends Component {
       { Header: "user", accessor: "email", fixed: true, width: 270 },
       { Header: "spam", accessor: "num_spam" },
       {
-        id: "contributions",
-        Header: "contributions",
-        accessor: d => d.num_annotations + d.num_project_survey_comments
+        id: "annotations",
+        Header: "annotations",
+        accessor: "num_annotations"
       },
       {
         id: "upvotes",
