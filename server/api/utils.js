@@ -57,13 +57,10 @@ const ensureAdminRoleOrEngagementItemOwnership = async (req, res, next) => {
         }
       ]
     });
-    const engagementItem =
-      req.body.engagementItem.engagementItemType === "annotation"
-        ? await Annotation.findById(req.body.engagementItem.id)
-        : await ProjectSurveyComment.findById(req.body.engagementItem.id);
+    const comment = Annotation.findById(req.body.comment.id);
     if (
       requestor.roles.filter(r => r.name === "admin").length ||
-      engagementItem.owner_id === req.user.id
+      comment.owner_id === req.user.id
     ) {
       next();
     } else {

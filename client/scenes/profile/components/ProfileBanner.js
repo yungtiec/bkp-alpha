@@ -20,7 +20,7 @@ export default ({
       <div className="profile-banner__short-bio">
         <h2>{name}</h2>
         <p>
-          <span>{numAnnotations || 0} annotation(s)</span>
+          <span>{numAnnotations || 0} comment(s)</span>
           <span className="divider">|</span>
           <span>{numIssues || 0} issue(s)</span>
           <span className="divider">|</span>

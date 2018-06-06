@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { fetchEngagementItems } from "./data/engagementItems/actions";
-import { getEngagementItems } from "./data/engagementItems/reducer";
+import { fetchComments } from "./data/comments/actions";
+import { getComments } from "./data/comments/reducer";
 
 const LoadableProjectSurveyAdminView = Loadable({
   loader: () => import("./main"),
@@ -29,7 +29,7 @@ class MyComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEngagementItems(this.props.match.params.projectSurveyId);
+    this.props.fetchComments(this.props.match.params.projectSurveyId);
   }
 
   render() {
@@ -38,15 +38,15 @@ class MyComponent extends React.Component {
 }
 
 const mapState = state => {
-  const { engagementItemsById, engagementItemIds } = getEngagementItems(state);
+  const { commentsById, commentIds } = getComments(state);
   return {
-    engagementItemsById,
-    engagementItemIds
+    commentsById,
+    commentIds
   };
 };
 
 const actions = {
-  fetchEngagementItems
+  fetchComments
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

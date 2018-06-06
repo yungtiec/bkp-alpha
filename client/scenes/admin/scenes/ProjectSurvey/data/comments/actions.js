@@ -1,20 +1,20 @@
 import * as types from "./actionTypes";
 import { keyBy, assignIn } from "lodash";
 import {
-  getEngagementItems,
-  postPendingEngagementItemStatus,
-  updateEngagementItemIssueStatus
+  getComments,
+  postPendingCommentStatus,
+  updateCommentIssueStatus
 } from "./service";
 import { notify } from "reapop";
 
-export function fetchEngagementItems(projectSurveyId) {
+export function fetchComments(projectSurveyId) {
   return async dispatch => {
     try {
-      var engagementItems = await getEngagementItems(projectSurveyId);
-      const engagementItemsById = keyBy(engagementItems, "engagementItemId");
+      var comments = await getComments(projectSurveyId);
+      const commentsById = keyBy(comments, "id");
       dispatch({
-        type: types.ENGAGEMENT_ITEMS_FETCH_SUCCESS,
-        engagementItemsById
+        type: types.COMMENTS_FETCH_SUCCESS,
+        commentsById
       });
     } catch (error) {
       dispatch(
@@ -30,13 +30,13 @@ export function fetchEngagementItems(projectSurveyId) {
   };
 }
 
-export function verifyPendingEngagementItem(engagementItem, status) {
+export function verifyPendingComment(comment, status) {
   return async dispatch => {
     try {
-      await postPendingEngagementItemStatus(engagementItem, status);
+      await postPendingCommentStatus(comment, status);
       dispatch({
-        type: types.ENGAGEMENT_ITEM_VERIFIED_SUCCESS,
-        engagementItem: engagementItem,
+        type: types.COMMENT_VERIFIED_SUCCESS,
+        comment: comment,
         status
       });
     } catch (error) {
@@ -53,20 +53,20 @@ export function verifyPendingEngagementItem(engagementItem, status) {
   };
 }
 
-export const changeEngagementItemIssueStatus = engagementItem => {
+export const changeCommentIssueStatus = comment => {
   return async (dispatch, getState) => {
     try {
       const user = getState().data.user;
       if (!user.roles.filter(r => r.name === "admin").length) return;
-      const open = engagementItem.issue ? !engagementItem.issue.open : true;
+      const open = comment.issue ? !comment.issue.open : true;
 
-      await updateEngagementItemIssueStatus({
-        engagementItem,
+      await updateCommentIssueStatus({
+        comment,
         open
       });
       dispatch({
-        type: types.ENGAGEMENT_ITEM_ISSUE_UPDATED,
-        engagementItem,
+        type: types.COMMENT_ISSUE_UPDATED,
+        comment,
         open
       });
     } catch (err) {

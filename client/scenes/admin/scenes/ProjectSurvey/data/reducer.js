@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
-import { default as engagementItemsReducer } from './engagementItems/reducer';
+import { default as commentsReducer } from './comments/reducer';
 
 export const reducer = combineReducers({
-  engagementItems: engagementItemsReducer
+  comments: commentsReducer
 });
 

@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import autoBind from "react-autobind";
 import {
-  fetchEngagementItems,
-  verifyPendingEngagementItem,
-  changeEngagementItemIssueStatus
-} from "./data/engagementItems/actions";
+  fetchComments,
+  verifyPendingComment,
+  changeCommentIssueStatus
+} from "./data/comments/actions";
 import { Sidebar } from "./components";
 import {
   requiresAuthorization,
@@ -19,7 +19,7 @@ import asyncPoll from "react-async-poll";
 import { seeAnnotationContext } from "../../../../utils";
 
 const onPollInterval = (props, dispatch) => {
-  return props.fetchEngagementItems(props.match.params.projectSurveyId);
+  return props.fetchComments(props.match.params.projectSurveyId);
 };
 
 class AdminProjectSurveyPanel extends Component {
@@ -28,38 +28,38 @@ class AdminProjectSurveyPanel extends Component {
     autoBind(this);
   }
 
-  labelAsNotSpam(engagementItem) {
-    this.props.verifyPendingEngagementItem(engagementItem, "verified");
+  labelAsNotSpam(comment) {
+    this.props.verifyPendingComment(comment, "verified");
   }
 
-  labelAsSpam(engagementItem) {
-    this.props.verifyPendingEngagementItem(engagementItem, "spam");
+  labelAsSpam(comment) {
+    this.props.verifyPendingComment(comment, "spam");
   }
 
-  renderActions(engagementItem) {
+  renderActions(comment) {
     return (
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
           className="btn btn-outline-danger"
-          onClick={() => this.labelAsSpam(engagementItem)}
+          onClick={() => this.labelAsSpam(comment)}
         >
           spam
         </button>
         <button
           type="button"
           className="btn btn-outline-primary"
-          onClick={() => this.labelAsNotSpam(engagementItem)}
+          onClick={() => this.labelAsNotSpam(comment)}
         >
           verify
         </button>
-        {engagementItem.issue ? (
-          engagementItem.issue.open ? (
+        {comment.issue ? (
+          comment.issue.open ? (
             <button
               type="button"
               className="btn btn-outline-success"
               onClick={() =>
-                this.props.changeEngagementItemIssueStatus(engagementItem)
+                this.props.changeCommentIssueStatus(comment)
               }
             >
               close issue
@@ -69,18 +69,18 @@ class AdminProjectSurveyPanel extends Component {
               type="button"
               className="btn btn-outline-success"
               onClick={() =>
-                this.props.changeEngagementItemIssueStatus(engagementItem)
+                this.props.changeCommentIssueStatus(comment)
               }
             >
               re-open issue
             </button>
           )
-        ) : engagementItem.hierarchyLevel === 1 ? (
+        ) : comment.hierarchyLevel === 1 ? (
           <button
             type="button"
             className="btn btn-outline-success"
             onClick={() =>
-              this.props.changeEngagementItemIssueStatus(engagementItem)
+              this.props.changeCommentIssueStatus(comment)
             }
           >
             open issue
@@ -89,8 +89,8 @@ class AdminProjectSurveyPanel extends Component {
         <button
           type="button"
           className="btn btn-outline-secondary"
-          disabled={engagementItem.reviewed === "spam"}
-          onClick={() => seeAnnotationContext(engagementItem)}
+          disabled={comment.reviewed === "spam"}
+          onClick={() => seeAnnotationContext(comment)}
         >
           see in context
         </button>
@@ -100,9 +100,9 @@ class AdminProjectSurveyPanel extends Component {
 
   render() {
     const {
-      engagementItemsById,
-      engagementItemIds,
-      changeEngagementItemIssueStatus
+      commentsById,
+      commentIds,
+      changeCommentIssueStatus
     } = this.props;
     return (
       <div className="admin-project-survey-panel  main-container">
@@ -110,20 +110,20 @@ class AdminProjectSurveyPanel extends Component {
         <div className="admin-project-survey-panel__content">
           <Sidebar />
           <div class="admin-project-survey-panel__item-container">
-            {engagementItemIds.map(aid => {
-              return engagementItemsById[aid].parentId ? (
+            {commentIds.map(aid => {
+              return commentsById[aid].parentId ? (
                 <AnnotationReply
                   key={`admin__annotation-reply--${aid}`}
-                  annotation={engagementItemsById[aid]}
+                  annotation={commentsById[aid]}
                 >
-                  {this.renderActions(engagementItemsById[aid])}
+                  {this.renderActions(commentsById[aid])}
                 </AnnotationReply>
               ) : (
                 <AnnotationMain
                   key={`admin__annotation-main--${aid}`}
-                  annotation={engagementItemsById[aid]}
+                  annotation={commentsById[aid]}
                 >
-                  {this.renderActions(engagementItemsById[aid])}
+                  {this.renderActions(commentsById[aid])}
                 </AnnotationMain>
               );
             })}
@@ -135,17 +135,17 @@ class AdminProjectSurveyPanel extends Component {
 }
 
 const mapState = (state, ownProps) => {
-  const { engagementItemsById, engagementItemIds } = ownProps;
+  const { commentsById, commentIds } = ownProps;
   return {
-    engagementItemsById,
-    engagementItemIds
+    commentsById,
+    commentIds
   };
 };
 
 const actions = {
-  fetchEngagementItems,
-  verifyPendingEngagementItem,
-  changeEngagementItemIssueStatus
+  fetchComments,
+  verifyPendingComment,
+  changeCommentIssueStatus
 };
 
 export default withRouter(
