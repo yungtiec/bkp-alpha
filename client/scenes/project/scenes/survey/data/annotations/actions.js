@@ -4,7 +4,8 @@ import {
   postUpvoteToAnnotation,
   updateAnnotationComment,
   postPendingAnnotationStatus,
-  updateAnnotationIssueStatus
+  updateAnnotationIssueStatus,
+  postComment
 } from "./service";
 import { getAllTags } from "../tags/service";
 import { findItemInTreeById } from "../../../../../../utils";
@@ -12,16 +13,40 @@ import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";
 
-export const fetchAnnotationsBySurvey = uri => {
+export const fetchAnnotationsBySurvey = projectSurveyId => {
   return async dispatch => {
     try {
-      const annotations = await getAnnotationsBySurvey(uri);
+      const annotations = await getAnnotationsBySurvey(projectSurveyId);
       const tags = await getAllTags();
       const annotationsById = keyBy(annotations, "id");
       dispatch({
         type: types.ANNOTATIONS_FETCH_SUCCESS,
         annotationsById,
         tags
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const addNewComment = ({
+  projectSurveyId,
+  comment,
+  tags,
+  issueOpen
+}) => {
+  return async dispatch => {
+    try {
+      const postedComment = await postComment({
+        projectSurveyId,
+        comment,
+        tags,
+        issueOpen
+      });
+      dispatch({
+        type: types.ANNOTATION_ADDED,
+        annotation: postedComment
       });
     } catch (err) {
       console.log(err);

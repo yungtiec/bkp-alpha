@@ -359,3 +359,18 @@ export function getAllAnnotations(state) {
     };
   }
 }
+
+export const getOutstandingIssues = state => {
+  const annotationsById =
+    state.scenes.project.scenes.survey.data.annotations.annotationsById;
+  if (!annotationsById) return null;
+  const annotations = values(annotationsById)
+    .filter(item => item.issue && item.issue.open)
+    .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
+  const outstandingIssues = orderBy(
+    annotations,
+    ["upvotesFrom.length", "unix"],
+    ["desc", "desc"]
+  );
+  return outstandingIssues;
+};

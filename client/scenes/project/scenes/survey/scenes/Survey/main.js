@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import autoBind from "react-autobind";
+import { batchActions } from "redux-batched-actions";
+import { SquareLoader } from "halogenium";
+import { Link, Switch, Route } from "react-router-dom";
 import {
   Link as ScrollLink,
   Element,
@@ -7,19 +10,17 @@ import {
   scroller
 } from "react-scroll";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { SurveyContent, SurveyProgress } from "./components";
 import {
   SidebarLayout,
   SidebarAnnotations,
   SidebarPageComments,
-  SidebarHeader
+  SidebarHeader,
+  CommentBoxWithTagField,
+  SurveyHeader
 } from "../../components";
-import { SurveyContent } from "./components";
 import { findAnnotationsInQnaByText } from "../../utils";
 import { CustomScrollbar } from "../../../../../../components";
-import autoBind from "react-autobind";
-import { batchActions } from "redux-batched-actions";
-import { SquareLoader } from "halogenium";
 
 class Survey extends Component {
   constructor(props) {
@@ -36,41 +37,21 @@ class Survey extends Component {
       window.location.pathname.indexOf("/annotation/") !== -1;
     const givenQnaContext =
       window.location.pathname.indexOf("/question/") !== -1;
-    const givenPageCommentContext =
-      window.location.pathname.indexOf("/page-comments") !== -1;
-    var annotationId, qnaId, pos, annotations, commentId;
-    if (
-      givenAnnotationContext &&
-      givenQnaContext &&
-      !this.props.sidebarContext.focusOnce
-    ) {
+    var annotationId, qnaId, pos, annotations;
+    if (givenAnnotationContext && !this.props.sidebarContext.focusOnce) {
       pos = window.location.pathname.indexOf("/annotation/");
       annotationId = window.location.pathname.substring(pos).split("/")[2];
-      pos = window.location.pathname.indexOf("/question/");
-      qnaId = window.location.pathname.substring(pos).split("/")[2];
-      if (this.props.annotationsById[Number(annotationId)]) {
+      if (givenQnaContext) {
+        pos = window.location.pathname.indexOf("/question/");
+        qnaId = window.location.pathname.substring(pos).split("/")[2];
         scroller.scrollTo(`qna-${qnaId}`);
-        batchActions([
-          this.props.updateEngagementTabInView("annotations"),
-          this.props.updateSidebarContext({
-            selectedAnnotationId: Number(annotationId),
-            focusOnce: true
-          })
-        ]);
       }
-    } else if (
-      givenPageCommentContext &&
-      !this.props.sidebarContext.focusOnce
-    ) {
-      pos = window.location.pathname.indexOf("/page-comments/");
-      commentId = window.location.pathname.substring(pos).split("/")[2];
-      batchActions([
-        this.props.updateEngagementTabInView("comments"),
+      if (this.props.annotationsById[Number(annotationId)]) {
         this.props.updateSidebarContext({
-          selectedCommentId: commentId,
+          selectedAnnotationId: Number(annotationId),
           focusOnce: true
-        })
-      ]);
+        });
+      }
     }
   }
 
@@ -93,16 +74,12 @@ class Survey extends Component {
   }
 
   resetSidebarContext() {
-    batchActions([
-      this.props.updateEngagementTabInView("annotations"),
-      this.props.updateSidebarContext({
-        selectedText: "",
-        selectedAnnotations: null,
-        focusOnce: false,
-        selectedCommentId: "",
-        selectedAnnotationId: null
-      })
-    ]);
+    this.props.updateSidebarContext({
+      selectedText: "",
+      selectedAnnotations: null,
+      focusOnce: false,
+      selectedAnnotationId: null
+    });
   }
 
   annotationOnClick(evt, qnaId, answerId) {
@@ -166,7 +143,6 @@ class Survey extends Component {
     this.props.updateSidebarContext({
       selectedText: "",
       focusQnaId: "",
-      selectedCommentId: "",
       selectedAnnotationId: ""
     });
   }
@@ -185,42 +161,51 @@ class Survey extends Component {
       match,
       width,
       annotationSortBy,
-      engagementTab,
       sortAnnotationBy,
       tags,
       tagsWithCountInSurvey,
       tagFilter,
       updateTagFilter,
       addNewAnnotationSentFromServer,
-      updateEngagementTabInView,
-      commentSortBy,
-      sortCommentBy,
-      commentIds,
-      commentsById,
-      projectSurveyId,
       sidebarContext,
       annotationIssueFilter,
-      commentIssueFilter,
-      updateIssueFilter
+      updateIssueFilter,
+      addNewComment
     } = this.props;
+
     const selectedAnnotations = this.getSelectedAnnotations();
-    const selectedComment = commentsById[sidebarContext.selectedCommentId];
+
     return (
       <div>
-        <SurveyContent
-          parent={this}
-          isLoggedIn={isLoggedIn}
+        <SurveyHeader
           userEmail={userEmail}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
-          numAnnotations={annotationIds.length}
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
-          tags={tags}
-          tagFilter={tagFilter}
-          annotationOnClick={this.annotationOnClick}
-          addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
         />
+        <Switch>
+          <Route
+            path={`${this.props.match.path}/progress`}
+            render={() => <SurveyProgress surveyMetadata={surveyMetadata} />}
+          />
+          <Route
+            render={() => (
+              <SurveyContent
+                parent={this}
+                isLoggedIn={isLoggedIn}
+                surveyQnasById={surveyQnasById}
+                surveyQnaIds={surveyQnaIds}
+                numAnnotations={annotationIds.length}
+                surveyMetadata={surveyMetadata}
+                tags={tags}
+                tagFilter={tagFilter}
+                annotationOnClick={this.annotationOnClick}
+                addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
+              />
+            )}
+          />
+        </Switch>
         <SidebarLayout width={width} selectedAnnotations={selectedAnnotations}>
           <CustomScrollbar
             scrollbarContainerWidth={
@@ -237,47 +222,44 @@ class Survey extends Component {
               id="sidebar-contents"
               className="sidebar-contents"
             >
+              <div className="engagement-item page-comment">
+                <div className="engagement-item__main">
+                  <div className="engagement-item__header">
+                    <p>Leave a comment?</p>
+                  </div>
+                </div>
+                <CommentBoxWithTagField
+                  showTags={true}
+                  showIssueCheckbox={true}
+                  tags={tags}
+                  selectedTags={[]}
+                  initialValue=""
+                  projectSurveyId={surveyMetadata.id}
+                  onSubmit={addNewComment}
+                  onCancel={null}
+                />
+              </div>
               <SidebarHeader
-                engagementTab={engagementTab}
-                updateEngagementTabInView={updateEngagementTabInView}
                 annotationSortBy={annotationSortBy}
                 sortAnnotationBy={sortAnnotationBy}
                 annotationIds={annotationIds}
                 selectedAnnotations={selectedAnnotations}
-                commentSortBy={commentSortBy}
-                sortCommentBy={sortCommentBy}
-                commentIds={commentIds}
                 tagFilter={tagFilter}
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
                 isLoggedIn={isLoggedIn}
                 resetSelection={this.resetContext}
-                selectedComment={selectedComment}
                 annotationIssueFilter={annotationIssueFilter}
-                commentIssueFilter={commentIssueFilter}
                 updateIssueFilter={updateIssueFilter}
               />
-              {engagementTab === "annotations" && (
-                <SidebarAnnotations
-                  engagementTab={engagementTab}
-                  annotationIds={annotationIds}
-                  annotationsById={annotationsById}
-                  selectedText={sidebarContext.selectedText}
-                  selectedAnnotations={selectedAnnotations}
-                  parent={this}
-                />
-              )}
-              {engagementTab === "comments" && (
-                <SidebarPageComments
-                  projectSurveyId={projectSurveyId}
-                  engagementTab={engagementTab}
-                  commentIds={commentIds}
-                  commentsById={commentsById}
-                  selectedComment={selectedComment}
-                  parent={this}
-                  tags={tags}
-                />
-              )}
+              <SidebarAnnotations
+                annotationIds={annotationIds}
+                annotationsById={annotationsById}
+                selectedText={sidebarContext.selectedText}
+                selectedAnnotations={selectedAnnotations}
+                tags={tags}
+                parent={this}
+              />
             </Element>
           </CustomScrollbar>
         </SidebarLayout>

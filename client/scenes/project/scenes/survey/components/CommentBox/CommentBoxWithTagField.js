@@ -37,7 +37,7 @@ export default class CommentBoxWithTagField extends Component {
     });
   }
 
-  handleTagCloseIconOnClick(index) {
+  handleRemoveTag(index) {
     this.setState({
       selectedTags: this.state.selectedTags.filter((tag, i) => i !== index)
     });
@@ -71,7 +71,7 @@ export default class CommentBoxWithTagField extends Component {
           <div>
             <Select.Creatable
               multi={true}
-              placeholder="add tag(s)"
+              placeholder="add or create tag(s)"
               options={this.state.tags.map(tag => ({
                 ...tag,
                 value: tag.name,
@@ -88,7 +88,7 @@ export default class CommentBoxWithTagField extends Component {
                       containerClassname="annotation-item__tag"
                       tagValue={tag.name}
                       closeIconOnClick={() =>
-                        this.handleTagCloseIconOnClick(index)
+                        this.handleRemoveTag(index)
                       }
                     />
                   ))

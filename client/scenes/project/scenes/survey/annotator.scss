@@ -4,10 +4,12 @@
   border-bottom: 4px solid #ec7063;
 }
 
-// remove annotatorjs tooltip on hober
-.annotator-annotation.annotator-item {
+// remove annotatorjs tooltip on hover
+.annotator-annotation.annotator-item,
+.annotator-outer.annotator-viewer {
   display: none;
 }
+
 
 .annotator-listing:after {
   display: none;

@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import SurveyUpload from "./scenes/SurveyUpload";
 import Survey from "./scenes/Survey";
-import SurveyProgress from "./scenes/SurveyProgress";
 import autoBind from "react-autobind";
 import { updateVerificationStatusInView } from "./reducer";
 
@@ -48,10 +47,6 @@ class SurveyContainer extends Component {
         <Route
           path={`${this.props.match.path}/upload`}
           render={props => <SurveyUpload />}
-        />
-        <Route
-          path={`${this.props.match.path}/progress`}
-          render={props => <SurveyProgress />}
         />
         <Route render={props => <Survey />} />
       </Switch>

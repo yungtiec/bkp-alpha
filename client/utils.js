@@ -1,5 +1,6 @@
 import { find } from "lodash";
 import history from "./history";
+
 /**
  * itemCollection has a tree like structure
  * a collection in which each element has a children array, aka another collection
@@ -27,12 +28,12 @@ export function seeAnnotationContext(engagementItem) {
       ? find(engagementItem.ancestors, a => a.hierarchyLevel === 1)
       : engagementItem;
   const path =
-    engagementItem.engagementItemType === "annotation"
+    engagementItem.uri
       ? `${rootItem.uri.replace(window.origin, "")}/question/${
           engagementItem.survey_question_id
         }/annotation/${rootItem.id}`
       : `/project/${engagementItem.project_survey.project.symbol}/survey/${
           engagementItem.project_survey.id
-        }/page-comments/${rootItem.id}`;
+        }/annotation/${rootItem.id}`;
   return history.push(path);
 }

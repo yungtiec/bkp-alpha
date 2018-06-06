@@ -23,7 +23,12 @@ router.get("/", async (req, res, next) => {
     const annotations = await Annotation.scope({
       method: [
         "flatThreadByRootId",
-        { where: { uri: req.query.uri, hierarchyLevel: 1 } }
+        {
+          where: {
+            project_survey_id: req.query.projectSurveyId,
+            hierarchyLevel: 1
+          }
+        }
       ]
     }).findAll();
     res.send(annotations);
@@ -31,6 +36,56 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post(
+  "/",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      const isAdmin = await User.findOne({
+        where: { id: req.user.id },
+        include: [
+          {
+            model: Role
+          }
+        ]
+      }).then(
+        requestor => requestor.roles.filter(r => r.name === "admin").length
+      );
+      const comment = await Annotation.create({
+        owner_id: req.user.id,
+        project_survey_id: Number(req.body.projectSurveyId),
+        comment: req.body.comment,
+        reviewed: isAdmin ? "verified" : "pending"
+      })
+        .then(async comment => {
+          if (req.body.issueOpen)
+            await Issue.create({
+              open: true,
+              annotation_id: comment.id
+            });
+          return comment;
+        })
+        .then(comment => {
+          return Promise.map(req.body.tags, async addedTag => {
+            const [tag, created] = await Tag.findOrCreate({
+              where: { name: addedTag.name },
+              default: { name: addedTag.name }
+            });
+            return comment.addTag(tag.id);
+          }).then(() =>
+            Annotation.scope({
+              method: ["flatThreadByRootId", { where: { id: comment.id } }]
+            }).findOne()
+          );
+        });
+      res.send(comment);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 router.post(
   "/reply",
