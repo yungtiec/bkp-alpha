@@ -214,7 +214,6 @@ export default class CommentItem extends Component {
       ["unix", "upvotesFrom.length"],
       ["asc", "desc"]
     ).map((reply, i) => {
-      if (reply.reviewed === "spam") return null;
       const hasUpvoted = find(
         reply.upvotesFrom,
         user => user.email === this.props.userEmail
