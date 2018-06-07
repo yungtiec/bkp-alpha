@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import { ProfileBanner, ProfileNavbar, ProfileReplies } from "./components";
+import { ProfileBanner, ProfileNavbar } from "./components";
 import ProfileAbout from "./scenes/about";
-import ProfileAnnotations from "./scenes/annotations";
+import ProfileComments from "./scenes/comments";
 import Notifications from "./scenes/notifications";
 import autoBind from "react-autobind";
 import moment from "moment";
@@ -55,7 +55,7 @@ class Profile extends Component {
           name={`${basicInfo.first_name} ${basicInfo.last_name}`}
           isAdmin={isAdmin}
           restrictedAccess={basicInfo.restricted_access}
-          numAnnotations={basicInfo.num_annotations}
+          numComments={basicInfo.num_comments}
           numProjectSurveyComments={basicInfo.num_project_survey_comments}
           numIssues={basicInfo.num_issues}
           joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
@@ -73,8 +73,8 @@ class Profile extends Component {
             render={props => <ProfileAbout {...basicInfo} {...props} />}
           />
           <Route
-            path={`${match.url}/annotations`}
-            component={ProfileAnnotations}
+            path={`${match.url}/comments`}
+            component={ProfileComments}
           />
           {isMyProfile && (
             <Route

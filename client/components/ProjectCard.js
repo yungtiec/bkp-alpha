@@ -23,7 +23,7 @@ export default (projectId, project) => {
                 <span>disclosures ({project.num_surveys || 0})</span>
               </div>
               <div className="entity__metrics-stat">
-                <span>annotations ({project.num_total_annotations || 0})</span>
+                <span>comments ({project.num_total_comments || 0})</span>
               </div>
               <div className="entity__metrics-stat">
                 <span>issues ({project.num_issues || 0})</span>

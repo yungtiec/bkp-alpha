@@ -28,10 +28,10 @@
 .annotator-widget .annotator-listing,
 .annotator-widget .annotator-controls,
 .annotator-widget .annotator-controls a {
-  background-image: none;
-  text-shadow: none;
-  box-shadow: none;
-  border-radius: none;
+  background-image: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  border-radius: none !important;
 }
 
 // hide annotatorjs highlights
@@ -61,4 +61,9 @@
 
 .annotator-filter {
   z-index: 100010;
+}
+
+.annotator-save:hover,
+.annotator-cancel:hover {
+  background-image: none !important;
 }

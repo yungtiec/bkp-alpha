@@ -47,9 +47,18 @@ const Project = db.define(
                 },
                 { model: db.model("project_survey"), as: "descendents" },
                 {
-                  model: db.model("annotation"),
+                  model: db.model("comment"),
                   required: false,
-                  attributes: ["id", "reviewed"],
+                  attributes: ["id", "reviewed", "hierarchyLevel"],
+                  where: {
+                    reviewed: {
+                      [Sequelize.Op.or]: [
+                        { [Sequelize.Op.eq]: "pending" },
+                        { [Sequelize.Op.eq]: "verified" }
+                      ]
+                    },
+                    hierarchyLevel: 1
+                  },
                   include: [
                     {
                       model: db.model("issue"),
@@ -60,7 +69,14 @@ const Project = db.define(
                       as: "upvotesFrom",
                       attributes: ["id"],
                       required: false
-                    }
+                    },
+                    { model: db.model("comment"), as: "descendents" }
+                  ],
+                  order: [
+                    [
+                      { model: db.model("comment"), as: "descendents" },
+                      "hierarchyLevel"
+                    ]
                   ]
                 },
                 {
@@ -121,9 +137,18 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
               required: false
             },
             {
-              model: db.model("annotation"),
+              model: db.model("comment"),
               required: false,
-              attributes: ["id", "reviewed"],
+              attributes: ["id", "reviewed", "hierarchyLevel"],
+              where: {
+                reviewed: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "pending" },
+                    { [Sequelize.Op.eq]: "verified" }
+                  ]
+                },
+                hierarchyLevel: 1
+              },
               include: [
                 {
                   model: db.model("issue"),
@@ -134,7 +159,14 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
                   as: "upvotesFrom",
                   attributes: ["id"],
                   required: false
-                }
+                },
+                { model: db.model("comment"), as: "descendents" }
+              ],
+              order: [
+                [
+                  { model: db.model("comment"), as: "descendents" },
+                  "hierarchyLevel"
+                ]
               ]
             },
             {
@@ -152,31 +184,46 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
     }
   );
   const numSurveys = projectSurveys.length;
-  const numAnnotation = projectSurveys.reduce(
+  const numComments = projectSurveys.reduce((count, projectSurvey) => {
+    const numTotalComments = projectSurvey.comments.filter(
+      c => c.reviewed !== "spam"
+    ).length;
+    const numTotalReplies = projectSurvey.comments.reduce(
+      (count, comment) =>
+        comment.descendents && comment.descendents.length
+          ? comment.descendents.filter(d => d.reviewed !== "spam").length +
+            count
+          : count,
+      0
+    );
+    return numTotalComments + numTotalReplies + count;
+  }, 0);
+  const numCommentIssues = projectSurveys.reduce(
     (count, projectSurvey) =>
-      projectSurvey.annotations.filter(a => a.reviewed !== "spam").length +
-      count,
-    0
-  );
-  const numAnnotationIssues = projectSurveys.reduce(
-    (count, projectSurvey) =>
-      projectSurvey.annotations.filter(a => !!a.issue).length + count,
+      projectSurvey.comments.filter(a => !!a.issue).length + count,
     0
   );
   const projectSurveysWithStats =
     projectSurveys && projectSurveys.length
       ? projectSurveys.map(s => {
-          const numAnnotation = s.annotations.filter(a => a.reviewed !== "spam")
+          const numTotalComments = s.comments.filter(c => c.reviewed !== "spam")
             .length;
-          const numAnnotationIssues = s.annotations.filter(a => !!a.issue)
-            .length;
+          const numTotalReplies = s.comments.reduce(
+            (count, comment) =>
+              comment.descendents && comment.descendents.length
+                ? comment.descendents.filter(d => d.reviewed !== "spam")
+                    .length + count
+                : count,
+            0
+          );
+          const numCommentIssues = s.comments.filter(a => !!a.issue).length;
 
           return _.assignIn(
             _.pick(s.survey, ["creator", "title", "description"]),
             _.omit(
               _.assignIn(s, {
-                num_total_annotations: numAnnotation,
-                num_issues: numAnnotationIssues,
+                num_total_comments: numTotalComments + numTotalReplies,
+                num_issues: numCommentIssues,
                 project_symbol: project.symbol
               }),
               ["survey"]
@@ -186,8 +233,8 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
       : [];
   var assignees = {
     num_surveys: numSurveys,
-    num_total_annotations: numAnnotation,
-    num_issues: numAnnotationIssues
+    num_total_comments: numComments,
+    num_issues: numCommentIssues
   };
   if (includeProjectSurveys)
     assignees.project_surveys = projectSurveysWithStats;

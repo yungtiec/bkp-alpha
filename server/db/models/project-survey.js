@@ -45,7 +45,7 @@ const ProjectSurvey = db.define(
               required: false,
               include: [
                 {
-                  model: db.model("annotation"),
+                  model: db.model("comment"),
                   required: false
                 }
               ]
@@ -71,7 +71,7 @@ const ProjectSurvey = db.define(
                   required: false,
                   include: [
                     {
-                      model: db.model("annotation"),
+                      model: db.model("comment"),
                       required: false
                     }
                   ]
@@ -99,7 +99,7 @@ const ProjectSurvey = db.define(
                   required: false,
                   include: [
                     {
-                      model: db.model("annotation"),
+                      model: db.model("comment"),
                       required: false
                     }
                   ]
@@ -176,9 +176,18 @@ const ProjectSurvey = db.define(
               required: false
             },
             {
-              model: db.model("annotation"),
+              model: db.model("comment"),
               required: false,
-              attributes: ["id", "reviewed"],
+              attributes: ["id", "reviewed", "hierarchyLevel"],
+              where: {
+                reviewed: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "pending" },
+                    { [Sequelize.Op.eq]: "verified" }
+                  ]
+                },
+                hierarchyLevel: 1
+              },
               include: [
                 {
                   model: db.model("issue"),
@@ -189,7 +198,14 @@ const ProjectSurvey = db.define(
                   as: "upvotesFrom",
                   attributes: ["id"],
                   required: false
-                }
+                },
+                { model: db.model("comment"), as: "descendents" }
+              ],
+              order: [
+                [
+                  { model: db.model("comment"), as: "descendents" },
+                  "hierarchyLevel"
+                ]
               ]
             },
             {
@@ -239,9 +255,18 @@ function getPublishedSurveysStats(projectSurveys) {
         where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
         include: [
           {
-            model: db.model("annotation"),
+            model: db.model("comment"),
             required: false,
-            attributes: ["id", "reviewed"],
+            attributes: ["id", "reviewed", "hierarchyLevel"],
+            where: {
+              reviewed: {
+                [Sequelize.Op.or]: [
+                  { [Sequelize.Op.eq]: "pending" },
+                  { [Sequelize.Op.eq]: "verified" }
+                ]
+              },
+              hierarchyLevel: 1
+            },
             include: [
               {
                 model: db.model("issue"),
@@ -252,7 +277,14 @@ function getPublishedSurveysStats(projectSurveys) {
                 as: "upvotesFrom",
                 attributes: ["id"],
                 required: false
-              }
+              },
+              { model: db.model("comment"), as: "descendents" }
+            ],
+            order: [
+              [
+                { model: db.model("comment"), as: "descendents" },
+                "hierarchyLevel"
+              ]
             ]
           },
           {
@@ -265,26 +297,50 @@ function getPublishedSurveysStats(projectSurveys) {
         projectSurveyInstance.toJSON()
       );
     }
-    const annotations = rawProjectSurvey.annotations;
-    const numPendingAnnotations = annotations.filter(
-      a => a.reviewed === "pending"
-    ).length;
-    const numTotalAnnotations = annotations.filter(a => a.reviewed !== "spam")
+    const comments = rawProjectSurvey.comments;
+    const numPendingComments = comments.filter(c => c.reviewed === "pending")
       .length;
-    const numAnnotationUpvotes = annotations.reduce(
-      (upvotes, ann) => upvotes.concat(ann.upvotesFrom),
-      []
+    const numPendingReplies = comments.reduce(
+      (count, comment) =>
+        comment.descendents && comment.descendents.length
+          ? comment.descendents.filter(d => d.reviewed === "pending").length +
+            count
+          : count,
+      0
     );
-    const numAnnotationIssues = annotations.filter(a => !!a.issue).length;
+    const numTotalComments = comments.filter(c => c.reviewed !== "spam").length;
+    const numTotalReplies = comments.reduce(
+      (count, comment) =>
+        comment.descendents && comment.descendents.length
+          ? comment.descendents.filter(d => d.reviewed !== "spam").length +
+            count
+          : count,
+      0
+    );
+    const numCommentUpvotes = comments.reduce(
+      (upvotes, c) => upvotes.concat(c.upvotesFrom),
+      []
+    ).length;
+    const numReplyUpvotes = comments.reduce(
+      (count, comment) =>
+        comment.descendents && comment.descendents.length
+          ? comment.descendents.reduce(
+              (upvotes, d) => upvotes.concat(d.upvotesFrom),
+              []
+            ).length + count
+          : count,
+      0
+    );
+    const numCommentIssues = comments.filter(c => !!c.issue).length;
     const projectSurvey = _.assignIn(
       {
         title: rawProjectSurvey.survey.title,
         description: rawProjectSurvey.survey.description,
         creator: rawProjectSurvey.creator,
-        num_pending_annotations: numPendingAnnotations,
-        num_total_annotations: numTotalAnnotations,
-        num_reaction: numAnnotationUpvotes.length,
-        num_issues: numAnnotationIssues
+        num_pending_comments: numPendingComments + numPendingReplies,
+        num_total_comments: numTotalComments + numTotalReplies,
+        num_reaction: numCommentUpvotes + numReplyUpvotes,
+        num_issues: numCommentIssues
       },
       _.omit(rawProjectSurvey, ["survey"])
     );

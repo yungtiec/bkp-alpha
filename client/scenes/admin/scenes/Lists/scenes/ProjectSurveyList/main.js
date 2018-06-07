@@ -27,7 +27,7 @@ class AdminProjectSurveyList extends Component {
       },
       { Header: "title", accessor: "title", minWidth: 150 },
       { Header: "issues", accessor: "num_issues", width: 80 },
-      { Header: "pending annotations", accessor: "num_pending_annotations" }
+      { Header: "pending comments", accessor: "num_pending_comments" }
     ];
     const data = projectSurveyIds.map(id => projectSurveysById[id]);
 

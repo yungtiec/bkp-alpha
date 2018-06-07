@@ -147,12 +147,12 @@ async function seedSurveyFromMarkdown({
   var markdownParsor = new MarkdownParsor({ filepath });
   var survey = await Survey.create({
     title: markdownParsor.title,
-    description: markdownParsor.description,
-    creator_id: surveyCreatorId
+    description: markdownParsor.description
   });
   var projectSurvey = await ProjectSurvey.create({
     project_id: project.id,
-    survey_id: survey.id
+    survey_id: survey.id,
+    creator_id: surveyCreatorId
   });
   var questionInstances = await Promise.map(
     markdownParsor.questions,

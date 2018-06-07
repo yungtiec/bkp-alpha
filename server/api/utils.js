@@ -1,8 +1,7 @@
 const {
   User,
   Role,
-  Annotation,
-  ProjectSurveyComment
+  Comment
 } = require("../db/models");
 
 const ensureAuthentication = async (req, res, next) => {
@@ -47,7 +46,7 @@ const ensureAdminRoleOrOwnership = async (req, res, next) => {
   }
 };
 
-const ensureAdminRoleOrEngagementItemOwnership = async (req, res, next) => {
+const ensureAdminRoleOrCommentOwnership = async (req, res, next) => {
   try {
     const requestor = await User.findOne({
       where: { id: req.user.id },
@@ -57,13 +56,10 @@ const ensureAdminRoleOrEngagementItemOwnership = async (req, res, next) => {
         }
       ]
     });
-    const engagementItem =
-      req.body.engagementItem.engagementItemType === "annotation"
-        ? await Annotation.findById(req.body.engagementItem.id)
-        : await ProjectSurveyComment.findById(req.body.engagementItem.id);
+    const comment = Comment.findById(req.body.comment.id);
     if (
       requestor.roles.filter(r => r.name === "admin").length ||
-      engagementItem.owner_id === req.user.id
+      comment.owner_id === req.user.id
     ) {
       next();
     } else {
@@ -83,7 +79,7 @@ const ensureResourceAccess = async (req, res, next) => {
 module.exports = {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrEngagementItemOwnership,
+  ensureAdminRoleOrCommentOwnership,
   ensureAdminRoleOrOwnership,
   ensureResourceAccess
 };

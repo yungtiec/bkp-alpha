@@ -2,7 +2,7 @@ const router = require("express").Router();
 const {
   User,
   Role,
-  Annotation,
+  Comment,
   ProjectSurveyComment,
   ProjectSurvey,
   Project,
@@ -14,7 +14,7 @@ const {
 const {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrEngagementItemOwnership
+  ensureAdminRoleOrCommentOwnership
 } = require("./utils");
 Promise = require("bluebird");
 module.exports = router;
@@ -60,7 +60,7 @@ router.get(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      var annotations = await Annotation.findAll({
+      var comments = await Comment.findAll({
         where: {
           project_survey_id: req.params.projectSurveyId
         },
@@ -74,7 +74,7 @@ router.get(
             required: false
           },
           {
-            model: Annotation,
+            model: Comment,
             as: "ancestors",
             required: false,
             include: [
@@ -112,14 +112,14 @@ router.get(
         order: [
           [
             {
-              model: Annotation,
+              model: Comment,
               as: "ancestors"
             },
             "hierarchyLevel"
           ]
         ]
       });
-      res.send(annotations);
+      res.send(comments);
     } catch (err) {
       next(err);
     }
@@ -127,22 +127,13 @@ router.get(
 );
 
 router.post(
-  "/engagement-item/verify",
+  "/comment/verify",
   ensureAuthentication,
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      var engagementItem;
-      if (req.body.engagementItem.engagementItemType === "annotation") {
-        engagementItem = await Annotation.findById(req.body.engagementItem.id);
-      } else if (
-        req.body.engagementItem.engagementItemType === "page_comment"
-      ) {
-        engagementItem = await ProjectSurveyComment.findById(
-          req.body.engagementItem.id
-        );
-      }
-      engagementItem.update({ reviewed: req.body.reviewed });
+      var comment = await Comment.findById(req.body.comment.id);
+      comment.update({ reviewed: req.body.reviewed });
       res.sendStatus(200);
     } catch (err) {
       next(err);
@@ -151,56 +142,55 @@ router.post(
 );
 
 router.post(
-  "/engagement-item/issue",
+  "/comment/issue",
   ensureAuthentication,
-  ensureAdminRoleOrEngagementItemOwnership,
+  ensureAdminRoleOrCommentOwnership,
   async (req, res, next) => {
     try {
-      var engagementItem;
-      if (req.body.engagementItem.engagementItemType === "annotation") {
-        engagementItem = await Annotation.findOne({
-          where: { id: req.body.engagementItem.id },
-          include: [
-            {
-              model: Issue
-            }
-          ]
-        });
-      } else if (
-        req.body.engagementItem.engagementItemType === "page_comment"
-      ) {
-        engagementItem = await ProjectSurveyComment.scope({
-          method: [
-            "withProjectSurveyInfo",
-            { where: { id: req.body.engagementItem.id } }
-          ]
-        });
-      }
-      if (!req.body.open) {
+      var comment = await Comment.findOne({
+        where: { id: req.body.comment.id },
+        include: [
+          {
+            model: Issue
+          },
+          {
+            model: ProjectSurvey,
+            include: [
+              {
+                model: Project,
+                attributes: ["symbol"]
+              }
+            ]
+          }
+        ]
+      });
+      if (!req.body.open && req.user.id !== comment.owner_id) {
         await Notification.notify({
           sender: "",
-          engagementItem: engagementItem,
+          comment,
           messageFragment: "Admin closed your issue."
         });
       }
-      engagementItem.issue
+      if (req.body.open && req.user.id !== comment.owner_id) {
+        await Notification.notify({
+          sender: "",
+          comment,
+          messageFragment: "Admin opened an issue on your comment."
+        });
+      }
+      comment.issue
         ? await Issue.update(
             {
               open: req.body.open
             },
             {
-              where: { id: engagementItem.issue.id }
+              where: { id: comment.issue.id }
             }
           )
-        : req.body.engagementItem.engagementItemType === "annotation"
-          ? await Issue.create({
-              open: req.body.open,
-              annotation_id: req.body.engagementItem.id
-            })
-          : await Issue.create({
-              open: req.body.open,
-              project_survey_comment_id: req.body.engagementItem.id
-            });
+        : Issue.create({
+            open: req.body.open,
+            comment_id: req.body.comment.id
+          });
       res.sendStatus(200);
     } catch (err) {
       next(err);

@@ -1,0 +1,143 @@
+@import "../breakpoint";
+
+.reply-comment__main {
+  padding: 35px 25px;
+  margin: 0px auto;
+  border: none;
+  text-decoration: none !important;
+  background-color: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.reply-comment__main:hover {
+  background-color: #f9f9f9;
+}
+
+.reply-comment__survey-title {
+  display: inline-block;
+  padding: 0.25em 0em;
+  font-weight: 700;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  margin-bottom: 15px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  text-align: left;
+  color: #020721;
+}
+
+.reply-comment__quote {
+  border-left: 3px solid #d4d4d4;
+  color: #d4d4d4;
+  padding-left: 10px;
+}
+
+.reply-comment__review {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+  color: white;
+}
+
+.reply-comment__review--pending {
+  background: #838383;
+}
+
+.reply-comment__review--spam {
+  background: #dc3545;
+}
+
+.reply-comment__review--verified {
+  background: #007bff;
+}
+
+.reply-comment__action--bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reply-comment__header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reply-comment__action--bottom .see-in-context {
+  cursor: pointer;
+  color: #459df9;
+}
+
+.reply-comment__user span {
+  margin-right: 10px;
+}
+.reply-comment__reply {
+  margin-left: 10px;
+}
+
+.reply-comment__parent {
+  color: #9a9696;
+}
+
+.reply-comment__parent .reply-comment__user,
+.reply-comment__parent .reply-comment__quote,
+.reply-comment__parent .reply-comment__comment,
+.reply-comment__parent .reply-comment__tags {
+  opacity: 0.6;
+}
+
+.reply-comment__parent-header {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.reply-comment__parent-header--mobile {
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
+}
+
+.reply-comment__reply {
+  padding-left: 10px;
+  border-left: 3px solid #999;
+  margin-top: 30px;
+}
+
+.reply-comment__review {
+  opacity: 1;
+}
+
+.reply-comment__tags .badge,
+.reply-comment__tags button {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.25;
+  font-size: 15px;
+}
+
+.reply-comment__tags .badge-light {
+  background: #f2f2f2 !important;
+}
+
+.reply-comment__tags .badge.issue {
+  cursor: pointer;
+}
+
+.reply-comment__tags .badge .fas {
+  font-size: 9px;
+  margin-left: 3px;
+}
+
+.reply-comment__tags {
+  margin-bottom: 1rem;
+}

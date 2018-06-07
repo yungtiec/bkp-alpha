@@ -34,10 +34,10 @@ export default ({ metadata }) => (
           </div>
         </div>
         <div className="project-metrics__stat">
-          <span class="project-metrics__stat-label">Annotations</span>
+          <span class="project-metrics__stat-label">Comments</span>
           <div class="project-metrics__stat-value">
             <span class="project-metrics__stat-number">
-              {metadata.num_total_annotations}
+              {metadata.num_total_comments}
             </span>
           </div>
         </div>

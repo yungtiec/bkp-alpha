@@ -71,7 +71,7 @@ const createApp = () => {
     res.redirect(`/${req.params.file}`);
   });
   app.get(
-    "/project/:symbol/survey/:surveyId/question/:questionId/annotation/public/:file",
+    "/project/:symbol/survey/:surveyId/question/:questionId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
@@ -83,7 +83,7 @@ const createApp = () => {
     }
   );
   app.get(
-    "/project/:symbol/survey/:surveyId/annotation/public/:file",
+    "/project/:symbol/survey/:surveyId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }

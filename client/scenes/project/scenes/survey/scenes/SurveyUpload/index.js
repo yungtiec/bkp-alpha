@@ -6,8 +6,8 @@ import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
 import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
-import { fetchAnnotationsBySurvey } from "../../data/annotations/actions";
-import { getOutstandingIssues } from "../../data/annotations/reducer";
+import { fetchCommentsBySurvey } from "../../data/comments/actions";
+import { getOutstandingIssues } from "../../data/comments/reducer";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
 import { getSelectedProject } from "../../../../data/metadata/reducer";
 import {
@@ -50,7 +50,7 @@ class MyComponent extends React.Component {
       this.props.fetchQuestionsByProjectSurveyId({
         projectSurveyId: this.props.match.params.projectSurveyId
       }),
-      this.props.fetchAnnotationsBySurvey(
+      this.props.fetchCommentsBySurvey(
         this.props.match.params.projectSurveyId
       )
     ]);
@@ -91,7 +91,7 @@ const mapState = state => {
 
 const actions = {
   fetchQuestionsByProjectSurveyId,
-  fetchAnnotationsBySurvey,
+  fetchCommentsBySurvey,
   importMarkdown,
   uploadMarkdownToServer,
   selectIssueToResolve,

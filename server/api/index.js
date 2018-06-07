@@ -4,7 +4,7 @@ module.exports = router;
 router.use("/admin", require("./admin"));
 router.use("/users", require("./users"));
 router.use("/annotator", require("./annotator"));
-router.use("/annotation", require("./annotation"));
+router.use("/comment", require("./comment"));
 router.use("/project", require("./project"));
 router.use("/tag", require("./tag"));
 router.use("/notifications", require("./notifications"));

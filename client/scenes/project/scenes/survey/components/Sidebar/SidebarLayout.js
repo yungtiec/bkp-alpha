@@ -31,7 +31,7 @@ class Sidebar extends Component {
       updateVerificationStatusInView,
       toggleSidebar,
       sidebarOpen,
-      selectedAnnotations,
+      selectedComments,
       verificationStatus,
       width,
       children,
@@ -80,7 +80,7 @@ class Sidebar extends Component {
             : this.renderVerificationStatusTab({
                 tabStyle,
                 verificationStatus,
-                selectedAnnotations
+                selectedComments
               })}
         </div>
         {children}
@@ -91,7 +91,7 @@ class Sidebar extends Component {
   renderVerificationStatusTab({
     tabStyle,
     verificationStatus,
-    selectedAnnotations
+    selectedComments
   }) {
     return (
       <div
@@ -104,8 +104,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "all" &&
-            selectedAnnotations &&
-            !selectedAnnotations.length &&
+            selectedComments &&
+            !selectedComments.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("all")}
         >
@@ -115,8 +115,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "verified" &&
-            selectedAnnotations &&
-            !selectedAnnotations.length &&
+            selectedComments &&
+            !selectedComments.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("verified")}
         >
@@ -126,8 +126,8 @@ class Sidebar extends Component {
           type="button"
           className={`social-sidebar__status-tab ${verificationStatus ===
             "pending" &&
-            selectedAnnotations &&
-            !selectedAnnotations.length &&
+            selectedComments &&
+            !selectedComments.length &&
             "active"}`}
           onClick={() => this.props.updateVerificationStatusInView("pending")}
         >

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const db = require("../db");
 const _ = require("lodash");
 const {
-  Annotation,
+  Comment,
   User,
   ProjectSurvey,
   Survey,
@@ -108,7 +108,7 @@ router.post(
             )
         );
         var resolvedAddedIssues = req.body.newIssues.map(async newIssue =>
-          ProjectSurveyComment.create({
+          Comment.create({
             comment: newIssue,
             reviewed: "verified",
             project_survey_id: req.params.parentProjectSurveyId,
@@ -116,7 +116,7 @@ router.post(
           }).then(comment =>
             Issue.create({
               open: false,
-              project_survey_comment_id: comment.id,
+              comment_id: comment.id,
               resolving_project_survey_id: projectSurvey.id
             })
           )

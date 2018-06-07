@@ -8,8 +8,7 @@ export default about => {
         <div className="profile-about__restricted-access">
           <span className="badge badge-danger">Restricted Access</span>
           <p>
-            Due to your recent activities, admin has revoke your annotation and
-            comment privilege.
+            Due to your recent activities, admin has revoke your comment privilege.
           </p>
         </div>
       )}

@@ -9,12 +9,12 @@ export default class Answers extends Component {
     autoBind(this);
   }
 
-  renderAnswer({ answer, qnaId, handleAnnotationOnClick }) {
+  renderAnswer({ answer, qnaId, handleCommentOnClick }) {
     return (
       <div
         key={`qna-${qnaId}__answer--${answer.id}`}
         onClick={e => {
-          handleAnnotationOnClick(e, qnaId, answer.id);
+          handleCommentOnClick(e, qnaId, answer.id);
         }}
       >
         <ReactMarkdown className="qna__answer" source={answer.markdown} />
@@ -23,18 +23,18 @@ export default class Answers extends Component {
   }
 
   render() {
-    const { answers, qnaId, handleAnnotationOnClick } = this.props;
+    const { answers, qnaId, handleCommentOnClick } = this.props;
 
     return (
       <div className="qna__answer-container">
         {this.renderAnswer({
           answer: answers[0],
           qnaId,
-          handleAnnotationOnClick
+          handleCommentOnClick
         })}
         {answers.children &&
           answers.children.map(child =>
-            this.renderAnswer({ answer: child, qnaId, handleAnnotationOnClick })
+            this.renderAnswer({ answer: child, qnaId, handleCommentOnClick })
           )}
       </div>
     );
