@@ -34,13 +34,6 @@ function hasEditRight(userId, parentProjectSurvey) {
   return isOwner || isCollaborator;
 }
 
-router.get("/test", async (req, res, next) => {
-  try {
-  } catch (err) {
-    next(err);
-  }
-});
-
 router.post(
   "/:parentProjectSurveyId",
   ensureAuthentication,
