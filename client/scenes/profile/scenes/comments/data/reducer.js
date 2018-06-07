@@ -20,7 +20,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         commentsById: action.commentsById,
         commentIds: action.commentIds,
-        pageCount: Math.ceil(action.annotationCount / state.pageLimit)
+        pageCount: Math.ceil(action.commentCount / state.pageLimit)
       };
     case types.PAGE_LIMIT_UPDATED:
       return { ...state, pageLimit: action.pageLimit };

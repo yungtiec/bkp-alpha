@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import { groupBy, keys, isEmpty } from "lodash";
 import moment from "moment";
 import Select from "react-select";
-import { ProfileSidebar, ProfileEngagementItems } from "../../components";
+import { ProfileSidebar, ProfileCommentItems } from "../../components";
 import {
   updatePageLimit,
   updatePageOffset,
@@ -81,7 +81,7 @@ class ProfileComments extends Component {
         >
           <span>FILTER BY PROJECT(S)</span>
           <Select
-            name="profile-annotations__project-select"
+            name="profile-comments__project-select"
             multi={true}
             value={pageProjectFilter}
             onChange={this.handleProjectSelectChange}
@@ -92,9 +92,9 @@ class ProfileComments extends Component {
           />
         </ProfileSidebar>
         <div className="d-flex flex-column profile-enagement-items">
-          <ProfileEngagementItems
-            engagementItemsById={commentsById}
-            engagementItemIds={commentIds}
+          <ProfileCommentItems
+            commentsById={commentsById}
+            commentIds={commentIds}
           />
           {commentIds.length && pageCount > 1 ? (
             <ReactPaginate

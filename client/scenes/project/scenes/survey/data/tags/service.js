@@ -1,13 +1,12 @@
 import axios from "axios";
 
-export function deleteTag({ annotationId, tagId }) {
-  return axios.put("/api/annotation/tag/remove", { annotationId, tagId });
+export function deleteTag({ commentId, tagId }) {
+  return axios.put("/api/comment/tag/remove", { commentId, tagId });
 }
 
-export function putTag({ annotationId, tagName }) {
-  console.log(tagName)
+export function putTag({ commentId, tagName }) {
   return axios
-    .put("/api/annotation/tag/add", { annotationId, tagName })
+    .put("/api/comment/tag/add", { commentId, tagName })
     .then(res => res.data);
 }
 

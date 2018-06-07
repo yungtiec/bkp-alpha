@@ -4,7 +4,7 @@ import Avatar from "react-avatar";
 
 export default ({
   name,
-  numAnnotations,
+  numComments,
   numIssues,
   joinDate,
   isAdmin,
@@ -20,7 +20,7 @@ export default ({
       <div className="profile-banner__short-bio">
         <h2>{name}</h2>
         <p>
-          <span>{numAnnotations || 0} comment(s)</span>
+          <span>{numComments || 0} comment(s)</span>
           <span className="divider">|</span>
           <span>{numIssues || 0} issue(s)</span>
           <span className="divider">|</span>

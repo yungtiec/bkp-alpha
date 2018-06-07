@@ -35,7 +35,7 @@ class QnaBox extends Component {
           },
           annotationCreated: function(ann) {
             undraw(self.state.temporaryHighlight);
-            self.props.addNewAnnotationSentFromServer(ann);
+            self.props.addNewCommentSentFromServer(ann);
           }
         };
       };
@@ -96,26 +96,6 @@ class QnaBox extends Component {
       $(".annotator-adder").css("height", "inherit");
     }
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const prevProjectSymbol = this.props.match.url.split("/")[2];
-  //   const nextProjectSymbol = nextProps.match.url.split("/")[2];
-  //   const prevSurveyId = this.props.match.params.surveyId;
-  //   const nextSurveyId = nextProps.match.params.surveyId;
-  //   const prevNumAnnotations = this.props.numAnnotations;
-  //   const nextNumAnnotations = nextProps.numAnnotations;
-  //   const nextTags = nextProps.tagFilter.map(tag => tag.value);
-  //   const prevTags = this.props.tagFilter.map(tag => tag.value);
-  //   if (
-  //     (prevProjectSymbol &&
-  //       prevSurveyId &&
-  //       (prevProjectSymbol !== nextProjectSymbol ||
-  //         prevSurveyId !== nextSurveyId)) ||
-  //     prevNumAnnotations !== nextNumAnnotations
-  //   ) {
-  //     this.annotation = $(this[`qna-${this.props.qna.id}`]).annotator();
-  //   }
-  // }
 
   render() {
     const { qna } = this.props;

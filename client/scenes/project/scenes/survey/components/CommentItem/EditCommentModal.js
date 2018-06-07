@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Modal from "react-modal";
 import { hideModal } from "../../../../../../data/reducer";
-import { editAnnotationComment } from "../../data/annotations/actions";
+import { editComment } from "../../data/comments/actions";
 import { removeTag, addTag } from "../../data/tags/actions";
 import { getAllTags } from "../../data/tags/reducer";
 import { CommentBox, CommentBoxWithTagField } from "../index";
 import { TagChip } from "../../../../../../components";
 import Select from "react-select";
 
-class AnnotationEditModal extends Component {
+class EditCommentModal extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -27,7 +27,7 @@ class AnnotationEditModal extends Component {
   handleTagOnChange(selected) {
     if (this.props.tags.indexOf(selected.value) === -1) {
       this.props.addTag({
-        annotationId: this.props.id,
+        commentId: this.props.id,
         tagName: selected.length && selected[0].value
       });
     }
@@ -38,25 +38,27 @@ class AnnotationEditModal extends Component {
       <Modal
         isOpen={true}
         onRequestClose={this.onClose}
-        contentLabel="Annotation Edit Modal"
+        contentLabel="Edit Comment Modal"
       >
-        <div className="annotation-item__edit">
+        <div className="comment-item--editing">
           <h5>Your annotation/comment</h5>
           <hr className="my-2" />
-          <p className="annotation-item__quote mt-4">{this.props.quote}</p>
+          <p className="comment-item--editing__quote mt-4">
+            {this.props.quote}
+          </p>
           <CommentBoxWithTagField
             issueOpen={this.props.issue ? this.props.issue.open : false}
             tags={this.props.availableTags}
             selectedTags={this.props.tags}
             initialValue={this.props.comment}
-            annotationId={this.props.id}
+            commentId={this.props.id}
             showTags={this.props.showTags}
             showIssueCheckbox={this.props.showIssueCheckbox}
             commentId={this.props.id}
             onSubmit={this.handleSubmitEditedComment}
             onCancel={this.onClose}
           />
-          <div className="annotation-item__action--bottom " />
+          <div className="comment-item--editing__action--bottom " />
         </div>
       </Modal>
     );
@@ -70,12 +72,12 @@ const mapState = (state, ownProps) => ({
 
 const actions = {
   hideModal,
-  editAnnotationComment,
+  editComment,
   removeTag,
   addTag
 };
 
-export default connect(mapState, actions)(AnnotationEditModal);
+export default connect(mapState, actions)(EditCommentModal);
 
 <span
   class="Select-value-label"

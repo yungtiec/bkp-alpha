@@ -1,10 +1,10 @@
 import {
-  getAnnotationsBySurvey,
-  postReplyToAnnotation,
-  postUpvoteToAnnotation,
-  updateAnnotationComment,
-  postPendingAnnotationStatus,
-  updateAnnotationIssueStatus,
+  getCommentsBySurvey,
+  postReplyToComment,
+  postUpvoteToComment,
+  updateComment,
+  postPendingCommentStatus,
+  updateCommentIssueStatus,
   postComment
 } from "./service";
 import { getAllTags } from "../tags/service";
@@ -13,15 +13,15 @@ import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";
 
-export const fetchAnnotationsBySurvey = projectSurveyId => {
+export const fetchCommentsBySurvey = projectSurveyId => {
   return async dispatch => {
     try {
-      const annotations = await getAnnotationsBySurvey(projectSurveyId);
+      const comments = await getCommentsBySurvey(projectSurveyId);
       const tags = await getAllTags();
-      const annotationsById = keyBy(annotations, "id");
+      const commentsById = keyBy(comments, "id");
       dispatch({
-        type: types.ANNOTATIONS_FETCH_SUCCESS,
-        annotationsById,
+        type: types.COMMENTS_FETCH_SUCCESS,
+        commentsById,
         tags
       });
     } catch (err) {
@@ -45,8 +45,8 @@ export const addNewComment = ({
         issueOpen
       });
       dispatch({
-        type: types.ANNOTATION_ADDED,
-        annotation: postedComment
+        type: types.COMMENT_ADDED,
+        comment: postedComment
       });
     } catch (err) {
       console.log(err);
@@ -54,23 +54,23 @@ export const addNewComment = ({
   };
 };
 
-export const addNewAnnotationSentFromServer = annotation => ({
-  type: types.ANNOTATION_ADDED,
-  annotation
+export const addNewCommentSentFromServer = comment => ({
+  type: types.COMMENT_ADDED,
+  comment
 });
 
-export const initiateReplyToAnnotation = ({ accessors, parent }) => {
+export const initiateReplyToComment = ({ accessors, parent }) => {
   return (dispatch, getState) => {
     const {
-      annotationsById
-    } = getState().scenes.project.scenes.survey.data.annotations;
+      commentsById
+    } = getState().scenes.project.scenes.survey.data.comments;
     const ancestorIsSpam = accessors
-      .map(aid => findItemInTreeById(values(annotationsById), aid))
+      .map(aid => findItemInTreeById(values(commentsById), aid))
       .reduce((bool, item) => item.reviewed === "spam" || bool, false);
 
     if (!ancestorIsSpam)
       dispatch({
-        type: types.ANNOTATION_REPLY_INIT,
+        type: types.COMMENT_REPLY_INIT,
         accessors,
         parent
       });
@@ -87,23 +87,23 @@ export const initiateReplyToAnnotation = ({ accessors, parent }) => {
   };
 };
 
-export const cancelReplyToAnnotation = ({ accessors, parent }) => ({
-  type: types.ANNOTATION_REPLY_CANCEL,
+export const cancelReplyToComment = ({ accessors, parent }) => ({
+  type: types.COMMENT_REPLY_CANCEL,
   accessors,
   parent
 });
 
-export const replyToAnnotation = ({ rootId, parentId, comment }) => {
+export const replyToComment = ({ rootId, parentId, comment }) => {
   return async (dispatch, getState) => {
     try {
-      const rootAnnotation = await postReplyToAnnotation({
+      const rootComment = await postReplyToComment({
         rootId,
         parentId,
         comment
       });
       dispatch({
-        type: types.ANNOTATION_UPDATED,
-        rootAnnotation
+        type: types.COMMENT_UPDATED,
+        rootComment
       });
     } catch (err) {
       console.log(err);
@@ -111,19 +111,19 @@ export const replyToAnnotation = ({ rootId, parentId, comment }) => {
   };
 };
 
-export const upvoteAnnotation = ({ rootId, itemId, hasUpvoted }) => {
+export const upvoteComment = ({ rootId, itemId, hasUpvoted }) => {
   return async dispatch => {
     try {
       const {
-        annotationId,
+        commentId,
         upvotesFrom
-      } = await postUpvoteToAnnotation({
-        annotationId: itemId,
+      } = await postUpvoteToComment({
+        commentId: itemId,
         hasUpvoted
       });
       dispatch({
-        type: types.ANNOTATION_UPVOTED,
-        annotationId,
+        type: types.COMMENT_UPVOTED,
+        commentId,
         rootId,
         upvotesFrom
       });
@@ -133,23 +133,23 @@ export const upvoteAnnotation = ({ rootId, itemId, hasUpvoted }) => {
   };
 };
 
-export const editAnnotationComment = ({
-  annotationId,
+export const editComment = ({
+  commentId,
   comment,
   tags,
   issueOpen
 }) => {
   return async dispatch => {
     try {
-      const rootAnnotation = await updateAnnotationComment({
-        annotationId,
+      const rootComment = await updateComment({
+        commentId,
         comment,
         tags,
         issueOpen
       });
       dispatch({
-        type: types.ANNOTATION_UPDATED,
-        rootAnnotation
+        type: types.COMMENT_UPDATED,
+        rootComment
       });
       dispatch({
         type: "modal.HIDE_MODAL"
@@ -170,16 +170,16 @@ export const editAnnotationComment = ({
   };
 };
 
-export const verifyAnnotationAsAdmin = ({ engagementItem, rootId, reviewed }) => {
+export const verifyCommentAsAdmin = ({ comment, rootId, reviewed }) => {
   return async dispatch => {
     try {
-      await postPendingAnnotationStatus({
-        engagementItem,
+      await postPendingCommentStatus({
+        comment,
         reviewed
       });
       dispatch({
-        type: types.ANNOTATION_VERIFIED,
-        annotationId: engagementItem.id,
+        type: types.COMMENT_VERIFIED,
+        commentId: comment.id,
         reviewed,
         rootId
       });
@@ -197,23 +197,23 @@ export const verifyAnnotationAsAdmin = ({ engagementItem, rootId, reviewed }) =>
   };
 };
 
-export const changeAnnotationIssueStatus = annotation => {
+export const changeCommentIssueStatus = comment => {
   return async (dispatch, getState) => {
     try {
       const user = getState().data.user;
       if (
-        annotation.owner_id !== user.id &&
+        comment.owner_id !== user.id &&
         !user.roles.filter(r => r.name === "admin").length
       )
         return;
-      const open = annotation.issue ? !annotation.issue.open : true;
-      await updateAnnotationIssueStatus({
-        annotation,
+      const open = comment.issue ? !comment.issue.open : true;
+      await updateCommentIssueStatus({
+        comment,
         open
       });
       dispatch({
-        type: types.ANNOTATION_ISSUE_UPDATED,
-        annotationId: annotation.id,
+        type: types.COMMENT_ISSUE_UPDATED,
+        commentId: comment.id,
         open
       });
     } catch (err) {

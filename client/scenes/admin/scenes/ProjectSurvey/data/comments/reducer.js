@@ -70,7 +70,6 @@ export default function reduce(state = initialState, action = {}) {
 
 export const getComments = state => {
   const filterDict = {
-    annotation: "commentType",
     verified: "reviewStatus",
     spam: "reviewStatus",
     pending: "reviewStatus",

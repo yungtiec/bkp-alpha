@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { Timeline, TimelineEvent } from "react-event-timeline";
-import { seeAnnotationContext } from "../../../../../../../utils";
+import { seeCommentContext } from "../../../../../../../utils";
 import { getFullNameFromUserObject } from "../../../utils";
 
 export default ({ surveyMetadata }) => (
@@ -47,14 +47,13 @@ export default ({ surveyMetadata }) => (
           {verison.resolvedIssues.length ? (
             <div className="entity-cards">
               {verison.resolvedIssues.map(issue => {
-                const engagementItem =
-                  issue.annotation || issue.project_survey_comment;
+                const comment = issue.comment;
                 return (
                   <div
                     className="entity-card__container p-3"
                     style={{ cursor: "pointer" }}
                     onClick={() =>
-                      seeAnnotationContext(
+                      seeCommentContext(
                         assignIn(
                           {
                             project_survey: {
@@ -64,20 +63,20 @@ export default ({ surveyMetadata }) => (
                               }
                             }
                           },
-                          engagementItem
+                          comment
                         )
                       )
                     }
                   >
-                    {engagementItem.quote ? (
+                    {comment.quote ? (
                       <div
                         style={{ borderLeft: "3px solid grey" }}
                         className="pl-3 mb-2"
                       >
-                        {engagementItem.quote}
+                        {comment.quote}
                       </div>
                     ) : null}
-                    <div>{engagementItem.comment}</div>
+                    <div>{comment.comment}</div>
                   </div>
                 );
               })}

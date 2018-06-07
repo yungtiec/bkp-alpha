@@ -46,7 +46,7 @@ const User = db.define(
   },
   {
     scopes: {
-      annotations: function({
+      comments: function({
         userId,
         limit,
         offset,
@@ -54,7 +54,7 @@ const User = db.define(
         issueStatus,
         projects
       }) {
-        var annotationQueryObj = getAnnotationQueryObj({
+        var commentQueryObj = getCommentQueryObj({
           queryObj: {
             userId,
             limit,
@@ -74,10 +74,10 @@ const User = db.define(
             "last_name",
             "organization"
           ],
-          include: [annotationQueryObj]
+          include: [commentQueryObj]
         };
       },
-      annotationCount: function({
+      commentCount: function({
         userId,
         limit,
         offset,
@@ -85,7 +85,7 @@ const User = db.define(
         projects,
         issueStatus
       }) {
-        var annotationQueryObj = getAnnotationQueryObj({
+        var commentQueryObj = getCommentQueryObj({
           queryObj: {
             userId,
             limit,
@@ -100,7 +100,7 @@ const User = db.define(
         return {
           where: { id: userId },
           attributes: ["id"],
-          include: [annotationQueryObj]
+          include: [commentQueryObj]
         };
       },
       roles: function(userId) {
@@ -217,8 +217,8 @@ User.getContributions = async function(userId) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
-  const [annotations, notifications] = await Promise.all([
-    user.getAnnotations({
+  const [comments, notifications] = await Promise.all([
+    user.getComments({
       attributes: ["id", "reviewed"],
       include: [
         {
@@ -244,23 +244,23 @@ User.getContributions = async function(userId) {
       }
     })
   ]);
-  const numAnnoationIssues = annotations.filter(item => item.issue).length;
-  const numAnnotationUpvotes = annotations.reduce(
+  const numCommentIssues = comments.filter(item => item.issue).length;
+  const numCommentUpvotes = comments.reduce(
     (count, item) =>
       item.upvotesFrom ? item.upvotesFrom.length + count : count,
     0
   );
 
-  const numAnnoationSpam = annotations.filter(item => item.reviewed === "spam")
+  const numCommentSpam = comments.filter(item => item.reviewed === "spam")
     .length;
 
   return assignIn(
     {
-      num_annotations: annotations.length,
-      num_spam: numAnnoationSpam,
-      num_issues: numAnnoationIssues,
+      num_comments: comments.length,
+      num_spam: numCommentSpam,
+      num_issues: numCommentIssues,
       num_notifications: notifications.length,
-      num_upvotes: numAnnotationUpvotes
+      num_upvotes: numCommentUpvotes
     },
     user.toJSON()
   );
@@ -273,26 +273,26 @@ User.getUserListWithContributions = async function() {
   return users;
 };
 
-User.getAnnotationsAndCount = async function(queryObj) {
+User.getCommentsAndCount = async function(queryObj) {
   const user = await User.scope({
-    method: ["annotations", cloneDeep(queryObj)]
+    method: ["comments", cloneDeep(queryObj)]
   }).findOne();
-  var { annotations } = await User.scope({
-    method: ["annotationCount", cloneDeep(queryObj)]
+  var { comments } = await User.scope({
+    method: ["commentCount", cloneDeep(queryObj)]
   }).findOne();
-  annotations = annotations.map(annotation => {
-    annotation = annotation.toJSON();
-    if (!annotation.parentId) return assignIn({ ancestors: [] }, annotation);
-    if (annotation.parent.ancestors.length) {
-      annotation.ancestors = annotation.parent.ancestors.concat(
-        annotation.parent
+  comments = comments.map(comment => {
+    comment = comment.toJSON();
+    if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
+    if (comment.parent.ancestors.length) {
+      comment.ancestors = comment.parent.ancestors.concat(
+        comment.parent
       );
     } else {
-      annotation.ancestors = [annotation.parent];
+      comment.ancestors = [comment.parent];
     }
-    return annotation;
+    return comment;
   });
-  return { annotations, annotationCount: annotations.length };
+  return { comments, commentCount: comments.length };
 };
 
 /**
@@ -309,7 +309,7 @@ const setSaltAndPassword = user => {
  * helpers
  */
 
-function getAnnotationQueryObj({
+function getCommentQueryObj({
   queryObj: { userId, limit, offset, reviewStatus, issueStatus, projects },
   order,
   pageCount
@@ -353,10 +353,10 @@ function getAnnotationQueryObj({
         model: db.model("issue"),
         required: false
       };
-  var annotationQueryObj = {
-    model: db.model("annotation"),
+  var commentQueryObj = {
+    model: db.model("comment"),
     where: { reviewed: reviewStatus },
-    as: "annotations",
+    as: "comments",
     subQuery: false,
     required: false,
     include: [
@@ -365,7 +365,7 @@ function getAnnotationQueryObj({
         required: false
       },
       {
-        model: db.model("annotation"),
+        model: db.model("comment"),
         as: "parent", // for unknown reason, include ancestors here doesn't work
         required: false,
         include: [
@@ -382,7 +382,7 @@ function getAnnotationQueryObj({
             required: false
           },
           {
-            model: db.model("annotation"),
+            model: db.model("comment"),
             as: "ancestors",
             required: false
           }
@@ -393,7 +393,7 @@ function getAnnotationQueryObj({
     ]
   };
   if (order) {
-    annotationQueryObj.order = [
+    commentQueryObj.order = [
       [
         {
           model: db.model("project_survey")
@@ -406,10 +406,10 @@ function getAnnotationQueryObj({
     ];
   }
   if (!pageCount) {
-    annotationQueryObj.limit = limit;
-    annotationQueryObj.offset = offset;
+    commentQueryObj.limit = limit;
+    commentQueryObj.offset = offset;
   }
-  return annotationQueryObj;
+  return commentQueryObj;
 }
 
 User.beforeCreate(setSaltAndPassword);

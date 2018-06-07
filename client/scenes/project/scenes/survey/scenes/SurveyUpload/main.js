@@ -86,9 +86,9 @@ class SurveyUpload extends Component {
                 <IssueInput addNewIssue={addNewIssue} />
                 <div className="pb-2">
                   {newIssues.map((item, i) => (
-                    <div className="engagement-item" key={`new-issue__${i}`}>
-                      <p className="engagement-item__comment mt-3">{item}</p>
-                      <div className="engagement-item__action--bottom justify-content-end">
+                    <div className="comment-item" key={`new-issue__${i}`}>
+                      <p className="comment-item__comment mt-3">{item}</p>
+                      <div className="comment-item__action--bottom justify-content-end">
                         <button
                           type="button"
                           className="btn btn-outline-danger btn-sm"
@@ -106,8 +106,8 @@ class SurveyUpload extends Component {
                 <div>
                   {outstandingIssues.map(item => (
                     <OutstandingIssue
-                      key={`issue-${item.engagementItemId}`}
-                      engagementItem={item}
+                      key={`issue-${item.id}`}
+                      comment={item}
                       resolvedIssueIds={resolvedIssueIds}
                       notify={notify}
                       selectIssueToResolve={selectIssueToResolve}

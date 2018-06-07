@@ -1,5 +1,5 @@
 const User = require("./user");
-const Annotation = require("./annotation");
+const Comment = require("./comment");
 const Permission = require("./permission");
 const Role = require("./role");
 const Project = require("./project");
@@ -85,46 +85,46 @@ Project.belongsToMany(User, {
 /*=====  End of User and Organization  ======*/
 
 /*==============================================
-=                  Annotation                  =
+=                  Comment                  =
 ==============================================*/
 
-/*----------  User and Annotation  ----------*/
-User.belongsToMany(Annotation, {
-  as: "upvotedAnnotations",
-  through: "annotation_upvote",
+/*----------  User and Comment  ----------*/
+User.belongsToMany(Comment, {
+  as: "upvotedComments",
+  through: "comment_upvote",
   foreignKey: "user_id"
 });
-Annotation.belongsToMany(User, {
+Comment.belongsToMany(User, {
   as: "upvotesFrom",
-  through: "annotation_upvote",
-  foreignKey: "annotation_id"
+  through: "comment_upvote",
+  foreignKey: "comment_id"
 });
 
-User.hasMany(Annotation, {
+User.hasMany(Comment, {
   foreignKey: "owner_id",
-  as: "annotations"
+  as: "comments"
 });
-Annotation.belongsTo(User, {
+Comment.belongsTo(User, {
   foreignKey: "owner_id",
   as: "owner"
 });
 
-/*----------  Annotation and Tag  ----------*/
-Tag.belongsToMany(Annotation, {
-  through: "annotation_tag",
+/*----------  Comment and Tag  ----------*/
+Tag.belongsToMany(Comment, {
+  through: "comment_tag",
   foreignKey: "tag_id"
 });
-Annotation.belongsToMany(Tag, {
-  through: "annotation_tag",
-  foreignKey: "annotation_id"
+Comment.belongsToMany(Tag, {
+  through: "comment_tag",
+  foreignKey: "comment_id"
 });
 
-/*----------  Annotation and Issue  ----------*/
-Annotation.hasOne(Issue, {
-  foreignKey: "annotation_id"
+/*----------  Comment and Issue  ----------*/
+Comment.hasOne(Issue, {
+  foreignKey: "comment_id"
 });
-Issue.belongsTo(Annotation, {
-  foreignKey: "annotation_id"
+Issue.belongsTo(Comment, {
+  foreignKey: "comment_id"
 });
 
 /*----------  Issue and Project Survey  ----------*/
@@ -137,15 +137,15 @@ Issue.belongsTo(ProjectSurvey, {
   as: "resolvingProjectSurvey"
 });
 
-/*----------  Annotation and Project Survey  ----------*/
-ProjectSurvey.hasMany(Annotation, {
+/*----------  Comment and Project Survey  ----------*/
+ProjectSurvey.hasMany(Comment, {
   foreignKey: "project_survey_id"
 });
-Annotation.belongsTo(ProjectSurvey, {
+Comment.belongsTo(ProjectSurvey, {
   foreignKey: "project_survey_id"
 });
 
-/*=====  End of Annotation  ======*/
+/*=====  End of Comment  ======*/
 
 /*==============================================
 =                    Survey                    =
@@ -223,10 +223,10 @@ ProjectSurvey.belongsTo(User, {
   as: "creator"
 });
 
-SurveyQuestion.hasMany(Annotation, {
+SurveyQuestion.hasMany(Comment, {
   foreignKey: "survey_question_id"
 });
-Annotation.belongsTo(SurveyQuestion, {
+Comment.belongsTo(SurveyQuestion, {
   foreignKey: "survey_question_id"
 });
 
@@ -251,7 +251,7 @@ User.belongsToMany(ProjectSurvey, {
 
 module.exports = {
   User,
-  Annotation,
+  Comment,
   Permission,
   Role,
   Project,

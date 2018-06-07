@@ -1,38 +1,36 @@
-import * as annotationTypes from "../annotations/actionTypes";
+import * as commentTypes from "../comments/actionTypes";
 import * as types from "./actionTypes";
 import { deleteTag, putTag } from "./service";
 import { cloneDeep } from "lodash";
 
 export const updateTagFilter = tags => {
   return (dispatch, getState) => {
-    const engagementTab = getState().scenes.project.scenes.survey.engagementTab;
     dispatch({
       type: types.TAG_FILTER_UPDATED,
-      tags,
-      engagementTab
+      tags
     });
   };
 };
 
-export const removeTag = ({ annotationId, tagId }) => {
+export const removeTag = ({ commentId, tagId }) => {
   return async (dispatch, getState) => {
     try {
-      var annotation = cloneDeep(
-        getState().scenes.project.scenes.survey.data.annotations
-          .annotationsById[annotationId]
+      var comment = cloneDeep(
+        getState().scenes.project.scenes.survey.data.comments
+          .commentsById[commentId]
       );
       await deleteTag({
-        annotationId,
+        commentId,
         tagId
       });
-      annotation.tags = annotation.tags.filter(tag => tag.id !== tagId);
+      comment.tags = comment.tags.filter(tag => tag.id !== tagId);
       dispatch({
-        type: annotationTypes.ANNOTATION_TAG_REMOVED,
-        annotation
+        type: commentTypes.COMMENT_TAG_REMOVED,
+        comment
       });
       dispatch({
         type: "modal.UPDATE_MODAL_PROPS",
-        modalProps: annotation
+        modalProps: comment
       });
     } catch (err) {
       console.log(err);
@@ -40,27 +38,27 @@ export const removeTag = ({ annotationId, tagId }) => {
   };
 };
 
-export const addTag = ({ annotationId, tagName }) => {
+export const addTag = ({ commentId, tagName }) => {
   return async (dispatch, getState) => {
     try {
-      var annotation = cloneDeep(
-        getState().scenes.project.scenes.survey.data.annotations
-          .annotationsById[annotationId]
+      var comment = cloneDeep(
+        getState().scenes.project.scenes.survey.data.comments
+          .commentsById[commentId]
       );
       var tag = await putTag({
-        annotationId,
+        commentId,
         tagName
       });
-      if (!annotation.tags) annotations.tags = [];
-      annotation.tags.push(tag);
+      if (!comment.tags) comments.tags = [];
+      comment.tags.push(tag);
       dispatch({
-        type: annotationTypes.ANNOTATION_TAG_ADDED,
-        annotation,
+        type: commentTypes.COMMENT_TAG_ADDED,
+        comment,
         tag
       });
       dispatch({
         type: "modal.UPDATE_MODAL_PROPS",
-        modalProps: annotation
+        modalProps: comment
       });
     } catch (err) {
       console.log(err);

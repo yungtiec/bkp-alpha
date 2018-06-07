@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Annotation, Tag, Issue, User, Role } = require("../db/models");
+const { Comment, Tag, Issue, User, Role } = require("../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication, ensureResourceAccess } = require("./utils");
 const { IncomingWebhook } = require("@slack/client");
@@ -54,7 +54,7 @@ router.post(
       }).then(
         requestor => requestor.roles.filter(r => r.name === "admin").length
       );
-      var newAnnotation = await Annotation.create({
+      var newComment = await Comment.create({
         uri,
         survey_question_id,
         project_survey_id,
@@ -67,22 +67,22 @@ router.post(
       const issuePromise = issue
         ? Issue.create({
             open: true,
-            annotation_id: newAnnotation.id
+            annotation_id: newComment.id
           })
         : null;
       const tagPromises = Promise.map(tags, async tag => {
         const [tagInstance, created] = await Tag.findOrCreate({
           where: { name: tag }
         });
-        return newAnnotation.addTag(tagInstance.id);
+        return newComment.addTag(tagInstance.id);
       });
-      const ownerPromise = newAnnotation.setOwner(req.user.id);
+      const ownerPromise = newComment.setOwner(req.user.id);
       await Promise.all([tagPromises, ownerPromise, issuePromise]);
-      newAnnotation = await Annotation.scope({
-        method: ["flatThreadByRootId", { where: { id: newAnnotation.id } }]
+      newComment = await Comment.scope({
+        method: ["flatThreadByRootId", { where: { id: newComment.id } }]
       }).findOne();
-      sendNotificationToSlack(newAnnotation);
-      res.send(newAnnotation);
+      sendNotificationToSlack(newComment);
+      res.send(newComment);
     } catch (err) {
       next(err);
     }
@@ -91,7 +91,7 @@ router.post(
 
 router.get("/search", async (req, res, next) => {
   try {
-    var annotations = await Annotation.findAll({
+    var comments = await Comment.findAll({
       where: {
         uri: req.query.uri,
         survey_question_id: req.query.survey_question_id,
@@ -108,8 +108,8 @@ router.get("/search", async (req, res, next) => {
       return annotation.toJSON();
     });
     res.send({
-      rows: annotations,
-      total: annotations.length
+      rows: comments,
+      total: comments.length
     });
   } catch (err) {
     next(err);

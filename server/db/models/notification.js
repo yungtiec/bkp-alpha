@@ -29,11 +29,11 @@ module.exports = Notification;
 
 Notification.notifyRootAndParent = function({
   sender,
-  engagementItem,
+  comment,
   parent,
   messageFragment
 }) {
-  const uri = getContextUri(engagementItem);
+  const uri = getContextUri(comment);
   var notification = {
     sender_id: sender ? sender.id : null,
     uri,
@@ -41,13 +41,10 @@ Notification.notifyRootAndParent = function({
     status: "unread"
   };
   var notifications = [];
-  engagementItem.ancestors.length > 1 &&
-    engagementItem.ancestors[0].owner_id !== sender.id &&
+  comment.ancestors.length > 1 &&
+    comment.ancestors[0].owner_id !== sender.id &&
     notifications.push(
-      assignIn(
-        { recipient_id: engagementItem.ancestors[0].owner_id },
-        notification
-      )
+      assignIn({ recipient_id: comment.ancestors[0].owner_id }, notification)
     );
   parent.owner_id !== sender.id &&
     notifications.push(
@@ -58,9 +55,9 @@ Notification.notifyRootAndParent = function({
   );
 };
 
-Notification.notify = function({ sender, engagementItem, messageFragment }) {
-  if (sender.id === engagementItem.owner_id) return;
-  const uri = getContextUri(engagementItem);
+Notification.notify = function({ sender, comment, messageFragment }) {
+  if (sender.id === comment.owner_id || comment.reviewed === "spam") return;
+  const uri = getContextUri(comment);
   Notification.create({
     sender_id: sender ? sender.id : null,
     uri,
@@ -68,7 +65,7 @@ Notification.notify = function({ sender, engagementItem, messageFragment }) {
       ? `${sender.first_name} ${sender.last_name} ${messageFragment}`
       : messageFragment,
     status: "unread",
-    recipient_id: engagementItem.owner_id
+    recipient_id: comment.owner_id
   });
 };
 
@@ -78,20 +75,16 @@ Notification.notify = function({ sender, engagementItem, messageFragment }) {
  *
  */
 
-function getContextUri(engagementItem) {
-  return engagementItem.engagementItemType === "annotation"
-    ? engagementItem.hierarchyLevel === 1
-      ? `${engagementItem.uri}/question/${engagementItem.survey_question_id}/${
-          engagementItem.engagementItemType
-        }/${engagementItem.id}`
-      : `${engagementItem.uri}/question/${engagementItem.survey_question_id}/${
-          engagementItem.engagementItemType
-        }/${engagementItem.ancestors[0].id}`
-    : engagementItem.hierarchyLevel === 1
-      ? `/project/${engagementItem.project_survey.project.symbol}/survey/${
-          engagementItem.project_survey.survey.id
-        }/page-comments/${engagementItem.id}`
-      : `/project/${engagementItem.project_survey.project.symbol}/survey/${
-          engagementItem.project_survey.survey.id
-        }/page-comments/${engagementItem.ancestors[0].id}`;
+function getContextUri(comment) {
+  var rootItem =
+    comment.ancestors && comment.ancestors.length
+      ? comment.ancestors[0]
+      : comment;
+  return rootItem && rootItem.uri
+    ? `${rootItem.uri}/question/${comment.survey_question_id}/comment/${
+        rootItem.id
+      }`
+    : `/project/${comment.project_survey.project.symbol}/survey/${
+        comment.project_survey.id
+      }/comment/${rootItem.id}`;
 }

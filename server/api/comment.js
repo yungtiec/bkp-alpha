@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const db = require("../db");
 const {
-  Annotation,
+  Comment,
   User,
   Role,
   Tag,
@@ -12,7 +12,7 @@ const _ = require("lodash");
 const {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrAnnotationOwnership,
+  ensureAdminRoleOrCommentOwnership,
   ensureResourceAccess
 } = require("./utils");
 Promise = require("bluebird");
@@ -20,7 +20,7 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const annotations = await Annotation.scope({
+    const comments = await Comment.scope({
       method: [
         "flatThreadByRootId",
         {
@@ -31,7 +31,7 @@ router.get("/", async (req, res, next) => {
         }
       ]
     }).findAll();
-    res.send(annotations);
+    res.send(comments);
   } catch (err) {
     next(err);
   }
@@ -53,7 +53,7 @@ router.post(
       }).then(
         requestor => requestor.roles.filter(r => r.name === "admin").length
       );
-      const comment = await Annotation.create({
+      const comment = await Comment.create({
         owner_id: req.user.id,
         project_survey_id: Number(req.body.projectSurveyId),
         comment: req.body.comment,
@@ -63,7 +63,7 @@ router.post(
           if (req.body.issueOpen)
             await Issue.create({
               open: true,
-              annotation_id: comment.id
+              comment_id: comment.id
             });
           return comment;
         })
@@ -75,7 +75,7 @@ router.post(
             });
             return comment.addTag(tag.id);
           }).then(() =>
-            Annotation.scope({
+            Comment.scope({
               method: ["flatThreadByRootId", { where: { id: comment.id } }]
             }).findOne()
           );
@@ -94,7 +94,7 @@ router.post(
   async (req, res, next) => {
     try {
       var ancestry;
-      const parent = await Annotation.findById(Number(req.body.parentId));
+      const parent = await Comment.findById(Number(req.body.parentId));
       const child = _.assignIn(
         _.omit(parent.toJSON(), [
           "id",
@@ -122,13 +122,13 @@ router.post(
           .then(ancestors =>
             _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
           ),
-        Annotation.create(child),
+        Comment.create(child),
         User.findById(req.user.id)
       ]);
       var rootAncestor = ancestors[0];
       reply = await reply.setParent(parent.toJSON().id);
       reply = await reply.setOwner(req.user.id);
-      ancestry = await Annotation.scope({
+      ancestry = await Comment.scope({
         method: [
           "flatThreadByRootId",
           { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
@@ -136,7 +136,10 @@ router.post(
       }).findOne();
       await Notification.notifyRootAndParent({
         sender: user,
-        engagementItem: _.assignIn(reply.toJSON(), { ancestors }),
+        comment: _.assignIn(reply.toJSON(), {
+          ancestors,
+          project_survey: ancestry.project_survey
+        }),
         parent,
         messageFragment: "replied to your post"
       });
@@ -155,23 +158,23 @@ router.post(
     try {
       const user = await User.findById(req.user.id);
       if (!req.body.hasUpvoted) {
-        await user.addUpvotedAnnotation(req.body.annotationId);
+        await user.addUpvotedComment(req.body.commentId);
       } else {
-        await user.removeUpvotedAnnotation(req.body.annotationId);
+        await user.removeUpvotedComment(req.body.commentId);
       }
-      const annotation = await Annotation.scope({
-        method: ["upvotes", req.body.annotationId]
+      const comment = await Comment.scope({
+        method: ["upvotes", req.body.commentId]
       }).findOne();
       if (!req.body.hasUpvoted) {
         await Notification.notify({
           sender: user,
-          engagementItem: annotation,
+          comment,
           messageFragment: "liked your post"
         });
       }
       res.send({
-        upvotesFrom: annotation.upvotesFrom,
-        annotationId: annotation.id
+        upvotesFrom: comment.upvotesFrom,
+        commentId: comment.id
       });
     } catch (err) {
       next(err);
@@ -185,8 +188,8 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var annotation = await Annotation.findOne({
-        where: { id: req.body.annotationId },
+      var comment = await Comment.findOne({
+        where: { id: req.body.commentId },
         include: [
           {
             model: User,
@@ -204,7 +207,7 @@ router.post(
           }
         ]
       });
-      var prevTags = annotation.tags || [];
+      var prevTags = comment.tags || [];
       var removedTags = prevTags.filter(function(prevTag) {
         return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
       });
@@ -216,33 +219,33 @@ router.post(
           })
         : [];
       var removedTagPromises, addedTagPromises, issuePromise;
-      if (annotation.owner.email !== req.user.email) res.sendStatus(401);
+      if (comment.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        await annotation.update({ comment: req.body.comment });
+        await comment.update({ comment: req.body.comment });
         removedTagPromises = Promise.map(removedTags, tag =>
-          annotation.removeTag(tag.id)
+          comment.removeTag(tag.id)
         );
         addedTagPromises = Promise.map(addedTags, async addedTag => {
           const [tag, created] = await Tag.findOrCreate({
             where: { name: addedTag.name },
             default: { name: addedTag.name }
           });
-          return annotation.addTag(tag.id);
+          return comment.addTag(tag.id);
         });
         issuePromise =
           "issueOpen" in req.body &&
-          (req.body.issueOpen || (!req.body.issueOpen && annotation.issue))
+          (req.body.issueOpen || (!req.body.issueOpen && comment.issue))
             ? Issue.findOrCreate({
                 defaults: {
                   open: req.body.issueOpen
                 },
-                where: { annotation_id: annotation.id }
+                where: { comment_id: comment.id }
               }).spread((issue, created) => {
                 if (!created) issue.update({ open: req.body.issueOpen });
               })
             : null;
         await Promise.all([removedTagPromises, addedTagPromises, issuePromise]);
-        const ancestors = await annotation.getAncestors({
+        const ancestors = await comment.getAncestors({
           raw: true
         });
         const rootAncestor = _.orderBy(
@@ -250,10 +253,10 @@ router.post(
           ["hierarchyLevel"],
           ["asc"]
         )[0];
-        const ancestry = await Annotation.scope({
+        const ancestry = await Comment.scope({
           method: [
             "flatThreadByRootId",
-            { where: { id: rootAncestor ? rootAncestor.id : annotation.id } }
+            { where: { id: rootAncestor ? rootAncestor.id : comment.id } }
           ]
         }).findOne();
         res.send(ancestry);
@@ -270,10 +273,8 @@ router.put(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const annotation = await Annotation.findById(
-        Number(req.body.annotationId)
-      );
-      await annotation.removeTag(req.body.tagId);
+      const comment = await Comment.findById(Number(req.body.commentId));
+      await comment.removeTag(req.body.tagId);
       res.sendStatus(200);
     } catch (err) {
       next(err);
@@ -287,14 +288,12 @@ router.put(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const annotation = await Annotation.findById(
-        Number(req.body.annotationId)
-      );
+      const comment = await Comment.findById(Number(req.body.commentId));
       const [tag, created] = await Tag.findOrCreate({
         where: { name: req.body.tagName },
         default: { name: req.body.tagName }
       });
-      await annotation.addTag(tag.id);
+      await comment.addTag(tag.id);
       res.send(tag);
     } catch (err) {
       next(err);
@@ -304,7 +303,7 @@ router.put(
 
 router.get("/pending/:projectSurveyId", async (req, res, next) => {
   try {
-    var annotations = await Annotation.findAll({
+    var comments = await Comment.findAll({
       where: {
         reviewed: "pending",
         project_survey_id: req.params.projectSurveyId
@@ -315,7 +314,7 @@ router.get("/pending/:projectSurveyId", async (req, res, next) => {
           as: "owner"
         },
         {
-          model: Annotation,
+          model: Comment,
           as: "parent",
           include: [
             {
@@ -326,7 +325,7 @@ router.get("/pending/:projectSurveyId", async (req, res, next) => {
         }
       ]
     });
-    res.send(annotations);
+    res.send(comments);
   } catch (err) {
     next(err);
   }

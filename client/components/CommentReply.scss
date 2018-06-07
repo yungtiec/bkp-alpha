@@ -1,6 +1,6 @@
 @import "../breakpoint";
 
-.reply-annotation__main {
+.reply-comment__main {
   padding: 35px 25px;
   margin: 0px auto;
   border: none;
@@ -9,11 +9,11 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-.reply-annotation__main:hover {
+.reply-comment__main:hover {
   background-color: #f9f9f9;
 }
 
-.reply-annotation__survey-title {
+.reply-comment__survey-title {
   display: inline-block;
   padding: 0.25em 0em;
   font-weight: 700;
@@ -29,13 +29,13 @@
   color: #020721;
 }
 
-.reply-annotation__quote {
+.reply-comment__quote {
   border-left: 3px solid #d4d4d4;
   color: #d4d4d4;
   padding-left: 10px;
 }
 
-.reply-annotation__review {
+.reply-comment__review {
   display: inline-block;
   padding: 0.25em 0.4em;
   font-weight: 700;
@@ -50,94 +50,94 @@
   color: white;
 }
 
-.reply-annotation__review--pending {
+.reply-comment__review--pending {
   background: #838383;
 }
 
-.reply-annotation__review--spam {
+.reply-comment__review--spam {
   background: #dc3545;
 }
 
-.reply-annotation__review--verified {
+.reply-comment__review--verified {
   background: #007bff;
 }
 
-.reply-annotation__action--bottom {
+.reply-comment__action--bottom {
   display: flex;
   justify-content: space-between;
 }
 
-.reply-annotation__header {
+.reply-comment__header {
   display: flex;
   justify-content: flex-end;
 }
 
-.reply-annotation__action--bottom .see-in-context {
+.reply-comment__action--bottom .see-in-context {
   cursor: pointer;
   color: #459df9;
 }
 
-.reply-annotation__user span {
+.reply-comment__user span {
   margin-right: 10px;
 }
-.reply-annotation__reply {
+.reply-comment__reply {
   margin-left: 10px;
 }
 
-.reply-annotation__parent {
+.reply-comment__parent {
   color: #9a9696;
 }
 
-.reply-annotation__parent .reply-annotation__user,
-.reply-annotation__parent .reply-annotation__quote,
-.reply-annotation__parent .reply-annotation__comment,
-.reply-annotation__parent .reply-annotation__tags {
+.reply-comment__parent .reply-comment__user,
+.reply-comment__parent .reply-comment__quote,
+.reply-comment__parent .reply-comment__comment,
+.reply-comment__parent .reply-comment__tags {
   opacity: 0.6;
 }
 
-.reply-annotation__parent-header {
+.reply-comment__parent-header {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
 
-.reply-annotation__parent-header--mobile {
+.reply-comment__parent-header--mobile {
   @include breakpoint(xs) {
     flex-direction: column;
   }
 }
 
-.reply-annotation__reply {
+.reply-comment__reply {
   padding-left: 10px;
   border-left: 3px solid #999;
   margin-top: 30px;
 }
 
-.reply-annotation__review {
+.reply-comment__review {
   opacity: 1;
 }
 
-.reply-annotation__tags .badge,
-.reply-annotation__tags button {
+.reply-comment__tags .badge,
+.reply-comment__tags button {
   margin-right: 5px;
   margin-bottom: 5px;
   line-height: 1.25;
   font-size: 15px;
 }
 
-.reply-annotation__tags .badge-light {
+.reply-comment__tags .badge-light {
   background: #f2f2f2 !important;
 }
 
-.reply-annotation__tags .badge.issue {
+.reply-comment__tags .badge.issue {
   cursor: pointer;
 }
 
-.reply-annotation__tags .badge .fas {
+.reply-comment__tags .badge .fas {
   font-size: 9px;
   margin-left: 3px;
 }
 
-.reply-annotation__tags {
+.reply-comment__tags {
   margin-bottom: 1rem;
 }

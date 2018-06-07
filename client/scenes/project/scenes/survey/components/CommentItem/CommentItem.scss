@@ -1,6 +1,6 @@
 @import "../../../../../../breakpoint";
 
-.engagement-item {
+.comment-item {
   background: #113954;
   padding: 20px;
   margin-bottom: 30px;
@@ -9,7 +9,7 @@
   }
 }
 
-.engagement-item__header {
+.comment-item__header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -23,7 +23,7 @@
   }
 }
 
-.engagement-item__quote {
+.comment-item__quote {
   border-left: 3px solid white;
   color: white;
   padding-left: 10px;
@@ -32,66 +32,66 @@
   }
 }
 
-.engagement-item__comment {
+.comment-item__comment {
   color: white;
   @include breakpoint(xs) {
     font-size: 12px;
   }
 }
 
-.engagement-item__edit .engagement-item__quote {
+.comment-item__edit .comment-item__quote {
   border-left: 3px solid #0057ff;
   color: black;
   padding-left: 10px;
 }
 
-.active .engagement-item__quote {
+.active .comment-item__quote {
   border-left: 3px solid #0057ff;
 }
 
-.engagement-item__action--bottom {
+.comment-item__action--bottom {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.engagement-item__action--bottom .btn {
+.comment-item__action--bottom .btn {
   border-radius: 0;
 }
 
-.engagement-item__action--bottom .fas {
+.comment-item__action--bottom .fas {
   padding: 5px;
   cursor: pointer;
 }
 
-.engagement-item__action--bottom .upvoted {
+.comment-item__action--bottom .upvoted {
   color: white;
 }
 
-.engagement-item__verified-message {
+.comment-item__verified-message {
   font-size: 12px;
   line-height: 30px;
 }
 
-.engagement-item__reply-thread {
+.comment-item__reply-thread {
   display: flex;
 }
 
-.engagement-item__reply-contents {
+.comment-item__reply-contents {
   width: 100%;
 }
 
-.engagement-item__reply-edge {
+.comment-item__reply-edge {
   display: flex;
   flex-direction: column;
 }
 
-.engagement-item__reply-edge .fa-caret-down {
+.comment-item__reply-edge .fa-caret-down {
   height: 24px;
   margin: 0 8px;
 }
 
-.engagement-item__thread-line {
+.comment-item__thread-line {
   border-right: 1px dashed #dbdbdb;
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
@@ -100,7 +100,7 @@
   right: 12px;
 }
 
-.engagement-item__edit {
+.comment-item__edit {
   width: 400px;
   margin: 0 auto;
   position: relative;
@@ -109,60 +109,60 @@
   height: 100%;
 }
 
-.engagement-item__edit .Select {
+.comment-item__edit .Select {
   flex: 1;
 }
 
-.engagement-item__edit label {
+.comment-item__edit label {
   line-height: 2;
   margin-right: 5px;
 }
 
-.engagement-item__tags .badge,
-.engagement-item__tags button {
+.comment-item__tags .badge,
+.comment-item__tags button {
   margin-right: 5px;
   margin-bottom: 5px;
   line-height: 1.25;
 }
 
-.engagement-item__tags .badge.issue {
+.comment-item__tags .badge.issue {
   cursor: pointer;
 }
 
-.engagement-item__tags .badge .fas {
+.comment-item__tags .badge .fas {
   font-size: 9px;
   margin-left: 3px;
 }
 
-.engagement-item__tags {
+.comment-item__tags {
   margin-bottom: 1rem;
 }
 
-.engagement-item__main,
-.engagement-item__reply-item {
+.comment-item__main,
+.comment-item__reply-item {
   margin-bottom: 20px;
 }
 
-.engagement-item__reply-item {
+.comment-item__reply-item {
   border-bottom: 1px solid;
 }
 
-.engagement-item__reply-item.last-item {
+.comment-item__reply-item.last-item {
   border-bottom: 0px;
 }
 
-.engagement-item__at-someone {
+.comment-item__at-someone {
   background: #245271;
   padding: 5px;
   color: white;
   border-radius: 3px;
 }
 
-.engagement-item__collapse-btn {
-  padding-bottom: 10px;
+.comment-item__collapse-btn {
+  padding-bottom: 1.3rem;
   border-bottom: 1px solid;
 }
 
-.engagement-item__issue-resolved {
+.comment-item__issue-resolved {
   font-size: 12px;
 }

@@ -64,10 +64,10 @@ router.get(
     }
     try {
       const {
-        annotations,
-        annotationCount
-      } = await User.getAnnotationsAndCount(queryObj);
-      res.send({ comments: annotations, commentCount: annotationCount });
+        comments,
+        commentCount
+      } = await User.getCommentsAndCount(queryObj);
+      res.send({ comments: comments, commentCount: commentCount });
     } catch (err) {
       next(err);
     }

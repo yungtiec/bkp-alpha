@@ -1,4 +1,4 @@
-import "./EngagementItem.scss";
+import "./CommentItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
@@ -17,34 +17,30 @@ export default class OutstandingIssue extends Component {
   }
 
   render() {
-    const {
-      engagementItem,
-      resolvedIssueIds,
-      selectIssueToResolve
-    } = this.props;
+    const { comment, resolvedIssueIds, selectIssueToResolve } = this.props;
 
     return (
       <div
-        className="engagement-item"
+        className="comment-item"
         style={{ cursor: "pointer" }}
-        onClick={() => selectIssueToResolve(engagementItem.issue.id)}
+        onClick={() => selectIssueToResolve(comment.issue.id)}
       >
-        {this.renderMainComment(engagementItem, resolvedIssueIds)}
+        {this.renderMainComment(comment, resolvedIssueIds)}
         {this.state.showReplies && (
           <p
-            className="mb-3 engagement-item__collapse-btn"
+            className="mb-3 comment-item__collapse-btn"
             onClick={this.toggleShowReplies}
           >
             - Collapse replies
           </p>
         )}
-        {engagementItem.descendents.length < 3 || this.state.showReplies ? (
+        {comment.descendents.length < 3 || this.state.showReplies ? (
           <div className="ml-3">
-            {this.renderReplies(engagementItem.descendents, engagementItem.id)}
+            {this.renderReplies(comment.descendents, comment.id)}
           </div>
         ) : (
           <p onClick={this.toggleShowReplies}>
-            + View {engagementItem.descendents.length} replies
+            + View {comment.descendents.length} replies
           </p>
         )}
       </div>
@@ -67,30 +63,29 @@ export default class OutstandingIssue extends Component {
     }));
   }
 
-  renderMainComment(engagementItem, resolvedIssueIds) {
+  renderMainComment(comment, resolvedIssueIds) {
     return (
-      <div className="engagement-item__main">
-        <div className="engagement-item__header">
+      <div
+        className="comment-item__main"
+        style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
+      >
+        <div className="comment-item__header">
+          <p>{comment.owner.first_name + " " + comment.owner.last_name}</p>
           <p>
-            {engagementItem.owner.first_name +
-              " " +
-              engagementItem.owner.last_name}
-          </p>
-          <p>
-            {moment(engagementItem.createdAt).fromNow()}
-            {resolvedIssueIds.indexOf(engagementItem.issue.id) !== -1 ? (
+            {moment(comment.createdAt).fromNow()}
+            {resolvedIssueIds.indexOf(comment.issue.id) !== -1 ? (
               <i className="ml-2 fas fa-check-circle text-right" />
             ) : null}
           </p>
         </div>
-        {engagementItem.engagementItemType === "annotation" && (
-          <p className="engagement-item__quote">{engagementItem.quote}</p>
+        {comment.quote && (
+          <p className="comment-item__quote">{comment.quote}</p>
         )}
-        <div className="engagement-item__tags">
-          {engagementItem.tags && engagementItem.tags.length
-            ? engagementItem.tags.map(tag => (
+        <div className="comment-item__tags">
+          {comment.tags && comment.tags.length
+            ? comment.tags.map(tag => (
                 <span
-                  key={`engagement-${engagementItem.id}__tag-${tag.name}`}
+                  key={`comment-${comment.id}__tag-${tag.name}`}
                   className="badge badge-light"
                 >
                   {tag.name}
@@ -99,7 +94,7 @@ export default class OutstandingIssue extends Component {
               ))
             : ""}
         </div>
-        <p className="engagement-item__comment">{engagementItem.comment}</p>
+        <p className="comment-item__comment">{comment.comment}</p>
       </div>
     );
   }
@@ -114,23 +109,25 @@ export default class OutstandingIssue extends Component {
       ),
       ["unix", "upvotesFrom.length"],
       ["asc", "desc"]
-    ).map(reply => {
+    ).map((reply, i) => {
       if (reply.reviewed === "spam") return null;
       return (
         <div
-          className="engagement-item__reply-item"
-          key={`engagement-item__reply-${reply.id}`}
+          className={`comment-item__reply-item ${
+            i === replies.length - 1 ? "last-item" : ""
+          }`}
+          key={`comment-item__reply-${reply.id}`}
         >
-          <div className="engagement-item__header">
+          <div className="comment-item__header">
             <p>{reply.owner.first_name + " " + reply.owner.last_name}</p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (
-            <p className="engagement-item__comment">[deleted]</p>
+            <p className="comment-item__comment">[deleted]</p>
           ) : (
-            <p className="engagement-item__comment">
+            <p className="comment-item__comment">
               {reply.hierarchyLevel !== 2 && (
-                <span className="engagement-item__at-someone">
+                <span className="comment-item__at-someone">
                   {"@" +
                     reply.parent.owner.first_name +
                     " " +

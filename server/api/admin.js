@@ -2,7 +2,7 @@ const router = require("express").Router();
 const {
   User,
   Role,
-  Annotation,
+  Comment,
   ProjectSurveyComment,
   ProjectSurvey,
   Project,
@@ -14,7 +14,7 @@ const {
 const {
   ensureAuthentication,
   ensureAdminRole,
-  ensureAdminRoleOrEngagementItemOwnership
+  ensureAdminRoleOrCommentOwnership
 } = require("./utils");
 Promise = require("bluebird");
 module.exports = router;
@@ -60,7 +60,7 @@ router.get(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      var annotations = await Annotation.findAll({
+      var comments = await Comment.findAll({
         where: {
           project_survey_id: req.params.projectSurveyId
         },
@@ -74,7 +74,7 @@ router.get(
             required: false
           },
           {
-            model: Annotation,
+            model: Comment,
             as: "ancestors",
             required: false,
             include: [
@@ -112,14 +112,14 @@ router.get(
         order: [
           [
             {
-              model: Annotation,
+              model: Comment,
               as: "ancestors"
             },
             "hierarchyLevel"
           ]
         ]
       });
-      res.send(annotations);
+      res.send(comments);
     } catch (err) {
       next(err);
     }
@@ -132,7 +132,7 @@ router.post(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      var comment = await Annotation.findById(req.body.comment.id);
+      var comment = await Comment.findById(req.body.comment.id);
       comment.update({ reviewed: req.body.reviewed });
       res.sendStatus(200);
     } catch (err) {
@@ -144,22 +144,38 @@ router.post(
 router.post(
   "/comment/issue",
   ensureAuthentication,
-  ensureAdminRoleOrEngagementItemOwnership,
+  ensureAdminRoleOrCommentOwnership,
   async (req, res, next) => {
     try {
-      var comment = await Annotation.findOne({
+      var comment = await Comment.findOne({
         where: { id: req.body.comment.id },
         include: [
           {
             model: Issue
+          },
+          {
+            model: ProjectSurvey,
+            include: [
+              {
+                model: Project,
+                attributes: ["symbol"]
+              }
+            ]
           }
         ]
       });
-      if (!req.body.open) {
+      if (!req.body.open && req.user.id !== comment.owner_id) {
         await Notification.notify({
           sender: "",
-          engagementItem: comment,
+          comment,
           messageFragment: "Admin closed your issue."
+        });
+      }
+      if (req.body.open && req.user.id !== comment.owner_id) {
+        await Notification.notify({
+          sender: "",
+          comment,
+          messageFragment: "Admin opened an issue on your comment."
         });
       }
       comment.issue
@@ -173,7 +189,7 @@ router.post(
           )
         : Issue.create({
             open: req.body.open,
-            annotation_id: req.body.comment.id
+            comment_id: req.body.comment.id
           });
       res.sendStatus(200);
     } catch (err) {

@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 const { assignIn } = require("lodash");
 
-const Annotation = db.define(
-  "annotation",
+const Comment = db.define(
+  "comment",
   {
     uri: {
       type: Sequelize.STRING
@@ -33,26 +33,14 @@ const Annotation = db.define(
     reviewed: {
       type: Sequelize.ENUM("pending", "spam", "verified"),
       defaultValue: "pending"
-    },
-    engagementItemType: {
-      type: Sequelize.VIRTUAL,
-      get() {
-        return "annotation";
-      }
-    },
-    engagementItemId: {
-      type: Sequelize.VIRTUAL,
-      get() {
-        return "annotation" + this.getDataValue("id");
-      }
     }
   },
   {
     hierarchy: true,
     scopes: {
-      upvotes: function(annotationId) {
+      upvotes: function(commentId) {
         return {
-          where: { id: annotationId },
+          where: { id: commentId },
           include: [
             {
               model: db.model("user"),
@@ -65,7 +53,16 @@ const Annotation = db.define(
               attributes: ["first_name", "last_name", "email", "id"]
             },
             {
-              model: db.model("annotation"),
+              model: db.model("project_survey"),
+              include: [
+                {
+                  model: db.model("project"),
+                  attributes: ["symbol"]
+                }
+              ]
+            },
+            {
+              model: db.model("comment"),
               as: "ancestors",
               required: false,
               attributes: ["id", "owner_id"],
@@ -79,7 +76,7 @@ const Annotation = db.define(
               order: [
                 [
                   {
-                    model: Annotation,
+                    model: Comment,
                     as: "ancestors"
                   },
                   "hierarchyLevel"
@@ -112,7 +109,7 @@ const Annotation = db.define(
               attributes: ["open", "id"]
             },
             {
-              model: Annotation,
+              model: Comment,
               required: false,
               include: [
                 {
@@ -150,6 +147,15 @@ const Annotation = db.define(
               attributes: ["name", "id"]
             },
             {
+              model: db.model("project_survey"),
+              include: [
+                {
+                  model: db.model("project"),
+                  attributes: ["symbol"]
+                }
+              ]
+            },
+            {
               model: db.model("issue"),
               attributes: ["open", "id"],
               include: [
@@ -166,7 +172,7 @@ const Annotation = db.define(
               ]
             },
             {
-              model: Annotation,
+              model: Comment,
               required: false,
               include: [
                 {
@@ -180,7 +186,7 @@ const Annotation = db.define(
                   attributes: ["first_name", "last_name", "email"]
                 },
                 {
-                  model: Annotation,
+                  model: Comment,
                   as: "parent",
                   required: false,
                   include: [
@@ -198,7 +204,7 @@ const Annotation = db.define(
           order: [
             [
               {
-                model: Annotation,
+                model: Comment,
                 as: "descendents"
               },
               "createdAt"
@@ -212,4 +218,4 @@ const Annotation = db.define(
   }
 );
 
-module.exports = Annotation;
+module.exports = Comment;

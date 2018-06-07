@@ -1,19 +1,19 @@
 @import "../breakpoint";
 
-.main-annotation__header {
+.main-comment__header {
   margin-bottom: 15px;
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
 }
 
-.main-annotation__header--mobile {
+.main-comment__header--mobile {
   @include breakpoint(xs) {
     flex-direction: column;
   }
 }
 
-.main-annotation__survey-title {
+.main-comment__survey-title {
   display: inline-block;
   padding: 0.25em 0em;
   font-weight: 700;
@@ -30,15 +30,15 @@
   color: #020721;
 }
 
-.main-annotation__user span {
+.main-comment__user span {
   margin-right: 10px;
 }
 
-.main-annotation__header p {
+.main-comment__header p {
   line-height: 40px;
 }
 
-.main-annotation__main {
+.main-comment__main {
   padding: 35px 25px;
   margin: 0px auto;
   text-decoration: none !important;
@@ -46,17 +46,17 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-.main-annotation__main:hover {
+.main-comment__main:hover {
   background-color: #f9f9f9;
 }
 
-.main-annotation__quote {
+.main-comment__quote {
   border-left: 3px solid #d4d4d4;
   color: #d4d4d4;
   padding-left: 10px;
 }
 
-.main-annotation__review {
+.main-comment__review {
   display: inline-block;
   padding: 0.25em 0.4em;
   font-weight: 700;
@@ -71,21 +71,21 @@
   color: white;
 }
 
-.main-annotation__review--pending,
-.main-annotation__review--issue-close {
+.main-comment__review--pending,
+.main-comment__review--issue-close {
   background: #838383;
 }
 
-.main-annotation__review--spam,
-.main-annotation__review--issue-open {
+.main-comment__review--spam,
+.main-comment__review--issue-open {
   background: #dc3545;
 }
 
-.main-annotation__review--verified {
+.main-comment__review--verified {
   background: #007bff;
 }
 
-.main-annotation__review--verified {
+.main-comment__review--verified {
   display: inline-block;
   padding: 0.25em 0.4em;
   font-weight: 700;
@@ -101,38 +101,38 @@
   color: white;
 }
 
-.main-annotation__action--bottom,
-.main-annotation__header {
+.main-comment__action--bottom,
+.main-comment__header {
   display: flex;
   justify-content: space-between;
 }
 
-.main-annotation__action--bottom .see-in-context {
+.main-comment__action--bottom .see-in-context {
   cursor: pointer;
   color: #459df9;
 }
 
-.main-annotation__tags .badge,
-.main-annotation__tags button {
+.main-comment__tags .badge,
+.main-comment__tags button {
   margin-right: 5px;
   margin-bottom: 5px;
   line-height: 1.25;
   font-size: 15px;
 }
 
-.main-annotation__tags .badge-light {
+.main-comment__tags .badge-light {
   background: #f2f2f2 !important;
 }
 
-.main-annotation__tags .badge.issue {
+.main-comment__tags .badge.issue {
   cursor: pointer;
 }
 
-.main-annotation__tags .badge .fas {
+.main-comment__tags .badge .fas {
   font-size: 9px;
   margin-left: 3px;
 }
 
-.main-annotation__tags {
+.main-comment__tags {
   margin-bottom: 1rem;
 }

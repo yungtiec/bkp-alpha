@@ -5,7 +5,6 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
 import {
-  sortAnnotationBy,
   sortCommentBy,
   updateIssueFilter,
   updateVerificationStatusInView,
@@ -15,13 +14,12 @@ import {
 } from "../../reducer";
 import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
 import {
-  fetchAnnotationsBySurvey,
-  addNewAnnotationSentFromServer,
-  editAnnotationComment,
+  fetchCommentsBySurvey,
+  addNewCommentSentFromServer,
   addNewComment
-} from "../../data/annotations/actions";
+} from "../../data/comments/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
-import { getAllAnnotations } from "../../data/annotations/reducer";
+import { getAllComments } from "../../data/comments/reducer";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
 import { getSelectedProject } from "../../../../data/metadata/reducer";
 import {
@@ -54,17 +52,15 @@ class MyComponent extends React.Component {
       this.props.fetchQuestionsByProjectSurveyId({
         projectSurveyId: this.props.match.params.projectSurveyId
       }),
-      this.props.fetchAnnotationsBySurvey(
-        this.props.match.params.projectSurveyId
-      )
+      this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
     ]);
   }
 
   render() {
     if (
       !this.props.surveyQnaIds ||
-      !this.props.annotationIds ||
-      !this.props.annotationsById
+      !this.props.commentIds ||
+      !this.props.commentsById
     )
       return null;
     else return <LoadableSurvey {...this.props} />;
@@ -74,14 +70,14 @@ class MyComponent extends React.Component {
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
   const {
-    annotationsById,
-    annotationIds,
-    unfilteredAnnotationIds
-  } = getAllAnnotations(state);
+    commentsById,
+    commentIds,
+    unfilteredCommentIds
+  } = getAllComments(state);
   const {
     sidebarOpen,
-    annotationSortBy,
-    annotationIssueFilter
+    commentSortBy,
+    commentIssueFilter
   } = state.scenes.project.scenes.survey;
   return {
     // global metadata
@@ -95,13 +91,13 @@ const mapState = state => {
     surveyQnasById,
     surveyQnaIds,
     // ann
-    annotationsById,
-    annotationIds,
-    unfilteredAnnotationIds,
+    commentsById,
+    commentIds,
+    unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
-    annotationSortBy,
-    annotationIssueFilter,
+    commentSortBy,
+    commentIssueFilter,
     sidebarContext: getSidebarContext(state),
     // tags
     tags: getAllTags(state),
@@ -112,10 +108,10 @@ const mapState = state => {
 
 const actions = {
   fetchQuestionsByProjectSurveyId,
-  fetchAnnotationsBySurvey,
+  fetchCommentsBySurvey,
   addNewComment,
-  addNewAnnotationSentFromServer,
-  sortAnnotationBy,
+  addNewCommentSentFromServer,
+  sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
   updateSidebarContext

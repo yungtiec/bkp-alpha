@@ -1,25 +1,25 @@
 const { expect } = require("chai");
 const db = require("../index");
-const Annotation = db.model("annotation");
+const Comment = db.model("comment");
 
 var parent, child, grandChild;
 
-describe("Annotation thread", () => {
+describe("Comment thread", () => {
   before(async () => {
     await db.sync({ force: true });
-    parent = await Annotation.create({
+    parent = await Comment.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
       text: "parent"
     });
-    child = await Annotation.create({
+    child = await Comment.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
       text: "child"
     });
-    grandChild = await Annotation.create({
+    grandChild = await Comment.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       quote:
         "nunc eget orci malesuada, a tincidunt nunc sagittis. Donec faucibus fermentum placerat. Ut bibendum purus vel viverra vehicula. Ut in arcu vitae turpis rhoncus fermentum. Integer varius malesuada dictum. Vestibulum placerat auctor eros in luctus. Ut at sem arcu. Sed commodo maximus malesuada. Morbi consequat lectus felis, eu malesuada metus placerat vitae. In porta dui non odio efficitur, at congue leo dapibus. Suspendisse potenti.",
@@ -30,7 +30,7 @@ describe("Annotation thread", () => {
   });
 
   it("creates correct hierarchy", async () => {
-    var rootAnnotation = await Annotation.find({
+    var rootComment = await Comment.find({
       where: {
         uri: "http://localhost:8080/project/DG/survey/3",
         quote:
@@ -38,15 +38,15 @@ describe("Annotation thread", () => {
         hierarchyLevel: 1
       },
       include: {
-        model: Annotation,
+        model: Comment,
         as: "descendents",
         hierarchy: true
       }
     });
 
-    var parent = rootAnnotation.toJSON();
-    var child = rootAnnotation.toJSON().children[0].toJSON();
-    var grandChild = rootAnnotation
+    var parent = rootComment.toJSON();
+    var child = rootComment.toJSON().children[0].toJSON();
+    var grandChild = rootComment
       .toJSON()
       .children[0].toJSON()
       .children[0].toJSON();

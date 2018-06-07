@@ -2,11 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 
 /** Modal Components */
-import { AnnotationEditModal } from "../scenes/project/scenes/survey/components";
+import { EditCommentModal } from "../scenes/project/scenes/survey/components";
 
 /** Modal Type Constants */
 const MODAL_COMPONENTS = {
-  ANNOTATION_EDIT_MODAL: AnnotationEditModal
+  EDIT_COMMENT_MODAL: EditCommentModal
 };
 
 const ModalContainer = ({ modalType, modalProps }) => {

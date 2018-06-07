@@ -1,4 +1,4 @@
-import "./EngagementItem.scss";
+import "./CommentItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
@@ -8,7 +8,7 @@ import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
 import ActionBar from "./ActionBar";
 
-export default class EngagementItem extends Component {
+export default class CommentItem extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -20,25 +20,25 @@ export default class EngagementItem extends Component {
   }
 
   render() {
-    const { engagementItem, engagementTab } = this.props;
+    const { comment } = this.props;
     return (
-      <div className="engagement-item">
-        {this.renderMainComment(engagementItem)}
+      <div className="comment-item">
+        {this.renderMainComment(comment)}
         {this.state.showReplies && (
           <p
-            className="mb-3 engagement-item__collapse-btn"
+            className="mb-3 comment-item__collapse-btn"
             onClick={this.toggleShowReplies}
           >
             - Collapse replies
           </p>
         )}
-        {engagementItem.descendents.length < 3 || this.state.showReplies ? (
+        {comment.descendents.length < 3 || this.state.showReplies ? (
           <div className="ml-3">
-            {this.renderReplies(engagementItem.descendents, engagementItem.id)}
+            {this.renderReplies(comment.descendents, comment.id)}
           </div>
         ) : (
           <p onClick={this.toggleShowReplies}>
-            + View {engagementItem.descendents.length} replies
+            + View {comment.descendents.length} replies
           </p>
         )}
         {this.state.isCommenting ? (
@@ -49,11 +49,9 @@ export default class EngagementItem extends Component {
               } ${this.state.replyTarget.owner.last_name}`}</span>
             )}
             <CommentBox
-              rootId={engagementItem.id}
+              rootId={comment.id}
               parentId={
-                this.state.replyTarget
-                  ? this.state.replyTarget.id
-                  : engagementItem.id
+                this.state.replyTarget ? this.state.replyTarget.id : comment.id
               }
               onSubmit={this.props.replyToItem}
               onCancel={this.hideCommentBox}
@@ -78,9 +76,9 @@ export default class EngagementItem extends Component {
     });
   }
 
-  openModal(engagementItem, showIssueCheckbox, showTags) {
-    this.props.loadModal("ANNOTATION_EDIT_MODAL", {
-      ...engagementItem,
+  openModal(comment, showIssueCheckbox, showTags) {
+    this.props.loadModal("EDIT_COMMENT_MODAL", {
+      ...comment,
       showIssueCheckbox,
       showTags,
       editItem: this.props.editItem
@@ -97,16 +95,16 @@ export default class EngagementItem extends Component {
     });
   }
 
-  labelAsNotSpam(engagementItem, rootId) {
+  labelAsNotSpam(comment, rootId) {
     this.props.verifyItemAsAdmin({
-      engagementItem,
+      comment,
       rootId,
       reviewed: "verified"
     });
   }
 
-  labelAsSpam(engagementItem, rootId) {
-    this.props.verifyItemAsAdmin({ engagementItem, rootId, reviewed: "spam" });
+  labelAsSpam(comment, rootId) {
+    this.props.verifyItemAsAdmin({ comment, rootId, reviewed: "spam" });
   }
 
   toggleShowReplies() {
@@ -115,9 +113,9 @@ export default class EngagementItem extends Component {
     }));
   }
 
-  renderMainComment(engagementItem) {
+  renderMainComment(comment) {
     const hasUpvoted = find(
-      engagementItem.upvotesFrom,
+      comment.upvotesFrom,
       user => user.email === this.props.userEmail
     );
     const initReplyToThis = this.props.userEmail
@@ -126,38 +124,32 @@ export default class EngagementItem extends Component {
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
           rootId: null,
-          itemId: engagementItem.id,
+          itemId: comment.id,
           hasUpvoted
         })
       : this.promptLoginToast;
-    const openModal = this.openModal.bind(null, engagementItem, true, true);
+    const openModal = this.openModal.bind(null, comment, true, true);
     const changeItemIssueStatus = this.props.changeItemIssueStatus.bind(
       null,
-      engagementItem
+      comment
     );
     return (
       <div
-        className="engagement-item__main"
-        style={
-          engagementItem.descendents.length ? { borderBottom: "1px solid" } : {}
-        }
+        className="comment-item__main"
+        style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
-        <div className="engagement-item__header">
-          <p>
-            {engagementItem.owner.first_name +
-              " " +
-              engagementItem.owner.last_name}
-          </p>
-          <p>{moment(engagementItem.createdAt).fromNow()}</p>
+        <div className="comment-item__header">
+          <p>{comment.owner.first_name + " " + comment.owner.last_name}</p>
+          <p>{moment(comment.createdAt).fromNow()}</p>
         </div>
-        {engagementItem.engagementItemType === "annotation" && (
-          <p className="engagement-item__quote">{engagementItem.quote}</p>
+        {comment.quote && (
+          <p className="comment-item__quote">{comment.quote}</p>
         )}
-        <div className="engagement-item__tags">
-          {engagementItem.issue &&
-            (engagementItem.issue.open ? (
+        <div className="comment-item__tags">
+          {comment.issue &&
+            (comment.issue.open ? (
               <span
-                key={`engagement-${engagementItem.id}__tag-issue--open`}
+                key={`comment-${comment.id}__tag-issue--open`}
                 className="badge badge-danger issue"
                 onClick={changeItemIssueStatus}
               >
@@ -166,16 +158,16 @@ export default class EngagementItem extends Component {
               </span>
             ) : (
               <span
-                key={`engagement-${engagementItem.id}__tag-issue--close`}
+                key={`comment-${comment.id}__tag-issue--close`}
                 className="badge badge-light"
               >
                 issue:close
               </span>
             ))}
-          {engagementItem.tags && engagementItem.tags.length
-            ? engagementItem.tags.map(tag => (
+          {comment.tags && comment.tags.length
+            ? comment.tags.map(tag => (
                 <span
-                  key={`engagement-${engagementItem.id}__tag-${tag.name}`}
+                  key={`comment-${comment.id}__tag-${tag.name}`}
                   className="badge badge-light"
                 >
                   {tag.name}
@@ -184,28 +176,28 @@ export default class EngagementItem extends Component {
               ))
             : ""}
         </div>
-        <p className="engagement-item__comment">{engagementItem.comment}</p>
-        {engagementItem.issue && engagementItem.issue.resolvingProjectSurvey ? (
-          <span className="engagement-item__issue-resolved">
+        <p className="comment-item__comment">{comment.comment}</p>
+        {comment.issue && comment.issue.resolvingProjectSurvey ? (
+          <span className="comment-item__issue-resolved">
             <Link
               to={`/project/${
-                engagementItem.issue.resolvingProjectSurvey.project.symbol
-              }/survey/${engagementItem.issue.resolvingProjectSurvey.id}`}
+                comment.issue.resolvingProjectSurvey.project.symbol
+              }/survey/${comment.issue.resolvingProjectSurvey.id}`}
             >{`issue resolved in disclosure v${
-              engagementItem.issue.resolvingProjectSurvey.hierarchyLevel
+              comment.issue.resolvingProjectSurvey.hierarchyLevel
             }`}</Link>
           </span>
         ) : null}
         <ActionBar
-          item={engagementItem}
+          item={comment}
           hasUpvoted={hasUpvoted}
           isAdmin={this.props.admin}
           thisUserEmail={this.props.userEmail}
           initReplyToThis={initReplyToThis}
           upvoteItem={upvoteItem}
           openModal={openModal}
-          labelAsSpam={() => this.labelAsSpam(engagementItem, null)}
-          labelAsNotSpam={() => this.labelAsNotSpam(engagementItem, null)}
+          labelAsSpam={() => this.labelAsSpam(comment, null)}
+          labelAsNotSpam={() => this.labelAsNotSpam(comment, null)}
         />
       </div>
     );
@@ -240,21 +232,21 @@ export default class EngagementItem extends Component {
         : this.promptLoginToast;
       return (
         <div
-          className={`engagement-item__reply-item ${
+          className={`comment-item__reply-item ${
             i === replies.length - 1 ? "last-item" : ""
           }`}
-          key={`engagement-item__reply-${reply.id}`}
+          key={`comment-item__reply-${reply.id}`}
         >
-          <div className="engagement-item__header">
+          <div className="comment-item__header">
             <p>{reply.owner.first_name + " " + reply.owner.last_name}</p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (
-            <p className="engagement-item__comment">[deleted]</p>
+            <p className="comment-item__comment">[deleted]</p>
           ) : (
-            <p className="engagement-item__comment">
+            <p className="comment-item__comment">
               {reply.hierarchyLevel !== 2 && (
-                <span className="engagement-item__at-someone">
+                <span className="comment-item__at-someone">
                   {"@" +
                     reply.parent.owner.first_name +
                     " " +

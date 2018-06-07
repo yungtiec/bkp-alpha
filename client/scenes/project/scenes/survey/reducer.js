@@ -4,10 +4,8 @@ import { reducer as dataReducer } from "./data/reducer";
 
 const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
 const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
-const ANNOTATION_SORT_BY = "survey.ANNOTATION_SORT_BY";
 const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
-const ENGAGEMENT_ITEM_CONTEXT_UPDATED =
-  "survey.ENGAGEMENT_ITEM_CONTEXT_UPDATED";
+const COMMENT_CONTEXT_UPDATED = "survey.COMMENT_CONTEXT_UPDATED";
 const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
 
 export const toggleSidebar = () => ({
@@ -19,18 +17,13 @@ export const updateVerificationStatusInView = verificationStatus => ({
   verificationStatus
 });
 
-export const sortAnnotationBy = annotationSortBy => ({
-  type: ANNOTATION_SORT_BY,
-  annotationSortBy
-});
-
 export const sortCommentBy = commentSortBy => ({
   type: COMMENT_SORT_BY,
   commentSortBy
 });
 
 export const updateSidebarContext = sidebarContext => ({
-  type: ENGAGEMENT_ITEM_CONTEXT_UPDATED,
+  type: COMMENT_CONTEXT_UPDATED,
   sidebarContext
 });
 
@@ -42,11 +35,11 @@ export const updateIssueFilter = issueFilter => ({
 const initialState = {
   sidebarOpen: true,
   verificationStatus: "all",
-  annotationSortBy: "position",
-  annotationIssueFilter: [],
+  commentSortBy: "position",
+  commentIssueFilter: [],
   sidebarContext: {
     selectedText: "",
-    selectedAnnotationId: null,
+    selectedCommentId: null,
     focusOnce: false
   }
 };
@@ -57,27 +50,18 @@ export default function reduce(state = initialState, action) {
       return { ...state, verificationStatus: action.verificationStatus };
     case SIDEBAR_OPEN_TOGGLE:
       return { ...state, sidebarOpen: !state.sidebarOpen };
-    case ANNOTATION_SORT_BY:
-      return { ...state, annotationSortBy: action.annotationSortBy };
     case COMMENT_SORT_BY:
       return { ...state, commentSortBy: action.commentSortBy };
-    case ENGAGEMENT_ITEM_CONTEXT_UPDATED:
+    case COMMENT_CONTEXT_UPDATED:
       return {
         ...state,
         sidebarContext: { ...state.sidebarContext, ...action.sidebarContext }
       };
     case ISSUE_FILTER_UPDATED:
-      if (state.engagementTab === "annotations") {
-        return {
-          ...state,
-          annotationIssueFilter: action.issueFilter
-        };
-      } else {
-        return {
-          ...state,
-          commentIssueFilter: action.issueFilter
-        };
-      }
+      return {
+        ...state,
+        commentIssueFilter: action.issueFilter
+      };
     default:
       const rest = _.omit(state, Object.keys(initialState));
       return {

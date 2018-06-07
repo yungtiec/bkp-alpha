@@ -7,14 +7,14 @@ export default ({
   isLoggedIn,
   surveyQnasById,
   surveyQnaIds,
-  numAnnotations,
+  numComments,
   surveyMetadata,
-  annotationOnClick,
+  commentOnClick,
   handlePollData,
   parent,
   tags,
   tagFilter,
-  addNewAnnotationSentFromServer
+  addNewCommentSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
     {surveyQnaIds.map(id => {
@@ -30,22 +30,22 @@ export default ({
             projectSurveyId={surveyMetadata.id}
             isLoggedIn={isLoggedIn}
             pollData={handlePollData}
-            numAnnotations={numAnnotations}
+            numComments={numComments}
             tags={tags}
             tagFilter={tagFilter}
-            addNewAnnotationSentFromServer={addNewAnnotationSentFromServer}
+            addNewCommentSentFromServer={addNewCommentSentFromServer}
           >
             <Question
               key={`qna-${id}__question`}
               qnaId={id}
               question={surveyQnasById[id].question}
-              handleAnnotationOnClick={annotationOnClick}
+              handleCommentOnClick={commentOnClick}
             />
             <Answers
               key={`qna-${id}__answers`}
               qnaId={id}
               answers={surveyQnasById[id].project_survey_answers}
-              handleAnnotationOnClick={annotationOnClick}
+              handleCommentOnClick={commentOnClick}
             />
           </Qna>
         </Element>

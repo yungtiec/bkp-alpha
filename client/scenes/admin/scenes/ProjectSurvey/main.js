@@ -11,12 +11,12 @@ import {
 import { Sidebar } from "./components";
 import {
   requiresAuthorization,
-  AnnotationMain,
-  AnnotationReply
+  CommentMain,
+  CommentReply
 } from "../../../../components";
 import history from "../../../../history";
 import asyncPoll from "react-async-poll";
-import { seeAnnotationContext } from "../../../../utils";
+import { seeCommentContext } from "../../../../utils";
 
 const onPollInterval = (props, dispatch) => {
   return props.fetchComments(props.match.params.projectSurveyId);
@@ -90,7 +90,7 @@ class AdminProjectSurveyPanel extends Component {
           type="button"
           className="btn btn-outline-secondary"
           disabled={comment.reviewed === "spam"}
-          onClick={() => seeAnnotationContext(comment)}
+          onClick={() => seeCommentContext(comment)}
         >
           see in context
         </button>
@@ -112,19 +112,19 @@ class AdminProjectSurveyPanel extends Component {
           <div class="admin-project-survey-panel__item-container">
             {commentIds.map(aid => {
               return commentsById[aid].parentId ? (
-                <AnnotationReply
-                  key={`admin__annotation-reply--${aid}`}
-                  annotation={commentsById[aid]}
+                <CommentReply
+                  key={`admin__comment-reply--${aid}`}
+                  comment={commentsById[aid]}
                 >
                   {this.renderActions(commentsById[aid])}
-                </AnnotationReply>
+                </CommentReply>
               ) : (
-                <AnnotationMain
-                  key={`admin__annotation-main--${aid}`}
-                  annotation={commentsById[aid]}
+                <CommentMain
+                  key={`admin__comment-main--${aid}`}
+                  comment={commentsById[aid]}
                 >
                   {this.renderActions(commentsById[aid])}
-                </AnnotationMain>
+                </CommentMain>
               );
             })}
           </div>

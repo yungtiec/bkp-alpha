@@ -12,7 +12,7 @@ export default class Question extends Component {
     return (
       <div
         onClick={e => {
-          this.props.handleAnnotationOnClick(e, this.props.qnaId);
+          this.props.handleCommentOnClick(e, this.props.qnaId);
         }}
       >
         <ReactMarkdown
