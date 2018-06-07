@@ -67,7 +67,7 @@ router.post(
       const issuePromise = issue
         ? Issue.create({
             open: true,
-            annotation_id: newComment.id
+            comment_id: newComment.id
           })
         : null;
       const tagPromises = Promise.map(tags, async tag => {

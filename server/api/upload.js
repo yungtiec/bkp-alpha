@@ -18,7 +18,8 @@ const {
   ensureAuthentication,
   ensureAdminRole,
   ensureAdminRoleOrAnnotationOwnership,
-  ensureResourceAccess
+  ensureResourceAccess,
+  getEngagedUsers
 } = require("./utils");
 const MarkdownParsor = require("../../script/markdown-parser");
 Promise = require("bluebird");
@@ -33,8 +34,11 @@ function hasEditRight(userId, parentProjectSurvey) {
   return isOwner || isCollaborator;
 }
 
-router.post("/", (req, res, next) => {
-  // upload new disclosure brand new
+router.get("/test", async (req, res, next) => {
+  try {
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post(
@@ -42,6 +46,7 @@ router.post(
   ensureAuthentication,
   async (req, res, next) => {
     try {
+      var uploader = await User.findById(req.user.id);
       var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
       var survey = await Survey.create({
         title: markdownParsor.title
@@ -49,6 +54,7 @@ router.post(
       var parentProjectSurvey = await ProjectSurvey.scope({
         method: ["byProjectSurveyId", Number(req.params.parentProjectSurveyId)]
       }).findOne();
+
       if (!hasEditRight(req.user.id, parentProjectSurvey)) res.sendStatus(401);
       else {
         var projectSurvey = await ProjectSurvey.create({
@@ -97,6 +103,14 @@ router.post(
                 user_id: user ? user.id : null,
                 email,
                 project_survey_id: projectSurvey.id
+              }).then(collaborator => {
+                return Notification.notifyCollaborators({
+                  sender: uploader,
+                  collaboratorId: user.id,
+                  projectSurveyId: projectSurvey.id,
+                  projectSymbol: parentProjectSurvey.project.symbol,
+                  parentSurveyTitle: parentProjectSurvey.survey.title
+                });
               })
             )
         );
@@ -121,10 +135,21 @@ router.post(
             })
           )
         );
+        var engagedUsers = await getEngagedUsers(parentProjectSurvey);
         await Promise.all(
           collaborators
             .concat(resolvedCurrentIssues)
             .concat(resolvedAddedIssues)
+            .concat(
+              engagedUsers.map(engagedUser =>
+                Notification.notifyEngagedUserOnUpdate({
+                  engagedUser,
+                  projectSurveyId: projectSurvey.id,
+                  projectSymbol: parentProjectSurvey.project.symbol,
+                  parentSurveyTitle: parentProjectSurvey.survey.title
+                })
+              )
+            )
         );
         res.send(projectSurvey);
       }
