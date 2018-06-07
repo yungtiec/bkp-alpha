@@ -22,6 +22,9 @@ const Notification = db.define("notification", {
   },
   read_date: {
     type: Sequelize.DATE
+  },
+  disclosure_updated: {
+    type: Sequelize.BOOLEAN
   }
 });
 
@@ -66,6 +69,37 @@ Notification.notify = function({ sender, comment, messageFragment }) {
       : messageFragment,
     status: "unread",
     recipient_id: comment.owner_id
+  });
+};
+
+Notification.notifyEngagedUserOnUpdate = function({
+  engagedUser,
+  projectSurveyId,
+  projectSymbol,
+  parentSurveyTitle
+}) {
+  return Notification.create({
+    message: `You might be interested in the updated version of ${parentSurveyTitle}`,
+    status: "unread",
+    recipient_id: engagedUser.id,
+    uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
+    disclosure_updated: true
+  });
+};
+
+Notification.notifyCollaborators = function({
+  sender,
+  collaboratorId,
+  projectSurveyId,
+  projectSymbol,
+  parentSurveyTitle
+}) {
+  return Notification.create({
+    message: `${sender.first_name} ${sender.last_name} updated ${parentSurveyTitle} and added you as collaborator`,
+    status: "unread",
+    recipient_id: collaboratorId,
+    uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
+    disclosure_updated: true
   });
 };
 
