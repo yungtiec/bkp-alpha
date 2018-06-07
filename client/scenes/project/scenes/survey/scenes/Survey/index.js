@@ -56,6 +56,25 @@ class MyComponent extends React.Component {
     ]);
   }
 
+  componentDidUpdate(prevProps) {
+    const projectSymbol = this.props.match.url.split("/")[2];
+    const prevProjectSymbol = prevProps.match.url.split("/")[2];
+    const surveyId = this.props.match.params.projectSurveyId;
+    const prevSurveyId = prevProps.match.params.projectSurveyId;
+    if (
+      projectSymbol &&
+      surveyId &&
+      (projectSymbol !== prevProjectSymbol || surveyId !== prevSurveyId)
+    ) {
+      batchActions([
+        this.props.fetchQuestionsByProjectSurveyId({
+          projectSurveyId: surveyId
+        }),
+        this.props.fetchCommentsBySurvey(surveyId)
+      ]);
+    }
+  }
+
   render() {
     if (
       !this.props.surveyQnaIds ||
@@ -69,11 +88,9 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
-  const {
-    commentsById,
-    commentIds,
-    unfilteredCommentIds
-  } = getAllComments(state);
+  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
+    state
+  );
   const {
     sidebarOpen,
     commentSortBy,

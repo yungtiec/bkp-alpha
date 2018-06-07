@@ -92,12 +92,7 @@ function updateCommentIssueStatus({ state, commentId, open }) {
   return state;
 }
 
-function updateUpvotesForComment({
-  state,
-  commentId,
-  rootId,
-  upvotesFrom
-}) {
+function updateUpvotesForComment({ state, commentId, rootId, upvotesFrom }) {
   var target;
   if (state.commentsById[commentId]) {
     // itself is root
@@ -211,11 +206,7 @@ function filterByTags({ tagFilter, commentsById, commentIds }) {
  *
  */
 
-function filterByIssue({
-  commentIssueFilter,
-  commentsById,
-  commentIds
-}) {
+function filterByIssue({ commentIssueFilter, commentsById, commentIds }) {
   if (!commentIssueFilter.length) return commentIds;
   return filter(commentIds, cid => {
     return commentIssueFilter.reduce((bool, issueStatus) => {
@@ -269,11 +260,7 @@ function splitRangePath(path) {
   return flatten(elements);
 }
 
-function getStartAndEndIndexInSurveyQna(
-  surveyQnaIds,
-  surveyQnasById,
-  comment
-) {
+function getStartAndEndIndexInSurveyQna(surveyQnaIds, surveyQnasById, comment) {
   try {
     if (!surveyQnaIds.length) return;
     const surveyQuestion = surveyQnasById[comment.survey_question_id];
@@ -362,7 +349,7 @@ export const getOutstandingIssues = state => {
     state.scenes.project.scenes.survey.data.comments.commentsById;
   if (!commentsById) return null;
   const comments = values(commentsById)
-    .filter(item => item.issue && item.issue.open)
+    .filter(item => item.reviewed !== "spam" && item.issue && item.issue.open)
     .map(item => assignIn({ unix: moment(item.createdAt).format("X") }, item));
   const outstandingIssues = orderBy(
     comments,

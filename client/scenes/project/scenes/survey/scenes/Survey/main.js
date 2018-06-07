@@ -36,7 +36,7 @@ class Survey extends Component {
     const givenQnaContext =
       window.location.pathname.indexOf("/question/") !== -1;
     var commentId, qnaId, pos, comments;
-    if (givenCommentContext && !this.props.sidebarContext.focusOnce) {
+    if (givenCommentContext) {
       pos = window.location.pathname.indexOf("/comment/");
       commentId = window.location.pathname.substring(pos).split("/")[2];
       if (givenQnaContext) {
@@ -53,17 +53,16 @@ class Survey extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const prevProjectSymbol = this.props.match.url.split("/")[2];
-    const nextProjectSymbol = nextProps.match.url.split("/")[2];
-    const prevSurveyId = this.props.match.params.projectSurveyId;
-    const nextSurveyId = nextProps.match.params.projectSurveyId;
+  componentDidUpdate(prevProps) {
+    const givenCommentContext =
+      this.props.location.pathname.indexOf("/comment/") !== -1;
     if (
-      prevProjectSymbol &&
-      prevSurveyId &&
-      (prevProjectSymbol !== nextProjectSymbol || prevSurveyId !== nextSurveyId)
+      (JSON.stringify(prevProps.commentsById) !==
+        JSON.stringify(this.props.commentsById) ||
+        this.props.location.pathname !== prevProps.location.pathname) &&
+      givenCommentContext
     ) {
-      this.resetSidebarContext();
+      this.focusOnContext();
     }
   }
 
@@ -105,11 +104,7 @@ class Survey extends Component {
   }
 
   getSelectedComments() {
-    const {
-      sidebarContext,
-      unfilteredCommentIds,
-      commentsById
-    } = this.props;
+    const { sidebarContext, unfilteredCommentIds, commentsById } = this.props;
     if (sidebarContext.selectedText)
       return findCommentsInQnaByText({
         commentIds: unfilteredCommentIds,
@@ -173,7 +168,12 @@ class Survey extends Component {
         <Switch>
           <Route
             path={`${this.props.match.path}/progress`}
-            render={() => <SurveyProgress surveyMetadata={surveyMetadata} />}
+            render={() => (
+              <SurveyProgress
+                surveyMetadata={surveyMetadata}
+                projectSymbol={projectMetadata.symbol}
+              />
+            )}
           />
           <Route
             render={() => (

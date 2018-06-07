@@ -84,7 +84,7 @@ class SurveyUpload extends Component {
                   <span>Issue not listed below? Add your own here.</span>
                 </div>
                 <IssueInput addNewIssue={addNewIssue} />
-                <div className="pb-2">
+                <div className="pb-2 mx-2">
                   {newIssues.map((item, i) => (
                     <div className="comment-item" key={`new-issue__${i}`}>
                       <p className="comment-item__comment mt-3">{item}</p>
@@ -103,7 +103,7 @@ class SurveyUpload extends Component {
                 <div className="social-sidebar__upload-subheader p-2">
                   Select from issues submitted by the community.
                 </div>
-                <div>
+                <div className="mx-2">
                   {outstandingIssues.map(item => (
                     <OutstandingIssue
                       key={`issue-${item.id}`}
