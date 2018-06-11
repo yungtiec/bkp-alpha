@@ -12,14 +12,13 @@ import {
 import { connect } from "react-redux";
 import { SurveyContent, SurveyProgress } from "./components";
 import {
-  SidebarLayout,
   SidebarComments,
   SidebarHeader,
   SurveyHeader,
   VersionToolbar
 } from "../../components";
 import { findCommentsInQnaByText } from "../../utils";
-import { CustomScrollbar } from "../../../../../../components";
+import { SidebarLayout, CustomScrollbar } from "../../../../../../components";
 
 class Survey extends Component {
   constructor(props) {
@@ -139,6 +138,7 @@ class Survey extends Component {
       commentIds,
       unfilteredCommentIds,
       isLoggedIn,
+      isClosedForComment,
       userEmail,
       match,
       width,
@@ -152,7 +152,11 @@ class Survey extends Component {
       sidebarContext,
       commentIssueFilter,
       updateIssueFilter,
-      addNewComment
+      addNewComment,
+      sidebarOpen,
+      verificationStatus,
+      toggleSidebar,
+      updateVerificationStatusInView
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
@@ -185,6 +189,7 @@ class Survey extends Component {
               <SurveyContent
                 parent={this}
                 isLoggedIn={isLoggedIn}
+                isClosedForComment={isClosedForComment}
                 surveyQnasById={surveyQnasById}
                 surveyQnaIds={surveyQnaIds}
                 numComments={commentIds.length}
@@ -197,7 +202,14 @@ class Survey extends Component {
             )}
           />
         </Switch>
-        <SidebarLayout width={width} selectedComments={selectedComments}>
+        <SidebarLayout
+          width={width}
+          selectedComments={selectedComments}
+          sidebarOpen={sidebarOpen}
+          verificationStatus={verificationStatus}
+          toggleSidebar={toggleSidebar}
+          updateVerificationStatusInView={updateVerificationStatusInView}
+        >
           <CustomScrollbar
             scrollbarContainerWidth={
               this.props.width < 767
@@ -222,6 +234,7 @@ class Survey extends Component {
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
                 isLoggedIn={isLoggedIn}
+                isClosedForComment={isClosedForComment}
                 resetSelection={this.resetContext}
                 commentIssueFilter={commentIssueFilter}
                 updateIssueFilter={updateIssueFilter}

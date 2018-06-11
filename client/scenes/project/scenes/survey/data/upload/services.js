@@ -5,14 +5,16 @@ export function postMarkdown({
   markdown,
   resolvedIssueIds,
   newIssues,
-  collaboratorEmails
+  collaboratorEmails,
+  commentPeriodInDay
 }) {
   return axios
     .post(`/api/upload/${parentProjectSurveyId}`, {
       markdown,
       resolvedIssueIds,
       newIssues,
-      collaboratorEmails
+      collaboratorEmails,
+      commentPeriodInDay
     })
     .then(res => res.data);
 }

@@ -1,4 +1,4 @@
-import "./index.scss"
+import "./index.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
@@ -20,7 +20,14 @@ class QnaBox extends Component {
   componentDidMount() {
     const self = this;
     if (!this.annotation) {
-      const { qna, match, isLoggedIn, pollData, tagFilter, projectSurveyId } = this.props;
+      const {
+        qna,
+        match,
+        isLoggedIn,
+        pollData,
+        tagFilter,
+        projectSurveyId
+      } = this.props;
       var app = new annotator.App();
       var pageUri = function() {
         return {
@@ -31,7 +38,7 @@ class QnaBox extends Component {
             });
             ann.uri = `${window.location.origin}${match.url}`;
             ann.survey_question_id = qna.id;
-            ann.project_survey_id = projectSurveyId
+            ann.project_survey_id = projectSurveyId;
           },
           annotationCreated: function(ann) {
             undraw(self.state.temporaryHighlight);
@@ -86,7 +93,7 @@ class QnaBox extends Component {
      * guest user cannot annotate
      * let's hide the annotatorjs widget
      */
-    if (!this.props.isLoggedIn) {
+    if (!this.props.isLoggedIn || this.props.isClosedForComment) {
       $(".annotator-adder").css("opacity", 0);
       $(".annotator-adder button").css("cursor", "text");
       $(".annotator-adder").css("height", "0px");

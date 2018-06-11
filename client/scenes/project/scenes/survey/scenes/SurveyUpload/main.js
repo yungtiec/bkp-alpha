@@ -2,13 +2,15 @@ import "./SurveyUpload.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { UploadInterface, CollaboratorControl, IssueInput } from "./components";
+import Select from "react-select";
+import { UploadInterface, IssueInput } from "./components";
 import {
+  SidebarLayout,
+  CollaboratorControl,
   CustomScrollbar,
   requiresAuthorization
 } from "../../../../../../components";
 import {
-  SidebarLayout,
   SurveyHeader,
   VersionToolbar,
   OutstandingIssue
@@ -18,6 +20,10 @@ class SurveyUpload extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+  }
+
+  handleCommentPeriodChange(selected) {
+    this.props.updateCommentPeriod(selected.value);
   }
 
   render() {
@@ -41,7 +47,11 @@ class SurveyUpload extends Component {
       collaboratorEmails,
       addNewIssue,
       removeIssue,
-      newIssues
+      newIssues,
+      updateCommentPeriod,
+      commentPeriodInDay,
+      sidebarOpen,
+      toggleSidebar
     } = this.props;
 
     return (
@@ -70,7 +80,12 @@ class SurveyUpload extends Component {
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
         />
-        <SidebarLayout width={width} uploadMode={true}>
+        <SidebarLayout
+          width={width}
+          uploadMode={true}
+          sidebarOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+        >
           <CustomScrollbar
             scrollbarContainerWidth={
               width < 767 ? "350px" : width > 1300 ? "450px" : "410px"
@@ -95,6 +110,23 @@ class SurveyUpload extends Component {
                 addNewCollaborator={addNewCollaborator}
                 removeCollaborator={removeCollaborator}
               />
+              <div className="mb-5">
+                <div className="social-sidebar__upload-header px-2 py-1">
+                  Set comment period
+                </div>
+                <div className="pb-1 pt-2 px-2">
+                  <Select
+                    name="form-field-name"
+                    value={commentPeriodInDay}
+                    onChange={this.handleCommentPeriodChange}
+                    options={[
+                      { value: 7, label: "1 week" },
+                      { value: 3, label: "3 day" },
+                      { value: 1, label: "1 day" }
+                    ]}
+                  />
+                </div>
+              </div>
               <div>
                 <div className="social-sidebar__upload-header px-2 py-1">
                   Resolve issue(s)
@@ -119,9 +151,11 @@ class SurveyUpload extends Component {
                     </div>
                   ))}
                 </div>
-                <div className="social-sidebar__upload-subheader p-2">
-                  Select from issues submitted by the community.
-                </div>
+                {outstandingIssues.length ? (
+                  <div className="social-sidebar__upload-subheader p-2">
+                    Select from issues submitted by the community.
+                  </div>
+                ) : null}
                 <div className="mx-2">
                   {outstandingIssues.map(item => (
                     <OutstandingIssue

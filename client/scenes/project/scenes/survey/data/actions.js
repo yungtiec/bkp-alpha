@@ -33,7 +33,8 @@ export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
           "versions",
           "hierarchyLevel",
           "resolvedIssues",
-          "comment_period_unix"
+          "comment_until_unix",
+          "createdAt"
         ]),
         omit(projectSurvey.survey, ["survey_questions", "id"])
       );

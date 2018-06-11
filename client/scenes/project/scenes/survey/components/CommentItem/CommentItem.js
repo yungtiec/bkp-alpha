@@ -26,7 +26,7 @@ export default class CommentItem extends Component {
         {this.renderMainComment(comment)}
         {this.state.showReplies && (
           <p
-            className="mb-3 comment-item__collapse-btn"
+            className="my-3 comment-item__collapse-btn"
             onClick={this.toggleShowReplies}
           >
             - Collapse replies
@@ -37,7 +37,7 @@ export default class CommentItem extends Component {
             {this.renderReplies(comment.descendents, comment.id)}
           </div>
         ) : (
-          <p onClick={this.toggleShowReplies}>
+          <p className="my-3" onClick={this.toggleShowReplies}>
             + View {comment.descendents.length} replies
           </p>
         )}

@@ -31,7 +31,7 @@ const ProjectSurvey = db.define(
     original_id: {
       type: Sequelize.INTEGER
     },
-    comment_period_unix: {
+    comment_until_unix: {
       type: Sequelize.INTEGER
     }
   },

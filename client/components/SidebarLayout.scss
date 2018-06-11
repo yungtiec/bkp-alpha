@@ -1,4 +1,4 @@
-@import "../../../../../../breakpoint";
+@import "../breakpoint";
 
 .social-sidebar {
   margin: 0;
@@ -47,3 +47,13 @@
   cursor: pointer;
 }
 
+.social-sidebar__upload-header {
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.social-sidebar__upload-subheader {
+  color: white;
+  font-size: 14px;
+}

@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../../../history";
+import { orderBy } from "lodash";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -111,13 +112,16 @@ class VersionToolbar extends Component {
             View progress
           </Link>
         </button>
-        {uploadModeAndPreview && this.renderUploadModeAndPreview()}
         {viewMode &&
         hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
           <button type="button" className="btn btn-outline-primary">
             <Link
               to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
+                orderBy(
+                  this.props.surveyMetadata.versions,
+                  ["hierarchyLevel"],
+                  ["desc"]
+                )[0].id
               }/upload`}
             >
               Import new version

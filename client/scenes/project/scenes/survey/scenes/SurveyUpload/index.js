@@ -10,11 +10,13 @@ import { fetchCommentsBySurvey } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
 import { getSelectedProject } from "../../../../data/metadata/reducer";
+import { toggleSidebar } from "../../reducer";
 import {
   getImportedMarkdown,
   getResolvedIssueId,
   getCollaboratorEmails,
-  getNewIssues
+  getNewIssues,
+  getCommentPeriodInDay
 } from "../../data/upload/reducer";
 import {
   importMarkdown,
@@ -23,7 +25,8 @@ import {
   addNewCollaborator,
   removeCollaborator,
   addNewIssue,
-  removeIssue
+  removeIssue,
+  updateCommentPeriod
 } from "../../data/upload/actions";
 import { notify } from "reapop";
 
@@ -50,9 +53,7 @@ class MyComponent extends React.Component {
       this.props.fetchQuestionsByProjectSurveyId({
         projectSurveyId: this.props.match.params.projectSurveyId
       }),
-      this.props.fetchCommentsBySurvey(
-        this.props.match.params.projectSurveyId
-      )
+      this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
     ]);
   }
 
@@ -74,6 +75,7 @@ const mapState = state => {
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
     userEmail: !!state.data.user.id && state.data.user.email,
+    sidebarOpen: state.scenes.project.scenes.survey.sidebarOpen,
     // project metadata
     projectMetadata: getSelectedProject(state),
     surveyMetadata: getSelectedSurvey(state),
@@ -85,7 +87,8 @@ const mapState = state => {
     importedMarkdown: getImportedMarkdown(state),
     resolvedIssueIds: getResolvedIssueId(state),
     collaboratorEmails: getCollaboratorEmails(state),
-    newIssues: getNewIssues(state)
+    newIssues: getNewIssues(state),
+    commentPeriodInDay: getCommentPeriodInDay(state)
   };
 };
 
@@ -99,7 +102,9 @@ const actions = {
   removeCollaborator,
   addNewIssue,
   removeIssue,
-  notify
+  updateCommentPeriod,
+  notify,
+  toggleSidebar
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

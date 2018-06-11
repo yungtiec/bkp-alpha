@@ -1,6 +1,4 @@
-import { values, orderBy, assignIn } from "lodash";
 import { combineReducers } from "redux";
-import moment from "moment";
 
 import { default as metadataReducer } from "./metadata/reducer";
 import { default as qnasReducer } from "./qnas/reducer";

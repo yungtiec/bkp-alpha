@@ -1,9 +1,8 @@
 import "./SidebarLayout.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import { AuthWidget } from "../../../../../../components";
+import { AuthWidget } from "./index";
 import { connect } from "react-redux";
-import { toggleSidebar, updateVerificationStatusInView } from "../../reducer";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -55,16 +54,18 @@ class Sidebar extends Component {
       <div className="social-sidebar" style={style}>
         <div className="annotation-coordinate__container" />
         <div className="social-sidebar__toolbar">
+          {sidebarOpen && <AuthWidget />}
           <button className="social-toolbar__size-btn" onClick={toggleSidebar}>
             <i className={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
-          <button
-            className="social-toolbar__visibility-btn"
-            onClick={this.toggleHighlights}
-          >
-            <i className={`fas fa-${eye}`} />
-          </button>
-          {sidebarOpen && <AuthWidget />}
+          {uploadMode ? null : (
+            <button
+              className="social-toolbar__visibility-btn"
+              onClick={this.toggleHighlights}
+            >
+              <i className={`fas fa-${eye}`} />
+            </button>
+          )}
         </div>
         <div>
           <div className="social-sidebar__logo-consensys">
@@ -138,14 +139,4 @@ class Sidebar extends Component {
   }
 }
 
-const mapState = state => {
-  const {
-    sidebarOpen,
-    verificationStatus
-  } = state.scenes.project.scenes.survey;
-  return { sidebarOpen, verificationStatus };
-};
-
-const actions = { toggleSidebar, updateVerificationStatusInView };
-
-export default connect(mapState, actions)(Sidebar);
+export default Sidebar;

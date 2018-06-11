@@ -1,4 +1,3 @@
-export { default as SidebarLayout } from "./Sidebar/SidebarLayout";
 export { default as SidebarHeader } from "./Sidebar/SidebarHeader";
 export { default as SidebarComments } from "./Sidebar/SidebarComments";
 export { default as CommentItem } from "./CommentItem/CommentItem";

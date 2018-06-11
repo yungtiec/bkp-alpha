@@ -5,6 +5,7 @@ import { Qna, Question, Answers } from "./index";
 
 export default ({
   isLoggedIn,
+  isClosedForComment,
   surveyQnasById,
   surveyQnaIds,
   numComments,
@@ -29,6 +30,7 @@ export default ({
             qna={surveyQnasById[id]}
             projectSurveyId={surveyMetadata.id}
             isLoggedIn={isLoggedIn}
+            isClosedForComment={isClosedForComment}
             pollData={handlePollData}
             numComments={numComments}
             tags={tags}
