@@ -6,14 +6,7 @@ import { SquareLoader } from "halogenium";
 
 const LoadableSurveyContainer = Loadable({
   loader: () => import("./main"),
-  loading: () => (
-    <SquareLoader
-      className="route__loader"
-      color="#2d4dd1"
-      size="16px"
-      margin="4px"
-    />
-  ),
+  loading: () => null,
   delay: 1000
 });
 

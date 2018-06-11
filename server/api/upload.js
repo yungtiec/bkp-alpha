@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../db");
 const _ = require("lodash");
+const moment = require("moment");
 const {
   Comment,
   User,
@@ -26,7 +27,8 @@ Promise = require("bluebird");
 module.exports = router;
 
 function hasEditRight(userId, parentProjectSurvey) {
-  const isOwner = userId === parentProjectSurvey.creator.id;
+  const isOwner =
+    parentProjectSurvey && userId === parentProjectSurvey.creator.id;
   const isCollaborator = parentProjectSurvey.collaborators.reduce(
     (bool, c) => c.id === userId,
     false
@@ -34,12 +36,78 @@ function hasEditRight(userId, parentProjectSurvey) {
   return isOwner || isCollaborator;
 }
 
+router.post("/", ensureAuthentication, async (req, res, next) => {
+  try {
+    var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
+    var survey = await Survey.create({
+      title: markdownParsor.title
+    });
+    var commentUntilInUnix = moment()
+      .add(req.body.commentPeriodInDay, "days")
+      .format("x");
+    var projectSurvey = await ProjectSurvey.create({
+      project_id: req.body.selectedProjectId,
+      survey_id: survey.id,
+      creator_id: req.user.id,
+      comment_until_unix: commentUntilInUnix
+    });
+    var questionInstances = await Promise.map(
+      markdownParsor.questions,
+      questionObject =>
+        Question.findOrCreate({
+          where: {
+            markdown: `### ${questionObject.question.trim()}`
+          },
+          defaults: {
+            markdown: `### ${questionObject.question.trim()}`
+          }
+        }).spread(async (question, created) => {
+          var answer = markdownParsor.findAnswerToQuestion(
+            questionObject.order_in_survey
+          );
+          var surveyQuestion = await SurveyQuestion.create({
+            survey_id: survey.id,
+            question_id: question.id,
+            order_in_survey: questionObject.order_in_survey
+          });
+          await ProjectSurveyAnswer.create({
+            markdown: answer,
+            survey_question_id: surveyQuestion.id,
+            project_survey_id: projectSurvey.id
+          });
+          return question;
+        })
+    );
+    var collaborators = req.body.collaboratorEmails.map(
+      async email =>
+        await User.findOne({ where: { email } }).then(user =>
+          Collaborator.create({
+            user_id: user ? user.id : null,
+            email,
+            project_survey_id: projectSurvey.id
+          }).then(collaborator => {
+            return Notification.notifyCollaborators({
+              sender: req.user,
+              collaboratorId: user.id,
+              projectSurveyId: projectSurvey.id,
+              projectSymbol: parentProjectSurvey.project.symbol,
+              parentSurveyTitle: parentProjectSurvey.survey.title,
+              action: "created"
+            });
+          })
+        )
+    );
+    res.send(projectSurvey);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post(
   "/:parentProjectSurveyId",
   ensureAuthentication,
   async (req, res, next) => {
     try {
-      var uploader = await User.findById(req.user.id);
       var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
       var survey = await Survey.create({
         title: markdownParsor.title
@@ -47,7 +115,9 @@ router.post(
       var parentProjectSurvey = await ProjectSurvey.scope({
         method: ["byProjectSurveyId", Number(req.params.parentProjectSurveyId)]
       }).findOne();
-
+      var commentUntilInUnix = moment()
+        .add(req.body.commentPeriodInDay, "days")
+        .format("x");
       if (!hasEditRight(req.user.id, parentProjectSurvey)) res.sendStatus(401);
       else {
         var projectSurvey = await ProjectSurvey.create({
@@ -58,7 +128,8 @@ router.post(
           original_id:
             req.user.id !== parentProjectSurvey.creator_id
               ? parentProjectSurvey.id
-              : null
+              : null,
+          comment_until_unix: commentUntilInUnix
         });
         if (req.user.id === parentProjectSurvey.creator_id)
           await parentProjectSurvey.addChild(projectSurvey.id);
@@ -98,11 +169,12 @@ router.post(
                 project_survey_id: projectSurvey.id
               }).then(collaborator => {
                 return Notification.notifyCollaborators({
-                  sender: uploader,
+                  sender: req.user,
                   collaboratorId: user.id,
                   projectSurveyId: projectSurvey.id,
                   projectSymbol: parentProjectSurvey.project.symbol,
-                  parentSurveyTitle: parentProjectSurvey.survey.title
+                  parentSurveyTitle: parentProjectSurvey.survey.title,
+                  action: "updated"
                 });
               })
             )

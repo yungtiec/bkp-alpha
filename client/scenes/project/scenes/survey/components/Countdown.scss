@@ -1,0 +1,26 @@
+.countdown {
+  color: #fff;
+  border: 1px solid #adafb2;
+  border-width: 1px 0;
+  padding: 15px 0;
+}
+
+.countdown-item {
+  margin: 0 -3px 0 0;
+  padding: 0;
+  display: inline-block;
+  width: 25%;
+  font-size: 30px;
+  line-height: 1;
+  text-align: center;
+
+  .countdown-item__label {
+    color: #adafb2;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+}
+
+#countdown-explaination {
+  width: 200px;
+}

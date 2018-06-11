@@ -2,9 +2,9 @@ import "./SidebarHeader.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
-import { CommentBoxWithTagField } from "../index";
 import Select from "react-select";
 import { keys } from "lodash";
+import { CommentBoxWithTagField, Countdown } from "../index";
 
 export default class SidebarHeader extends Component {
   constructor(props) {
@@ -66,7 +66,8 @@ export default class SidebarHeader extends Component {
       commentIssueFilter,
       tags,
       surveyMetadata,
-      addNewComment
+      addNewComment,
+      isClosedForComment
     } = this.props;
 
     return (
@@ -127,35 +128,34 @@ export default class SidebarHeader extends Component {
           )}
         {selectedComments && !selectedComments.length ? (
           <div className="comment-item page-comment">
-            <div className="comment-item__main">
-              <div className="comment-item__header">
-                <p>Leave a comment?</p>
-              </div>
-            </div>
-            <CommentBoxWithTagField
-              showTags={true}
-              showIssueCheckbox={true}
-              tags={tags}
-              selectedTags={[]}
-              initialValue=""
-              projectSurveyId={surveyMetadata.id}
-              onSubmit={addNewComment}
-              onCancel={null}
-            />
+            <Countdown timeInUnix={Number(surveyMetadata.comment_until_unix)} />
+            {!isClosedForComment ? (
+              <CommentBoxWithTagField
+                showTags={true}
+                showIssueCheckbox={true}
+                tags={tags}
+                selectedTags={[]}
+                initialValue=""
+                projectSurveyId={surveyMetadata.id}
+                onSubmit={addNewComment}
+                onCancel={null}
+              />
+            ) : null}
           </div>
         ) : null}
-        {!isLoggedIn && (
-          <div className="comment-item">
-            <div className="comment-item__main">
-              <div className="comment-item__header">
-                <p>
-                  <Link to="/login">Login</Link> or{" "}
-                  <Link to="/signup">signup</Link> to comment
-                </p>
+        {!isLoggedIn &&
+          !isClosedForComment && (
+            <div className="comment-item">
+              <div className="comment-item__main">
+                <div className="comment-item__header">
+                  <p>
+                    <Link to="/login">Login</Link> or{" "}
+                    <Link to="/signup">signup</Link> to comment
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }

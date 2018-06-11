@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import history from "../../../../../../history";
-import { ProjectSymbolBlueBox } from "../../../../../../components";
-import VersionToolbar from "./VersionToolbar";
-import { getFullNameFromUserObject } from "../../utils";
+import history from "../../../../../history";
+import { ProjectSymbolBlueBox } from "../../../../../components";
+import { getFullNameFromUserObject } from "../utils";
 
 export default class SurveyHeader extends Component {
   constructor(props) {
@@ -18,14 +17,7 @@ export default class SurveyHeader extends Component {
   render() {
     const {
       surveyMetadata,
-      projectMetadata,
-      surveyQnasById,
-      surveyQnaIds,
-      uploadMode,
-      uploaded,
-      resetUpload,
-      uploadMarkdownToServer,
-      userEmail
+      projectMetadata
     } = this.props;
     const creator = getFullNameFromUserObject(surveyMetadata.creator);
     const collaborators = surveyMetadata.collaborators
@@ -47,20 +39,9 @@ export default class SurveyHeader extends Component {
         </p>
         <ProjectSymbolBlueBox name={projectMetadata.name} />
         <p className="survey-title">{`${surveyMetadata.title}`}</p>
-        <p className="survey-subtitle">
+        <p className="survey-subtitle  mb-4">
           {`disclosure created by ${creator} ${collaborators}`}
         </p>
-        <VersionToolbar
-          resetUpload={resetUpload}
-          uploadMarkdownToServer={uploadMarkdownToServer}
-          uploaded={uploaded}
-          uploadMode={uploadMode}
-          projectMetadata={projectMetadata}
-          surveyMetadata={surveyMetadata}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-          userEmail={userEmail}
-        />
       </div>
     );
   }

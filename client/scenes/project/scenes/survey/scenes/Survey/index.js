@@ -3,10 +3,12 @@ import Loadable from "react-loadable";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
+import moment from "moment";
 import { batchActions } from "redux-batched-actions";
 import {
   sortCommentBy,
   updateIssueFilter,
+  toggleSidebar,
   updateVerificationStatusInView,
   updateEngagementTabInView,
   getSidebarContext,
@@ -91,8 +93,10 @@ const mapState = state => {
   const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
     state
   );
+  const surveyMetadata = getSelectedSurvey(state);
   const {
     sidebarOpen,
+    verificationStatus,
     commentSortBy,
     commentIssueFilter
   } = state.scenes.project.scenes.survey;
@@ -101,9 +105,13 @@ const mapState = state => {
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
     userEmail: !!state.data.user.id && state.data.user.email,
+    isClosedForComment:
+      Number(surveyMetadata.comment_until_unix) -
+        Number(moment().format("x")) <=
+      0,
     // project metadata
     projectMetadata: getSelectedProject(state),
-    surveyMetadata: getSelectedSurvey(state),
+    surveyMetadata,
     // survey data
     surveyQnasById,
     surveyQnaIds,
@@ -113,6 +121,7 @@ const mapState = state => {
     unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
+    verificationStatus,
     commentSortBy,
     commentIssueFilter,
     sidebarContext: getSidebarContext(state),
@@ -131,7 +140,9 @@ const actions = {
   sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
-  updateSidebarContext
+  updateSidebarContext,
+  toggleSidebar,
+  updateVerificationStatusInView
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

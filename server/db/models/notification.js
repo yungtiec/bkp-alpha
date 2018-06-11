@@ -92,10 +92,13 @@ Notification.notifyCollaborators = function({
   collaboratorId,
   projectSurveyId,
   projectSymbol,
-  parentSurveyTitle
+  parentSurveyTitle,
+  action
 }) {
   return Notification.create({
-    message: `${sender.first_name} ${sender.last_name} updated ${parentSurveyTitle} and added you as collaborator`,
+    message: `${sender.first_name} ${
+      sender.last_name
+    } ${action} ${parentSurveyTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
     uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,

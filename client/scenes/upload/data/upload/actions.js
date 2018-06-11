@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import { postMarkdown } from "./services";
-import history from "../../../../../../history";
+import history from "../../../../history";
 import { orderBy } from "lodash";
 
 export const importMarkdown = markdown => ({
@@ -11,28 +11,21 @@ export const importMarkdown = markdown => ({
 export const uploadMarkdownToServer = () => async (dispatch, getState) => {
   try {
     const state = getState();
-    const parentProjectSurveyId = orderBy(
-      state.scenes.project.scenes.survey.data.metadata.versions,
-      ["hierarchyLevel"],
-      ["desc"]
-    )[0].id;
-    const projectSymbol = state.scenes.project.data.metadata.symbol;
     const {
       markdown,
-      resolvedIssueIds,
-      newIssues,
       collaboratorEmails,
-      commentPeriodInDay
-    } = state.scenes.project.scenes.survey.data.upload;
+      commentPeriodInDay,
+      selectedProjectId
+    } = state.scenes.upload.data.upload;
     const projectSurvey = await postMarkdown({
-      parentProjectSurveyId,
       markdown,
-      resolvedIssueIds,
-      newIssues,
       collaboratorEmails,
-      commentPeriodInDay
+      commentPeriodInDay,
+      selectedProjectId
     });
-    history.push(`/project/${projectSymbol}/survey/${projectSurvey.id}`);
+    history.push(
+      `/project/${projectSurvey.project_id}/survey/${projectSurvey.id}`
+    );
     dispatch({
       type: types.MARKDOWN_UPLOADED
     });
@@ -40,11 +33,6 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
-
-export const selectIssueToResolve = issueId => ({
-  type: types.ISSUE_SELECTED,
-  issueId
-});
 
 export const addNewCollaborator = collaboratorEmail => ({
   type: types.COLLABORATOR_ADDED,
@@ -56,17 +44,12 @@ export const removeCollaborator = collaboratorEmail => ({
   collaboratorEmail
 });
 
-export const addNewIssue = issue => ({
-  type: types.ISSUE_ADDED,
-  issue
-});
-
-export const removeIssue = issue => ({
-  type: types.ISSUE_DELETED,
-  issue
-});
-
 export const updateCommentPeriod = commentPeriodInDay => ({
   type: types.COMMENT_PERIOD_UPDATED,
   commentPeriodInDay
+});
+
+export const updateSelectedProject = selectedProjectId => ({
+  type: types.SELECTED_PROJECT_UPDATED,
+  selectedProjectId
 });

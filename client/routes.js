@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Projects, Project, Profile, Admin, Unauthorized } from "./scenes";
+import {
+  Projects,
+  Project,
+  Profile,
+  Admin,
+  Unauthorized,
+  Upload
+} from "./scenes";
 import {
   Login,
   Signup,
@@ -38,6 +45,11 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
+            path="/upload"
+            component={Upload}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
             path="/unauthorized"
             component={Unauthorized}
           />
@@ -57,10 +69,9 @@ class Routes extends Component {
           )}
           {/* Displays our Login component as a fallback */}
           {!isLoggedIn && <Route component={Login} />}
-          {isLoggedIn && <RouteWithLayout
-            layout={LayoutWithNav}
-            component={Projects}
-          />}
+          {isLoggedIn && (
+            <RouteWithLayout layout={LayoutWithNav} component={Projects} />
+          )}
         </Switch>
       </div>
     );

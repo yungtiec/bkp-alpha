@@ -147,7 +147,6 @@ router.post(
         parent,
         messageFragment: "replied to your post"
       });
-      console.log("hello?");
       res.send(ancestry);
     } catch (err) {
       next(err);

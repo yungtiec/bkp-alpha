@@ -1,3 +1,4 @@
+import "./CollaboratorControl.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 
@@ -86,8 +87,8 @@ class CollaboratorControl extends Component {
         <div className="mt-3 mb-5 pl-2 pr-2">
           <div className="collaborator-item d-flex justify-content-between">
             <div className="collaborator-info d-flex">
-              <p className="collaborator-email">{creator.email}</p>
-              <p className="ml-3 collaborator-type">owner</p>
+              <p className="collaborator-email mb-1">{creator.email}</p>
+              <p className="ml-3 collaborator-type mb-1">owner</p>
             </div>
             <div />
           </div>

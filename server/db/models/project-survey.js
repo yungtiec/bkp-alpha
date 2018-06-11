@@ -30,6 +30,9 @@ const ProjectSurvey = db.define(
     },
     original_id: {
       type: Sequelize.INTEGER
+    },
+    comment_until_unix: {
+      type: Sequelize.INTEGER
     }
   },
   {

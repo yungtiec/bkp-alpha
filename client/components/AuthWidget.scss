@@ -10,7 +10,7 @@
 
 .auth-widget__dropdown {
   position: absolute;
-  top: 96px;
+  top: 0px;
   left: 48px;
   z-index: 3;
 }
@@ -44,8 +44,8 @@
 .auth-widget--navbar__dropdown-item {
   cursor: pointer;
   border-style: solid;
-  border-color: #459DF9;
-  color: #459DF9;
+  border-color: #459df9;
+  color: #459df9;
   border-width: 2px 2px 0px 2px;
   padding-left: 10px;
   width: 150px;

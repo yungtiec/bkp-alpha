@@ -6,7 +6,8 @@ const initialState = {
   markdown: null,
   resolvedIssueIds: [],
   collaboratorEmails: [],
-  newIssues: []
+  newIssues: [],
+  commentPeriodInDay: 7
 };
 
 function updateResolvedIssues(state, action) {
@@ -95,6 +96,11 @@ export default function reduce(state = initialState, action = {}) {
     case types.ISSUE_ADDED:
     case types.ISSUE_DELETED:
       return updateNewIssues(state, action);
+    case types.COMMENT_PERIOD_UPDATED:
+      return {
+        ...state,
+        commentPeriodInDay: action.commentPeriodInDay
+      };
     default:
       return state;
   }
@@ -114,4 +120,8 @@ export function getCollaboratorEmails(state) {
 
 export function getNewIssues(state) {
   return state.scenes.project.scenes.survey.data.upload.newIssues;
+}
+
+export function getCommentPeriodInDay(state) {
+  return state.scenes.project.scenes.survey.data.upload.commentPeriodInDay;
 }
