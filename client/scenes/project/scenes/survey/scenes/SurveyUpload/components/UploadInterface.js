@@ -66,17 +66,6 @@ export default class UploadInterface extends Component {
 
     return (
       <div className="project-survey" id="project-survey">
-        <SurveyHeader
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-          surveyMetadata={surveyMetadata}
-          projectMetadata={projectMetadata}
-          uploadMode={true}
-          uploaded={!!importedMarkdown}
-          resetUpload={() => this.props.importMarkdown(null)}
-          uploadMarkdownToServer={uploadMarkdownToServer}
-          userEmail={userEmail}
-        />
         {importedMarkdown ? null : (
           <div className="project-survey__upload-dropzone">
             <Dropzone

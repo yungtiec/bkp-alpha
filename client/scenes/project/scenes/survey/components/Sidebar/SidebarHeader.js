@@ -2,9 +2,9 @@ import "./SidebarHeader.scss";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
-import { CommentBoxWithTagField } from "../index";
 import Select from "react-select";
 import { keys } from "lodash";
+import { CommentBoxWithTagField, Countdown } from "../index";
 
 export default class SidebarHeader extends Component {
   constructor(props) {
@@ -127,11 +127,9 @@ export default class SidebarHeader extends Component {
           )}
         {selectedComments && !selectedComments.length ? (
           <div className="comment-item page-comment">
-            <div className="comment-item__main">
-              <div className="comment-item__header">
-                <p>Leave a comment?</p>
-              </div>
-            </div>
+            <Countdown
+              timeInUnix={Number(surveyMetadata.comment_period_unix)}
+            />
             <CommentBoxWithTagField
               showTags={true}
               showIssueCheckbox={true}

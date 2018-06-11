@@ -7,7 +7,12 @@ import {
   CustomScrollbar,
   requiresAuthorization
 } from "../../../../../../components";
-import { SidebarLayout, OutstandingIssue } from "../../components";
+import {
+  SidebarLayout,
+  SurveyHeader,
+  VersionToolbar,
+  OutstandingIssue
+} from "../../components";
 
 class SurveyUpload extends Component {
   constructor(props) {
@@ -41,6 +46,20 @@ class SurveyUpload extends Component {
 
     return (
       <div>
+        <SurveyHeader
+          surveyMetadata={surveyMetadata}
+          projectMetadata={projectMetadata}
+        />
+        <VersionToolbar
+          uploadMode={true}
+          uploaded={!!importedMarkdown}
+          uploadMarkdownToServer={uploadMarkdownToServer}
+          userEmail={userEmail}
+          projectMetadata={projectMetadata}
+          surveyMetadata={surveyMetadata}
+          surveyQnasById={surveyQnasById}
+          surveyQnaIds={surveyQnaIds}
+        />
         <UploadInterface
           userEmail={userEmail}
           importedMarkdown={importedMarkdown}

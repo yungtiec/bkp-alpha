@@ -15,7 +15,8 @@ import {
   SidebarLayout,
   SidebarComments,
   SidebarHeader,
-  SurveyHeader
+  SurveyHeader,
+  VersionToolbar
 } from "../../components";
 import { findCommentsInQnaByText } from "../../utils";
 import { CustomScrollbar } from "../../../../../../components";
@@ -159,11 +160,15 @@ class Survey extends Component {
     return (
       <div>
         <SurveyHeader
-          userEmail={userEmail}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
+        />
+        <VersionToolbar
+          projectMetadata={projectMetadata}
+          surveyMetadata={surveyMetadata}
+          surveyQnasById={surveyQnasById}
+          surveyQnaIds={surveyQnaIds}
+          userEmail={userEmail}
         />
         <Switch>
           <Route

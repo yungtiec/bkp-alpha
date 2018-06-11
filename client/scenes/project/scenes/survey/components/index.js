@@ -8,4 +8,6 @@ export {
   default as CommentBoxWithTagField
 } from "./CommentBox/CommentBoxWithTagField";
 export { default as EditCommentModal } from "./CommentItem/EditCommentModal";
+export { default as VersionToolbar } from "./VersionToolbar";
 export { default as SurveyHeader } from "./SurveyHeader";
+export { default as Countdown } from "./Countdown";

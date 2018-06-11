@@ -26,7 +26,14 @@ if (process.env.NODE_ENV !== "production") require("../secrets");
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) =>
   db.models.user
-    .findById(id)
+    .findOne({
+      where: { id },
+      include: [
+        {
+          model: db.model("role")
+        }
+      ]
+    })
     .then(user => done(null, user))
     .catch(done)
 );

@@ -32,7 +32,8 @@ export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
           "collaborators",
           "versions",
           "hierarchyLevel",
-          "resolvedIssues"
+          "resolvedIssues",
+          "comment_period_unix"
         ]),
         omit(projectSurvey.survey, ["survey_questions", "id"])
       );

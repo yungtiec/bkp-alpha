@@ -5,7 +5,7 @@ import { notify } from "reapop";
 import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
-import history from "../../../../../../history";
+import history from "../../../../../history";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -43,7 +43,6 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      resetUpload,
       userEmail
     } = this.props;
 
@@ -57,66 +56,8 @@ class VersionToolbar extends Component {
     const uploadModeAndPending = uploadMode && !uploaded;
     const viewMode = !uploadMode;
 
-    switch (true) {
-      case uploadModeAndPreview:
-        return this.renderUploadModeAndPreview();
-      case uploadModeAndPending:
-        return this.renderUploadModeAndPending();
-      case viewMode:
-        return this.renderViewMode(surveyMarkdown);
-    }
-  }
-
-  renderUploadModeAndPreview() {
     return (
-      <div className="btn-group" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={() =>
-            history.push(
-              `/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }`
-            )
-          }
-        >
-          View disclosure
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={this.props.resetUpload}
-        >
-          Import another file
-        </button>
-      </div>
-    );
-  }
-
-  renderUploadModeAndPending() {
-    return (
-      <div className="btn-group" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={() =>
-            history.push(
-              `/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }`
-            )
-          }
-        >
-          View disclosure
-        </button>
-      </div>
-    );
-  }
-
-  renderViewMode(surveyMarkdown) {
-    return (
-      <div className="btn-group" role="group" aria-label="Basic example">
+      <div className="btn-group mb-5" role="group" aria-label="Basic example">
         <div className="btn-group">
           <button
             type="button"
@@ -170,7 +111,9 @@ class VersionToolbar extends Component {
             View progress
           </Link>
         </button>
-        {hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
+        {uploadModeAndPreview && this.renderUploadModeAndPreview()}
+        {viewMode &&
+        hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
           <button type="button" className="btn btn-outline-primary">
             <Link
               to={`/project/${this.props.projectMetadata.symbol}/survey/${
@@ -181,7 +124,8 @@ class VersionToolbar extends Component {
             </Link>
           </button>
         ) : null}
-        {hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
+        {viewMode &&
+        hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
           <div className="btn-group">
             <button
               type="button"
