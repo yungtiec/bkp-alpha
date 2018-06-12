@@ -1,41 +1,75 @@
 import axios from "axios";
 
-export function getCommentsBySurvey(projectSurveyId) {
+export function getCommentsBySurvey(projectSymbol, projectSurveyId) {
   return axios
-    .get("/api/comment", {
-      params: {
-        projectSurveyId
-      }
-    })
+    .get(`/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments`)
     .then(res => res.data);
 }
 
-export function postComment({ projectSurveyId, comment, tags, issueOpen }) {
-  return axios
-    .post("/api/comment", { projectSurveyId, comment, tags, issueOpen })
-    .then(res => res.data);
-}
-
-export function postReplyToComment({ rootId, parentId, comment }) {
-  return axios
-    .post("/api/comment/reply", { rootId, parentId, comment })
-    .then(res => res.data);
-}
-
-export function postUpvoteToComment({ commentId, hasUpvoted }) {
-  return axios
-    .post("/api/comment/upvote", { commentId, hasUpvoted })
-    .then(res => res.data);
-}
-
-export function updateComment({
-  commentId,
+export function postComment({
+  projectSymbol,
+  projectSurveyId,
   comment,
   tags,
   issueOpen
 }) {
   return axios
-    .post("/api/comment/edit", { commentId, comment, tags, issueOpen })
+    .post(
+      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments`,
+      {
+        comment,
+        tags,
+        issueOpen
+      }
+    )
+    .then(res => res.data);
+}
+
+export function postReplyToComment({
+  projectSymbol,
+  projectSurveyId,
+  rootId,
+  parentId,
+  comment
+}) {
+  return axios
+    .post(
+      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments/${parentId}/reply`,
+      {
+        rootId,
+        comment
+      }
+    )
+    .then(res => res.data);
+}
+
+export function postUpvoteToComment({
+  projectSymbol,
+  projectSurveyId,
+  commentId,
+  hasUpvoted
+}) {
+  return axios
+    .post(
+      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments/${commentId}/upvote`,
+      { commentId, hasUpvoted }
+    )
+    .then(res => res.data);
+}
+
+export function updateComment({
+  projectSymbol,
+  projectSurveyId,
+  commentId,
+  updatedComment,
+  tags,
+  issueOpen
+}) {
+  return axios
+    .post(
+      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments/${commentId}/edit`,
+      { updatedComment, tags, issueOpen }
+    )
     .then(res => res.data);
 }
 

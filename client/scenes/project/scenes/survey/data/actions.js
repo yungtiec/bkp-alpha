@@ -2,10 +2,16 @@ import * as types from "./actionTypes";
 import { getSurveyByProjectSurveyId } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 
-export function fetchQuestionsByProjectSurveyId({ projectSurveyId }) {
+export function fetchQuestionsByProjectSurveyId({
+  projectSurveyId,
+  projectSymbol
+}) {
   return async (dispatch, getState) => {
     try {
-      var projectSurvey = await getSurveyByProjectSurveyId(projectSurveyId);
+      var projectSurvey = await getSurveyByProjectSurveyId(
+        projectSymbol,
+        projectSurveyId
+      );
       const surveyQnas = sortBy(
         projectSurvey.survey.survey_questions,
         ["order_in_survey"],

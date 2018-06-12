@@ -13,10 +13,13 @@ import * as types from "./actionTypes";
 import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
 import { notify } from "reapop";
 
-export const fetchCommentsBySurvey = projectSurveyId => {
+export const fetchCommentsBySurvey = ({ projectSymbol, projectSurveyId }) => {
   return async dispatch => {
     try {
-      const comments = await getCommentsBySurvey(projectSurveyId);
+      const comments = await getCommentsBySurvey(
+        projectSymbol,
+        projectSurveyId
+      );
       const tags = await getAllTags();
       const commentsById = keyBy(comments, "id");
       dispatch({
@@ -36,9 +39,10 @@ export const addNewComment = ({
   tags,
   issueOpen
 }) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
       const postedComment = await postComment({
+        projectSymbol: getState().scenes.project.data.metadata.symbol,
         projectSurveyId,
         comment,
         tags,
@@ -97,6 +101,8 @@ export const replyToComment = ({ rootId, parentId, comment }) => {
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({
+        projectSymbol: getState().scenes.project.data.metadata.symbol,
+        projectSurveyId: comment.project_survey_id,
         rootId,
         parentId,
         comment
@@ -111,14 +117,13 @@ export const replyToComment = ({ rootId, parentId, comment }) => {
   };
 };
 
-export const upvoteComment = ({ rootId, itemId, hasUpvoted }) => {
-  return async dispatch => {
+export const upvoteComment = ({ rootId, comment, hasUpvoted }) => {
+  return async (dispatch, getState) => {
     try {
-      const {
-        commentId,
-        upvotesFrom
-      } = await postUpvoteToComment({
-        commentId: itemId,
+      const { commentId, upvotesFrom } = await postUpvoteToComment({
+        projectSymbol: getState().scenes.project.data.metadata.symbol,
+        projectSurveyId: comment.project_survey_id,
+        commentId: comment.id,
         hasUpvoted
       });
       dispatch({
@@ -134,16 +139,19 @@ export const upvoteComment = ({ rootId, itemId, hasUpvoted }) => {
 };
 
 export const editComment = ({
+  projectSurveyId,
   commentId,
-  comment,
+  updatedComment,
   tags,
   issueOpen
 }) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
       const rootComment = await updateComment({
+        projectSymbol: getState().scenes.project.data.metadata.symbol,
+        projectSurveyId,
         commentId,
-        comment,
+        updatedComment,
         tags,
         issueOpen
       });

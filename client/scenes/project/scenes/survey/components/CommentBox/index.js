@@ -17,7 +17,7 @@ export default class CommentBox extends Component {
     if (this.state.value) {
       this.props.onSubmit({
         ...this.props,
-        comment: this.state.value
+        updatedComment: this.state.value
       });
       this.setState({
         value: ""

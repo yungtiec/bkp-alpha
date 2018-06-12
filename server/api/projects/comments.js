@@ -1,10 +1,10 @@
-const router = require("express").Router();
+const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
 const {
+  Comment,
   User,
   Role,
   Tag,
-  ProjectSurveyComment,
   Issue,
   Notification
 } = require("../../db/models");
@@ -12,18 +12,20 @@ const _ = require("lodash");
 const {
   ensureAuthentication,
   ensureAdminRole,
+  ensureAdminRoleOrCommentOwnership,
   ensureResourceAccess
 } = require("../utils");
+Promise = require("bluebird");
 module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const comments = await ProjectSurveyComment.scope({
+    const comments = await Comment.scope({
       method: [
         "flatThreadByRootId",
         {
           where: {
-            project_survey_id: req.query.projectSurveyId,
+            project_survey_id: req.params.projectSurveyId,
             hierarchyLevel: 1
           }
         }
@@ -51,9 +53,9 @@ router.post(
       }).then(
         requestor => requestor.roles.filter(r => r.name === "admin").length
       );
-      const comment = await ProjectSurveyComment.create({
+      const comment = await Comment.create({
         owner_id: req.user.id,
-        project_survey_id: Number(req.body.projectSurveyId),
+        project_survey_id: Number(req.params.projectSurveyId),
         comment: req.body.comment,
         reviewed: isAdmin ? "verified" : "pending"
       })
@@ -61,7 +63,7 @@ router.post(
           if (req.body.issueOpen)
             await Issue.create({
               open: true,
-              project_survey_comment_id: comment.id
+              comment_id: comment.id
             });
           return comment;
         })
@@ -73,7 +75,7 @@ router.post(
             });
             return comment.addTag(tag.id);
           }).then(() =>
-            ProjectSurveyComment.scope({
+            Comment.scope({
               method: ["flatThreadByRootId", { where: { id: comment.id } }]
             }).findOne()
           );
@@ -86,15 +88,13 @@ router.post(
 );
 
 router.post(
-  "/reply",
+  "/:parentId/reply",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
       var ancestry;
-      const parent = await ProjectSurveyComment.scope({
-        method: ["withProjectSurveyInfo", Number(req.body.parentId)]
-      }).findOne();
+      const parent = await Comment.findById(Number(req.params.parentId));
       const child = _.assignIn(
         _.omit(parent.toJSON(), [
           "id",
@@ -106,11 +106,7 @@ router.post(
           "reviewed",
           "owner"
         ]),
-        {
-          comment: req.body.comment,
-          owner_id: req.user.id,
-          reviewed: "pending"
-        }
+        { comment: req.body.comment, reviewed: "pending" }
       );
       var [ancestors, reply, user] = await Promise.all([
         parent
@@ -126,13 +122,13 @@ router.post(
           .then(ancestors =>
             _.orderBy(ancestors, ["hierarchyLevel"], ["asc"]).concat(parent)
           ),
-        ProjectSurveyComment.create(child),
+        Comment.create(child),
         User.findById(req.user.id)
       ]);
       var rootAncestor = ancestors[0];
       reply = await reply.setParent(parent.toJSON().id);
       reply = await reply.setOwner(req.user.id);
-      ancestry = await ProjectSurveyComment.scope({
+      ancestry = await Comment.scope({
         method: [
           "flatThreadByRootId",
           { where: { id: rootAncestor ? rootAncestor.id : parent.id } }
@@ -140,9 +136,9 @@ router.post(
       }).findOne();
       await Notification.notifyRootAndParent({
         sender: user,
-        engagementItem: _.assignIn(reply.toJSON(), {
+        comment: _.assignIn(reply.toJSON(), {
           ancestors,
-          project_survey: parent.project_survey
+          project_survey: ancestry.project_survey
         }),
         parent,
         messageFragment: "replied to your post"
@@ -155,28 +151,31 @@ router.post(
 );
 
 router.post(
-  "/upvote",
+  "/:commentId/upvote",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
       const user = await User.findById(req.user.id);
       if (!req.body.hasUpvoted) {
-        await user.addUpvotedComment(req.body.commentId);
+        await req.user.addUpvotedComment(req.params.commentId);
       } else {
-        await user.removeUpvotedComment(req.body.commentId);
+        await req.user.removeUpvotedComment(req.params.commentId);
       }
-      const comment = await ProjectSurveyComment.scope({
-        method: ["upvotes", req.body.commentId]
+      const comment = await Comment.scope({
+        method: ["upvotes", req.params.commentId]
       }).findOne();
       if (!req.body.hasUpvoted) {
         await Notification.notify({
-          sender: user,
-          engagementItem: comment,
+          sender: req.user,
+          comment,
           messageFragment: "liked your post"
         });
       }
-      res.send({ upvotesFrom: comment.upvotesFrom, commentId: comment.id });
+      res.send({
+        upvotesFrom: comment.upvotesFrom,
+        commentId: comment.id
+      });
     } catch (err) {
       next(err);
     }
@@ -184,13 +183,13 @@ router.post(
 );
 
 router.post(
-  "/edit",
+  "/:commentId/edit",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var comment = await ProjectSurveyComment.findOne({
-        where: { id: req.body.commentId },
+      var comment = await Comment.findOne({
+        where: { id: req.params.commentId },
         include: [
           {
             model: User,
@@ -222,7 +221,7 @@ router.post(
       var removedTagPromises, addedTagPromises, issuePromise;
       if (comment.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        await comment.update({ comment: req.body.comment });
+        await comment.update({ comment: req.body.updatedComment });
         removedTagPromises = Promise.map(removedTags, tag =>
           comment.removeTag(tag.id)
         );
@@ -240,7 +239,7 @@ router.post(
                 defaults: {
                   open: req.body.issueOpen
                 },
-                where: { project_survey_comment_id: comment.id }
+                where: { comment_id: comment.id }
               }).spread((issue, created) => {
                 if (!created) issue.update({ open: req.body.issueOpen });
               })
@@ -254,7 +253,7 @@ router.post(
           ["hierarchyLevel"],
           ["asc"]
         )[0];
-        const ancestry = await ProjectSurveyComment.scope({
+        const ancestry = await Comment.scope({
           method: [
             "flatThreadByRootId",
             { where: { id: rootAncestor ? rootAncestor.id : comment.id } }
@@ -267,3 +266,67 @@ router.post(
     }
   }
 );
+
+router.put(
+  "/tag/remove",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(Number(req.body.commentId));
+      await comment.removeTag(req.body.tagId);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.put(
+  "/tag/add",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(Number(req.body.commentId));
+      const [tag, created] = await Tag.findOrCreate({
+        where: { name: req.body.tagName },
+        default: { name: req.body.tagName }
+      });
+      await comment.addTag(tag.id);
+      res.send(tag);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.get("/pending/:projectSurveyId", async (req, res, next) => {
+  try {
+    var comments = await Comment.findAll({
+      where: {
+        reviewed: "pending",
+        project_survey_id: req.params.projectSurveyId
+      },
+      include: [
+        {
+          model: User,
+          as: "owner"
+        },
+        {
+          model: Comment,
+          as: "parent",
+          include: [
+            {
+              model: User,
+              as: "owner"
+            }
+          ]
+        }
+      ]
+    });
+    res.send(comments);
+  } catch (err) {
+    next(err);
+  }
+});
