@@ -52,9 +52,9 @@ class EditCommentModal extends Component {
             selectedTags={this.props.tags}
             initialValue={this.props.comment}
             commentId={this.props.id}
+            projectSurveyId={this.props.project_survey_id}
             showTags={this.props.showTags}
             showIssueCheckbox={this.props.showIssueCheckbox}
-            commentId={this.props.id}
             onSubmit={this.handleSubmitEditedComment}
             onCancel={this.onClose}
           />
@@ -78,12 +78,3 @@ const actions = {
 };
 
 export default connect(mapState, actions)(EditCommentModal);
-
-<span
-  class="Select-value-label"
-  role="option"
-  aria-selected="true"
-  id="react-select-3--value-0"
->
-  tag (3)<span class="Select-aria-only">&nbsp;</span>
-</span>;

@@ -5,7 +5,7 @@ router.use("/admin", require("./admin"));
 router.use("/users", require("./users"));
 router.use("/annotator", require("./annotator"));
 router.use("/comment", require("./comment"));
-router.use("/project", require("./project"));
+router.use("/projects", require("./projects"));
 router.use("/tag", require("./tag"));
 router.use("/notifications", require("./notifications"));
 router.use("/upload", require("./upload"));

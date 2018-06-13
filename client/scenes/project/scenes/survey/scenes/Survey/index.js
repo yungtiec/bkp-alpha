@@ -52,9 +52,13 @@ class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
       this.props.fetchQuestionsByProjectSurveyId({
+        projectSymbol: this.props.match.params.symbol,
         projectSurveyId: this.props.match.params.projectSurveyId
       }),
-      this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId)
+      this.props.fetchCommentsBySurvey({
+        projectSymbol: this.props.match.params.symbol,
+        projectSurveyId: this.props.match.params.projectSurveyId
+      })
     ]);
   }
 

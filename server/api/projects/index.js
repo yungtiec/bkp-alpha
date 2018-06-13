@@ -20,8 +20,6 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 module.exports = router;
 
-router.use("/survey", require("./survey"));
-
 router.get("/", async (req, res, next) => {
   try {
     const projects = await Project.getProjects();
@@ -39,3 +37,6 @@ router.get("/:symbol", async (req, res, next) => {
     next(err);
   }
 });
+
+router.use("/:symbol/surveys", require("./surveys"));
+router.use("/:symbol/surveys/:projectSurveyId/comments", require("./comments"));

@@ -48,7 +48,8 @@ export default class CommentBoxWithTagField extends Component {
     const newArgObj = {
       ...argObj,
       tags: this.state.selectedTags,
-      issueOpen: this.state.issueOpen
+      issueOpen: this.state.issueOpen,
+      projectSurveyId: this.props.projectSurveyId
     };
     onSubmit(newArgObj);
     this.setState({
@@ -87,9 +88,7 @@ export default class CommentBoxWithTagField extends Component {
                       key={`comment-tag__${tag.name}`}
                       containerClassname="comment-item__tag dark-bg"
                       tagValue={tag.name}
-                      closeIconOnClick={() =>
-                        this.handleRemoveTag(index)
-                      }
+                      closeIconOnClick={() => this.handleRemoveTag(index)}
                     />
                   ))
                 : ""}

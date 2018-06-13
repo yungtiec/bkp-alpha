@@ -124,7 +124,7 @@ export default class CommentItem extends Component {
     const upvoteItem = this.props.userEmail
       ? this.props.upvoteItem.bind(this, {
           rootId: null,
-          itemId: comment.id,
+          comment,
           hasUpvoted
         })
       : this.promptLoginToast;
@@ -145,37 +145,39 @@ export default class CommentItem extends Component {
         {comment.quote && (
           <p className="comment-item__quote">{comment.quote}</p>
         )}
-        <div className="comment-item__tags">
-          {comment.issue &&
-            (comment.issue.open ? (
-              <span
-                key={`comment-${comment.id}__tag-issue--open`}
-                className="badge badge-danger issue"
-                onClick={changeItemIssueStatus}
-              >
-                issue:open
-                <i className="fas fa-times" />
-              </span>
-            ) : (
-              <span
-                key={`comment-${comment.id}__tag-issue--close`}
-                className="badge badge-light"
-              >
-                issue:close
-              </span>
-            ))}
-          {comment.tags && comment.tags.length
-            ? comment.tags.map(tag => (
+        {(comment.tags && comment.tags.length) || comment.issue ? (
+          <div className="comment-item__tags">
+            {comment.issue &&
+              (comment.issue.open ? (
                 <span
-                  key={`comment-${comment.id}__tag-${tag.name}`}
+                  key={`comment-${comment.id}__tag-issue--open`}
+                  className="badge badge-danger issue"
+                  onClick={changeItemIssueStatus}
+                >
+                  issue:open
+                  <i className="fas fa-times" />
+                </span>
+              ) : (
+                <span
+                  key={`comment-${comment.id}__tag-issue--close`}
                   className="badge badge-light"
                 >
-                  {tag.name}
-                  {"  "}
+                  issue:close
                 </span>
-              ))
-            : ""}
-        </div>
+              ))}
+            {comment.tags && comment.tags.length
+              ? comment.tags.map(tag => (
+                  <span
+                    key={`comment-${comment.id}__tag-${tag.name}`}
+                    className="badge badge-light"
+                  >
+                    {tag.name}
+                    {"  "}
+                  </span>
+                ))
+              : ""}
+          </div>
+        ) : null}
         <p className="comment-item__comment">{comment.comment}</p>
         {comment.issue && comment.issue.resolvingProjectSurvey ? (
           <span className="comment-item__issue-resolved">
@@ -221,7 +223,7 @@ export default class CommentItem extends Component {
       const upvoteItem = this.props.userEmail
         ? this.props.upvoteItem.bind(this, {
             rootId,
-            itemId: reply.id,
+            comment: reply,
             hasUpvoted
           })
         : this.promptLoginToast;
