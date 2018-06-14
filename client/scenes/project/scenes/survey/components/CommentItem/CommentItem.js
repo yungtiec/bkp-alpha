@@ -180,8 +180,6 @@ export default class CommentItem extends Component {
         <ActionBar
           item={comment}
           hasUpvoted={hasUpvoted}
-          isAdmin={this.props.admin}
-          thisUserEmail={this.props.userEmail}
           initReplyToThis={initReplyToThis}
           upvoteItem={upvoteItem}
           openModal={openModal}
@@ -247,8 +245,6 @@ export default class CommentItem extends Component {
           <ActionBar
             item={reply}
             hasUpvoted={hasUpvoted}
-            isAdmin={this.props.admin}
-            thisUserEmail={this.props.userEmail}
             initReplyToThis={initReplyToThis}
             upvoteItem={upvoteItem}
             openModal={openModal}

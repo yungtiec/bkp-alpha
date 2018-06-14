@@ -1,14 +1,12 @@
 import React from "react";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
-import policies from "../../../../../../access-control.js";
+import policies from "../../../../../../policies.js";
 import { connect } from "react-redux";
 
 const ActionBar = ({
   user,
   projectMetadata,
   item,
-  thisUserEmail,
-  isAdmin,
   initReplyToThis,
   openModal,
   hasUpvoted,
@@ -49,9 +47,12 @@ const ActionBar = ({
           </div>
         </VisibleIf>
         <div>
-          {item.owner.email === thisUserEmail && (
+          <VisibleIf
+            action="Edit"
+            model={{ project: projectMetadata, comment: item }}
+          >
             <i className="fas fa-edit" onClick={openModal} />
-          )}
+          </VisibleIf>
           <i className="fas fa-reply" onClick={initReplyToThis} />
           <span className={`${hasUpvoted ? "upvoted" : ""}`}>
             <i className="fas fa-thumbs-up" onClick={upvoteItem} />

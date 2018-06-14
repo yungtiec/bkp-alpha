@@ -69,7 +69,6 @@ function renderSidebarWithSelectedComments(props) {
             loadModal={loadModal}
             notify={notify}
             userEmail={userEmail}
-            admin={admin}
           />
         ))}
     </div>

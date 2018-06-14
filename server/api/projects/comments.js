@@ -1,6 +1,6 @@
 const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
-const ac = require("../../access-control");
+const permission = require("../../access-control")["Comment"];
 const {
   Comment,
   User,
@@ -10,7 +10,9 @@ const {
   Notification,
   ProjectSurvey,
   Project,
-  Survey
+  Survey,
+  ProjectAdmin,
+  ProjectEditor
 } = require("../../db/models");
 const _ = require("lodash");
 const {
@@ -317,27 +319,35 @@ router.post(
                 model: db.model("user"),
                 as: "collaborators",
                 required: false
+              },
+              {
+                model: Project,
+                include: [
+                  {
+                    model: User,
+                    through: ProjectAdmin,
+                    as: "admins"
+                  },
+                  {
+                    model: User,
+                    through: ProjectEditor,
+                    as: "editors"
+                  }
+                ]
               }
             ]
           }
         ]
       });
-      const permission = ac.can(req.user.roles[0].name).updateAny("comment");
-      const canVerify = permission.attributes.indexOf("verify") !== -1;
-      const isEditor = req.user.roles[0].name === "editor";
-      const isProjectSurveyCollaborator = _.find(
-        comment.project_survey.collaborators,
-        c => c.id === req.user.id
+      const canVerify = permission(
+        "Verify",
+        {
+          comment,
+          project: comment.project_survey.project
+        },
+        req.user
       );
-      const isProjectSurveyOwner =
-        req.user.id === comment.project_survey.creator_id;
-      if (
-        !canVerify ||
-        (canVerify &&
-          isEditor &&
-          !isProjectSurveyOwner &&
-          !isProjectSurveyCollaborator)
-      ) {
+      if (!canVerify) {
         res.sendStatus(403);
       } else {
         comment.update({ reviewed: req.body.reviewed });
@@ -366,7 +376,18 @@ router.post(
             include: [
               {
                 model: Project,
-                attributes: ["symbol"]
+                include: [
+                  {
+                    model: User,
+                    through: ProjectAdmin,
+                    as: "admins"
+                  },
+                  {
+                    model: User,
+                    through: ProjectEditor,
+                    as: "editors"
+                  }
+                ]
               },
               {
                 model: Survey,
@@ -381,23 +402,15 @@ router.post(
           }
         ]
       });
-      const permission = ac.can(req.user.roles[0].name).updateAny("comment");
-      const canIssue = permission.attributes.indexOf("issue") !== -1;
-      const isEditor = req.user.roles[0].name === "editor";
-      const isProjectSurveyCollaborator = _.find(
-        comment.project_survey.collaborators,
-        c => c.id === req.user.id
+      const canIssue = permission(
+        "Issue",
+        {
+          comment,
+          project: comment.project_survey.project
+        },
+        req.user
       );
-      const isProjectSurveyOwner =
-        req.user.id === comment.project_survey.creator_id;
-      const isOwner = req.user.id === comment.owner_id;
-      if (
-        (!canIssue && !isOwner) ||
-        (canIssue &&
-          isEditor &&
-          !isProjectSurveyOwner &&
-          !isProjectSurveyCollaborator)
-      ) {
+      if (!canIssue) {
         res.sendStatus(403);
         return;
       }

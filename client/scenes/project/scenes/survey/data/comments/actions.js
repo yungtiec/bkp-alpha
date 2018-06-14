@@ -214,11 +214,6 @@ export const changeCommentIssueStatus = comment => {
   return async (dispatch, getState) => {
     try {
       const user = getState().data.user;
-      if (
-        comment.owner_id !== user.id &&
-        !user.roles.filter(r => r.name === "admin").length
-      )
-        return;
       const open = comment.issue ? !comment.issue.open : true;
       await updateCommentIssueStatus({
         comment,

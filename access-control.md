@@ -15,7 +15,7 @@ ternary
     - project editor
     - project admin
     - admin
-    comment owner
+    - comment owner
 - Survey/VersionToolbar
 - Navbar
 all or none

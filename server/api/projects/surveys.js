@@ -1,6 +1,6 @@
 const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
-const ac = require("../../access-control");
+const permission = require("../../access-control")["Disclosure"];
 const {
   Comment,
   User,
@@ -99,11 +99,6 @@ async function createNewProjectSurvey({
   next
 }) {
   try {
-    const permission = ac.can(creator.roles[0].name).createAny("disclosure");
-    if (!permission.granted) {
-      res.sendStatus(403);
-      return;
-    }
     var project = await Project.findOne({
       where: { symbol: parentProjectSurvey.project.symbol },
       include: [
@@ -119,10 +114,8 @@ async function createNewProjectSurvey({
         }
       ]
     });
-    var isProjectAdmin = _.find(project.admins, a => a.id === creator.id);
-    var isProjectEditor = _.find(project.editors, a => a.id === creator.id);
-    var isSystemAdmin = creator.roles[0].name === "admin";
-    if (!isProjectAdmin && !isProjectEditor && !isSystemAdmin) {
+    const canCreate = permission("Create", { project }, creator);
+    if (canCreate) {
       res.sendStatus(403);
       return;
     }
@@ -203,11 +196,6 @@ async function updateExistingProjectSurvey({
   next
 }) {
   try {
-    const permission = ac.can(creator.roles[0].name).createAny("disclosure");
-    if (!permission.granted) {
-      res.sendStatus(403);
-      return;
-    }
     var parentProjectSurvey = await ProjectSurvey.scope({
       method: ["byProjectSurveyId", Number(parentProjectSurveyId)]
     }).findOne();
@@ -226,10 +214,12 @@ async function updateExistingProjectSurvey({
         }
       ]
     });
-    var isProjectAdmin = _.find(project.admins, a => a.id === creator.id);
-    var isProjectEditor = _.find(project.editors, a => a.id === creator.id);
-    var isSystemAdmin = creator.roles[0].name === "admin";
-    if (!isProjectAdmin && !isProjectEditor && !isSystemAdmin) {
+    const canVersion = permission(
+      "Version",
+      { project, disclosure: parentProjectSurvey },
+      creator
+    );
+    if (canVersion) {
       res.sendStatus(403);
       return;
     }
