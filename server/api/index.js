@@ -1,15 +1,10 @@
 const router = require("express").Router();
 module.exports = router;
 
-router.use("/admin", require("./admin"));
 router.use("/users", require("./users"));
-router.use("/annotator", require("./annotator"));
-router.use("/comment", require("./comment"));
 router.use("/projects", require("./projects"));
-router.use("/tag", require("./tag"));
+router.use("/tags", require("./tags"));
 router.use("/notifications", require("./notifications"));
-router.use("/upload", require("./upload"));
-
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");

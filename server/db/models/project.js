@@ -30,6 +30,16 @@ const Project = db.define(
         var query = {
           include: [
             {
+              model: db.model("user"),
+              through: db.model("project_admin"),
+              as: "admins"
+            },
+            {
+              model: db.model("user"),
+              through: db.model("project_editor"),
+              as: "editors"
+            },
+            {
               model: db.model("project_survey"),
               where: { hierarchyLevel: 1 },
               required: false,

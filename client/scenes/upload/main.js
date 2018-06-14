@@ -100,7 +100,7 @@ class Upload extends Component {
                     onChange={this.handleProjectSelectChange}
                     options={projectSymbolArr.map(symbol => ({
                       label: projectsBySymbol[symbol].name.toUpperCase(),
-                      value: projectsBySymbol[symbol].id
+                      value: symbol
                     }))}
                   />
                 </div>
@@ -135,6 +135,6 @@ const mapState = (state, ownProps) => ({ ...ownProps });
 export default connect(mapState, {})(
   requiresAuthorization({
     Component: Upload,
-    roleRequired: "editor"
+    roleRequired: ["project_editor", "project_admin", "admin"]
   })
 );

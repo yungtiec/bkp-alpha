@@ -7,6 +7,8 @@ import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../../../history";
 import { orderBy } from "lodash";
+import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import policies from "../../../../../policies.js";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -22,15 +24,6 @@ function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   return surveyMarkdown;
 }
 
-function hasEditRight(userEmail, surveyMetadata) {
-  const isOwner = userEmail === surveyMetadata.creator.email;
-  const isCollaborator = surveyMetadata.collaborators.reduce(
-    (bool, c) => c.email === userEmail || bool,
-    false
-  );
-  return isOwner || isCollaborator;
-}
-
 class VersionToolbar extends Component {
   constructor(props) {
     super(props);
@@ -38,13 +31,14 @@ class VersionToolbar extends Component {
   }
   render() {
     const {
+      resetUpload,
       projectMetadata,
       surveyMetadata,
       surveyQnasById,
       surveyQnaIds,
       uploadMode,
       uploaded,
-      userEmail
+      user
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -52,10 +46,6 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       surveyQnasById
     });
-
-    const uploadModeAndPreview = uploadMode && uploaded;
-    const uploadModeAndPending = uploadMode && !uploaded;
-    const viewMode = !uploadMode;
 
     return (
       <div className="btn-group mb-5" role="group" aria-label="Basic example">
@@ -112,98 +102,125 @@ class VersionToolbar extends Component {
             View progress
           </Link>
         </button>
-        {viewMode &&
-        hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
-          <button type="button" className="btn btn-outline-primary">
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                orderBy(
-                  this.props.surveyMetadata.versions,
-                  ["hierarchyLevel"],
-                  ["desc"]
-                )[0].id
-              }/upload`}
-            >
-              Import new version
-            </Link>
-          </button>
-        ) : null}
-        {viewMode &&
-        hasEditRight(this.props.userEmail, this.props.surveyMetadata) ? (
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              id="downloadMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Copy or download
-            </button>
-            <div className="dropdown-menu" aria-labelledby="downloadMenuButton">
-              <div className="card-body" style={{ width: "18rem" }}>
-                <h6 className="card-subtitle mb-4 text-secondary">
-                  Edit disclosure in the markdown editor of your choice
-                </h6>
-                <p className="card-text">
-                  Don't have an editor in mind?{" "}
-                  <a
-                    href="https://dillinger.io/"
-                    target="_blank"
-                    className="font-weight-bold text-primary"
+        {!uploadMode ? (
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{ project: projectMetadata, disclosure: surveyMetadata }}
+              >
+                <button type="button" className="btn btn-outline-primary">
+                  <Link
+                    to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                      orderBy(
+                        this.props.surveyMetadata.versions,
+                        ["hierarchyLevel"],
+                        ["desc"]
+                      )[0].id
+                    }/upload`}
                   >
-                    Here's a place to start.
-                  </a>
-                </p>
-                <p className="card-text">
-                  Need some pointers on writing markdown file?{" "}
-                  <a
-                    href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                    target="_blank"
-                    className="font-weight-bold text-primary"
+                    Import new version
+                  </Link>
+                </button>
+                <div className="btn-group">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary dropdown-toggle"
+                    type="button"
+                    id="downloadMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
-                    check out this cheatsheet.
-                  </a>
-                </p>
-                <CopyToClipboard
-                  text={surveyMarkdown}
-                  onCopy={() =>
-                    this.props.notify({
-                      title: "Copied to clipboard",
-                      message: "Paste in the editor of your choice",
-                      status: "success",
-                      dismissible: true,
-                      dismissAfter: 3000
-                    })
-                  }
+                    Copy or download
+                  </button>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby="downloadMenuButton"
+                  >
+                    <div className="card-body" style={{ width: "18rem" }}>
+                      <h6 className="card-subtitle mb-4 text-secondary">
+                        Edit disclosure in the markdown editor of your choice
+                      </h6>
+                      <p className="card-text">
+                        Don't have an editor in mind?{" "}
+                        <a
+                          href="https://dillinger.io/"
+                          target="_blank"
+                          className="font-weight-bold text-primary"
+                        >
+                          Here's a place to start.
+                        </a>
+                      </p>
+                      <p className="card-text">
+                        Need some pointers on writing markdown file?{" "}
+                        <a
+                          href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
+                          target="_blank"
+                          className="font-weight-bold text-primary"
+                        >
+                          check out this cheatsheet.
+                        </a>
+                      </p>
+                      <CopyToClipboard
+                        text={surveyMarkdown}
+                        onCopy={() =>
+                          this.props.notify({
+                            title: "Copied to clipboard",
+                            message: "Paste in the editor of your choice",
+                            status: "success",
+                            dismissible: true,
+                            dismissAfter: 3000
+                          })
+                        }
+                      >
+                        <a className="card-link text-primary mr-3">
+                          Copy markdown
+                        </a>
+                      </CopyToClipboard>
+                      <a
+                        className="card-link text-primary mr-3"
+                        onClick={() =>
+                          download(
+                            surveyMarkdown,
+                            `${this.props.projectMetadata.symbol.toLowerCase()}-${
+                              this.props.surveyMetadata.id
+                            }.md`,
+                            "text/markdown"
+                          )
+                        }
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
+        ) : uploaded ? (
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{ project: projectMetadata, disclosure: surveyMetadata }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={resetUpload}
                 >
-                  <a className="card-link text-primary mr-3">Copy markdown</a>
-                </CopyToClipboard>
-                <a
-                  className="card-link text-primary mr-3"
-                  onClick={() =>
-                    download(
-                      surveyMarkdown,
-                      `${this.props.projectMetadata.symbol.toLowerCase()}-${
-                        this.props.surveyMetadata.id
-                      }.md`,
-                      "text/markdown"
-                    )
-                  }
-                >
-                  Download
-                </a>
-              </div>
-            </div>
-          </div>
+                  Import another file
+                </button>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
         ) : null}
       </div>
     );
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps });
+const mapState = (state, ownProps) => ({ ...ownProps, user: state.data.user });
 
 export default connect(mapState, { notify })(VersionToolbar);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import history from "../history";
+import { isEmpty } from "lodash";
 
 export default function requiresAuthorization({
   Component,
@@ -18,10 +19,10 @@ export default function requiresAuthorization({
 
     checkAndRedirect() {
       if (
-        !this.props.user ||
+        isEmpty(this.props.user) ||
         (roleRequired &&
-          this.props.user &&
-          !this.props.user.roles.filter(r => r.name === roleRequired).length) ||
+          !isEmpty(this.props.user) &&
+          !roleRequired.indexOf(this.props.user.roles[0].name) === -1) ||
         (checkSurveyEditRight &&
           (this.props.user.email !== this.props.surveyMetadata.creator.email &&
             !this.props.surveyMetadata.collaborators.reduce(

@@ -1,7 +1,7 @@
-const router = require("express").Router();
-const { Comment, Tag, Issue, User, Role } = require("../db/models");
+const router = require("express").Router({ mergeParams: true });
+const { Comment, Tag, Issue, User, Role } = require("../../db/models");
 const { assignIn, pick } = require("lodash");
-const { ensureAuthentication, ensureResourceAccess } = require("./utils");
+const { ensureAuthentication, ensureResourceAccess } = require("..//utils");
 const { IncomingWebhook } = require("@slack/client");
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(slackWebhookUrl);
@@ -28,7 +28,7 @@ function sendNotificationToSlack(annotation) {
 }
 
 router.post(
-  "/store",
+  "/",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
@@ -44,16 +44,7 @@ router.post(
         tags,
         issue
       } = req.body;
-      const isAdmin = await User.findOne({
-        where: { id: req.user.id },
-        include: [
-          {
-            model: Role
-          }
-        ]
-      }).then(
-        requestor => requestor.roles.filter(r => r.name === "admin").length
-      );
+      const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
       var newComment = await Comment.create({
         uri,
         survey_question_id,
@@ -89,11 +80,11 @@ router.post(
   }
 );
 
-router.get("/search", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     var comments = await Comment.findAll({
       where: {
-        uri: req.query.uri,
+        project_survey_id: req.query.project_survey_id,
         survey_question_id: req.query.survey_question_id,
         reviewed: { $not: "spam" },
         hierarchyLevel: 1

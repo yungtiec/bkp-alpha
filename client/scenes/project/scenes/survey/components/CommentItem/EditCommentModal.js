@@ -4,7 +4,6 @@ import autoBind from "react-autobind";
 import Modal from "react-modal";
 import { hideModal } from "../../../../../../data/reducer";
 import { editComment } from "../../data/comments/actions";
-import { removeTag, addTag } from "../../data/tags/actions";
 import { getAllTags } from "../../data/tags/reducer";
 import { CommentBox, CommentBoxWithTagField } from "../index";
 import { TagChip } from "../../../../../../components";
@@ -22,15 +21,6 @@ class EditCommentModal extends Component {
 
   handleSubmitEditedComment(argObj) {
     this.props.editItem(argObj);
-  }
-
-  handleTagOnChange(selected) {
-    if (this.props.tags.indexOf(selected.value) === -1) {
-      this.props.addTag({
-        commentId: this.props.id,
-        tagName: selected.length && selected[0].value
-      });
-    }
   }
 
   render() {
@@ -72,9 +62,7 @@ const mapState = (state, ownProps) => ({
 
 const actions = {
   hideModal,
-  editComment,
-  removeTag,
-  addTag
+  editComment
 };
 
 export default connect(mapState, actions)(EditCommentModal);

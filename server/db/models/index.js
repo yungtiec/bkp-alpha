@@ -1,6 +1,5 @@
 const User = require("./user");
 const Comment = require("./comment");
-const Permission = require("./permission");
 const Role = require("./role");
 const Project = require("./project");
 const ProjectSurvey = require("./project-survey");
@@ -13,6 +12,8 @@ const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
 const Collaborator = require("./collaborator");
+const ProjectAdmin = require("./project-admin");
+const ProjectEditor = require("./project-editor");
 
 /*=============================================
 =            role based authorization         =
@@ -28,15 +29,6 @@ User.belongsToMany(Role, {
 Role.belongsToMany(User, {
   through: "user_role",
   foreignKey: "role_id"
-});
-
-Role.belongsToMany(Permission, {
-  through: "role_permission",
-  foreignKey: "role_id"
-});
-Permission.belongsToMany(Role, {
-  through: "role_permission",
-  foreignKey: "permission_id"
 });
 
 /*=====  End of role based authorization  ===*/
@@ -74,11 +66,24 @@ Notification.belongsTo(User, {
 =============================================*/
 
 User.belongsToMany(Project, {
-  through: "user_project",
+  through: "project_admin",
+  as: "managedProjects",
   foreignKey: "user_id"
 });
 Project.belongsToMany(User, {
-  through: "user_project",
+  through: "project_admin",
+  as: "admins",
+  foreignKey: "project_id"
+});
+
+User.belongsToMany(Project, {
+  through: "project_editor",
+  as: "editedProjects",
+  foreignKey: "user_id"
+});
+Project.belongsToMany(User, {
+  through: "project_editor",
+  as: "editors",
   foreignKey: "project_id"
 });
 
@@ -252,7 +257,6 @@ User.belongsToMany(ProjectSurvey, {
 module.exports = {
   User,
   Comment,
-  Permission,
   Role,
   Project,
   ProjectSurvey,
@@ -264,5 +268,7 @@ module.exports = {
   Tag,
   Issue,
   Notification,
-  Collaborator
+  Collaborator,
+  ProjectAdmin,
+  ProjectEditor
 };

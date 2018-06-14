@@ -13,7 +13,7 @@ module.exports = router;
 router.get(
   "/:userId",
   ensureAuthentication,
-  // ensureAdminRoleOrOwnership, // nothing senstiive
+  // nothing senstiive here, we can let users decide what to diclose in their profile later on
   async (req, res, next) => {
     try {
       const profile = await User.getContributions(Number(req.params.userId));
@@ -27,7 +27,7 @@ router.get(
 router.get(
   "/:userId/comments",
   ensureAuthentication,
-  // ensureAdminRoleOrOwnership, // nothing senstiive
+  // nothing senstiive here, we can let users decide what to diclose in their profile later on
   async (req, res, next) => {
     var queryObj = {
       userId: Number(req.params.userId),
@@ -67,7 +67,7 @@ router.get(
         comments,
         commentCount
       } = await User.getCommentsAndCount(queryObj);
-      res.send({ comments: comments, commentCount: commentCount });
+      res.send({ comments: pagedComments, commentCount: commentCount });
     } catch (err) {
       next(err);
     }

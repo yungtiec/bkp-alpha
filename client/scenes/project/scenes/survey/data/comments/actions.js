@@ -35,7 +35,7 @@ export const fetchCommentsBySurvey = ({ projectSymbol, projectSurveyId }) => {
 
 export const addNewComment = ({
   projectSurveyId,
-  comment,
+  newComment,
   tags,
   issueOpen
 }) => {
@@ -44,7 +44,7 @@ export const addNewComment = ({
       const postedComment = await postComment({
         projectSymbol: getState().scenes.project.data.metadata.symbol,
         projectSurveyId,
-        comment,
+        newComment,
         tags,
         issueOpen
       });
@@ -97,15 +97,20 @@ export const cancelReplyToComment = ({ accessors, parent }) => ({
   parent
 });
 
-export const replyToComment = ({ rootId, parentId, comment }) => {
+export const replyToComment = ({
+  rootId,
+  parentId,
+  newComment,
+  projectSurveyId
+}) => {
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({
         projectSymbol: getState().scenes.project.data.metadata.symbol,
-        projectSurveyId: comment.project_survey_id,
+        projectSurveyId,
         rootId,
         parentId,
-        comment
+        newComment
       });
       dispatch({
         type: types.COMMENT_UPDATED,
@@ -141,7 +146,7 @@ export const upvoteComment = ({ rootId, comment, hasUpvoted }) => {
 export const editComment = ({
   projectSurveyId,
   commentId,
-  updatedComment,
+  newComment,
   tags,
   issueOpen
 }) => {
@@ -151,7 +156,7 @@ export const editComment = ({
         projectSymbol: getState().scenes.project.data.metadata.symbol,
         projectSurveyId,
         commentId,
-        updatedComment,
+        newComment,
         tags,
         issueOpen
       });
@@ -209,11 +214,6 @@ export const changeCommentIssueStatus = comment => {
   return async (dispatch, getState) => {
     try {
       const user = getState().data.user;
-      if (
-        comment.owner_id !== user.id &&
-        !user.roles.filter(r => r.name === "admin").length
-      )
-        return;
       const open = comment.issue ? !comment.issue.open : true;
       await updateCommentIssueStatus({
         comment,

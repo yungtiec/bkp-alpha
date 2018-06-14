@@ -172,7 +172,6 @@ class Survey extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
-          userEmail={userEmail}
         />
         <Switch>
           <Route

@@ -53,7 +53,7 @@ const ensureAdminRoleOrCommentOwnership = async (req, res, next) => {
         }
       ]
     });
-    const comment = Comment.findById(req.body.comment.id);
+    const comment = Comment.findById(req.body.commentId);
     if (
       requestor.roles.filter(r => r.name === "admin").length ||
       comment.owner_id === req.user.id
@@ -68,12 +68,15 @@ const ensureAdminRoleOrCommentOwnership = async (req, res, next) => {
 };
 
 const ensureResourceAccess = async (req, res, next) => {
-  const requestor = await User.findById(req.user.id);
-  if (requestor.restricted_access) res.sendStatus(403);
+  if (req.user.restricted_access) res.sendStatus(403);
   else next();
 };
 
-const getEngagedUsers = async projectSurvey => {
+const getEngagedUsers = async ({
+  projectSurvey,
+  creator,
+  collaboratorEmails
+}) => {
   var comments = await projectSurvey.getComments({
     include: [
       {
@@ -82,10 +85,8 @@ const getEngagedUsers = async projectSurvey => {
       }
     ]
   });
-  var commentators = _.uniqBy(comments.map(c => c.owner.toJSON()), "id");
-  var issueCreators = _.uniqBy(
-    comments.filter(c => !!c.issue).map(c => c.owner.toJSON()),
-    "id"
+  var commentators = _.uniqBy(comments.map(c => c.owner.toJSON()), "id").filter(
+    c => collaboratorEmails.indexOf(c.email) === -1 && c.id !== creator.id
   );
   // we might want to tailor the notification based on their action
   return commentators;

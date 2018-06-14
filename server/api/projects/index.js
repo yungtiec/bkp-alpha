@@ -40,3 +40,4 @@ router.get("/:symbol", async (req, res, next) => {
 
 router.use("/:symbol/surveys", require("./surveys"));
 router.use("/:symbol/surveys/:projectSurveyId/comments", require("./comments"));
+router.use("/:symbol/surveys/:projectSurveyId/annotator", require("./annotator"));

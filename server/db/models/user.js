@@ -280,7 +280,7 @@ User.getCommentsAndCount = async function(queryObj) {
   var { comments } = await User.scope({
     method: ["commentCount", cloneDeep(queryObj)]
   }).findOne();
-  comments = comments.map(comment => {
+  pagedComments = user.comments.map(comment => {
     comment = comment.toJSON();
     if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
     if (comment.parent.ancestors.length) {
@@ -292,7 +292,7 @@ User.getCommentsAndCount = async function(queryObj) {
     }
     return comment;
   });
-  return { comments, commentCount: comments.length };
+  return { pagedComments, commentCount: comments.length };
 };
 
 /**

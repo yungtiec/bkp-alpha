@@ -57,24 +57,27 @@ class QnaBox extends Component {
           ]
         })
         .include(annotator.storage.http, {
-          prefix: `${window.location.origin}/api/annotator`,
+          prefix: `${
+            window.location.origin
+          }/api/projects/-/surveys/${projectSurveyId}/annotator`,
           urls: {
-            create: "/store",
+            create: "/",
             update: "/update/:id",
             destroy: "/delete/:id",
-            search: "/search/"
+            search: "/"
           }
         })
         .include(pageUri);
       app.start().then(function() {
         app.annotations.load({
           uri: `${window.location.origin}${match.url}`,
+          project_survey_id: projectSurveyId,
           survey_question_id: qna.id
         });
       });
       this.annotator = app;
       $(".annotator__tag-container").tagsInput({
-        autocomplete_url: "/api/tag/autocomplete",
+        autocomplete_url: "/api/tags/autocomplete",
         defaultText: "add tag(s)",
         height: "70px",
         width: "100%",

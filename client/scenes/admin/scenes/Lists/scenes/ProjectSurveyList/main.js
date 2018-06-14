@@ -53,6 +53,6 @@ class AdminProjectSurveyList extends Component {
 export default withRouter(
   requiresAuthorization({
     Component: AdminProjectSurveyList,
-    roleRequired: "admin"
+    roleRequired: ["admin"]
   })
 );

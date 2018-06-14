@@ -32,7 +32,7 @@ const ProjectSurvey = db.define(
       type: Sequelize.INTEGER
     },
     comment_until_unix: {
-      type: Sequelize.INTEGER
+      type: Sequelize.BIGINT
     }
   },
   {

@@ -40,7 +40,7 @@ Notification.notifyRootAndParent = function({
   var notification = {
     sender_id: sender ? sender.id : null,
     uri,
-    message: `${sender.first_name} ${sender.last_name} ${messageFragment}`,
+    message: `${sender.email} ${messageFragment}`,
     status: "unread"
   };
   var notifications = [];
@@ -64,9 +64,7 @@ Notification.notify = function({ sender, comment, messageFragment }) {
   Notification.create({
     sender_id: sender ? sender.id : null,
     uri,
-    message: sender
-      ? `${sender.first_name} ${sender.last_name} ${messageFragment}`
-      : messageFragment,
+    message: sender ? `${sender.email} ${messageFragment}` : messageFragment,
     status: "unread",
     recipient_id: comment.owner_id
   });
@@ -79,7 +77,7 @@ Notification.notifyEngagedUserOnUpdate = function({
   parentSurveyTitle
 }) {
   return Notification.create({
-    message: `You might be interested in the updated version of ${parentSurveyTitle}`,
+    message: `You might be interested in the updated version of ${projectSymbol}/${parentSurveyTitle}`,
     status: "unread",
     recipient_id: engagedUser.id,
     uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
@@ -96,9 +94,9 @@ Notification.notifyCollaborators = function({
   action
 }) {
   return Notification.create({
-    message: `${sender.first_name} ${
-      sender.last_name
-    } ${action} ${parentSurveyTitle} and added you as collaborator`,
+    message: `${
+      sender.email
+    } ${action} ${projectSymbol}/${parentSurveyTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
     uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
