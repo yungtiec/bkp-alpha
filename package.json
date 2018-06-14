@@ -20,7 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^4.1.0",
-    "accesscontrol": "^2.2.1",
     "annotator": "git+https://github.com/yungtiec/tbp-annotator.git",
     "axios": "^0.15.3",
     "babel-plugin-import-inspector": "^2.0.0",

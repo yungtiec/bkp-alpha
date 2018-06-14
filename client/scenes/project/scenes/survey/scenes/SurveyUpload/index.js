@@ -51,7 +51,7 @@ const LoadableSurveyUpload = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
-      this.props.fetchProjectBySymbol(projectSymbol),
+      this.props.fetchProjectBySymbol(this.props.match.params.symbol),
       this.props.fetchQuestionsByProjectSurveyId({
         projectSymbol: this.props.match.params.symbol,
         projectSurveyId: this.props.match.params.projectSurveyId

@@ -135,6 +135,6 @@ const mapState = (state, ownProps) => ({ ...ownProps });
 export default connect(mapState, {})(
   requiresAuthorization({
     Component: Upload,
-    roleRequired: "editor"
+    roleRequired: "project_editor"
   })
 );

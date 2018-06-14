@@ -51,7 +51,7 @@ module.exports = {
         return (
           isAdmin ||
           isProjectAdmin ||
-          (isProjectEditor && (isCommentOwner || isDisclosureCollaborator))
+          (isProjectEditor && (isDisclosureOwner || isDisclosureCollaborator))
         );
     }
   }

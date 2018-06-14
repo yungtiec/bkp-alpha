@@ -115,7 +115,7 @@ async function createNewProjectSurvey({
       ]
     });
     const canCreate = permission("Create", { project }, creator);
-    if (canCreate) {
+    if (!canCreate) {
       res.sendStatus(403);
       return;
     }
@@ -219,7 +219,7 @@ async function updateExistingProjectSurvey({
       { project, disclosure: parentProjectSurvey },
       creator
     );
-    if (canVersion) {
+    if (!canVersion) {
       res.sendStatus(403);
       return;
     }
@@ -230,120 +230,108 @@ async function updateExistingProjectSurvey({
     var commentUntilInUnix = moment()
       .add(commentPeriodInDay, "days")
       .format("x");
-    if (!hasEditRight(creator.id, parentProjectSurvey)) res.sendStatus(401);
-    else {
-      var projectSurvey = await ProjectSurvey.create({
-        project_id: parentProjectSurvey.project.id,
-        survey_id: survey.id,
-        creator_id: creator.id,
-        forked: creator.id !== parentProjectSurvey.creator_id,
-        original_id:
-          creator.id !== parentProjectSurvey.creator_id
-            ? parentProjectSurvey.id
-            : null,
-        comment_until_unix: commentUntilInUnix
-      });
-      if (creator.id === parentProjectSurvey.creator_id)
-        await parentProjectSurvey.addChild(projectSurvey.id);
-      var questionInstances = await Promise.map(
-        markdownParsor.questions,
-        questionObject =>
-          Question.findOrCreate({
-            where: {
-              markdown: `### ${questionObject.question.trim()}`
-            },
-            defaults: {
-              markdown: `### ${questionObject.question.trim()}`
-            }
-          }).spread(async (question, created) => {
-            var answer = markdownParsor.findAnswerToQuestion(
-              questionObject.order_in_survey
-            );
-            var surveyQuestion = await SurveyQuestion.create({
-              survey_id: survey.id,
-              question_id: question.id,
-              order_in_survey: questionObject.order_in_survey
+
+    var projectSurvey = await ProjectSurvey.create({
+      project_id: parentProjectSurvey.project.id,
+      survey_id: survey.id,
+      creator_id: creator.id,
+      forked: creator.id !== parentProjectSurvey.creator_id,
+      original_id:
+        creator.id !== parentProjectSurvey.creator_id
+          ? parentProjectSurvey.id
+          : null,
+      comment_until_unix: commentUntilInUnix
+    });
+    if (creator.id === parentProjectSurvey.creator_id)
+      await parentProjectSurvey.addChild(projectSurvey.id);
+    var questionInstances = await Promise.map(
+      markdownParsor.questions,
+      questionObject =>
+        Question.findOrCreate({
+          where: {
+            markdown: `### ${questionObject.question.trim()}`
+          },
+          defaults: {
+            markdown: `### ${questionObject.question.trim()}`
+          }
+        }).spread(async (question, created) => {
+          var answer = markdownParsor.findAnswerToQuestion(
+            questionObject.order_in_survey
+          );
+          var surveyQuestion = await SurveyQuestion.create({
+            survey_id: survey.id,
+            question_id: question.id,
+            order_in_survey: questionObject.order_in_survey
+          });
+          await ProjectSurveyAnswer.create({
+            markdown: answer,
+            survey_question_id: surveyQuestion.id,
+            project_survey_id: projectSurvey.id
+          });
+          return question;
+        })
+    );
+    var collaborators = collaboratorEmails.map(
+      async email =>
+        await User.findOne({ where: { email } }).then(user =>
+          Collaborator.create({
+            user_id: user ? user.id : null,
+            email,
+            project_survey_id: projectSurvey.id
+          }).then(collaborator => {
+            return Notification.notifyCollaborators({
+              sender: creator,
+              collaboratorId: user.id,
+              projectSurveyId: projectSurvey.id,
+              projectSymbol: parentProjectSurvey.project.symbol,
+              parentSurveyTitle: parentProjectSurvey.survey.title,
+              action: "updated"
             });
-            await ProjectSurveyAnswer.create({
-              markdown: answer,
-              survey_question_id: surveyQuestion.id,
-              project_survey_id: projectSurvey.id
-            });
-            return question;
           })
-      );
-      var collaborators = collaboratorEmails.map(
-        async email =>
-          await User.findOne({ where: { email } }).then(user =>
-            Collaborator.create({
-              user_id: user ? user.id : null,
-              email,
-              project_survey_id: projectSurvey.id
-            }).then(collaborator => {
-              return Notification.notifyCollaborators({
-                sender: creator,
-                collaboratorId: user.id,
-                projectSurveyId: projectSurvey.id,
-                projectSymbol: parentProjectSurvey.project.symbol,
-                parentSurveyTitle: parentProjectSurvey.survey.title,
-                action: "updated"
-              });
+        )
+    );
+    var resolvedCurrentIssues = resolvedIssueIds.map(async issueId =>
+      Issue.update(
+        { open: false, resolving_project_survey_id: projectSurvey.id },
+        { where: { id: Number(issueId) } }
+      )
+    );
+    var resolvedAddedIssues = newIssues.map(async newIssue =>
+      Comment.create({
+        comment: newIssue,
+        reviewed: "verified",
+        project_survey_id: parentProjectSurveyId,
+        owner_id: user.id
+      }).then(comment =>
+        Issue.create({
+          open: false,
+          comment_id: comment.id,
+          resolving_project_survey_id: projectSurvey.id
+        })
+      )
+    );
+    var engagedUsers = await getEngagedUsers({
+      projectSurvey: parentProjectSurvey,
+      creator,
+      collaboratorEmails
+    });
+    await Promise.all(
+      collaborators
+        .concat(resolvedCurrentIssues)
+        .concat(resolvedAddedIssues)
+        .concat(
+          engagedUsers.map(engagedUser =>
+            Notification.notifyEngagedUserOnUpdate({
+              engagedUser,
+              projectSurveyId: projectSurvey.id,
+              projectSymbol: parentProjectSurvey.project.symbol,
+              parentSurveyTitle: parentProjectSurvey.survey.title
             })
           )
-      );
-      var resolvedCurrentIssues = resolvedIssueIds.map(async issueId =>
-        Issue.update(
-          { open: false, resolving_project_survey_id: projectSurvey.id },
-          { where: { id: Number(issueId) } }
         )
-      );
-      var resolvedAddedIssues = newIssues.map(async newIssue =>
-        Comment.create({
-          comment: newIssue,
-          reviewed: "verified",
-          project_survey_id: parentProjectSurveyId,
-          owner_id: user.id
-        }).then(comment =>
-          Issue.create({
-            open: false,
-            comment_id: comment.id,
-            resolving_project_survey_id: projectSurvey.id
-          })
-        )
-      );
-      var engagedUsers = await getEngagedUsers({
-        projectSurvey: parentProjectSurvey,
-        creator,
-        collaboratorEmails
-      });
-      await Promise.all(
-        collaborators
-          .concat(resolvedCurrentIssues)
-          .concat(resolvedAddedIssues)
-          .concat(
-            engagedUsers.map(engagedUser =>
-              Notification.notifyEngagedUserOnUpdate({
-                engagedUser,
-                projectSurveyId: projectSurvey.id,
-                projectSymbol: parentProjectSurvey.project.symbol,
-                parentSurveyTitle: parentProjectSurvey.survey.title
-              })
-            )
-          )
-      );
-      res.send(projectSurvey);
-    }
+    );
+    res.send(projectSurvey);
   } catch (err) {
     next(err);
   }
-}
-
-function hasEditRight(userId, parentProjectSurvey) {
-  const isOwner =
-    parentProjectSurvey && userId === parentProjectSurvey.creator.id;
-  const isCollaborator = parentProjectSurvey.collaborators.reduce(
-    (bool, c) => c.id === userId,
-    false
-  );
-  return isOwner || isCollaborator;
 }

@@ -64,7 +64,7 @@ class SurveyUpload extends Component {
           uploadMode={true}
           uploaded={!!importedMarkdown}
           uploadMarkdownToServer={uploadMarkdownToServer}
-          userEmail={userEmail}
+          resetUpload={() => importMarkdown(null)}
           projectMetadata={projectMetadata}
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
@@ -181,6 +181,7 @@ const mapState = (state, ownProps) => ({ ...ownProps });
 export default connect(mapState, {})(
   requiresAuthorization({
     Component: SurveyUpload,
-    checkSurveyEditRight: true
+    checkSurveyEditRight: true,
+    roleRequired: "project_editor"
   })
 );

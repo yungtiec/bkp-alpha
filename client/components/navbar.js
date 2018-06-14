@@ -24,18 +24,6 @@ class Navbar extends Component {
     autoBind(this);
   }
 
-  state = {
-    showFilters: false
-  };
-
-  setSearchBarRef(input) {
-    this.searchBar = input;
-  }
-
-  handleSearchIconOnClick() {
-    this.setState(state => ({ showSearchBar: !state.showSearchBar }));
-  }
-
   render() {
     return (
       <div className="header">
@@ -84,6 +72,7 @@ class Navbar extends Component {
 
 const mapState = state => {
   return {
+    user: state.data.user,
     isAdmin: currentUserIsAdmin(state),
     isLoggedIn: !!state.data.user.id,
     numNotifications: getUserNotificationCount(state)
