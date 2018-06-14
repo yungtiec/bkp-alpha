@@ -12,6 +12,8 @@ import {
 } from "../data/reducer";
 import { AuthWidget, SearchBar } from "./index";
 import asyncPoll from "react-async-poll";
+import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import policies from "../policies.js";
 
 const onPollInterval = (props, dispatch) => {
   if (!props.isLoggedIn) return;
@@ -49,6 +51,15 @@ class Navbar extends Component {
             <Link to="/projects" className="navbar__nav-item">
               projects
             </Link>
+            <PunditContainer policies={policies} user={this.props.user}>
+              <PunditTypeSet type="Disclosure">
+                <VisibleIf action="Create" model={{}}>
+                  <Link to="/upload" className="navbar__nav-item">
+                    create
+                  </Link>
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
             {this.props.isLoggedIn ? (
               <Link
                 to="/user/profile/notifications"

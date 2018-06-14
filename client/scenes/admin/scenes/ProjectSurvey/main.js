@@ -158,7 +158,7 @@ export default withRouter(
     asyncPoll(60 * 1000, onPollInterval)(
       requiresAuthorization({
         Component: AdminProjectSurveyPanel,
-        roleRequired: "admin"
+        roleRequired: ["admin"]
       })
     )
   )

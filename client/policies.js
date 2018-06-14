@@ -31,12 +31,14 @@ module.exports = {
   Disclosure: (action, model, user) => {
     if (!user || isEmpty(user)) return false;
     const isAdmin = user.roles[0].name === "admin";
-    const isProjectAdmin =
-      user.roles[0].name === "project_admin" &&
-      !!find(model.project.admins, a => a.id === user.id);
-    const isProjectEditor =
-      user.roles[0].name === "project_editor" &&
-      !!find(model.project.editors, a => a.id === user.id);
+    const isProjectAdmin = model.project
+      ? user.roles[0].name === "project_admin" &&
+        !!find(model.project.admins, a => a.id === user.id)
+      : user.roles[0].name === "project_admin";
+    const isProjectEditor = model.project
+      ? user.roles[0].name === "project_editor" &&
+        !!find(model.project.editors, a => a.id === user.id)
+      : user.roles[0].name === "project_editor";
     const isDisclosureOwner = model.disclosure
       ? model.disclosure.creator_id === user.id
       : null;

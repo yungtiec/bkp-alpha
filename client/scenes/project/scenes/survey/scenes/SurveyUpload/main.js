@@ -182,6 +182,6 @@ export default connect(mapState, {})(
   requiresAuthorization({
     Component: SurveyUpload,
     checkSurveyEditRight: true,
-    roleRequired: "project_editor"
+    roleRequired: ["project_editor", "project_admin", "admin"]
   })
 );

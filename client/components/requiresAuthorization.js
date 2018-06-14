@@ -22,7 +22,7 @@ export default function requiresAuthorization({
         isEmpty(this.props.user) ||
         (roleRequired &&
           !isEmpty(this.props.user) &&
-          !this.props.user.roles.filter(r => r.name === roleRequired).length) ||
+          !roleRequired.indexOf(this.props.user.roles[0].name) === -1) ||
         (checkSurveyEditRight &&
           (this.props.user.email !== this.props.surveyMetadata.creator.email &&
             !this.props.surveyMetadata.collaborators.reduce(

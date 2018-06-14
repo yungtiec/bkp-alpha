@@ -23,6 +23,6 @@ const Admin = ({ match }) => {
 export default withRouter(
   requiresAuthorization({
     Component: Admin,
-    roleRequired: "admin"
+    roleRequired: ["admin"]
   })
 );
