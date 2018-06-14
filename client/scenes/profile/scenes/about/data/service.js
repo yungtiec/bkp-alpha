@@ -6,8 +6,7 @@ export function getUserBasicInfo(userId) {
 
 export function postAccessStatus({ userId, accessStatus }) {
   return axios
-    .post(`/api/admin/user/access`, {
-      userId,
+    .post(`/admin/users/${userId}/access`, {
       accessStatus
     })
     .then(res => res.data);

@@ -5,7 +5,7 @@ const initialState = {
   markdown: null,
   collaboratorEmails: [],
   commentPeriodInDay: 7,
-  selectedProjectId: ""
+  selectedProjectSymbol: ""
 };
 
 function updateCollaboratorEmails(state, action) {
@@ -56,7 +56,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.SELECTED_PROJECT_UPDATED:
       return {
         ...state,
-        selectedProjectId: action.selectedProjectId
+        selectedProjectSymbol: action.selectedProjectSymbol
       };
     default:
       return state;
@@ -76,5 +76,5 @@ export function getCommentPeriodInDay(state) {
 }
 
 export function getSelectedProject(state) {
-  return state.scenes.upload.data.upload.selectedProjectId;
+  return state.scenes.upload.data.upload.selectedProjectSymbol;
 }

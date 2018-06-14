@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import moment from "moment";
 import { batchActions } from "redux-batched-actions";
+import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   sortCommentBy,
   updateIssueFilter,
@@ -50,35 +51,41 @@ const LoadableSurvey = Loadable({
 
 class MyComponent extends React.Component {
   componentDidMount() {
-    batchActions([
-      this.props.fetchQuestionsByProjectSurveyId({
-        projectSymbol: this.props.match.params.symbol,
-        projectSurveyId: this.props.match.params.projectSurveyId
-      }),
-      this.props.fetchCommentsBySurvey({
-        projectSymbol: this.props.match.params.symbol,
-        projectSurveyId: this.props.match.params.projectSurveyId
-      })
-    ]);
+    this.loadData({
+      projectSymbol: this.props.match.params.symbol,
+      projectSurveyId: this.props.match.params.projectSurveyId
+    });
   }
 
   componentDidUpdate(prevProps) {
-    const projectSymbol = this.props.match.url.split("/")[2];
-    const prevProjectSymbol = prevProps.match.url.split("/")[2];
-    const surveyId = this.props.match.params.projectSurveyId;
+    const projectSymbol = this.props.match.params.symbol;
+    const prevProjectSymbol = prevProps.match.params.symbol;
+    const projectSurveyId = this.props.match.params.projectSurveyId;
     const prevSurveyId = prevProps.match.params.projectSurveyId;
     if (
       projectSymbol &&
-      surveyId &&
-      (projectSymbol !== prevProjectSymbol || surveyId !== prevSurveyId)
+      projectSurveyId &&
+      (projectSymbol !== prevProjectSymbol || projectSurveyId !== prevSurveyId)
     ) {
-      batchActions([
-        this.props.fetchQuestionsByProjectSurveyId({
-          projectSurveyId: surveyId
-        }),
-        this.props.fetchCommentsBySurvey(surveyId)
-      ]);
+      this.loadData({
+        projectSymbol: projectSymbol,
+        projectSurveyId: projectSurveyId
+      });
     }
+  }
+
+  loadData({ projectSymbol, projectSurveyId }) {
+    batchActions([
+      this.props.fetchProjectBySymbol(projectSymbol),
+      this.props.fetchQuestionsByProjectSurveyId({
+        projectSymbol: projectSymbol,
+        projectSurveyId: projectSurveyId
+      }),
+      this.props.fetchCommentsBySurvey({
+        projectSymbol: projectSymbol,
+        projectSurveyId: projectSurveyId
+      })
+    ]);
   }
 
   render() {
@@ -137,6 +144,7 @@ const mapState = state => {
 };
 
 const actions = {
+  fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
   fetchCommentsBySurvey,
   addNewComment,

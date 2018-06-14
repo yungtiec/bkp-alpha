@@ -9,7 +9,7 @@ export function getCommentsBySurvey(projectSymbol, projectSurveyId) {
 export function postComment({
   projectSymbol,
   projectSurveyId,
-  comment,
+  newComment,
   tags,
   issueOpen
 }) {
@@ -17,7 +17,7 @@ export function postComment({
     .post(
       `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments`,
       {
-        comment,
+        newComment,
         tags,
         issueOpen
       }
@@ -30,14 +30,14 @@ export function postReplyToComment({
   projectSurveyId,
   rootId,
   parentId,
-  comment
+  newComment
 }) {
   return axios
     .post(
       `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments/${parentId}/reply`,
       {
         rootId,
-        comment
+        newComment
       }
     )
     .then(res => res.data);
@@ -61,28 +61,26 @@ export function updateComment({
   projectSymbol,
   projectSurveyId,
   commentId,
-  updatedComment,
+  newComment,
   tags,
   issueOpen
 }) {
   return axios
     .post(
       `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/comments/${commentId}/edit`,
-      { updatedComment, tags, issueOpen }
+      { newComment, tags, issueOpen }
     )
     .then(res => res.data);
 }
 
 export function postPendingCommentStatus({ comment, reviewed }) {
-  return axios.post("/api/admin/comment/verify", {
-    comment,
+  return axios.post(`/api/projects/-/surveys/-/comments/${comment.id}/verify`, {
     reviewed
   });
 }
 
 export function updateCommentIssueStatus({ comment, open }) {
-  return axios.post("/api/admin/comment/issue", {
-    comment,
+  return axios.post(`/api/projects/-/surveys/-/comments/${comment.id}/issue`, {
     open
   });
 }

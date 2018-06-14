@@ -1,12 +1,12 @@
 import "./CommentItem.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
 import ActionBar from "./ActionBar";
+import ActionableIssueTag from "./ActionableIssueTag";
 
 export default class CommentItem extends Component {
   constructor(props) {
@@ -53,6 +53,7 @@ export default class CommentItem extends Component {
               parentId={
                 this.state.replyTarget ? this.state.replyTarget.id : comment.id
               }
+              projectSurveyId={comment.project_survey_id}
               onSubmit={this.props.replyToItem}
               onCancel={this.hideCommentBox}
             />
@@ -147,24 +148,10 @@ export default class CommentItem extends Component {
         )}
         {(comment.tags && comment.tags.length) || comment.issue ? (
           <div className="comment-item__tags">
-            {comment.issue &&
-              (comment.issue.open ? (
-                <span
-                  key={`comment-${comment.id}__tag-issue--open`}
-                  className="badge badge-danger issue"
-                  onClick={changeItemIssueStatus}
-                >
-                  issue:open
-                  <i className="fas fa-times" />
-                </span>
-              ) : (
-                <span
-                  key={`comment-${comment.id}__tag-issue--close`}
-                  className="badge badge-light"
-                >
-                  issue:close
-                </span>
-              ))}
+            <ActionableIssueTag
+              comment={comment}
+              changeItemIssueStatus={changeItemIssueStatus}
+            />
             {comment.tags && comment.tags.length
               ? comment.tags.map(tag => (
                   <span

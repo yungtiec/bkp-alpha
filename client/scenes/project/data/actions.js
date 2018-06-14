@@ -3,8 +3,10 @@ import { keyBy, assignIn, omit, pick } from "lodash";
 import { getProjectBySymbol } from "./service";
 
 export function fetchProjectBySymbol(symbol) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
+      const currentProject = getState().scenes.project.data.metadata;
+      if (currentProject.symbol === symbol) return;
       const project = await getProjectBySymbol(symbol);
       const projectSurveys =
         project.project_surveys && project.project_surveys.length

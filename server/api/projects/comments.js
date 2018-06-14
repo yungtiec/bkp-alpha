@@ -1,12 +1,16 @@
 const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
+const ac = require("../../access-control");
 const {
   Comment,
   User,
   Role,
   Tag,
   Issue,
-  Notification
+  Notification,
+  ProjectSurvey,
+  Project,
+  Survey
 } = require("../../db/models");
 const _ = require("lodash");
 const {
@@ -43,20 +47,11 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const isAdmin = await User.findOne({
-        where: { id: req.user.id },
-        include: [
-          {
-            model: Role
-          }
-        ]
-      }).then(
-        requestor => requestor.roles.filter(r => r.name === "admin").length
-      );
+      const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
       const comment = await Comment.create({
         owner_id: req.user.id,
         project_survey_id: Number(req.params.projectSurveyId),
-        comment: req.body.comment,
+        comment: req.body.newComment,
         reviewed: isAdmin ? "verified" : "pending"
       })
         .then(async comment => {
@@ -94,6 +89,7 @@ router.post(
   async (req, res, next) => {
     try {
       var ancestry;
+      const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
       const parent = await Comment.findById(Number(req.params.parentId));
       const child = _.assignIn(
         _.omit(parent.toJSON(), [
@@ -106,7 +102,10 @@ router.post(
           "reviewed",
           "owner"
         ]),
-        { comment: req.body.comment, reviewed: "pending" }
+        {
+          comment: req.body.newComment,
+          reviewed: isAdmin ? "verified" : "pending"
+        }
       );
       var [ancestors, reply, user] = await Promise.all([
         parent
@@ -156,7 +155,6 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const user = await User.findById(req.user.id);
       if (!req.body.hasUpvoted) {
         await req.user.addUpvotedComment(req.params.commentId);
       } else {
@@ -207,21 +205,23 @@ router.post(
           }
         ]
       });
-      var prevTags = comment.tags || [];
-      var removedTags = prevTags.filter(function(prevTag) {
-        return req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1;
-      });
-      var addedTags = req.body.tags
-        ? req.body.tags.filter(tag => {
-            return (
-              prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1
-            );
-          })
-        : [];
-      var removedTagPromises, addedTagPromises, issuePromise;
       if (comment.owner.email !== req.user.email) res.sendStatus(401);
       else {
-        await comment.update({ comment: req.body.updatedComment });
+        var prevTags = comment.tags || [];
+        var removedTags = prevTags.filter(function(prevTag) {
+          return (
+            req.body.tags.map(tag => tag.name).indexOf(prevTag.name) === -1
+          );
+        });
+        var addedTags = req.body.tags
+          ? req.body.tags.filter(tag => {
+              return (
+                prevTags.map(prevTag => prevTag.name).indexOf(tag.name) === -1
+              );
+            })
+          : [];
+        var removedTagPromises, addedTagPromises, issuePromise;
+        await comment.update({ comment: req.body.newComment });
         removedTagPromises = Promise.map(removedTags, tag =>
           comment.removeTag(tag.id)
         );
@@ -267,14 +267,14 @@ router.post(
   }
 );
 
-router.put(
-  "/tag/remove",
+router.delete(
+  "/:commentId/tags/:tagId",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const comment = await Comment.findById(Number(req.body.commentId));
-      await comment.removeTag(req.body.tagId);
+      const comment = await Comment.findById(Number(req.params.commentId));
+      await comment.removeTag(req.params.tagId);
       res.sendStatus(200);
     } catch (err) {
       next(err);
@@ -283,12 +283,12 @@ router.put(
 );
 
 router.put(
-  "/tag/add",
+  "/:commentId/tags",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const comment = await Comment.findById(Number(req.body.commentId));
+      const comment = await Comment.findById(Number(req.params.commentId));
       const [tag, created] = await Tag.findOrCreate({
         where: { name: req.body.tagName },
         default: { name: req.body.tagName }
@@ -301,32 +301,143 @@ router.put(
   }
 );
 
-router.get("/pending/:projectSurveyId", async (req, res, next) => {
-  try {
-    var comments = await Comment.findAll({
-      where: {
-        reviewed: "pending",
-        project_survey_id: req.params.projectSurveyId
-      },
-      include: [
-        {
-          model: User,
-          as: "owner"
-        },
-        {
-          model: Comment,
-          as: "parent",
-          include: [
-            {
-              model: User,
-              as: "owner"
-            }
-          ]
-        }
-      ]
-    });
-    res.send(comments);
-  } catch (err) {
-    next(err);
+router.post(
+  "/:commentId/verify",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      var comment = await Comment.findOne({
+        where: { id: req.params.commentId },
+        include: [
+          {
+            model: ProjectSurvey,
+            include: [
+              {
+                model: db.model("user"),
+                as: "collaborators",
+                required: false
+              }
+            ]
+          }
+        ]
+      });
+      const permission = ac.can(req.user.roles[0].name).updateAny("comment");
+      const canVerify = permission.attributes.indexOf("verify") !== -1;
+      const isEditor = req.user.roles[0].name === "editor";
+      const isProjectSurveyCollaborator = _.find(
+        comment.project_survey.collaborators,
+        c => c.id === req.user.id
+      );
+      const isProjectSurveyOwner =
+        req.user.id === comment.project_survey.creator_id;
+      if (
+        !canVerify ||
+        (canVerify &&
+          isEditor &&
+          !isProjectSurveyOwner &&
+          !isProjectSurveyCollaborator)
+      ) {
+        res.sendStatus(403);
+      } else {
+        comment.update({ reviewed: req.body.reviewed });
+        res.sendStatus(200);
+      }
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
+
+router.post(
+  "/:commentId/issue",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      var comment = await Comment.findOne({
+        where: { id: req.params.commentId },
+        include: [
+          {
+            model: Issue
+          },
+          {
+            model: ProjectSurvey,
+            include: [
+              {
+                model: Project,
+                attributes: ["symbol"]
+              },
+              {
+                model: Survey,
+                attributes: ["title"]
+              },
+              {
+                model: db.model("user"),
+                as: "collaborators",
+                required: false
+              }
+            ]
+          }
+        ]
+      });
+      const permission = ac.can(req.user.roles[0].name).updateAny("comment");
+      const canIssue = permission.attributes.indexOf("issue") !== -1;
+      const isEditor = req.user.roles[0].name === "editor";
+      const isProjectSurveyCollaborator = _.find(
+        comment.project_survey.collaborators,
+        c => c.id === req.user.id
+      );
+      const isProjectSurveyOwner =
+        req.user.id === comment.project_survey.creator_id;
+      const isOwner = req.user.id === comment.owner_id;
+      if (
+        (!canIssue && !isOwner) ||
+        (canIssue &&
+          isEditor &&
+          !isProjectSurveyOwner &&
+          !isProjectSurveyCollaborator)
+      ) {
+        res.sendStatus(403);
+        return;
+      }
+      comment.issue
+        ? await Issue.update(
+            {
+              open: req.body.open
+            },
+            {
+              where: { id: comment.issue.id }
+            }
+          )
+        : Issue.create({
+            open: req.body.open,
+            comment_id: req.params.commentId
+          });
+      if (!req.body.open && req.user.id !== comment.owner_id) {
+        await Notification.notify({
+          sender: "",
+          comment,
+          messageFragment: `${req.user.email} closed your issue in ${
+            comment.project_survey.project.symbol
+          }/${comment.project_survey.survey.title}.`
+        });
+      }
+      if (req.body.open && req.user.id !== comment.owner_id) {
+        await Notification.notify({
+          sender: "",
+          comment,
+          messageFragment: `${
+            req.user.email
+          } opened an issue on your comment in ${
+            comment.project_survey.project.symbol
+          }/${comment.project_survey.survey.title}.`
+        });
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  }
+);

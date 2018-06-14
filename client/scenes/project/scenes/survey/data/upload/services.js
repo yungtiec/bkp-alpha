@@ -9,7 +9,7 @@ export function postMarkdown({
   commentPeriodInDay
 }) {
   return axios
-    .post(`/api/upload/${parentProjectSurveyId}`, {
+    .post(`/api/projects/-/surveys/${parentProjectSurveyId}`, {
       markdown,
       resolvedIssueIds,
       newIssues,

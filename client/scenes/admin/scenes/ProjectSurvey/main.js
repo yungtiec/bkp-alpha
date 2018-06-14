@@ -8,7 +8,10 @@ import {
   verifyPendingComment,
   changeCommentIssueStatus
 } from "./data/comments/actions";
-import { Sidebar } from "./components";
+import {
+  AdminProjectSurveySidebar,
+  AdminProjectSurveyActionBar
+} from "./components";
 import {
   requiresAuthorization,
   CommentMain,
@@ -58,9 +61,7 @@ class AdminProjectSurveyPanel extends Component {
             <button
               type="button"
               className="btn btn-outline-success"
-              onClick={() =>
-                this.props.changeCommentIssueStatus(comment)
-              }
+              onClick={() => this.props.changeCommentIssueStatus(comment)}
             >
               close issue
             </button>
@@ -68,9 +69,7 @@ class AdminProjectSurveyPanel extends Component {
             <button
               type="button"
               className="btn btn-outline-success"
-              onClick={() =>
-                this.props.changeCommentIssueStatus(comment)
-              }
+              onClick={() => this.props.changeCommentIssueStatus(comment)}
             >
               re-open issue
             </button>
@@ -79,9 +78,7 @@ class AdminProjectSurveyPanel extends Component {
           <button
             type="button"
             className="btn btn-outline-success"
-            onClick={() =>
-              this.props.changeCommentIssueStatus(comment)
-            }
+            onClick={() => this.props.changeCommentIssueStatus(comment)}
           >
             open issue
           </button>
@@ -99,16 +96,12 @@ class AdminProjectSurveyPanel extends Component {
   }
 
   render() {
-    const {
-      commentsById,
-      commentIds,
-      changeCommentIssueStatus
-    } = this.props;
+    const { commentsById, commentIds, changeCommentIssueStatus } = this.props;
     return (
       <div className="admin-project-survey-panel  main-container">
         <Link to="/admin/list/project-surveys">back to survey list</Link>
         <div className="admin-project-survey-panel__content">
-          <Sidebar />
+          <AdminProjectSurveySidebar />
           <div class="admin-project-survey-panel__item-container">
             {commentIds.map(aid => {
               return commentsById[aid].parentId ? (
@@ -116,14 +109,26 @@ class AdminProjectSurveyPanel extends Component {
                   key={`admin__comment-reply--${aid}`}
                   comment={commentsById[aid]}
                 >
-                  {this.renderActions(commentsById[aid])}
+                  <AdminProjectSurveyActionBar
+                    labelAsSpam={this.labelAsSpam}
+                    labelAsNotSpam={this.labelAsNotSpam}
+                    changeCommentIssueStatus={changeCommentIssueStatus}
+                    seeCommentContext={seeCommentContext}
+                    comment={commentsById[aid]}
+                  />
                 </CommentReply>
               ) : (
                 <CommentMain
                   key={`admin__comment-main--${aid}`}
                   comment={commentsById[aid]}
                 >
-                  {this.renderActions(commentsById[aid])}
+                  <AdminProjectSurveyActionBar
+                    labelAsSpam={this.labelAsSpam}
+                    labelAsNotSpam={this.labelAsNotSpam}
+                    changeCommentIssueStatus={changeCommentIssueStatus}
+                    seeCommentContext={seeCommentContext}
+                    comment={commentsById[aid]}
+                  />
                 </CommentMain>
               );
             })}

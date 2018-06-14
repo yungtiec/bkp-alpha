@@ -15,16 +15,16 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectId
+      selectedProjectSymbol
     } = state.scenes.upload.data.upload;
     const projectSurvey = await postMarkdown({
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectId
+      selectedProjectSymbol
     });
     history.push(
-      `/project/${projectSurvey.project_id}/survey/${projectSurvey.id}`
+      `/project/${selectedProjectSymbol}/survey/${projectSurvey.id}`
     );
     dispatch({
       type: types.MARKDOWN_UPLOADED
@@ -49,7 +49,7 @@ export const updateCommentPeriod = commentPeriodInDay => ({
   commentPeriodInDay
 });
 
-export const updateSelectedProject = selectedProjectId => ({
+export const updateSelectedProject = selectedProjectSymbol => ({
   type: types.SELECTED_PROJECT_UPDATED,
-  selectedProjectId
+  selectedProjectSymbol
 });

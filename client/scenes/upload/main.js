@@ -100,7 +100,7 @@ class Upload extends Component {
                     onChange={this.handleProjectSelectChange}
                     options={projectSymbolArr.map(symbol => ({
                       label: projectsBySymbol[symbol].name.toUpperCase(),
-                      value: projectsBySymbol[symbol].id
+                      value: symbol
                     }))}
                   />
                 </div>

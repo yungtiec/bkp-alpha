@@ -4,14 +4,14 @@ export function postMarkdown({
   markdown,
   collaboratorEmails,
   commentPeriodInDay,
-  selectedProjectId
+  selectedProjectSymbol
 }) {
   return axios
-    .post(`/api/upload`, {
+    .post(`/api/projects/-/surveys/-`, {
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectId
+      selectedProjectSymbol
     })
     .then(res => res.data);
 }

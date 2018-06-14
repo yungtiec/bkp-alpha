@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
+import { fetchProjectBySymbol } from "../../../../data/actions";
 import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
@@ -50,6 +51,7 @@ const LoadableSurveyUpload = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
+      this.props.fetchProjectBySymbol(projectSymbol),
       this.props.fetchQuestionsByProjectSurveyId({
         projectSymbol: this.props.match.params.symbol,
         projectSurveyId: this.props.match.params.projectSurveyId
@@ -97,6 +99,7 @@ const mapState = state => {
 };
 
 const actions = {
+  fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
   fetchCommentsBySurvey,
   importMarkdown,

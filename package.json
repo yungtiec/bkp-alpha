@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^4.1.0",
+    "accesscontrol": "^2.2.1",
     "annotator": "git+https://github.com/yungtiec/tbp-annotator.git",
     "axios": "^0.15.3",
     "babel-plugin-import-inspector": "^2.0.0",
@@ -64,6 +65,7 @@
     "react-markdown": "^3.3.0",
     "react-modal": "^3.3.2",
     "react-paginate": "^5.2.3",
+    "react-pundit": "^2.0.0",
     "react-redux": "^5.0.2",
     "react-router-dom": "^4.1.1",
     "react-scroll": "^1.7.7",

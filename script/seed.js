@@ -41,7 +41,6 @@ async function seed() {
 
 async function seedUser(projects) {
   const userCsv = fs.readFileSync("./data/users.csv", "utf8");
-  const adminRole = await Role.findOne({ where: { name: "admin" } });
   await parse(userCsv, {
     columns: true,
     auto_parse: true
@@ -55,8 +54,10 @@ async function seedUser(projects) {
 
         return User.create(entry)
           .then(async user => {
-            if (user.first_name === "Admin")
-              return await user.addRole(adminRole.id);
+            if (user.first_name === "Admin") return await user.addRole(1);
+            else if (user.first_name === "Tammy" || user.first_name === "Ron")
+              return await user.addRole(2);
+            else if (user.first_name === "Leslie") return await user.addRole(3);
             else return user;
           })
           .catch(err => {
@@ -69,34 +70,10 @@ async function seedUser(projects) {
 }
 
 async function seedPermission() {
-  const permissions = await Promise.map(
-    [
-      { name: "upvote" },
-      { name: "annotate" },
-      { name: "answer_survey" },
-      { name: "create_survey" },
-      { name: "approve_survey_answers" },
-      { name: "approve_annotation" }
-    ],
-    entry => Permission.create(entry)
-  );
   const role = await Promise.map(
-    [
-      { name: "admin" },
-      { name: "open_source_user" },
-      { name: "business_user" }
-    ],
+    [{ name: "admin" }, { name: "project_admin" }, { name: "editor" }],
     entry => Role.create(entry)
   );
-  await Promise.map(permissions, permission => {
-    return role[0].addPermission(permission.id);
-  });
-  await Promise.map(permissions.slice(0, 2), permission => {
-    return role[1].addPermission(permission.id);
-  });
-  await Promise.map(permissions.slice(0, 4), permission => {
-    return role[2].addPermission(permission.id);
-  });
 }
 
 async function seedProject() {
