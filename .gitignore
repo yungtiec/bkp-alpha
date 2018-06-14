@@ -8,3 +8,5 @@ secrets.js
 npm-debug.log
 yarn-error.log
 data/users.csv
+resources
+reference
