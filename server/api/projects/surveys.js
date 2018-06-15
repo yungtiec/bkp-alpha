@@ -100,7 +100,7 @@ async function createNewProjectSurvey({
 }) {
   try {
     var project = await Project.findOne({
-      where: { symbol: parentProjectSurvey.project.symbol },
+      where: { symbol: selectedProjectSymbol },
       include: [
         {
           model: User,
