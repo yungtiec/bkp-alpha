@@ -31,8 +31,15 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:symbol", async (req, res, next) => {
   try {
+    const admins = await Role.findOne({
+      where: { name: "admin" }
+    }).then(role => role.getUsers());
     const project = await Project.getProjectWithStats(req.params.symbol);
-    res.send(project);
+    const collaboratorOptions = admins
+      .concat(project.admins || [])
+      .concat(project.editors || [])
+      .filter(c => c.id !== req.user.id);
+    res.send(_.assignIn(project, { collaboratorOptions }));
   } catch (err) {
     next(err);
   }
@@ -40,4 +47,7 @@ router.get("/:symbol", async (req, res, next) => {
 
 router.use("/:symbol/surveys", require("./surveys"));
 router.use("/:symbol/surveys/:projectSurveyId/comments", require("./comments"));
-router.use("/:symbol/surveys/:projectSurveyId/annotator", require("./annotator"));
+router.use(
+  "/:symbol/surveys/:projectSurveyId/annotator",
+  require("./annotator")
+);

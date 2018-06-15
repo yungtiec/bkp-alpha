@@ -5,6 +5,9 @@ import "./annotator/jquery.tagsinput.min.js";
 import "./annotator/jquery.tagsinput.min.css";
 import "normalize.css";
 import "react-select/dist/react-select.css";
+import "react-accessible-accordion/dist/fancy-example.css";
+import "rc-steps/assets/index.css";
+import "rc-steps/assets/iconfont.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "Tether";
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -16,7 +19,6 @@ import { Router } from "react-router-dom";
 import history from "./history";
 import store from "./store";
 import App from "./app";
-
 
 ReactDOM.render(
   <Provider store={store}>

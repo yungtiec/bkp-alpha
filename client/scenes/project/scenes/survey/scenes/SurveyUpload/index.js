@@ -16,6 +16,7 @@ import {
   getImportedMarkdown,
   getResolvedIssueId,
   getCollaboratorEmails,
+  getCollaboratorOptions,
   getNewIssues,
   getCommentPeriodInDay
 } from "../../data/upload/reducer";
@@ -23,8 +24,7 @@ import {
   importMarkdown,
   uploadMarkdownToServer,
   selectIssueToResolve,
-  addNewCollaborator,
-  removeCollaborator,
+  updateCollaborators,
   addNewIssue,
   removeIssue,
   updateCommentPeriod
@@ -93,6 +93,7 @@ const mapState = state => {
     importedMarkdown: getImportedMarkdown(state),
     resolvedIssueIds: getResolvedIssueId(state),
     collaboratorEmails: getCollaboratorEmails(state),
+    collaboratorOptions: getCollaboratorOptions(state),
     newIssues: getNewIssues(state),
     commentPeriodInDay: getCommentPeriodInDay(state)
   };
@@ -105,8 +106,7 @@ const actions = {
   importMarkdown,
   uploadMarkdownToServer,
   selectIssueToResolve,
-  addNewCollaborator,
-  removeCollaborator,
+  updateCollaborators,
   addNewIssue,
   removeIssue,
   updateCommentPeriod,

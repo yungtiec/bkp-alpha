@@ -40,7 +40,7 @@ module.exports = {
         !!find(model.project.editors, a => a.id === user.id)
       : user.roles[0].name === "project_editor";
     const isDisclosureOwner = model.disclosure
-      ? model.disclosure.creator_id === user.id
+      ? model.disclosure.creator.id === user.id
       : null;
     const isDisclosureCollaborator = model.disclosure
       ? find(model.disclosure.collaborators, a => a.id === user.id)

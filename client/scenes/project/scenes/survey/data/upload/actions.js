@@ -29,7 +29,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       markdown,
       resolvedIssueIds,
       newIssues,
-      collaboratorEmails,
+      collaboratorEmails: collaboratorEmails.map(c => c.value),
       commentPeriodInDay
     });
     history.push(`/project/${projectSymbol}/survey/${projectSurvey.id}`);
@@ -46,14 +46,9 @@ export const selectIssueToResolve = issueId => ({
   issueId
 });
 
-export const addNewCollaborator = collaboratorEmail => ({
-  type: types.COLLABORATOR_ADDED,
-  collaboratorEmail
-});
-
-export const removeCollaborator = collaboratorEmail => ({
-  type: types.COLLABORATOR_DELETED,
-  collaboratorEmail
+export const updateCollaborators = collaboratorEmails => ({
+  type: types.COLLABORATOR_UPDATED,
+  collaboratorEmails
 });
 
 export const addNewIssue = issue => ({

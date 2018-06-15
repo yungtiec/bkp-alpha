@@ -301,7 +301,7 @@ async function updateExistingProjectSurvey({
         comment: newIssue,
         reviewed: "verified",
         project_survey_id: parentProjectSurveyId,
-        owner_id: user.id
+        owner_id: creator.id
       }).then(comment =>
         Issue.create({
           open: false,

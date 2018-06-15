@@ -1,11 +1,14 @@
 import * as types from "./actionTypes";
 import { SURVEY_FETCH_SUCCESS } from "../actionTypes";
+import { PROJECT_FETCH_SUCCESS } from "../../../../data/actionTypes";
+
 import { uniq } from "lodash";
 
 const initialState = {
   markdown: null,
   resolvedIssueIds: [],
   collaboratorEmails: [],
+  collaboratorOptions: [],
   newIssues: [],
   commentPeriodInDay: 7
 };
@@ -22,29 +25,6 @@ function updateResolvedIssues(state, action) {
   return {
     ...state,
     resolvedIssueIds
-  };
-}
-
-function updateCollaboratorEmails(state, action) {
-  var collaboratorEmails;
-  switch (action.type) {
-    case types.COLLABORATOR_ADDED:
-      collaboratorEmails = [action.collaboratorEmail].concat(
-        state.collaboratorEmails
-      );
-      break;
-    case types.COLLABORATOR_DELETED:
-      collaboratorEmails = state.collaboratorEmails.filter(
-        email => email !== action.collaboratorEmail
-      );
-      break;
-    default:
-      collaboratorEmails = state.collaboratorEmails;
-      break;
-  }
-  return {
-    ...state,
-    collaboratorEmails: uniq(collaboratorEmails)
   };
 }
 
@@ -69,6 +49,11 @@ function updateNewIssues(state, action) {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    case PROJECT_FETCH_SUCCESS:
+      return {
+        ...state,
+        collaboratorOptions: action.projectMetadata.collaboratorOptions
+      };
     case SURVEY_FETCH_SUCCESS:
       return {
         ...state,
@@ -90,9 +75,11 @@ export default function reduce(state = initialState, action = {}) {
       };
     case types.ISSUE_SELECTED:
       return updateResolvedIssues(state, action);
-    case types.COLLABORATOR_ADDED:
-    case types.COLLABORATOR_DELETED:
-      return updateCollaboratorEmails(state, action);
+    case types.COLLABORATOR_UPDATED:
+      return {
+        ...state,
+        collaboratorEmails: action.collaboratorEmails
+      };
     case types.ISSUE_ADDED:
     case types.ISSUE_DELETED:
       return updateNewIssues(state, action);
@@ -116,6 +103,10 @@ export function getResolvedIssueId(state) {
 
 export function getCollaboratorEmails(state) {
   return state.scenes.project.scenes.survey.data.upload.collaboratorEmails;
+}
+
+export function getCollaboratorOptions(state) {
+  return state.scenes.project.scenes.survey.data.upload.collaboratorOptions;
 }
 
 export function getNewIssues(state) {

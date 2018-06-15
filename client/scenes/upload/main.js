@@ -1,7 +1,3 @@
-import "./index.scss";
-import "rc-steps/assets/index.css";
-import "rc-steps/assets/iconfont.css";
-import "react-accessible-accordion/dist/fancy-example.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";

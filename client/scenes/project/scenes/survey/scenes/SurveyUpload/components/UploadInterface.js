@@ -65,7 +65,7 @@ export default class UploadInterface extends Component {
     if (importedMarkdown) this.diff.cleanupSemantic(textDiff);
 
     return (
-      <div className="project-survey" id="project-survey">
+      <div style={{ width: "100%" }}>
         {importedMarkdown ? null : (
           <div className="project-survey__upload-dropzone">
             <Dropzone
