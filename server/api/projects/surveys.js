@@ -100,7 +100,7 @@ async function createNewProjectSurvey({
 }) {
   try {
     var project = await Project.findOne({
-      where: { symbol: parentProjectSurvey.project.symbol },
+      where: { symbol: selectedProjectSymbol },
       include: [
         {
           model: User,
@@ -301,7 +301,7 @@ async function updateExistingProjectSurvey({
         comment: newIssue,
         reviewed: "verified",
         project_survey_id: parentProjectSurveyId,
-        owner_id: user.id
+        owner_id: creator.id
       }).then(comment =>
         Issue.create({
           open: false,

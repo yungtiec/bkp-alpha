@@ -8,13 +8,16 @@ import { toggleSidebar } from "./reducer";
 import {
   getImportedMarkdown,
   getCollaboratorEmails,
+  getCollaboratorOptions,
   getCommentPeriodInDay,
-  getSelectedProject
+  getSelectedProject,
+  getManagedProjects
 } from "./data/upload/reducer";
 import {
+  fetchManagedProjects,
   importMarkdown,
   uploadMarkdownToServer,
-  addNewCollaborator,
+  updateCollaborators,
   removeCollaborator,
   updateCommentPeriod,
   updateSelectedProject
@@ -46,7 +49,7 @@ class MyComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllProjects();
+    this.props.fetchManagedProjects();
   }
 
   render() {
@@ -55,7 +58,7 @@ class MyComponent extends React.Component {
 }
 
 const mapState = state => {
-  const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
+  const { projectsBySymbol, projectSymbolArr } = getManagedProjects(state);
   return {
     // global metadata
     width: state.data.environment.width,
@@ -64,17 +67,19 @@ const mapState = state => {
     sidebarOpen: state.scenes.upload.sidebarOpen,
     importedMarkdown: getImportedMarkdown(state),
     collaboratorEmails: getCollaboratorEmails(state),
+    collaboratorOptions: getCollaboratorOptions(state),
     commentPeriodInDay: getCommentPeriodInDay(state),
-    selectedProjectId: getSelectedProject(state),
+    selectedProject: getSelectedProject(state),
     projectsBySymbol,
     projectSymbolArr
   };
 };
 
 const actions = {
+  fetchManagedProjects,
   importMarkdown,
   uploadMarkdownToServer,
-  addNewCollaborator,
+  updateCollaborators,
   removeCollaborator,
   updateCommentPeriod,
   updateSelectedProject,

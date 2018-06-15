@@ -59,8 +59,7 @@ class CollaboratorControl extends Component {
 
     return (
       <div>
-        <div className="social-sidebar__upload-header p-2">Collaborator(s)</div>
-        <div className="social-sidebar__collaborator-input input-group pl-2 pr-2">
+        <div className="social-sidebar__collaborator-input input-group">
           <input
             type="email"
             className="form-control"
@@ -82,9 +81,9 @@ class CollaboratorControl extends Component {
           </div>
         </div>
         {!this.state.pristine && !this.state.validEmail ? (
-          <p className="mt-1 text-danger pl-2 pr-2">valid email required</p>
+          <p className="mt-1 text-danger">valid email required</p>
         ) : null}
-        <div className="mt-3 mb-5 pl-2 pr-2">
+        <div className="mt-3">
           <div className="collaborator-item d-flex justify-content-between">
             <div className="collaborator-info d-flex">
               <p className="collaborator-email mb-1">{creator.email}</p>

@@ -35,7 +35,7 @@ class IssueInput extends Component {
     const isEnabled = this.state.issue.length > 0;
 
     return (
-      <div className="social-sidebar__issue-input pb-3 px-2">
+      <div className="social-sidebar__issue-input">
         <textarea
           type="text"
           className="form-control"

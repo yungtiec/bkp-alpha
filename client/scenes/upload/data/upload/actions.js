@@ -1,7 +1,22 @@
 import * as types from "./actionTypes";
-import { postMarkdown } from "./services";
+import { postMarkdown, getManagedProjects } from "./services";
 import history from "../../../../history";
-import { orderBy } from "lodash";
+import { orderBy, keyBy } from "lodash";
+
+export const fetchManagedProjects = () => async (dispatch, getState) => {
+  try {
+    const projects = await getManagedProjects();
+    const projectsBySymbol = keyBy(projects, "symbol");
+    const projectSymbolArr = projects.map(project => project.symbol);
+    dispatch({
+      type: types.MANAGED_PROJECTS_FETCH_SUCCESS,
+      projectsBySymbol,
+      projectSymbolArr
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const importMarkdown = markdown => ({
   type: types.MARKDOWN_IMPORTED,
@@ -15,16 +30,16 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectSymbol
+      selectedProject
     } = state.scenes.upload.data.upload;
     const projectSurvey = await postMarkdown({
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectSymbol
+      selectedProjectSymbol: selectedProject.symbol
     });
     history.push(
-      `/project/${selectedProjectSymbol}/survey/${projectSurvey.id}`
+      `/project/${selectedProject.symbol}/survey/${projectSurvey.id}`
     );
     dispatch({
       type: types.MARKDOWN_UPLOADED
@@ -34,14 +49,9 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
   }
 };
 
-export const addNewCollaborator = collaboratorEmail => ({
-  type: types.COLLABORATOR_ADDED,
-  collaboratorEmail
-});
-
-export const removeCollaborator = collaboratorEmail => ({
-  type: types.COLLABORATOR_DELETED,
-  collaboratorEmail
+export const updateCollaborators = collaboratorEmails => ({
+  type: types.COLLABORATOR_UPDATED,
+  collaboratorEmails
 });
 
 export const updateCommentPeriod = commentPeriodInDay => ({
@@ -49,7 +59,7 @@ export const updateCommentPeriod = commentPeriodInDay => ({
   commentPeriodInDay
 });
 
-export const updateSelectedProject = selectedProjectSymbol => ({
+export const updateSelectedProject = selectedProject => ({
   type: types.SELECTED_PROJECT_UPDATED,
-  selectedProjectSymbol
+  selectedProject
 });

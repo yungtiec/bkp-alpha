@@ -1,4 +1,4 @@
-import "./CommentItem.scss";
+import "./OutstandingIssue.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
@@ -21,7 +21,7 @@ export default class OutstandingIssue extends Component {
 
     return (
       <div
-        className="comment-item"
+        className="comment-issue-item"
         style={{ cursor: "pointer" }}
         onClick={() => selectIssueToResolve(comment.issue.id)}
       >

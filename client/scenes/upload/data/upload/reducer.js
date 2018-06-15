@@ -5,34 +5,20 @@ const initialState = {
   markdown: null,
   collaboratorEmails: [],
   commentPeriodInDay: 7,
-  selectedProjectSymbol: ""
+  selectedProject: "",
+  projectSymbolArr: [],
+  projectsBySymbol: {},
+  collaboratorOptions: []
 };
-
-function updateCollaboratorEmails(state, action) {
-  var collaboratorEmails;
-  switch (action.type) {
-    case types.COLLABORATOR_ADDED:
-      collaboratorEmails = [action.collaboratorEmail].concat(
-        state.collaboratorEmails
-      );
-      break;
-    case types.COLLABORATOR_DELETED:
-      collaboratorEmails = state.collaboratorEmails.filter(
-        email => email !== action.collaboratorEmail
-      );
-      break;
-    default:
-      collaboratorEmails = state.collaboratorEmails;
-      break;
-  }
-  return {
-    ...state,
-    collaboratorEmails: uniq(collaboratorEmails)
-  };
-}
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    case types.MANAGED_PROJECTS_FETCH_SUCCESS:
+      return {
+        ...state,
+        projectSymbolArr: action.projectSymbolArr,
+        projectsBySymbol: action.projectsBySymbol
+      };
     case types.MARKDOWN_IMPORTED:
       return {
         ...state,
@@ -42,12 +28,15 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state,
         markdown: null,
-        resolvedIssueIds: [],
-        newIssues: []
+        collaboratorEmails: [],
+        commentPeriodInDay: 7,
+        selectedProject: ""
       };
-    case types.COLLABORATOR_ADDED:
-    case types.COLLABORATOR_DELETED:
-      return updateCollaboratorEmails(state, action);
+    case types.COLLABORATOR_UPDATED:
+      return {
+        ...state,
+        collaboratorEmails: action.collaboratorEmails
+      };
     case types.COMMENT_PERIOD_UPDATED:
       return {
         ...state,
@@ -56,7 +45,8 @@ export default function reduce(state = initialState, action = {}) {
     case types.SELECTED_PROJECT_UPDATED:
       return {
         ...state,
-        selectedProjectSymbol: action.selectedProjectSymbol
+        selectedProject: action.selectedProject,
+        collaboratorOptions: action.selectedProject.collaboratorOptions
       };
     default:
       return state;
@@ -76,5 +66,20 @@ export function getCommentPeriodInDay(state) {
 }
 
 export function getSelectedProject(state) {
-  return state.scenes.upload.data.upload.selectedProjectSymbol;
+  return state.scenes.upload.data.upload.selectedProject;
+}
+
+export function getCollaboratorOptions(state) {
+  return state.scenes.upload.data.upload.collaboratorOptions;
+}
+
+export function getManagedProjects(state) {
+  const {
+    projectSymbolArr,
+    projectsBySymbol
+  } = state.scenes.upload.data.upload;
+  return {
+    projectSymbolArr,
+    projectsBySymbol
+  };
 }
