@@ -55,6 +55,17 @@ router.get("/:projectSurveyId", async (req, res, next) => {
   }
 });
 
+router.get("/:rootProjectSurveyId/issues", async (req, res, next) => {
+  try {
+    const projectSurvey = await Project.getOutstandingIssuesByVersion(
+      req.params.rootProjectSurveyId
+    );
+    res.send(projectSurvey);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post(
   "/:parentProjectSurveyId",
   ensureAuthentication,

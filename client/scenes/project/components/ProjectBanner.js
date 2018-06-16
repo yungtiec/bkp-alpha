@@ -31,16 +31,16 @@ const ProjectBanner = ({ metadata, user, loadModal }) => (
       <span class="project-metrics__stat-label">Editors</span>
       <div>
         {(metadata.admins || []).map(a => (
-          <h5 className="project-banner__editor-badge mr-2 mt-2">
-            <span class="badge badge-white">
+          <h5 className="project-banner__editor-badge mr-2">
+            <span class="mt-2 badge badge-white">
               {a.email}
               <span class="badge badge-secondary ml-1">admin</span>
             </span>
           </h5>
         ))}
         {(metadata.currentEditors || []).map(a => (
-          <h5 className="project-banner__editor-badge mr-2 mt-2">
-            <span class="badge badge-white">
+          <h5 className="project-banner__editor-badge mr-2">
+            <span class="mt-2 badge badge-white">
               {a.email}
               <span />
             </span>
@@ -58,7 +58,7 @@ const ProjectBanner = ({ metadata, user, loadModal }) => (
                   })
                 }
               >
-                <button class="btn badge btn-primary">
+                <button class="mt-2 btn badge btn-primary">
                   manage editors<span />
                 </button>
               </h5>

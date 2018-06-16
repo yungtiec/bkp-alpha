@@ -172,6 +172,9 @@
 
 .project-banner__editors {
   padding: 0 18px;
+  @include breakpoint(xs) {
+    text-align: center;
+  }
 }
 
 .project-banner__editor-badge {

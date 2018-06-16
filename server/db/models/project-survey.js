@@ -78,6 +78,17 @@ const ProjectSurvey = db.define(
                       required: false
                     }
                   ]
+                },
+                {
+                  model: db.model("comment"),
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false,
+                      where: { open: true }
+                    }
+                  ]
                 }
               ]
             },
@@ -104,6 +115,17 @@ const ProjectSurvey = db.define(
                     {
                       model: db.model("comment"),
                       required: false
+                    }
+                  ]
+                },
+                {
+                  model: db.model("comment"),
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false,
+                      where: { open: true }
                     }
                   ]
                 }
@@ -145,6 +167,17 @@ const ProjectSurvey = db.define(
                       ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              model: db.model("comment"),
+              required: false,
+              include: [
+                {
+                  model: db.model("issue"),
+                  required: false,
+                  where: { open: true }
                 }
               ]
             },
