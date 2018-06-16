@@ -4,7 +4,6 @@ import autoBind from "react-autobind";
 import Select from "react-select";
 import {
   SidebarLayout,
-  CollaboratorControl,
   CustomScrollbar,
   requiresAuthorization
 } from "../../components";

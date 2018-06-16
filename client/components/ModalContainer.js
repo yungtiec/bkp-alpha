@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 
 /** Modal Components */
 import { EditCommentModal } from "../scenes/project/scenes/survey/components";
+import { ProjectEditorModal } from "../scenes/project/components";
 
 /** Modal Type Constants */
 const MODAL_COMPONENTS = {
-  EDIT_COMMENT_MODAL: EditCommentModal
+  EDIT_COMMENT_MODAL: EditCommentModal,
+  PROJECT_EDITORS_MODAL: ProjectEditorModal
 };
 
 const ModalContainer = ({ modalType, modalProps }) => {

@@ -56,5 +56,18 @@ module.exports = {
           (isProjectEditor && (isDisclosureOwner || isDisclosureCollaborator))
         );
     }
+  },
+  Project: (action, model, user) => {
+    if (!user || isEmpty(user)) return false;
+    const isAdmin = user.roles[0].name === "admin";
+    const isProjectAdmin = model.project
+      ? user.roles[0].name === "project_admin" &&
+        !!find(model.project.admins, a => a.id === user.id)
+      : user.roles[0].name === "project_admin";
+
+    switch (action) {
+      case "ManageEditors":
+        return isAdmin || isProjectAdmin;
+    }
   }
 };

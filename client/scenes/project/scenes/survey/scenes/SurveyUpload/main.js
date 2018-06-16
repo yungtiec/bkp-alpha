@@ -6,7 +6,6 @@ import Select from "react-select";
 import { UploadInterface, IssueInput } from "./components";
 import {
   SidebarLayout,
-  CollaboratorControl,
   CustomScrollbar,
   requiresAuthorization
 } from "../../../../../../components";
