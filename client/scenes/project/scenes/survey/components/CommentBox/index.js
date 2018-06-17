@@ -34,10 +34,11 @@ export default class CommentBox extends Component {
           name="textarea"
           value={this.state.value}
           onChange={this.handleChange}
+          placeholder="Enter comment..."
         />
         <div className="comment-box__actions">
           <button className="btn" onClick={this.handleSubmit}>
-            save
+            submit
           </button>
           {this.props.onCancel && (
             <button className="btn" onClick={this.props.onCancel}>
