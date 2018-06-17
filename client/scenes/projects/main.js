@@ -31,8 +31,6 @@ class ProjectList extends Component {
       latestProjectSurveyIds
     } = this.props;
 
-    console.log(projectSurveysById)
-
     return (
       <div className="main-container">
         <span className="projects-container__sub-header">Recent Disclosures</span>
