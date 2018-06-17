@@ -77,7 +77,8 @@ class SurveyUpload extends Component {
       updateCommentPeriod,
       commentPeriodInDay,
       sidebarOpen,
-      toggleSidebar
+      toggleSidebar,
+      upvoteProjectSurvey
     } = this.props;
 
     return (

@@ -133,8 +133,8 @@ class AuthForm extends Component {
                 </label>
                 <InputPassword
                   name="password"
-                  validations="minLength:8"
-                  validationError="Password must have a minimum length of 8 characters"
+                  // validations="minLength:8"
+                  // validationError="Password must have a minimum length of 8 characters"
                   required
                 />
               </div>
