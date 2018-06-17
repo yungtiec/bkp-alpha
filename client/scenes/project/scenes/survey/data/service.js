@@ -6,3 +6,15 @@ export function getSurveyByProjectSurveyId(projectSymbol, projectSurveyId) {
     .get(`/api/projects/${projectSymbol}/surveys/${projectSurveyId}`)
     .then(res => res.data);
 }
+
+export function postUpvoteToProjectSurvey({
+  projectSurveyId,
+  projectSymbol,
+  hasUpvoted
+}) {
+  return axios
+    .post(`/api/projects/${projectSymbol}/surveys/${projectSurveyId}/upvote`, {
+      hasUpvoted
+    })
+    .then(res => res.data);
+}

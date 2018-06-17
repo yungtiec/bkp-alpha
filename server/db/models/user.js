@@ -6,6 +6,11 @@ const { assignIn, cloneDeep } = require("lodash");
 const User = db.define(
   "user",
   {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     email: {
       type: Sequelize.STRING,
       unique: true,
@@ -284,9 +289,7 @@ User.getCommentsAndCount = async function(queryObj) {
     comment = comment.toJSON();
     if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
     if (comment.parent.ancestors.length) {
-      comment.ancestors = comment.parent.ancestors.concat(
-        comment.parent
-      );
+      comment.ancestors = comment.parent.ancestors.concat(comment.parent);
     } else {
       comment.ancestors = [comment.parent];
     }

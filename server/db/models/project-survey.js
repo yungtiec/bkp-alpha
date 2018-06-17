@@ -141,6 +141,11 @@ const ProjectSurvey = db.define(
               required: false
             },
             {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
+            },
+            {
               model: db.model("survey"),
               include: [
                 {
@@ -170,6 +175,7 @@ const ProjectSurvey = db.define(
                 }
               ]
             },
+
             {
               model: db.model("comment"),
               required: false,
@@ -210,6 +216,11 @@ const ProjectSurvey = db.define(
               model: db.model("user"),
               as: "collaborators",
               required: false
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
             },
             {
               model: db.model("comment"),
@@ -322,6 +333,12 @@ function getPublishedSurveysStats(projectSurveys) {
                 "hierarchyLevel"
               ]
             ]
+          },
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["id"],
+            required: false
           },
           {
             model: db.model("survey")

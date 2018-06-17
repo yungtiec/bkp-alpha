@@ -26,6 +26,32 @@ const AuthForm = props => {
       <div className="auth__form-wrapper">
         <div className="auth__form-contents">
           <form className="auth__form" onSubmit={handleSubmit} name={name}>
+            <div className="form-group row">
+              <a href="/auth/google" target="_blank">
+                <img
+                  width="191px"
+                  height="46px"
+                  src="/assets/btn_google_signin_dark_normal_web.png"
+                />
+              </a>
+            </div>
+            <div className="d-flex" style={{ margin: "0px -30px" }}>
+              <div
+                style={{
+                  border: "1px solid black",
+                  borderWidth: "0 0 1px 0",
+                  width: "45%"
+                }}
+              />
+              <span style={{ marginTop: "-4px" }}>or</span>
+              <div
+                style={{
+                  border: "1px solid black",
+                  borderWidth: "0 0 1px 0",
+                  width: "45%"
+                }}
+              />
+            </div>
             {name === "signup" && (
               <div className="form-group row">
                 <div style={{ margin: "0 1% 0 0", width: "48%" }}>
@@ -55,7 +81,11 @@ const AuthForm = props => {
                 <label htmlFor="organization">
                   <small>Organization</small>
                 </label>
-                <input name="organization" className="form-control" type="text" />
+                <input
+                  name="organization"
+                  className="form-control"
+                  type="text"
+                />
               </div>
             )}
             <div className="form-group row">

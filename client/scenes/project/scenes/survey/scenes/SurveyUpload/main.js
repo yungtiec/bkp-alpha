@@ -95,6 +95,7 @@ class SurveyUpload extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
+          upvoteProjectSurvey={upvoteProjectSurvey}
         />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>

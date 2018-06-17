@@ -1,7 +1,7 @@
 const passport = require("passport");
 const router = require("express").Router();
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-const { User } = require("../db/models");
+const { User, Role } = require("../db/models");
 module.exports = router;
 
 /**
@@ -29,20 +29,31 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
   const strategy = new GoogleStrategy(
     googleConfig,
-    (token, refreshToken, profile, done) => {
+    async (token, refreshToken, profile, done) => {
       const googleId = profile.id;
       const name = profile.displayName;
       const email = profile.emails[0].value;
+      const firstName = profile.name ? profile.name.givenName : "";
+      const lastName = profile.name ? profile.name.familyName : "";
 
-      User.find({ where: { googleId } })
-        .then(
-          foundUser =>
-            foundUser
-              ? done(null, foundUser)
-              : User.create({ name, email, googleId }).then(createdUser =>
-                  done(null, createdUser)
-                )
-        )
+      User.find({ where: { googleId }, include: [{ model: Role }] })
+        .then(foundUser => {
+          return foundUser
+            ? done(null, foundUser)
+            : User.create({
+                email,
+                googleId,
+                first_name: firstName,
+                last_name: lastName
+              }).then(async createdUser => {
+                console.log(createdUser);
+                var user = await User.find({
+                  where: { googleId },
+                  include: [{ model: Role }]
+                });
+                return done(null, user);
+              });
+        })
         .catch(done);
     }
   );

@@ -67,6 +67,27 @@ router.get("/:rootProjectSurveyId/issues", async (req, res, next) => {
 });
 
 router.post(
+  "/:projectSurveyId/upvote",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      if (!req.body.hasUpvoted) {
+        await req.user.addUpvotedProjectSurveys(req.params.projectSurveyId);
+      } else {
+        await req.user.removeUpvotedProjectSurveys(req.params.projectSurveyId);
+      }
+      const upvotesFrom = await ProjectSurvey.findById(
+        req.params.projectSurveyId
+      ).then(ps => ps.getUpvotesFrom());
+      res.send(upvotesFrom);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
   "/:parentProjectSurveyId",
   ensureAuthentication,
   ensureResourceAccess,

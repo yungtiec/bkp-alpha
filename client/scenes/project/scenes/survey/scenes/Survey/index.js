@@ -15,7 +15,10 @@ import {
   getSidebarContext,
   updateSidebarContext
 } from "../../reducer";
-import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
+import {
+  fetchQuestionsByProjectSurveyId,
+  upvoteProjectSurvey
+} from "../../data/actions";
 import {
   fetchCommentsBySurvey,
   addNewCommentSentFromServer,
@@ -146,6 +149,7 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
+  upvoteProjectSurvey,
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,

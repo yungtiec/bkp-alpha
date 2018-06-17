@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../../../history";
-import { orderBy } from "lodash";
+import { orderBy, find } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../policies.js";
 
@@ -38,7 +38,8 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      user
+      user,
+      upvoteProjectSurvey
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -47,8 +48,31 @@ class VersionToolbar extends Component {
       surveyQnasById
     });
 
+    const hasUpvoted = find(
+      surveyMetadata.upvotesFrom,
+      u => u.email === user.email
+    );
+
     return (
       <div className="btn-group mb-5" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          className={`btn ${
+            hasUpvoted
+              ? "bg-consensys text-light"
+              : "text-consensys btn-outline-primary"
+          }`}
+          onClick={() =>
+            upvoteProjectSurvey({
+              projectSymbol: projectMetadata.symbol,
+              projectSurveyId: surveyMetadata.id,
+              hasUpvoted
+            })
+          }
+        >
+          <i class="fas fa-thumbs-up mr-2" />
+          {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+        </button>
         <div className="btn-group">
           <button
             type="button"

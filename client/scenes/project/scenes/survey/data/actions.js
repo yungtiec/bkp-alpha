@@ -1,5 +1,8 @@
 import * as types from "./actionTypes";
-import { getSurveyByProjectSurveyId } from "./service";
+import {
+  getSurveyByProjectSurveyId,
+  postUpvoteToProjectSurvey
+} from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 
 export function fetchQuestionsByProjectSurveyId({
@@ -40,18 +43,41 @@ export function fetchQuestionsByProjectSurveyId({
           "hierarchyLevel",
           "resolvedIssues",
           "comment_until_unix",
-          "createdAt"
+          "createdAt",
+          "upvotesFrom"
         ]),
         omit(projectSurvey.survey, ["survey_questions", "id"])
       );
       dispatch({
-        type: types.SURVEY_FETCH_SUCCESS,
+        type: types.PROJECT_SURVEY_FETCH_SUCCESS,
         surveyQnasById,
         surveyQnaIds,
         surveyMetadata
       });
     } catch (error) {
       console.error(error);
+    }
+  };
+}
+
+export function upvoteProjectSurvey({
+  projectSurveyId,
+  projectSymbol,
+  hasUpvoted
+}) {
+  return async (dispatch, getState) => {
+    try {
+      const upvotesFrom = await postUpvoteToProjectSurvey({
+        projectSurveyId,
+        projectSymbol,
+        hasUpvoted
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_UPVOTED,
+        upvotesFrom
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 }
