@@ -51,6 +51,11 @@ const Project = db.define(
                   required: false
                 },
                 {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["first_name", "last_name", "email"]
+                },
+                {
                   model: db.model("project_survey"),
                   as: "forkFrom",
                   include: [{ model: db.model("user"), as: "creator" }]
@@ -145,6 +150,11 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
               model: db.model("user"),
               as: "collaborators",
               required: false
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
             },
             {
               model: db.model("comment"),

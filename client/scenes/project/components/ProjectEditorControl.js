@@ -1,8 +1,8 @@
-import "./CollaboratorControl.scss";
+import "./ProjectEditorControl.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 
-class CollaboratorControl extends Component {
+class ProjectEditorControl extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -25,7 +25,7 @@ class CollaboratorControl extends Component {
 
   handleSubmit(event) {
     if (this.validateEmail()) {
-      this.props.addNewCollaborator(this.state.email);
+      this.props.addEditor(this.state.email);
       this.setState({
         email: "",
         pristine: true,
@@ -54,7 +54,12 @@ class CollaboratorControl extends Component {
   }
 
   render() {
-    const { creator, collaboratorEmails, removeCollaborator } = this.props;
+    const {
+      projectAdmins,
+      currentEditors,
+      addEditor,
+      removeEditor
+    } = this.props;
     const isEnabled = this.state.email.length > 0;
 
     return (
@@ -63,7 +68,7 @@ class CollaboratorControl extends Component {
           <input
             type="email"
             className="form-control"
-            placeholder="Collaborator's email"
+            placeholder="Editor's email"
             aria-label="Recipient's username"
             aria-describedby="basic-addon2"
             value={this.state.email}
@@ -84,26 +89,31 @@ class CollaboratorControl extends Component {
           <p className="mt-1 text-danger">valid email required</p>
         ) : null}
         <div className="mt-3">
-          <div className="collaborator-item d-flex justify-content-between">
-            <div className="collaborator-info d-flex">
-              <p className="collaborator-email mb-1">{creator.email}</p>
-              <p className="ml-3 collaborator-type mb-1">owner</p>
-            </div>
-            <div />
-          </div>
-          {collaboratorEmails.map((email, i) => (
+          {projectAdmins.map((e, i) => (
             <div
               className="collaborator-item d-flex justify-content-between"
               key={`collaborator-item__${i}`}
             >
               <div className="collaborator-info d-flex">
-                <p className="collaborator-email">{email}</p>
-                <p className="ml-3 collaborator-type">collaborator</p>
+                <p className="collaborator-email">{e.email}</p>
+              </div>
+              <div className="collaborator-actions">
+                <p className="px-2 py-1">project admin</p>
+              </div>
+            </div>
+          ))}
+          {currentEditors.map((e, i) => (
+            <div
+              className="collaborator-item d-flex justify-content-between"
+              key={`collaborator-item__${i}`}
+            >
+              <div className="collaborator-info d-flex">
+                <p className="collaborator-email">{e.email}</p>
               </div>
               <div className="collaborator-actions">
                 <span
                   className="px-2 py-1"
-                  onClick={() => removeCollaborator(email)}
+                  onClick={() => removeEditor(e.project_editor.id)}
                 >
                   <i class="fas fa-times text-danger" />
                 </span>
@@ -116,4 +126,4 @@ class CollaboratorControl extends Component {
   }
 }
 
-export default CollaboratorControl;
+export default ProjectEditorControl;

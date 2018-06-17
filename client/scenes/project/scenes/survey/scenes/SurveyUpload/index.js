@@ -5,7 +5,10 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
 import { fetchProjectBySymbol } from "../../../../data/actions";
-import { fetchQuestionsByProjectSurveyId } from "../../data/actions";
+import {
+  fetchQuestionsByProjectSurveyId,
+  upvoteProjectSurvey
+} from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
@@ -102,6 +105,7 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
+  upvoteProjectSurvey,
   fetchCommentsBySurvey,
   importMarkdown,
   uploadMarkdownToServer,

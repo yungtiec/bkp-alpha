@@ -31,10 +31,15 @@ router.post("/login", async (req, res, next) => {
 
 router.post("/signup", (req, res, next) => {
   User.create(req.body)
-    .then(user => {
+    .then(async user => {
+      user = await User.find({
+        where: { id: user.id },
+        include: [{ model: Role }]
+      });
       req.login(user, err => (err ? next(err) : res.json(user)));
     })
     .catch(err => {
+      console.log(err);
       if (err.name === "SequelizeUniqueConstraintError") {
         res.status(401).send("User already exists");
       } else {
@@ -54,7 +59,7 @@ router.get("/me", async (req, res) => {
     const user = await User.getContributions(req.user.id);
     res.send(user);
   } else {
-    res.sendStatus(401)
+    res.sendStatus(401);
   }
 });
 

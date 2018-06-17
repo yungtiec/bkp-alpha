@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../../../history";
-import { orderBy } from "lodash";
+import { orderBy, find } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../policies.js";
 
@@ -38,7 +38,8 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
-      user
+      user,
+      upvoteProjectSurvey
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -47,8 +48,31 @@ class VersionToolbar extends Component {
       surveyQnasById
     });
 
+    const hasUpvoted = find(
+      surveyMetadata.upvotesFrom,
+      u => u.email === user.email
+    );
+
     return (
       <div className="btn-group mb-5" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          className={`btn ${
+            hasUpvoted
+              ? "bg-consensys text-light"
+              : "text-consensys btn-outline-primary"
+          }`}
+          onClick={() =>
+            upvoteProjectSurvey({
+              projectSymbol: projectMetadata.symbol,
+              projectSurveyId: surveyMetadata.id,
+              hasUpvoted
+            })
+          }
+        >
+          <i class="fas fa-thumbs-up mr-2" />
+          {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+        </button>
         <div className="btn-group">
           <button
             type="button"
@@ -93,15 +117,46 @@ class VersionToolbar extends Component {
         >
           View disclosure
         </button>
-        <button type="button" className="btn btn-outline-primary">
-          <Link
-            to={`/project/${this.props.projectMetadata.symbol}/survey/${
-              this.props.surveyMetadata.id
-            }/progress`}
+        <div className="btn-group">
+          <button
+            type="button"
+            className="btn btn-outline-primary dropdown-toggle"
+            type="button"
+            id="versionProgressButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
           >
-            View progress
-          </Link>
-        </button>
+            <Link
+              to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }/progress`}
+            >
+              View progress
+            </Link>
+          </button>
+          <div
+            className="dropdown-menu"
+            aria-labelledby="versionProgressButton"
+          >
+            <Link
+              to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }/progress`}
+              class="dropdown-item"
+            >
+              Milestone
+            </Link>
+            <Link
+              to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }/issues`}
+              class="dropdown-item"
+            >
+              Issues
+            </Link>
+          </div>
+        </div>
         {!uploadMode ? (
           <PunditContainer policies={policies} user={user}>
             <PunditTypeSet type="Disclosure">

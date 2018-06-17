@@ -43,6 +43,12 @@ export default (surveyId, survey) => {
               <div className="entity__metrics-stat">
                 <span>issues ({survey.num_issues || 0})</span>
               </div>
+              <div className="entity__metrics-stat">
+                <span>
+                  <i class="fas fa-thumbs-up mr-2" />
+                  ({(survey.upvotesFrom && survey.upvotesFrom.length) || 0})
+                </span>
+              </div>
             </div>
           </div>
         </div>

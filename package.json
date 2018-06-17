@@ -31,6 +31,7 @@
     "downloadjs": "^1.4.7",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
+    "formsy-react": "^1.1.4",
     "halogenium": "^2.2.3",
     "history": "^4.6.3",
     "install": "^0.11.0",

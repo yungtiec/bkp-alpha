@@ -6,7 +6,6 @@ import Select from "react-select";
 import { UploadInterface, IssueInput } from "./components";
 import {
   SidebarLayout,
-  CollaboratorControl,
   CustomScrollbar,
   requiresAuthorization
 } from "../../../../../../components";
@@ -96,6 +95,7 @@ class SurveyUpload extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
+          upvoteProjectSurvey={upvoteProjectSurvey}
         />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>

@@ -5,17 +5,21 @@ const initialState = {};
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.SURVEY_FETCH_SUCCESS:
+    case types.PROJECT_SURVEY_FETCH_SUCCESS:
       return {
         ...state,
         ...action.surveyMetadata
-      }
+      };
+    case types.PROJECT_SURVEY_UPVOTED:
+      return {
+        ...state,
+        upvotesFrom: action.upvotesFrom
+      };
     default:
       return state;
   }
 }
 
 export function getSelectedSurvey(state) {
-  return state.scenes.project.scenes.survey.data.metadata
+  return state.scenes.project.scenes.survey.data.metadata;
 }
-

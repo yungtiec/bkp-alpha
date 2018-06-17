@@ -10,7 +10,7 @@ import {
   scroller
 } from "react-scroll";
 import { connect } from "react-redux";
-import { SurveyContent, SurveyProgress } from "./components";
+import { SurveyContent, SurveyProgress, SurveyIssues } from "./components";
 import {
   SidebarComments,
   SidebarHeader,
@@ -156,7 +156,8 @@ class Survey extends Component {
       sidebarOpen,
       verificationStatus,
       toggleSidebar,
-      updateVerificationStatusInView
+      updateVerificationStatusInView,
+      upvoteProjectSurvey
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
@@ -172,8 +173,18 @@ class Survey extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
+          upvoteProjectSurvey={upvoteProjectSurvey}
         />
         <Switch>
+          <Route
+            path={`${this.props.match.path}/issues`}
+            render={props => (
+              <SurveyIssues
+                surveyVersions={surveyMetadata.versions}
+                projectSymbol={projectMetadata.symbol}
+              />
+            )}
+          />
           <Route
             path={`${this.props.match.path}/progress`}
             render={() => (

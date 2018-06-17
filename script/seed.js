@@ -52,7 +52,7 @@ async function seedUser(projects) {
           if (entry[k] == "") entry[k] = null;
         }
 
-        return User.create(entry)
+        return User.create(_.omit(entry, ["id"]))
           .then(async user => {
             if (user.first_name === "Admin") return await user.addRole(1);
             else if (user.first_name === "Tammy" || user.first_name === "Ron")

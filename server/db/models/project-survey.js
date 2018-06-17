@@ -78,6 +78,17 @@ const ProjectSurvey = db.define(
                       required: false
                     }
                   ]
+                },
+                {
+                  model: db.model("comment"),
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false,
+                      where: { open: true }
+                    }
+                  ]
                 }
               ]
             },
@@ -106,6 +117,17 @@ const ProjectSurvey = db.define(
                       required: false
                     }
                   ]
+                },
+                {
+                  model: db.model("comment"),
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false,
+                      where: { open: true }
+                    }
+                  ]
                 }
               ]
             },
@@ -117,6 +139,11 @@ const ProjectSurvey = db.define(
               model: db.model("user"),
               as: "collaborators",
               required: false
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
             },
             {
               model: db.model("survey"),
@@ -145,6 +172,18 @@ const ProjectSurvey = db.define(
                       ]
                     }
                   ]
+                }
+              ]
+            },
+
+            {
+              model: db.model("comment"),
+              required: false,
+              include: [
+                {
+                  model: db.model("issue"),
+                  required: false,
+                  where: { open: true }
                 }
               ]
             },
@@ -177,6 +216,11 @@ const ProjectSurvey = db.define(
               model: db.model("user"),
               as: "collaborators",
               required: false
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["first_name", "last_name", "email"]
             },
             {
               model: db.model("comment"),
@@ -289,6 +333,12 @@ function getPublishedSurveysStats(projectSurveys) {
                 "hierarchyLevel"
               ]
             ]
+          },
+          {
+            model: db.model("user"),
+            as: "upvotesFrom",
+            attributes: ["id"],
+            required: false
           },
           {
             model: db.model("survey")
