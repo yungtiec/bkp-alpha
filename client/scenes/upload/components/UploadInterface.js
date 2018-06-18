@@ -59,7 +59,11 @@ export default class UploadInterface extends Component {
             </Dropzone>
           </div>
         )}
-        {importedMarkdown ? <ReactMarkdown source={importedMarkdown} /> : null}
+        {importedMarkdown ? (
+          <div className="markdown-body">
+            <ReactMarkdown source={importedMarkdown} />
+          </div>
+        ) : null}
       </div>
     );
   }

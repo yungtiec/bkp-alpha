@@ -55,15 +55,15 @@
 
 | practice or disclosure                                    |                            status                            | comment                                                      |
 | :-------------------------------------------------------- | :----------------------------------------------------------: | :----------------------------------------------------------- |
-| Practice: Financial Characteristics                       | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | CVL offers the right to participate in curating Newsrooms and content via the Civil Registry. |
-| Practice: Consumptive Token                               | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | CVL is used to publish and curate content, with more CVL carrying more weight. |
+| Practice: Financial Characteristics                       | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | CVL offers the right to participate in curating Newsrooms and content via the Civil Registry. |
+| Practice: Consumptive Token                               | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | CVL is used to publish and curate content, with more CVL carrying more weight. |
 | Practice: Token Usability                                 |                              -                               | Cannot be evaluated until mainnet launch.                    |
-| Disclosure: Description of token’s features and operation | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper pages 5, 9, and 10.                               |
-| Disclosure: Brooklyn Project Taxonomy classification      | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | [Smart contract 3](https://medium.com/@Join_Civil/the-civil-cryptoeconomic-whitepaper-1a42a7ff038d), Whitepaper pages 5, 9, and 10. |
+| Disclosure: Description of token’s features and operation | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper pages 5, 9, and 10.                               |
+| Disclosure: Brooklyn Project Taxonomy classification      | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | [Smart contract 3](https://medium.com/@Join_Civil/the-civil-cryptoeconomic-whitepaper-1a42a7ff038d), Whitepaper pages 5, 9, and 10. |
 
 
 
-##### Analysis:
+###### Analysis:
 
 Civil’s CVL token’s design fits within the parameters described in principle 1 of the CTF. The token does not display financial characteristics, such as equity ownership, a predominant interest in a fund, or passive-earned dividend rights. The token does offer the right to participate in curating Newsrooms and content via the Civil Registry. The use of CVL to publish and curate content is a consumptive right, allowing the token to be classified as a consumer token. The actual implementation of this cannot be evaluated until the token launch, but there is no evidence to suggest the technology is unrealistic.
 
@@ -77,13 +77,12 @@ Within the Brooklyn Project taxonomy, CVL would be considered a consumer token. 
 
 | practice or disclosure                                       |                            status                            | comment                                               |
 | :----------------------------------------------------------- | :----------------------------------------------------------: | :---------------------------------------------------- |
-| Practice: Appropriate organizational and governance structure | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | See organizational breakdown in analysis below.       |
-| Practice: Team member qualifications                         | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | See team bios in analysis below.                      |
+| Practice: Appropriate organizational and governance structure | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | See organizational breakdown in analysis below.       |
+| Practice: Team member qualifications                         | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | See team bios in analysis below.                      |
 | Practice: Transparency and updates of project fund use       |                              -                               | Cannot be evaluated until fundraising phase complete. |
-| Disclosure: How and by whom the project will be governed     | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper pages 14-18.                               |
+| Disclosure: How and by whom the project will be governed     | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper pages 14-18.                               |
 | Disclosure: Relevant holding company and jurisdiction        |                              -                               | Not available.                                        |
-|                                                              |                                                              |                                                       |
-| Disclosure: Identities and backgrounds of key people         | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper pages 21-24.                               |
+| Disclosure: Identities and backgrounds of key people         | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper pages 21-24.                               |
 | Disclosure: Project roadmap                                  |                              -                               | Not available.                                        |
 | Disclosure: Updates on milestone progress and funds          |                              -                               | Not available.                                        |
 
@@ -126,16 +125,16 @@ Conflict resolution is first attempted through decentralized methods, such as cr
 
 | practice or disclosure                                       |                            status                            | comment                                                      |
 | ------------------------------------------------------------ | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| Practice: Minimize or eliminate token bonuses                | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | All purchasers over both phases of the token sale will pay the same price per token. |
-| Practice: Minimize distribution to uninformed individuals    | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | See analysis below.                                          |
-| Practice: Minimize selling tokens in quantities that exceed the risk a buyer can bear | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | See analysis below.                                          |
+| Practice: Minimize or eliminate token bonuses                | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | All purchasers over both phases of the token sale will pay the same price per token. |
+| Practice: Minimize distribution to uninformed individuals    | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | See analysis below.                                          |
+| Practice: Minimize selling tokens in quantities that exceed the risk a buyer can bear | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | See analysis below.                                          |
 | Practice: Ensure terms of token distributions are transparent |                              -                               | Planned token distribution details are available, but this won’t be complete until after token sale. |
-| Disclosure: Purpose of any token distributions               | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper page 14.                                          |
-| Disclosure: Legal entity that distributed tokens             | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper page 19.                                          |
-| Disclosure: Conditions a buyer must meet to receive tokens   | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper page 19.                                          |
+| Disclosure: Purpose of any token distributions               | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper page 14.                                          |
+| Disclosure: Legal entity that distributed tokens             | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper page 19.                                          |
+| Disclosure: Conditions a buyer must meet to receive tokens   | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper page 19.                                          |
 | Disclosure: Terms of token distributions (lockups, vesting)  |                              -                               | Not available.                                               |
 | Disclosure: Project status at time of token distribution     |                              -                               | Not applicable until token distribution.                     |
-| Disclosure: Steps to limit sale to individuals who do not intend to consume token | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper page 19.                                          |
+| Disclosure: Steps to limit sale to individuals who do not intend to consume token | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper page 19.                                          |
 | Disclosure: Clarification of duties to increase token price  |                              -                               | Not available.                                               |
 | Disclosure: Restrictions and plans for secondary trading     |                              -                               | Not available.                                               |
 
@@ -161,10 +160,10 @@ The terms of the token distribution, specifically lockups, vesting, and transfer
 
 | practice or disclosure                                       |                            status                            | comment                                                      |
 | ------------------------------------------------------------ | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| Practice: State expected access to and use of proceeds       | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | See pages 17-18 of the whitepaper, “The Civil Ecosystem Vision” (Appendix 1 below). |
+| Practice: State expected access to and use of proceeds       | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | See pages 17-18 of the whitepaper, “The Civil Ecosystem Vision” (Appendix 1 below). |
 | Practice: Ensure resources used for project purposes         |                              -                               | Cannot be evaluated until fundraising phase complete.        |
 | Practice: Update plans based on project progress             |                              -                               | Not yet applicable.                                          |
-| Disclosure: Planned and actual use of proceeds by function line | ![checked](https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395886-checkmark_80611.png) | Whitepaper pages 14-18.                                      |
+| Disclosure: Planned and actual use of proceeds by function line | ![checked](https://tbp-annotator.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper pages 14-18.                                      |
 | Disclosure: Token sale proceeds                              |                              -                               | Not applicable until after token distribution.               |
 | Disclosure: Updates on the project’s progress and funds      |                              -                               | Not applicable until after token distribution.               |
 | Disclosure: Salaries and remunerations of team               |                              -                               | Not available.                                               |

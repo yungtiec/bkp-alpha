@@ -16,6 +16,7 @@ export default class Answers extends Component {
         onClick={e => {
           handleCommentOnClick(e, qnaId, answer.id);
         }}
+        className="markdown-body"
       >
         <ReactMarkdown className="qna__answer" source={answer.markdown} />
       </div>

@@ -1,6 +1,7 @@
 import $ from "jquery";
 import "jquery-ui/ui/widgets/autocomplete.js";
 import "jquery-ui/themes/base/all.css";
+import "github-markdown-css/github-markdown.css";
 import "./annotator/jquery.tagsinput.min.js";
 import "./annotator/jquery.tagsinput.min.css";
 import "normalize.css";
