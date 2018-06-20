@@ -26,13 +26,16 @@ class ScoreInput extends React.Component {
 
     return (
       <div style={{ margin: 0, width: "100%" }}>
-        <input
-          onChange={this.changeValue}
-          onBlur={this.validateValue}
-          type="Number"
-          className="form-control"
-          value={this.props.getValue() || ""}
-        />
+        <div className="d-flex justify-content-between">
+          <span>{this.props.label}</span>
+          <input
+            onChange={this.changeValue}
+            onBlur={this.validateValue}
+            type="Number"
+            className=""
+            value={this.props.getValue() || ""}
+          />
+        </div>
         <span className="text-danger" style={{ fontSize: "12px" }}>
           {errorMessage}
         </span>

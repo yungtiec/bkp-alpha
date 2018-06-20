@@ -16,6 +16,7 @@ import {
 } from "react-accessible-accordion";
 import Steps, { Step } from "rc-steps";
 import Formsy from "formsy-react";
+import ScoreInput from "./components/ScoreInput";
 
 class Upload extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class Upload extends Component {
   }
 
   handleSubmit(model) {
-    console.log(model)
+    console.log(model);
   }
 
   next(field) {
@@ -193,8 +194,57 @@ class Upload extends Component {
                   onValidSubmit={model => this.handleSubmit(model)}
                   name="project-scorecard__form"
                 >
+                  <ScoreInput
+                    label="Consumer Token Design"
+                    name="consumer_token_design"
+                    required
+                  />
+                  <ScoreInput
+                    label="Project Governance and Operation"
+                    name="project_governance_and_operation"
+                    required
+                  />
+                  <ScoreInput
+                    label="Responsible Token Distribution"
+                    name="responsible_token_distribution"
+                    required
+                  />
+                  <ScoreInput
+                    label="Use of Token Distribution Proceeds"
+                    name="use_of_token_distribution_proceeds"
+                    required
+                  />
+                  <ScoreInput
+                    label="Token Inventory"
+                    name="token_inventory"
+                    required
+                  />
+                  <ScoreInput
+                    label="Mitigation of Conflicts and Improper Trading"
+                    name="mitigation_of_conflicts_and_improper_trading"
+                    required
+                  />
+                  <ScoreInput
+                    label="Token Safety and Security"
+                    name="token_safety_and_security"
+                    required
+                  />
+                  <ScoreInput
+                    label="Marketing Practices"
+                    name="marketing_practices"
+                    required
+                  />
+                  <ScoreInput
+                    label="Protecting and Empowering Consumers"
+                    name="protecting_and_empowering_consumers"
+                    required
+                  />
+                  <ScoreInput
+                    label="Compliance with Applicable Laws"
+                    name="compliance_with_application_laws"
+                    required
+                  />
                 </Formsy>
-
               </AccordionItemBody>
             </AccordionItem>
             <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
