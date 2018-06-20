@@ -15,6 +15,7 @@ import {
   AccordionItemBody
 } from "react-accessible-accordion";
 import Steps, { Step } from "rc-steps";
+import Formsy from "formsy-react";
 
 class Upload extends Component {
   constructor(props) {
@@ -48,6 +49,10 @@ class Upload extends Component {
     this.setState({
       activeAccordionItemId: key
     });
+  }
+
+  handleSubmit(model) {
+    console.log(model)
   }
 
   next(field) {
@@ -179,6 +184,21 @@ class Upload extends Component {
             </AccordionItem>
             <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
               <AccordionItemTitle>
+                <p className="upload-accordion__item-header">Project score</p>
+              </AccordionItemTitle>
+              <AccordionItemBody>
+                <p>fill in project scorecard</p>
+                <Formsy
+                  className=""
+                  onValidSubmit={model => this.handleSubmit(model)}
+                  name="project-scorecard__form"
+                >
+                </Formsy>
+
+              </AccordionItemBody>
+            </AccordionItem>
+            <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
+              <AccordionItemTitle>
                 <p className="upload-accordion__item-header">
                   Disclosure markdown
                 </p>
@@ -230,8 +250,12 @@ class Upload extends Component {
                   description="select collaborator(s) to work on your disclosure"
                 />
                 <Step
-                  title="comment periood"
+                  title="comment period"
                   description="set comment period for audiences"
+                />
+                <Step
+                  title="project score"
+                  description="fill in project scorecard"
                 />
                 <Step
                   title="disclosure"
@@ -239,7 +263,7 @@ class Upload extends Component {
                   status={
                     !importedMarkdown
                       ? "wait"
-                      : this.state.activeAccordionItemId === 3
+                      : this.state.activeAccordionItemId === 4
                         ? "finish"
                         : "wait"
                   }

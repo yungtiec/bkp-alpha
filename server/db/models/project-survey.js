@@ -33,6 +33,9 @@ const ProjectSurvey = db.define(
     },
     comment_until_unix: {
       type: Sequelize.BIGINT
+    },
+    scorecard: {
+      type: Sequelize.JSONB
     }
   },
   {
