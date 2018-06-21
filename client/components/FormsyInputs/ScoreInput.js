@@ -1,3 +1,4 @@
+import "./ScoreInput.scss";
 import { withFormsy } from "formsy-react";
 import React from "react";
 import autoBind from "react-autobind";
@@ -13,10 +14,6 @@ class ScoreInput extends React.Component {
     // turn will validate it and the rest of the form
     // Important: Don't skip this step. This pattern is required
     // for Formsy to work.
-    this.props.setValue(event.currentTarget.value, false);
-  }
-
-  validateValue(event) {
     this.props.setValue(event.currentTarget.value);
   }
 
@@ -25,20 +22,18 @@ class ScoreInput extends React.Component {
     var errorMessage = this.props.getErrorMessage();
 
     return (
-      <div style={{ margin: 0, width: "100%" }}>
-        <div className="d-flex justify-content-between">
+      <div className="score-input__container">
+        <div className="d-flex justify-content-between score-input__div">
           <span>{this.props.label}</span>
           <input
+            className="score-input"
             onChange={this.changeValue}
-            onBlur={this.validateValue}
             type="Number"
             className=""
             value={this.props.getValue() || ""}
           />
         </div>
-        <span className="text-danger" style={{ fontSize: "12px" }}>
-          {errorMessage}
-        </span>
+        <span className="text-danger score-input__error">{errorMessage}</span>
       </div>
     );
   }

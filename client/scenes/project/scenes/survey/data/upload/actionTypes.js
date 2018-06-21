@@ -5,3 +5,5 @@ export const COLLABORATOR_UPDATED = "survey.upload.COLLABORATOR_UPDATED";
 export const ISSUE_ADDED = "survey.upload.ISSUE_ADDED";
 export const ISSUE_DELETED = "survey.upload.ISSUE_DELETED";
 export const COMMENT_PERIOD_UPDATED = "survey.upload.COMMENT_PERIOD_UPDATED";
+export const PROJECT_SCORECARD_UPDATED =
+  "survey.upload.PROJECT_SCORECARD_UPDATED";

@@ -1,8 +1,7 @@
 import * as types from "./actionTypes";
-import { SURVEY_FETCH_SUCCESS } from "../actionTypes";
+import { PROJECT_SURVEY_FETCH_SUCCESS } from "../actionTypes";
 import { PROJECT_FETCH_SUCCESS } from "../../../../data/actionTypes";
-
-import { uniq } from "lodash";
+import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
   markdown: null,
@@ -10,7 +9,8 @@ const initialState = {
   collaboratorEmails: [],
   collaboratorOptions: [],
   newIssues: [],
-  commentPeriodInDay: 7
+  commentPeriodInDay: 7,
+  scorecard: {}
 };
 
 function updateResolvedIssues(state, action) {
@@ -54,12 +54,13 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         collaboratorOptions: action.projectMetadata.collaboratorOptions
       };
-    case SURVEY_FETCH_SUCCESS:
+    case PROJECT_SURVEY_FETCH_SUCCESS:
       return {
         ...state,
         collaboratorEmails: action.surveyMetadata.collaborators.map(
           c => c.email
-        )
+        ),
+        scorecard: action.surveyMetadata.scorecard
       };
     case types.MARKDOWN_IMPORTED:
       return {
@@ -88,6 +89,11 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         commentPeriodInDay: action.commentPeriodInDay
       };
+    case types.PROJECT_SCORECARD_UPDATED:
+      return {
+        ...state,
+        scorecard: action.projectScorecard
+      };
     default:
       return state;
   }
@@ -115,4 +121,16 @@ export function getNewIssues(state) {
 
 export function getCommentPeriodInDay(state) {
   return state.scenes.project.scenes.survey.data.upload.commentPeriodInDay;
+}
+
+export function getProjectScorecardStatus(state) {
+  const scorecard = state.scenes.project.scenes.survey.data.upload.scorecard;
+  return (
+    !isEmpty(scorecard) &&
+    values(scorecard).reduce((bool, score) => !!score && bool, true)
+  );
+}
+
+export function getProjectScorecard(state) {
+  return state.scenes.project.scenes.survey.data.upload.scorecard;
 }

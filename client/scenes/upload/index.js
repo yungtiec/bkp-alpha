@@ -11,7 +11,8 @@ import {
   getCollaboratorOptions,
   getCommentPeriodInDay,
   getSelectedProject,
-  getManagedProjects
+  getManagedProjects,
+  getProjectScorecardStatus
 } from "./data/upload/reducer";
 import {
   fetchManagedProjects,
@@ -20,7 +21,8 @@ import {
   updateCollaborators,
   removeCollaborator,
   updateCommentPeriod,
-  updateSelectedProject
+  updateSelectedProject,
+  updateProjectScorecard
 } from "./data/upload/actions";
 import { fetchAllProjects } from "../../data/reducer";
 import { getAllProjects } from "../../data/reducer";
@@ -70,6 +72,7 @@ const mapState = state => {
     collaboratorOptions: getCollaboratorOptions(state),
     commentPeriodInDay: getCommentPeriodInDay(state),
     selectedProject: getSelectedProject(state),
+    scorecardCompleted: getProjectScorecardStatus(state),
     projectsBySymbol,
     projectSymbolArr
   };
@@ -85,7 +88,8 @@ const actions = {
   updateSelectedProject,
   notify,
   toggleSidebar,
-  fetchAllProjects
+  fetchAllProjects,
+  updateProjectScorecard
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

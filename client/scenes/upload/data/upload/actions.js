@@ -30,13 +30,15 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProject
+      selectedProject,
+      scorecard
     } = state.scenes.upload.data.upload;
     const projectSurvey = await postMarkdown({
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectSymbol: selectedProject.symbol
+      selectedProjectSymbol: selectedProject.symbol,
+      scorecard
     });
     history.push(
       `/project/${selectedProject.symbol}/survey/${projectSurvey.id}`
@@ -63,3 +65,8 @@ export const updateSelectedProject = selectedProject => ({
   type: types.SELECTED_PROJECT_UPDATED,
   selectedProject
 });
+
+export const updateProjectScorecard = projectScorecard => ({
+  type: types.PROJECT_SCORECARD_UPDATED,
+  projectScorecard
+})

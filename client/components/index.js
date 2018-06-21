@@ -23,3 +23,6 @@ export { default as StackableTable } from "./StackableTable";
 export { default as ProjectCard } from "./ProjectCard";
 export { default as SurveyCard } from "./SurveyCard";
 export { default as SidebarLayout } from "./SidebarLayout";
+export { InputEmail, InputPassword, InputText } from "./FormsyInputs/Inputs";
+export { default as ScoreInput } from "./FormsyInputs/ScoreInput";
+export { default as ProjectScorecardInputs } from "./ProjectScorecardInputs";

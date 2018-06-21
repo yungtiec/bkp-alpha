@@ -5,7 +5,8 @@ import Select from "react-select";
 import {
   SidebarLayout,
   CustomScrollbar,
-  requiresAuthorization
+  requiresAuthorization,
+  ProjectScorecardInputs
 } from "../../components";
 import UploadInterface from "./components/UploadInterface";
 import {
@@ -16,7 +17,6 @@ import {
 } from "react-accessible-accordion";
 import Steps, { Step } from "rc-steps";
 import Formsy from "formsy-react";
-import ScoreInput from "./components/ScoreInput";
 
 class Upload extends Component {
   constructor(props) {
@@ -24,7 +24,8 @@ class Upload extends Component {
     autoBind(this);
     this.state = {
       activeAccordionItemId: 0,
-      projectError: false
+      projectError: false,
+      scorecardError: false
     };
   }
 
@@ -47,25 +48,41 @@ class Upload extends Component {
   }
 
   handleAccordionChange(key) {
-    this.setState({
-      activeAccordionItemId: key
-    });
-  }
-
-  handleSubmit(model) {
-    console.log(model);
-  }
-
-  next(field) {
-    if (field === "project" && !this.props.selectedProject)
+    if (key > 0)
       this.setState(prevState => ({
         ...prevState,
-        projectError: true
+        activeAccordionItemId: key,
+        projectError: !this.props.selectedProject
+      }));
+    if (key > 3)
+      this.setState(prevState => ({
+        ...prevState,
+        activeAccordionItemId: key,
+        scorecardError: !this.props.scorecardCompleted
+      }));
+    if (key === 0 || key === 3)
+      this.setState({
+        activeAccordionItemId: key
+      });
+  }
+
+  next(currentField) {
+    if (currentField === "project" && !this.props.selectedProject)
+      this.setState(prevState => ({
+        ...prevState,
+        projectError: !this.props.selectedProject
+      }));
+    else if (currentField === "scorecard" && !this.props.scorecardCompleted)
+      this.setState(prevState => ({
+        ...prevState,
+        scorecardError: !this.props.scorecardCompleted
       }));
     else
       this.setState(prevState => ({
         ...prevState,
-        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 4
+        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 5,
+        scorecardError: !this.props.scorecardCompleted,
+        projectError: !this.props.selectedProject
       }));
   }
 
@@ -86,8 +103,10 @@ class Upload extends Component {
       updateCommentPeriod,
       commentPeriodInDay,
       selectedProject,
+      updateProjectScorecard,
       sidebarOpen,
-      toggleSidebar
+      toggleSidebar,
+      scorecardCompleted
     } = this.props;
 
     return (
@@ -188,63 +207,18 @@ class Upload extends Component {
                 <p className="upload-accordion__item-header">Project score</p>
               </AccordionItemTitle>
               <AccordionItemBody>
-                <p>fill in project scorecard</p>
-                <Formsy
-                  className=""
-                  onValidSubmit={model => this.handleSubmit(model)}
-                  name="project-scorecard__form"
-                >
-                  <ScoreInput
-                    label="Consumer Token Design"
-                    name="consumer_token_design"
-                    required
+                <div className="d-flex flex-column">
+                  <p>fill in project scorecard</p>
+                  <ProjectScorecardInputs
+                    updateProjectScorecard={updateProjectScorecard}
                   />
-                  <ScoreInput
-                    label="Project Governance and Operation"
-                    name="project_governance_and_operation"
-                    required
-                  />
-                  <ScoreInput
-                    label="Responsible Token Distribution"
-                    name="responsible_token_distribution"
-                    required
-                  />
-                  <ScoreInput
-                    label="Use of Token Distribution Proceeds"
-                    name="use_of_token_distribution_proceeds"
-                    required
-                  />
-                  <ScoreInput
-                    label="Token Inventory"
-                    name="token_inventory"
-                    required
-                  />
-                  <ScoreInput
-                    label="Mitigation of Conflicts and Improper Trading"
-                    name="mitigation_of_conflicts_and_improper_trading"
-                    required
-                  />
-                  <ScoreInput
-                    label="Token Safety and Security"
-                    name="token_safety_and_security"
-                    required
-                  />
-                  <ScoreInput
-                    label="Marketing Practices"
-                    name="marketing_practices"
-                    required
-                  />
-                  <ScoreInput
-                    label="Protecting and Empowering Consumers"
-                    name="protecting_and_empowering_consumers"
-                    required
-                  />
-                  <ScoreInput
-                    label="Compliance with Applicable Laws"
-                    name="compliance_with_application_laws"
-                    required
-                  />
-                </Formsy>
+                  <button
+                    onClick={() => this.next("scorecard")}
+                    className="btn btn-primary mt-4 align-self-end"
+                  >
+                    next
+                  </button>
+                </div>
               </AccordionItemBody>
             </AccordionItem>
             <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
@@ -290,9 +264,7 @@ class Upload extends Component {
                   status={
                     this.state.projectError
                       ? "error"
-                      : this.state.activeAccordionItemId === 0
-                        ? "wait"
-                        : "finish"
+                      : this.state.activeAccordionItemId > 0 ? "finish" : "wait"
                   }
                 />
                 <Step
@@ -306,6 +278,11 @@ class Upload extends Component {
                 <Step
                   title="project score"
                   description="fill in project scorecard"
+                  status={
+                    this.state.scorecardError
+                      ? "error"
+                      : this.state.activeAccordionItemId > 3 ? "finish" : "wait"
+                  }
                 />
                 <Step
                   title="disclosure"
@@ -319,7 +296,7 @@ class Upload extends Component {
                   }
                 />
               </Steps>
-              {!!importedMarkdown && !!selectedProject ? (
+              {!!importedMarkdown && !!selectedProject && scorecardCompleted ? (
                 <div className="mb-5 mt-2">
                   <button
                     type="button"

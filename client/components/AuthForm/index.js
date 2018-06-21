@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { auth } from "../../data/reducer";
 import { Link } from "react-router-dom";
-import { InputEmail, InputPassword, InputText } from "./Inputs";
+import { InputEmail, InputPassword, InputText } from "./index";
 import Formsy from "formsy-react";
 
 /**

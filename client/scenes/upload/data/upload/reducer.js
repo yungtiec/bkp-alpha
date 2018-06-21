@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { uniq } from "lodash";
+import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
   markdown: null,
@@ -8,7 +8,8 @@ const initialState = {
   selectedProject: "",
   projectSymbolArr: [],
   projectsBySymbol: {},
-  collaboratorOptions: []
+  collaboratorOptions: [],
+  scorecard: {}
 };
 
 export default function reduce(state = initialState, action = {}) {
@@ -48,6 +49,11 @@ export default function reduce(state = initialState, action = {}) {
         selectedProject: action.selectedProject,
         collaboratorOptions: action.selectedProject.collaboratorOptions
       };
+    case types.PROJECT_SCORECARD_UPDATED:
+      return {
+        ...state,
+        scorecard: action.projectScorecard
+      };
     default:
       return state;
   }
@@ -71,6 +77,14 @@ export function getSelectedProject(state) {
 
 export function getCollaboratorOptions(state) {
   return state.scenes.upload.data.upload.collaboratorOptions;
+}
+
+export function getProjectScorecardStatus(state) {
+  const scorecard = state.scenes.upload.data.upload.scorecard;
+  return (
+    !isEmpty(scorecard) &&
+    values(scorecard).reduce((bool, score) => !!score && bool, true)
+  );
 }
 
 export function getManagedProjects(state) {

@@ -99,6 +99,7 @@ router.post(
           collaboratorEmails: req.body.collaboratorEmails,
           commentPeriodInDay: req.body.commentPeriodInDay,
           selectedProjectSymbol: req.body.selectedProjectSymbol,
+          scorecard: req.body.scorecard,
           creator: req.user,
           res,
           next
@@ -111,6 +112,7 @@ router.post(
           newIssues: req.body.newIssues,
           collaboratorEmails: req.body.collaboratorEmails,
           commentPeriodInDay: req.body.commentPeriodInDay,
+          scorecard: req.body.scorecard,
           creator: req.user,
           res,
           next
@@ -126,6 +128,7 @@ async function createNewProjectSurvey({
   collaboratorEmails,
   commentPeriodInDay,
   selectedProjectSymbol,
+  scorecard,
   creator,
   res,
   next
@@ -162,7 +165,8 @@ async function createNewProjectSurvey({
       project_id: project.id,
       survey_id: survey.id,
       creator_id: creator.id,
-      comment_until_unix: commentUntilInUnix
+      comment_until_unix: commentUntilInUnix,
+      scorecard
     });
     var questionInstances = await Promise.map(
       markdownParsor.questions,
@@ -223,6 +227,7 @@ async function updateExistingProjectSurvey({
   newIssues,
   collaboratorEmails,
   commentPeriodInDay,
+  scorecard,
   creator,
   res,
   next
@@ -272,7 +277,8 @@ async function updateExistingProjectSurvey({
         creator.id !== parentProjectSurvey.creator_id
           ? parentProjectSurvey.id
           : null,
-      comment_until_unix: commentUntilInUnix
+      comment_until_unix: commentUntilInUnix,
+      scorecard
     });
     if (creator.id === parentProjectSurvey.creator_id)
       await parentProjectSurvey.addChild(projectSurvey.id);

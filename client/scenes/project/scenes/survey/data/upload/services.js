@@ -6,7 +6,8 @@ export function postMarkdown({
   resolvedIssueIds,
   newIssues,
   collaboratorEmails,
-  commentPeriodInDay
+  commentPeriodInDay,
+  scorecard
 }) {
   return axios
     .post(`/api/projects/-/surveys/${parentProjectSurveyId}`, {
@@ -14,7 +15,8 @@ export function postMarkdown({
       resolvedIssueIds,
       newIssues,
       collaboratorEmails,
-      commentPeriodInDay
+      commentPeriodInDay,
+      scorecard
     })
     .then(res => res.data);
 }

@@ -44,7 +44,8 @@ export function fetchQuestionsByProjectSurveyId({
           "resolvedIssues",
           "comment_until_unix",
           "createdAt",
-          "upvotesFrom"
+          "upvotesFrom",
+          "scorecard"
         ]),
         omit(projectSurvey.survey, ["survey_questions", "id"])
       );

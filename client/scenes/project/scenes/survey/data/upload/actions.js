@@ -22,7 +22,8 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       resolvedIssueIds,
       newIssues,
       collaboratorEmails,
-      commentPeriodInDay
+      commentPeriodInDay,
+      scorecard
     } = state.scenes.project.scenes.survey.data.upload;
     const projectSurvey = await postMarkdown({
       parentProjectSurveyId,
@@ -30,7 +31,8 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       resolvedIssueIds,
       newIssues,
       collaboratorEmails: collaboratorEmails.map(c => c.value),
-      commentPeriodInDay
+      commentPeriodInDay,
+      scorecard
     });
     history.push(`/project/${projectSymbol}/survey/${projectSurvey.id}`);
     dispatch({
@@ -65,3 +67,8 @@ export const updateCommentPeriod = commentPeriodInDay => ({
   type: types.COMMENT_PERIOD_UPDATED,
   commentPeriodInDay
 });
+
+export const updateProjectScorecard = projectScorecard => ({
+  type: types.PROJECT_SCORECARD_UPDATED,
+  projectScorecard
+})

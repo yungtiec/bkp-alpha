@@ -21,7 +21,9 @@ import {
   getCollaboratorEmails,
   getCollaboratorOptions,
   getNewIssues,
-  getCommentPeriodInDay
+  getCommentPeriodInDay,
+  getProjectScorecardStatus,
+  getProjectScorecard
 } from "../../data/upload/reducer";
 import {
   importMarkdown,
@@ -30,7 +32,8 @@ import {
   updateCollaborators,
   addNewIssue,
   removeIssue,
-  updateCommentPeriod
+  updateCommentPeriod,
+  updateProjectScorecard
 } from "../../data/upload/actions";
 import { notify } from "reapop";
 
@@ -98,7 +101,9 @@ const mapState = state => {
     collaboratorEmails: getCollaboratorEmails(state),
     collaboratorOptions: getCollaboratorOptions(state),
     newIssues: getNewIssues(state),
-    commentPeriodInDay: getCommentPeriodInDay(state)
+    commentPeriodInDay: getCommentPeriodInDay(state),
+    scorecardCompleted: getProjectScorecardStatus(state),
+    scorecard: getProjectScorecard(state)
   };
 };
 
@@ -115,7 +120,8 @@ const actions = {
   removeIssue,
   updateCommentPeriod,
   notify,
-  toggleSidebar
+  toggleSidebar,
+  updateProjectScorecard
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

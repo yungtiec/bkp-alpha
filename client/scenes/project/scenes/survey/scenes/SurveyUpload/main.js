@@ -7,7 +7,8 @@ import { UploadInterface, IssueInput } from "./components";
 import {
   SidebarLayout,
   CustomScrollbar,
-  requiresAuthorization
+  requiresAuthorization,
+  ProjectScorecardInputs
 } from "../../../../../../components";
 import {
   SurveyHeader,
@@ -27,7 +28,8 @@ class SurveyUpload extends Component {
     super(props);
     autoBind(this);
     this.state = {
-      activeAccordionItemId: 0
+      activeAccordionItemId: 0,
+      scorecardError: false
     };
   }
 
@@ -36,20 +38,34 @@ class SurveyUpload extends Component {
   }
 
   handleAccordionChange(key) {
-    this.setState({
-      activeAccordionItemId: key
-    });
+    if (key > 4)
+      this.setState(prevState => ({
+        ...prevState,
+        activeAccordionItemId: key,
+        scorecardError: !this.props.scorecardCompleted
+      }));
+    else
+      this.setState({
+        activeAccordionItemId: key
+      });
   }
 
   handleCollaboratorChange(selected) {
     this.props.updateCollaborators(selected);
   }
 
-  next(field) {
-    this.setState(prevState => ({
-      ...prevState,
-      activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 5
-    }));
+  next(currentField) {
+    if (currentField === "scorecard" && !this.props.scorecardCompleted)
+      this.setState(prevState => ({
+        ...prevState,
+        scorecardError: !this.props.scorecardCompleted
+      }));
+    else
+      this.setState(prevState => ({
+        ...prevState,
+        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 6,
+        scorecardError: !this.props.scorecardCompleted
+      }));
   }
 
   render() {
@@ -78,7 +94,10 @@ class SurveyUpload extends Component {
       commentPeriodInDay,
       sidebarOpen,
       toggleSidebar,
-      upvoteProjectSurvey
+      upvoteProjectSurvey,
+      updateProjectScorecard,
+      scorecard,
+      scorecardCompleted
     } = this.props;
 
     return (
@@ -230,6 +249,26 @@ class SurveyUpload extends Component {
           </AccordionItem>
           <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
             <AccordionItemTitle>
+              <p className="upload-accordion__item-header">Project score</p>
+            </AccordionItemTitle>
+            <AccordionItemBody>
+              <div className="d-flex flex-column">
+                <p>fill in project scorecard</p>
+                <ProjectScorecardInputs
+                  scorecard={scorecard}
+                  updateProjectScorecard={updateProjectScorecard}
+                />
+                <button
+                  onClick={() => this.next("scorecard")}
+                  className="btn btn-primary mt-4 align-self-end"
+                >
+                  next
+                </button>
+              </div>
+            </AccordionItemBody>
+          </AccordionItem>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 5}>
+            <AccordionItemTitle>
               <p className="upload-accordion__item-header">
                 Disclosure markdown
               </p>
@@ -295,18 +334,27 @@ class SurveyUpload extends Component {
                   description="resolve additional issues"
                 />
                 <Step
+                  title="project score"
+                  description="fill in project scorecard"
+                  status={
+                    this.state.scorecardError
+                      ? "error"
+                      : this.state.activeAccordionItemId > 4 ? "finish" : "wait"
+                  }
+                />
+                <Step
                   title="disclosure"
                   description="import markdown and preview"
                   status={
                     !importedMarkdown
                       ? "wait"
-                      : this.state.activeAccordionItemId === 4
+                      : this.state.activeAccordionItemId === 5
                         ? "finish"
                         : "wait"
                   }
                 />
               </Steps>
-              {!!importedMarkdown ? (
+              {!!importedMarkdown && scorecardCompleted ? (
                 <div className="mb-5 mt-2">
                   <button
                     type="button"

@@ -8,14 +8,16 @@ export function postMarkdown({
   markdown,
   collaboratorEmails,
   commentPeriodInDay,
-  selectedProjectSymbol
+  selectedProjectSymbol,
+  scorecard
 }) {
   return axios
     .post(`/api/projects/-/surveys/-`, {
       markdown,
       collaboratorEmails,
       commentPeriodInDay,
-      selectedProjectSymbol
+      selectedProjectSymbol,
+      scorecard
     })
     .then(res => res.data);
 }
