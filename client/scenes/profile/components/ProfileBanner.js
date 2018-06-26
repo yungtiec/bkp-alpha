@@ -15,7 +15,12 @@ export default ({
   <div className="profile-banner">
     <div className="container">
       <div className="profile-banner__avatar-container">
-        <Avatar name={name} size={120} color="#2D4DD1" fgColor="#ffffff" />
+        <Avatar
+          name={name.trim() ? name : "?"}
+          size={120}
+          color="#2D4DD1"
+          fgColor="#ffffff"
+        />
       </div>
       <div className="profile-banner__short-bio">
         <h2>{name}</h2>

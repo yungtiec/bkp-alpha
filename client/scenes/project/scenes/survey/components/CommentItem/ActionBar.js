@@ -43,7 +43,6 @@ const ActionBar = ({
           model={{ project: projectMetadata, comment: item }}
         >
           <div className={`comment-item__verified-message`}>
-            {item.reviewed}
           </div>
         </VisibleIf>
         <div>

@@ -27,8 +27,14 @@ export const auth = (userInfo, method) => dispatch => {
     .post(`/auth/${method}`, userInfo)
     .then(
       res => {
+        console.log((!res.data.first_name || !res.data.last_name))
         dispatch(getUser(res.data));
         if (res.data.restricted_access) history.push("/user/profile");
+        else if (!res.data.first_name || !res.data.last_name)
+          history.push({
+            pathname: "/user/profile",
+            state: { edit: true, basicInfoMissing: true }
+          });
         else history.push("/projects");
       },
       authError => {
@@ -45,5 +51,13 @@ export const logout = () => dispatch =>
     .then(res => {
       dispatch(removeUser());
       history.push("/login");
+    })
+    .catch(err => console.log(err));
+
+export const editProfile = profile => dispatch =>
+  axios
+    .put("/auth/profile", profile)
+    .then(res => {
+      dispatch({ type: types.PROFILE_UPDATED, profile });
     })
     .catch(err => console.log(err));

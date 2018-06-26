@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User, Role } = require("../db/models");
+const _ = require("lodash");
 
 module.exports = router;
 
@@ -60,6 +61,20 @@ router.get("/me", async (req, res) => {
     res.send(user);
   } else {
     res.sendStatus(401);
+  }
+});
+
+router.put("/profile", async (req, res, next) => {
+  if (!req.user || req.user.id !== req.body.id) res.sendStatus(401);
+  else {
+    const user = await User.findById(req.user.id).then(user =>
+      user.update({
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        organization: req.body.organization
+      })
+    );
+    res.send(user);
   }
 });
 

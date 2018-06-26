@@ -1,71 +1,136 @@
 import "./index.scss";
-import React from "react";
+import React, { Component } from "react";
+import autoBind from "react-autobind";
+import { withRouter } from "react-router-dom";
 
-export default about => {
-  return (
-    <div className="profile-subroute container">
-      {about.restricted_access && (
-        <div className="profile-about__restricted-access">
-          <span className="badge badge-danger">Restricted Access</span>
-          <p>
-            Due to your recent activities, admin has revoke your comment privilege.
-          </p>
-        </div>
-      )}
-      <div className="profile-about__field">
-        <span className="profile-about__field-label">First Name</span>
-        <div className="profile-about__field-value">
-          <div className="profile-about__input-container">
-            <input
-              type="text"
-              disabled
-              name="firstName"
-              value={about.first_name || ""}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="profile-about__field">
-        <span className="profile-about__field-label">Last Name</span>
+class ProfileAbout extends Component {
+  constructor(props) {
+    super(props);
+    autoBind(this);
+    this.state = {
+      edit: this.props.location.state && this.props.location.state.edit,
+      firstName: this.props.first_name,
+      lastName: this.props.last_name,
+      organization: this.props.organization
+    };
+  }
 
-        <div className="profile-about__field-value">
-          <div className="profile-about__input-container">
-            <input
-              type="text"
-              disabled
-              name="firstName"
-              value={about.last_name}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="profile-about__field">
-        <span className="profile-about__field-label">Email</span>
+  handleChange(evt) {
+    this.setState({ [evt.target.name]: evt.target.value });
+  }
 
-        <div className="profile-about__field-value">
-          <div className="profile-about__input-container">
-            <input
-              type="text"
-              disabled
-              name="firstName"
-              value={about.email || ""}
-            />
+  handleSubmit(evt) {
+    this.props.editProfile({ ...this.state, id: this.props.id });
+    this.setState(prevState => ({
+      edit: !prevState.edit
+    }));
+  }
+
+  render() {
+    return (
+      <div className="profile-subroute container">
+        {this.props.restricted_access && (
+          <div className="profile-about__restricted-access">
+            <span className="badge badge-danger">Restricted Access</span>
+            <p>
+              Due to your recent activities, admin has revoke your comment
+              privilege.
+            </p>
+          </div>
+        )}
+        {(!this.props.first_name || !this.props.last_name) && (
+          <div className="profile-about__restricted-access">
+            <p className="text-center mt-3 text-danger">
+              Please update your information.
+            </p>
+          </div>
+        )}
+        <div className="profile-about__field">
+          <span className="profile-about__field-label">Email</span>
+          <div className="profile-about__field-value">
+            <div className="profile-about__input-container">
+              <input
+                type="text"
+                disabled
+                name="email"
+                value={this.props.email || ""}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="profile-about__field">
-        <span className="profile-about__field-label">Organization</span>
-        <div className="profile-about__field-value">
-          <div className="profile-about__input-container">
-            <input
-              type="text"
-              disabled
-              name="firstName"
-              value={about.organization || ""}
-            />
+        <div className="profile-about__field">
+          <span className="profile-about__field-label">First Name</span>
+          <div className="profile-about__field-value">
+            <div className="profile-about__input-container">
+              <input
+                ref={input => (this.firstInput = input)}
+                type="text"
+                disabled={!this.state.edit}
+                onChange={this.handleChange}
+                name="firstName"
+                value={this.state.firstName || ""}
+              />
+            </div>
           </div>
         </div>
+        <div className="profile-about__field">
+          <span className="profile-about__field-label">Last Name</span>
+          <div className="profile-about__field-value">
+            <div className="profile-about__input-container">
+              <input
+                type="text"
+                disabled={!this.state.edit}
+                onChange={this.handleChange}
+                name="lastName"
+                value={this.state.lastName}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-about__field">
+          <span className="profile-about__field-label">Organization</span>
+          <div className="profile-about__field-value">
+            <div className="profile-about__input-container">
+              <input
+                type="text"
+                disabled={!this.state.edit}
+                onChange={this.handleChange}
+                name="organization"
+                value={this.state.organization || ""}
+              />
+            </div>
+          </div>
+        </div>
+        {this.props.isMyProfile ? (
+          <div className="profile-about__field justify-content-center">
+            {this.state.edit ? (
+              <button
+                type="button"
+                className="btn btn-primary  mt-4"
+                onClick={this.handleSubmit}
+              >
+                save changes
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-primary  mt-4"
+                onClick={() => {
+                  this.firstInput.focus();
+                  this.setState(prevState => ({
+                    edit: !prevState.edit
+                  }));
+                }}
+              >
+                edit
+              </button>
+            )}
+          </div>
+        ) : null}
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
+
+export default withRouter(ProfileAbout);

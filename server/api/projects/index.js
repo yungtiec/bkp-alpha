@@ -37,10 +37,10 @@ router.get("/:symbol", async (req, res, next) => {
       where: { name: "admin" }
     }).then(role => role.getUsers());
     const project = await Project.getProjectWithStats(req.params.symbol);
-    const collaboratorOptions = admins
+    const collaboratorOptions = req.user && req.user.id ? admins
       .concat(project.admins || [])
       .concat(project.editors || [])
-      .filter(c => c.id !== req.user.id);
+      .filter(c => c.id !== req.user.id) : [];
     res.send(_.assignIn(project, { collaboratorOptions }));
   } catch (err) {
     next(err);

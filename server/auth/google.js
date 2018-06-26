@@ -46,7 +46,6 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
                 first_name: firstName,
                 last_name: lastName
               }).then(async createdUser => {
-                console.log(createdUser);
                 var user = await User.find({
                   where: { googleId },
                   include: [{ model: Role }]
@@ -65,8 +64,12 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   router.get(
     "/callback",
     passport.authenticate("google", {
-      successRedirect: "/home",
       failureRedirect: "/login"
-    })
+    }),
+    (req, res) => {
+      if (!req.user.first_name || !req.user.last_name)
+        res.redirect("/user/profile/about");
+      else res.redirect("/projects");
+    }
   );
 }

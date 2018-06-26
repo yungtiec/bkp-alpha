@@ -8,6 +8,13 @@ export default function(state = defaultUser, action) {
       return action.user;
     case types.REMOVE_USER:
       return defaultUser;
+    case types.PROFILE_UPDATED:
+      return {
+        ...state,
+        first_name: action.profile.firstName,
+        last_name: action.profile.lastName,
+        organization: action.profile.organization
+      };
     default:
       return state;
   }
@@ -18,4 +25,4 @@ export const currentUserIsAdmin = state => {
     state.data.user.roles &&
     state.data.user.roles.filter(r => r.name === "admin").length
   );
-}
+};

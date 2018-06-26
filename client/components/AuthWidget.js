@@ -53,7 +53,7 @@ class AuthWidget extends Component {
         <div className={className} ref={this.setWrapperRef}>
           <div className={`${className}__avatar-container`}>
             <Avatar
-              name={name}
+              name={name.trim() ? name : "?"}
               size={46}
               color={avatarColor}
               fgColor={avatarFgColor}
@@ -78,15 +78,14 @@ class AuthWidget extends Component {
           )}
         </div>
       );
-    else
-      return <div />;
+    else return <div />;
   }
 }
 
 const mapState = state => {
   const isLoggedIn = !!state.data.user.id;
   const name = isLoggedIn
-    ? `${state.data.user.first_name} ${state.data.user.last_name}`
+    ? `${state.data.user.first_name || ""} ${state.data.user.last_name || ""}`
     : "";
   return {
     isLoggedIn,

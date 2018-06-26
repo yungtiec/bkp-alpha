@@ -308,7 +308,7 @@ class SurveyUpload extends Component {
             scrollbarContainerWidth={
               width < 767 ? "350px" : width > 1300 ? "450px" : "410px"
             }
-            scrollbarContainerHeight="calc(100% - 75px)"
+            scrollbarContainerHeight="calc(100% - 70px)"
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"
           >

@@ -76,13 +76,6 @@ class Sidebar extends Component {
               src="/assets/consensys-logo-white-transparent.png"
             />
           </div>
-          {uploadMode
-            ? null
-            : this.renderVerificationStatusTab({
-                tabStyle,
-                verificationStatus,
-                selectedComments
-              })}
         </div>
         {children}
       </div>

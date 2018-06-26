@@ -15,7 +15,7 @@ import {
   changeAccessStatus
 } from "./scenes/about/data/actions";
 import { getUserBasicInfo } from "./scenes/about/data/reducer";
-import { currentUserIsAdmin } from "../../data/reducer";
+import { currentUserIsAdmin, editProfile } from "../../data/reducer";
 
 class Profile extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { basicInfo, match, isAdmin, myUserId } = this.props;
+    const { basicInfo, match, isAdmin, myUserId, editProfile } = this.props;
     const activeTab = window.location.pathname.split("/")[3];
     const isMyProfile =
       match.params.userId === "profile" || match.params.userId === myUserId;
@@ -52,7 +52,7 @@ class Profile extends Component {
     return (
       <div className="profile-container">
         <ProfileBanner
-          name={`${basicInfo.first_name} ${basicInfo.last_name}`}
+          name={`${basicInfo.first_name || ""} ${basicInfo.last_name || ""}`}
           isAdmin={isAdmin}
           restrictedAccess={basicInfo.restricted_access}
           numComments={basicInfo.num_comments}
@@ -70,12 +70,16 @@ class Profile extends Component {
         <Switch>
           <Route
             path={`${match.url}/about`}
-            render={props => <ProfileAbout {...basicInfo} {...props} />}
+            render={props => (
+              <ProfileAbout
+                isMyProfile={isMyProfile}
+                editProfile={editProfile}
+                {...basicInfo}
+                {...props}
+              />
+            )}
           />
-          <Route
-            path={`${match.url}/comments`}
-            component={ProfileComments}
-          />
+          <Route path={`${match.url}/comments`} component={ProfileComments} />
           {isMyProfile && (
             <Route
               path={`${match.url}/notifications`}
@@ -101,7 +105,8 @@ const mapState = (state, ownProps) => {
 
 const actions = {
   fetchUserBasicInfo,
-  changeAccessStatus
+  changeAccessStatus,
+  editProfile
 };
 
 export default withRouter(connect(mapState, actions)(Profile));

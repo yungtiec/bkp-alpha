@@ -15,6 +15,13 @@ export default function reduce(state = initialState, action = {}) {
       newState = cloneDeep(state);
       newState.restricted_access = action.accessStatus === "restricted";
       return newState;
+    case "user.PROFILE_UPDATED":
+      return {
+        ...state,
+        first_name: action.profile.firstName,
+        last_name: action.profile.lastName,
+        organization: action.profile.organization
+      };
     default:
       return state;
   }

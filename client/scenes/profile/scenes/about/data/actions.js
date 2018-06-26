@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { getUserBasicInfo, postAccessStatus } from "./service";
+import { getUserBasicInfo, postAccessStatus, putProfile } from "./service";
 
 export function fetchUserBasicInfo(userId) {
   return async (dispatch, getState) => {
@@ -29,3 +29,4 @@ export function changeAccessStatus({ userId, accessStatus }) {
     }
   };
 }
+
