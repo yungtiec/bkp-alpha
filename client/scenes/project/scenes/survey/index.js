@@ -7,7 +7,7 @@ import { SquareLoader } from "halogenium";
 const LoadableSurveyContainer = Loadable({
   loader: () => import("./main"),
   loading: () => null,
-  delay: 1000
+  delay: 400
 });
 
 export default class MyComponent extends React.Component {

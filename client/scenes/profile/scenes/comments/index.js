@@ -24,7 +24,7 @@ const LoadableUserComments = Loadable({
     let UserComments = loaded.default;
     return <UserComments {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

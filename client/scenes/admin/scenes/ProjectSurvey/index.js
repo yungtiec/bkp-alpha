@@ -20,7 +20,7 @@ const LoadableProjectSurveyAdminView = Loadable({
     let ProjectSurveyAdminView = loaded.default;
     return <ProjectSurveyAdminView {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

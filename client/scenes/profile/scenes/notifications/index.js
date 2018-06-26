@@ -25,7 +25,7 @@ const LoadableUserNotifications = Loadable({
     let UserNotifications = loaded.default;
     return <UserNotifications {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

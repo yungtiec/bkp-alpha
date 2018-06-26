@@ -42,7 +42,7 @@ const LoadableSurveyUpload = Loadable({
     let Upload = loaded.default;
     return <Upload {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

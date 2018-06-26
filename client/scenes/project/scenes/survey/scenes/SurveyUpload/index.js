@@ -51,7 +51,7 @@ const LoadableSurveyUpload = Loadable({
     let SurveyProgress = loaded.default;
     return <SurveyProgress {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

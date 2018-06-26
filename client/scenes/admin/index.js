@@ -12,7 +12,7 @@ const LoadableAdmin = Loadable({
       margin="4px"
     />
   ),
-  delay: 1000
+  delay: 400
 });
 
 export default class MyComponent extends React.Component {

@@ -20,7 +20,7 @@ const LoadableAdminProjectSurveyList = Loadable({
     let AdminProjectSurveyList = loaded.default;
     return <AdminProjectSurveyList {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends Component {

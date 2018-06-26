@@ -49,7 +49,7 @@ const LoadableSurvey = Loadable({
     let Survey = loaded.default;
     return <Survey {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

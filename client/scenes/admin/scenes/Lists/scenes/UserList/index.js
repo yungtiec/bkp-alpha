@@ -20,7 +20,7 @@ const LoadableAdminUserList = Loadable({
     let AdminUserList = loaded.default;
     return <AdminUserList {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends Component {

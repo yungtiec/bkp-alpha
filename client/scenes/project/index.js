@@ -21,7 +21,7 @@ const LoadableProject = Loadable({
     let Project = loaded.default;
     return <Project {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {

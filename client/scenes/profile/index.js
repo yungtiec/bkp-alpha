@@ -20,7 +20,7 @@ const LoadableProfile = Loadable({
     let Profile = loaded.default;
     return <Profile {...props} />;
   },
-  delay: 1000
+  delay: 400
 });
 
 class MyComponent extends React.Component {
