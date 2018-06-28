@@ -27,6 +27,8 @@ class Navbar extends Component {
   }
 
   render() {
+    const { isAdmin, isLoggedIn, width, user, numNotifications } = this.props;
+
     return (
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
@@ -41,30 +43,38 @@ class Navbar extends Component {
             </div>
           </div>
           <div className="box--right">
-            {this.props.isAdmin ? (
+            {width > 600 && isAdmin ? (
               <Link to="/admin" className="navbar__nav-item">
                 admin
               </Link>
             ) : (
               ""
             )}
-            <Link to="/projects" className="navbar__nav-item">
-              projects
-            </Link>
-            <PunditContainer policies={policies} user={this.props.user}>
-              <PunditTypeSet type="Disclosure">
-                <VisibleIf action="Create" model={{}}>
-                  <Link to="/upload" className="navbar__nav-item">
-                    create
-                  </Link>
-                </VisibleIf>
-              </PunditTypeSet>
-            </PunditContainer>
-            {this.props.isLoggedIn ? (
+            {width > 600 ? (
+              <Link to="/projects" className="navbar__nav-item">
+                projects
+              </Link>
+            ) : (
+              ""
+            )}
+            {width > 600 ? (
+              <PunditContainer policies={policies} user={user}>
+                <PunditTypeSet type="Disclosure">
+                  <VisibleIf action="Create" model={{}}>
+                    <Link to="/upload" className="navbar__nav-item">
+                      create
+                    </Link>
+                  </VisibleIf>
+                </PunditTypeSet>
+              </PunditContainer>
+            ) : (
+              ""
+            )}
+            {isLoggedIn ? (
               <Link
                 to="/user/profile/notifications"
                 className="navbar__nav-item notification-count"
-                data-count={this.props.numNotifications || ""}
+                data-count={numNotifications || ""}
               >
                 <i className="fas fa-bell" />
               </Link>
@@ -86,7 +96,8 @@ const mapState = state => {
     user: state.data.user,
     isAdmin: currentUserIsAdmin(state),
     isLoggedIn: !!state.data.user.id,
-    numNotifications: getUserNotificationCount(state)
+    numNotifications: getUserNotificationCount(state),
+    width: state.data.environment.width
   };
 };
 

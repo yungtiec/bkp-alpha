@@ -7,7 +7,6 @@ class LayoutWithNav extends Component {
   }
 
   render() {
-
     return (
       <div>
         <Navbar />
