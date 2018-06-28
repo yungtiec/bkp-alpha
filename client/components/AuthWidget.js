@@ -96,6 +96,16 @@ class AuthWidget extends Component {
                 ""
               )}
               {width < 600 ? (
+                <Link
+                  to="/leaderboard"
+                  style={{ display: "block", margin: "0px" }}
+                >
+                  <div className={`${className}__dropdown-item`}>leaderboard</div>
+                </Link>
+              ) : (
+                ""
+              )}
+              {width < 600 ? (
                 <PunditContainer policies={policies} user={user}>
                   <PunditTypeSet type="Disclosure">
                     <VisibleIf action="Create" model={{}}>

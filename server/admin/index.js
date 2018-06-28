@@ -25,7 +25,7 @@ router.get(
   ensureAdminRole,
   async (req, res, next) => {
     try {
-      const users = await User.getUserListWithContributions();
+      const users = await User.getUserListWithContributions({});
       res.send(users);
     } catch (err) {
       next(err);

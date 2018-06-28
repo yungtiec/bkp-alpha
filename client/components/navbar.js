@@ -58,6 +58,13 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
+              <Link to="/leaderboard" className="navbar__nav-item">
+                leaderboard
+              </Link>
+            ) : (
+              ""
+            )}
+            {width > 600 ? (
               <PunditContainer policies={policies} user={user}>
                 <PunditTypeSet type="Disclosure">
                   <VisibleIf action="Create" model={{}}>
