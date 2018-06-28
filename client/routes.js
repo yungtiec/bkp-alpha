@@ -8,7 +8,8 @@ import {
   Profile,
   Admin,
   Unauthorized,
-  Upload
+  Upload,
+  Leaderboard
 } from "./scenes";
 import {
   Login,
@@ -47,6 +48,11 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/upload"
             component={Upload}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/leaderboard"
+            component={Leaderboard}
           />
           <RouteWithLayout
             layout={LayoutWithNav}

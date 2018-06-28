@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
-const { assignIn, cloneDeep } = require("lodash");
+const { assignIn, cloneDeep, omit } = require("lodash");
 
 const User = db.define(
   "user",
@@ -218,7 +218,7 @@ User.encryptPassword = function(plainText, salt) {
     .digest("hex");
 };
 
-User.getContributions = async function(userId) {
+User.getContributions = async function(userId, listing) {
   const user = await User.scope({
     method: ["basicInfo", Number(userId)]
   }).findOne();
@@ -262,18 +262,17 @@ User.getContributions = async function(userId) {
   return assignIn(
     {
       num_comments: comments.length,
-      num_spam: numCommentSpam,
       num_issues: numCommentIssues,
-      num_notifications: notifications.length,
-      num_upvotes: numCommentUpvotes
+      num_upvotes: numCommentUpvotes,
+      num_spam: numCommentSpam
     },
-    user.toJSON()
+    listing ? omit(user.toJSON(), ["roles"]) : user.toJSON()
   );
 };
 
-User.getUserListWithContributions = async function() {
-  const users = await Promise.map(User.findAll(), user =>
-    User.getContributions(user.id)
+User.getUserListWithContributions = async function(query) {
+  const users = await Promise.map(User.findAll(query), user =>
+    User.getContributions(user.id, true)
   );
   return users;
 };

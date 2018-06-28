@@ -11,6 +11,15 @@ const {
 } = require("./utils");
 module.exports = router;
 
+router.get("/", ensureAuthentication, async (req, res, next) => {
+  try {
+    const users = await User.getUserListWithContributions({ limit: 20 });
+    res.send(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get(
   "/:userId",
   ensureAuthentication,

@@ -4,8 +4,10 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
-import { logout } from "../data/reducer";
+import { logout, currentUserIsAdmin } from "../data/reducer";
 import ReactDOM from "react-dom";
+import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import policies from "../policies.js";
 
 class AuthWidget extends Component {
   constructor(props) {
@@ -43,7 +45,15 @@ class AuthWidget extends Component {
   }
 
   render() {
-    const { isLoggedIn, name, logout, inNavbar } = this.props;
+    const {
+      isLoggedIn,
+      name,
+      logout,
+      inNavbar,
+      width,
+      isAdmin,
+      user
+    } = this.props;
     const className = inNavbar ? "auth-widget--navbar" : "auth-widget";
     const avatarColor = inNavbar ? "#459DF9" : "#ffffff";
     const avatarFgColor = inNavbar ? "#ffffff" : "#09263a";
@@ -68,6 +78,51 @@ class AuthWidget extends Component {
               >
                 <div className={`${className}__dropdown-item`}>profile</div>
               </Link>
+              {width < 600 && isAdmin ? (
+                <Link to="/admin" style={{ display: "block", margin: "0px" }}>
+                  <div className={`${className}__dropdown-item`}>admin</div>
+                </Link>
+              ) : (
+                ""
+              )}
+              {width < 600 ? (
+                <Link
+                  to="/projects"
+                  style={{ display: "block", margin: "0px" }}
+                >
+                  <div className={`${className}__dropdown-item`}>projects</div>
+                </Link>
+              ) : (
+                ""
+              )}
+              {width < 600 ? (
+                <Link
+                  to="/leaderboard"
+                  style={{ display: "block", margin: "0px" }}
+                >
+                  <div className={`${className}__dropdown-item`}>leaderboard</div>
+                </Link>
+              ) : (
+                ""
+              )}
+              {width < 600 ? (
+                <PunditContainer policies={policies} user={user}>
+                  <PunditTypeSet type="Disclosure">
+                    <VisibleIf action="Create" model={{}}>
+                      <Link
+                        to="/upload"
+                        style={{ display: "block", margin: "0px" }}
+                      >
+                        <div className={`${className}__dropdown-item`}>
+                          create
+                        </div>
+                      </Link>
+                    </VisibleIf>
+                  </PunditTypeSet>
+                </PunditContainer>
+              ) : (
+                ""
+              )}
               <div
                 className={`${className}__dropdown-item last`}
                 onClick={logout}
@@ -89,7 +144,10 @@ const mapState = state => {
     : "";
   return {
     isLoggedIn,
-    name
+    name,
+    isAdmin: currentUserIsAdmin(state),
+    width: state.data.environment.width,
+    user: state.data.user
   };
 };
 
