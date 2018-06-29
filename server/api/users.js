@@ -81,7 +81,7 @@ router.get(
           .concat(p.admins || [])
           .concat(p.editors || [])
           .filter(c => c.id !== req.user.id);
-        return _.assignIn(p.toJSON(), { collaboratorOptions });
+        return _.assignIn(p, { collaboratorOptions });
       });
       res.send(projects);
     } catch (err) {

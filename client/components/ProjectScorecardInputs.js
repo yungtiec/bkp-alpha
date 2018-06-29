@@ -41,7 +41,7 @@ export default class ProjectScorecardInputs extends Component {
           value={
             scorecard ? Number(scorecard["consumer_token_design"]) : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Project Governance and Operation"
@@ -53,7 +53,7 @@ export default class ProjectScorecardInputs extends Component {
               ? Number(scorecard["project_governance_and_operation"])
               : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Responsible Token Distribution"
@@ -63,7 +63,7 @@ export default class ProjectScorecardInputs extends Component {
           value={
             scorecard ? Number(scorecard["responsible_token_distribution"]) : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Use of Token Distribution Proceeds"
@@ -75,7 +75,7 @@ export default class ProjectScorecardInputs extends Component {
               ? Number(scorecard["use_of_token_distribution_proceeds"])
               : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Token Inventory"
@@ -83,7 +83,7 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationErrors={validationErrors}
           value={scorecard ? Number(scorecard["token_inventory"]) : ""}
-          required
+          require
         />
         <ScoreInput
           label="Mitigation of Conflicts and Improper Trading"
@@ -97,7 +97,7 @@ export default class ProjectScorecardInputs extends Component {
                 )
               : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Token Safety and Security"
@@ -107,7 +107,7 @@ export default class ProjectScorecardInputs extends Component {
           value={
             scorecard ? Number(scorecard["token_safety_and_security"]) : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Marketing Practices"
@@ -117,7 +117,7 @@ export default class ProjectScorecardInputs extends Component {
           value={
             scorecard ? Number(scorecard["marketing_practices"]) : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Protecting and Empowering Consumers"
@@ -129,7 +129,7 @@ export default class ProjectScorecardInputs extends Component {
               ? Number(scorecard["protecting_and_empowering_consumers"])
               : ""
           }
-          required
+          require
         />
         <ScoreInput
           label="Compliance with Applicable Laws"
@@ -141,7 +141,7 @@ export default class ProjectScorecardInputs extends Component {
               ? Number(scorecard["compliance_with_application_laws"])
               : ""
           }
-          required
+          require
         />
       </Formsy>
     );
