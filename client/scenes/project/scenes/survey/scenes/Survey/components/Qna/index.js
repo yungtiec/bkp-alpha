@@ -89,6 +89,17 @@ class QnaBox extends Component {
           undraw(self.state.temporaryHighlight);
       });
     }
+    if (!this.props.isLoggedIn || this.props.isClosedForComment) {
+      $(".annotator-adder").css("display", "none");
+      $(".annotator-adder").css("opacity", 0);
+      $(".annotator-adder button").css("cursor", "text");
+      $(".annotator-adder").css("height", "0px");
+    } else {
+      $(".annotator-adder").css("display", "block");
+      $(".annotator-adder").css("opacity", 1);
+      $(".annotator-adder").css("cursor", "pointer");
+      $(".annotator-adder").css("height", "inherit");
+    }
   }
 
   componentDidUpdate() {

@@ -1,10 +1,11 @@
 const router = require("express").Router({ mergeParams: true });
-const { Comment, Tag, Issue, User, Role } = require("../../db/models");
+const { Comment, Tag, Issue, User, Role, ProjectSurvey } = require("../../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication, ensureResourceAccess } = require("..//utils");
 const { IncomingWebhook } = require("@slack/client");
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(slackWebhookUrl);
+const moment = require("moment")
 Promise = require("bluebird");
 module.exports = router;
 
@@ -51,7 +52,7 @@ router.post(
           Number(moment().format("x")) <=
         0;
       if (isClosedForComment) {
-        res.sendStatus(401);
+        res.sendStatus(404);
         return;
       }
       var newComment = await Comment.create({
