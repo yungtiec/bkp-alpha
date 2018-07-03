@@ -45,6 +45,15 @@ router.post(
         issue
       } = req.body;
       const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
+      const projectSurvey = await ProjectSurvey.findById(project_survey_id);
+      const isClosedForComment =
+        Number(projectSurvey.comment_until_unix) -
+          Number(moment().format("x")) <=
+        0;
+      if (isClosedForComment) {
+        res.sendStatus(401);
+        return;
+      }
       var newComment = await Comment.create({
         uri,
         survey_question_id,
