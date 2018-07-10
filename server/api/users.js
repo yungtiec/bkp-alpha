@@ -26,7 +26,9 @@ router.get(
   // nothing senstiive here, we can let users decide what to diclose in their profile later on
   async (req, res, next) => {
     try {
-      const profile = await User.getContributions(Number(req.params.userId));
+      const profile = await User.getContributions({
+        userId: Number(req.params.userId)
+      });
       res.send(profile);
     } catch (err) {
       next(err);
@@ -81,7 +83,7 @@ router.get(
           .concat(p.admins || [])
           .concat(p.editors || [])
           .filter(c => c.id !== req.user.id);
-        return _.assignIn(p.toJSON(), { collaboratorOptions });
+        return _.assignIn(p, { collaboratorOptions });
       });
       res.send(projects);
     } catch (err) {

@@ -118,9 +118,12 @@ const User = db.define(
           ]
         };
       },
-      basicInfo: function(userId) {
+      basicInfo: function({ userId, googleId }) {
+        var query;
+        if (userId) query = { id: userId };
+        if (googleId) query = { googleId };
         return {
-          where: { id: userId },
+          where: query,
           attributes: [
             "id",
             "email",
@@ -134,7 +137,9 @@ const User = db.define(
             {
               model: db.model("role"),
               attributes: ["name"]
-            }
+            },
+            { model: db.model("project"), as: "managedProjects" },
+            { model: db.model("project"), as: "editedProjects" }
           ]
         };
       },
@@ -218,9 +223,12 @@ User.encryptPassword = function(plainText, salt) {
     .digest("hex");
 };
 
-User.getContributions = async function(userId, listing) {
+User.getContributions = async function({ userId, googleId, forListing }) {
+  var query;
+  if (userId) query = { userId: Number(userId) };
+  if (googleId) query = { googleId };
   const user = await User.scope({
-    method: ["basicInfo", Number(userId)]
+    method: ["basicInfo", query]
   }).findOne();
   const [comments, notifications] = await Promise.all([
     user.getComments({
@@ -266,13 +274,13 @@ User.getContributions = async function(userId, listing) {
       num_upvotes: numCommentUpvotes,
       num_spam: numCommentSpam
     },
-    listing ? omit(user.toJSON(), ["roles"]) : user.toJSON()
+    forListing ? omit(user.toJSON(), ["roles"]) : user.toJSON()
   );
 };
 
 User.getUserListWithContributions = async function(query) {
   const users = await Promise.map(User.findAll(query), user =>
-    User.getContributions(user.id, true)
+    User.getContributions({ userId: user.id, forListing: true })
   );
   return users;
 };

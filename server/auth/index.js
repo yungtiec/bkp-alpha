@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Role } = require("../db/models");
+const { User, Role, ProjectAdmin, ProjectEditor } = require("../db/models");
 const _ = require("lodash");
 
 module.exports = router;
@@ -22,7 +22,7 @@ router.post("/login", async (req, res, next) => {
       } else {
         req.login(user, async err => {
           if (err) next(err);
-          user = await User.getContributions(user.id);
+          user = await User.getContributions({ userId: user.id });
           res.send(user);
         });
       }
@@ -33,10 +33,7 @@ router.post("/login", async (req, res, next) => {
 router.post("/signup", (req, res, next) => {
   User.create(req.body)
     .then(async user => {
-      user = await User.find({
-        where: { id: user.id },
-        include: [{ model: Role }]
-      });
+      user = await User.getContributions({ userId: user.id });
       req.login(user, err => (err ? next(err) : res.json(user)));
     })
     .catch(err => {
@@ -57,7 +54,7 @@ router.post("/logout", (req, res) => {
 
 router.get("/me", async (req, res) => {
   if (req.user) {
-    const user = await User.getContributions(req.user.id);
+    const user = await User.getContributions({ userId: req.user.id });
     res.send(user);
   } else {
     res.sendStatus(401);

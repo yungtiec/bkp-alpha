@@ -59,6 +59,9 @@ class Profile extends Component {
           numProjectSurveyComments={basicInfo.num_project_survey_comments}
           numIssues={basicInfo.num_issues}
           joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
+          managedProjects={basicInfo.managedProjects}
+          editedProjects={basicInfo.editedProjects}
+          role={basicInfo.roles && basicInfo.roles[0]}
           restrictAccess={this.restrictAccess}
           restoreAccess={this.restoreAccess}
         />

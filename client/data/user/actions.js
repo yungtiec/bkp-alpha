@@ -27,7 +27,6 @@ export const auth = (userInfo, method) => dispatch => {
     .post(`/auth/${method}`, userInfo)
     .then(
       res => {
-        console.log((!res.data.first_name || !res.data.last_name))
         dispatch(getUser(res.data));
         if (res.data.restricted_access) history.push("/user/profile");
         else if (!res.data.first_name || !res.data.last_name)

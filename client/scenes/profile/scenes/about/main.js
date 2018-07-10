@@ -107,7 +107,7 @@ class ProfileAbout extends Component {
             {this.state.edit ? (
               <button
                 type="button"
-                className="btn btn-primary  mt-4"
+                className="btn btn-primary  mt-4 btn-lg"
                 onClick={this.handleSubmit}
               >
                 save changes
@@ -115,7 +115,7 @@ class ProfileAbout extends Component {
             ) : (
               <button
                 type="button"
-                className="btn btn-primary  mt-4"
+                className="btn btn-primary  mt-4 btn-lg"
                 onClick={() => {
                   this.firstInput.focus();
                   this.setState(prevState => ({

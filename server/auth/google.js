@@ -46,10 +46,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
                 first_name: firstName,
                 last_name: lastName
               }).then(async createdUser => {
-                var user = await User.find({
-                  where: { googleId },
-                  include: [{ model: Role }]
-                });
+                var user = await User.getContributions({ googleId });
                 return done(null, user);
               });
         })
