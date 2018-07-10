@@ -49,7 +49,7 @@ export default ({
           <span className="divider">|</span>
           <span>joined {joinDate}</span>
         </p>
-        {managedProjects.length ? (
+        {managedProjects && managedProjects.length ? (
           <h6>
             manage documents for{" "}
             {managedProjects.map((mp, i) => (
@@ -61,7 +61,7 @@ export default ({
             ))}
           </h6>
         ) : null}
-        {editedProjects.length ? (
+        {editedProjects && editedProjects.length ? (
           <h6>
             edit documents for{" "}
             {editedProjects.map((ep, i) => (

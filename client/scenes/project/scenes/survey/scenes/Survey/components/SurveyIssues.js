@@ -18,7 +18,7 @@ export default ({ surveyVersions, projectSymbol }) => {
             </p>
             {commentsWithIssue.length ? (
               <div className="entity-cards mb-4">
-                {commentsWithIssue.map(c => (
+                {commentsWithIssue.filter(c => c.reviewed !== "spam").map(c => (
                   <div
                     key={`outstanding-issue__${c.issue.id}`}
                     className="entity-card__container p-3"
