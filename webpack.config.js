@@ -2,6 +2,7 @@ var webpack = require("webpack");
 var path = require("path");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
 const isDev = process.env.NODE_ENV === "development";
+const secrets = require("./secrets");
 require("image-webpack-loader");
 
 module.exports = {
@@ -62,7 +63,18 @@ module.exports = {
           Tether: "tether",
           Popper: ["popper.js", "default"]
         }),
-        new LiveReloadPlugin({ appendScriptTag: true })
+        new LiveReloadPlugin({ appendScriptTag: true }),
+        new webpack.DefinePlugin({
+          "process.env": {
+            NODE_ENV: JSON.stringify("development"),
+            UPORT_CLIENT_PRIVATE_KEY: JSON.stringify(
+              process.env.UPORT_CLIENT_PRIVATE_KEY
+            ),
+            UPORT_CLIENT_ADDRESS: JSON.stringify(
+              process.env.UPORT_CLIENT_ADDRESS
+            )
+          }
+        })
       ]
     : [
         new webpack.ProvidePlugin({
@@ -74,7 +86,13 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
           "process.env": {
-            NODE_ENV: JSON.stringify("production")
+            NODE_ENV: JSON.stringify("production"),
+            UPORT_CLIENT_PRIVATE_KEY: JSON.stringify(
+              process.env.UPORT_CLIENT_PRIVATE_KEY
+            ),
+            UPORT_CLIENT_ADDRESS: JSON.stringify(
+              process.env.UPORT_CLIENT_ADDRESS
+            )
           }
         })
       ]
