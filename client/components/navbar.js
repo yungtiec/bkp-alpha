@@ -41,8 +41,6 @@ class Navbar extends Component {
                 src="/assets/the-brooklyn-project-logo.png"
               />
             </div>
-          </div>
-          <div className="box--right">
             {width > 600 && isAdmin ? (
               <Link to="/admin" className="navbar__nav-item">
                 admin
@@ -77,6 +75,8 @@ class Navbar extends Component {
             ) : (
               ""
             )}
+          </div>
+          <div className="box--right">
             {isLoggedIn ? (
               <Link
                 to="/user/profile/notifications"

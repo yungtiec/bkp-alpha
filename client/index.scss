@@ -26,12 +26,12 @@ li {
 }
 
 .main-container {
-  margin: 10px 80px;
+  margin: 30px 80px;
   @include breakpoint(xl) {
-    margin: 10px 160px;
+    margin: 30px 160px;
   }
   @include breakpoint(xs) {
-    margin: 10px 10px;
+    margin: 20px 10px;
   }
 }
 
