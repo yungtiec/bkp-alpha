@@ -29,7 +29,8 @@ class SurveyUpload extends Component {
     autoBind(this);
     this.state = {
       activeAccordionItemId: 0,
-      scorecardError: false
+      scorecardError: false,
+      isScorecard: false
     };
   }
 
@@ -54,8 +55,18 @@ class SurveyUpload extends Component {
     this.props.updateCollaborators(selected);
   }
 
+  handleIsScorecardChange(evt) {
+    this.setState({
+      isScorecard: evt.target.checked
+    });
+  }
+
   next(currentField) {
-    if (currentField === "scorecard" && !this.props.scorecardCompleted)
+    if (
+      currentField === "scorecard" &&
+      this.state.isScorecard &&
+      !this.props.scorecardCompleted
+    )
       this.setState(prevState => ({
         ...prevState,
         scorecardError: !this.props.scorecardCompleted
@@ -64,7 +75,7 @@ class SurveyUpload extends Component {
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 6,
-        scorecardError: !this.props.scorecardCompleted
+        scorecardError: false
       }));
   }
 
@@ -249,15 +260,32 @@ class SurveyUpload extends Component {
           </AccordionItem>
           <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
             <AccordionItemTitle>
-              <p className="upload-accordion__item-header">Project score</p>
+              <p className="upload-accordion__item-header">
+                Project score (optional)
+              </p>
             </AccordionItemTitle>
             <AccordionItemBody>
-              <div className="d-flex flex-column">
-                <p>fill in project scorecard</p>
-                <ProjectScorecardInputs
-                  scorecard={scorecard}
-                  updateProjectScorecard={updateProjectScorecard}
+              <h6 className="upload-accordion__scorecard-checkbox">
+                <input
+                  name="isScorecard"
+                  type="checkbox"
+                  checked={this.state.isScorecard}
+                  onChange={this.handleIsScorecardChange}
                 />
+                Is this document a transparency scorecard?
+              </h6>
+              {this.state.isScorecard ? (
+                <div className="d-flex flex-column">
+                  <h6 className="mb-3  mt-5">
+                    Fill in score 1 to 10 (10 - best, 1 - worst)
+                  </h6>
+                  <ProjectScorecardInputs
+                    scorecard={scorecard}
+                    updateProjectScorecard={updateProjectScorecard}
+                  />
+                </div>
+              ) : null}
+              <div className="d-flex flex-column">
                 <button
                   onClick={() => this.next("scorecard")}
                   className="btn btn-primary mt-4 align-self-end"
@@ -337,7 +365,7 @@ class SurveyUpload extends Component {
                   title="project score"
                   description="fill in project scorecard"
                   status={
-                    this.state.scorecardError
+                    this.state.isScorecard && this.state.scorecardError
                       ? "error"
                       : this.state.activeAccordionItemId > 4 ? "finish" : "wait"
                   }
@@ -354,7 +382,9 @@ class SurveyUpload extends Component {
                   }
                 />
               </Steps>
-              {!!importedMarkdown && scorecardCompleted ? (
+              {!!importedMarkdown &&
+              ((this.state.isScorecard && scorecardCompleted) ||
+                !this.state.isScorecard) ? (
                 <div className="mb-5 mt-2">
                   <button
                     type="button"
