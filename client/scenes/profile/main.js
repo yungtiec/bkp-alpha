@@ -52,7 +52,7 @@ class Profile extends Component {
     return (
       <div className="profile-container">
         <ProfileBanner
-          name={`${basicInfo.first_name || ""} ${basicInfo.last_name || ""}`}
+          name={basicInfo.name}
           isAdmin={isAdmin}
           restrictedAccess={basicInfo.restricted_access}
           numComments={basicInfo.num_comments}

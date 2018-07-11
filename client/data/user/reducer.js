@@ -13,6 +13,7 @@ export default function(state = defaultUser, action) {
         ...state,
         first_name: action.profile.firstName,
         last_name: action.profile.lastName,
+        name: action.profile.name,
         organization: action.profile.organization
       };
     default:

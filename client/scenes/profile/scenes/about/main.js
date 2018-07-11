@@ -11,6 +11,7 @@ class ProfileAbout extends Component {
       edit: this.props.location.state && this.props.location.state.edit,
       firstName: this.props.first_name,
       lastName: this.props.last_name,
+      name: this.props.name,
       organization: this.props.organization
     };
   }
@@ -38,7 +39,7 @@ class ProfileAbout extends Component {
             </p>
           </div>
         )}
-        {(!this.props.first_name || !this.props.last_name) && (
+        {(!this.props.name) && (
           <div className="profile-about__restricted-access">
             <p className="text-center mt-3 text-danger">
               Please update your information.
@@ -59,7 +60,7 @@ class ProfileAbout extends Component {
           </div>
         </div>
         <div className="profile-about__field">
-          <span className="profile-about__field-label">First Name</span>
+          <span className="profile-about__field-label">Name</span>
           <div className="profile-about__field-value">
             <div className="profile-about__input-container">
               <input
@@ -67,27 +68,12 @@ class ProfileAbout extends Component {
                 type="text"
                 disabled={!this.state.edit}
                 onChange={this.handleChange}
-                name="firstName"
-                value={this.state.firstName || ""}
+                name="name"
+                value={this.state.name || ""}
               />
             </div>
           </div>
         </div>
-        <div className="profile-about__field">
-          <span className="profile-about__field-label">Last Name</span>
-          <div className="profile-about__field-value">
-            <div className="profile-about__input-container">
-              <input
-                type="text"
-                disabled={!this.state.edit}
-                onChange={this.handleChange}
-                name="lastName"
-                value={this.state.lastName}
-              />
-            </div>
-          </div>
-        </div>
-
         <div className="profile-about__field">
           <span className="profile-about__field-label">Organization</span>
           <div className="profile-about__field-value">
@@ -134,3 +120,34 @@ class ProfileAbout extends Component {
 }
 
 export default withRouter(ProfileAbout);
+
+
+// <div className="profile-about__field">
+//   <span className="profile-about__field-label">First Name</span>
+//   <div className="profile-about__field-value">
+//     <div className="profile-about__input-container">
+//       <input
+//         ref={input => (this.firstInput = input)}
+//         type="text"
+//         disabled={!this.state.edit}
+//         onChange={this.handleChange}
+//         name="firstName"
+//         value={this.state.firstName || ""}
+//       />
+//     </div>
+//   </div>
+// </div>
+// <div className="profile-about__field">
+//   <span className="profile-about__field-label">Last Name</span>
+//   <div className="profile-about__field-value">
+//     <div className="profile-about__input-container">
+//       <input
+//         type="text"
+//         disabled={!this.state.edit}
+//         onChange={this.handleChange}
+//         name="lastName"
+//         value={this.state.lastName}
+//       />
+//     </div>
+//   </div>
+// </div>

@@ -5,28 +5,14 @@ export default about => {
   return (
     <div className="profile-subroute container">
       <div className="profile-about__field">
-        <span className="profile-about__field-label">First Name</span>
+        <span className="profile-about__field-label">Name</span>
         <div className="profile-about__field-value">
           <div className="profile-about__input-container">
             <input
               type="text"
               disabled
               name="firstName"
-              value={about.first_name}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="profile-about__field">
-        <span className="profile-about__field-label">Last Name</span>
-
-        <div className="profile-about__field-value">
-          <div className="profile-about__input-container">
-            <input
-              type="text"
-              disabled
-              name="firstName"
-              value={about.last_name}
+              value={about.name}
             />
           </div>
         </div>
@@ -56,3 +42,30 @@ export default about => {
     </div>
   );
 };
+
+// <div className="profile-about__field">
+//   <span className="profile-about__field-label">First Name</span>
+//   <div className="profile-about__field-value">
+//     <div className="profile-about__input-container">
+//       <input
+//         type="text"
+//         disabled
+//         name="firstName"
+//         value={about.first_name}
+//       />
+//     </div>
+//   </div>
+// </div>
+// <div className="profile-about__field">
+//   <span className="profile-about__field-label">Last Name</span>
+//   <div className="profile-about__field-value">
+//     <div className="profile-about__input-container">
+//       <input
+//         type="text"
+//         disabled
+//         name="firstName"
+//         value={about.last_name}
+//       />
+//     </div>
+//   </div>
+// </div>

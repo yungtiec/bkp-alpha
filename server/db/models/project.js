@@ -53,7 +53,7 @@ const Project = db.define(
                 {
                   model: db.model("user"),
                   as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "email"]
+                  attributes: ["name", "first_name", "last_name", "email"]
                 },
                 {
                   model: db.model("project_survey"),
@@ -154,7 +154,7 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["name", "first_name", "last_name", "email"]
             },
             {
               model: db.model("comment"),

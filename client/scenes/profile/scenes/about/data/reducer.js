@@ -20,6 +20,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         first_name: action.profile.firstName,
         last_name: action.profile.lastName,
+        name: action.profile.name,
         organization: action.profile.organization
       };
     default:

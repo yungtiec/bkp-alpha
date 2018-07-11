@@ -100,7 +100,9 @@ class AuthWidget extends Component {
                   to="/leaderboard"
                   style={{ display: "block", margin: "0px" }}
                 >
-                  <div className={`${className}__dropdown-item`}>leaderboard</div>
+                  <div className={`${className}__dropdown-item`}>
+                    leaderboard
+                  </div>
                 </Link>
               ) : (
                 ""
@@ -139,9 +141,7 @@ class AuthWidget extends Component {
 
 const mapState = state => {
   const isLoggedIn = !!state.data.user.id;
-  const name = isLoggedIn
-    ? `${state.data.user.first_name || ""} ${state.data.user.last_name || ""}`
-    : "";
+  const name = isLoggedIn ? state.data.user.name : "";
   return {
     isLoggedIn,
     name,

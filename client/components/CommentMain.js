@@ -23,13 +23,7 @@ export default ({ comment, path, children }) => (
         <p className="main-comment__user">
           {comment.owner && (
             <span>
-              <Avatar
-                name={`${comment.owner.first_name} ${
-                  comment.owner.last_name
-                }`}
-                color={"#999999"}
-                size={40}
-              />
+              <Avatar name={comment.owner.name} color={"#999999"} size={40} />
             </span>
           )}
           <span>{moment(comment.createdAt).fromNow()}</span>
@@ -59,13 +53,7 @@ export default ({ comment, path, children }) => (
         <p className="main-comment__user">
           {comment.owner && (
             <span>
-              <Avatar
-                name={`${comment.owner.first_name} ${
-                  comment.owner.last_name
-                }`}
-                color={"#999999"}
-                size={40}
-              />
+              <Avatar name={comment.owner.name} color={"#999999"} size={40} />
             </span>
           )}
           <span>{moment(comment.createdAt).fromNow()}</span>

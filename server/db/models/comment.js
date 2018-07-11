@@ -45,12 +45,12 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["first_name", "last_name", "name", "email"]
             },
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "email", "id"]
+              attributes: ["first_name", "last_name", "name", "email", "id"]
             },
             {
               model: db.model("project_survey"),
@@ -93,12 +93,12 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["first_name", "last_name", "name", "email"]
             },
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["first_name", "last_name", "name", "email"]
             },
             {
               model: db.model("tag"),
@@ -115,12 +115,12 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email"]
                 },
                 {
                   model: db.model("user"),
                   as: "owner",
-                  attributes: ["first_name", "last_name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email"]
                 }
               ],
               as: "descendents",
@@ -135,12 +135,12 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["first_name", "last_name", "name", "email"]
             },
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "email"]
+              attributes: ["first_name", "last_name", "name", "email"]
             },
             {
               model: db.model("tag"),
@@ -178,12 +178,12 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email"]
                 },
                 {
                   model: db.model("user"),
                   as: "owner",
-                  attributes: ["first_name", "last_name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email"]
                 },
                 {
                   model: Comment,
@@ -193,7 +193,7 @@ const Comment = db.define(
                     {
                       model: db.model("user"),
                       as: "owner",
-                      attributes: ["first_name", "last_name", "email"]
+                      attributes: ["first_name", "last_name", "name", "email"]
                     }
                   ]
                 }

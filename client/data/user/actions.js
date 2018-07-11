@@ -31,7 +31,7 @@ export const auth = (userInfo, method) => dispatch => {
       res => {
         dispatch(getUser(res.data));
         if (res.data.restricted_access) history.push("/user/profile");
-        else if (!res.data.first_name || !res.data.last_name)
+        else if (!res.data.name)
           history.push({
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
@@ -76,7 +76,7 @@ export const signinWithUport = () => dispatch =>
       res => {
         dispatch(getUser(res.data));
         if (res.data.restricted_access) history.push("/user/profile");
-        else if (!res.data.first_name || !res.data.last_name)
+        else if (!res.data.name)
           history.push({
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }

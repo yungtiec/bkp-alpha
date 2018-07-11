@@ -68,6 +68,7 @@ router.put("/profile", async (req, res, next) => {
       user.update({
         first_name: req.body.firstName,
         last_name: req.body.lastName,
+        name: req.body.name,
         organization: req.body.organization
       })
     );

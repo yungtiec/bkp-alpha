@@ -44,7 +44,8 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
                 email,
                 googleId,
                 first_name: firstName,
-                last_name: lastName
+                last_name: lastName,
+                name: name
               }).then(async createdUser => {
                 var user = await User.getContributions({ googleId });
                 return done(null, user);
@@ -64,8 +65,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       failureRedirect: "/login"
     }),
     (req, res) => {
-      if (!req.user.first_name || !req.user.last_name)
-        res.redirect("/user/profile/about");
+      if (!req.user.name) res.redirect("/user/profile/about");
       else res.redirect("/projects");
     }
   );

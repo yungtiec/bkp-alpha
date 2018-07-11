@@ -83,6 +83,7 @@ const User = db.define(
           attributes: [
             "id",
             "email",
+            "name",
             "first_name",
             "last_name",
             "organization"
@@ -136,6 +137,7 @@ const User = db.define(
           attributes: [
             "id",
             "email",
+            "name",
             "first_name",
             "last_name",
             "organization",
@@ -176,6 +178,7 @@ const User = db.define(
                   attributes: [
                     "id",
                     "email",
+                    "name",
                     "first_name",
                     "last_name",
                     "organization"
@@ -256,7 +259,7 @@ User.getContributions = async function({
         {
           model: db.model("user"),
           as: "upvotesFrom",
-          attributes: ["first_name", "last_name", "email"],
+          attributes: ["name", "first_name", "last_name", "email"],
           required: false
         }
       ]
@@ -328,6 +331,15 @@ const setSaltAndPassword = user => {
     user.salt = User.generateSalt();
     user.password = User.encryptPassword(user.password(), user.salt());
   }
+};
+
+const setName = user => {
+  user.name = user.first_name + " " + user.last_name;
+};
+
+const hookChain = user => {
+  setSaltAndPassword(user);
+  setName(user);
 };
 
 /**
@@ -437,11 +449,5 @@ function getCommentQueryObj({
   return commentQueryObj;
 }
 
-User.beforeCreate(setSaltAndPassword);
-User.beforeUpdate(setSaltAndPassword);
-
-// const setName = user => {
-//   user.name = user.first_name + " " + user.last_name;
-// };
-// User.beforeCreate(setName);
-// User.beforeUpdate(setName);
+User.beforeCreate(hookChain);
+User.beforeUpdate(hookChain);

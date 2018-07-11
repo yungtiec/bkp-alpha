@@ -7,11 +7,7 @@ import Avatar from "react-avatar";
 
 export default ({ comment, path, children }) => {
   const replier = comment.owner ? (
-    <Avatar
-      name={`${comment.owner.first_name} ${comment.owner.last_name}`}
-      size={40}
-      color={"#999999"}
-    />
+    <Avatar name={comment.owner.name} size={40} color={"#999999"} />
   ) : (
     "you"
   );
@@ -36,11 +32,7 @@ export default ({ comment, path, children }) => {
           ) : (
             <p className="reply-comment__user">
               <span>
-                <Avatar
-                  name={`${parent.owner.first_name} ${parent.owner.last_name}`}
-                  size={40}
-                  color={"#999999"}
-                />
+                <Avatar name={parent.owner.name} size={40} color={"#999999"} />
               </span>
               <span>{moment(parent.createdAt).fromNow()}</span>
             </p>
@@ -59,11 +51,7 @@ export default ({ comment, path, children }) => {
           comment.project_survey.survey && (
             <p className="reply-comment__user">
               <span>
-                <Avatar
-                  name={`${parent.owner.first_name} ${parent.owner.last_name}`}
-                  size={40}
-                  color={"#999999"}
-                />
+                <Avatar name={parent.owner.name} size={40} color={"#999999"} />
               </span>
               <span>{moment(parent.createdAt).fromNow()}</span>
             </p>

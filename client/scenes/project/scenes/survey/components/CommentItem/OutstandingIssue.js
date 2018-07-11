@@ -70,7 +70,7 @@ export default class OutstandingIssue extends Component {
         style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
         <div className="comment-item__header">
-          <p>{comment.owner.first_name + " " + comment.owner.last_name}</p>
+          <p>{comment.owner.name}</p>
           <p>
             {moment(comment.createdAt).fromNow()}
             {resolvedIssueIds.indexOf(comment.issue.id) !== -1 ? (
@@ -119,7 +119,7 @@ export default class OutstandingIssue extends Component {
           key={`comment-item__reply-${reply.id}`}
         >
           <div className="comment-item__header">
-            <p>{reply.owner.first_name + " " + reply.owner.last_name}</p>
+            <p>{reply.owner.name}</p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (
@@ -128,10 +128,7 @@ export default class OutstandingIssue extends Component {
             <p className="comment-item__comment">
               {reply.hierarchyLevel !== 2 && (
                 <span className="comment-item__at-someone">
-                  {"@" +
-                    reply.parent.owner.first_name +
-                    " " +
-                    reply.parent.owner.last_name}
+                  {"@" + reply.parent.owner.name}
                 </span>
               )}{" "}
               {reply.comment}
