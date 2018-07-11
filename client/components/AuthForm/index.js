@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { auth } from "../../data/reducer";
+import { auth, signinWithUport } from "../../data/reducer";
 import { Link } from "react-router-dom";
 import { InputEmail, InputPassword, InputText } from "../index";
 import Formsy from "formsy-react";
@@ -43,7 +43,13 @@ class AuthForm extends Component {
   }
 
   render() {
-    const { authMethod, authMethodLabel, handleSubmit, error } = this.props;
+    const {
+      authMethod,
+      authMethodLabel,
+      handleSubmit,
+      error,
+      signinWithUport
+    } = this.props;
 
     return (
       <div className="auth-page">
@@ -66,12 +72,19 @@ class AuthForm extends Component {
               onValid={this.enableButton}
               onInvalid={this.disableButton}
             >
-              <div className="form-group row">
+              <div className="form-group row oauth-btns">
                 <a href="/auth/google">
                   <img
                     width="191px"
                     height="46px"
                     src="/assets/btn_google_signin_dark_normal_web.png"
+                  />
+                </a>
+                <a onClick={signinWithUport}>
+                  <img
+                    width="191px"
+                    height="46px"
+                    src="/assets/btn_uport_signin_dark_normal_web.png"
                   />
                 </a>
               </div>
@@ -199,13 +212,6 @@ class AuthForm extends Component {
   }
 }
 
-/**
- * CONTAINER
- *   Note that we have two different sets of 'mapStateToProps' functions -
- *   one for Login, and one for Signup. However, they share the same 'mapDispatchToProps'
- *   function, and share the same Component. This is a good example of how we
- *   can stay DRY with interfaces that are very similar to each other!
- */
 const mapLogin = state => {
   return {
     authMethod: "login",
@@ -222,29 +228,8 @@ const mapSignup = state => {
   };
 };
 
-const mapDispatch = (dispatch, props) => {
-  return {
-    handleSubmit(model) {
-      console.log(props);
-      const email = model.email;
-      const password = model.password;
-      var userInfo =
-        props.authMethod === "login"
-          ? { email, password }
-          : {
-              email,
-              password,
-              first_name: model.firstName,
-              last_name: model.lastName,
-              organization: model.organization
-            };
-      dispatch(auth(userInfo, props.authMethod));
-    }
-  };
-};
-
-export const Login = connect(mapLogin, { auth })(AuthForm);
-export const Signup = connect(mapSignup, { auth })(AuthForm);
+export const Login = connect(mapLogin, { auth, signinWithUport })(AuthForm);
+export const Signup = connect(mapSignup, { auth, signinWithUport })(AuthForm);
 
 /**
  * PROP TYPES

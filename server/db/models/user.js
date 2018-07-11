@@ -13,8 +13,7 @@ const User = db.define(
     },
     email: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false
+      unique: true
     },
     password: {
       type: Sequelize.STRING,
@@ -35,10 +34,19 @@ const User = db.define(
     googleId: {
       type: Sequelize.STRING
     },
+    uportAddress: {
+      type: Sequelize.STRING
+    },
     first_name: {
       type: Sequelize.STRING
     },
     last_name: {
+      type: Sequelize.STRING
+    },
+    name: {
+      type: Sequelize.STRING
+    },
+    username: {
       type: Sequelize.STRING
     },
     organization: {
@@ -118,10 +126,11 @@ const User = db.define(
           ]
         };
       },
-      basicInfo: function({ userId, googleId }) {
+      basicInfo: function({ userId, googleId, uportAddress }) {
         var query;
         if (userId) query = { id: userId };
         if (googleId) query = { googleId };
+        if (uportAddress) query = { uportAddress };
         return {
           where: query,
           attributes: [
@@ -223,10 +232,16 @@ User.encryptPassword = function(plainText, salt) {
     .digest("hex");
 };
 
-User.getContributions = async function({ userId, googleId, forListing }) {
+User.getContributions = async function({
+  userId,
+  googleId,
+  uportAddress,
+  forListing
+}) {
   var query;
-  if (userId) query = { userId: Number(userId) };
   if (googleId) query = { googleId };
+  if (uportAddress) query = { uportAddress };
+  if (userId) query = { userId: Number(userId) };
   const user = await User.scope({
     method: ["basicInfo", query]
   }).findOne();
@@ -424,3 +439,9 @@ function getCommentQueryObj({
 
 User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
+
+// const setName = user => {
+//   user.name = user.first_name + " " + user.last_name;
+// };
+// User.beforeCreate(setName);
+// User.beforeUpdate(setName);

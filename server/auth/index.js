@@ -76,3 +76,4 @@ router.put("/profile", async (req, res, next) => {
 });
 
 router.use("/google", require("./google"));
+router.use("/uport", require("./uport"));
