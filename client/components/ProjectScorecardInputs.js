@@ -39,7 +39,9 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard ? Number(scorecard["consumer_token_design"]) : ""
+            scorecard && scorecard["consumer_token_design"]
+              ? Number(scorecard["consumer_token_design"])
+              : ""
           }
           required
         />
@@ -49,7 +51,7 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard
+            scorecard && scorecard["project_governance_and_operation"]
               ? Number(scorecard["project_governance_and_operation"])
               : ""
           }
@@ -61,7 +63,9 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard ? Number(scorecard["responsible_token_distribution"]) : ""
+            scorecard && scorecard["responsible_token_distribution"]
+              ? Number(scorecard["responsible_token_distribution"])
+              : ""
           }
           required
         />
@@ -71,7 +75,7 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard
+            scorecard && scorecard["use_of_token_distribution_proceeds"]
               ? Number(scorecard["use_of_token_distribution_proceeds"])
               : ""
           }
@@ -82,7 +86,11 @@ export default class ProjectScorecardInputs extends Component {
           name="token_inventory"
           validations={validations}
           validationError={validationError}
-          value={scorecard ? Number(scorecard["token_inventory"]) : ""}
+          value={
+            scorecard && scorecard["token_inventory"]
+              ? Number(scorecard["token_inventory"])
+              : ""
+          }
           required
         />
         <ScoreInput
@@ -91,7 +99,8 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard
+            scorecard &&
+            scorecard["mitigation_of_conflicts_and_improper_trading"]
               ? Number(
                   scorecard["mitigation_of_conflicts_and_improper_trading"]
                 )
@@ -105,7 +114,9 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard ? Number(scorecard["token_safety_and_security"]) : ""
+            scorecard && scorecard["token_safety_and_security"]
+              ? Number(scorecard["token_safety_and_security"])
+              : ""
           }
           required
         />
@@ -115,7 +126,9 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard ? Number(scorecard["marketing_practices"]) : ""
+            scorecard && scorecard["marketing_practices"]
+              ? Number(scorecard["marketing_practices"])
+              : ""
           }
           required
         />
@@ -125,7 +138,7 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard
+            scorecard && scorecard["protecting_and_empowering_consumers"]
               ? Number(scorecard["protecting_and_empowering_consumers"])
               : ""
           }
@@ -137,7 +150,7 @@ export default class ProjectScorecardInputs extends Component {
           validations={validations}
           validationError={validationError}
           value={
-            scorecard
+            scorecard && scorecard["compliance_with_application_laws"]
               ? Number(scorecard["compliance_with_application_laws"])
               : ""
           }

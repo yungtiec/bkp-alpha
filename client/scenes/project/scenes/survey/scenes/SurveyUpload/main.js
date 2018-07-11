@@ -1,4 +1,3 @@
-import "./SurveyUpload.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
@@ -43,7 +42,7 @@ class SurveyUpload extends Component {
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: key,
-        scorecardError: !this.props.scorecardCompleted
+        scorecardError: this.state.isScorecard && !this.props.scorecardCompleted
       }));
     else
       this.setState({
@@ -277,7 +276,7 @@ class SurveyUpload extends Component {
               {this.state.isScorecard ? (
                 <div className="d-flex flex-column">
                   <h6 className="mb-3  mt-5">
-                    Fill in score 1 to 10 (10 - best, 1 - worst)
+                    Fill in score 1 to 10 (10-best, 1-worst)
                   </h6>
                   <ProjectScorecardInputs
                     scorecard={scorecard}

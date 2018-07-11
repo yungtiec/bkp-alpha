@@ -25,7 +25,8 @@ class Upload extends Component {
     this.state = {
       activeAccordionItemId: 0,
       projectError: false,
-      scorecardError: false
+      scorecardError: false,
+      isScorecard: false
     };
   }
 
@@ -47,6 +48,12 @@ class Upload extends Component {
     this.props.updateCollaborators(selected);
   }
 
+  handleIsScorecardChange(evt) {
+    this.setState({
+      isScorecard: evt.target.checked
+    });
+  }
+
   handleAccordionChange(key) {
     if (key > 0)
       this.setState(prevState => ({
@@ -58,7 +65,7 @@ class Upload extends Component {
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: key,
-        scorecardError: !this.props.scorecardCompleted
+        scorecardError: this.state.isScorecard && !this.props.scorecardCompleted
       }));
     if (key === 0 || key === 3)
       this.setState({
@@ -72,7 +79,11 @@ class Upload extends Component {
         ...prevState,
         projectError: !this.props.selectedProject
       }));
-    else if (currentField === "scorecard" && !this.props.scorecardCompleted)
+    else if (
+      currentField === "scorecard" &&
+      this.state.isScorecard &&
+      !this.props.scorecardCompleted
+    )
       this.setState(prevState => ({
         ...prevState,
         scorecardError: !this.props.scorecardCompleted
@@ -81,7 +92,7 @@ class Upload extends Component {
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 5,
-        scorecardError: !this.props.scorecardCompleted,
+        scorecardError: false,
         projectError: !this.props.selectedProject
       }));
   }
@@ -204,14 +215,31 @@ class Upload extends Component {
             </AccordionItem>
             <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
               <AccordionItemTitle>
-                <p className="upload-accordion__item-header">Project score</p>
+                <p className="upload-accordion__item-header">
+                  Project score (optional)
+                </p>
               </AccordionItemTitle>
               <AccordionItemBody>
-                <div className="d-flex flex-column">
-                  <p>fill in project scorecard</p>
-                  <ProjectScorecardInputs
-                    updateProjectScorecard={updateProjectScorecard}
+                <h6 className="upload-accordion__scorecard-checkbox">
+                  <input
+                    name="isScorecard"
+                    type="checkbox"
+                    checked={this.state.isScorecard}
+                    onChange={this.handleIsScorecardChange}
                   />
+                  Is this document a transparency scorecard?
+                </h6>
+                {this.state.isScorecard ? (
+                  <div className="d-flex flex-column">
+                    <h6 className="mb-3  mt-5">
+                      Fill in score 1 to 10 (10-best, 1-worst)
+                    </h6>
+                    <ProjectScorecardInputs
+                      updateProjectScorecard={updateProjectScorecard}
+                    />
+                  </div>
+                ) : null}
+                <div className="d-flex flex-column">
                   <button
                     onClick={() => this.next("scorecard")}
                     className="btn btn-primary mt-4 align-self-end"
