@@ -7,6 +7,7 @@ router.post("/", async (req, res, next) => {
     var user = await User.findOne({
       where: { uportAddress: req.body.address }
     });
+    console.log(req.body)
     if (user)
       user = await User.getContributions({ uportAddress: req.body.address });
     else

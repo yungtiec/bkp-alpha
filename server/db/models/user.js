@@ -334,7 +334,7 @@ const setSaltAndPassword = user => {
 };
 
 const setName = user => {
-  user.name = user.first_name + " " + user.last_name;
+  user.name = !user.name ? user.first_name + " " + user.last_name : user.name;
 };
 
 const hookChain = user => {
