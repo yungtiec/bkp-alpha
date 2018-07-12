@@ -32,7 +32,7 @@ export default ({
     <div className="container">
       <div className="profile-banner__avatar-container">
         <Avatar
-          name={name.trim() ? name : "?"}
+          name={name && name.trim() ? name : "?"}
           size={120}
           color="#2D4DD1"
           fgColor="#ffffff"

@@ -29,7 +29,8 @@ class SurveyUpload extends Component {
     this.state = {
       activeAccordionItemId: 0,
       scorecardError: false,
-      isScorecard: false
+      isScorecard: false,
+      uploadClicked: false
     };
   }
 
@@ -76,6 +77,18 @@ class SurveyUpload extends Component {
         activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 6,
         scorecardError: false
       }));
+  }
+
+  submit() {
+    if (
+      !!this.props.importedMarkdown &&
+      ((this.state.isScorecard && this.props.scorecardCompleted) ||
+        !this.state.isScorecard)
+    ) {
+      this.props.uploadMarkdownToServer();
+    } else {
+      this.setState({ uploadClicked: true });
+    }
   }
 
   render() {
@@ -381,18 +394,22 @@ class SurveyUpload extends Component {
                   }
                 />
               </Steps>
-              {!!importedMarkdown &&
-              ((this.state.isScorecard && scorecardCompleted) ||
-                !this.state.isScorecard) ? (
-                <div className="mb-5 mt-2">
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-lg btn-block "
-                    onClick={uploadMarkdownToServer}
-                  >
-                    Upload
-                  </button>
-                </div>
+              <button
+                type="button"
+                class="btn btn-primary btn-lg btn-block "
+                onClick={this.submit}
+              >
+                Upload
+              </button>
+              {this.state.uploadClicked &&
+              !(
+                !!importedMarkdown &&
+                ((this.state.isScorecard && scorecardCompleted) ||
+                  !this.state.isScorecard)
+              ) ? (
+                <p className="text-danger">
+                  Please go through all the mandatory fields
+                </p>
               ) : null}
             </div>
           </CustomScrollbar>

@@ -26,7 +26,8 @@ class Upload extends Component {
       activeAccordionItemId: 0,
       projectError: false,
       scorecardError: false,
-      isScorecard: false
+      isScorecard: false,
+      uploadClicked: false
     };
   }
 
@@ -95,6 +96,19 @@ class Upload extends Component {
         scorecardError: false,
         projectError: !this.props.selectedProject
       }));
+  }
+
+  submit() {
+    if (
+      !!this.props.importedMarkdown &&
+      !!this.props.selectedProject &&
+      ((this.state.isScorecard && this.props.scorecardCompleted) ||
+        !this.state.isScorecard)
+    ) {
+      this.props.uploadMarkdownToServer();
+    } else {
+      this.setState({ uploadClicked: true });
+    }
   }
 
   render() {
@@ -256,7 +270,17 @@ class Upload extends Component {
                 </p>
               </AccordionItemTitle>
               <AccordionItemBody>
-                <p>import markdown and preview</p>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <p style={{ marginBottom: "0px" }}>
+                    import markdown and preview
+                  </p>
+                  <button
+                    onClick={() => importMarkdown(null)}
+                    className="btn btn-outline-primary"
+                  >
+                    reset
+                  </button>
+                </div>
                 <UploadInterface
                   importedMarkdown={importedMarkdown}
                   importMarkdown={importMarkdown}
@@ -324,17 +348,26 @@ class Upload extends Component {
                   }
                 />
               </Steps>
-              {!!importedMarkdown && !!selectedProject && scorecardCompleted ? (
-                <div className="mb-5 mt-2">
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-lg btn-block "
-                    onClick={uploadMarkdownToServer}
-                  >
-                    Upload
-                  </button>
-                </div>
-              ) : null}
+              <div className="mb-5 mt-2">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block "
+                  onClick={this.submit}
+                >
+                  Upload
+                </button>
+                {this.state.uploadClicked &&
+                !(
+                  !!this.props.importedMarkdown &&
+                  !!this.props.selectedProject &&
+                  ((this.state.isScorecard && this.props.scorecardCompleted) ||
+                    !this.state.isScorecard)
+                ) ? (
+                  <p className="text-danger">
+                    Please go through all the mandatory fields
+                  </p>
+                ) : null}
+              </div>
             </div>
           </CustomScrollbar>
         </SidebarLayout>
@@ -351,9 +384,3 @@ export default connect(mapState, {})(
     roleRequired: ["project_editor", "project_admin", "admin"]
   })
 );
-
-// <UploadInterface
-//   importedMarkdown={importedMarkdown}
-//   importMarkdown={importMarkdown}
-//   uploadMarkdownToServer={uploadMarkdownToServer}
-// />;
