@@ -21,7 +21,8 @@ import {
   getCollaboratorEmails,
   getCollaboratorOptions,
   getNewIssues,
-  getCommentPeriodInDay,
+  getCommentPeriodUnit,
+  getCommentPeriodValue,
   getProjectScorecardStatus,
   getProjectScorecard
 } from "../../data/upload/reducer";
@@ -32,7 +33,8 @@ import {
   updateCollaborators,
   addNewIssue,
   removeIssue,
-  updateCommentPeriod,
+  updateCommentPeriodUnit,
+  updateCommentPeriodValue,
   updateProjectScorecard
 } from "../../data/upload/actions";
 import { notify } from "reapop";
@@ -101,7 +103,10 @@ const mapState = state => {
     collaboratorEmails: getCollaboratorEmails(state),
     collaboratorOptions: getCollaboratorOptions(state),
     newIssues: getNewIssues(state),
-    commentPeriodInDay: getCommentPeriodInDay(state),
+    // comment period
+    commentPeriodUnit: getCommentPeriodUnit(state),
+    commentPeriodValue: getCommentPeriodValue(state),
+    // scorecard
     scorecardCompleted: getProjectScorecardStatus(state),
     scorecard: getProjectScorecard(state)
   };
@@ -118,7 +123,8 @@ const actions = {
   updateCollaborators,
   addNewIssue,
   removeIssue,
-  updateCommentPeriod,
+  updateCommentPeriodUnit,
+  updateCommentPeriodValue,
   notify,
   toggleSidebar,
   updateProjectScorecard

@@ -31,8 +31,12 @@ class Upload extends Component {
     };
   }
 
-  handleCommentPeriodChange(selected) {
-    this.props.updateCommentPeriod(selected.value);
+  handleCommentPeriodUnitChange(selected) {
+    this.props.updateCommentPeriodUnit(selected.value);
+  }
+
+  handleCommentPeriodValueChange(evt) {
+    this.props.updateCommentPeriodValue(evt.target.value);
   }
 
   handleProjectSelectChange(selected) {
@@ -125,8 +129,9 @@ class Upload extends Component {
       collaboratorOptions,
       updateCollaborators,
       collaboratorEmails,
-      updateCommentPeriod,
-      commentPeriodInDay,
+      updateCommentPeriodUnit,
+      commentPeriodValue,
+      commentPeriodUnit,
       selectedProject,
       updateProjectScorecard,
       sidebarOpen,
@@ -206,18 +211,26 @@ class Upload extends Component {
                 <p className="upload-accordion__item-header">Comment period</p>
               </AccordionItemTitle>
               <AccordionItemBody>
-                <div className="d-flex flex-column">
+                <div className="d-flex flex-column upload-accordion__comment-period-control">
                   <p>set comment period for audiences</p>
-                  <Select
-                    name="form-field-name"
-                    value={commentPeriodInDay}
-                    onChange={this.handleCommentPeriodChange}
-                    options={[
-                      { value: 7, label: "1 week" },
-                      { value: 3, label: "3 day" },
-                      { value: 1, label: "1 day" }
-                    ]}
-                  />
+                  <div className="d-flex">
+                    <input
+                      name="comment-period-value"
+                      type="number"
+                      value={commentPeriodValue}
+                      onChange={this.handleCommentPeriodValueChange}
+                    />
+                    <Select
+                      name="comment-period-value"
+                      value={commentPeriodUnit}
+                      onChange={this.handleCommentPeriodUnitChange}
+                      options={[
+                        { value: "weeks", label: "week(s)" },
+                        { value: "days", label: "day(s)" },
+                        { value: "hours", label: "hour(s)" }
+                      ]}
+                    />
+                  </div>
                   <button
                     onClick={this.next}
                     className="btn btn-primary mt-4 align-self-end"

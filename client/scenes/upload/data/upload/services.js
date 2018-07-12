@@ -7,7 +7,8 @@ export function getManagedProjects() {
 export function postMarkdown({
   markdown,
   collaboratorEmails,
-  commentPeriodInDay,
+  commentPeriodValue,
+  commentPeriodUnit,
   selectedProjectSymbol,
   scorecard
 }) {
@@ -15,7 +16,8 @@ export function postMarkdown({
     .post(`/api/projects/-/surveys/-`, {
       markdown,
       collaboratorEmails,
-      commentPeriodInDay,
+      commentPeriodValue,
+      commentPeriodUnit,
       selectedProjectSymbol,
       scorecard
     })

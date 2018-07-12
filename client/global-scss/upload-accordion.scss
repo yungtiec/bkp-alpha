@@ -35,3 +35,20 @@
 .upload-accordion__scorecard-checkbox input {
   margin-right: 5px;
 }
+
+input[name="comment-period-value"] {
+  padding: 0;
+  border: 1px solid rgb(204, 204, 204);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  padding-left: 5px;
+}
+
+.upload-accordion__comment-period-control .Select-control {
+  width: 130px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+  height: 29.5px;
+  margin: 0px;
+}

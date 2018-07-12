@@ -97,7 +97,8 @@ router.post(
         createNewProjectSurvey({
           markdown: req.body.markdown,
           collaboratorEmails: req.body.collaboratorEmails,
-          commentPeriodInDay: req.body.commentPeriodInDay,
+          commentPeriodUnit: req.body.commentPeriodUnit,
+          commentPeriodValue: req.body.commentPeriodValue,
           selectedProjectSymbol: req.body.selectedProjectSymbol,
           scorecard: req.body.scorecard,
           creator: req.user,
@@ -111,7 +112,8 @@ router.post(
           resolvedIssueIds: req.body.resolvedIssueIds,
           newIssues: req.body.newIssues,
           collaboratorEmails: req.body.collaboratorEmails,
-          commentPeriodInDay: req.body.commentPeriodInDay,
+          commentPeriodUnit: req.body.commentPeriodUnit,
+          commentPeriodValue: req.body.commentPeriodValue,
           scorecard: req.body.scorecard,
           creator: req.user,
           res,
@@ -126,7 +128,8 @@ router.post(
 async function createNewProjectSurvey({
   markdown,
   collaboratorEmails,
-  commentPeriodInDay,
+  commentPeriodUnit,
+  commentPeriodValue,
   selectedProjectSymbol,
   scorecard,
   creator,
@@ -158,8 +161,9 @@ async function createNewProjectSurvey({
     var survey = await Survey.create({
       title: markdownParsor.title
     });
+    console.log(commentPeriodValue, commentPeriodUnit)
     var commentUntilInUnix = moment()
-      .add(commentPeriodInDay, "days")
+      .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
     var projectSurvey = await ProjectSurvey.create({
       project_id: project.id,
@@ -226,7 +230,8 @@ async function updateExistingProjectSurvey({
   resolvedIssueIds,
   newIssues,
   collaboratorEmails,
-  commentPeriodInDay,
+  commentPeriodValue,
+  commentPeriodUnit,
   scorecard,
   creator,
   res,
@@ -265,7 +270,7 @@ async function updateExistingProjectSurvey({
       title: markdownParsor.title
     });
     var commentUntilInUnix = moment()
-      .add(commentPeriodInDay, "days")
+      .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
 
     var projectSurvey = await ProjectSurvey.create({

@@ -4,7 +4,8 @@ import { uniq, isEmpty, values } from "lodash";
 const initialState = {
   markdown: null,
   collaboratorEmails: [],
-  commentPeriodInDay: 7,
+  commentPeriodValue: 3,
+  commentPeriodUnit: "days",
   selectedProject: "",
   projectSymbolArr: [],
   projectsBySymbol: {},
@@ -30,7 +31,8 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         markdown: null,
         collaboratorEmails: [],
-        commentPeriodInDay: 7,
+        commentPeriodValue: 3,
+        commentPeriodUnit: "days",
         selectedProject: ""
       };
     case types.COLLABORATOR_UPDATED:
@@ -38,10 +40,15 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         collaboratorEmails: action.collaboratorEmails
       };
-    case types.COMMENT_PERIOD_UPDATED:
+    case types.COMMENT_PERIOD_UNIT_UPDATED:
       return {
         ...state,
-        commentPeriodInDay: action.commentPeriodInDay
+        commentPeriodUnit: action.commentPeriodUnit
+      };
+    case types.COMMENT_PERIOD_VALUE_UPDATED:
+      return {
+        ...state,
+        commentPeriodValue: action.commentPeriodValue
       };
     case types.SELECTED_PROJECT_UPDATED:
       return {
@@ -67,8 +74,12 @@ export function getCollaboratorEmails(state) {
   return state.scenes.upload.data.upload.collaboratorEmails;
 }
 
-export function getCommentPeriodInDay(state) {
-  return state.scenes.upload.data.upload.commentPeriodInDay;
+export function getCommentPeriodUnit(state) {
+  return state.scenes.upload.data.upload.commentPeriodUnit;
+}
+
+export function getCommentPeriodValue(state) {
+  return state.scenes.upload.data.upload.commentPeriodValue;
 }
 
 export function getSelectedProject(state) {

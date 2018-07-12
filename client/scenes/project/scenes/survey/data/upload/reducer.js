@@ -9,7 +9,8 @@ const initialState = {
   collaboratorEmails: [],
   collaboratorOptions: [],
   newIssues: [],
-  commentPeriodInDay: 7,
+  commentPeriodValue: 3,
+  commentPeriodUnit: "days",
   scorecard: {}
 };
 
@@ -72,7 +73,9 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         markdown: null,
         resolvedIssueIds: [],
-        newIssues: []
+        newIssues: [],
+        commentPeriodValue: 3,
+        commentPeriodUnit: "days"
       };
     case types.ISSUE_SELECTED:
       return updateResolvedIssues(state, action);
@@ -84,10 +87,15 @@ export default function reduce(state = initialState, action = {}) {
     case types.ISSUE_ADDED:
     case types.ISSUE_DELETED:
       return updateNewIssues(state, action);
-    case types.COMMENT_PERIOD_UPDATED:
+    case types.COMMENT_PERIOD_UNIT_UPDATED:
       return {
         ...state,
-        commentPeriodInDay: action.commentPeriodInDay
+        commentPeriodUnit: action.commentPeriodUnit
+      };
+    case types.COMMENT_PERIOD_VALUE_UPDATED:
+      return {
+        ...state,
+        commentPeriodValue: action.commentPeriodValue
       };
     case types.PROJECT_SCORECARD_UPDATED:
       return {
@@ -119,10 +127,13 @@ export function getNewIssues(state) {
   return state.scenes.project.scenes.survey.data.upload.newIssues;
 }
 
-export function getCommentPeriodInDay(state) {
-  return state.scenes.project.scenes.survey.data.upload.commentPeriodInDay;
+export function getCommentPeriodUnit(state) {
+  return state.scenes.project.scenes.survey.data.upload.commentPeriodUnit;
 }
 
+export function getCommentPeriodValue(state) {
+  return state.scenes.project.scenes.survey.data.upload.commentPeriodValue;
+}
 export function getProjectScorecardStatus(state) {
   const scorecard = state.scenes.project.scenes.survey.data.upload.scorecard;
   return (

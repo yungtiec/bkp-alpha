@@ -6,7 +6,8 @@ export function postMarkdown({
   resolvedIssueIds,
   newIssues,
   collaboratorEmails,
-  commentPeriodInDay,
+  commentPeriodUnit,
+  commentPeriodValue,
   scorecard
 }) {
   return axios
@@ -15,7 +16,8 @@ export function postMarkdown({
       resolvedIssueIds,
       newIssues,
       collaboratorEmails,
-      commentPeriodInDay,
+      commentPeriodUnit,
+      commentPeriodValue,
       scorecard
     })
     .then(res => res.data);
