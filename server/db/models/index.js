@@ -11,7 +11,7 @@ const SurveyQuestion = require("./survey-question");
 const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
-const Collaborator = require("./collaborator");
+const ProjectSurveyCollaborator = require("./project-survey-collaborator");
 const ProjectAdmin = require("./project-admin");
 const ProjectEditor = require("./project-editor");
 
@@ -255,12 +255,12 @@ ProjectSurvey.belongsTo(ProjectSurvey, {
 });
 
 ProjectSurvey.belongsToMany(User, {
-  through: "collaborator",
+  through: "project_survey_collaborator",
   foreignKey: "project_survey_id",
   as: "collaborators"
 });
 User.belongsToMany(ProjectSurvey, {
-  through: "collaborator",
+  through: "project_survey_collaborator",
   foreignKey: "user_id"
 });
 /*=============  End of Survey  ==============*/
@@ -279,7 +279,7 @@ module.exports = {
   Tag,
   Issue,
   Notification,
-  Collaborator,
+  ProjectSurveyCollaborator,
   ProjectAdmin,
   ProjectEditor
 };

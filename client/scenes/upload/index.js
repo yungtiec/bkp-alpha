@@ -12,11 +12,9 @@ import {
   getCommentPeriodUnit,
   getCommentPeriodValue,
   getSelectedProject,
-  getManagedProjects,
   getProjectScorecardStatus
 } from "./data/upload/reducer";
 import {
-  fetchManagedProjects,
   importMarkdown,
   uploadMarkdownToServer,
   updateCollaborators,
@@ -26,8 +24,11 @@ import {
   updateSelectedProject,
   updateProjectScorecard
 } from "./data/upload/actions";
-import { fetchAllProjects } from "../../data/reducer";
-import { getAllProjects } from "../../data/reducer";
+import {
+  fetchAllProjects,
+  fetchManagedProjects,
+  getManagedProjects
+} from "../../data/reducer";
 import { notify } from "reapop";
 
 const LoadableSurveyUpload = Loadable({

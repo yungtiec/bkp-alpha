@@ -11,7 +11,7 @@ const {
   ProjectSurveyAnswer,
   Notification,
   Question,
-  Collaborator,
+  ProjectSurveyCollaborator,
   Issue,
   ProjectSurveyComment,
   ProjectAdmin,
@@ -202,7 +202,7 @@ async function createNewProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          Collaborator.create({
+          ProjectSurveyCollaborator.create({
             user_id: user ? user.id : null,
             email,
             project_survey_id: projectSurvey.id
@@ -317,7 +317,7 @@ async function updateExistingProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          Collaborator.create({
+          ProjectSurveyCollaborator.create({
             user_id: user ? user.id : null,
             email,
             project_survey_id: projectSurvey.id

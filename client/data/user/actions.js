@@ -1,7 +1,7 @@
 import axios from "axios";
 import history from "../../history";
 import * as types from "./actionTypes";
-import { pick } from "lodash";
+import { pick, keyBy } from "lodash";
 import ReactGA from "react-ga";
 import { loadModal } from "../modal/actions";
 import { uport } from "./connector";
@@ -64,9 +64,6 @@ export const editProfile = profile => dispatch =>
     .catch(err => console.log(err));
 
 export const signinWithUport = () => dispatch =>
-  // axios
-  //   .get("/auth/uport")
-  //   .then(res => res.data)
   uport
     .requestCredentials({
       requested: ["name", "email"]
@@ -84,9 +81,24 @@ export const signinWithUport = () => dispatch =>
         else history.push("/projects");
       },
       authError => {
-        // rare example: a good use case for parallel (non-catch) error handler
         dispatch(getUser({ error: authError }));
       }
     )
     .catch(dispatchOrHistoryErr => console.error(dispatchOrHistoryErr));
-// .then(urls => dispatch(loadModal("UPORT_MODAL", urls)))
+
+export const fetchManagedProjects = () => async (dispatch, getState) => {
+  try {
+    const projects = await axios
+      .get(`api/users/-/projects`)
+      .then(res => res.data);
+    const projectsBySymbol = keyBy(projects, "symbol");
+    const projectSymbolArr = projects.map(project => project.symbol);
+    dispatch({
+      type: types.MANAGED_PROJECTS_FETCH_SUCCESS,
+      projectsBySymbol,
+      projectSymbolArr
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};

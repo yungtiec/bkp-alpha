@@ -3,21 +3,6 @@ import { postMarkdown, getManagedProjects } from "./services";
 import history from "../../../../history";
 import { orderBy, keyBy } from "lodash";
 
-export const fetchManagedProjects = () => async (dispatch, getState) => {
-  try {
-    const projects = await getManagedProjects();
-    const projectsBySymbol = keyBy(projects, "symbol");
-    const projectSymbolArr = projects.map(project => project.symbol);
-    dispatch({
-      type: types.MANAGED_PROJECTS_FETCH_SUCCESS,
-      projectsBySymbol,
-      projectSymbolArr
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const importMarkdown = markdown => ({
   type: types.MARKDOWN_IMPORTED,
   markdown

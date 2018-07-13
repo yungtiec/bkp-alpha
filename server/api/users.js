@@ -64,6 +64,7 @@ router.get(
         ]
       };
       var projects;
+      var managedProjects, editedProjects;
       var admins = (admins = await Role.findOne({
         where: { name: "admin" }
       }).then(role => role.getUsers()));
@@ -72,7 +73,9 @@ router.get(
           projects = await Project.getProjects();
           break;
         case "project_admin":
-          projects = await req.user.getManagedProjects(includeQuery);
+          managedProjects = await req.user.getManagedProjects(includeQuery);
+          editedProjects = await req.user.getEditedProjects(includeQuery);
+          projects = editedProjects.concat(managedProjects);
           break;
         case "project_editor":
           projects = await req.user.getEditedProjects(includeQuery);
@@ -90,6 +93,12 @@ router.get(
       next(err);
     }
   }
+);
+
+router.get(
+  "/:userId/surveys",
+  ensureAuthentication,
+  async (req, res, next) => {}
 );
 
 router.get(

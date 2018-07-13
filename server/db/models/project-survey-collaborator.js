@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const Collaborator = db.define("collaborator", {
+const ProjectSurveyCollaborator = db.define("project_survey_collaborator", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -18,4 +18,4 @@ const Collaborator = db.define("collaborator", {
   }
 });
 
-module.exports = Collaborator;
+module.exports = ProjectSurveyCollaborator;

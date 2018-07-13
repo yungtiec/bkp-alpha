@@ -16,6 +16,12 @@ export default function(state = defaultUser, action) {
         name: action.profile.name,
         organization: action.profile.organization
       };
+    case types.MANAGED_PROJECTS_FETCH_SUCCESS:
+      return {
+        ...state,
+        projectSymbolArr: action.projectSymbolArr,
+        projectsBySymbol: action.projectsBySymbol
+      };
     default:
       return state;
   }
@@ -27,3 +33,11 @@ export const currentUserIsAdmin = state => {
     state.data.user.roles.filter(r => r.name === "admin").length
   );
 };
+
+export function getManagedProjects(state) {
+  const { projectSymbolArr, projectsBySymbol } = state.data.user;
+  return {
+    projectSymbolArr,
+    projectsBySymbol
+  };
+}

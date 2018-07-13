@@ -1,9 +1,5 @@
 import axios from "axios";
 
-export function getManagedProjects() {
-  return axios.get(`api/users/-/projects`).then(res => res.data);
-}
-
 export function postMarkdown({
   markdown,
   collaboratorEmails,

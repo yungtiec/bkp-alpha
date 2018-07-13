@@ -15,12 +15,6 @@ const initialState = {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.MANAGED_PROJECTS_FETCH_SUCCESS:
-      return {
-        ...state,
-        projectSymbolArr: action.projectSymbolArr,
-        projectsBySymbol: action.projectsBySymbol
-      };
     case types.MARKDOWN_IMPORTED:
       return {
         ...state,
@@ -96,15 +90,4 @@ export function getProjectScorecardStatus(state) {
     !isEmpty(scorecard) &&
     values(scorecard).reduce((bool, score) => !!score && bool, true)
   );
-}
-
-export function getManagedProjects(state) {
-  const {
-    projectSymbolArr,
-    projectsBySymbol
-  } = state.scenes.upload.data.upload;
-  return {
-    projectSymbolArr,
-    projectsBySymbol
-  };
 }
