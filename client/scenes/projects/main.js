@@ -9,7 +9,7 @@ import {
   fetchPublishedProjectSurveyStats,
   getProjectSurveys
 } from "../../data/reducer";
-import { ListView, ProjectCard, SurveyCard } from "../../components";
+import { ListView, CardProject, CardSurvey } from "../../components";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
 
@@ -39,7 +39,7 @@ class ProjectList extends Component {
           rowClassName={"col-md-12 entity-card__container"}
           rowsIdArray={latestProjectSurveyIds}
           rowsById={projectSurveysById}
-          renderRow={SurveyCard}
+          renderRow={CardSurvey}
         />
         <span className="projects-container__sub-header">Projects</span>
         <ListView
@@ -47,7 +47,7 @@ class ProjectList extends Component {
           rowClassName={"col-md-12 entity-card__container"}
           rowsIdArray={projectSymbolArr}
           rowsById={projectsBySymbol}
-          renderRow={ProjectCard}
+          renderRow={CardProject}
         />
       </div>
     );

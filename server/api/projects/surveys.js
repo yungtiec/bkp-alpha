@@ -47,7 +47,7 @@ router.get("/latest", async (req, res, next) => {
 router.get("/:projectSurveyId", async (req, res, next) => {
   try {
     const projectSurvey = await ProjectSurvey.scope({
-      method: ["byProjectSurveyId", req.params.projectSurveyId]
+      method: ["byIdWithAllEngagements", req.params.projectSurveyId]
     }).findOne();
     res.send(projectSurvey);
   } catch (err) {
@@ -239,7 +239,7 @@ async function updateExistingProjectSurvey({
 }) {
   try {
     var parentProjectSurvey = await ProjectSurvey.scope({
-      method: ["byProjectSurveyId", Number(parentProjectSurveyId)]
+      method: ["byIdWithAllEngagements", Number(parentProjectSurveyId)]
     }).findOne();
     var project = await Project.findOne({
       where: { symbol: parentProjectSurvey.project.symbol },

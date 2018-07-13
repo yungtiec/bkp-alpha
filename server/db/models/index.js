@@ -261,7 +261,8 @@ ProjectSurvey.belongsToMany(User, {
 });
 User.belongsToMany(ProjectSurvey, {
   through: "project_survey_collaborator",
-  foreignKey: "user_id"
+  foreignKey: "user_id",
+  as: "collaboratedProjectSurveys"
 });
 /*=============  End of Survey  ==============*/
 

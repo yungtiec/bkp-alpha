@@ -2,14 +2,31 @@ const Sequelize = require("sequelize");
 const _ = require("lodash");
 const db = require("../db");
 const router = require("express").Router();
-const { User, Role, Annotation, Project } = require("../db/models");
-const { assignIn } = require("lodash");
 const {
-  ensureAuthentication,
-  ensureAdminRole,
-  ensureAdminRoleOrOwnership
-} = require("./utils");
+  User,
+  Role,
+  Annotation,
+  Project,
+  ProjectSurvey,
+  Comment,
+  Issue
+} = require("../db/models");
+const { assignIn } = require("lodash");
+const { ensureAuthentication } = require("./utils");
 module.exports = router;
+
+const ensureCorrectRole = (req, res, next) => {
+  if (
+    !req.user.roles ||
+    !req.user.roles.length ||
+    req.user.roles[0].name === "user"
+  ) {
+    res.send([]);
+    return;
+  } else {
+    next();
+  }
+};
 
 router.get("/", ensureAuthentication, async (req, res, next) => {
   try {
@@ -39,16 +56,9 @@ router.get(
 router.get(
   "/:userId/projects",
   ensureAuthentication,
+  ensureCorrectRole,
   async (req, res, next) => {
     try {
-      if (
-        !req.user.roles ||
-        !req.user.roles.length ||
-        req.user.roles[0].name === "user"
-      ) {
-        res.send([]);
-        return;
-      }
       var includeQuery = {
         include: [
           {
@@ -98,7 +108,104 @@ router.get(
 router.get(
   "/:userId/surveys",
   ensureAuthentication,
-  async (req, res, next) => {}
+  ensureCorrectRole,
+  async (req, res, next) => {
+    try {
+      var projectSurveys;
+      var ownProjectSurveys, collaboratorProjectSurveys;
+      switch (req.user.roles[0].name) {
+        case "admin":
+          projectSurveys = await ProjectSurvey.scope(
+            "allRootsWithDescendants"
+          ).findAll();
+          break;
+        case "project_admin":
+        case "project_editor":
+          ownProjectSurveys = await ProjectSurvey.scope(
+            "allRootsWithDescendants"
+          ).findAll({
+            where: { creator_id: req.user.id }
+          });
+          collaboratorProjectSurveys = await req.user.getCollaboratedProjectSurveys(
+            {
+              include: [
+                { model: db.model("project_survey"), as: "descendents" },
+                {
+                  model: db.model("survey")
+                },
+                {
+                  model: db.model("project")
+                }
+              ],
+              order: [
+                ["createdAt", "DESC"],
+                [
+                  { model: db.model("project_survey"), as: "descendents" },
+                  "hierarchyLevel",
+                  "DESC"
+                ]
+              ]
+            }
+          );
+          projectSurveys = ownProjectSurveys.concat(collaboratorProjectSurveys);
+          break;
+        default:
+          projectSurveys = [];
+          break;
+      }
+      res.send(projectSurveys);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.get(
+  "/:userId/issues",
+  ensureAuthentication,
+  ensureCorrectRole,
+  async (req, res, next) => {
+    try {
+      var issues = await Comment.findAll({
+        where: {
+          project_survey_id: {
+            [Sequelize.Op.or]: req.query.projectSurveyIds.map(id => Number(id))
+          }
+        },
+        include: [
+          {
+            model: Issue,
+            required: true
+          },
+          {
+            model: db.model("user"),
+            as: "owner",
+            attributes: ["first_name", "last_name", "name", "email"]
+          },
+          {
+            model: db.model("project_survey"),
+            attributes: ["project_id", "survey_id", "id"],
+            include: [
+              {
+                model: db.model("project"),
+                attributes: ["symbol"]
+              },
+              {
+                model: db.model("survey"),
+                attributes: ["title"]
+              }
+            ]
+          }
+        ],
+        order: [["createdAt", "DESC"]],
+        offset: Number(req.query.offset),
+        limit: Number(req.query.limit)
+      });
+      res.send(issues);
+    } catch (err) {
+      next(err);
+    }
+  }
 );
 
 router.get(

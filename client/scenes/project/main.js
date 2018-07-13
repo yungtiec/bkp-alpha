@@ -2,7 +2,7 @@ import "./index.scss";
 import React, { Component } from "react";
 import { withRouter, Route } from "react-router-dom";
 import { ProjectBanner } from "./components";
-import { ListView, ProjectSymbolBlueBox, SurveyCard } from "../../components";
+import { ListView, ProjectSymbolBlueBox, CardSurvey } from "../../components";
 import Survey from "./scenes/survey";
 
 const ProjectIndex = ({
@@ -29,7 +29,7 @@ const ProjectIndex = ({
               rowClassName="col-md-12 entity-card__container"
               rowsIdArray={projectSurveyIds}
               rowsById={projectSurveysById}
-              renderRow={SurveyCard}
+              renderRow={CardSurvey}
             />
           ) : null}
         </div>

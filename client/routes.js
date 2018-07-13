@@ -9,7 +9,8 @@ import {
   Admin,
   Unauthorized,
   Upload,
-  Leaderboard
+  Leaderboard,
+  Dashboard
 } from "./scenes";
 import {
   Login,
@@ -34,6 +35,11 @@ class Routes extends Component {
           {/* Routes placed here are available to all visitors */}
           <RouteWithLayout layout={Layout} path="/login" component={Login} />
           <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/dashboard"
+            component={Dashboard}
+          />
           <RouteWithLayout
             layout={LayoutWithNav}
             path="/projects"

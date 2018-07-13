@@ -1,0 +1,22 @@
+.dashboard-sidebar {
+  width: 300px;
+}
+
+.dashboard-section__title {
+  font-size: 16px;
+  box-shadow: #2a48d4 0px -2px 0px 0px inset;
+  display: inline-block;
+  padding-bottom: 20px;
+  margin-bottom: 0;
+  letter-spacing: 0.08rem;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.dashboard-listing__item {
+  font-size: 14px;
+}
+
+.dashboard-listing__item:hover {
+  color: #4a9ff6;
+}

@@ -5,7 +5,10 @@ const defaultUser = {};
 export default function(state = defaultUser, action) {
   switch (action.type) {
     case types.GET_USER:
-      return action.user;
+      return {
+        ...state,
+        ...action.user
+      };
     case types.REMOVE_USER:
       return defaultUser;
     case types.PROFILE_UPDATED:
@@ -21,6 +24,12 @@ export default function(state = defaultUser, action) {
         ...state,
         projectSymbolArr: action.projectSymbolArr,
         projectsBySymbol: action.projectsBySymbol
+      };
+    case types.OWN_PROJECT_SURVEYS_FETCH_SUCCESS:
+      return {
+        ...state,
+        projectSurveysById: action.projectSurveysById,
+        projectSurveyIds: action.projectSurveyIds
       };
     default:
       return state;
@@ -39,5 +48,13 @@ export function getManagedProjects(state) {
   return {
     projectSymbolArr,
     projectsBySymbol
+  };
+}
+
+export function getOwnProjectSurveys(state) {
+  const { projectSurveysById, projectSurveyIds } = state.data.user;
+  return {
+    projectSurveysById,
+    projectSurveyIds
   };
 }

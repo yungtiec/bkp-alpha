@@ -41,7 +41,7 @@ const ProjectSurvey = db.define(
   {
     hierarchy: true,
     scopes: {
-      byProjectSurveyId: function(projectSurveyId) {
+      byIdWithAllEngagements: function(projectSurveyId) {
         return {
           where: { id: projectSurveyId },
           include: [
@@ -178,7 +178,6 @@ const ProjectSurvey = db.define(
                 }
               ]
             },
-
             {
               model: db.model("comment"),
               required: false,
@@ -206,7 +205,7 @@ const ProjectSurvey = db.define(
           ]
         };
       },
-      allPublishedSurveys: function() {
+      allLatestWithAllEngagements: function() {
         return {
           where: { hierarchyLevel: 1 },
           include: [
@@ -273,6 +272,28 @@ const ProjectSurvey = db.define(
             ]
           ]
         };
+      },
+      allRootsWithDescendants: function() {
+        return {
+          where: { hierarchyLevel: 1 },
+          include: [
+            { model: db.model("project_survey"), as: "descendents" },
+            {
+              model: db.model("survey")
+            },
+            {
+              model: db.model("project")
+            }
+          ],
+          order: [
+            ["createdAt", "DESC"],
+            [
+              { model: db.model("project_survey"), as: "descendents" },
+              "hierarchyLevel",
+              "DESC"
+            ]
+          ]
+        };
       }
     }
   }
@@ -280,13 +301,15 @@ const ProjectSurvey = db.define(
 
 ProjectSurvey.getAllPublishedSurveysWithStats = async function() {
   const projectSurveys = await ProjectSurvey.scope(
-    "allPublishedSurveys"
+    "allLatestWithAllEngagements"
   ).findAll();
   return getPublishedSurveysStats(projectSurveys);
 };
 
 ProjectSurvey.getLatestPublishedSurveysWithStats = async function() {
-  return await ProjectSurvey.scope("allPublishedSurveys").find({ limit: 10 });
+  return await ProjectSurvey.scope("allLatestWithAllEngagements").find({
+    limit: 10
+  });
 };
 
 module.exports = ProjectSurvey;

@@ -102,3 +102,21 @@ export const fetchManagedProjects = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
+
+export const fetchOwnProjectSurveys = () => async (dispatch, getState) => {
+  try {
+    const projectSurveys = await axios
+      .get(`api/users/-/surveys`)
+      .then(res => res.data);
+    const projectSurveysById = keyBy(projectSurveys, "id");
+    const projectSurveyIds = projectSurveys.map(ps => ps.id);
+    dispatch({
+      type: types.OWN_PROJECT_SURVEYS_FETCH_SUCCESS,
+      projectSurveysById,
+      projectSurveyIds
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
