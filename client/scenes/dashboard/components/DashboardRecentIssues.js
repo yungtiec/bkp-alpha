@@ -19,7 +19,8 @@ class DashboardRecentIssues extends Component {
   render() {
     if (!this.props.issueIds || !this.props.issuesById) return "loading";
     return (
-      <div class="dashboard__recent-issues mx-3">
+      <div class="dashboard__recent-issues ml-5">
+        <p className="dashboard__recent-issues-title pl-1">Recent Issues</p>
         <ListView
           viewClassName={"row entity-cards"}
           rowClassName={"col-md-12 entity-card__container"}

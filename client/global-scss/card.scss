@@ -23,7 +23,7 @@
 
 .entity__block * {
   color: rgba(0, 0, 0, 0.7);
-  letter-spacing: 0.08rem;
+  letter-spacing: 0.04rem;
   color: #555;
 }
 
@@ -143,9 +143,8 @@
 }
 
 .entity__block > .entity__metadata ~ .entity__metadata {
-  ::after {
-    content: "|";
-  }
+  margin-left: 10px;
+  border-left: 1px solid #999;
 }
 
 .entity__header {

@@ -9,7 +9,7 @@ export default (issueCommentId, issue) => {
     <ListRow className="entity-card" rowId={issueCommentId} onClick>
       <Link
         to={`/project/${issue.project_survey.project.symbol}/survey/${
-          issue.project_survey.survey.id
+          issue.project_survey.id
         }/comment/${issue.id}`}
       >
         <div className="entity__block">

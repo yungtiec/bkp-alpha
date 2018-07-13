@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default ({ projectSurveyIds, projectSurveysById }) => {
   return (
     <div className="d-flex flex-column">
-      <p className="dashboard-section__title mb-2 pb-3 pl-1">Documents</p>
+      <p className="dashboard-listing__title mb-2 pb-3 pl-1">Documents</p>
       {projectSurveyIds && projectSurveyIds.length ? (
         projectSurveyIds.map(id => (
           <div
