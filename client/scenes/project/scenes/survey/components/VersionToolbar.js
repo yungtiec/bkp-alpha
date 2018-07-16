@@ -162,7 +162,7 @@ class VersionToolbar extends Component {
             <PunditTypeSet type="Disclosure">
               <VisibleIf
                 action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata }}
+                model={{ project: projectMetadata, disclosure: surveyMetadata.survey }}
               >
                 <button type="button" className="btn btn-outline-primary">
                   <Link
@@ -258,7 +258,7 @@ class VersionToolbar extends Component {
             <PunditTypeSet type="Disclosure">
               <VisibleIf
                 action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata }}
+                model={{ project: projectMetadata, disclosure: surveyMetadata.survey }}
               >
                 <button
                   type="button"

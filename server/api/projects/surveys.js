@@ -11,7 +11,7 @@ const {
   ProjectSurveyAnswer,
   Notification,
   Question,
-  ProjectSurveyCollaborator,
+  SurveyCollaborator,
   Issue,
   ProjectSurveyComment,
   ProjectAdmin,
@@ -161,7 +161,7 @@ async function createNewProjectSurvey({
     var survey = await Survey.create({
       title: markdownParsor.title
     });
-    console.log(commentPeriodValue, commentPeriodUnit)
+    console.log(commentPeriodValue, commentPeriodUnit);
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
@@ -202,7 +202,7 @@ async function createNewProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          ProjectSurveyCollaborator.create({
+          SurveyCollaborator.create({
             user_id: user ? user.id : null,
             email,
             project_survey_id: projectSurvey.id
@@ -242,7 +242,7 @@ async function updateExistingProjectSurvey({
       method: ["byIdWithAllEngagements", Number(parentProjectSurveyId)]
     }).findOne();
     var project = await Project.findOne({
-      where: { symbol: parentProjectSurvey.project.symbol },
+      where: { symbol: parentProjectSurvey.survey.project.symbol },
       include: [
         {
           model: User,
@@ -258,7 +258,7 @@ async function updateExistingProjectSurvey({
     });
     const canVersion = permission(
       "Version",
-      { project, disclosure: parentProjectSurvey },
+      { project, disclosure: parentProjectSurvey.survey },
       creator
     );
     if (!canVersion) {
@@ -266,27 +266,19 @@ async function updateExistingProjectSurvey({
       return;
     }
     var markdownParsor = new MarkdownParsor({ markdown: markdown });
-    var survey = await Survey.create({
-      title: markdownParsor.title
-    });
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
-
     var projectSurvey = await ProjectSurvey.create({
-      project_id: parentProjectSurvey.project.id,
-      survey_id: survey.id,
+      survey_id: parentProjectSurvey.survey.id,
       creator_id: creator.id,
-      forked: creator.id !== parentProjectSurvey.creator_id,
-      original_id:
-        creator.id !== parentProjectSurvey.creator_id
-          ? parentProjectSurvey.id
-          : null,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });
-    if (creator.id === parentProjectSurvey.creator_id)
-      await parentProjectSurvey.addChild(projectSurvey.id);
+    await parentProjectSurvey.addChild(projectSurvey.id);
+    var survey = await Survey.findById(parentProjectSurvey.survey.id).then(s =>
+      s.update({ latest_version: parentProjectSurvey.hierarchyLevel + 1 })
+    );
     var questionInstances = await Promise.map(
       markdownParsor.questions,
       questionObject =>
@@ -302,7 +294,7 @@ async function updateExistingProjectSurvey({
             questionObject.order_in_survey
           );
           var surveyQuestion = await SurveyQuestion.create({
-            survey_id: survey.id,
+            project_survey_id: projectSurvey.id,
             question_id: question.id,
             order_in_survey: questionObject.order_in_survey
           });
@@ -317,19 +309,24 @@ async function updateExistingProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          ProjectSurveyCollaborator.create({
-            user_id: user ? user.id : null,
-            email,
-            project_survey_id: projectSurvey.id
-          }).then(collaborator => {
-            return Notification.notifyCollaborators({
-              sender: creator,
-              collaboratorId: user.id,
-              projectSurveyId: projectSurvey.id,
-              projectSymbol: parentProjectSurvey.project.symbol,
-              parentSurveyTitle: parentProjectSurvey.survey.title,
-              action: "updated"
-            });
+          SurveyCollaborator.findOrCreate({
+            where: { user_id: user.id },
+            defaults: {
+              user_id: user ? user.id : null,
+              email,
+              survey_id: parentProjectSurvey.survey.id,
+              project_survey_version: projectSurvey.hierarchyLevel
+            }
+          }).then((collaborator, created) => {
+            if (created)
+              return Notification.notifyCollaborators({
+                sender: creator,
+                collaboratorId: user.id,
+                projectSurveyId: projectSurvey.id,
+                projectSymbol: project.symbol,
+                parentSurveyTitle: parentProjectSurvey.survey.title,
+                action: "updated"
+              });
           })
         )
     );
@@ -367,7 +364,7 @@ async function updateExistingProjectSurvey({
             Notification.notifyEngagedUserOnUpdate({
               engagedUser,
               projectSurveyId: projectSurvey.id,
-              projectSymbol: parentProjectSurvey.project.symbol,
+              projectSymbol: project.symbol,
               parentSurveyTitle: parentProjectSurvey.survey.title
             })
           )

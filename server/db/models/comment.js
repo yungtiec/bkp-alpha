@@ -56,7 +56,7 @@ const Comment = db.define(
               model: db.model("project_survey"),
               include: [
                 {
-                  survey: db.model("survey"),
+                  model: db.model("survey"),
                   include: [
                     {
                       model: db.model("project"),
@@ -155,8 +155,13 @@ const Comment = db.define(
               model: db.model("project_survey"),
               include: [
                 {
-                  model: db.model("project"),
-                  attributes: ["symbol"]
+                  model: db.model("survey"),
+                  include: [
+                    {
+                      model: db.model("project"),
+                      attributes: ["symbol"]
+                    }
+                  ]
                 }
               ]
             },
@@ -169,7 +174,7 @@ const Comment = db.define(
                   as: "resolvingProjectSurvey",
                   include: [
                     {
-                      survey: db.model("survey"),
+                      model: db.model("survey"),
                       include: [
                         {
                           model: db.model("project"),

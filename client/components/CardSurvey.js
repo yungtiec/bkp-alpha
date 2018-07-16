@@ -9,7 +9,11 @@ export default (surveyId, survey) => {
     <ListRow className="entity-card" rowId={surveyId} onClick>
       <Link
         to={`/project/${survey.project_symbol ||
-          (survey.project && survey.project.symbol)}/survey/${surveyId}`}
+          (survey.project && survey.project.symbol)}/survey/${
+          survey.project_surveys
+            ? survey.project_surveys.slice(-1)[0].id
+            : surveyId
+        }`}
       >
         <div className="entity__block">
           <div className="entity__header">
@@ -20,8 +24,7 @@ export default (surveyId, survey) => {
                   : survey.title}
               </span>
               <span className="entity__ticker">
-                ({`v${survey.project_surveys.length} `}
-                {`by ${survey.creator.name}`})
+                {`by ${survey.creator.name}`}
               </span>
             </div>
             <p className="entity__date">

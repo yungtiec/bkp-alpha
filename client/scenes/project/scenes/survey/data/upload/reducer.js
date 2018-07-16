@@ -58,7 +58,7 @@ export default function reduce(state = initialState, action = {}) {
     case PROJECT_SURVEY_FETCH_SUCCESS:
       return {
         ...state,
-        collaboratorEmails: action.surveyMetadata.collaborators.map(
+        collaboratorEmails: action.surveyMetadata.survey.collaborators.map(
           c => c.email
         ),
         scorecard: action.surveyMetadata.scorecard

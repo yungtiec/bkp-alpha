@@ -434,10 +434,4 @@ class SurveyUpload extends Component {
 
 const mapState = (state, ownProps) => ({ ...ownProps });
 
-export default connect(mapState, {})(
-  requiresAuthorization({
-    Component: SurveyUpload,
-    checkSurveyEditRight: true,
-    roleRequired: ["project_editor", "project_admin", "admin"]
-  })
-);
+export default connect(mapState, {})(SurveyUpload);

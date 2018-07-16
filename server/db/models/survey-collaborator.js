@@ -15,6 +15,9 @@ const ProjectSurveyCollaborator = db.define("survey_collaborator", {
   },
   survey_id: {
     type: Sequelize.INTEGER
+  },
+  project_survey_version: {
+    type: Sequelize.INTEGER
   }
 });
 

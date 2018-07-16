@@ -15,18 +15,15 @@ export default class SurveyHeader extends Component {
   }
 
   render() {
-    const {
-      surveyMetadata,
-      projectMetadata
-    } = this.props;
-    const creator = getFullNameFromUserObject(surveyMetadata.creator);
-    const collaborators = surveyMetadata.collaborators
+    const { surveyMetadata, projectMetadata } = this.props;
+    const creator = getFullNameFromUserObject(surveyMetadata.survey.creator);
+    const collaborators = surveyMetadata.survey.collaborators
       .map((c, i) => {
         if (
-          i === surveyMetadata.collaborators.length - 1 &&
-          surveyMetadata.collaborators.length > 1
+          i === surveyMetadata.survey.collaborators.length - 1 &&
+          surveyMetadata.survey.collaborators.length > 1
         )
-          return `and ${getFullNameFromUserObject(c)}`;
+          return ` and ${getFullNameFromUserObject(c)}`;
         else if (i === 0) return `with ${getFullNameFromUserObject(c)}`;
         else return `, ${getFullNameFromUserObject(c)}`;
       })
@@ -38,7 +35,7 @@ export default class SurveyHeader extends Component {
           back to project page
         </p>
         <ProjectSymbolBlueBox name={projectMetadata.name} />
-        <p className="survey__title">{`${surveyMetadata.title}`}</p>
+        <p className="survey__title">{`${surveyMetadata.survey.title}`}</p>
         <p className="survey__subtitle  mb-4">
           {`disclosure created by ${creator} ${collaborators}`}
           <a href class="survey__request-btn ml-2">

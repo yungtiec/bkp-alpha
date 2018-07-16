@@ -25,6 +25,10 @@ const Survey = db.define("survey", {
   latest_version: {
     type: Sequelize.INTEGER
   }
+}, {
+  scopes: {
+
+  }
 });
 
 module.exports = Survey;

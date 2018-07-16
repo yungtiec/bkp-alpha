@@ -57,11 +57,6 @@ const ProjectSurvey = db.define(
                   as: "creator"
                 },
                 {
-                  model: db.model("user"),
-                  as: "collaborators",
-                  required: false
-                },
-                {
                   model: db.model("issue"),
                   as: "resolvedIssues",
                   required: false,
@@ -94,11 +89,6 @@ const ProjectSurvey = db.define(
                 {
                   model: db.model("user"),
                   as: "creator"
-                },
-                {
-                  model: db.model("user"),
-                  as: "collaborators",
-                  required: false
                 },
                 {
                   model: db.model("issue"),
@@ -143,6 +133,10 @@ const ProjectSurvey = db.define(
                   model: db.model("user"),
                   as: "collaborators",
                   required: false
+                },
+                {
+                  model: db.model("user"),
+                  as: "creator"
                 }
               ]
             },
