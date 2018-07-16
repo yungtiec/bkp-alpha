@@ -20,7 +20,7 @@ export default (surveyId, survey) => {
                   : survey.title}
               </span>
               <span className="entity__ticker">
-                ({`v${survey.hierarchyLevel} `}
+                ({`v${survey.project_surveys.length} `}
                 {`by ${survey.creator.name}`})
               </span>
             </div>

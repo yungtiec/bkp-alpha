@@ -39,10 +39,10 @@ class MyComponent extends React.Component {
 }
 
 const mapState = state => {
-  const { projectSurveysById, projectSurveyIds } = getAllProjectSurveys(state);
+  const { surveysById, surveyIds } = getAllProjectSurveys(state);
   return {
-    projectSurveysById,
-    projectSurveyIds,
+    surveysById,
+    surveyIds,
     metadata: getSelectedProject(state)
   };
 };

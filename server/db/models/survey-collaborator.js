@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const ProjectSurveyCollaborator = db.define("project_survey_collaborator", {
+const ProjectSurveyCollaborator = db.define("survey_collaborator", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -13,7 +13,7 @@ const ProjectSurveyCollaborator = db.define("project_survey_collaborator", {
   user_id: {
     type: Sequelize.INTEGER
   },
-  project_survey_id: {
+  survey_id: {
     type: Sequelize.INTEGER
   }
 });

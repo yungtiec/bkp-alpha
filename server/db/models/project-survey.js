@@ -13,9 +13,6 @@ const ProjectSurvey = db.define(
     survey_id: {
       type: Sequelize.INTEGER
     },
-    project_id: {
-      type: Sequelize.INTEGER
-    },
     submitted: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
@@ -23,13 +20,6 @@ const ProjectSurvey = db.define(
     reviewed: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
-    },
-    forked: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
-    },
-    original_id: {
-      type: Sequelize.INTEGER
     },
     comment_until_unix: {
       type: Sequelize.BIGINT
@@ -140,11 +130,6 @@ const ProjectSurvey = db.define(
             },
             {
               model: db.model("user"),
-              as: "collaborators",
-              required: false
-            },
-            {
-              model: db.model("user"),
               as: "upvotesFrom",
               attributes: ["name", "first_name", "last_name", "email"]
             },
@@ -152,29 +137,12 @@ const ProjectSurvey = db.define(
               model: db.model("survey"),
               include: [
                 {
-                  model: db.model("survey_question"),
-                  include: [
-                    {
-                      model: db.model("question")
-                    },
-                    {
-                      model: db.model("project_survey_answer"),
-                      where: {
-                        project_survey_id: projectSurveyId
-                      },
-                      include: [
-                        {
-                          model: db.model("project_survey_answer"),
-                          where: {
-                            project_survey_id: projectSurveyId
-                          },
-                          as: "descendents",
-                          hierarchy: true,
-                          required: false
-                        }
-                      ]
-                    }
-                  ]
+                  model: db.model("project")
+                },
+                {
+                  model: db.model("user"),
+                  as: "collaborators",
+                  required: false
                 }
               ]
             },
@@ -190,7 +158,23 @@ const ProjectSurvey = db.define(
               ]
             },
             {
-              model: db.model("project")
+              model: db.model("survey_question"),
+              include: [
+                {
+                  model: db.model("question")
+                },
+                {
+                  model: db.model("project_survey_answer"),
+                  include: [
+                    {
+                      model: db.model("project_survey_answer"),
+                      as: "descendents",
+                      hierarchy: true,
+                      required: false
+                    }
+                  ]
+                }
+              ]
             }
           ],
           order: [
@@ -214,11 +198,7 @@ const ProjectSurvey = db.define(
               model: db.model("user"),
               as: "creator"
             },
-            {
-              model: db.model("user"),
-              as: "collaborators",
-              required: false
-            },
+
             {
               model: db.model("user"),
               as: "upvotesFrom",
@@ -258,10 +238,17 @@ const ProjectSurvey = db.define(
               ]
             },
             {
-              model: db.model("survey")
-            },
-            {
-              model: db.model("project")
+              model: db.model("survey"),
+              include: [
+                {
+                  model: db.model("project")
+                },
+                {
+                  model: db.model("user"),
+                  as: "collaborators",
+                  required: false
+                }
+              ]
             }
           ],
           order: [
@@ -279,10 +266,12 @@ const ProjectSurvey = db.define(
           include: [
             { model: db.model("project_survey"), as: "descendents" },
             {
-              model: db.model("survey")
-            },
-            {
-              model: db.model("project")
+              model: db.model("survey"),
+              include: [
+                {
+                  model: db.model("project")
+                }
+              ]
             }
           ],
           order: [
@@ -362,19 +351,25 @@ function getPublishedSurveysStats(projectSurveys) {
           },
           {
             model: db.model("user"),
+            as: "creator"
+          },
+          {
+            model: db.model("user"),
             as: "upvotesFrom",
             attributes: ["id"],
             required: false
           },
           {
-            model: db.model("survey")
+            model: db.model("survey"),
+            include: [
+              {
+                model: db.model("project")
+              }
+            ]
           }
         ]
       });
-      rawProjectSurvey = _.assignIn(
-        _.pick(rawProjectSurvey, ["creator", "project"]),
-        projectSurveyInstance.toJSON()
-      );
+      rawProjectSurvey = projectSurveyInstance.toJSON();
     }
     const comments = rawProjectSurvey.comments;
     const numPendingComments = comments.filter(c => c.reviewed === "pending")
@@ -419,7 +414,8 @@ function getPublishedSurveysStats(projectSurveys) {
         num_pending_comments: numPendingComments + numPendingReplies,
         num_total_comments: numTotalComments + numTotalReplies,
         num_reaction: numCommentUpvotes + numReplyUpvotes,
-        num_issues: numCommentIssues
+        num_issues: numCommentIssues,
+        project: rawProjectSurvey.survey.project
       },
       _.omit(rawProjectSurvey, ["survey"])
     );

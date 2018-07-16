@@ -1,16 +1,16 @@
 import * as types from "../actionTypes";
 
 const initialState = {
-  projectSurveysById: {},
-  projectSurveyIds: []
+  surveysById: {},
+  surveyIds: []
 };
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
     case types.PROJECT_FETCH_SUCCESS:
       return {
-        projectSurveysById: action.projectSurveysById,
-        projectSurveyIds: action.projectSurveyIds
+        surveysById: action.surveysById,
+        surveyIds: action.surveyIds
       };
     default:
       return state;

@@ -6,29 +6,32 @@ import { ListView, ProjectSymbolBlueBox, CardSurvey } from "../../components";
 import Survey from "./scenes/survey";
 
 const ProjectIndex = ({
-  projectSurveysById,
-  projectSurveyIds,
+  surveysById,
+  surveyIds,
   metadata,
   match,
   children
 }) => {
   return (
     <div className="main-container">
-      <Route path={`${match.path}/survey/:projectSurveyId`} component={Survey} />
+      <Route
+        path={`${match.path}/survey/:projectSurveyId`}
+        component={Survey}
+      />
       {match.isExact && (
         <div className="surveys-container">
           <ProjectBanner metadata={metadata} />
           <span className="surveys-container__sub-header">
-            {projectSurveyIds.length
+            {surveyIds.length
               ? "Browse disclosures"
               : `${metadata.name} currently has no disclosure document`}
           </span>
-          {projectSurveyIds.length ? (
+          {surveyIds.length ? (
             <ListView
               viewClassName={"row entity-cards"}
               rowClassName="col-md-12 entity-card__container"
-              rowsIdArray={projectSurveyIds}
-              rowsById={projectSurveysById}
+              rowsIdArray={surveyIds}
+              rowsById={surveysById}
               renderRow={CardSurvey}
             />
           ) : null}
