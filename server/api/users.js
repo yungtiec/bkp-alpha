@@ -96,7 +96,7 @@ router.get(
           .concat(p.admins || [])
           .concat(p.editors || [])
           .filter(c => c.id !== req.user.id);
-        return _.assignIn(p.toJSON(), { collaboratorOptions });
+        return _.assignIn(p, { collaboratorOptions });
       });
       res.send(projects);
     } catch (err) {
@@ -154,55 +154,6 @@ router.get(
           break;
       }
       res.send(projectSurveys);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-router.get(
-  "/:userId/issues",
-  ensureAuthentication,
-  ensureCorrectRole,
-  async (req, res, next) => {
-    try {
-      var issues = await Comment.findAndCountAll({
-        where: {
-          project_survey_id: {
-            [Sequelize.Op.or]: req.query.projectSurveyIds.map(id => Number(id))
-          }
-        },
-        include: [
-          {
-            where: { open: true },
-            model: Issue,
-            required: true
-          },
-          {
-            model: db.model("user"),
-            as: "owner",
-            attributes: ["first_name", "last_name", "name", "email"]
-          },
-          {
-            model: db.model("project_survey"),
-            attributes: ["project_id", "survey_id", "id"],
-            include: [
-              {
-                model: db.model("project"),
-                attributes: ["symbol"]
-              },
-              {
-                model: db.model("survey"),
-                attributes: ["title"]
-              }
-            ]
-          }
-        ],
-        order: [["createdAt", "DESC"]],
-        offset: Number(req.query.offset),
-        limit: Number(req.query.limit)
-      });
-      res.send(issues);
     } catch (err) {
       next(err);
     }

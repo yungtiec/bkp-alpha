@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getResponsibleIssues = ({ projectSurveyIds, offset, limit }) =>
   axios
-    .get("/api/users/-/issues", {
+    .get("/api/issues", {
       params: {
         projectSurveyIds,
         offset,

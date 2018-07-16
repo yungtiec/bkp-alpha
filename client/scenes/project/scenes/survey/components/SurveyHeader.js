@@ -38,9 +38,12 @@ export default class SurveyHeader extends Component {
           back to project page
         </p>
         <ProjectSymbolBlueBox name={projectMetadata.name} />
-        <p className="survey-title">{`${surveyMetadata.title}`}</p>
-        <p className="survey-subtitle  mb-4">
+        <p className="survey__title">{`${surveyMetadata.title}`}</p>
+        <p className="survey__subtitle  mb-4">
           {`disclosure created by ${creator} ${collaborators}`}
+          <a href class="survey__request-btn ml-2">
+            request editing right
+          </a>
         </p>
       </div>
     );

@@ -3,6 +3,7 @@ module.exports = router;
 
 router.use("/users", require("./users"));
 router.use("/projects", require("./projects"));
+router.use("/issues", require("./issues"));
 router.use("/tags", require("./tags"));
 router.use("/notifications", require("./notifications"));
 

@@ -10,7 +10,7 @@
   width: 150px;
 }
 
-.project-survey__header .survey-title {
+.project-survey__header .survey__title {
   font-weight: 700;
   font-size: 42px;
   line-height: 1.58;
@@ -21,8 +21,13 @@
   }
 }
 
-.project-survey__header .survey-subtitle {
+.project-survey__header .survey__subtitle {
   font-size: 1.2rem;
   color: #838383;
   font-family: "Roboto Condensed", sans-serif;
+}
+
+.survey__request-btn {
+  text-decoration: underline;
+  color: #4a9ff6 !important;
 }
