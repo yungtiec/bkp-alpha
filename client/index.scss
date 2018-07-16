@@ -36,6 +36,14 @@ li {
   }
 }
 
+.component__loader-container {
+  flex-grow: 1;
+  background: #fdfafa;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
 .route__loader div {
   position: fixed;
   height: 2em !important;

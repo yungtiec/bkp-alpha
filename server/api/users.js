@@ -166,7 +166,7 @@ router.get(
   ensureCorrectRole,
   async (req, res, next) => {
     try {
-      var issues = await Comment.findAll({
+      var issues = await Comment.findAndCountAll({
         where: {
           project_survey_id: {
             [Sequelize.Op.or]: req.query.projectSurveyIds.map(id => Number(id))
@@ -174,6 +174,7 @@ router.get(
         },
         include: [
           {
+            where: { open: true },
             model: Issue,
             required: true
           },

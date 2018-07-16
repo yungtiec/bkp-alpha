@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { getResponsibleIssues } from "../data/reducer";
+import { getResponsibleIssues, canLoadMore } from "../data/reducer";
 import { fetchResponsibleIssues } from "../data/actions";
 import { CardIssue } from "./index";
 import { ListView } from "../../../components";
+import { ScaleLoader } from "halogenium";
 
 class DashboardRecentIssues extends Component {
   constructor(props) {
@@ -17,17 +18,35 @@ class DashboardRecentIssues extends Component {
   }
 
   render() {
-    if (!this.props.issueIds || !this.props.issuesById) return "loading";
     return (
       <div class="dashboard__recent-issues ml-5">
         <p className="dashboard__recent-issues-title pl-1">Recent Issues</p>
-        <ListView
-          viewClassName={"row entity-cards"}
-          rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={this.props.issueIds}
-          rowsById={this.props.issuesById}
-          renderRow={CardIssue}
-        />
+        {!this.props.issueIds || !this.props.issuesById ? (
+          <div className="component__loader-container d-flex">
+            <ScaleLoader
+              className="component__loader"
+              color="#2d4dd1"
+              size="16px"
+              margin="4px"
+            />
+          </div>
+        ) : (
+          <ListView
+            viewClassName="row entity-cards"
+            rowClassName="col-md-12 entity-card__container  d-flex flex-column"
+            rowsIdArray={this.props.issueIds}
+            rowsById={this.props.issuesById}
+            renderRow={CardIssue}
+          />
+        )}
+        {this.props.canLoadMore ? (
+          <a
+            className="dashboard__show-more"
+            onClick={this.props.fetchResponsibleIssues}
+          >
+            <p>show more</p>
+          </a>
+        ) : null}
       </div>
     );
   }
@@ -37,7 +56,8 @@ const mapState = state => {
   const { issuesById, issueIds } = getResponsibleIssues(state);
   return {
     issuesById,
-    issueIds
+    issueIds,
+    canLoadMore: canLoadMore(state)
   };
 };
 

@@ -6,7 +6,8 @@ const initialState = {
   issueIds: null,
   issues: null,
   issueOffset: 0,
-  issueLimit: 10
+  issueLimit: 10,
+  issueCount: null
 };
 
 export default function(state = initialState, action) {
@@ -16,7 +17,8 @@ export default function(state = initialState, action) {
         ...state,
         issuesById: assignIn(action.issuesById, state.issuesById),
         issueIds: (state.issueIds || []).concat(action.issueIds),
-        issueOffset: action.issueOffset
+        issueOffset: action.issueOffset,
+        issueCount: action.count
       };
     default:
       return state;
@@ -28,4 +30,11 @@ export function getResponsibleIssues(state) {
     issuesById: state.scenes.dashboard.data.issuesById,
     issueIds: state.scenes.dashboard.data.issueIds
   };
+}
+
+export function canLoadMore(state) {
+  return (
+    state.scenes.dashboard.data.issueOffset <
+    state.scenes.dashboard.data.issueCount
+  );
 }

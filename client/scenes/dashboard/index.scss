@@ -21,6 +21,10 @@
   color: #4a9ff6;
 }
 
+.dashboard__recent-issues {
+  width: 100%;
+}
+
 .dashboard__recent-issues-title {
   font-size: 16px;
   margin-bottom: 12px;
@@ -31,4 +35,18 @@
 
 .dashboard__recent-issues .entity__title span {
   text-transform: initial;
+}
+
+.dashboard__show-more {
+  display: inline-block;
+  padding: 15px 0 15px 0;
+}
+
+.dashboard__show-more p {
+  font-size: 14px;
+  color: #4a9ff6;
+}
+
+.dashboard__show-more p:hover {
+  text-decoration: underline;
 }
