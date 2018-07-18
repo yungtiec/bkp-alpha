@@ -132,6 +132,10 @@ const ProjectSurvey = db.define(
                 {
                   model: db.model("user"),
                   as: "collaborators",
+                  through: {
+                    model: db.model("survey_collaborator"),
+                    where: { revoked_access: { [Sequelize.Op.not]: true } }
+                  },
                   required: false
                 },
                 {
@@ -240,6 +244,10 @@ const ProjectSurvey = db.define(
                 {
                   model: db.model("user"),
                   as: "collaborators",
+                  through: {
+                    model: db.model("survey_collaborator"),
+                    where: { revoked_access: { [Sequelize.Op.not]: true } }
+                  },
                   required: false
                 }
               ]

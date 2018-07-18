@@ -111,7 +111,9 @@ router.post(
           markdown: req.body.markdown,
           resolvedIssueIds: req.body.resolvedIssueIds,
           newIssues: req.body.newIssues,
-          collaboratorEmails: req.body.collaboratorEmails,
+          collaboratorEmails: req.body.collaboratorEmails.map(
+            emailOption => emailOption.value
+          ),
           commentPeriodUnit: req.body.commentPeriodUnit,
           commentPeriodValue: req.body.commentPeriodValue,
           scorecard: req.body.scorecard,
@@ -306,19 +308,49 @@ async function updateExistingProjectSurvey({
           return question;
         })
     );
+    var prevCollaboratorEmails = parentProjectSurvey.survey.collaborators.map(
+      user => user.email
+    );
+    var removedCollaborators = _.difference(
+      prevCollaboratorEmails,
+      collaboratorEmails
+    ).map(async email =>
+      SurveyCollaborator.update(
+        { revoked_access: true },
+        {
+          where: {
+            email,
+            survey_id: parentProjectSurvey.survey.id
+          }
+        }
+      )
+    );
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
           SurveyCollaborator.findOrCreate({
-            where: { user_id: user.id },
+            where: {
+              user_id: user.id,
+              survey_id: parentProjectSurvey.survey.id
+            },
             defaults: {
               user_id: user ? user.id : null,
               email,
               survey_id: parentProjectSurvey.survey.id,
               project_survey_version: projectSurvey.hierarchyLevel
             }
-          }).then((collaborator, created) => {
-            if (created)
+          }).then(async (collaborator, created) => {
+            var updated;
+            if (collaborator.revoked_access) {
+              collaborator = await SurveyCollaborator.update(
+                {
+                  revoked_access: false
+                },
+                { where: { id: collaborator.id } }
+              );
+              updated = true;
+            }
+            if (created || updated)
               return Notification.notifyCollaborators({
                 sender: creator,
                 collaboratorId: user.id,
@@ -357,6 +389,7 @@ async function updateExistingProjectSurvey({
     });
     await Promise.all(
       collaborators
+        .concat(removedCollaborators)
         .concat(resolvedCurrentIssues)
         .concat(resolvedAddedIssues)
         .concat(

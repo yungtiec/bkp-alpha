@@ -17,7 +17,6 @@ export default ({ surveyMetadata, projectSymbol }) => (
         );
         if (version.creator.email !== surveyMetadata.survey.creator.email)
           collaborators = collaborators.concat(surveyMetadata.survey.creator);
-        console.log(collaborators);
         collaborators = collaborators
           .map((c, i) => {
             if (i === collaborators.length - 1 && collaborators.length > 1)
