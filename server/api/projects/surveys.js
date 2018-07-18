@@ -165,14 +165,15 @@ async function createNewProjectSurvey({
     var survey = await Survey.create({
       title: markdownParsor.title,
       creator_id: creator.id,
+      project_id: project.id,
       latest_version: 1
     });
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
     var projectSurvey = await ProjectSurvey.create({
-      project_id: project.id,
       survey_id: survey.id,
+      creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });

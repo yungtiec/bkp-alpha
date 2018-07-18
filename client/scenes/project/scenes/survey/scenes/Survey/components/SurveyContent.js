@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Element } from "react-scroll";
 import { Qna, Question, Answers, SurveyScorecard } from "./index";
+import { isEmpty } from "lodash";
 
 export default ({
   isLoggedIn,
@@ -10,14 +11,22 @@ export default ({
   numComments,
   surveyMetadata,
   commentOnClick,
-  handlePollData,
   parent,
   tags,
   tagFilter,
   addNewCommentSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
-    <SurveyScorecard scorecard={surveyMetadata.scorecard} parent={parent} />
+    {surveyMetadata.scorecard && !isEmpty(surveyMetadata.scorecard) ? (
+      <SurveyScorecard
+        scorecard={surveyMetadata.scorecard}
+        parent={parent}
+        projectSurveyId={surveyMetadata.id}
+        isLoggedIn={isLoggedIn}
+        isClosedForComment={isClosedForComment}
+        addNewCommentSentFromServer={addNewCommentSentFromServer}
+      />
+    ) : null}
     {surveyQnaIds.map(id => {
       return (
         <Element
@@ -31,7 +40,6 @@ export default ({
             projectSurveyId={surveyMetadata.id}
             isLoggedIn={isLoggedIn}
             isClosedForComment={isClosedForComment}
-            pollData={handlePollData}
             numComments={numComments}
             tags={tags}
             tagFilter={tagFilter}

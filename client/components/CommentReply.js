@@ -25,7 +25,7 @@ export default ({ comment, path, children }) => {
           {comment.project_survey && comment.project_survey.survey ? (
             <div className="reply-comment__survey-title-container">
               <span className="reply-comment__survey-title">
-                {comment.project_survey.project.name}:{" "}
+                {comment.project_survey.survey.project.name}:{" "}
                 {comment.project_survey.survey.title}
               </span>
             </div>
