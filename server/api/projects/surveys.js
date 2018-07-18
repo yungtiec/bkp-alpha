@@ -96,7 +96,9 @@ router.post(
       if (req.params.parentProjectSurveyId === "-")
         createNewProjectSurvey({
           markdown: req.body.markdown,
-          collaboratorEmails: req.body.collaboratorEmails,
+          collaboratorEmails: req.body.collaboratorEmails.map(
+            emailOption => emailOption.value
+          ),
           commentPeriodUnit: req.body.commentPeriodUnit,
           commentPeriodValue: req.body.commentPeriodValue,
           selectedProjectSymbol: req.body.selectedProjectSymbol,
@@ -161,16 +163,15 @@ async function createNewProjectSurvey({
     }
     var markdownParsor = new MarkdownParsor({ markdown: markdown });
     var survey = await Survey.create({
-      title: markdownParsor.title
+      title: markdownParsor.title,
+      creator_id: creator.id
     });
-    console.log(commentPeriodValue, commentPeriodUnit);
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
     var projectSurvey = await ProjectSurvey.create({
       project_id: project.id,
       survey_id: survey.id,
-      creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });
@@ -207,7 +208,7 @@ async function createNewProjectSurvey({
           SurveyCollaborator.create({
             user_id: user ? user.id : null,
             email,
-            project_survey_id: projectSurvey.id
+            survey_id: survey.id
           }).then(collaborator => {
             return Notification.notifyCollaborators({
               sender: creator,

@@ -159,10 +159,14 @@ class Upload extends Component {
                     name="upload__project-select"
                     value={selectedProject.symbol}
                     onChange={this.handleProjectSelectChange}
-                    options={projectSymbolArr.map(symbol => ({
-                      label: projectsBySymbol[symbol].name.toUpperCase(),
-                      value: symbol
-                    }))}
+                    options={
+                      projectSymbolArr
+                        ? projectSymbolArr.map(symbol => ({
+                            label: projectsBySymbol[symbol].name.toUpperCase(),
+                            value: symbol
+                          }))
+                        : []
+                    }
                     placeholder="select..."
                   />
                   {this.state.projectError ? (
