@@ -164,7 +164,8 @@ async function createNewProjectSurvey({
     var markdownParsor = new MarkdownParsor({ markdown: markdown });
     var survey = await Survey.create({
       title: markdownParsor.title,
-      creator_id: creator.id
+      creator_id: creator.id,
+      latest_version: 1
     });
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)

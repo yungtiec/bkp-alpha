@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Element } from "react-scroll";
-import autoBind from "react-autobind";
-import { Qna, Question, Answers } from "./index";
+import { Qna, Question, Answers, SurveyScorecard } from "./index";
 
 export default ({
   isLoggedIn,
@@ -18,6 +17,7 @@ export default ({
   addNewCommentSentFromServer
 }) => (
   <div className="project-survey" id="project-survey">
+    <SurveyScorecard scorecard={surveyMetadata.scorecard} parent={parent} />
     {surveyQnaIds.map(id => {
       return (
         <Element
