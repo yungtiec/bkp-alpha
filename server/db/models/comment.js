@@ -38,6 +38,46 @@ const Comment = db.define(
   {
     hierarchy: true,
     scopes: {
+      withProjectSurveys: function(moreIncludeOptions) {
+        var options = {
+          include: [
+            {
+              model: db.model("project_survey"),
+              include: [
+                {
+                  model: db.model("survey"),
+                  attributes: ["title"],
+                  include: [
+                    {
+                      model: db.model("user"),
+                      as: "collaborators",
+                      required: false
+                    },
+                    {
+                      model: db.model("project"),
+                      include: [
+                        {
+                          model: db.model("user"),
+                          through: db.model("project_admin"),
+                          as: "admins"
+                        },
+                        {
+                          model: db.model("user"),
+                          through: db.model("project_editor"),
+                          as: "editors"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
+        if (moreIncludeOptions)
+          options.include = options.include.concat(moreIncludeOptions);
+        return options;
+      },
       upvotes: function(commentId) {
         return {
           where: { id: commentId },
@@ -87,49 +127,6 @@ const Comment = db.define(
                   "hierarchyLevel"
                 ]
               ]
-            }
-          ]
-        };
-      },
-      oneThreadByRootId: function(id) {
-        return {
-          where: { id },
-          include: [
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email"]
-            },
-            {
-              model: db.model("user"),
-              as: "owner",
-              attributes: ["first_name", "last_name", "name", "email"]
-            },
-            {
-              model: db.model("tag"),
-              attributes: ["name", "id"]
-            },
-            {
-              model: db.model("issue"),
-              attributes: ["open", "id"]
-            },
-            {
-              model: Comment,
-              required: false,
-              include: [
-                {
-                  model: db.model("user"),
-                  as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "name", "email"]
-                },
-                {
-                  model: db.model("user"),
-                  as: "owner",
-                  attributes: ["first_name", "last_name", "name", "email"]
-                }
-              ],
-              as: "descendents",
-              hierarchy: true
             }
           ]
         };

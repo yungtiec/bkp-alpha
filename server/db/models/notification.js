@@ -119,7 +119,7 @@ function getContextUri(comment) {
     ? `${rootItem.uri}/question/${comment.survey_question_id}/comment/${
         rootItem.id
       }`
-    : `/project/${comment.project_survey.project.symbol}/survey/${
+    : `/project/${comment.project_survey.survey.project.symbol}/survey/${
         comment.project_survey.id
       }/comment/${rootItem.id}`;
 }

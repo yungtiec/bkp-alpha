@@ -22,6 +22,8 @@ module.exports = {
         return (
           (isAdmin || isProjectAdmin || isProjectEditor) && needVerification
         );
+      case "AutoVerify":
+        return isAdmin || isProjectAdmin || isProjectEditor;
       case "Issue":
         return isAdmin || isProjectAdmin || isProjectEditor || isCommentOwner;
       case "Edit":
