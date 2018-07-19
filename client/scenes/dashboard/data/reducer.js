@@ -4,7 +4,6 @@ import { assignIn } from "lodash";
 const initialState = {
   issuesById: null,
   issueIds: null,
-  issues: null,
   issueOffset: 0,
   issueLimit: 10,
   issueCount: null

@@ -17,7 +17,7 @@ import {
 } from "../../reducer";
 import {
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey
+  upvoteSurvey
 } from "../../data/actions";
 import {
   fetchCommentsBySurvey,
@@ -149,7 +149,7 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey,
+  upvoteSurvey,
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,

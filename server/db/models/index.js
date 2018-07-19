@@ -230,15 +230,15 @@ ProjectSurvey.belongsTo(User, {
   as: "creator"
 });
 
-User.belongsToMany(ProjectSurvey, {
-  as: "upvotedProjectSurveys",
-  through: "project_survey_upvote",
+User.belongsToMany(Survey, {
+  as: "upvotedSurveys",
+  through: "survey_upvote",
   foreignKey: "user_id"
 });
-ProjectSurvey.belongsToMany(User, {
+Survey.belongsToMany(User, {
   as: "upvotesFrom",
-  through: "project_survey_upvote",
-  foreignKey: "project_survey_id"
+  through: "survey_upvote",
+  foreignKey: "survey_id"
 });
 
 SurveyQuestion.hasMany(Comment, {

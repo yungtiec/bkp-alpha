@@ -53,6 +53,11 @@ const Project = db.define(
                   required: false
                 },
                 {
+                  model: db.model("user"),
+                  as: "upvotesFrom",
+                  attributes: ["name", "first_name", "last_name", "email"]
+                },
+                {
                   model: db.model("survey"),
                   as: "forkFrom"
                 },
@@ -61,11 +66,6 @@ const Project = db.define(
                   required: false,
                   include: [
                     { model: db.model("user"), as: "creator" },
-                    {
-                      model: db.model("user"),
-                      as: "upvotesFrom",
-                      attributes: ["name", "first_name", "last_name", "email"]
-                    },
                     { model: db.model("project_survey"), as: "descendents" },
                     {
                       model: db.model("comment"),
@@ -105,7 +105,8 @@ const Project = db.define(
                     ["createdAt", "DESC"],
                     [
                       { model: db.model("project_survey"), as: "descendents" },
-                      "hierarchyLevel"
+                      "hierarchyLevel",
+                      "DESC"
                     ]
                   ]
                 }

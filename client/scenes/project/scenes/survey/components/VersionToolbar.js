@@ -39,7 +39,7 @@ class VersionToolbar extends Component {
       uploadMode,
       uploaded,
       user,
-      upvoteProjectSurvey
+      upvoteSurvey
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -63,9 +63,9 @@ class VersionToolbar extends Component {
               : "text-consensys btn-outline-primary"
           }`}
           onClick={() =>
-            upvoteProjectSurvey({
+            upvoteSurvey({
               projectSymbol: projectMetadata.symbol,
-              projectSurveyId: surveyMetadata.id,
+              surveyId: surveyMetadata.survey.id,
               hasUpvoted
             })
           }
@@ -162,7 +162,10 @@ class VersionToolbar extends Component {
             <PunditTypeSet type="Disclosure">
               <VisibleIf
                 action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata.survey }}
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
               >
                 <button type="button" className="btn btn-outline-primary">
                   <Link
@@ -258,7 +261,10 @@ class VersionToolbar extends Component {
             <PunditTypeSet type="Disclosure">
               <VisibleIf
                 action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata.survey }}
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
               >
                 <button
                   type="button"

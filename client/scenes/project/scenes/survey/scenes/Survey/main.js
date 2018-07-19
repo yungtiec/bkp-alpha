@@ -157,7 +157,7 @@ class Survey extends Component {
       verificationStatus,
       toggleSidebar,
       updateVerificationStatusInView,
-      upvoteProjectSurvey
+      upvoteSurvey
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
@@ -173,7 +173,7 @@ class Survey extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
-          upvoteProjectSurvey={upvoteProjectSurvey}
+          upvoteSurvey={upvoteSurvey}
         />
         <Switch>
           <Route

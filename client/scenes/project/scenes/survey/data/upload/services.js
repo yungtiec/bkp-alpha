@@ -11,7 +11,7 @@ export function postMarkdown({
   scorecard
 }) {
   return axios
-    .post(`/api/projects/-/surveys/${parentProjectSurveyId}`, {
+    .post(`/api/surveys/${parentProjectSurveyId}`, {
       markdown,
       resolvedIssueIds,
       newIssues,

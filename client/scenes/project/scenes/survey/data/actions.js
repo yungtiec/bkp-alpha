@@ -1,7 +1,7 @@
 import * as types from "./actionTypes";
 import {
   getSurveyByProjectSurveyId,
-  postUpvoteToProjectSurvey
+  postUpvoteToSurvey
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 
@@ -41,15 +41,15 @@ export function fetchQuestionsByProjectSurveyId({
   };
 }
 
-export function upvoteProjectSurvey({
-  projectSurveyId,
+export function upvoteSurvey({
+  surveyId,
   projectSymbol,
   hasUpvoted
 }) {
   return async (dispatch, getState) => {
     try {
-      const upvotesFrom = await postUpvoteToProjectSurvey({
-        projectSurveyId,
+      const upvotesFrom = await postUpvoteToSurvey({
+        surveyId,
         projectSymbol,
         hasUpvoted
       });

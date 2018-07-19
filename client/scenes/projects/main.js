@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 import { fetchAllProjects } from "../../data/projects/actions";
 import { getAllProjects } from "../../data/projects/reducer";
 import {
-  fetchPublishedProjectSurveyStats,
-  getProjectSurveys
+  fetchLastestSurveysWithStats,
+  getSurveyListing
 } from "../../data/reducer";
 import { ListView, CardProject, CardSurvey } from "../../components";
 import autoBind from "react-autobind";
@@ -27,18 +27,20 @@ class ProjectList extends Component {
     const {
       projectsBySymbol,
       projectSymbolArr,
-      projectSurveysById,
-      latestProjectSurveyIds
+      surveysById,
+      surveyIds
     } = this.props;
 
     return (
       <div className="main-container">
-        <span className="projects-container__sub-header">Recent Disclosures</span>
+        <span className="projects-container__sub-header">
+          Recent Disclosures
+        </span>
         <ListView
           viewClassName={"row entity-cards"}
           rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={latestProjectSurveyIds}
-          rowsById={projectSurveysById}
+          rowsIdArray={surveyIds}
+          rowsById={surveysById}
           renderRow={CardSurvey}
         />
         <span className="projects-container__sub-header">Projects</span>
@@ -56,14 +58,12 @@ class ProjectList extends Component {
 
 const mapState = state => {
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
-  const { projectSurveysById, latestProjectSurveyIds } = getProjectSurveys(
-    state
-  );
+  const { surveysById, surveyIds } = getSurveyListing(state);
   return {
     projectsBySymbol,
     projectSymbolArr,
-    projectSurveysById,
-    latestProjectSurveyIds
+    surveysById,
+    surveyIds
   };
 };
 
@@ -72,7 +72,7 @@ const actions = dispatch => {
     loadInitialData() {
       batchActions([
         dispatch(fetchAllProjects()),
-        dispatch(fetchPublishedProjectSurveyStats())
+        dispatch(fetchLastestSurveysWithStats())
       ]);
     }
   };

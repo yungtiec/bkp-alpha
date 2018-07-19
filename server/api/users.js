@@ -115,11 +115,11 @@ router.get(
       var ownSurveys, collaboratorSurveys;
       switch (req.user.roles[0].name) {
         case "admin":
-          surveys = await Survey.scope("allRootsWithDescendants").findAll();
+          surveys = await Survey.scope("includeVersions").findAll();
           break;
         case "project_admin":
         case "project_editor":
-          ownSurveys = await Survey.scope("allRootsWithDescendants").findAll({
+          ownSurveys = await Survey.scope("includeVersions").findAll({
             where: { creator_id: req.user.id }
           });
           collaboratorSurveys = await req.user.getCollaboratedSurveys({
