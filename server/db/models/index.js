@@ -264,7 +264,7 @@ Survey.belongsToMany(User, {
 User.belongsToMany(Survey, {
   through: "survey_collaborator",
   foreignKey: "user_id",
-  as: "collaboratedProjectSurveys"
+  as: "collaboratedSurveys"
 });
 /*=============  End of Survey  ==============*/
 

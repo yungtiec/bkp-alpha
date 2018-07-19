@@ -8,7 +8,7 @@ export default (issueCommentId, issue) => {
   return (
     <ListRow className="entity-card" rowId={issueCommentId} onClick>
       <Link
-        to={`/project/${issue.project_survey.project.symbol}/survey/${
+        to={`/project/${issue.project_survey.survey.project.symbol}/survey/${
           issue.project_survey.id
         }/comment/${issue.id}`}
       >
@@ -23,7 +23,7 @@ export default (issueCommentId, issue) => {
             <div className="entity__metadata">
               <span>
                 in{" "}
-                {`${issue.project_survey.project.symbol} - ${
+                {`${issue.project_survey.survey.project.symbol} - ${
                   issue.project_survey.survey.title
                 }`}
               </span>

@@ -5,8 +5,8 @@ import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../policies";
 
 export default ({
-  projectSurveysById,
-  projectSurveyIds,
+  surveysById,
+  surveyIds,
   projectSymbolArr,
   projectsBySymbol,
   user
@@ -15,8 +15,8 @@ export default ({
     <div className="main-container d-flex">
       <div className="d-flex flex-column dashboard-sidebar">
         <DashboardSurveyList
-          projectSurveyIds={projectSurveyIds}
-          projectSurveysById={projectSurveysById}
+          surveyIds={surveyIds}
+          surveysById={surveysById}
         />
         <PunditContainer policies={policies} user={user}>
           <PunditTypeSet type="Project">
