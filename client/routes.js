@@ -10,7 +10,8 @@ import {
   Unauthorized,
   Upload,
   Leaderboard,
-  Dashboard
+  Dashboard,
+  Landing
 } from "./scenes";
 import {
   Login,
@@ -80,7 +81,7 @@ class Routes extends Component {
             />
           )}
           {/* Displays our Login component as a fallback */}
-          {!isLoggedIn && <Route component={Login} />}
+          {!isLoggedIn && <Route component={Landing} />}
           {isLoggedIn && (
             <RouteWithLayout layout={LayoutWithNav} component={Projects} />
           )}
