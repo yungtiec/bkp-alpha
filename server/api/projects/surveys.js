@@ -178,14 +178,9 @@ async function createNewProjectSurvey({
     var questionInstances = await Promise.map(
       markdownParsor.questions,
       questionObject =>
-        Question.findOrCreate({
-          where: {
-            markdown: `### ${questionObject.question.trim()}`
-          },
-          defaults: {
-            markdown: `### ${questionObject.question.trim()}`
-          }
-        }).spread(async (question, created) => {
+        Question.create({
+          markdown: `### ${questionObject.question.trim()}`
+        }).then(async question => {
           var answer = markdownParsor.findAnswerToQuestion(
             questionObject.order_in_survey
           );

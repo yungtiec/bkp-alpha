@@ -4,7 +4,7 @@ import { Link as ScrollLink, Element } from "react-scroll";
 
 export default ({ surveyQnasById, surveyQnaIds }) => (
   <div className="d-flex flex-column sidebar-contents">
-    <div className="sidebar__title-container">
+    <div className="sidebar__title-container mb-5">
       <p className="sidebar__title">Table of Contents</p>
     </div>
     {surveyQnaIds.map(id => (

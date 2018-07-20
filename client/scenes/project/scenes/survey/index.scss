@@ -15,9 +15,14 @@
   font-size: 42px;
   line-height: 1.58;
   text-transform: capitalize;
+  width: 70%%;
   @include breakpoint(xs) {
+    width: 100%;
     font-size: 36px;
     line-height: 40px;
+  }
+  @include breakpoint(sm) {
+    width: 100%;
   }
 }
 

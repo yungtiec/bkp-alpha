@@ -50,7 +50,7 @@ class Navbar extends Component {
             )}
             {width > 600 ? (
               <Link to="/projects" className="navbar__nav-item">
-                projects
+                listing
               </Link>
             ) : (
               ""

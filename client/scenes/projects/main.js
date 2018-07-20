@@ -33,7 +33,9 @@ class ProjectList extends Component {
 
     return (
       <div className="main-container">
-        <span className="projects-container__sub-header">Recent Disclosures</span>
+        <span className="projects-container__sub-header">
+          Recent Documents
+        </span>
         <ListView
           viewClassName={"row entity-cards"}
           rowClassName={"col-md-12 entity-card__container"}
@@ -41,7 +43,9 @@ class ProjectList extends Component {
           rowsById={projectSurveysById}
           renderRow={CardSurvey}
         />
-        <span className="projects-container__sub-header">Projects</span>
+        {projectSymbolArr && projectSymbolArr.length ? (
+          <span className="projects-container__sub-header">Categories</span>
+        ) : null}
         <ListView
           viewClassName={"row entity-cards"}
           rowClassName={"col-md-12 entity-card__container"}

@@ -20,8 +20,8 @@ const ProjectIndex = ({
           <ProjectBanner metadata={metadata} />
           <span className="surveys-container__sub-header">
             {projectSurveyIds.length
-              ? "Browse disclosures"
-              : `${metadata.name} currently has no disclosure document`}
+              ? "Browse documents"
+              : `${metadata.name} currently has no document`}
           </span>
           {projectSurveyIds.length ? (
             <ListView
