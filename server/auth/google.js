@@ -40,14 +40,18 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
         .then(foundUser => {
           return foundUser
             ? done(null, foundUser)
-            : User.create({
-                email,
-                googleId,
-                first_name: firstName,
-                last_name: lastName,
-                name: name
-              }).then(async createdUser => {
-                var user = await User.getContributions({ googleId });
+            : User.findOrCreate({
+                where: { email },
+                defaults: {
+                  email,
+                  googleId,
+                  first_name: firstName,
+                  last_name: lastName,
+                  name: firstName + " " + lastName
+                }
+              }).spread(async (user, created) => {
+                if (!created) user = await user.update({ googleId });
+                user = await User.getContributions({ googleId });
                 return done(null, user);
               });
         })
@@ -65,7 +69,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       failureRedirect: "/login"
     }),
     (req, res) => {
-      if (!req.user.name) res.redirect("/user/profile/about");
+      if (!req.user.name.trim()) res.redirect("/user/profile/about");
       else res.redirect("/projects");
     }
   );

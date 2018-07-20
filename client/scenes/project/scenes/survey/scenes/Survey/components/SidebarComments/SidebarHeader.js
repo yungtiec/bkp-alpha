@@ -126,7 +126,7 @@ export default class SidebarHeader extends Component {
               />
             </div>
           )}
-        {selectedComments && !selectedComments.length ? (
+        {selectedComments && !selectedComments.length && isLoggedIn ? (
           <div className="comment-item page-comment">
             <Countdown timeInUnix={Number(surveyMetadata.comment_until_unix)} />
             {!isClosedForComment ? (
