@@ -9,7 +9,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export const getUser = user => {
   return dispatch => {
-    if (isProduction && user && user.email) ReactGA.set({ user: user.email });
+    if (isProduction && user && user.email) ReactGA.set({ userId: user.email });
     dispatch({ type: types.GET_USER, user });
   };
 };
