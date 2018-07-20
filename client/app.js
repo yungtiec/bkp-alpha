@@ -15,7 +15,6 @@ class App extends Component {
   componentDidMount() {
     if (isProduction) {
       ReactGA.initialize("UA-119328185-1", {
-        debug: true,
         titleCase: false
       });
       history.listen((location, action) => {
