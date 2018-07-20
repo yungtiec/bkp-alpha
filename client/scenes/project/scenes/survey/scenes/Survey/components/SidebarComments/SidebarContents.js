@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import { CommentItem } from "../index";
+import { CommentItem } from "../../../../components";
 import { Link as ScrollLink, Element } from "react-scroll";
 import {
   replyToComment,
@@ -11,11 +11,11 @@ import {
   verifyCommentAsAdmin,
   editComment,
   changeCommentIssueStatus
-} from "../../data/comments/actions";
+} from "../../../../data/comments/actions";
 import { loadModal } from "../../../../../../data/reducer";
 import { notify } from "reapop";
 
-const SidebarComment = props => {
+const SidebarContents = props => {
   if (
     props.commentIds &&
     // props.selectedText &&
@@ -146,4 +146,4 @@ const actions = {
   notify
 };
 
-export default connect(mapState, actions)(SidebarComment);
+export default connect(mapState, actions)(SidebarContents);

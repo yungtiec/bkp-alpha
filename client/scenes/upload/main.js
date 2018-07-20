@@ -306,7 +306,6 @@ class Upload extends Component {
 
         <SidebarLayout
           width={width}
-          uploadMode={true}
           sidebarOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
         >

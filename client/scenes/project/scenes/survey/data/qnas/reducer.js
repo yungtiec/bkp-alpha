@@ -1,5 +1,15 @@
-import _ from "lodash";
+import { cloneDeep } from "lodash";
 import * as types from "../actionTypes";
+
+const labelDividerTitle = ({ surveyQnasById, surveyQnaIds }) => {
+  surveyQnaIds.forEach(id => {
+    const isDividerTitle =
+      surveyQnasById[id].project_survey_answers.length === 1 &&
+      !surveyQnasById[id].project_survey_answers[0].markdown.trim();
+    surveyQnasById[id].isDividerTitle = isDividerTitle;
+  });
+  return surveyQnasById;
+};
 
 const initialState = {
   surveyQnasById: {},
@@ -11,7 +21,10 @@ export default function reduce(state = initialState, action = {}) {
     case types.PROJECT_SURVEY_FETCH_SUCCESS:
       return {
         ...state,
-        surveyQnasById: action.surveyQnasById,
+        surveyQnasById: labelDividerTitle({
+          surveyQnasById: cloneDeep(action.surveyQnasById),
+          surveyQnaIds: action.surveyQnaIds
+        }),
         surveyQnaIds: action.surveyQnaIds
       };
     default:
@@ -20,5 +33,5 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getAllSurveyQuestions(state) {
-  return state.scenes.project.scenes.survey.data.qnas
+  return state.scenes.project.scenes.survey.data.qnas;
 }

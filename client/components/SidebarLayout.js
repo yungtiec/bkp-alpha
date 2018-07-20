@@ -27,14 +27,14 @@ class Sidebar extends Component {
 
   render() {
     const {
-      updateVerificationStatusInView,
       toggleSidebar,
       sidebarOpen,
-      selectedComments,
-      verificationStatus,
       width,
       children,
-      uploadMode
+      annotationHighlight,
+      toggleAnnotationHighlight,
+      sidebarContext,
+      toggleSidebarContext
     } = this.props;
     var style = sidebarOpen
       ? {
@@ -45,7 +45,8 @@ class Sidebar extends Component {
           marginLeft: "-10px"
         };
     var sizeBtnAngle = sidebarOpen ? "right" : "left";
-    var eye = this.state.showHighlights ? "eye" : "eye-slash";
+    var eye = annotationHighlight ? "eye" : "eye-slash";
+    var book = sidebarContext ? "list-ul" : "arrow-left"
     var tabStyle = {
       width: width < 767 ? "348px" : width > 1300 ? "-448px" : "408px"
     };
@@ -58,12 +59,20 @@ class Sidebar extends Component {
           <button className="social-toolbar__size-btn" onClick={toggleSidebar}>
             <i className={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
-          {uploadMode ? null : (
+          {toggleAnnotationHighlight && (
             <button
               className="social-toolbar__visibility-btn"
-              onClick={this.toggleHighlights}
+              onClick={toggleAnnotationHighlight}
             >
               <i className={`fas fa-${eye}`} />
+            </button>
+          )}
+          {toggleSidebarContext && (
+            <button
+              className="social-toolbar__table-of-contents-btn"
+              onClick={toggleSidebarContext}
+            >
+              <i className={`fas fa-${book}`} />
             </button>
           )}
         </div>
@@ -78,55 +87,6 @@ class Sidebar extends Component {
           </div>
         </div>
         {children}
-      </div>
-    );
-  }
-
-  renderVerificationStatusTab({
-    tabStyle,
-    verificationStatus,
-    selectedComments
-  }) {
-    return (
-      <div
-        className="social-sidebar__status-tab-container"
-        role="group"
-        aria-label="Basic example"
-        style={tabStyle}
-      >
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "all" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("all")}
-        >
-          all
-        </button>
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "verified" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("verified")}
-        >
-          verified
-        </button>
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "pending" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("pending")}
-        >
-          pending
-        </button>
       </div>
     );
   }

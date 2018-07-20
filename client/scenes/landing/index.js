@@ -57,7 +57,7 @@ export default ({ user }) => (
               </div>
               <div className="row">
                 <div className="col-lg-12 my-auto">
-                  <Link class="btn btn-primary btn-xl" to="signup">Sign Up</Link>
+                  <Link class="btn btn-landing btn-xl" to="signup">Sign Up</Link>
                 </div>
               </div>
             </div>

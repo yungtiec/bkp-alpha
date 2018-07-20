@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
 import Select from "react-select";
 import { keys } from "lodash";
-import { CommentBoxWithTagField, Countdown } from "../index";
+import { CommentBoxWithTagField, Countdown } from "../../../../components";
 
 export default class SidebarHeader extends Component {
   constructor(props) {
@@ -82,7 +82,7 @@ export default class SidebarHeader extends Component {
           <div className="social-sidebar__engagement-tab-container">
             <p
               className="social-sidebar__engagement-tab active reset-selection"
-              onClick={this.props.resetSelection}
+              onClick={this.props.resetCommentSelection}
             >
               Show all Comments ({commentIds.length})
             </p>

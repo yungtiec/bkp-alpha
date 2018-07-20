@@ -96,7 +96,9 @@ router.post(
       if (req.params.parentProjectSurveyId === "-")
         createNewProjectSurvey({
           markdown: req.body.markdown,
-          collaboratorEmails: req.body.collaboratorEmails,
+          collaboratorEmails: req.body.collaboratorEmails.map(
+            emailOption => emailOption.value
+          ),
           commentPeriodUnit: req.body.commentPeriodUnit,
           commentPeriodValue: req.body.commentPeriodValue,
           selectedProjectSymbol: req.body.selectedProjectSymbol,
@@ -111,7 +113,9 @@ router.post(
           markdown: req.body.markdown,
           resolvedIssueIds: req.body.resolvedIssueIds,
           newIssues: req.body.newIssues,
-          collaboratorEmails: req.body.collaboratorEmails,
+          collaboratorEmails: req.body.collaboratorEmails.map(
+            emailOption => emailOption.value
+          ),
           commentPeriodUnit: req.body.commentPeriodUnit,
           commentPeriodValue: req.body.commentPeriodValue,
           scorecard: req.body.scorecard,
@@ -161,7 +165,6 @@ async function createNewProjectSurvey({
     var survey = await Survey.create({
       title: markdownParsor.title
     });
-    console.log(commentPeriodValue, commentPeriodUnit)
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");

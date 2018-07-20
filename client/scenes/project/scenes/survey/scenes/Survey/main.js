@@ -10,13 +10,14 @@ import {
   scroller
 } from "react-scroll";
 import { connect } from "react-redux";
-import { SurveyContent, SurveyProgress, SurveyIssues } from "./components";
 import {
+  SurveyContent,
+  SurveyProgress,
+  SurveyIssues,
   SidebarComments,
-  SidebarHeader,
-  SurveyHeader,
-  VersionToolbar
-} from "../../components";
+  SidebarTableOfContents
+} from "./components";
+import { SurveyHeader, VersionToolbar } from "../../components";
 import { findCommentsInQnaByText } from "../../utils";
 import { SidebarLayout, CustomScrollbar } from "../../../../../../components";
 
@@ -45,7 +46,7 @@ class Survey extends Component {
         scroller.scrollTo(`qna-${qnaId}`);
       }
       if (this.props.commentsById[Number(commentId)]) {
-        this.props.updateSidebarContext({
+        this.props.updateSidebarCommentContext({
           selectedCommentId: Number(commentId),
           focusOnce: true
         });
@@ -71,7 +72,7 @@ class Survey extends Component {
   }
 
   resetSidebarContext() {
-    this.props.updateSidebarContext({
+    this.props.updateSidebarCommentContext({
       selectedText: "",
       selectedComments: null,
       focusOnce: false,
@@ -96,7 +97,7 @@ class Survey extends Component {
       this.props.toggleSidebar();
     }
     if (comments && comments.length) {
-      this.props.updateSidebarContext({
+      this.props.updateSidebarCommentContext({
         focusQnaId: qnaId,
         selectedText
       });
@@ -104,28 +105,42 @@ class Survey extends Component {
   }
 
   getSelectedComments() {
-    const { sidebarContext, unfilteredCommentIds, commentsById } = this.props;
-    if (sidebarContext.selectedText)
+    const {
+      sidebarCommentContext,
+      unfilteredCommentIds,
+      commentsById
+    } = this.props;
+    if (sidebarCommentContext.selectedText)
       return findCommentsInQnaByText({
         commentIds: unfilteredCommentIds,
         commentsById: commentsById,
-        text: sidebarContext.selectedText,
-        qnaId: sidebarContext.focusQnaId
+        text: sidebarCommentContext.selectedText,
+        qnaId: sidebarCommentContext.focusQnaId
       });
     else if (
-      sidebarContext.selectedCommentId &&
-      commentsById[sidebarContext.selectedCommentId]
+      sidebarCommentContext.selectedCommentId &&
+      commentsById[sidebarCommentContext.selectedCommentId]
     )
-      return [commentsById[sidebarContext.selectedCommentId]];
+      return [commentsById[sidebarCommentContext.selectedCommentId]];
     else return [];
   }
 
-  resetContext() {
-    this.props.updateSidebarContext({
+  resetSidebarCommentContext() {
+    this.props.updateSidebarCommentContext({
       selectedText: "",
       focusQnaId: "",
       selectedCommentId: ""
     });
+  }
+
+  toggleAnnotationHighlight() {
+    const next = !this.props.annotationHighlight;
+    if (!next) {
+      $(".annotator-hl").addClass("hidden");
+    } else {
+      $(".annotator-hl").removeClass("hidden");
+    }
+    this.props.toggleAnnotationHighlight();
   }
 
   render() {
@@ -149,14 +164,16 @@ class Survey extends Component {
       tagFilter,
       updateTagFilter,
       addNewCommentSentFromServer,
-      sidebarContext,
+      sidebarCommentContext,
       commentIssueFilter,
       updateIssueFilter,
       addNewComment,
       sidebarOpen,
-      verificationStatus,
+      sidebarContext,
+      annotationHighlight,
       toggleSidebar,
-      updateVerificationStatusInView,
+      toggleSidebarContext,
+      toggleAnnotationHighlight,
       upvoteProjectSurvey
     } = this.props;
 
@@ -216,9 +233,11 @@ class Survey extends Component {
           width={width}
           selectedComments={selectedComments}
           sidebarOpen={sidebarOpen}
-          verificationStatus={verificationStatus}
           toggleSidebar={toggleSidebar}
-          updateVerificationStatusInView={updateVerificationStatusInView}
+          annotationHighlight={annotationHighlight}
+          toggleAnnotationHighlight={this.toggleAnnotationHighlight}
+          sidebarContext={sidebarContext}
+          toggleSidebarContext={toggleSidebarContext}
         >
           <CustomScrollbar
             scrollbarContainerWidth={
@@ -230,37 +249,34 @@ class Survey extends Component {
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"
           >
-            <Element
-              name="sidebar-contents"
-              id="sidebar-contents"
-              className="sidebar-contents"
-            >
-              <SidebarHeader
+            {sidebarContext === "comments" && (
+              <SidebarComments
+                isLoggedIn={isLoggedIn}
+                commentIds={commentIds}
+                commentsById={commentsById}
+                surveyMetadata={surveyMetadata}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
-                commentIds={commentIds}
-                selectedComments={selectedComments}
+                tags={tags}
                 tagFilter={tagFilter}
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
-                isLoggedIn={isLoggedIn}
-                isClosedForComment={isClosedForComment}
-                resetSelection={this.resetContext}
                 commentIssueFilter={commentIssueFilter}
                 updateIssueFilter={updateIssueFilter}
-                tags={tags}
-                surveyMetadata={surveyMetadata}
+                isClosedForComment={isClosedForComment}
                 addNewComment={addNewComment}
-              />
-              <SidebarComments
-                commentIds={commentIds}
-                commentsById={commentsById}
-                selectedText={sidebarContext.selectedText}
                 selectedComments={selectedComments}
-                tags={tags}
+                selectedText={sidebarCommentContext.selectedText}
+                resetCommentSelection={this.resetSidebarCommentContext}
                 parent={this}
               />
-            </Element>
+            )}
+            {sidebarContext === "tableOfContents" && (
+              <SidebarTableOfContents
+                surveyQnasById={surveyQnasById}
+                surveyQnaIds={surveyQnaIds}
+              />
+            )}
           </CustomScrollbar>
         </SidebarLayout>
       </div>

@@ -10,10 +10,12 @@ import {
   sortCommentBy,
   updateIssueFilter,
   toggleSidebar,
+  toggleSidebarContext,
+  toggleAnnotationHighlight,
   updateVerificationStatusInView,
   updateEngagementTabInView,
-  getSidebarContext,
-  updateSidebarContext
+  getSidebarCommentContext,
+  updateSidebarCommentContext
 } from "../../reducer";
 import {
   fetchQuestionsByProjectSurveyId,
@@ -110,9 +112,11 @@ const mapState = state => {
   const surveyMetadata = getSelectedSurvey(state);
   const {
     sidebarOpen,
+    annotationHighlight,
     verificationStatus,
     commentSortBy,
-    commentIssueFilter
+    commentIssueFilter,
+    sidebarContext
   } = state.scenes.project.scenes.survey;
   return {
     // global metadata
@@ -135,10 +139,12 @@ const mapState = state => {
     unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
+    annotationHighlight,
     verificationStatus,
     commentSortBy,
     commentIssueFilter,
-    sidebarContext: getSidebarContext(state),
+    sidebarContext,
+    sidebarCommentContext: getSidebarCommentContext(state),
     // tags
     tags: getAllTags(state),
     tagFilter: getTagFilter(state),
@@ -156,8 +162,10 @@ const actions = {
   sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
-  updateSidebarContext,
+  updateSidebarCommentContext,
   toggleSidebar,
+  toggleSidebarContext,
+  toggleAnnotationHighlight,
   updateVerificationStatusInView
 };
 

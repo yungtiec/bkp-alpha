@@ -36,11 +36,13 @@ class Routes extends Component {
           {/* Routes placed here are available to all visitors */}
           <RouteWithLayout layout={Layout} path="/login" component={Login} />
           <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/dashboard"
-            component={Dashboard}
-          />
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/dashboard"
+              component={Dashboard}
+            />
+          )}
           <RouteWithLayout
             layout={LayoutWithNav}
             path="/projects"
@@ -51,11 +53,13 @@ class Routes extends Component {
             path="/project/:symbol"
             component={Project}
           />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/upload"
-            component={Upload}
-          />
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/upload"
+              component={Upload}
+            />
+          )}
           <RouteWithLayout
             layout={LayoutWithNav}
             path="/leaderboard"

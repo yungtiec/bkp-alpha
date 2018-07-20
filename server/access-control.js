@@ -19,9 +19,7 @@ module.exports = {
           !(isAdmin || isProjectAdmin || isProjectEditor) || !needVerification
         );
       case "Verify":
-        return (
-          (isAdmin || isProjectAdmin || isProjectEditor) && needVerification
-        );
+        return isAdmin || isProjectAdmin || isProjectEditor;
       case "Issue":
         return isAdmin || isProjectAdmin || isProjectEditor || isCommentOwner;
       case "Edit":

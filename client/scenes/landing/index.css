@@ -368,27 +368,26 @@ footer img {
   height: auto;
 }
 
-.bg-primary,
-.btn-primary {
+.bg-landing {
   background: #2744cb;
   background: -webkit-linear-gradient(#2744cb, #233db6);
   background: linear-gradient(#2744cb, #233db6);
 }
 
-.btn-primary {
+.btn-landing {
   border-color: #2744cb;
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active {
+.btn-landing:hover,
+.btn-landing:focus,
+.btn-landing:active,
+.btn-landing.active {
   color: white;
   border-color: #1b2f8b;
   background-color: #1b2f8b;
 }
 
-.text-primary {
+.text-landing {
   color: #2744cb;
 }
 
@@ -412,15 +411,7 @@ footer img {
   background-color: #2744cb;
 }
 
-.btn {
-  border-radius: 0px;
-  font-family: "Roboto", sans-serif;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
 .btn-xl {
-  font-size: 11px;
   padding: 15px 45px;
 }
 
