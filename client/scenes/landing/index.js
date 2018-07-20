@@ -26,7 +26,7 @@ export default ({ user }) => (
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to="projects">View Framework</Link>
+                <Link to="project/GENERAL/survey/21">View Framework</Link>
               </li>
               <li className="nav-item">
                 <Link to="login">Log In</Link>
