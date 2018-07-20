@@ -41,6 +41,7 @@ export default ({
               key={`qna-${id}__question`}
               qnaId={id}
               question={surveyQnasById[id].question}
+              isDividerTitle={surveyQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
             <Answers

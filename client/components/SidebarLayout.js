@@ -46,15 +46,15 @@ class Sidebar extends Component {
         };
     var sizeBtnAngle = sidebarOpen ? "right" : "left";
     var eye = annotationHighlight ? "eye" : "eye-slash";
-    var book = sidebarContext ? "list-ul" : "arrow-left"
+    var book = sidebarContext === "comments" ? "list-ul" : "arrow-left"
     var tabStyle = {
       width: width < 767 ? "348px" : width > 1300 ? "-448px" : "408px"
     };
 
     return (
-      <div className="social-sidebar" style={style}>
+      <div className="sidebar" style={style}>
         <div className="annotation-coordinate__container" />
-        <div className="social-sidebar__toolbar">
+        <div className="sidebar__toolbar">
           {sidebarOpen && <AuthWidget />}
           <button className="social-toolbar__size-btn" onClick={toggleSidebar}>
             <i className={`fas fa-angle-${sizeBtnAngle}`} />
@@ -77,7 +77,7 @@ class Sidebar extends Component {
           )}
         </div>
         <div>
-          <div className="social-sidebar__logo-consensys">
+          <div className="sidebar__logo-consensys">
             <img
               width="100px"
               height="auto"

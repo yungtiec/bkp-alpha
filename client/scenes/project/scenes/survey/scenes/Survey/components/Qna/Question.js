@@ -15,10 +15,16 @@ export default class Question extends Component {
           this.props.handleCommentOnClick(e, this.props.qnaId);
         }}
       >
-        <ReactMarkdown
-          className="qna__question"
-          source={this.props.question.markdown}
-        />
+        {this.props.isDividerTitle ? (
+          <div className="qna__question">
+            <h2>{this.props.question.markdown.replace("### ", "")}</h2>
+          </div>
+        ) : (
+          <ReactMarkdown
+            className="qna__question"
+            source={this.props.question.markdown}
+          />
+        )}
       </div>
     );
   }

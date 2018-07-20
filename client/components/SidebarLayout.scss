@@ -1,6 +1,6 @@
 @import "../breakpoint";
 
-.social-sidebar {
+.sidebar {
   margin: 0;
   padding: 0;
   border: 0;
@@ -29,7 +29,7 @@
   }
 }
 
-.social-sidebar__toolbar {
+.sidebar__toolbar {
   z-index: 2;
   position: absolute;
   left: -40.5px;
@@ -37,7 +37,7 @@
   width: 40px;
 }
 
-.social-sidebar__toolbar button {
+.sidebar__toolbar button {
   width: 50px;
   height: 50px;
   border: 2px solid #09263a;
@@ -47,13 +47,13 @@
   cursor: pointer;
 }
 
-.social-sidebar__upload-header {
+.sidebar__upload-header {
   color: white;
   font-weight: 700;
   font-size: 14px;
 }
 
-.social-sidebar__upload-subheader {
+.sidebar__upload-subheader {
   color: white;
   font-size: 14px;
 }

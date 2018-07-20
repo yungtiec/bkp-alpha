@@ -21,7 +21,7 @@ export default class SidebarHeader extends Component {
   renderCommentSortBy({ commentSortBy }) {
     return (
       <div
-        className="social-sidebar__sort-by btn-group"
+        className="sidebar__sort-by btn-group"
         role="group"
         aria-label="Basic example"
       >
@@ -73,15 +73,15 @@ export default class SidebarHeader extends Component {
     return (
       <div>
         {selectedComments && !selectedComments.length ? (
-          <div className="social-sidebar__engagement-tab-container">
-            <p className="social-sidebar__engagement-tab">
+          <div className="sidebar__title-container">
+            <p className="sidebar__title">
               Comments ({commentIds.length})
             </p>
           </div>
         ) : (
-          <div className="social-sidebar__engagement-tab-container">
+          <div className="sidebar__title-container">
             <p
-              className="social-sidebar__engagement-tab active reset-selection"
+              className="sidebar__title active reset-selection"
               onClick={this.props.resetCommentSelection}
             >
               Show all Comments ({commentIds.length})
@@ -95,11 +95,11 @@ export default class SidebarHeader extends Component {
           })}
         {selectedComments &&
           !selectedComments.length && (
-            <div className="social-sidebar__issue-filter-container">
+            <div className="sidebar__issue-filter-container">
               <span className="select-label">filter by issue</span>
               <Select
-                name="social-sidebar__issue-filter"
-                className="social-sidebar__issue-filter"
+                name="sidebar__issue-filter"
+                className="sidebar__issue-filter"
                 placeholder="select issue status"
                 multi={true}
                 value={commentIssueFilter}
@@ -113,11 +113,11 @@ export default class SidebarHeader extends Component {
           )}
         {selectedComments &&
           !selectedComments.length && (
-            <div className="social-sidebar__tag-filter-container">
+            <div className="sidebar__tag-filter-container">
               <span className="select-label">filter by tag(s)</span>
               <Select
-                name="social-sidebar__tag-filter"
-                className="social-sidebar__tag-filter"
+                name="sidebar__tag-filter"
+                className="sidebar__tag-filter"
                 placeholder="select tag(s)"
                 multi={true}
                 value={tagFilter}

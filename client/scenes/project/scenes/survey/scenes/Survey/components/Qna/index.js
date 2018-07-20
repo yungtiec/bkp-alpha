@@ -124,7 +124,10 @@ class QnaBox extends Component {
     const { qna } = this.props;
 
     return (
-      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)}>
+      <div
+        className={qna.isDividerTitle ? "" : "mb-4"}
+        ref={el => (this[`qna-${qna.id}`] = el)}
+      >
         {this.props.children}
       </div>
     );
