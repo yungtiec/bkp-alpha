@@ -21,7 +21,7 @@ export default (surveyId, survey) => {
               </span>
               <span className="entity__ticker">
                 ({`v${survey.hierarchyLevel} `}
-                {`by ${survey.creator.name}`})
+                {`by ${survey.creator.displayName}`})
               </span>
             </div>
             <p className="entity__date">

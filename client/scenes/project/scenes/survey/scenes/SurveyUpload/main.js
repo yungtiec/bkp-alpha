@@ -98,7 +98,6 @@ class SurveyUpload extends Component {
   render() {
     const {
       isLoggedIn,
-      userEmail,
       width,
       surveyQnasById,
       surveyQnaIds,
@@ -339,7 +338,6 @@ class SurveyUpload extends Component {
                 </button>
               </div>
               <UploadInterface
-                userEmail={userEmail}
                 importedMarkdown={importedMarkdown}
                 importMarkdown={importMarkdown}
                 isLoggedIn={isLoggedIn}

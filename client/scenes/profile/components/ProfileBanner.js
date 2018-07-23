@@ -54,7 +54,7 @@ export default ({
             manage documents for{" "}
             {managedProjects.map((mp, i) => (
               <h5 key="`managed-project-${i}`">
-                <span class="badge badge-secondary">{mp.name}</span>
+                <span class="badge badge-secondary">{mp.displayName}</span>
               </h5>
             ))}
           </h6>
@@ -64,7 +64,7 @@ export default ({
             edit documents for{" "}
             {editedProjects.map((ep, i) => (
               <h5 key="`edited-project-${i}`">
-                <span class="badge badge-secondary">{ep.name}</span>
+                <span class="badge badge-secondary">{ep.displayName}</span>
               </h5>
             ))}
           </h6>

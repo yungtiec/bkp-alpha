@@ -50,7 +50,14 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "name", "email", "id"]
+              attributes: [
+                "first_name",
+                "last_name",
+                "name",
+                "email",
+                "id",
+                "anonymity"
+              ]
             },
             {
               model: db.model("project_survey"),
@@ -98,7 +105,13 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "name", "email"]
+              attributes: [
+                "first_name",
+                "last_name",
+                "name",
+                "email",
+                "anonymity"
+              ]
             },
             {
               model: db.model("tag"),
@@ -120,7 +133,13 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "owner",
-                  attributes: ["first_name", "last_name", "name", "email"]
+                  attributes: [
+                    "first_name",
+                    "last_name",
+                    "name",
+                    "email",
+                    "anonymity"
+                  ]
                 }
               ],
               as: "descendents",
@@ -140,7 +159,13 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "owner",
-              attributes: ["first_name", "last_name", "name", "email"]
+              attributes: [
+                "first_name",
+                "last_name",
+                "name",
+                "email",
+                "anonymity"
+              ]
             },
             {
               model: db.model("tag"),
@@ -183,7 +208,13 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "owner",
-                  attributes: ["first_name", "last_name", "name", "email"]
+                  attributes: [
+                    "first_name",
+                    "last_name",
+                    "name",
+                    "email",
+                    "anonymity"
+                  ]
                 },
                 {
                   model: Comment,
@@ -193,7 +224,13 @@ const Comment = db.define(
                     {
                       model: db.model("user"),
                       as: "owner",
-                      attributes: ["first_name", "last_name", "name", "email"]
+                      attributes: [
+                        "first_name",
+                        "last_name",
+                        "name",
+                        "email",
+                        "anonymity"
+                      ]
                     }
                   ]
                 }

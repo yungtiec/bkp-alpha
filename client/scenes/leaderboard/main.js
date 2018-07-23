@@ -15,8 +15,11 @@ class Leaderboard extends Component {
   render() {
     const { userIds, usersById } = this.props;
     const columns = [
-      { Header: "user", accessor: "email" },
-
+      {
+        id: "user",
+        Header: "user",
+        accessor: "displayName"
+      },
       {
         id: "upvotes",
         Header: "upvotes received",

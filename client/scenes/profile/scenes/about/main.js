@@ -12,7 +12,7 @@ class ProfileAbout extends Component {
       firstName: this.props.first_name,
       lastName: this.props.last_name,
       name: this.props.name,
-      organization: this.props.organization
+      organization: this.props.organization,
     };
   }
 
@@ -39,13 +39,24 @@ class ProfileAbout extends Component {
             </p>
           </div>
         )}
-        {(!this.props.name) && (
+        {!this.props.name.trim() && (
           <div className="profile-about__restricted-access">
             <p className="text-center mt-3 text-danger">
-              Please update your information.
+              Please fill in your name.
             </p>
           </div>
         )}
+        <div className="profile-about__field">
+          <span>
+            <input
+              name="anonymous"
+              type="checkbox"
+              checked={this.props.anonymity}
+              onChange={this.props.changeAnonymity}
+              className="mr-2 mb-3"
+            />Stay anonymous
+          </span>
+        </div>
         <div className="profile-about__field">
           <span className="profile-about__field-label">Email</span>
           <div className="profile-about__field-value">
@@ -121,33 +132,3 @@ class ProfileAbout extends Component {
 
 export default withRouter(ProfileAbout);
 
-
-// <div className="profile-about__field">
-//   <span className="profile-about__field-label">First Name</span>
-//   <div className="profile-about__field-value">
-//     <div className="profile-about__input-container">
-//       <input
-//         ref={input => (this.firstInput = input)}
-//         type="text"
-//         disabled={!this.state.edit}
-//         onChange={this.handleChange}
-//         name="firstName"
-//         value={this.state.firstName || ""}
-//       />
-//     </div>
-//   </div>
-// </div>
-// <div className="profile-about__field">
-//   <span className="profile-about__field-label">Last Name</span>
-//   <div className="profile-about__field-value">
-//     <div className="profile-about__input-container">
-//       <input
-//         type="text"
-//         disabled={!this.state.edit}
-//         onChange={this.handleChange}
-//         name="lastName"
-//         value={this.state.lastName}
-//       />
-//     </div>
-//   </div>
-// </div>

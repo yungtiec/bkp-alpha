@@ -45,7 +45,6 @@ export default class UploadInterface extends Component {
   render() {
     const {
       isLoggedIn,
-      userEmail,
       surveyQnasById,
       surveyQnaIds,
       surveyMetadata,

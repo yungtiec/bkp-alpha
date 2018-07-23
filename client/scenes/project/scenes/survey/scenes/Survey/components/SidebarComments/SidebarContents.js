@@ -48,7 +48,7 @@ function renderSidebarWithSelectedComments(props) {
     changeCommentIssueStatus,
     loadModal,
     notify,
-    userEmail,
+    user,
     admin
   } = props;
   return (
@@ -68,7 +68,7 @@ function renderSidebarWithSelectedComments(props) {
             changeItemIssueStatus={changeCommentIssueStatus}
             loadModal={loadModal}
             notify={notify}
-            userEmail={userEmail}
+            user={user}
           />
         ))}
     </div>
@@ -90,7 +90,8 @@ function renderSidebarWithAllComments(props) {
     changeCommentIssueStatus,
     loadModal,
     notify,
-    userEmail,
+    user,
+    isLoggedIn,
     admin
   } = props;
   return commentIds
@@ -118,7 +119,8 @@ function renderSidebarWithAllComments(props) {
             changeItemIssueStatus={changeCommentIssueStatus}
             loadModal={loadModal}
             notify={notify}
-            userEmail={userEmail}
+            user={user}
+            isLoggedIn={isLoggedIn}
             admin={admin}
           />
         </ScrollLink>
@@ -127,7 +129,7 @@ function renderSidebarWithAllComments(props) {
 }
 
 const mapState = (state, ownProps) => ({
-  userEmail: state.data.user.email,
+  user: state.data.user,
   admin:
     !!state.data.user.roles &&
     state.data.user.roles.filter(r => r.name === "admin").length,

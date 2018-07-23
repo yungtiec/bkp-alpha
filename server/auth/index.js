@@ -76,5 +76,17 @@ router.put("/profile", async (req, res, next) => {
   }
 });
 
+router.put("/profile/anonymity", async (req, res, next) => {
+  if (!req.user || req.user && !req.user.id) res.sendStatus(401);
+  else {
+    const user = await User.findById(req.user.id).then(user =>
+      user.update({
+        anonymity: !req.user.anonymity
+      })
+    );
+    res.send(user);
+  }
+});
+
 router.use("/google", require("./google"));
 router.use("/uport", require("./uport"));

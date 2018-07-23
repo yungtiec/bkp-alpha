@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { getUserBasicInfo, postAccessStatus, putProfile } from "./service";
+import { getUserBasicInfo, postAccessStatus, putAnonymity } from "./service";
 
 export function fetchUserBasicInfo(userId) {
   return async (dispatch, getState) => {
@@ -30,3 +30,15 @@ export function changeAccessStatus({ userId, accessStatus }) {
   };
 }
 
+export function changeAnonymity() {
+  return async (dispatch, getState) => {
+    try {
+      var user = await putAnonymity();
+      dispatch({
+        type: types.ANONYMITY_UPDATED
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}

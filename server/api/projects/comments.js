@@ -194,7 +194,13 @@ router.post(
           {
             model: User,
             as: "owner",
-            attributes: ["first_name", "last_name", "email", "name"]
+            attributes: [
+              "first_name",
+              "last_name",
+              "email",
+              "name",
+              "anonymity"
+            ]
           },
           {
             model: db.model("tag"),
@@ -454,4 +460,3 @@ router.post(
     }
   }
 );
-

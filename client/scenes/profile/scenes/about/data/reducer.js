@@ -15,6 +15,10 @@ export default function reduce(state = initialState, action = {}) {
       newState = cloneDeep(state);
       newState.restricted_access = action.accessStatus === "restricted";
       return newState;
+    case types.ANONYMITY_UPDATED:
+      newState = cloneDeep(state);
+      newState.anonymity = !state.anonymity;
+      return newState;
     case "user.PROFILE_UPDATED":
       return {
         ...state,

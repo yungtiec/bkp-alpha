@@ -50,7 +50,10 @@ class VersionToolbar extends Component {
 
     const hasUpvoted = find(
       surveyMetadata.upvotesFrom,
-      u => u.email === user.email
+      upvotedUser =>
+        upvotedUser.email === user.email ||
+        upvotedUser.googleId === user.googleId ||
+        upvotedUser.uportAddress === user.uportAddress
     );
 
     return (
@@ -104,57 +107,22 @@ class VersionToolbar extends Component {
             ))}
           </div>
         </div>
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={() =>
-            history.push(
-              `/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }`
-            )
-          }
-        >
-          View disclosure
-        </button>
         <div className="btn-group">
           <button
             type="button"
             className="btn btn-outline-primary dropdown-toggle"
             type="button"
-            id="versionProgressButton"
+            id="feedbackMenuBtn"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }/progress`}
-            >
-              View progress
-            </Link>
+            Feedback
           </button>
-          <div
-            className="dropdown-menu"
-            aria-labelledby="versionProgressButton"
-          >
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }/progress`}
-              class="dropdown-item"
-            >
-              Milestone
-            </Link>
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }/issues`}
-              class="dropdown-item"
-            >
-              Issues
-            </Link>
+          <div className="dropdown-menu" aria-labelledby="feedbackMenuBtn">
+            <a class="dropdown-item">I like this</a>
+            <a class="dropdown-item">I don't like this</a>
+            <a class="dropdown-item">Other feedback</a>
           </div>
         </div>
         {!uploadMode ? (

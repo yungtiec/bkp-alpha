@@ -11,7 +11,7 @@ export default ({ handleClick, message, createdAt, sender, status }) => (
     {sender ? (
       <div className="notification-item__user">
         <Avatar
-          name={sender.name}
+          name={sender.displayName}
           color={"#999999"}
           size={50}
         />

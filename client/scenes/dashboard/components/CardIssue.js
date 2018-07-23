@@ -17,7 +17,7 @@ export default (issueCommentId, issue) => {
             <div className="entity__title">
               <span>{issue.comment}</span>
             </div>
-            <p className="entity__date">{`by ${issue.owner.name}`}</p>
+            <p className="entity__date">{`by ${issue.owner.displayName}`}</p>
           </div>
           <div className="entity__action--bottom">
             <div className="entity__metadata">

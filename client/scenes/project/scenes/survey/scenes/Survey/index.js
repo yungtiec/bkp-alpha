@@ -122,7 +122,6 @@ const mapState = state => {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
-    userEmail: !!state.data.user.id && state.data.user.email,
     isClosedForComment:
       Number(surveyMetadata.comment_until_unix) -
         Number(moment().format("x")) <=

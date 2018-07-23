@@ -154,7 +154,6 @@ class Survey extends Component {
       unfilteredCommentIds,
       isLoggedIn,
       isClosedForComment,
-      userEmail,
       match,
       width,
       commentSortBy,
@@ -185,13 +184,15 @@ class Survey extends Component {
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
         />
-        <VersionToolbar
-          projectMetadata={projectMetadata}
-          surveyMetadata={surveyMetadata}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-          upvoteProjectSurvey={upvoteProjectSurvey}
-        />
+        {isLoggedIn && (
+          <VersionToolbar
+            projectMetadata={projectMetadata}
+            surveyMetadata={surveyMetadata}
+            surveyQnasById={surveyQnasById}
+            surveyQnaIds={surveyQnaIds}
+            upvoteProjectSurvey={upvoteProjectSurvey}
+          />
+        )}
         <Switch>
           <Route
             path={`${this.props.match.path}/issues`}

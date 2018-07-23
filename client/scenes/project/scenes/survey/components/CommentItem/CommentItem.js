@@ -45,7 +45,7 @@ export default class CommentItem extends Component {
           <div>
             {this.state.replyTarget && (
               <span className="ml-1">{`replying to ${
-                this.state.replyTarget.owner.name
+                this.state.replyTarget.owner.displayName
               }`}</span>
             )}
             <CommentBox
@@ -117,12 +117,15 @@ export default class CommentItem extends Component {
   renderMainComment(comment) {
     const hasUpvoted = find(
       comment.upvotesFrom,
-      user => user.email === this.props.userEmail
+      upvotedUser =>
+        upvotedUser.email === this.props.user.email ||
+        upvotedUser.googleId === this.props.user.googleId ||
+        upvotedUser.uportAddress === this.props.user.uportAddress
     );
-    const initReplyToThis = this.props.userEmail
+    const initReplyToThis = this.props.isLoggedIn
       ? this.initReply.bind(this, null)
       : this.promptLoginToast;
-    const upvoteItem = this.props.userEmail
+    const upvoteItem = this.props.isLoggedIn
       ? this.props.upvoteItem.bind(this, {
           rootId: null,
           comment,
@@ -140,7 +143,7 @@ export default class CommentItem extends Component {
         style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
         <div className="comment-item__header">
-          <p>{comment.owner.name}</p>
+          <p>{comment.owner.displayName}</p>
           <p>{moment(comment.createdAt).fromNow()}</p>
         </div>
         {comment.quote && (
@@ -203,9 +206,12 @@ export default class CommentItem extends Component {
     ).map((reply, i) => {
       const hasUpvoted = find(
         reply.upvotesFrom,
-        user => user.email === this.props.userEmail
+        upvotedUser =>
+          upvotedUser.email === this.props.user.email ||
+          upvotedUser.googleId === this.props.user.googleId ||
+          upvotedUser.uportAddress === this.props.user.uportAddress
       );
-      const upvoteItem = this.props.userEmail
+      const upvoteItem = this.props.isLoggedIn
         ? this.props.upvoteItem.bind(this, {
             rootId,
             comment: reply,
@@ -213,7 +219,7 @@ export default class CommentItem extends Component {
           })
         : this.promptLoginToast;
       const openModal = this.openModal.bind(null, reply, false, false);
-      const initReplyToThis = this.props.userEmail
+      const initReplyToThis = this.props.isLoggedIn
         ? this.initReply.bind(this, reply)
         : this.promptLoginToast;
       return (
@@ -224,7 +230,7 @@ export default class CommentItem extends Component {
           key={`comment-item__reply-${reply.id}`}
         >
           <div className="comment-item__header">
-            <p>{reply.owner.name}</p>
+            <p>{reply.owner.displayName}</p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (
@@ -233,7 +239,7 @@ export default class CommentItem extends Component {
             <p className="comment-item__comment">
               {reply.hierarchyLevel !== 2 && (
                 <span className="comment-item__at-someone">
-                  {"@" + reply.parent.owner.name}
+                  {"@" + reply.parent.owner.displayName}
                 </span>
               )}{" "}
               {reply.comment}

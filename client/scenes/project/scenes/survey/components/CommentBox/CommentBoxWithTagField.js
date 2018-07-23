@@ -68,47 +68,6 @@ export default class CommentBoxWithTagField extends Component {
     } = this.props;
     return (
       <div>
-        {showTags && (
-          <div>
-            <Select.Creatable
-              multi={true}
-              placeholder="add or create tag(s)"
-              options={this.state.tags.map(tag => ({
-                ...tag,
-                value: tag.name,
-                label: tag.name
-              }))}
-              onChange={this.handleTagOnChange}
-              value={[]}
-            />
-            <div className="comment-item__tags mt-2 mb-2">
-              {this.state.selectedTags && this.state.selectedTags.length
-                ? this.state.selectedTags.map((tag, index) => (
-                    <TagChip
-                      key={`comment-tag__${tag.name}`}
-                      containerClassname="comment-item__tag dark-bg"
-                      tagValue={tag.name}
-                      closeIconOnClick={() => this.handleRemoveTag(index)}
-                    />
-                  ))
-                : ""}
-            </div>
-          </div>
-        )}
-        {showIssueCheckbox && (
-          <div className="mt-2 mb-4">
-            <p>
-              <input
-                className="mr-2"
-                name="comment-item__issue-checkbox"
-                type="checkbox"
-                checked={this.state.issueOpen}
-                onChange={this.handleIssueCheckboxChange}
-              />
-              Open an issue?
-            </p>
-          </div>
-        )}
         <CommentBox
           {...otherProps}
           onSubmit={this.handleSubmitEditedCommentAndTag}

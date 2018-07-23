@@ -9,7 +9,8 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export const getUser = user => {
   return dispatch => {
-    if (isProduction && user && user.email) ReactGA.set({ userId: user.email });
+    if (isProduction && user && user.id)
+      ReactGA.set({ userId: user.name || user.email || user.id });
     dispatch({ type: types.GET_USER, user });
   };
 };
@@ -36,7 +37,7 @@ export const auth = (userInfo, method) => dispatch => {
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/projects");
+        else history.push("/project/BKP/survey/21");
       },
       authError => {
         // rare example: a good use case for parallel (non-catch) error handler
@@ -78,7 +79,7 @@ export const signinWithUport = () => dispatch =>
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/projects");
+        else history.push("/project/BKP/survey/21");
       },
       authError => {
         dispatch(getUser({ error: authError }));
@@ -119,4 +120,3 @@ export const fetchOwnProjectSurveys = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
-

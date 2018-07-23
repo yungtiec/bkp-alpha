@@ -17,6 +17,7 @@ export default function(state = defaultUser, action) {
         first_name: action.profile.firstName,
         last_name: action.profile.lastName,
         name: action.profile.name,
+        displayName: action.profile.displayName,
         organization: action.profile.organization
       };
     case types.MANAGED_PROJECTS_FETCH_SUCCESS:

@@ -74,9 +74,7 @@ export default class SidebarHeader extends Component {
       <div>
         {selectedComments && !selectedComments.length ? (
           <div className="sidebar__title-container">
-            <p className="sidebar__title">
-              Comments ({commentIds.length})
-            </p>
+            <p className="sidebar__title">Comments ({commentIds.length})</p>
           </div>
         ) : (
           <div className="sidebar__title-container">
@@ -93,39 +91,6 @@ export default class SidebarHeader extends Component {
           this.renderCommentSortBy({
             commentSortBy
           })}
-        {selectedComments &&
-          !selectedComments.length && (
-            <div className="sidebar__issue-filter-container">
-              <span className="select-label">filter by issue</span>
-              <Select
-                name="sidebar__issue-filter"
-                className="sidebar__issue-filter"
-                placeholder="select issue status"
-                multi={true}
-                value={commentIssueFilter}
-                onChange={this.handleIssueFilterChange}
-                options={[
-                  { value: "open", label: "open" },
-                  { value: "closed", label: "closed" }
-                ]}
-              />
-            </div>
-          )}
-        {selectedComments &&
-          !selectedComments.length && (
-            <div className="sidebar__tag-filter-container">
-              <span className="select-label">filter by tag(s)</span>
-              <Select
-                name="sidebar__tag-filter"
-                className="sidebar__tag-filter"
-                placeholder="select tag(s)"
-                multi={true}
-                value={tagFilter}
-                onChange={this.handleTagFilterChange}
-                options={tagsWithCountInSurvey}
-              />
-            </div>
-          )}
         {selectedComments && !selectedComments.length && isLoggedIn ? (
           <div className="comment-item page-comment">
             <Countdown timeInUnix={Number(surveyMetadata.comment_until_unix)} />

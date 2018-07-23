@@ -55,9 +55,18 @@ const User = db.define(
     restricted_access: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
+    },
+    anonymity: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   },
   {
+    getterMethods: {
+      displayName() {
+        return this.anonymity ? "Anonymous" : this.name;
+      }
+    },
     scopes: {
       comments: function({
         userId,
@@ -86,7 +95,8 @@ const User = db.define(
             "name",
             "first_name",
             "last_name",
-            "organization"
+            "organization",
+            "anonymity",
           ],
           include: [commentQueryObj]
         };
@@ -142,6 +152,7 @@ const User = db.define(
             "last_name",
             "organization",
             "restricted_access",
+            "anonymity",
             "createdAt"
           ],
           include: [
