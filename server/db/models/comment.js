@@ -45,7 +45,7 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email"]
+              attributes: ["first_name", "last_name", "name", "email", "id"]
             },
             {
               model: db.model("user"),
@@ -100,7 +100,7 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email"]
+              attributes: ["first_name", "last_name", "name", "email", "id"]
             },
             {
               model: db.model("user"),
@@ -128,7 +128,7 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email", "id"]
                 },
                 {
                   model: db.model("user"),
@@ -154,7 +154,7 @@ const Comment = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email"]
+              attributes: ["first_name", "last_name", "name", "email", "id"]
             },
             {
               model: db.model("user"),
@@ -203,7 +203,7 @@ const Comment = db.define(
                 {
                   model: db.model("user"),
                   as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "name", "email"]
+                  attributes: ["first_name", "last_name", "name", "email", "id"]
                 },
                 {
                   model: db.model("user"),

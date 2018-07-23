@@ -4,13 +4,17 @@ import { connect } from "react-redux";
 /** Modal Components */
 import { EditCommentModal } from "../scenes/project/scenes/survey/components";
 import { ProjectEditorModal } from "../scenes/project/components";
-import { UportModal } from "./AuthForm/UportModal";
+import FeedbackModal from "./FeedbackModal";
 
 /** Modal Type Constants */
 const MODAL_COMPONENTS = {
   EDIT_COMMENT_MODAL: EditCommentModal,
   PROJECT_EDITORS_MODAL: ProjectEditorModal,
-  UPORT_MODAL: UportModal
+  FEEDBACK_MODAL: FeedbackModal
+};
+
+const styles = {
+  FEEDBACK_MODAL: { height: "220px" }
 };
 
 const ModalContainer = ({ modalType, modalProps }) => {
@@ -19,7 +23,7 @@ const ModalContainer = ({ modalType, modalProps }) => {
   }
   const SpecificModal = MODAL_COMPONENTS[modalType];
 
-  return <SpecificModal {...modalProps} />;
+  return <SpecificModal style={styles[modalType]} {...modalProps} />;
 };
 
 export default connect(state => state.data.modal)(ModalContainer);

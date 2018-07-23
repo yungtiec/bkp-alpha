@@ -46,6 +46,7 @@ export default ({
       addNewComment={addNewComment}
     />
     <SidebarContents
+      isLoggedIn={isLoggedIn}
       commentIds={commentIds}
       commentsById={commentsById}
       selectedText={selectedText}

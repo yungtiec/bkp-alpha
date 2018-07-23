@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { Component } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 export default ({ user }) => (
   <div className="landing">
@@ -26,9 +26,6 @@ export default ({ user }) => (
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to="project/GENERAL/survey/21">View Framework</Link>
-              </li>
-              <li className="nav-item">
                 <Link to="login">Log In</Link>
               </li>
             </ul>
@@ -39,12 +36,10 @@ export default ({ user }) => (
         <div className="row">
           <div className="col-lg-12 my-auto">
             <div className="header-content mx-auto">
-              <h5 className="header-title mb-5">
-                Help The Brooklyn Project roll out the first official release of
-                the Consumer Token Framework, the premier community-driven
-                framework to promote transparency and accountability in the
-                blockchain.
-              </h5>
+              <h1 class="mb-5">
+                A collaborative approach to support innovators and protect
+                consumers on blockchains
+              </h1>
               <div className="row">
                 <div className="col-lg-12 header-text">
                   <p>
@@ -57,7 +52,12 @@ export default ({ user }) => (
               </div>
               <div className="row">
                 <div className="col-lg-12 my-auto">
-                  <Link class="btn btn-landing btn-xl" to="signup">Sign Up</Link>
+                  <Link
+                    class="btn btn-landing btn-xl"
+                    to="project/BKP/survey/21"
+                  >
+                    View Framework
+                  </Link>
                 </div>
               </div>
             </div>
@@ -65,22 +65,69 @@ export default ({ user }) => (
         </div>
       </div>
     </header>
-    <section className="framework" id="framework">
-      <div className="container">
-        <div className="row mb-3">
-          <div className="col-md-12">
-            <h2>How does it work?</h2>
+    <section class="framework" id="framework">
+      <div class="container">
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <h2>The Core Framework consists of:</h2>
           </div>
         </div>
-        <div className="row mb-5">
-          <div className="col-sm-12">
+        <div class="row">
+          <div class="col-sm-1 d-none d-md-block">
+            <div class="text-baseline" />
+          </div>
+          <div class="col-sm-11">
             <p>
-              As a registered member of our community, your contributions will
-              be recorded and evaluated by other community members. Exceptional
-              contributions may be rewarded with acknowledgements in the final
-              release of the Framework. You can provide feedback directly by
-              using the BKP’s proprietary Annotator App. By registering you
-              agree to our terms and conditions.
+              10 Principles that serve as general, aspirational guideposts for
+              projects.
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1 d-none d-md-block">
+            <div class="text-baseline" />
+          </div>
+          <div class="col-sm-11">
+            <p>
+              Detailed suggested practices that form a foundation for
+              consumer-oriented behavior and community-driven collaboration.
+            </p>
+          </div>
+        </div>
+        <div class="row  mb-3">
+          <div class="col-sm-1 d-none d-md-block">
+            <div class="text-baseline" />
+          </div>
+          <div class="col-sm-11">
+            <p>
+              Recommended disclosures that provide a frame of reference for
+              smart transparency.
+            </p>
+          </div>
+        </div>
+        <div class="row mb-5">
+          <div class="col-sm-12">
+            <p>
+              Crypto-economic systems form the backbone of blockchain
+              technology. In the context of the Core Framework, a
+              crypto-economic system will allow projects to apply to a registry
+              that (1) signals whether a project is implementing the framework,
+              and (2) invites the community to scrutinize their practices.
+            </p>
+            <p>
+              The goal of this initiative is to build a vibrant community that
+              collaborates with projects to solve their most urgent and
+              difficult problems, and a signaling system to inform consumers and
+              innovators when they may be treading into risky territory on
+              public blockchains.
+            </p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <p>
+              To collaborate with us, sign up
+              <Link to="signup"> here.</Link>
             </p>
           </div>
         </div>

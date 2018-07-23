@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import history from "../../../../../history";
 import { orderBy, find } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import { loadModal } from "../../../../../data/reducer";
 import policies from "../../../../../policies.js";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
@@ -29,6 +30,7 @@ class VersionToolbar extends Component {
     super(props);
     autoBind(this);
   }
+
   render() {
     const {
       resetUpload,
@@ -38,6 +40,7 @@ class VersionToolbar extends Component {
       surveyQnaIds,
       uploadMode,
       uploaded,
+      loadModal,
       user,
       upvoteProjectSurvey
     } = this.props;
@@ -122,7 +125,12 @@ class VersionToolbar extends Component {
           <div className="dropdown-menu" aria-labelledby="feedbackMenuBtn">
             <a class="dropdown-item">I like this</a>
             <a class="dropdown-item">I don't like this</a>
-            <a class="dropdown-item">Other feedback</a>
+            <a
+              class="dropdown-item"
+              onClick={() => loadModal("FEEDBACK_MODAL", {})}
+            >
+              Other feedback
+            </a>
           </div>
         </div>
         {!uploadMode ? (
@@ -246,4 +254,4 @@ class VersionToolbar extends Component {
 
 const mapState = (state, ownProps) => ({ ...ownProps, user: state.data.user });
 
-export default connect(mapState, { notify })(VersionToolbar);
+export default connect(mapState, { notify, loadModal })(VersionToolbar);

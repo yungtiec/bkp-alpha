@@ -15,7 +15,7 @@ function sendNotificationToSlack(annotation) {
     webhook.send(
       `Incoming annotation at ${annotation.uri}/question/${
         annotation.survey_question_id
-      }/annotation/${
+      }/comment/${
         annotation.id
       }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
       function(err, res) {
@@ -82,7 +82,7 @@ router.post(
       newComment = await Comment.scope({
         method: ["flatThreadByRootId", { where: { id: newComment.id } }]
       }).findOne();
-      sendNotificationToSlack(newComment);
+      // sendNotificationToSlack(newComment);
       res.send(newComment);
     } catch (err) {
       next(err);

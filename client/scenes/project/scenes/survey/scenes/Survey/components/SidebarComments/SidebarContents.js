@@ -49,6 +49,7 @@ function renderSidebarWithSelectedComments(props) {
     loadModal,
     notify,
     user,
+    isLoggedIn,
     admin
   } = props;
   return (
@@ -69,6 +70,7 @@ function renderSidebarWithSelectedComments(props) {
             loadModal={loadModal}
             notify={notify}
             user={user}
+            isLoggedIn={isLoggedIn}
           />
         ))}
     </div>

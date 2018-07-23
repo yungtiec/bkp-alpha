@@ -21,6 +21,7 @@ export default class CommentItem extends Component {
 
   render() {
     const { comment } = this.props;
+
     return (
       <div className="comment-item">
         {this.renderMainComment(comment)}
@@ -117,10 +118,7 @@ export default class CommentItem extends Component {
   renderMainComment(comment) {
     const hasUpvoted = find(
       comment.upvotesFrom,
-      upvotedUser =>
-        upvotedUser.email === this.props.user.email ||
-        upvotedUser.googleId === this.props.user.googleId ||
-        upvotedUser.uportAddress === this.props.user.uportAddress
+      upvotedUser => upvotedUser.id === this.props.user.id
     );
     const initReplyToThis = this.props.isLoggedIn
       ? this.initReply.bind(this, null)
@@ -206,10 +204,7 @@ export default class CommentItem extends Component {
     ).map((reply, i) => {
       const hasUpvoted = find(
         reply.upvotesFrom,
-        upvotedUser =>
-          upvotedUser.email === this.props.user.email ||
-          upvotedUser.googleId === this.props.user.googleId ||
-          upvotedUser.uportAddress === this.props.user.uportAddress
+        upvotedUser => upvotedUser.id === this.props.user.id
       );
       const upvoteItem = this.props.isLoggedIn
         ? this.props.upvoteItem.bind(this, {

@@ -146,7 +146,7 @@ const ProjectSurvey = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["name", "first_name", "last_name", "email"]
+              attributes: ["id", "name", "first_name", "last_name", "email"]
             },
             {
               model: db.model("survey"),
@@ -222,7 +222,7 @@ const ProjectSurvey = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["name", "first_name", "last_name", "email"]
+              attributes: ["id", "name", "first_name", "last_name", "email"]
             },
             {
               model: db.model("comment"),
