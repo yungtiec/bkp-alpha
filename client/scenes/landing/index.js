@@ -2,8 +2,9 @@ import "./index.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { logout } from "../../data/reducer";
 
-const Landing = ({ user }) => (
+const Landing = ({ user, logout }) => (
   <div className="landing">
     <header className="masthead">
       <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
@@ -24,15 +25,18 @@ const Landing = ({ user }) => (
             Menu
             <i className="fa fa-bars" />
           </button>
-          {user ? null : (
-            <div className="collapse navbar-collapse" id="navbarResponsive">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
+
+          <div>
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                {!!user.id ? (
+                  <a onClick={logout}>Log Out</a>
+                ) : (
                   <Link to="login">Log In</Link>
-                </li>
-              </ul>
-            </div>
-          )}
+                )}
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
 
@@ -147,4 +151,6 @@ const Landing = ({ user }) => (
 
 const mapState = state => ({ user: state.data.user });
 
-export default connect(mapState, {})(Landing);
+const actions = { logout };
+
+export default connect(mapState, actions)(Landing);

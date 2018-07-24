@@ -54,14 +54,14 @@ class AuthForm extends Component {
     return (
       <div className="auth-page">
         <div className="auth-page__header">
-          <div className="logo-tbp">
+          <Link className="logo-tbp my-0 mx-0" to="/landing">
             <img
               width="120px"
               height="auto"
               className="logo__large"
               src="/assets/the-brooklyn-project-logo-white-transparent.png"
             />
-          </div>
+          </Link>
         </div>
         <div className="auth__form-wrapper">
           <div className="auth__form-contents">
