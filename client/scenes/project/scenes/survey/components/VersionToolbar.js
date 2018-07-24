@@ -42,6 +42,7 @@ class VersionToolbar extends Component {
       uploaded,
       loadModal,
       user,
+      width,
       upvoteProjectSurvey,
       downvoteProjectSurvey
     } = this.props;
@@ -87,7 +88,9 @@ class VersionToolbar extends Component {
         >
           <i className="fas fa-thumbs-up mr-2" />
           {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
-          <span className="ml-3">I like this framework</span>
+          {width < 520 ? null : (
+            <span className="ml-3">I like this framework</span>
+          )}
         </button>
         <button
           type="button"
@@ -108,7 +111,9 @@ class VersionToolbar extends Component {
           {surveyMetadata.downvotesFrom
             ? surveyMetadata.downvotesFrom.length
             : 0}
-          <span className="ml-3">I don't like this framework</span>
+          {width < 520 ? null : (
+            <span className="ml-3">I don't like this framework</span>
+          )}
         </button>
         {!uploadMode ? (
           <PunditContainer policies={policies} user={user}>
@@ -229,6 +234,10 @@ class VersionToolbar extends Component {
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps, user: state.data.user });
+const mapState = (state, ownProps) => ({
+  ...ownProps,
+  user: state.data.user,
+  width: state.data.environment.width
+});
 
 export default connect(mapState, { notify, loadModal })(VersionToolbar);

@@ -1,8 +1,9 @@
 import "./index.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export default ({ user }) => (
+const Landing = ({ user }) => (
   <div className="landing">
     <header className="masthead">
       <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
@@ -23,15 +24,18 @@ export default ({ user }) => (
             Menu
             <i className="fa fa-bars" />
           </button>
-          <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to="login">Log In</Link>
-              </li>
-            </ul>
-          </div>
+          {user ? null : (
+            <div className="collapse navbar-collapse" id="navbarResponsive">
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to="login">Log In</Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </nav>
+
       <div className="container h-fill">
         <div className="row">
           <div className="col-lg-12 my-auto">
@@ -140,3 +144,7 @@ export default ({ user }) => (
     </footer>
   </div>
 );
+
+const mapState = state => ({ user: state.data.user });
+
+export default connect(mapState, {})(Landing);
