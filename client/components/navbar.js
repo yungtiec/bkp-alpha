@@ -33,14 +33,14 @@ class Navbar extends Component {
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
-            <div className="logo-header">
+            <Link className="logo-header my-0 ml-0" to="/landing">
               <img
                 width="100px"
                 height="auto"
                 className="logo__large"
                 src="/assets/the-brooklyn-project-logo.png"
               />
-            </div>
+            </Link>
             {width > 600 && isAdmin ? (
               <Link to="/admin" className="navbar__nav-item">
                 admin

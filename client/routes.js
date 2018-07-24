@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Route, Switch } from "react-router-dom";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   Projects,
@@ -70,6 +70,7 @@ class Routes extends Component {
             path="/unauthorized"
             component={Unauthorized}
           />
+          <Route path="/landing" component={Landing} />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
@@ -86,9 +87,7 @@ class Routes extends Component {
           )}
           {/* Displays our Login component as a fallback */}
           {!isLoggedIn && <Route component={Landing} />}
-          {isLoggedIn && (
-            <RouteWithLayout layout={LayoutWithNav} component={Projects} />
-          )}
+          {isLoggedIn && <Redirect to="/project/BKP/survey/21" />}
         </Switch>
       </div>
     );
