@@ -40,7 +40,7 @@ Notification.notifyRootAndParent = function({
   var notification = {
     sender_id: sender ? sender.id : null,
     uri,
-    message: `${sender.email} ${messageFragment}`,
+    message: `${sender.displayName} ${messageFragment}`,
     status: "unread"
   };
   var notifications = [];
@@ -64,7 +64,9 @@ Notification.notify = function({ sender, comment, messageFragment }) {
   Notification.create({
     sender_id: sender ? sender.id : null,
     uri,
-    message: sender ? `${sender.email} ${messageFragment}` : messageFragment,
+    message: sender
+      ? `${sender.displayName} ${messageFragment}`
+      : messageFragment,
     status: "unread",
     recipient_id: comment.owner_id
   });
@@ -95,7 +97,7 @@ Notification.notifyCollaborators = function({
 }) {
   return Notification.create({
     message: `${
-      sender.email
+      sender.displayName
     } ${action} ${projectSymbol}/${parentSurveyTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
