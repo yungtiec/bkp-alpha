@@ -40,6 +40,17 @@ class Survey extends Component {
           content: "Tell us what you think about the framework.",
           disableBeacon: true,
           placement: "left"
+        },
+        {
+          target: "p.comment-item__owner-name:first-of-type",
+          content: (
+            <div>
+              Wish to comment anonymously? Change your default setting in
+              profile page.
+            </div>
+          ),
+          disableBeacon: true,
+          placement: "left"
         }
       ]
     };

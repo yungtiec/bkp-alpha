@@ -141,7 +141,7 @@ export default class CommentItem extends Component {
         style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
         <div className="comment-item__header">
-          <p>{comment.owner.displayName}</p>
+          <p className="comment-item__owner-name">{comment.owner.displayName}</p>
           <p>{moment(comment.createdAt).fromNow()}</p>
         </div>
         {comment.quote && (
