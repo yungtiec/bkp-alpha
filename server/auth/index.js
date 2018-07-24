@@ -93,7 +93,7 @@ router.put("/profile/onboard", async (req, res, next) => {
   else {
     const user = await User.findById(req.user.id).then(user =>
       user.update({
-        onboard: !req.user.onboard
+        onboard: true
       })
     );
     res.send(user);
