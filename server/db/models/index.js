@@ -239,6 +239,17 @@ ProjectSurvey.belongsToMany(User, {
   foreignKey: "project_survey_id"
 });
 
+User.belongsToMany(ProjectSurvey, {
+  as: "downvotedProjectSurveys",
+  through: "project_survey_downvote",
+  foreignKey: "user_id"
+});
+ProjectSurvey.belongsToMany(User, {
+  as: "downvotesFrom",
+  through: "project_survey_downvote",
+  foreignKey: "project_survey_id"
+});
+
 SurveyQuestion.hasMany(Comment, {
   foreignKey: "survey_question_id"
 });

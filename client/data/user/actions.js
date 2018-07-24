@@ -120,3 +120,10 @@ export const fetchOwnProjectSurveys = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
+
+export const updateOnboardStatus = () => dispatch =>
+  axios
+    .put(`/auth/profile/onboard`)
+    .then(res => res.data)
+    .then(dispatch({ type: types.ONBOARD_STATUS_UPDATED }))
+    .catch(err => console.log(err));

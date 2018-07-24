@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import moment from "moment";
 import { batchActions } from "redux-batched-actions";
+import { updateOnboardStatus } from "../../../../../../data/reducer";
 import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   sortCommentBy,
@@ -19,7 +20,8 @@ import {
 } from "../../reducer";
 import {
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey
+  upvoteProjectSurvey,
+  downvoteProjectSurvey
 } from "../../data/actions";
 import {
   fetchCommentsBySurvey,
@@ -118,10 +120,12 @@ const mapState = state => {
     commentIssueFilter,
     sidebarContext
   } = state.scenes.project.scenes.survey;
+
   return {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
+    onboard: state.data.user.onboard,
     isClosedForComment:
       Number(surveyMetadata.comment_until_unix) -
         Number(moment().format("x")) <=
@@ -155,6 +159,7 @@ const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
   upvoteProjectSurvey,
+  downvoteProjectSurvey,
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,
@@ -165,7 +170,8 @@ const actions = {
   toggleSidebar,
   toggleSidebarContext,
   toggleAnnotationHighlight,
-  updateVerificationStatusInView
+  updateVerificationStatusInView,
+  updateOnboardStatus
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

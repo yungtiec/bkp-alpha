@@ -18,3 +18,18 @@ export function postUpvoteToProjectSurvey({
     })
     .then(res => res.data);
 }
+
+export function postDownvoteToProjectSurvey({
+  projectSurveyId,
+  projectSymbol,
+  hasDownvoted
+}) {
+  return axios
+    .post(
+      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/downvote`,
+      {
+        hasDownvoted
+      }
+    )
+    .then(res => res.data);
+}

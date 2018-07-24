@@ -88,6 +88,27 @@ router.post(
 );
 
 router.post(
+  "/:projectSurveyId/downvote",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      if (!req.body.hasDownvoted) {
+        await req.user.addDownvotedProjectSurveys(req.params.projectSurveyId);
+      } else {
+        await req.user.removeDownvotedProjectSurveys(req.params.projectSurveyId);
+      }
+      const downvotesFrom = await ProjectSurvey.findById(
+        req.params.projectSurveyId
+      ).then(ps => ps.getDownvotesFrom());
+      res.send(downvotesFrom);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
   "/:parentProjectSurveyId",
   ensureAuthentication,
   ensureResourceAccess,

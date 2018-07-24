@@ -15,6 +15,11 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         upvotesFrom: action.upvotesFrom
       };
+    case types.PROJECT_SURVEY_DOWNVOTED:
+      return {
+        ...state,
+        downvotesFrom: action.downvotesFrom
+      };
     default:
       return state;
   }

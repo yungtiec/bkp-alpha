@@ -59,6 +59,10 @@ const User = db.define(
     anonymity: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
+    },
+    onboard: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   },
   {
@@ -97,6 +101,7 @@ const User = db.define(
             "last_name",
             "organization",
             "anonymity",
+            "onboard",
           ],
           include: [commentQueryObj]
         };
@@ -153,6 +158,7 @@ const User = db.define(
             "organization",
             "restricted_access",
             "anonymity",
+            "onboard",
             "createdAt"
           ],
           include: [

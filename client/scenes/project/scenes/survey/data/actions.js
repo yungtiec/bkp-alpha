@@ -1,7 +1,9 @@
 import * as types from "./actionTypes";
 import {
   getSurveyByProjectSurveyId,
-  postUpvoteToProjectSurvey
+  postUpvoteToProjectSurvey,
+  postDownvoteToProjectSurvey,
+  putOnboardStatus
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 
@@ -45,6 +47,7 @@ export function fetchQuestionsByProjectSurveyId({
           "comment_until_unix",
           "createdAt",
           "upvotesFrom",
+          "downvotesFrom",
           "scorecard"
         ]),
         omit(projectSurvey.survey, ["survey_questions", "id"])
@@ -76,6 +79,29 @@ export function upvoteProjectSurvey({
       dispatch({
         type: types.PROJECT_SURVEY_UPVOTED,
         upvotesFrom
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
+
+
+export function downvoteProjectSurvey({
+  projectSurveyId,
+  projectSymbol,
+  hasDownvoted
+}) {
+  return async (dispatch, getState) => {
+    try {
+      const downvotesFrom = await postDownvoteToProjectSurvey({
+        projectSurveyId,
+        projectSymbol,
+        hasDownvoted
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_DOWNVOTED,
+        downvotesFrom
       });
     } catch (err) {
       console.log(err);

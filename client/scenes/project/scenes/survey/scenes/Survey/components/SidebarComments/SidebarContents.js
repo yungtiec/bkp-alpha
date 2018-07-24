@@ -12,7 +12,7 @@ import {
   editComment,
   changeCommentIssueStatus
 } from "../../../../data/comments/actions";
-import { loadModal } from "../../../../../../data/reducer";
+import { loadModal } from "../../../../../../../../data/reducer";
 import { notify } from "reapop";
 
 const SidebarContents = props => {

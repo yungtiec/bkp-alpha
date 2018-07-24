@@ -173,7 +173,7 @@ export default class CommentItem extends Component {
               to={`/project/${
                 comment.issue.resolvingProjectSurvey.project.symbol
               }/survey/${comment.issue.resolvingProjectSurvey.id}`}
-            >{`issue resolved in disclosure v${
+            >{`issue resolved in document v${
               comment.issue.resolvingProjectSurvey.hierarchyLevel
             }`}</Link>
           </span>

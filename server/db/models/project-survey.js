@@ -149,6 +149,11 @@ const ProjectSurvey = db.define(
               attributes: ["id", "name", "first_name", "last_name", "email"]
             },
             {
+              model: db.model("user"),
+              as: "downvotesFrom",
+              attributes: ["id", "name", "first_name", "last_name", "email"]
+            },
+            {
               model: db.model("survey"),
               include: [
                 {
@@ -222,6 +227,11 @@ const ProjectSurvey = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
+              attributes: ["id", "name", "first_name", "last_name", "email"]
+            },
+            {
+              model: db.model("user"),
+              as: "downvotesFrom",
               attributes: ["id", "name", "first_name", "last_name", "email"]
             },
             {
@@ -362,7 +372,13 @@ function getPublishedSurveysStats(projectSurveys) {
           },
           {
             model: db.model("user"),
-            as: "upvotesFrom",
+            as: "upvotesFrom;",
+            attributes: ["id"],
+            required: false
+          },
+          {
+            model: db.model("user"),
+            as: "downvotesFrom",
             attributes: ["id"],
             required: false
           },

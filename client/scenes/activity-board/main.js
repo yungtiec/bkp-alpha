@@ -21,6 +21,11 @@ class Leaderboard extends Component {
         accessor: "displayName"
       },
       {
+        id: "comments",
+        Header: "comments made",
+        accessor: "num_comments"
+      },
+      {
         id: "upvotes",
         Header: "upvotes received",
         accessor: "num_upvotes"

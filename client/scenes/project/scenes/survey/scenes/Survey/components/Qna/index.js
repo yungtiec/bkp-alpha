@@ -6,6 +6,7 @@ import Question from "./Question";
 import Answers from "./Answers";
 import annotator from "annotator";
 import { draw, undraw } from "../../../../../../../../annotator/highlight";
+import history from "../../../../../../../../history";
 import { isEmpty } from "lodash";
 
 class QnaBox extends Component {
@@ -43,6 +44,11 @@ class QnaBox extends Component {
           annotationCreated: function(ann) {
             undraw(self.state.temporaryHighlight);
             self.props.addNewCommentSentFromServer(ann);
+            history.push(
+              `/project/${projectSymbol}/survey/${projectSurveyId}/comment/${
+                ann.id
+              }`
+            );
           }
         };
       };

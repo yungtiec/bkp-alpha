@@ -25,7 +25,7 @@ export default class SidebarHeader extends Component {
         role="group"
         aria-label="Basic example"
       >
-        <span>sort by</span>
+        <span>sort comments by</span>
         <Select
           name="form-field-name"
           value={commentSortBy}

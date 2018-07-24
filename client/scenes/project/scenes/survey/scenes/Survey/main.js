@@ -20,11 +20,29 @@ import {
 import { SurveyHeader, VersionToolbar } from "../../components";
 import { findCommentsInQnaByText } from "../../utils";
 import { SidebarLayout, CustomScrollbar } from "../../../../../../components";
+import Joyride from "react-joyride";
 
 class Survey extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.state = {
+      run: this.props.isLoggedIn && !this.props.onboard,
+      steps: [
+        {
+          target: "div.qna__answer p:first-of-type",
+          content: "Select text from document to make an annotation.",
+          disableBeacon: true,
+          placement: "top"
+        },
+        {
+          target: ".page-comment",
+          content: "Tell us what you think about the framework.",
+          disableBeacon: true,
+          placement: "left"
+        }
+      ]
+    };
   }
 
   componentDidMount(nextProps) {
@@ -133,14 +151,10 @@ class Survey extends Component {
     });
   }
 
-  toggleAnnotationHighlight() {
-    const next = !this.props.annotationHighlight;
-    if (!next) {
-      $(".annotator-hl").addClass("hidden");
-    } else {
-      $(".annotator-hl").removeClass("hidden");
+  handleJoyrideCallback(data) {
+    if (data.status === "finished") {
+      this.props.updateOnboardStatus();
     }
-    this.props.toggleAnnotationHighlight();
   }
 
   render() {
@@ -172,14 +186,26 @@ class Survey extends Component {
       annotationHighlight,
       toggleSidebar,
       toggleSidebarContext,
-      toggleAnnotationHighlight,
-      upvoteProjectSurvey
+      upvoteProjectSurvey,
+      downvoteProjectSurvey
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
 
     return (
       <div>
+        <Joyride
+          continuous
+          showProgress
+          steps={this.state.steps}
+          run={this.state.run}
+          callback={this.handleJoyrideCallback}
+          styles={{
+            options: {
+              primaryColor: "#2540ce"
+            }
+          }}
+        />
         <SurveyHeader
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
@@ -191,6 +217,7 @@ class Survey extends Component {
             surveyQnasById={surveyQnasById}
             surveyQnaIds={surveyQnaIds}
             upvoteProjectSurvey={upvoteProjectSurvey}
+            downvoteProjectSurvey={downvoteProjectSurvey}
           />
         )}
         <Switch>
@@ -235,8 +262,6 @@ class Survey extends Component {
           selectedComments={selectedComments}
           sidebarOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
-          annotationHighlight={annotationHighlight}
-          toggleAnnotationHighlight={this.toggleAnnotationHighlight}
           sidebarContext={sidebarContext}
           toggleSidebarContext={toggleSidebarContext}
         >

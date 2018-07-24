@@ -9,7 +9,7 @@ import {
   Admin,
   Unauthorized,
   Upload,
-  Leaderboard,
+  ActivityBoard,
   Dashboard,
   Landing
 } from "./scenes";
@@ -62,8 +62,8 @@ class Routes extends Component {
           )}
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/leaderboard"
-            component={Leaderboard}
+            path="/activity-board"
+            component={ActivityBoard}
           />
           <RouteWithLayout
             layout={LayoutWithNav}

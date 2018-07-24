@@ -52,7 +52,9 @@ class AuthWidget extends Component {
       inNavbar,
       width,
       isAdmin,
-      user
+      user,
+      dataTip,
+      dataFor
     } = this.props;
     const className = inNavbar ? "auth-widget--navbar" : "auth-widget";
     const avatarColor = inNavbar ? "#459DF9" : "#ffffff";
@@ -60,7 +62,12 @@ class AuthWidget extends Component {
 
     if (isLoggedIn)
       return (
-        <div className={className} ref={this.setWrapperRef}>
+        <div
+          className={className}
+          ref={this.setWrapperRef}
+          data-tip={dataTip}
+          data-for={dataFor}
+        >
           <div className={`${className}__avatar-container`}>
             <Avatar
               name={name.trim() ? name : "?"}

@@ -20,6 +20,11 @@ export default function(state = defaultUser, action) {
         displayName: action.profile.displayName,
         organization: action.profile.organization
       };
+    case types.ONBOARD_STATUS_UPDATED:
+      return {
+        ...state,
+        onboard: true
+      };
     case types.MANAGED_PROJECTS_FETCH_SUCCESS:
       return {
         ...state,

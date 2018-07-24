@@ -10,8 +10,8 @@ const initialState = {
 const storeUsers = (state, action) => {
   const sortedUsers = orderBy(
     values(action.usersById),
-    ["num_upvotes", "email"],
-    ["desc", "asc"]
+    ["num_upvotes", "num_comments", "name"],
+    ["desc", "desc", "asc"]
   );
   const userIds = sortedUsers.map(s => s.id);
   return {
@@ -20,7 +20,6 @@ const storeUsers = (state, action) => {
     userIds
   };
 };
-
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
@@ -36,5 +35,4 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
-export const getUsers = state =>
-  state.scenes.leaderboard.data;
+export const getUsers = state => state.scenes.activityBoard.data;

@@ -5,7 +5,7 @@ import { default as ReactCountdown } from "react-countdown-now";
 import ReactTooltip from "react-tooltip";
 
 // Random component
-const Completionist = () => <span>This disclosure is closed for comment</span>;
+const Completionist = () => <span>This document is closed for comment</span>;
 
 // Renderer callback with condition
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -14,7 +14,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
     return (
       <div className="comment-item__main">
         <div className="comment-item__header">
-          <p className="mb-2">This disclosure is closed for comment</p>
+          <p className="mb-2">This document is closed for comment</p>
         </div>
       </div>
     );
@@ -34,7 +34,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
             >
               <span>
                 Once the countdown ends, the editors will go over your
-                feedbacks, edit the disclosure and publish a new version.
+                feedback, edit the document and publish a new version.
               </span>
             </ReactTooltip>
           </div>

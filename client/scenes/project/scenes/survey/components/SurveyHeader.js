@@ -34,7 +34,7 @@ export default class SurveyHeader extends Component {
         <ProjectSymbolBlueBox name={projectMetadata.name} />
         <p className="survey__title">{`${surveyMetadata.title}`}</p>
         <p className="survey__subtitle  mb-4">
-          {`disclosure created by ${creator} ${collaborators}`}
+          {`document version 0.4.0 created by ${creator} ${collaborators}`}
         </p>
       </div>
     );

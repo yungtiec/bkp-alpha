@@ -56,8 +56,8 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="/leaderboard" className="navbar__nav-item">
-                leaderboard
+              <Link to="/activity-board" className="navbar__nav-item">
+                activity board
               </Link>
             ) : (
               ""

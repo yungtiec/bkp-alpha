@@ -42,7 +42,8 @@ class VersionToolbar extends Component {
       uploaded,
       loadModal,
       user,
-      upvoteProjectSurvey
+      upvoteProjectSurvey,
+      downvoteProjectSurvey
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -57,6 +58,14 @@ class VersionToolbar extends Component {
         upvotedUser.email === user.email ||
         upvotedUser.googleId === user.googleId ||
         upvotedUser.uportAddress === user.uportAddress
+    );
+
+    const hasDownvoted = find(
+      surveyMetadata.downvotesFrom,
+      downvotedUser =>
+        downvotedUser.email === user.email ||
+        downvotedUser.googleId === user.googleId ||
+        downvotedUser.uportAddress === user.uportAddress
     );
 
     return (
@@ -76,63 +85,31 @@ class VersionToolbar extends Component {
             })
           }
         >
-          <i class="fas fa-thumbs-up mr-2" />
+          <i className="fas fa-thumbs-up mr-2" />
           {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+          <span className="ml-3">I like this framework</span>
         </button>
-        <div className="btn-group">
-          <button
-            type="button"
-            className="btn btn-outline-primary dropdown-toggle"
-            type="button"
-            id="versionMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {`Version ${this.props.surveyMetadata.hierarchyLevel}`}
-          </button>
-          <div className="dropdown-menu" aria-labelledby="versionMenuButton">
-            {this.props.surveyMetadata.versions.map(v => (
-              <Link
-                key={`version-dropdown__item-${v.id}`}
-                class="dropdown-item"
-                to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                  v.id
-                }`}
-                style={
-                  v.hierarchyLevel === this.props.surveyMetadata.hierarchyLevel
-                    ? { fontWeight: 700 }
-                    : {}
-                }
-              >
-                {`Version ${v.hierarchyLevel}`}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div className="btn-group">
-          <button
-            type="button"
-            className="btn btn-outline-primary dropdown-toggle"
-            type="button"
-            id="feedbackMenuBtn"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Feedback
-          </button>
-          <div className="dropdown-menu" aria-labelledby="feedbackMenuBtn">
-            <a class="dropdown-item">I like this</a>
-            <a class="dropdown-item">I don't like this</a>
-            <a
-              class="dropdown-item"
-              onClick={() => loadModal("FEEDBACK_MODAL", {})}
-            >
-              Other feedback
-            </a>
-          </div>
-        </div>
+        <button
+          type="button"
+          className={`btn ${
+            hasDownvoted
+              ? "bg-consensys text-light"
+              : "text-consensys btn-outline-primary"
+          }`}
+          onClick={() =>
+            downvoteProjectSurvey({
+              projectSymbol: projectMetadata.symbol,
+              projectSurveyId: surveyMetadata.id,
+              hasDownvoted
+            })
+          }
+        >
+          <i className="fas fa-thumbs-down mr-2" />
+          {surveyMetadata.downvotesFrom
+            ? surveyMetadata.downvotesFrom.length
+            : 0}
+          <span className="ml-3">I don't like this framework</span>
+        </button>
         {!uploadMode ? (
           <PunditContainer policies={policies} user={user}>
             <PunditTypeSet type="Disclosure">
