@@ -5,6 +5,7 @@ import { Element } from "react-scroll";
 
 export default ({
   isLoggedIn,
+  anonymity,
   commentIds,
   commentsById,
   surveyMetadata,
@@ -37,6 +38,7 @@ export default ({
       updateTagFilter={updateTagFilter}
       tagsWithCountInSurvey={tagsWithCountInSurvey}
       isLoggedIn={isLoggedIn}
+      anonymity={anonymity}
       isClosedForComment={isClosedForComment}
       resetCommentSelection={resetCommentSelection}
       commentIssueFilter={commentIssueFilter}

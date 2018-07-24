@@ -42,11 +42,11 @@ class Survey extends Component {
           placement: "left"
         },
         {
-          target: "p.comment-item__owner-name:first-of-type",
+          target: ".page-comment",
           content: (
             <div>
-              Wish to comment anonymously? Change your default setting in
-              profile page.
+              Wish to comment anonymity? Change your default setting in profile
+              page.
             </div>
           ),
           disableBeacon: true,
@@ -178,6 +178,7 @@ class Survey extends Component {
       commentIds,
       unfilteredCommentIds,
       isLoggedIn,
+      anonymity,
       isClosedForComment,
       match,
       width,
@@ -289,6 +290,7 @@ class Survey extends Component {
             {sidebarContext === "comments" && (
               <SidebarComments
                 isLoggedIn={isLoggedIn}
+                anonymity={anonymity}
                 commentIds={commentIds}
                 commentsById={commentsById}
                 surveyMetadata={surveyMetadata}

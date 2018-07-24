@@ -125,6 +125,7 @@ const mapState = state => {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
+    anonymity: !!state.data.user.id && state.data.user.anonymity,
     onboard: state.data.user.onboard,
     isClosedForComment:
       Number(surveyMetadata.comment_until_unix) -
