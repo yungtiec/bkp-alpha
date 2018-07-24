@@ -45,7 +45,7 @@ class Survey extends Component {
           target: ".page-comment",
           content: (
             <div>
-              Wish to comment anonymity? Change your default setting in profile
+              Wish to comment anonymity? Change the default setting in your profile
               page.
             </div>
           ),
