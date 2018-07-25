@@ -11,12 +11,12 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
     if (process.env.NODE_ENV === "production")
       webhook.send(req.body.feedback, function(err, res) {
         if (err) {
-          console.log("Error:", err);
+          next(err);
         } else {
-          console.log("Message sent: ", res);
+          res.send(200);
         }
       });
-    else res.send(200)
+    else res.send(200);
   } catch (err) {
     next(err);
   }
