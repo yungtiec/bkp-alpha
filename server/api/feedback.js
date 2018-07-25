@@ -9,14 +9,14 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
   try {
     console.log(req.body.feedback);
     if (process.env.NODE_ENV === "production")
-      webhook.send(req.body.feedback, function(err, res) {
+      webhook.send(req.body.feedback, function(err, result) {
         if (err) {
           next(err);
         } else {
-          res.send(200);
+          res.sendStatus(200);
         }
       });
-    else res.send(200);
+    else res.sendStatus(200);
   } catch (err) {
     next(err);
   }
