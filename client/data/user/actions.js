@@ -5,6 +5,7 @@ import { pick, keyBy } from "lodash";
 import ReactGA from "react-ga";
 import { loadModal } from "../modal/actions";
 import { uport } from "./connector";
+import { notify } from "reapop";
 const isProduction = process.env.NODE_ENV === "production";
 
 export const getUser = user => {
@@ -127,3 +128,88 @@ export const updateOnboardStatus = () => dispatch =>
     .then(res => res.data)
     .then(dispatch({ type: types.ONBOARD_STATUS_UPDATED }))
     .catch(err => console.log(err));
+
+export const requestPasswordReset = email => dispatch =>
+  axios
+    .put("/auth/reset-password", { email })
+    .then(res => {
+      history.push("/login");
+      dispatch(
+        notify({
+          title:
+            "You will receive an email with instructions about how to reset your password in a few minutes.",
+          message: "",
+          status: "success",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    })
+    .catch(err =>
+      dispatch(
+        notify({
+          title: "Something went wrong. ",
+          message: "Please try again later.",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      )
+    );
+
+export const resetPassword = ({ password, token }) => dispatch =>
+  axios
+    .put(`/auth/reset-password/${token}`, { password })
+    .then(res => {
+      dispatch(getUser(res.data));
+      dispatch(
+        notify({
+          title: "Your password has been reset.",
+          message: "",
+          status: "success",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+      if (res.data.restricted_access) history.push("/user/profile");
+      else if (!res.data.name)
+        history.push({
+          pathname: "/user/profile",
+          state: { edit: true, basicInfoMissing: true }
+        });
+      else history.push("/project/BKP/survey/21");
+    })
+    .catch(err => {
+      if (err.response && err.response.status === 404) {
+        dispatch(
+          notify({
+            title: "Reset password link is not valid",
+            message: "",
+            status: "error",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
+      } else if (err.response && err.response.status === 410) {
+        history.push("/request-password-reset");
+        dispatch(
+          notify({
+            title: "The link has expired. Reset your password again here.",
+            message: "",
+            status: "error",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
+      } else if (err.response && err.response.status === 400) {
+        dispatch(
+          notify({
+            title: "Something went wrong",
+            message: "Please try again later.",
+            status: "error",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
+      }
+    });

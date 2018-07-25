@@ -51,10 +51,11 @@ const Landing = ({ user, logout }) => (
               <div className="row">
                 <div className="col-lg-12 header-text">
                   <p>
-                    As a registered Contributor, you will take part in
-                    constructive debate about the pros and cons of our approach
-                    and help shape a self-regulated future for token projects by
-                    sharing suggestions for improvements of the Framework.
+                    The Brooklyn Project is developing a Core Framework and
+                    experimenting with a crypto-economic system to help consumer
+                    token projects engage the community to build more trust,
+                    cooperation, fairness, safety, and regulatory compliance
+                    across the industry.
                   </p>
                 </div>
               </div>

@@ -5,7 +5,7 @@
  */
 export { default as Navbar } from "./Navbar";
 export { default as SearchBar } from "./SearchBar";
-export { Login, Signup } from "./AuthForm";
+export { Login, Signup, RequestPasswordReset, ResetPassword } from "./AuthForm";
 export { default as ListView } from "./ListView";
 export { default as ListRow } from "./ListRow";
 export { default as AuthWidget } from "./AuthWidget";

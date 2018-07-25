@@ -63,6 +63,12 @@ const User = db.define(
     onboard: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
+    },
+    reset_password_token: {
+      type: Sequelize.STRING
+    },
+    reset_password_expiration: {
+      type: Sequelize.INTEGER
     }
   },
   {
@@ -101,7 +107,7 @@ const User = db.define(
             "last_name",
             "organization",
             "anonymity",
-            "onboard",
+            "onboard"
           ],
           include: [commentQueryObj]
         };

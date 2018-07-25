@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const { User, Role, ProjectAdmin, ProjectEditor } = require("../db/models");
 const _ = require("lodash");
+const generateForgetPasswordHtml = require("./generateForgetPasswordHtml.js");
+const crypto = require("crypto");
+const sgMail = require("@sendgrid/mail");
+const moment = require("moment");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = router;
 
@@ -77,7 +82,7 @@ router.put("/profile", async (req, res, next) => {
 });
 
 router.put("/profile/anonymity", async (req, res, next) => {
-  if (!req.user || req.user && !req.user.id) res.sendStatus(401);
+  if (!req.user || (req.user && !req.user.id)) res.sendStatus(401);
   else {
     const user = await User.findById(req.user.id).then(user =>
       user.update({
@@ -89,7 +94,7 @@ router.put("/profile/anonymity", async (req, res, next) => {
 });
 
 router.put("/profile/onboard", async (req, res, next) => {
-  if (!req.user || req.user && !req.user.id) res.sendStatus(401);
+  if (!req.user || (req.user && !req.user.id)) res.sendStatus(401);
   else {
     const user = await User.findById(req.user.id).then(user =>
       user.update({
@@ -97,6 +102,79 @@ router.put("/profile/onboard", async (req, res, next) => {
       })
     );
     res.send(user);
+  }
+});
+
+router.put("/reset-password", function(req, res, next) {
+  const token = crypto.randomBytes(16).toString("hex");
+  const message = {
+    to: req.body.email,
+    from: "The Brooklyn Project <reset-password@thebkp.com>",
+    subject: "The Brooklyn Project - password Reset",
+    text:
+      "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
+      "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
+      "http://" +
+      "localhost:8000/" +
+      "/reset-password/" +
+      token +
+      "\n\n" +
+      "If you did not request this, please ignore this email and your password will remain unchanged.\n",
+    html: generateForgetPasswordHtml(token)
+  };
+  const expiration = moment()
+    .add(7, "days")
+    .format("x");
+  User.findOne({ where: { email: req.body.email } })
+    .then(function(user) {
+      if (!user) {
+        res.sendStatus(400);
+      } else {
+        user
+          .update({
+            reset_password_token: token,
+            reset_passowrd_expiration: expiration
+          })
+          .then(() => sgMail.send(message))
+          .then(() => res.sendStatus(200));
+      }
+    })
+    .catch(err => next(err));
+});
+
+router.put("/reset-password/:token", async (req, res, next) => {
+  try {
+    var user = await User.findOne({
+      where: { reset_password_token: req.params.token }
+    });
+    var error;
+    if (!user) {
+      error = new Error("User not found");
+      error.status = 404;
+      next(error);
+    } else if (
+      Number(user.reset_passowrd_expiration) - Number(moment().format("x")) <=
+      0
+    ) {
+      error = new Error("Token expired");
+      error.status = 410;
+      next(error);
+    } else {
+      await user.update({
+        reset_password_token: null,
+        reset_passowrd_expiration: null,
+        password: req.body.password
+      });
+      req.logIn(user, async function(err) {
+        if (err) res.sendStatus(400);
+        else {
+          user = await User.getContributions({ userId: user.id });
+          res.send(user);
+        }
+      });
+    }
+  } catch (err) {
+    next(err);
   }
 });
 

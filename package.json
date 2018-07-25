@@ -19,6 +19,7 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "@slack/client": "^4.1.0",
     "annotator": "git+https://github.com/yungtiec/tbp-annotator.git",
     "axios": "^0.15.3",
@@ -28,6 +29,7 @@
     "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.1",
     "connect-session-sequelize": "^4.1.0",
+    "crypto": "^1.0.1",
     "downloadjs": "^1.4.7",
     "express": "^4.14.1",
     "express-session": "^1.15.1",

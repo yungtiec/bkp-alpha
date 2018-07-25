@@ -17,6 +17,8 @@ import {
   Login,
   Signup,
   Layout,
+  RequestPasswordReset,
+  ResetPassword,
   LayoutWithNav,
   RouteWithLayout
 } from "./components";
@@ -36,6 +38,16 @@ class Routes extends Component {
           {/* Routes placed here are available to all visitors */}
           <RouteWithLayout layout={Layout} path="/login" component={Login} />
           <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
+          <RouteWithLayout
+            layout={Layout}
+            path="/request-password-reset"
+            component={RequestPasswordReset}
+          />
+          <RouteWithLayout
+            layout={Layout}
+            path="/reset-password/:token"
+            component={ResetPassword}
+          />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
