@@ -54,7 +54,7 @@ class Sidebar extends Component {
             <i className={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
           <ReactTooltip id="hide-sidebar" type="dark">
-            <span>Hide sidebar</span>
+            <span>{sidebarOpen ? "Hide sidebar" : "Show sidebar"}</span>
           </ReactTooltip>
           {toggleSidebarContext && (
             <button
