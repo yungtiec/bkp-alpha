@@ -120,7 +120,10 @@ router.put("/reset-password", function(req, res, next) {
       token +
       "\n\n" +
       "If you did not request this, please ignore this email and your password will remain unchanged.\n",
-    html: generateForgetPasswordHtml(token)
+    html: generateForgetPasswordHtml(
+      process.env.NODE_ENV === "production",
+      token
+    )
   };
   const expiration = moment()
     .add(7, "days")

@@ -1,4 +1,4 @@
-module.exports = token => `<!DOCTYPE html>
+module.exports = (inProduction, token) => `<!DOCTYPE html>
 
 
 <html>
@@ -417,7 +417,11 @@ module.exports = token => `<!DOCTYPE html>
 
                                           <td>
 
-                                            <a href="http://localhost:8000/reset-password/${token}"
+                                            <a href="https://${
+                                              inProduction
+                                                ? "alpha.thebkp.com"
+                                                : "localhost:8000"
+                                            }/reset-password/${token}"
                                               target="_blank">Reset your password
                                             </a>
                                           </td>
