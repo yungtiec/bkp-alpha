@@ -153,6 +153,11 @@ class AuthForm extends Component {
             required
           />
         </div>
+        {authMethod === "login" ? (
+          <Link to="/request-password-reset" className="row">
+            forget password?
+          </Link>
+        ) : null}
         {authMethod === "signup" && (
           <div className="form-group row d-flex flex-column">
             <label htmlFor="password">
