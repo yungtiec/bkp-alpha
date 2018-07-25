@@ -14,7 +14,10 @@ const ProjectIndex = ({
 }) => {
   return (
     <div className="main-container">
-      <Route path={`${match.path}/survey/:projectSurveyId`} component={Survey} />
+      <Route
+        path={`${match.path}/survey/:projectSurveyId`}
+        component={Survey}
+      />
       {match.isExact && (
         <div className="surveys-container">
           <ProjectBanner metadata={metadata} />

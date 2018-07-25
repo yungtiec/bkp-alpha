@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import moment from "moment";
 import { batchActions } from "redux-batched-actions";
-import { updateOnboardStatus } from "../../../../../../data/reducer";
+import { updateOnboardStatus, loadModal } from "../../../../../../data/reducer";
 import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   sortCommentBy,
@@ -172,7 +172,8 @@ const actions = {
   toggleSidebarContext,
   toggleAnnotationHighlight,
   updateVerificationStatusInView,
-  updateOnboardStatus
+  updateOnboardStatus,
+  loadModal
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

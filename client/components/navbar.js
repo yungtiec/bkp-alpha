@@ -55,7 +55,7 @@ class Navbar extends Component {
             ) : (
               ""
             )}
-            {width > 600 ? (
+            {width && isAdmin > 600 ? (
               <Link to="/activity-board" className="navbar__nav-item">
                 activity board
               </Link>

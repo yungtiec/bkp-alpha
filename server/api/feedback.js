@@ -16,6 +16,7 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
           console.log("Message sent: ", res);
         }
       });
+    else res.send(200)
   } catch (err) {
     next(err);
   }

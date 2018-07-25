@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import autoBind from "react-autobind";
-import { StackableTable } from "../../components";
+import { StackableTable, requiresAuthorization } from "../../components";
 import history from "../../history";
 
 class Leaderboard extends Component {
@@ -43,4 +43,10 @@ class Leaderboard extends Component {
   }
 }
 
-export default withRouter(Leaderboard);
+export default withRouter(
+  requiresAuthorization({
+    Component: Leaderboard,
+    roleRequired: ["admin"]
+  })
+);
+

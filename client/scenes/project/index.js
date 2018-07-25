@@ -6,7 +6,6 @@ import { fetchProjectBySymbol } from "./data/actions";
 import { getAllProjectSurveys } from "./data/surveys/reducer";
 import { getSelectedProject } from "./data/metadata/reducer";
 
-
 const LoadableProject = Loadable({
   loader: () => import("./main"),
   loading: () => (
@@ -34,7 +33,7 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    return <LoadableProject  {...this.props}/>;
+    return <LoadableProject {...this.props} />;
   }
 }
 

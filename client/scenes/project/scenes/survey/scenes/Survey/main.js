@@ -45,8 +45,8 @@ class Survey extends Component {
           target: ".page-comment",
           content: (
             <div>
-              Wish to comment anonymously? Change the default setting in your profile
-              page.
+              Wish to comment anonymously? Change the default setting in your
+              profile page.
             </div>
           ),
           disableBeacon: true,
@@ -199,7 +199,8 @@ class Survey extends Component {
       toggleSidebar,
       toggleSidebarContext,
       upvoteProjectSurvey,
-      downvoteProjectSurvey
+      downvoteProjectSurvey,
+      loadModal
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
@@ -269,6 +270,15 @@ class Survey extends Component {
             )}
           />
         </Switch>
+        <span>
+          <a
+            className="text-primary"
+            onClick={() => loadModal("FEEDBACK_MODAL")}
+          >
+            Give your feedback
+          </a>{" "}
+          to help us improve the platform.
+        </span>
         <SidebarLayout
           width={width}
           selectedComments={selectedComments}
