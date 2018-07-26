@@ -56,16 +56,17 @@ class Sidebar extends Component {
           <ReactTooltip id="hide-sidebar" type="dark">
             <span>{sidebarOpen ? "Hide sidebar" : "Show sidebar"}</span>
           </ReactTooltip>
-          {toggleSidebarContext && (
-            <button
-              data-tip
-              data-for="table-of-contents"
-              className="social-toolbar__table-of-contents-btn"
-              onClick={toggleSidebarContext}
-            >
-              <i className={`fas fa-${book}`} />
-            </button>
-          )}
+          {sidebarOpen &&
+            toggleSidebarContext && (
+              <button
+                data-tip
+                data-for="table-of-contents"
+                className="social-toolbar__table-of-contents-btn"
+                onClick={toggleSidebarContext}
+              >
+                <i className={`fas fa-${book}`} />
+              </button>
+            )}
           <ReactTooltip id="table-of-contents" type="dark">
             <span>
               {sidebarContext === "comments"

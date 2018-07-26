@@ -10,6 +10,7 @@ import { orderBy, find } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import { loadModal } from "../../../../../data/reducer";
 import policies from "../../../../../policies.js";
+import ReactTooltip from "react-tooltip";
 
 function getSurveyMarkdown({ surveyTitle, surveyQnaIds, surveyQnasById }) {
   const newline = "\n\n";
@@ -77,7 +78,7 @@ class VersionToolbar extends Component {
             hasUpvoted
               ? "bg-consensys text-light"
               : "text-consensys btn-outline-primary"
-          }`}
+          } project-survey__upvote-btn`}
           onClick={() =>
             upvoteProjectSurvey({
               projectSymbol: projectMetadata.symbol,

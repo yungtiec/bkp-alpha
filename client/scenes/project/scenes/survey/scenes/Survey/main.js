@@ -30,6 +30,12 @@ class Survey extends Component {
       run: this.props.isLoggedIn && !this.props.onboard,
       steps: [
         {
+          target: "project-survey__upvote-btn",
+          content: "What do you think about the framework overall?",
+          disableBeacon: true,
+          placement: "top"
+        },
+        {
           target: "div.qna__answer p:first-of-type",
           content: "Select text from document to make an annotation.",
           disableBeacon: true,

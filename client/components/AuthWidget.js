@@ -102,13 +102,13 @@ class AuthWidget extends Component {
               ) : (
                 ""
               )}
-              {width < 600 ? (
+              {width < 600 && isAdmin ? (
                 <Link
-                  to="/leaderboard"
+                  to="/activity-board"
                   style={{ display: "block", margin: "0px" }}
                 >
                   <div className={`${className}__dropdown-item`}>
-                    leaderboard
+                    activity board
                   </div>
                 </Link>
               ) : (

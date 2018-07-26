@@ -6,6 +6,7 @@ import {
   putOnboardStatus
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
+import { notify } from "reapop";
 
 export function fetchQuestionsByProjectSurveyId({
   projectSurveyId,
@@ -80,12 +81,21 @@ export function upvoteProjectSurvey({
         type: types.PROJECT_SURVEY_UPVOTED,
         upvotesFrom
       });
+      if (!hasUpvoted)
+        dispatch(
+          notify({
+            title: "Please leave a comment, and let me know what you think.",
+            message: "",
+            status: "info",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
     } catch (err) {
       console.log(err);
     }
   };
 }
-
 
 export function downvoteProjectSurvey({
   projectSurveyId,
@@ -103,6 +113,16 @@ export function downvoteProjectSurvey({
         type: types.PROJECT_SURVEY_DOWNVOTED,
         downvotesFrom
       });
+      if (!hasDownvoted)
+        dispatch(
+          notify({
+            title: "Please leave a comment, and let me know what you think.",
+            message: "",
+            status: "info",
+            dismissible: true,
+            dismissAfter: 3000
+          })
+        );
     } catch (err) {
       console.log(err);
     }

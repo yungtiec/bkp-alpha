@@ -59,6 +59,8 @@ const initialState = {
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
+    case "environment.CHANGE_IS_MOBILE":
+      return { ...state, sidebarOpen: false };
     case VERIFICATION_STATUS_IN_VIEW:
       return { ...state, verificationStatus: action.verificationStatus };
     case SIDEBAR_OPEN_TOGGLE:
