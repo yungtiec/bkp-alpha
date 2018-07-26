@@ -110,12 +110,18 @@ export default class SidebarHeader extends Component {
         ) : null}
         {!isLoggedIn &&
           !isClosedForComment && (
-            <div className="comment-item">
+            <div className="comment-item mt-4">
               <div className="comment-item__main">
                 <div className="comment-item__header">
-                  <p>
-                    <Link to="/login">Login</Link> or{" "}
-                    <Link to="/signup">signup</Link> to comment
+                  <p className="mb-0">
+                    <Link to="/login" className="text-primary">
+                      Login
+                    </Link>{" "}
+                    or{" "}
+                    <Link to="/signup" className="text-primary">
+                      signup
+                    </Link>{" "}
+                    to comment
                   </p>
                 </div>
               </div>
