@@ -213,7 +213,6 @@ class AuthForm extends Component {
   renderResetPasswordForm() {
     const { authMethod, authMethodLabel } = this.props;
 
-    console.log(this.props.match);
     return (
       <Formsy
         className="auth__form"
@@ -287,8 +286,16 @@ class AuthForm extends Component {
                 <a
                   href="https://thebrooklynproject.consensys.net/"
                   target="_blank"
+                  className="ml-0"
                 >
                   <span>About</span>
+                </a>
+                <a
+                  href="https://tinyurl.com/y94wspyg"
+                  blank="_target"
+                  style={{ width: "100px" }}
+                >
+                  <span>privacy policy</span>
                 </a>
               </nav>
             </div>
