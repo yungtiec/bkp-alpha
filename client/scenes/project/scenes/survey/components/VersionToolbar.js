@@ -57,17 +57,13 @@ class VersionToolbar extends Component {
     const hasUpvoted = !!find(
       surveyMetadata.upvotesFrom,
       upvotedUser =>
-        upvotedUser.email === user.email ||
-        upvotedUser.googleId === user.googleId ||
-        upvotedUser.uportAddress === user.uportAddress
+        upvotedUser.id === user.id
     );
 
     const hasDownvoted = !!find(
       surveyMetadata.downvotesFrom,
       downvotedUser =>
-        downvotedUser.email === user.email ||
-        downvotedUser.googleId === user.googleId ||
-        downvotedUser.uportAddress === user.uportAddress
+        downvotedUser.id === user.id
     );
 
     return (
