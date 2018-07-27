@@ -292,7 +292,7 @@ class AuthForm extends Component {
                 </a>
                 <a
                   href="https://tinyurl.com/y94wspyg"
-                  blank="_target"
+                  target="_blank"
                   style={{ width: "100px" }}
                 >
                   <span>privacy policy</span>

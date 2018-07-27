@@ -145,7 +145,7 @@ const Landing = ({ user, logout }) => (
     <footer>
       <div className="container d-flex flex-column align-items-center">
         <img src="assets/consensys-logo-white-transparent.png" />
-        <a href="https://tinyurl.com/y94wspyg" blank="_target" className="mt-5">
+        <a href="https://tinyurl.com/y94wspyg" target="_blank" className="mt-5">
           privacy policy
         </a>
       </div>
