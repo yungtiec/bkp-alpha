@@ -10,11 +10,13 @@ export function getSurveyByProjectSurveyId(projectSymbol, projectSurveyId) {
 export function postUpvoteToProjectSurvey({
   projectSurveyId,
   projectSymbol,
-  hasUpvoted
+  hasUpvoted,
+  hasDownvoted
 }) {
   return axios
     .post(`/api/projects/${projectSymbol}/surveys/${projectSurveyId}/upvote`, {
-      hasUpvoted
+      hasUpvoted,
+      hasDownvoted
     })
     .then(res => res.data);
 }
@@ -22,12 +24,14 @@ export function postUpvoteToProjectSurvey({
 export function postDownvoteToProjectSurvey({
   projectSurveyId,
   projectSymbol,
+  hasUpvoted,
   hasDownvoted
 }) {
   return axios
     .post(
       `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/downvote`,
       {
+        hasUpvoted,
         hasDownvoted
       }
     )

@@ -4,6 +4,4 @@ export const PROJECT_SURVEY_FETCH_REQUEST =
   "project.survey.PROJECT_SURVEY_FETCH_REQUEST";
 export const PROJECT_SURVEY_FETCH_ERROR =
   "project.survey.PROJECT_SURVEY_FETCH_ERROR";
-export const PROJECT_SURVEY_UPVOTED = "project.survey.PROJECT_SURVEY_UPVOTED";
-export const PROJECT_SURVEY_DOWNVOTED =
-  "project.survey.PROJECT_SURVEY_DOWNVOTED";
+export const PROJECT_SURVEY_VOTED = "project.survey.PROJECT_SURVEY_VOTED";

@@ -1,4 +1,5 @@
 export { default as CommentItem } from "./CommentItem/CommentItem";
+export { default as CommentModal } from "./CommentItem/CommentModal";
 export { default as OutstandingIssue } from "./CommentItem/OutstandingIssue";
 export { default as CommentBox } from "./CommentBox";
 export {

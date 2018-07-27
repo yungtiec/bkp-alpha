@@ -71,165 +71,172 @@ class VersionToolbar extends Component {
     );
 
     return (
-      <div className="btn-group mb-5" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          className={`btn ${
-            hasUpvoted
-              ? "bg-consensys text-light"
-              : "text-consensys btn-outline-primary"
-          } project-survey__upvote-btn`}
-          onClick={() =>
-            upvoteProjectSurvey({
-              projectSymbol: projectMetadata.symbol,
-              projectSurveyId: surveyMetadata.id,
+      <div>
+        <p>Do you like this framework?</p>
+        <div className="btn-group mb-5" role="group" aria-label="Basic example">
+          <button
+            type="button"
+            className={`btn ${
               hasUpvoted
-            })
-          }
-        >
-          <i className="fas fa-thumbs-up mr-2" />
-          {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
-          {width < 520 ? null : (
-            <span className="ml-3">I like this framework</span>
-          )}
-        </button>
-        <button
-          type="button"
-          className={`btn ${
-            hasDownvoted
-              ? "bg-consensys text-light"
-              : "text-consensys btn-outline-primary"
-          }`}
-          onClick={() =>
-            downvoteProjectSurvey({
-              projectSymbol: projectMetadata.symbol,
-              projectSurveyId: surveyMetadata.id,
+                ? "bg-consensys text-light"
+                : "text-consensys btn-outline-primary"
+            } project-survey__upvote-btn`}
+            onClick={() =>
+              upvoteProjectSurvey({
+                projectSymbol: projectMetadata.symbol,
+                projectSurveyId: surveyMetadata.id,
+                hasUpvoted,
+                hasDownvoted
+              })
+            }
+          >
+            <i className="fas fa-thumbs-up mr-2" />
+            {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+          </button>
+          <button
+            type="button"
+            className={`btn ${
               hasDownvoted
-            })
-          }
-        >
-          <i className="fas fa-thumbs-down mr-2" />
-          {surveyMetadata.downvotesFrom
-            ? surveyMetadata.downvotesFrom.length
-            : 0}
-          {width < 520 ? null : (
-            <span className="ml-3">I don't like this framework</span>
-          )}
-        </button>
-        {!uploadMode ? (
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata }}
-              >
-                <button type="button" className="btn btn-outline-primary">
-                  <Link
-                    to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                      orderBy(
-                        this.props.surveyMetadata.versions,
-                        ["hierarchyLevel"],
-                        ["desc"]
-                      )[0].id
-                    }/upload`}
-                  >
-                    Import new version
-                  </Link>
-                </button>
-                <div className="btn-group">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary dropdown-toggle"
-                    type="button"
-                    id="downloadMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Copy or download
+                ? "bg-consensys text-light"
+                : "text-consensys btn-outline-primary"
+            }`}
+            onClick={() =>
+              downvoteProjectSurvey({
+                projectSymbol: projectMetadata.symbol,
+                projectSurveyId: surveyMetadata.id,
+                hasUpvoted,
+                hasDownvoted
+              })
+            }
+          >
+            <i className="fas fa-thumbs-down mr-2" />
+            {surveyMetadata.downvotesFrom
+              ? surveyMetadata.downvotesFrom.length
+              : 0}
+          </button>
+          {!uploadMode ? (
+            <PunditContainer policies={policies} user={user}>
+              <PunditTypeSet type="Disclosure">
+                <VisibleIf
+                  action="Version"
+                  model={{
+                    project: projectMetadata,
+                    disclosure: surveyMetadata
+                  }}
+                >
+                  <button type="button" className="btn btn-outline-primary">
+                    <Link
+                      to={`/project/${
+                        this.props.projectMetadata.symbol
+                      }/survey/${
+                        orderBy(
+                          this.props.surveyMetadata.versions,
+                          ["hierarchyLevel"],
+                          ["desc"]
+                        )[0].id
+                      }/upload`}
+                    >
+                      Import new version
+                    </Link>
                   </button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="downloadMenuButton"
-                  >
-                    <div className="card-body" style={{ width: "18rem" }}>
-                      <h6 className="card-subtitle mb-4 text-secondary">
-                        Edit disclosure in the markdown editor of your choice
-                      </h6>
-                      <p className="card-text">
-                        Don't have an editor in mind?{" "}
-                        <a
-                          href="https://dillinger.io/"
-                          target="_blank"
-                          className="font-weight-bold text-primary"
+                  <div className="btn-group">
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary dropdown-toggle"
+                      type="button"
+                      id="downloadMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      Copy or download
+                    </button>
+                    <div
+                      className="dropdown-menu"
+                      aria-labelledby="downloadMenuButton"
+                    >
+                      <div className="card-body" style={{ width: "18rem" }}>
+                        <h6 className="card-subtitle mb-4 text-secondary">
+                          Edit disclosure in the markdown editor of your choice
+                        </h6>
+                        <p className="card-text">
+                          Don't have an editor in mind?{" "}
+                          <a
+                            href="https://dillinger.io/"
+                            target="_blank"
+                            className="font-weight-bold text-primary"
+                          >
+                            Here's a place to start.
+                          </a>
+                        </p>
+                        <p className="card-text">
+                          Need some pointers on writing markdown file?{" "}
+                          <a
+                            href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
+                            target="_blank"
+                            className="font-weight-bold text-primary"
+                          >
+                            check out this cheatsheet.
+                          </a>
+                        </p>
+                        <CopyToClipboard
+                          text={surveyMarkdown}
+                          onCopy={() =>
+                            this.props.notify({
+                              title: "Copied to clipboard",
+                              message: "Paste in the editor of your choice",
+                              status: "success",
+                              dismissible: true,
+                              dismissAfter: 3000
+                            })
+                          }
                         >
-                          Here's a place to start.
-                        </a>
-                      </p>
-                      <p className="card-text">
-                        Need some pointers on writing markdown file?{" "}
+                          <a className="card-link text-primary mr-3">
+                            Copy markdown
+                          </a>
+                        </CopyToClipboard>
                         <a
-                          href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                          target="_blank"
-                          className="font-weight-bold text-primary"
+                          className="card-link text-primary mr-3"
+                          onClick={() =>
+                            download(
+                              surveyMarkdown,
+                              `${this.props.projectMetadata.symbol.toLowerCase()}-${
+                                this.props.surveyMetadata.id
+                              }.md`,
+                              "text/markdown"
+                            )
+                          }
                         >
-                          check out this cheatsheet.
+                          Download
                         </a>
-                      </p>
-                      <CopyToClipboard
-                        text={surveyMarkdown}
-                        onCopy={() =>
-                          this.props.notify({
-                            title: "Copied to clipboard",
-                            message: "Paste in the editor of your choice",
-                            status: "success",
-                            dismissible: true,
-                            dismissAfter: 3000
-                          })
-                        }
-                      >
-                        <a className="card-link text-primary mr-3">
-                          Copy markdown
-                        </a>
-                      </CopyToClipboard>
-                      <a
-                        className="card-link text-primary mr-3"
-                        onClick={() =>
-                          download(
-                            surveyMarkdown,
-                            `${this.props.projectMetadata.symbol.toLowerCase()}-${
-                              this.props.surveyMetadata.id
-                            }.md`,
-                            "text/markdown"
-                          )
-                        }
-                      >
-                        Download
-                      </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
-        ) : uploaded ? (
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{ project: projectMetadata, disclosure: surveyMetadata }}
-              >
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  onClick={resetUpload}
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
+          ) : uploaded ? (
+            <PunditContainer policies={policies} user={user}>
+              <PunditTypeSet type="Disclosure">
+                <VisibleIf
+                  action="Version"
+                  model={{
+                    project: projectMetadata,
+                    disclosure: surveyMetadata
+                  }}
                 >
-                  Import another file
-                </button>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
-        ) : null}
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    onClick={resetUpload}
+                  >
+                    Import another file
+                  </button>
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
+          ) : null}
+        </div>
       </div>
     );
   }

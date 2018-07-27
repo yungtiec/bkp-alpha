@@ -72,15 +72,19 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
+      if (req.body.hasDownvoted)
+        await req.user.removeDownvotedProjectSurveys(
+          req.params.projectSurveyId
+        );
       if (!req.body.hasUpvoted) {
         await req.user.addUpvotedProjectSurveys(req.params.projectSurveyId);
       } else {
         await req.user.removeUpvotedProjectSurveys(req.params.projectSurveyId);
       }
-      const upvotesFrom = await ProjectSurvey.findById(
+      const [upvotesFrom, downvotesFrom] = await ProjectSurvey.findById(
         req.params.projectSurveyId
-      ).then(ps => ps.getUpvotesFrom());
-      res.send(upvotesFrom);
+      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+      res.send([upvotesFrom, downvotesFrom]);
     } catch (err) {
       next(err);
     }
@@ -93,15 +97,19 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
+      if (req.body.hasUpvoted)
+        await req.user.removeUpvotedProjectSurveys(req.params.projectSurveyId);
       if (!req.body.hasDownvoted) {
         await req.user.addDownvotedProjectSurveys(req.params.projectSurveyId);
       } else {
-        await req.user.removeDownvotedProjectSurveys(req.params.projectSurveyId);
+        await req.user.removeDownvotedProjectSurveys(
+          req.params.projectSurveyId
+        );
       }
-      const downvotesFrom = await ProjectSurvey.findById(
+      const [upvotesFrom, downvotesFrom] = await ProjectSurvey.findById(
         req.params.projectSurveyId
-      ).then(ps => ps.getDownvotesFrom());
-      res.send(downvotesFrom);
+      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+      res.send([upvotesFrom, downvotesFrom]);
     } catch (err) {
       next(err);
     }

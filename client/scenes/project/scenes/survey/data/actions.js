@@ -7,6 +7,7 @@ import {
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 import { notify } from "reapop";
+import { loadModal } from "../../../../../data/reducer";
 
 export function fetchQuestionsByProjectSurveyId({
   projectSurveyId,
@@ -68,29 +69,27 @@ export function fetchQuestionsByProjectSurveyId({
 export function upvoteProjectSurvey({
   projectSurveyId,
   projectSymbol,
-  hasUpvoted
+  hasUpvoted,
+  hasDownvoted
 }) {
   return async (dispatch, getState) => {
     try {
-      const upvotesFrom = await postUpvoteToProjectSurvey({
+      const [upvotesFrom, downvotesFrom] = await postUpvoteToProjectSurvey({
         projectSurveyId,
         projectSymbol,
-        hasUpvoted
+        hasUpvoted,
+        hasDownvoted
       });
       dispatch({
-        type: types.PROJECT_SURVEY_UPVOTED,
-        upvotesFrom
+        type: types.PROJECT_SURVEY_VOTED,
+        upvotesFrom,
+        downvotesFrom
       });
-      if (!hasUpvoted)
-        dispatch(
-          notify({
-            title: "Please leave a comment, and let me know what you think.",
-            message: "",
-            status: "info",
-            dismissible: true,
-            dismissAfter: 3000
-          })
-        );
+      dispatch(
+        loadModal("COMMENT_MODAL", {
+          projectSurveyId
+        })
+      );
     } catch (err) {
       console.log(err);
     }
@@ -100,29 +99,27 @@ export function upvoteProjectSurvey({
 export function downvoteProjectSurvey({
   projectSurveyId,
   projectSymbol,
+  hasUpvoted,
   hasDownvoted
 }) {
   return async (dispatch, getState) => {
     try {
-      const downvotesFrom = await postDownvoteToProjectSurvey({
+      const [upvotesFrom, downvotesFrom] = await postDownvoteToProjectSurvey({
         projectSurveyId,
         projectSymbol,
+        hasUpvoted,
         hasDownvoted
       });
       dispatch({
-        type: types.PROJECT_SURVEY_DOWNVOTED,
+        type: types.PROJECT_SURVEY_VOTED,
+        upvotesFrom,
         downvotesFrom
       });
-      if (!hasDownvoted)
-        dispatch(
-          notify({
-            title: "Please leave a comment, and let me know what you think.",
-            message: "",
-            status: "info",
-            dismissible: true,
-            dismissAfter: 3000
-          })
-        );
+      dispatch(
+        loadModal("COMMENT_MODAL", {
+          projectSurveyId
+        })
+      );
     } catch (err) {
       console.log(err);
     }

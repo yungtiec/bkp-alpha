@@ -10,15 +10,11 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         ...action.surveyMetadata
       };
-    case types.PROJECT_SURVEY_UPVOTED:
+    case types.PROJECT_SURVEY_VOTED:
       return {
         ...state,
+        downvotesFrom: action.downvotesFrom,
         upvotesFrom: action.upvotesFrom
-      };
-    case types.PROJECT_SURVEY_DOWNVOTED:
-      return {
-        ...state,
-        downvotesFrom: action.downvotesFrom
       };
     default:
       return state;

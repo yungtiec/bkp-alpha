@@ -33,18 +33,25 @@ export default class CommentBox extends Component {
           name="textarea"
           value={this.state.value}
           onChange={this.handleChange}
-          placeholder="Enter comment..."
+          placeholder="Please give feedback on the framework..."
         />
-        <div className="comment-box__actions">
-          <button className="btn" onClick={this.handleSubmit}>
-            submit
-          </button>
-          {this.props.onCancel && (
+        {this.props.onCancel ? (
+          <div className="comment-box__actions">
+            <button className="btn btn-primary" onClick={this.handleSubmit}>
+              comment
+            </button>
             <button className="btn" onClick={this.props.onCancel}>
               cancel
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <button
+            className="btn btn-primary btn-block mt-4"
+            onClick={this.handleSubmit}
+          >
+            comment
+          </button>
+        )}
       </div>
     );
   }
