@@ -21,8 +21,6 @@ const styles = {
 
 const ModalContainer = ({ modalType, modalProps }) => {
 
-  console.log(modalType)
-
   if (!modalType) {
     return null;
   }

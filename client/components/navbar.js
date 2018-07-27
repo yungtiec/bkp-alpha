@@ -29,8 +29,6 @@ class Navbar extends Component {
   render() {
     const { isAdmin, isLoggedIn, width, user, numNotifications } = this.props;
 
-    console.log(numNotifications)
-
     return (
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
