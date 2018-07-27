@@ -42,9 +42,11 @@ class Sidebar extends Component {
         <div className="annotation-coordinate__container" />
         <div className="sidebar__toolbar">
           {sidebarOpen && <AuthWidget dataTip={true} dataFor="auth-widget" />}
-          <ReactTooltip id="auth-widget" type="dark">
-            <span>Your profile</span>
-          </ReactTooltip>
+          {sidebarOpen && (
+            <ReactTooltip id="auth-widget" type="dark">
+              <span>Your profile</span>
+            </ReactTooltip>
+          )}
           <button
             data-tip
             data-for="hide-sidebar"
@@ -67,13 +69,16 @@ class Sidebar extends Component {
                 <i className={`fas fa-${book}`} />
               </button>
             )}
-          <ReactTooltip id="table-of-contents" type="dark">
-            <span>
-              {sidebarContext === "comments"
-                ? "Table of contents"
-                : "back to comments"}
-            </span>
-          </ReactTooltip>
+          {sidebarOpen &&
+            toggleSidebarContext && (
+              <ReactTooltip id="table-of-contents" type="dark">
+                <span>
+                  {sidebarContext === "comments"
+                    ? "Table of contents"
+                    : "back to comments"}
+                </span>
+              </ReactTooltip>
+            )}
         </div>
         <div>
           <div className="sidebar__logo-consensys">

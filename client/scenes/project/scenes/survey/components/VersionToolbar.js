@@ -54,7 +54,7 @@ class VersionToolbar extends Component {
       surveyQnasById
     });
 
-    const hasUpvoted = find(
+    const hasUpvoted = !!find(
       surveyMetadata.upvotesFrom,
       upvotedUser =>
         upvotedUser.email === user.email ||
@@ -62,7 +62,7 @@ class VersionToolbar extends Component {
         upvotedUser.uportAddress === user.uportAddress
     );
 
-    const hasDownvoted = find(
+    const hasDownvoted = !!find(
       surveyMetadata.downvotesFrom,
       downvotedUser =>
         downvotedUser.email === user.email ||
