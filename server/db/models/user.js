@@ -313,7 +313,8 @@ User.getContributions = async function({
       num_comments: comments.length,
       num_issues: numCommentIssues,
       num_upvotes: numCommentUpvotes,
-      num_spam: numCommentSpam
+      num_spam: numCommentSpam,
+      num_notifications: notifications.length
     },
     forListing ? omit(user.toJSON(), ["roles"]) : user.toJSON()
   );
