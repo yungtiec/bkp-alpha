@@ -10,4 +10,11 @@
   ol li {
     list-style-type: lower-alpha;
   }
+  .markdown-body li > p {
+    margin-bottom: 5px !important;
+  }
+  .markdown-body ul,
+  .markdown-body ul li {
+    padding-bottom: 0px !important;
+  }
 }
