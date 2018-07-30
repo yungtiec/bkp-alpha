@@ -8,7 +8,8 @@ import {
   auth,
   signinWithUport,
   requestPasswordReset,
-  resetPassword
+  resetPassword,
+  verifyUportOnMobile
 } from "../../data/reducer";
 import { Link } from "react-router-dom";
 import { InputEmail, InputPassword, InputText } from "../index";
@@ -22,6 +23,14 @@ class AuthForm extends Component {
     super(props);
     autoBind(this);
     this.state = { canSubmit: false };
+  }
+
+  componentDidMount() {
+    console.log(window.location.href.split("access_token=")[1])
+    if (window.location.href.split("access_token=").length > 1) {
+      console.log("??", window.location.href.split("access_token=")[1])
+      this.props.verifyUportOnMobile(window.location.href.split("access_token=")[1]);
+    }
   }
 
   disableButton() {
@@ -359,8 +368,12 @@ const mapResetPassword = state => {
   };
 };
 
-export const Login = connect(mapLogin, { auth, signinWithUport })(AuthForm);
-export const Signup = connect(mapSignup, { auth, signinWithUport })(AuthForm);
+export const Login = withRouter(
+  connect(mapLogin, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
+export const Signup = withRouter(
+  connect(mapSignup, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
 export const RequestPasswordReset = connect(mapRequestPasswordReset, {
   requestPasswordReset
 })(AuthForm);

@@ -88,6 +88,24 @@ export const signinWithUport = () => dispatch =>
     )
     .catch(dispatchOrHistoryErr => console.error(dispatchOrHistoryErr));
 
+export const verifyUportOnMobile = accessToken => async dispatch => {
+  try {
+    const user = await axios
+      .post("/auth/uport/mobile", { accessToken })
+      .then(res => res.data);
+    dispatch(getUser(user));
+    if (user.restricted_access) history.push("/user/profile");
+    else if (!user.name)
+      history.push({
+        pathname: "/user/profile",
+        state: { edit: true, basicInfoMissing: true }
+      });
+    else history.push("/project/BKP/survey/21");
+  } catch (authError) {
+    dispatch(getUser({ error: authError }));
+  }
+};
+
 export const fetchManagedProjects = () => async (dispatch, getState) => {
   try {
     const projects = await axios

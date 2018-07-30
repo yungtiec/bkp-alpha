@@ -102,6 +102,17 @@ class AuthWidget extends Component {
               ) : (
                 ""
               )}
+              {width < 600 ? (
+                <a
+                  href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                  target="_blank"
+                  className="navbar__nav-item"
+                >
+                  discuss
+                </a>
+              ) : (
+                ""
+              )}
               {width < 600 && isAdmin ? (
                 <Link
                   to="/activity-board"

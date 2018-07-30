@@ -1,3 +1,5 @@
+@import "../../breakpoint";
+
 .oauth-btns {
   margin: auto;
   margin-bottom: 30px;
@@ -5,6 +7,9 @@
 
 .oauth-btns a {
   margin: 0 5px;
+  @include breakpoint(xs) {
+    margin: auto;
+  }
 }
 
 .auth-page {

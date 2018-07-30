@@ -55,6 +55,17 @@ class Navbar extends Component {
             ) : (
               ""
             )}
+            {width > 600 ? (
+              <a
+                href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                target="_blank"
+                className="navbar__nav-item"
+              >
+                discuss
+              </a>
+            ) : (
+              ""
+            )}
             {width && isAdmin > 600 ? (
               <Link to="/activity-board" className="navbar__nav-item">
                 activity board
