@@ -307,7 +307,7 @@ class AuthForm extends Component {
                   <span>privacy policy</span>
                 </a>
                 <a
-                  href="https://tinyurl.com/y94wspyg"
+                  href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
                   target="_blank"
                   style={{ width: "100px" }}
                 >
