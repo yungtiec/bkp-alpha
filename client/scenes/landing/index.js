@@ -153,7 +153,7 @@ const Landing = ({ user, logout }) => (
             href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
             target="_blank"
           >
-            term of uses
+            terms of use
           </a>
         </div>
       </div>

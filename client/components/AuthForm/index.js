@@ -306,6 +306,13 @@ class AuthForm extends Component {
                 >
                   <span>privacy policy</span>
                 </a>
+                <a
+                  href="https://tinyurl.com/y94wspyg"
+                  target="_blank"
+                  style={{ width: "100px" }}
+                >
+                  <span>terms of use</span>
+                </a>
               </nav>
             </div>
             <div className="auth-form__form-footer__right">
