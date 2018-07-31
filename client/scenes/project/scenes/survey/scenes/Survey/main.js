@@ -278,6 +278,13 @@ class Survey extends Component {
         </Switch>
         <span>
           <a
+            href="https://tinyurl.com/y94wspyg"
+            target="_blank"
+            className="mr-4"
+          >
+            <span>terms of use</span>
+          </a>
+          <a
             className="text-primary"
             onClick={() => loadModal("FEEDBACK_MODAL")}
           >
