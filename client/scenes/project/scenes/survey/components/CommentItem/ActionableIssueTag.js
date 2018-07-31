@@ -30,7 +30,7 @@ const ActionableIssueTag = ({
               key={`comment-${comment.id}__tag-issue--open`}
               className="badge badge-danger issue"
             >
-              issue:open
+              open
               <VisibleIf
                 action="Issue"
                 model={{ project: projectMetadata, comment }}
@@ -44,7 +44,7 @@ const ActionableIssueTag = ({
             key={`comment-${comment.id}__tag-issue--close`}
             className="badge badge-light"
           >
-            issue:close
+            resolved
           </span>
         ))}
     </PunditTypeSet>

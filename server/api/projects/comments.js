@@ -57,11 +57,10 @@ router.post(
         reviewed: isAdmin ? "verified" : "pending"
       })
         .then(async comment => {
-          if (req.body.issueOpen)
-            await Issue.create({
-              open: true,
-              comment_id: comment.id
-            });
+          await Issue.create({
+            open: true,
+            comment_id: comment.id
+          });
           return comment;
         })
         .then(comment => {

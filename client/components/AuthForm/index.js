@@ -316,7 +316,7 @@ class AuthForm extends Component {
               </nav>
             </div>
             <div className="auth-form__form-footer__right">
-              <p id="no-acct-msg" className="message__has-account">
+              <p id="no-acct-msg" className="message__has-account my-2">
                 {authMethod === "signup"
                   ? "Already have an account?"
                   : "Don't have an account?"}

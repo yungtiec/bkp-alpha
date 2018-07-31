@@ -93,8 +93,8 @@ class Survey extends Component {
     const givenCommentContext =
       this.props.location.pathname.indexOf("/comment/") !== -1;
     if (
-      (JSON.stringify(prevProps.commentsById) !==
-        JSON.stringify(this.props.commentsById) ||
+      (JSON.stringify(prevProps.commentIds) !==
+        JSON.stringify(this.props.commentIds) ||
         this.props.location.pathname !== prevProps.location.pathname) &&
       givenCommentContext
     ) {
@@ -276,22 +276,24 @@ class Survey extends Component {
             )}
           />
         </Switch>
-        <span>
+        <div className="d-flex project-survey__footer">
           <a
             href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
             target="_blank"
-            className="mr-4"
+            className="mr-4 mb-3"
           >
             <span>terms of use</span>
           </a>
-          <a
-            className="text-primary"
-            onClick={() => loadModal("FEEDBACK_MODAL")}
-          >
-            Give your feedback
-          </a>{" "}
-          to help us improve the platform.
-        </span>
+          <span className="mb-3">
+            <a
+              className="text-primary"
+              onClick={() => loadModal("FEEDBACK_MODAL")}
+            >
+              Give your feedback
+            </a>{" "}
+            to help us improve the platform.
+          </span>
+        </div>
         <SidebarLayout
           width={width}
           selectedComments={selectedComments}

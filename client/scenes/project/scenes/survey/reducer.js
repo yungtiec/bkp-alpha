@@ -2,14 +2,14 @@ import { omit } from "lodash";
 import * as types from "./data/actionTypes";
 import { reducer as dataReducer } from "./data/reducer";
 
-const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
-const ANNOTATION_HIGHLIGHT_TOGGLE = "survey.ANNOTATION_HIGHLIGHT_TOGGLE";
-const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
-const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
-const SIDEBAR_COMMENT_CONTEXT_UPDATED =
+export const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
+export const ANNOTATION_HIGHLIGHT_TOGGLE = "survey.ANNOTATION_HIGHLIGHT_TOGGLE";
+export const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
+export const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
+export const SIDEBAR_COMMENT_CONTEXT_UPDATED =
   "survey.SIDEBAR_COMMENT_CONTEXT_UPDATED";
-const SIDEBAR_CONTEXT_UPDATED = "survey.SIDEBAR_CONTEXT_UPDATED";
-const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
+export const SIDEBAR_CONTEXT_UPDATED = "survey.SIDEBAR_CONTEXT_UPDATED";
+export const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
 
 export const toggleSidebar = () => ({
   type: SIDEBAR_OPEN_TOGGLE

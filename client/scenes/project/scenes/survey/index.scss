@@ -36,3 +36,9 @@
   text-decoration: underline;
   color: #4a9ff6 !important;
 }
+
+.project-survey__footer {
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
+}

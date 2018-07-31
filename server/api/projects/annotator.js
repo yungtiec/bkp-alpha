@@ -72,12 +72,10 @@ router.post(
         annotator_schema_version,
         reviewed: isAdmin ? "verified" : "pending"
       });
-      // const issuePromise = issue
-      //   ? Issue.create({
-      //       open: true,
-      //       comment_id: newComment.id
-      //     })
-      //   : null;
+      const issuePromise = Issue.create({
+        open: true,
+        comment_id: newComment.id
+      });
       // const tagPromises = Promise.map(tags, async tag => {
       //   const [tagInstance, created] = await Tag.findOrCreate({
       //     where: { name: tag }
@@ -88,7 +86,7 @@ router.post(
       await Promise.all([
         // tagPromises,
         ownerPromise,
-        // issuePromise
+        issuePromise
       ]);
       newComment = await Comment.scope({
         method: ["flatThreadByRootId", { where: { id: newComment.id } }]
