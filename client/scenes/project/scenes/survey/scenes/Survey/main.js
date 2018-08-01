@@ -30,6 +30,30 @@ class Survey extends Component {
       run: this.props.isLoggedIn && !this.props.onboard,
       steps: [
         {
+          content: (
+            <div>
+              <p>
+                Welcome to the public comment initiative for The Brooklyn
+                project's Consumer Token Framework.
+                Your feedback is important to us. By leaving comments and
+                upvoting comments you find helpful, you will provide a basis for
+                a better framework. The public comment initiative will be closed
+                on <b>15 August 2018</b>. A final version of the framework will
+                incorporate the feedback received before the deadline and is
+                scheduled to be released shortly after.
+              </p>
+            </div>
+          ),
+          placement: "center",
+          disableBeacon: true,
+          styles: {
+            options: {
+              zIndex: 10000
+            }
+          },
+          target: "body"
+        },
+        {
           target: "project-survey__upvote-btn",
           content: "What do you think about the framework overall?",
           disableBeacon: true,
@@ -282,17 +306,17 @@ class Survey extends Component {
             target="_blank"
             className="mr-4 mb-3"
           >
-            <span>privacy policy</span>
+            <span className="text-secondary">privacy policy</span>
           </a>
           <a
             href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
             target="_blank"
             className="mr-4 mb-3"
           >
-            <span>terms of use</span>
+            <span className="text-secondary">terms of use</span>
           </a>
           <a className="mb-3" onClick={() => loadModal("FEEDBACK_MODAL")}>
-            <span>
+            <span className="text-secondary">
               report bugs or give feedback on the app
             </span>
           </a>
