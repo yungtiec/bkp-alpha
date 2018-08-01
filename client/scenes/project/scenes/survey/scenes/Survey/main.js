@@ -291,15 +291,11 @@ class Survey extends Component {
           >
             <span>terms of use</span>
           </a>
-          <span className="mb-3">
-            <a
-              className="text-primary"
-              onClick={() => loadModal("FEEDBACK_MODAL")}
-            >
-              Give your feedback
-            </a>{" "}
-            to help us improve the platform.
-          </span>
+          <a className="mb-3" onClick={() => loadModal("FEEDBACK_MODAL")}>
+            <span>
+              report bugs or give feedback on the app
+            </span>
+          </a>
         </div>
         <SidebarLayout
           width={width}
