@@ -278,6 +278,13 @@ class Survey extends Component {
         </Switch>
         <div className="d-flex project-survey__footer">
           <a
+            href="https://tinyurl.com/y94wspyg"
+            target="_blank"
+            className="mr-4 mb-3"
+          >
+            <span>privacy policy</span>
+          </a>
+          <a
             href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
             target="_blank"
             className="mr-4 mb-3"
