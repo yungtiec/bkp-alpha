@@ -108,9 +108,7 @@ class AuthWidget extends Component {
                   target="_blank"
                   style={{ display: "block", margin: "0px" }}
                 >
-                  <div className="auth-widget--navbar__dropdown-item">
-                    discuss
-                  </div>
+                  <div className={`${className}__dropdown-item`}>discuss</div>
                 </a>
               ) : (
                 ""
