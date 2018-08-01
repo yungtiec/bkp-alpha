@@ -49,7 +49,7 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="/project/BKP/survey/21" className="navbar__nav-item">
+              <Link to="/project/BKP/survey/3" className="navbar__nav-item">
                 framework
               </Link>
             ) : (

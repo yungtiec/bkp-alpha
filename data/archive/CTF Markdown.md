@@ -43,13 +43,24 @@ This framework offers a set of voluntary principles and leading practices. It is
 * **For token purchasers:** At present, implementation of this framework offers no accredited designations. Tokens, regardless of their status with respect to the Consumer Token Framework, carry substantial risk, and it is the responsibility of token purchasers to conduct a thorough assessment of whether purchasing and using a specific token is appropriate. Token purchasers should not rely upon a token’s implementation of this framework as a substitute for due diligence.
 * **For token projects:** These principles and practices have been written with rules and regulations in mind but are no substitute for legal advice. It is essential for every token to seek the advice of a qualified lawyer in order to ensure full compliance with the rules and regulations in all relevant jurisdictions. If there is a conflict between this framework and the law, at present or in the future, the law prevails. Moreover, it is not necessarily expected that projects will be able to apply these principles and practices perfectly. Reasonable, transparent and good faith efforts are the goal.
 
-### PART 1: PRINCIPLES AND PRACTICES
+### Future updates to the framework
+
+The development of these guidelines is an open-source initiative led by The Brooklyn Project. The current version of this document follows several months of consultations with The Brooklyn Project’s community members. We welcome ongoing feedback to help with the release of future versions of the framework. The framework is the beginning of an evolving conversation and should not be viewed as hard and fast rules.
+
+**LEGAL NOTICE - THIS IS A DRAFT DOCUMENT THAT FACILITATES COMMUNITY BRAINSTORMING. IT SHOULD BE CONSIDERED A PRELIMINARY DRAFT. IT MAY REFLECT COMMENTS AND FEEDBACK FROM THE GENERAL PUBLIC WHO MAY OR MAY NOT HAVE VALUABLE KNOWLEDGE OR INSIGHT ON THESE TOPICS. VIEWERS OF THE DOCUMENT SHOULD ASSUME THAT NEITHER THE BROOKLYN PROJECT NOR ANY OTHER PERSON OR ENTITY HAS PERFORMED ANY PARTICULAR VETTING, AT ANY PARTICULAR TIME, OF ANY PARTICULAR CONTRIBUTORS OR THEIR CONTRIBUTIONS.**
+
+**THIS DOCUMENT SHOULD BE VIEWED AS STARTING A CONVERSATION, WITHOUT PREJUDICE TO ANY PARTICULAR PERSON, ENTITY, OR PROJECT. NOTHING HEREIN SHOULD BE VIEWED AS AN INDUSTRY “BEST PRACTICE” OR STANDARD MERELY BY VIRTUE OF INCLUSION IN THIS DRAFT DOCUMENT. TO THE CONTRARY, THE DRAFT LIKELY GOES BEYOND MANY CURRENT INDUSTRY “BEST” PRACTICES.**
+
+**THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP OR PRIVILEGE WITH OR AMONG ANYONE, AND NOBODY SHOULD RELY ON THIS DOCUMENT AS LEGAL ADVICE.  IF YOU ARE INVOLVED IN A TOKEN PROJECT, YOU SHOULD CONSULT AND RELY UPON YOUR OWN LEGAL COUNSEL FOR LEGAL ADVICE.**
+
+
+### PART 1: PRINCIPLES
 
 ### Principle 1: Consumer Token Design
 
 *The token should be usable and have the intrinsic characteristics of a [consumer token](https://thebrooklynproject.consensys.net/token-taxonomy).*
 
-1. Ensure the token’s intrinsic features do not include equity ownership, equity-like economics rights (e.g. passively-earned dividends), or other characteristics of a financial instrument.
+1. Ensure the token’s intrinsic features do not include equity ownership, a predominant interest in a fund, equity-like economics rights (e.g. passively-earned dividends), or other characteristics of a financial instrument.
 2. Ensure the token is consumptive in nature -- i.e., the token represents or provides access to a good, service, and/or content.
 3. Ensure the token is usable as intended.
 
@@ -58,20 +69,17 @@ This framework offers a set of voluntary principles and leading practices. It is
 *The project should have an appropriate and transparent governance structure.*
 
 1. Define an appropriate organizational and governance structure for the project and review it periodically for improvement.
-2. Delineate aspects of the project controlled centrally by the project team or other entity, and aspects of the project controlled in a decentralized fashion by a network of people.
-3. Delineate aspects of the project that will be "open source" and/or "forkable" by anyone in the public.
-4. Ensure the backgrounds of key people involved in the project are easily accessible and not misrepresented.
-5. Track and provide ongoing transparency regarding project progress.
+2. Ensure the backgrounds of key people involved in the project are easily accessible and not misrepresented.
+3. Track and provide ongoing transparency regarding project progress.
 
 ### Principle 3: Responsible Token Distribution
 
 *Token distributions should be orderly, fair, and carried out in a transparent manner.*
 
 1. Minimize or eliminate the following practices:
-   1. Token bonuses, discounts, and other preferential terms that give purchasers the expectation that they will earn a passive return on their purchase.
-   2. Distribution of tokens to individuals who intend only to speculate on price appreciation of the token and do not intend to use the token.
-   3. Distribution of tokens to individuals in quantities that are not in line with the reasonable expected use or consumption of such tokens by a purchaser.
-   4. Selling tokens in quantities that exceed the cost and risk that a buyer can reasonably bear.
+   1. Token bonuses, discounts, and other preferential terms that give purchasers the expectation that they can earn a return on their purchase.
+   2. Distribution of tokens to individuals in quantities that are not in line with the reasonable expected use or consumption of such tokens by a purchaser.
+   3. Selling tokens in quantities that exceed the cost and risk that a buyer can reasonably bear.
 2. Ensure the terms of the token distribution are transparent.
 
 ### Principle 4: Purpose of Token Distribution
@@ -88,7 +96,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 1. Define the rules that will govern total token supply or inventory -- i.e., how new tokens can be created or existing tokens can be destroyed.
 2. Define the factors that may impact the number of tokens in circulation -- e.g., lockup periods and transfer restrictions.
 3. Define the governance for token inventory that is retained by all project-related entities.
-4. Where reasonably applicable, ensure governance parameters of the token inventory are auditable in production code.
+4. Ensure governance parameters of the token inventory are auditable in production code.
 
 ### Principle 6: Mitigation of Conflicts and Improper Trading
 
@@ -111,7 +119,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 
 1. Ensure all product advertising is fair and does not mislead token purchasers.
 2. When reasonably possible, ensure promises about governance provisions made in whitepapers, blog posts and websites marketed to buyers are aligned with rules encoded in a project's smart contracts.
-3. Avoid marketing the token as a financial investment unless in full compliance with applicable laws governing securities or financial products.
+3. Avoid marketing the token as a financial investment if it is not registered as a security.
 4. Avoid marketing the ability of buyers to re-trade the token for passive financial profit on speculative secondary markets.
 
 ### Principle 9: Protecting and Empowering Consumers
@@ -142,7 +150,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 - Description of how and by whom the project will operate and be governed.
 - Relevant holding or operating company and in what jurisdiction(s) it operates.
 - Identities and backgrounds of key people in the project.
-- Description of which portions of the project are decentralized, centralized, open-sourced, or "forkable".
+- Description of whether the project or portions of the project are decentralized, centralized, open-sourced, or "forkable".
 - Project roadmap, including key technical and project milestones.
 - Regular updates on project progress towards milestones and use of funds.
 
@@ -153,7 +161,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 - Conditions that a buyer must meet in order to be eligible to buy or receive tokens.
 - The terms of any token distributions—including to founders, employees, and advisors—such as the price paid and number of tokens received, as well as any lockups, vesting, or transfer restrictions.
 - Project’s status/progress at the time of token distributions.
-- Steps taken to minimize or eliminate distribution to people who intend only to speculate on the price of the token and do not intend to use the token for its intended purpose (e.g. “user quizzes”, “self-signed attestations”, etc.).
+- Steps taken to minimize or eliminate distribution to people who do not intend to use the token for its intended purpose (e.g. “user quizzes”, “self-signed attestations”, etc.).
 - Steps taken to clarify any duties owed (or not owed) to maximize or increase token price.
 - Plans and restrictions for secondary trading of tokens.
 
@@ -199,14 +207,3 @@ This framework offers a set of voluntary principles and leading practices. It is
 
 - Statement of Good Faith affirming that the token and distributions comply with applicable laws and regulations, including securities, data privacy, KYC, anti-money laundering, and tax laws.
 - Statement of whether the project has received legal and other professional advice in connection with the matters outlined in its Statement of Good Faith.
-
-### Future updates to the framework
-
-The development of these guidelines is an open-source initiative led by The Brooklyn Project. The current version of this document follows several months of consultations with The Brooklyn Project’s community members. We welcome ongoing feedback to help with the release of future versions of the framework. The framework is the beginning of an evolving conversation and should not be viewed as hard and fast rules.
-
-**LEGAL NOTICE - THIS IS A DRAFT DOCUMENT THAT FACILITATES COMMUNITY BRAINSTORMING. IT SHOULD BE CONSIDERED A PRELIMINARY DRAFT. IT MAY REFLECT COMMENTS AND FEEDBACK FROM THE GENERAL PUBLIC WHO MAY OR MAY NOT HAVE VALUABLE KNOWLEDGE OR INSIGHT ON THESE TOPICS. VIEWERS OF THE DOCUMENT SHOULD ASSUME THAT NEITHER THE BROOKLYN PROJECT NOR ANY OTHER PERSON OR ENTITY HAS PERFORMED ANY PARTICULAR VETTING, AT ANY PARTICULAR TIME, OF ANY PARTICULAR CONTRIBUTORS OR THEIR CONTRIBUTIONS.**
-
-**THIS DOCUMENT SHOULD BE VIEWED AS STARTING A CONVERSATION, WITHOUT PREJUDICE TO ANY PARTICULAR PERSON, ENTITY, OR PROJECT. NOTHING HEREIN SHOULD BE VIEWED AS AN INDUSTRY “BEST PRACTICE” OR STANDARD MERELY BY VIRTUE OF INCLUSION IN THIS DRAFT DOCUMENT. TO THE CONTRARY, THE DRAFT LIKELY GOES BEYOND MANY CURRENT INDUSTRY “BEST” PRACTICES.**
-
-**THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP OR PRIVILEGE WITH OR AMONG ANYONE, AND NOBODY SHOULD RELY ON THIS DOCUMENT AS LEGAL ADVICE.  IF YOU ARE INVOLVED IN A TOKEN PROJECT, YOU SHOULD CONSULT AND RELY UPON YOUR OWN LEGAL COUNSEL FOR LEGAL ADVICE.**
-

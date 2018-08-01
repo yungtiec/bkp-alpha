@@ -335,7 +335,7 @@ class Survey extends Component {
                 ? "350px"
                 : this.props.width > 1300 ? "450px" : "410px"
             }
-            scrollbarContainerHeight="calc(100% - 70px)"
+            scrollbarContainerHeight="calc(100% - 100px)"
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"
           >

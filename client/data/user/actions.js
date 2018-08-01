@@ -38,7 +38,7 @@ export const auth = (userInfo, method) => dispatch => {
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/survey/21");
+        else history.push("/project/BKP/survey/3");
       },
       authError => {
         // rare example: a good use case for parallel (non-catch) error handler
@@ -80,7 +80,7 @@ export const signinWithUport = () => dispatch =>
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/survey/21");
+        else history.push("/project/BKP/survey/3");
       },
       authError => {
         dispatch(getUser({ error: authError }));
@@ -100,7 +100,7 @@ export const verifyUportOnMobile = accessToken => async dispatch => {
         pathname: "/user/profile",
         state: { edit: true, basicInfoMissing: true }
       });
-    else history.push("/project/BKP/survey/21");
+    else history.push("/project/BKP/survey/3");
   } catch (authError) {
     dispatch(getUser({ error: authError }));
   }
@@ -195,7 +195,7 @@ export const resetPassword = ({ password, token }) => dispatch =>
           pathname: "/user/profile",
           state: { edit: true, basicInfoMissing: true }
         });
-      else history.push("/project/BKP/survey/21");
+      else history.push("/project/BKP/survey/3");
     })
     .catch(err => {
       if (err.response && err.response.status === 404) {

@@ -99,7 +99,7 @@ class Routes extends Component {
           )}
           {/* Displays our Login component as a fallback */}
           {!isLoggedIn && <Route component={Landing} />}
-          {isLoggedIn && <Redirect to="/project/BKP/survey/21" />}
+          {isLoggedIn && <Redirect to="/project/BKP/survey/3" />}
         </Switch>
       </div>
     );

@@ -436,7 +436,7 @@ router.post(
         await Notification.notify({
           sender: "",
           comment,
-          messageFragment: `${req.user.email} closed your issue in ${
+          messageFragment: `${req.user.name} closed your issue in ${
             comment.project_survey.project.symbol
           }/${comment.project_survey.survey.title}.`
         });
@@ -446,7 +446,7 @@ router.post(
           sender: "",
           comment,
           messageFragment: `${
-            req.user.email
+            req.user.name
           } opened an issue on your comment in ${
             comment.project_survey.project.symbol
           }/${comment.project_survey.survey.title}.`

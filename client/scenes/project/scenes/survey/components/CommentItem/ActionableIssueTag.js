@@ -25,6 +25,7 @@ const ActionableIssueTag = ({
             ifClick={changeItemIssueStatus}
             elseClick={() => {}}
             element={"div"}
+            className="d-inline-block"
           >
             <span
               key={`comment-${comment.id}__tag-issue--open`}
@@ -41,6 +42,7 @@ const ActionableIssueTag = ({
           </IfElseButton>
         ) : (
           <span
+            onClick={changeItemIssueStatus}
             key={`comment-${comment.id}__tag-issue--close`}
             className="badge badge-light"
           >

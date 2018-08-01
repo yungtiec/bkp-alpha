@@ -362,7 +362,7 @@ const setName = user => {
 };
 
 const hookChain = user => {
-  setSaltAndPassword(user);
+  // setSaltAndPassword(user);
   setName(user);
 };
 
