@@ -45,6 +45,7 @@ const ActionBar = ({
           <div className={`comment-item__verified-message`}>
           </div>
         </VisibleIf>
+        <div />
         <div>
           <VisibleIf
             action="Edit"

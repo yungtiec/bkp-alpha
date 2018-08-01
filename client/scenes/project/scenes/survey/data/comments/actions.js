@@ -65,10 +65,26 @@ export const addNewComment = ({
   };
 };
 
-export const addNewCommentSentFromServer = comment => ({
-  type: types.COMMENT_ADDED,
-  comment
-});
+export const addNewCommentSentFromServer = comment => {
+  return (dispatch, getState) => {
+    try {
+      const projectSymbol = getState().scenes.project.data.metadata.symbol;
+      const projectSurveyId = getState().scenes.project.scenes.survey.data.metadata
+        .id;
+      dispatch({
+        type: types.COMMENT_ADDED,
+        comment
+      });
+      history.push(
+        `/project/${projectSymbol}/survey/${projectSurveyId}/comment/${
+          comment.id
+        }`
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 export const initiateReplyToComment = ({ accessors, parent }) => {
   return (dispatch, getState) => {

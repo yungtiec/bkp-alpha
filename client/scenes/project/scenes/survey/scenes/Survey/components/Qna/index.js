@@ -44,11 +44,6 @@ class QnaBox extends Component {
           annotationCreated: function(ann) {
             undraw(self.state.temporaryHighlight);
             self.props.addNewCommentSentFromServer(ann);
-            history.push(
-              `/project/${projectSymbol}/survey/${projectSurveyId}/comment/${
-                ann.id
-              }`
-            );
           }
         };
       };

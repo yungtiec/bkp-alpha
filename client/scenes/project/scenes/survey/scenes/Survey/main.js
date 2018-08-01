@@ -34,11 +34,11 @@ class Survey extends Component {
             <div>
               <p>
                 Welcome to the public comment initiative for The Brooklyn
-                project's Consumer Token Framework.
-                Your feedback is important to us. By leaving comments and
-                upvoting comments you find helpful, you will provide a basis for
-                a better framework. The public comment initiative will be closed
-                on <b>15 August 2018</b>. A final version of the framework will
+                project's Consumer Token Framework. Your feedback is important
+                to us. By leaving comments and upvoting comments you find
+                helpful, you will provide a basis for a better framework. The
+                public comment initiative will be closed on{" "}
+                <b>15 August 2018</b>. A final version of the framework will
                 incorporate the feedback received before the deadline and is
                 scheduled to be released shortly after.
               </p>
@@ -107,6 +107,7 @@ class Survey extends Component {
       if (this.props.commentsById[Number(commentId)]) {
         this.props.updateSidebarCommentContext({
           selectedCommentId: Number(commentId),
+          selectedText: "",
           focusOnce: true
         });
       }
@@ -117,9 +118,7 @@ class Survey extends Component {
     const givenCommentContext =
       this.props.location.pathname.indexOf("/comment/") !== -1;
     if (
-      (JSON.stringify(prevProps.commentIds) !==
-        JSON.stringify(this.props.commentIds) ||
-        this.props.location.pathname !== prevProps.location.pathname) &&
+      this.props.location.pathname !== prevProps.location.pathname &&
       givenCommentContext
     ) {
       this.focusOnContext();
@@ -158,7 +157,8 @@ class Survey extends Component {
     if (comments && comments.length) {
       this.props.updateSidebarCommentContext({
         focusQnaId: qnaId,
-        selectedText
+        selectedText,
+        focusOnce: true
       });
     }
   }
