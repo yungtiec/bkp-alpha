@@ -31,7 +31,7 @@ class FeedbackModal extends Component {
         onRequestClose={this.props.hideModal}
         contentLabel="Feedback Modal"
       >
-        <p>Tell use what you think about the platform.</p>
+        <p>Tell us what you think about the platform.</p>
         <textarea
           className="comment-box__text-area"
           name="textarea"
