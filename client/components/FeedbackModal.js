@@ -37,7 +37,7 @@ class FeedbackModal extends Component {
           name="textarea"
           value={this.state.value}
           onChange={this.handleChange}
-          placeholder="I think..."
+          placeholder="Report bugs and share suggestions for improvements to the platform here"
         />
         <div className="comment-box__actions">
           <button className="btn" onClick={this.handleSubmit}>
