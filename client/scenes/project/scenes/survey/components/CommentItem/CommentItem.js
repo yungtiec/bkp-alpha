@@ -171,7 +171,7 @@ export default class CommentItem extends Component {
           <span className="comment-item__issue-resolved">
             <Link
               to={`/project/${
-                comment.issue.resolvingProjectSurvey.project.symbol
+                comment.issue.resolvingProjectSurvey.survey.project.symbol
               }/survey/${comment.issue.resolvingProjectSurvey.id}`}
             >{`issue resolved in document v${
               comment.issue.resolvingProjectSurvey.hierarchyLevel

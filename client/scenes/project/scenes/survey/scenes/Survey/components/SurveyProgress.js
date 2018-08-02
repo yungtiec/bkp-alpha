@@ -8,30 +8,34 @@ import { assignIn } from "lodash";
 export default ({ surveyMetadata, projectSymbol }) => (
   <div className="project-survey" id="project-survey">
     <Timeline style={{ margin: 0, fontWeight: 400, fontSize: "14px" }}>
-      {surveyMetadata.versions.map(verison => {
-        const creator = getFullNameFromUserObject(verison.creator);
-        const collaborators = verison.collaborators
+      {surveyMetadata.versions.map(version => {
+        const creator = version.creator.name;
+        var collaborators = surveyMetadata.survey.collaborators.filter(
+          sc =>
+            sc.survey_collaborator.project_survey_version <=
+              version.hierarchyLevel && sc.email !== version.creator.email
+        );
+        if (version.creator.email !== surveyMetadata.survey.creator.email)
+          collaborators = collaborators.concat(surveyMetadata.survey.creator);
+        collaborators = collaborators
           .map((c, i) => {
-            if (
-              i === verison.collaborators.length - 1 &&
-              verison.collaborators.length > 1
-            )
-              return `and ${getFullNameFromUserObject(c)}`;
-            else if (i === 0) return `${getFullNameFromUserObject(c)}`;
-            else return `, ${getFullNameFromUserObject(c)}`;
+            if (i === collaborators.length - 1 && collaborators.length > 1)
+              return ` and ${c.name}`;
+            else if (i === 0) return `${c.name}`;
+            else return `, ${c.name}`;
           })
           .join("");
         return (
           <TimelineEvent
-            key={`timeline-event__${verison.id}`}
+            key={`timeline-event__${version.id}`}
             title={`${creator} ${
-              verison.hierarchyLevel === 1 ? "created" : "updated"
+              version.hierarchyLevel === 1 ? "created" : "updated"
             } the disclosure${
               collaborators.length
                 ? ` in collaboration with ${collaborators}.`
                 : "."
             }`}
-            createdAt={moment(verison.createdAt).format("MMM DD, YYYY")}
+            createdAt={moment(version.createdAt).format("MMM DD, YYYY")}
             icon={<i />}
             iconColor="#2540CE"
             container="card"
@@ -44,12 +48,12 @@ export default ({ surveyMetadata, projectSymbol }) => (
               color: "inherit"
             }}
           >
-            {verison.resolvedIssues.length ? (
+            {version.resolvedIssues.length ? (
               <p>This version resolves the following issues:</p>
             ) : null}
-            {verison.resolvedIssues.length ? (
+            {version.resolvedIssues.length ? (
               <div className="entity-cards">
-                {verison.resolvedIssues.map(issue => {
+                {version.resolvedIssues.map(issue => {
                   const comment = issue.comment;
                   return (
                     <div

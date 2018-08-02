@@ -43,9 +43,13 @@ class VersionToolbar extends Component {
       uploaded,
       loadModal,
       user,
+<<<<<<< HEAD
       width,
       upvoteProjectSurvey,
       downvoteProjectSurvey
+=======
+      upvoteSurvey
+>>>>>>> db-refactor
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -67,9 +71,32 @@ class VersionToolbar extends Component {
     );
 
     return (
+<<<<<<< HEAD
       <div>
         <p>Do you like this framework?</p>
         <div className="btn-group mb-5" role="group" aria-label="Basic example">
+=======
+      <div className="btn-group mb-5" role="group" aria-label="Basic example">
+        <button
+          type="button"
+          className={`btn ${
+            hasUpvoted
+              ? "bg-consensys text-light"
+              : "text-consensys btn-outline-primary"
+          }`}
+          onClick={() =>
+            upvoteSurvey({
+              projectSymbol: projectMetadata.symbol,
+              surveyId: surveyMetadata.survey.id,
+              hasUpvoted
+            })
+          }
+        >
+          <i class="fas fa-thumbs-up mr-2" />
+          {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+        </button>
+        <div className="btn-group">
+>>>>>>> db-refactor
           <button
             type="button"
             className={`btn ${
@@ -110,6 +137,7 @@ class VersionToolbar extends Component {
               ? surveyMetadata.downvotesFrom.length
               : 0}
           </button>
+<<<<<<< HEAD
           {!uploadMode ? (
             <PunditContainer policies={policies} user={user}>
               <PunditTypeSet type="Disclosure">
@@ -134,6 +162,64 @@ class VersionToolbar extends Component {
                     >
                       Import new version
                     </Link>
+=======
+          <div
+            className="dropdown-menu"
+            aria-labelledby="versionProgressButton"
+          >
+            <Link
+              to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }/progress`}
+              class="dropdown-item"
+            >
+              Milestone
+            </Link>
+            <Link
+              to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                this.props.surveyMetadata.id
+              }/issues`}
+              class="dropdown-item"
+            >
+              Issues
+            </Link>
+          </div>
+        </div>
+        {!uploadMode ? (
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
+              >
+                <button type="button" className="btn btn-outline-primary">
+                  <Link
+                    to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                      orderBy(
+                        this.props.surveyMetadata.versions,
+                        ["hierarchyLevel"],
+                        ["desc"]
+                      )[0].id
+                    }/upload`}
+                  >
+                    Import new version
+                  </Link>
+                </button>
+                <div className="btn-group">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary dropdown-toggle"
+                    type="button"
+                    id="downloadMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Copy or download
+>>>>>>> db-refactor
                   </button>
                   <div className="btn-group">
                     <button
@@ -208,6 +294,7 @@ class VersionToolbar extends Component {
                       </div>
                     </div>
                   </div>
+<<<<<<< HEAD
                 </VisibleIf>
               </PunditTypeSet>
             </PunditContainer>
@@ -220,6 +307,26 @@ class VersionToolbar extends Component {
                     project: projectMetadata,
                     disclosure: surveyMetadata
                   }}
+=======
+                </div>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
+        ) : uploaded ? (
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={resetUpload}
+>>>>>>> db-refactor
                 >
                   <button
                     type="button"

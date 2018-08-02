@@ -382,12 +382,14 @@ function getCommentQueryObj({
         duplicating: false,
         include: [
           {
-            model: db.model("project"),
-            attributes: ["id", "symbol", "name"]
-          },
-          {
             model: db.model("survey"),
-            attributes: ["id", "title"]
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: db.model("project"),
+                attributes: ["id", "symbol", "name"]
+              }
+            ]
           }
         ]
       }
@@ -396,12 +398,14 @@ function getCommentQueryObj({
         required: true,
         include: [
           {
-            model: db.model("project"),
-            attributes: ["id", "symbol", "name"]
-          },
-          {
             model: db.model("survey"),
-            attributes: ["id", "title"]
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: db.model("project"),
+                attributes: ["id", "symbol", "name"]
+              }
+            ]
           }
         ]
       };

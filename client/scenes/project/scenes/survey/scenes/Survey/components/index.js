@@ -6,3 +6,4 @@ export { default as SurveyProgress } from "./SurveyProgress";
 export { default as SurveyIssues } from "./SurveyIssues";
 export { default as SidebarComments } from "./SidebarComments";
 export { default as SidebarTableOfContents } from "./SidebarTableOfContents";
+export { default as SurveyScorecard } from "./SurveyScorecard";

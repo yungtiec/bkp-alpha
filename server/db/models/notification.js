@@ -118,6 +118,6 @@ function getContextUri(comment) {
       ? comment.ancestors[0]
       : comment;
   return `/project/${comment.project_survey.project.symbol}/survey/${
-        comment.project_survey.id
-      }/comment/${rootItem.id}`;
+    comment.project_survey.id
+  }/comment/${rootItem.id}`;
 }

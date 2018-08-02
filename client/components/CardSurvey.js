@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 export default (surveyId, survey) => {
+  const latestProjectSurvey =
+    survey.latest_project_survey || survey.project_surveys[0];
   return (
     <ListRow className="entity-card" rowId={surveyId} onClick>
       <Link
         to={`/project/${survey.project_symbol ||
-          (survey.project && survey.project.symbol)}/survey/${surveyId}`}
+          (survey.project && survey.project.symbol)}/survey/${
+          latestProjectSurvey.id
+        }`}
       >
         <div className="entity__block">
           <div className="entity__header">
@@ -20,16 +24,11 @@ export default (surveyId, survey) => {
                   : survey.title}
               </span>
               <span className="entity__ticker">
-                ({`v${survey.hierarchyLevel} `}
-                {`by ${survey.creator.displayName}`})
+                {`by ${survey.creator.name}`}
               </span>
             </div>
             <p className="entity__date">
-              {moment(
-                survey.hierarchyLevel === 1
-                  ? survey.createdAt
-                  : survey.updatedAt
-              ).format("MMM DD YYYY")}
+              {moment(latestProjectSurvey.createdAt).format("MMM DD YYYY")}
             </p>
           </div>
           <div className="entity__description">{survey.description}</div>
@@ -43,7 +42,7 @@ export default (surveyId, survey) => {
             <div className="entity__metrics-stat">
               <span>
                 <i class="fas fa-thumbs-up mr-2" />
-                ({(survey.upvotesFrom && survey.upvotesFrom.length) || 0})
+                ({survey.num_upvotes || 0})
               </span>
             </div>
           </div>

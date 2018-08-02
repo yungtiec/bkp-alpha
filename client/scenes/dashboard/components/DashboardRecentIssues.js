@@ -30,6 +30,10 @@ class DashboardRecentIssues extends Component {
               margin="4px"
             />
           </div>
+        ) : this.props.issueIds && !this.props.issueIds.length ? (
+          <div className="component__loader-container d-flex">
+            currently has no issue available
+          </div>
         ) : (
           <ListView
             viewClassName="row entity-cards"

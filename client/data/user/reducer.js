@@ -31,11 +31,11 @@ export default function(state = defaultUser, action) {
         projectSymbolArr: action.projectSymbolArr,
         projectsBySymbol: action.projectsBySymbol
       };
-    case types.OWN_PROJECT_SURVEYS_FETCH_SUCCESS:
+    case types.OWN_SURVEYS_FETCH_SUCCESS:
       return {
         ...state,
-        projectSurveysById: action.projectSurveysById,
-        projectSurveyIds: action.projectSurveyIds
+        surveysById: action.surveysById,
+        surveyIds: action.surveyIds
       };
     default:
       return state;
@@ -57,10 +57,10 @@ export function getManagedProjects(state) {
   };
 }
 
-export function getOwnProjectSurveys(state) {
-  const { projectSurveysById, projectSurveyIds } = state.data.user;
+export function getOwnSurveys(state) {
+  const { surveysById, surveyIds } = state.data.user;
   return {
-    projectSurveysById,
-    projectSurveyIds
+    surveysById,
+    surveyIds
   };
 }

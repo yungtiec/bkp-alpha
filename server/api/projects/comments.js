@@ -49,33 +49,52 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
-      const comment = await Comment.create({
+      var [comment, issue] = await Comment.create({
         owner_id: req.user.id,
         project_survey_id: Number(req.params.projectSurveyId),
-        comment: req.body.newComment,
-        reviewed: isAdmin ? "verified" : "pending"
-      })
-        .then(async comment => {
-          await Issue.create({
+        comment: req.body.newComment
+      }).then(comment =>
+        Promise.all([
+          Issue.create({
             open: true,
             comment_id: comment.id
-          });
-          return comment;
-        })
-        .then(comment => {
-          return Promise.map(req.body.tags, async addedTag => {
-            const [tag, created] = await Tag.findOrCreate({
-              where: { name: addedTag.name },
-              default: { name: addedTag.name }
-            });
-            return comment.addTag(tag.id);
-          }).then(() =>
-            Comment.scope({
-              method: ["flatThreadByRootId", { where: { id: comment.id } }]
-            }).findOne()
-          );
+          }),
+          Comment.scope("withProjectSurveys").findOne({
+            where: { id: comment.id }
+          })
+        ])
+      );
+      const autoVerify = permission(
+        "AutoVerify",
+        {
+          comment,
+          project: comment.project_survey.survey.project
+        },
+        req.user
+      );
+      const issuePromise =
+        req.body.issueOpen &&
+        Issue.create({
+          open: true,
+          comment_id: comment.id
         });
+      // const tagPromises = Promise.map(req.body.tags, async addedTag => {
+      //   const [tag, created] = await Tag.findOrCreate({
+      //     where: { name: addedTag.name },
+      //     default: { name: addedTag.name }
+      //   });
+      //   return comment.addTag(tag.id);
+      // });
+      const autoVerifyPromise =
+        autoVerify && comment.update({ reviewed: "verified" });
+      await Promise.all([
+        issuePromise,
+        // tagPromises,
+        autoVerifyPromise
+      ]);
+      comment = await Comment.scope({
+        method: ["flatThreadByRootId", { where: { id: comment.id } }]
+      }).findOne();
       res.send(comment);
     } catch (err) {
       next(err);
@@ -314,41 +333,14 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var comment = await Comment.findOne({
-        where: { id: req.params.commentId },
-        include: [
-          {
-            model: ProjectSurvey,
-            include: [
-              {
-                model: db.model("user"),
-                as: "collaborators",
-                required: false
-              },
-              {
-                model: Project,
-                include: [
-                  {
-                    model: User,
-                    through: ProjectAdmin,
-                    as: "admins"
-                  },
-                  {
-                    model: User,
-                    through: ProjectEditor,
-                    as: "editors"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+      var comment = await Comment.scope("withProjectSurveys").findOne({
+        where: { id: req.params.commentId }
       });
       const canVerify = permission(
         "Verify",
         {
           comment,
-          project: comment.project_survey.project
+          project: comment.project_survey.survey.project
         },
         req.user
       );
@@ -370,48 +362,16 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var comment = await Comment.findOne({
-        where: { id: req.params.commentId },
-        include: [
-          {
-            model: Issue
-          },
-          {
-            model: ProjectSurvey,
-            include: [
-              {
-                model: Project,
-                include: [
-                  {
-                    model: User,
-                    through: ProjectAdmin,
-                    as: "admins"
-                  },
-                  {
-                    model: User,
-                    through: ProjectEditor,
-                    as: "editors"
-                  }
-                ]
-              },
-              {
-                model: Survey,
-                attributes: ["title"]
-              },
-              {
-                model: db.model("user"),
-                as: "collaborators",
-                required: false
-              }
-            ]
-          }
-        ]
+      var comment = await Comment.scope({
+        method: ["withProjectSurveys", { model: Issue }]
+      }).findOne({
+        where: { id: req.params.commentId }
       });
       const canIssue = permission(
         "Issue",
         {
           comment,
-          project: comment.project_survey.project
+          project: comment.project_survey.survey.project
         },
         req.user
       );
@@ -448,7 +408,7 @@ router.post(
           messageFragment: `${
             req.user.name
           } opened an issue on your comment in ${
-            comment.project_survey.project.symbol
+            comment.project_survey.survey.project.symbol
           }/${comment.project_survey.survey.title}.`
         });
       }

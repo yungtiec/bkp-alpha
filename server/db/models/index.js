@@ -11,7 +11,7 @@ const SurveyQuestion = require("./survey-question");
 const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
-const ProjectSurveyCollaborator = require("./project-survey-collaborator");
+const SurveyCollaborator = require("./survey-collaborator");
 const ProjectAdmin = require("./project-admin");
 const ProjectEditor = require("./project-editor");
 
@@ -156,37 +156,39 @@ Comment.belongsTo(ProjectSurvey, {
 =                    Survey                    =
 ==============================================*/
 
-Project.belongsToMany(Survey, {
-  through: ProjectSurvey,
-  foreignKey: "project_id"
-});
-Survey.belongsToMany(Project, {
-  through: ProjectSurvey,
-  foreignKey: "survey_id"
-});
 ProjectSurvey.belongsTo(Survey, {
   foreignKey: "survey_id"
-});
-ProjectSurvey.belongsTo(Project, {
-  foreignKey: "project_id"
-});
-Project.hasMany(ProjectSurvey, {
-  foreignKey: "project_id"
 });
 Survey.hasMany(ProjectSurvey, {
   foreignKey: "survey_id"
 });
 
-Question.belongsToMany(Survey, {
+Survey.belongsTo(Project, {
+  foreignKey: "project_id"
+});
+Project.hasMany(Survey, {
+  foreignKey: "project_id"
+});
+
+User.hasMany(Survey, {
+  foreignKey: "creator_id",
+  as: "surveys"
+});
+Survey.belongsTo(User, {
+  foreignKey: "creator_id",
+  as: "creator"
+});
+
+Question.belongsToMany(ProjectSurvey, {
   through: SurveyQuestion,
   foreignKey: "question_id"
 });
-Survey.belongsToMany(Question, {
+ProjectSurvey.belongsToMany(Question, {
   through: SurveyQuestion,
-  foreignKey: "survey_id"
+  foreignKey: "project_survey_id"
 });
-SurveyQuestion.belongsTo(Survey, {
-  foreignKey: "survey_id"
+SurveyQuestion.belongsTo(ProjectSurvey, {
+  foreignKey: "project_survey_id"
 });
 SurveyQuestion.belongsTo(Question, {
   foreignKey: "question_id"
@@ -194,8 +196,8 @@ SurveyQuestion.belongsTo(Question, {
 Question.hasMany(SurveyQuestion, {
   foreignKey: "question_id"
 });
-Survey.hasMany(SurveyQuestion, {
-  foreignKey: "survey_id"
+ProjectSurvey.hasMany(SurveyQuestion, {
+  foreignKey: "project_survey_id"
 });
 
 SurveyQuestion.belongsToMany(ProjectSurvey, {
@@ -221,22 +223,22 @@ ProjectSurvey.hasMany(ProjectSurveyAnswer, {
 
 User.hasMany(ProjectSurvey, {
   foreignKey: "creator_id",
-  as: "projectSurveys"
+  as: "createdProjectSurveys"
 });
 ProjectSurvey.belongsTo(User, {
   foreignKey: "creator_id",
   as: "creator"
 });
 
-User.belongsToMany(ProjectSurvey, {
-  as: "upvotedProjectSurveys",
-  through: "project_survey_upvote",
+User.belongsToMany(Survey, {
+  as: "upvotedSurveys",
+  through: "survey_upvote",
   foreignKey: "user_id"
 });
-ProjectSurvey.belongsToMany(User, {
+Survey.belongsToMany(User, {
   as: "upvotesFrom",
-  through: "project_survey_upvote",
-  foreignKey: "project_survey_id"
+  through: "survey_upvote",
+  foreignKey: "survey_id"
 });
 
 User.belongsToMany(ProjectSurvey, {
@@ -257,23 +259,23 @@ Comment.belongsTo(SurveyQuestion, {
   foreignKey: "survey_question_id"
 });
 
-ProjectSurvey.hasMany(ProjectSurvey, {
-  foreignKey: "original_id"
+Survey.hasMany(Survey, {
+  foreignKey: "original_survey_id"
 });
-ProjectSurvey.belongsTo(ProjectSurvey, {
-  foreignKey: "original_id",
+Survey.belongsTo(Survey, {
+  foreignKey: "original_survey_id",
   as: "forkFrom"
 });
 
-ProjectSurvey.belongsToMany(User, {
-  through: "project_survey_collaborator",
-  foreignKey: "project_survey_id",
+Survey.belongsToMany(User, {
+  through: "survey_collaborator",
+  foreignKey: "survey_id",
   as: "collaborators"
 });
-User.belongsToMany(ProjectSurvey, {
-  through: "project_survey_collaborator",
+User.belongsToMany(Survey, {
+  through: "survey_collaborator",
   foreignKey: "user_id",
-  as: "collaboratedProjectSurveys"
+  as: "collaboratedSurveys"
 });
 /*=============  End of Survey  ==============*/
 
@@ -291,7 +293,7 @@ module.exports = {
   Tag,
   Issue,
   Notification,
-  ProjectSurveyCollaborator,
+  SurveyCollaborator,
   ProjectAdmin,
   ProjectEditor
 };

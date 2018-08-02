@@ -52,8 +52,8 @@ export const logout = () => dispatch =>
   axios
     .post("/auth/logout")
     .then(res => {
-      dispatch(removeUser());
       history.push("/login");
+      dispatch(removeUser());
     })
     .catch(err => console.log(err));
 
@@ -123,17 +123,17 @@ export const fetchManagedProjects = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchOwnProjectSurveys = () => async (dispatch, getState) => {
+export const fetchOwnSurveys = () => async (dispatch, getState) => {
   try {
-    const projectSurveys = await axios
+    const surveys = await axios
       .get(`api/users/-/surveys`)
       .then(res => res.data);
-    const projectSurveysById = keyBy(projectSurveys, "id");
-    const projectSurveyIds = projectSurveys.map(ps => ps.id);
+    const surveysById = keyBy(surveys, "id");
+    const surveyIds = surveys.map(ps => ps.id);
     dispatch({
-      type: types.OWN_PROJECT_SURVEYS_FETCH_SUCCESS,
-      projectSurveysById,
-      projectSurveyIds
+      type: types.OWN_SURVEYS_FETCH_SUCCESS,
+      surveysById,
+      surveyIds
     });
   } catch (err) {
     console.log(err);

@@ -121,7 +121,7 @@ class SurveyUpload extends Component {
       commentPeriodUnit,
       sidebarOpen,
       toggleSidebar,
-      upvoteProjectSurvey,
+      upvoteSurvey,
       updateProjectScorecard,
       scorecard,
       scorecardCompleted
@@ -142,7 +142,7 @@ class SurveyUpload extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
-          upvoteProjectSurvey={upvoteProjectSurvey}
+          upvoteSurvey={upvoteSurvey}
         />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>

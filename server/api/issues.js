@@ -25,19 +25,22 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
         {
           model: db.model("user"),
           as: "owner",
+
           attributes: ["first_name", "last_name", "name", "email", "anonymity"]
         },
         {
           model: db.model("project_survey"),
-          attributes: ["project_id", "survey_id", "id"],
+          attributes: ["survey_id", "id"],
           include: [
             {
-              model: db.model("project"),
-              attributes: ["symbol"]
-            },
-            {
               model: db.model("survey"),
-              attributes: ["title"]
+              attributes: ["project_id", "title"],
+              include: [
+                {
+                  model: db.model("project"),
+                  attributes: ["symbol"]
+                }
+              ]
             }
           ]
         }

@@ -40,14 +40,16 @@ const Project = db.define(
               as: "editors"
             },
             {
-              model: db.model("project_survey"),
-              where: { hierarchyLevel: 1 },
-              required: false,
+              model: db.model("survey"),
               include: [
                 { model: db.model("user"), as: "creator" },
                 {
                   model: db.model("user"),
                   as: "collaborators",
+                  through: {
+                    model: db.model("survey_collaborator"),
+                    where: { revoked_access: { [Sequelize.Op.not]: true } }
+                  },
                   required: false
                 },
                 {
@@ -56,54 +58,58 @@ const Project = db.define(
                   attributes: ["name", "first_name", "last_name", "email"]
                 },
                 {
-                  model: db.model("project_survey"),
-                  as: "forkFrom",
-                  include: [{ model: db.model("user"), as: "creator" }]
+                  model: db.model("survey"),
+                  as: "forkFrom"
                 },
-                { model: db.model("project_survey"), as: "descendents" },
                 {
-                  model: db.model("comment"),
+                  model: db.model("project_survey"),
                   required: false,
-                  attributes: ["id", "reviewed", "hierarchyLevel"],
-                  where: {
-                    reviewed: {
-                      [Sequelize.Op.or]: [
-                        { [Sequelize.Op.eq]: "pending" },
-                        { [Sequelize.Op.eq]: "verified" }
-                      ]
-                    },
-                    hierarchyLevel: 1
-                  },
                   include: [
+                    { model: db.model("user"), as: "creator" },
+                    { model: db.model("project_survey"), as: "descendents" },
                     {
-                      model: db.model("issue"),
-                      required: false
-                    },
-                    {
-                      model: db.model("user"),
-                      as: "upvotesFrom",
-                      attributes: ["id"],
-                      required: false
-                    },
-                    { model: db.model("comment"), as: "descendents" }
+                      model: db.model("comment"),
+                      required: false,
+                      attributes: ["id", "reviewed", "hierarchyLevel"],
+                      where: {
+                        reviewed: {
+                          [Sequelize.Op.or]: [
+                            { [Sequelize.Op.eq]: "pending" },
+                            { [Sequelize.Op.eq]: "verified" }
+                          ]
+                        },
+                        hierarchyLevel: 1
+                      },
+                      include: [
+                        {
+                          model: db.model("issue"),
+                          required: false
+                        },
+                        {
+                          model: db.model("user"),
+                          as: "upvotesFrom",
+                          attributes: ["id"],
+                          required: false
+                        },
+                        { model: db.model("comment"), as: "descendents" }
+                      ],
+                      order: [
+                        [
+                          { model: db.model("comment"), as: "descendents" },
+                          "hierarchyLevel"
+                        ]
+                      ]
+                    }
                   ],
                   order: [
+                    ["createdAt", "DESC"],
                     [
-                      { model: db.model("comment"), as: "descendents" },
-                      "hierarchyLevel"
+                      { model: db.model("project_survey"), as: "descendents" },
+                      "hierarchyLevel",
+                      "DESC"
                     ]
                   ]
-                },
-                {
-                  model: db.model("survey")
                 }
-              ],
-              order: [
-                ["createdAt", "DESC"],
-                [
-                  { model: db.model("project_survey"), as: "descendents" },
-                  "hierarchyLevel"
-                ]
               ]
             }
           ]
@@ -137,118 +143,58 @@ module.exports = Project;
  *
  */
 
-async function getProjectStats(projectInstance, includeProjectSurveys) {
+async function getProjectStats(projectInstance, includeSurveys) {
   var project = projectInstance.toJSON();
-  var projectSurveys = await Promise.map(
-    project.project_surveys,
-    async rawProjectSurvey => {
-      if (rawProjectSurvey.descendents.length) {
-        projectSurvey = await db.model("project_survey").findOne({
-          where: { id: rawProjectSurvey.descendents.slice(-1)[0].id },
-          include: [
-            {
-              model: db.model("user"),
-              as: "collaborators",
-              required: false
-            },
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["name", "first_name", "last_name", "email"]
-            },
-            {
-              model: db.model("comment"),
-              required: false,
-              attributes: ["id", "reviewed", "hierarchyLevel"],
-              where: {
-                reviewed: {
-                  [Sequelize.Op.or]: [
-                    { [Sequelize.Op.eq]: "pending" },
-                    { [Sequelize.Op.eq]: "verified" }
-                  ]
-                },
-                hierarchyLevel: 1
-              },
-              include: [
-                {
-                  model: db.model("issue"),
-                  required: false
-                },
-                {
-                  model: db.model("user"),
-                  as: "upvotesFrom",
-                  attributes: ["id"],
-                  required: false
-                },
-                { model: db.model("comment"), as: "descendents" }
-              ],
-              order: [
-                [
-                  { model: db.model("comment"), as: "descendents" },
-                  "hierarchyLevel"
-                ]
-              ]
-            },
-            {
-              model: db.model("survey")
-            }
-          ]
-        });
-        return _.assignIn(
-          _.pick(rawProjectSurvey, ["creator", "project"]),
-          projectSurvey.toJSON()
-        );
-      } else {
-        return rawProjectSurvey;
-      }
-    }
-  );
-  const numSurveys = projectSurveys.length;
-  const numComments = projectSurveys.reduce((count, projectSurvey) => {
-    const numTotalComments = projectSurvey.comments.filter(
-      c => c.reviewed !== "spam"
-    ).length;
-    const numTotalReplies = projectSurvey.comments.reduce(
-      (count, comment) =>
-        comment.descendents && comment.descendents.length
-          ? comment.descendents.filter(d => d.reviewed !== "spam").length +
-            count
-          : count,
-      0
-    );
+  var surveys = project.surveys;
+  const numSurveys = surveys.length;
+  const numComments = surveys.reduce((count, survey) => {
+    const numTotalComments = survey.project_surveys
+      .slice(-1)[0]
+      .comments.filter(c => c.reviewed !== "spam").length;
+    const numTotalReplies = survey.project_surveys
+      .slice(-1)[0]
+      .comments.reduce(
+        (count, comment) =>
+          comment.descendents && comment.descendents.length
+            ? comment.descendents.filter(d => d.reviewed !== "spam").length +
+              count
+            : count,
+        0
+      );
     return numTotalComments + numTotalReplies + count;
   }, 0);
-  const numCommentIssues = projectSurveys.reduce(
-    (count, projectSurvey) =>
-      projectSurvey.comments.filter(a => !!a.issue).length + count,
+  const numCommentIssues = surveys.reduce(
+    (count, survey) =>
+      survey.project_surveys.slice(-1)[0].comments.filter(a => !!a.issue)
+        .length + count,
     0
   );
-  const projectSurveysWithStats =
-    projectSurveys && projectSurveys.length
-      ? projectSurveys.map(s => {
-          const numTotalComments = s.comments.filter(c => c.reviewed !== "spam")
-            .length;
-          const numTotalReplies = s.comments.reduce(
-            (count, comment) =>
-              comment.descendents && comment.descendents.length
-                ? comment.descendents.filter(d => d.reviewed !== "spam")
-                    .length + count
-                : count,
-            0
-          );
-          const numCommentIssues = s.comments.filter(a => !!a.issue).length;
+  const surveysWithStats =
+    surveys && surveys.length
+      ? surveys.map(s => {
+          const numTotalComments = s.project_surveys
+            .slice(-1)[0]
+            .comments.filter(c => c.reviewed !== "spam").length;
+          const numTotalReplies = s.project_surveys
+            .slice(-1)[0]
+            .comments.reduce(
+              (count, comment) =>
+                comment.descendents && comment.descendents.length
+                  ? comment.descendents.filter(d => d.reviewed !== "spam")
+                      .length + count
+                  : count,
+              0
+            );
+          const numCommentIssues = s.project_surveys
+            .slice(-1)[0]
+            .comments.filter(a => !!a.issue).length;
 
-          return _.assignIn(
-            _.pick(s.survey, ["creator", "title", "description"]),
-            _.omit(
-              _.assignIn(s, {
-                num_total_comments: numTotalComments + numTotalReplies,
-                num_issues: numCommentIssues,
-                project_symbol: project.symbol
-              }),
-              ["survey"]
-            )
-          );
+          return _.assignIn(s, {
+            num_total_comments: numTotalComments + numTotalReplies,
+            num_issues: numCommentIssues,
+            num_versions: s.project_surveys.length,
+            project_symbol: project.symbol
+          });
         })
       : [];
   var assignees = {
@@ -256,7 +202,6 @@ async function getProjectStats(projectInstance, includeProjectSurveys) {
     num_total_comments: numComments,
     num_issues: numCommentIssues
   };
-  if (includeProjectSurveys)
-    assignees.project_surveys = projectSurveysWithStats;
-  return _.assignIn(_.omit(project, ["project_surveys"]), assignees);
+  if (includeSurveys) assignees.surveys = surveysWithStats;
+  return _.assignIn(_.omit(project, ["surveys"]), assignees);
 }

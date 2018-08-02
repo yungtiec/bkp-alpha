@@ -124,10 +124,10 @@ async function seedSurveyFromMarkdown({
   var markdownParsor = new MarkdownParsor({ filepath });
   var survey = await Survey.create({
     title: markdownParsor.title,
-    description: markdownParsor.description
+    description: markdownParsor.description,
+    project_id: project.id
   });
   var projectSurvey = await ProjectSurvey.create({
-    project_id: project.id,
     survey_id: survey.id,
     creator_id: surveyCreatorId
   });
@@ -141,7 +141,7 @@ async function seedSurveyFromMarkdown({
           questionObject.order_in_survey
         );
         var surveyQuestion = await SurveyQuestion.create({
-          survey_id: survey.id,
+          project_survey_id: survey.id,
           question_id: question.id,
           order_in_survey: questionObject.order_in_survey
         });

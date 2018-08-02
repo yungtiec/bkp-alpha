@@ -7,7 +7,7 @@ import { batchActions } from "redux-batched-actions";
 import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey
+  upvoteSurvey
 } from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
@@ -114,7 +114,7 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey,
+  upvoteSurvey,
   fetchCommentsBySurvey,
   importMarkdown,
   uploadMarkdownToServer,

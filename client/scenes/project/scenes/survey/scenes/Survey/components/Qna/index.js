@@ -25,7 +25,6 @@ class QnaBox extends Component {
         qna,
         match,
         isLoggedIn,
-        pollData,
         tagFilter,
         projectSurveyId
       } = this.props;

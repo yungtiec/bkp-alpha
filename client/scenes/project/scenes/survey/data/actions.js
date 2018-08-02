@@ -1,9 +1,13 @@
 import * as types from "./actionTypes";
 import {
   getSurveyByProjectSurveyId,
+<<<<<<< HEAD
   postUpvoteToProjectSurvey,
   postDownvoteToProjectSurvey,
   putOnboardStatus
+=======
+  postUpvoteToSurvey
+>>>>>>> db-refactor
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 import { notify } from "reapop";
@@ -20,7 +24,7 @@ export function fetchQuestionsByProjectSurveyId({
         projectSurveyId
       );
       const surveyQnas = sortBy(
-        projectSurvey.survey.survey_questions,
+        projectSurvey.survey_questions,
         ["order_in_survey"],
         ["asc"]
       );
@@ -28,32 +32,11 @@ export function fetchQuestionsByProjectSurveyId({
       const surveyQnaIds = surveyQnas.map(qna => qna.id);
       const surveyVersions = projectSurvey.ancestors
         .concat([
-          omit(projectSurvey, [
-            "ancestors",
-            "descendents",
-            "survey.survey_questions"
-          ])
+          omit(projectSurvey, ["ancestors", "descendents", "survey_questions"])
         ])
         .concat(projectSurvey.descendents);
       projectSurvey.versions = surveyVersions;
-      const surveyMetadata = assignIn(
-        pick(projectSurvey, [
-          "title",
-          "description",
-          "id",
-          "creator",
-          "collaborators",
-          "versions",
-          "hierarchyLevel",
-          "resolvedIssues",
-          "comment_until_unix",
-          "createdAt",
-          "upvotesFrom",
-          "downvotesFrom",
-          "scorecard"
-        ]),
-        omit(projectSurvey.survey, ["survey_questions", "id"])
-      );
+      const surveyMetadata = omit(projectSurvey, ["survey_questions"]);
       dispatch({
         type: types.PROJECT_SURVEY_FETCH_SUCCESS,
         surveyQnasById,
@@ -66,16 +49,21 @@ export function fetchQuestionsByProjectSurveyId({
   };
 }
 
-export function upvoteProjectSurvey({
-  projectSurveyId,
+export function upvoteSurvey({
+  surveyId,
   projectSymbol,
   hasUpvoted,
   hasDownvoted
 }) {
   return async (dispatch, getState) => {
     try {
+<<<<<<< HEAD
       const [upvotesFrom, downvotesFrom] = await postUpvoteToProjectSurvey({
         projectSurveyId,
+=======
+      const upvotesFrom = await postUpvoteToSurvey({
+        surveyId,
+>>>>>>> db-refactor
         projectSymbol,
         hasUpvoted,
         hasDownvoted
