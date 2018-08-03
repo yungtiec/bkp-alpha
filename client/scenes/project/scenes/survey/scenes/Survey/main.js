@@ -227,15 +227,10 @@ class Survey extends Component {
       sidebarContext,
       annotationHighlight,
       toggleSidebar,
-<<<<<<< HEAD
       toggleSidebarContext,
-      upvoteProjectSurvey,
-      downvoteProjectSurvey,
+      upvoteSurvey,
+      downvoteSurvey,
       loadModal
-=======
-      updateVerificationStatusInView,
-      upvoteSurvey
->>>>>>> db-refactor
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
@@ -258,26 +253,16 @@ class Survey extends Component {
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
         />
-<<<<<<< HEAD
         {isLoggedIn && (
           <VersionToolbar
             projectMetadata={projectMetadata}
             surveyMetadata={surveyMetadata}
             surveyQnasById={surveyQnasById}
             surveyQnaIds={surveyQnaIds}
-            upvoteProjectSurvey={upvoteProjectSurvey}
-            downvoteProjectSurvey={downvoteProjectSurvey}
+            upvoteSurvey={upvoteSurvey}
+            downvoteSurvey={downvoteSurvey}
           />
         )}
-=======
-        <VersionToolbar
-          projectMetadata={projectMetadata}
-          surveyMetadata={surveyMetadata}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-          upvoteSurvey={upvoteSurvey}
-        />
->>>>>>> db-refactor
         <Switch>
           <Route
             path={`${this.props.match.path}/issues`}

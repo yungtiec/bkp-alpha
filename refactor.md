@@ -39,14 +39,15 @@
 [x] CONFLICT (content): Merge conflict in client/components/CardSurvey.js
 
 ##### add downvote
-[] Auto-merging client/scenes/project/scenes/survey/scenes/Survey/main.js
-[] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/scenes/Survey/main.js
+[x] server side
+[x] Auto-merging client/scenes/project/scenes/survey/scenes/Survey/main.js
+[x] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/scenes/Survey/main.js
 [] Auto-merging client/scenes/project/scenes/survey/scenes/Survey/index.js
 [] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/scenes/Survey/index.js
-[] Auto-merging client/scenes/project/scenes/survey/data/service.js
-[] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/service.js
-[] Auto-merging client/scenes/project/scenes/survey/data/actions.js
-[] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/actions.js
+[x] Auto-merging client/scenes/project/scenes/survey/data/service.js
+[x] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/service.js
+[x] Auto-merging client/scenes/project/scenes/survey/data/actions.js
+[x] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/actions.js
 
 ##### version toolbar: downvote related
 ###### too many actions, need re-design

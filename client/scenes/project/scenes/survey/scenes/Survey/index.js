@@ -20,12 +20,8 @@ import {
 } from "../../reducer";
 import {
   fetchQuestionsByProjectSurveyId,
-<<<<<<< HEAD
-  upvoteProjectSurvey,
-  downvoteProjectSurvey
-=======
-  upvoteSurvey
->>>>>>> db-refactor
+  upvoteSurvey,
+  downvoteSurvey
 } from "../../data/actions";
 import {
   fetchCommentsBySurvey,
@@ -163,12 +159,8 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
-<<<<<<< HEAD
-  upvoteProjectSurvey,
-  downvoteProjectSurvey,
-=======
   upvoteSurvey,
->>>>>>> db-refactor
+  downvoteSurvey,
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,

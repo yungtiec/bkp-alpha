@@ -61,7 +61,7 @@ async function seedUser(projects) {
             else return user;
           })
           .catch(err => {
-            console.log(chalk.red(err));
+            console.log(err);
           });
       },
       { concurrency: 1000 }

@@ -7,40 +7,30 @@ export function getSurveyByProjectSurveyId(projectSymbol, projectSurveyId) {
     .then(res => res.data);
 }
 
-<<<<<<< HEAD
-export function postUpvoteToProjectSurvey({
-  projectSurveyId,
+export function postUpvoteToSurvey({
+  surveyId,
   projectSymbol,
   hasUpvoted,
   hasDownvoted
 }) {
   return axios
-    .post(`/api/projects/${projectSymbol}/surveys/${projectSurveyId}/upvote`, {
+    .post(`/api/surveys/${surveyId}/upvote`, {
       hasUpvoted,
       hasDownvoted
-=======
-export function postUpvoteToSurvey({ surveyId, projectSymbol, hasUpvoted }) {
-  return axios
-    .post(`/api/surveys/${surveyId}/upvote`, {
-      hasUpvoted
->>>>>>> db-refactor
     })
     .then(res => res.data);
 }
 
-export function postDownvoteToProjectSurvey({
-  projectSurveyId,
+export function postDownvoteToSurvey({
+  surveyId,
   projectSymbol,
   hasUpvoted,
   hasDownvoted
 }) {
   return axios
-    .post(
-      `/api/projects/${projectSymbol}/surveys/${projectSurveyId}/downvote`,
-      {
-        hasUpvoted,
-        hasDownvoted
-      }
-    )
+    .post(`/api/surveys/${surveyId}/downvote`, {
+      hasUpvoted,
+      hasDownvoted
+    })
     .then(res => res.data);
 }

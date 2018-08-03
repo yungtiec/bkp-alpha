@@ -69,15 +69,40 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
+      if (req.body.hasDownvoted)
+        await req.user.removeDownvotedSurveys(req.params.surveyId);
       if (!req.body.hasUpvoted) {
         await req.user.addUpvotedSurveys(req.params.surveyId);
       } else {
         await req.user.removeUpvotedSurveys(req.params.surveyId);
       }
-      const upvotesFrom = await Survey.findById(req.params.surveyId).then(
-        survey => survey.getUpvotesFrom()
-      );
-      res.send(upvotesFrom);
+      const [upvotesFrom, downvotesFrom] = await Survey.findById(
+        req.params.surveyId
+      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+      res.send([upvotesFrom, downvotesFrom]);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/:surveyId/downvote",
+  ensureAuthentication,
+  ensureResourceAccess,
+  async (req, res, next) => {
+    try {
+      if (req.body.hasUpvoted)
+        await req.user.removeUpvotedSurveys(req.params.surveyId);
+      if (!req.body.hasDownvoted) {
+        await req.user.addDownvotedSurveys(req.params.surveyId);
+      } else {
+        await req.user.removeDownvotedSurveys(req.params.surveyId);
+      }
+      const [upvotesFrom, downvotesFrom] = await Survey.findById(
+        req.params.surveyId
+      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+      res.send([upvotesFrom, downvotesFrom]);
     } catch (err) {
       next(err);
     }

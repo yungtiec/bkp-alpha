@@ -43,13 +43,9 @@ class VersionToolbar extends Component {
       uploaded,
       loadModal,
       user,
-<<<<<<< HEAD
       width,
-      upvoteProjectSurvey,
-      downvoteProjectSurvey
-=======
-      upvoteSurvey
->>>>>>> db-refactor
+      upvoteSurvey,
+      downvoteSurvey
     } = this.props;
 
     const surveyMarkdown = getSurveyMarkdown({
@@ -59,44 +55,19 @@ class VersionToolbar extends Component {
     });
 
     const hasUpvoted = !!find(
-      surveyMetadata.upvotesFrom,
-      upvotedUser =>
-        upvotedUser.id === user.id
+      surveyMetadata.survey.upvotesFrom,
+      upvotedUser => upvotedUser.id === user.id
     );
 
     const hasDownvoted = !!find(
-      surveyMetadata.downvotesFrom,
-      downvotedUser =>
-        downvotedUser.id === user.id
+      surveyMetadata.survey.downvotesFrom,
+      downvotedUser => downvotedUser.id === user.id
     );
 
     return (
-<<<<<<< HEAD
       <div>
         <p>Do you like this framework?</p>
         <div className="btn-group mb-5" role="group" aria-label="Basic example">
-=======
-      <div className="btn-group mb-5" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          className={`btn ${
-            hasUpvoted
-              ? "bg-consensys text-light"
-              : "text-consensys btn-outline-primary"
-          }`}
-          onClick={() =>
-            upvoteSurvey({
-              projectSymbol: projectMetadata.symbol,
-              surveyId: surveyMetadata.survey.id,
-              hasUpvoted
-            })
-          }
-        >
-          <i class="fas fa-thumbs-up mr-2" />
-          {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
-        </button>
-        <div className="btn-group">
->>>>>>> db-refactor
           <button
             type="button"
             className={`btn ${
@@ -105,8 +76,9 @@ class VersionToolbar extends Component {
                 : "text-consensys btn-outline-primary"
             } project-survey__upvote-btn`}
             onClick={() =>
-              upvoteProjectSurvey({
+              upvoteSurvey({
                 projectSymbol: projectMetadata.symbol,
+                surveyId: surveyMetadata.survey.id,
                 projectSurveyId: surveyMetadata.id,
                 hasUpvoted,
                 hasDownvoted
@@ -114,7 +86,7 @@ class VersionToolbar extends Component {
             }
           >
             <i className="fas fa-thumbs-up mr-2" />
-            {surveyMetadata.upvotesFrom ? surveyMetadata.upvotesFrom.length : 0}
+            {surveyMetadata.survey.upvotesFrom ? surveyMetadata.survey.upvotesFrom.length : 0}
           </button>
           <button
             type="button"
@@ -124,8 +96,9 @@ class VersionToolbar extends Component {
                 : "text-consensys btn-outline-primary"
             }`}
             onClick={() =>
-              downvoteProjectSurvey({
+              downvoteSurvey({
                 projectSymbol: projectMetadata.symbol,
+                surveyId: surveyMetadata.survey.id,
                 projectSurveyId: surveyMetadata.id,
                 hasUpvoted,
                 hasDownvoted
@@ -133,36 +106,11 @@ class VersionToolbar extends Component {
             }
           >
             <i className="fas fa-thumbs-down mr-2" />
-            {surveyMetadata.downvotesFrom
-              ? surveyMetadata.downvotesFrom.length
+            {surveyMetadata.survey.downvotesFrom
+              ? surveyMetadata.survey.downvotesFrom.length
               : 0}
           </button>
-<<<<<<< HEAD
-          {!uploadMode ? (
-            <PunditContainer policies={policies} user={user}>
-              <PunditTypeSet type="Disclosure">
-                <VisibleIf
-                  action="Version"
-                  model={{
-                    project: projectMetadata,
-                    disclosure: surveyMetadata
-                  }}
-                >
-                  <button type="button" className="btn btn-outline-primary">
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/survey/${
-                        orderBy(
-                          this.props.surveyMetadata.versions,
-                          ["hierarchyLevel"],
-                          ["desc"]
-                        )[0].id
-                      }/upload`}
-                    >
-                      Import new version
-                    </Link>
-=======
+
           <div
             className="dropdown-menu"
             aria-labelledby="versionProgressButton"
@@ -219,7 +167,6 @@ class VersionToolbar extends Component {
                     aria-expanded="false"
                   >
                     Copy or download
->>>>>>> db-refactor
                   </button>
                   <div className="btn-group">
                     <button
@@ -294,20 +241,6 @@ class VersionToolbar extends Component {
                       </div>
                     </div>
                   </div>
-<<<<<<< HEAD
-                </VisibleIf>
-              </PunditTypeSet>
-            </PunditContainer>
-          ) : uploaded ? (
-            <PunditContainer policies={policies} user={user}>
-              <PunditTypeSet type="Disclosure">
-                <VisibleIf
-                  action="Version"
-                  model={{
-                    project: projectMetadata,
-                    disclosure: surveyMetadata
-                  }}
-=======
                 </div>
               </VisibleIf>
             </PunditTypeSet>
@@ -326,20 +259,13 @@ class VersionToolbar extends Component {
                   type="button"
                   className="btn btn-outline-primary"
                   onClick={resetUpload}
->>>>>>> db-refactor
                 >
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary"
-                    onClick={resetUpload}
-                  >
-                    Import another file
-                  </button>
-                </VisibleIf>
-              </PunditTypeSet>
-            </PunditContainer>
-          ) : null}
-        </div>
+                  Import another file
+                </button>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
+        ) : null}
       </div>
     );
   }

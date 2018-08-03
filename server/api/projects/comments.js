@@ -49,7 +49,8 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var [comment, issue] = await Comment.create({
+      console.log(req.params)
+      var [issue, comment] = await Comment.create({
         owner_id: req.user.id,
         project_survey_id: Number(req.params.projectSurveyId),
         comment: req.body.newComment

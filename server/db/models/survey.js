@@ -51,7 +51,12 @@ const Survey = db.define(
             {
               model: db.model("user"),
               as: "upvotesFrom",
-              attributes: ["name", "first_name", "last_name", "email"]
+              attributes: ["name", "first_name", "last_name", "email", "id"]
+            },
+            {
+              model: db.model("user"),
+              as: "downvotesFrom",
+              attributes: ["name", "first_name", "last_name", "email", "id"]
             },
             {
               model: db.model("project_survey"),
@@ -160,6 +165,7 @@ function computeSurveyStats(survey) {
         .length,
       num_total_comments: comments.filter(c => c.reviewed !== "spam").length,
       num_upvotes: survey.upvotesFrom.length,
+      num_downvotes: survey.upvotesFrom.length,
       latest_project_survey: survey.project_surveys[0]
     },
     _.omit(survey.toJSON(), ["project_surveys"])

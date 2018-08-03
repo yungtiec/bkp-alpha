@@ -1,13 +1,9 @@
 import * as types from "./actionTypes";
 import {
   getSurveyByProjectSurveyId,
-<<<<<<< HEAD
-  postUpvoteToProjectSurvey,
-  postDownvoteToProjectSurvey,
+  postUpvoteToSurvey,
+  postDownvoteToSurvey,
   putOnboardStatus
-=======
-  postUpvoteToSurvey
->>>>>>> db-refactor
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
 import { notify } from "reapop";
@@ -51,25 +47,21 @@ export function fetchQuestionsByProjectSurveyId({
 
 export function upvoteSurvey({
   surveyId,
+  projectSurveyId,
   projectSymbol,
   hasUpvoted,
   hasDownvoted
 }) {
   return async (dispatch, getState) => {
     try {
-<<<<<<< HEAD
-      const [upvotesFrom, downvotesFrom] = await postUpvoteToProjectSurvey({
-        projectSurveyId,
-=======
-      const upvotesFrom = await postUpvoteToSurvey({
+      const [upvotesFrom, downvotesFrom] = await postUpvoteToSurvey({
         surveyId,
->>>>>>> db-refactor
         projectSymbol,
         hasUpvoted,
         hasDownvoted
       });
       dispatch({
-        type: types.PROJECT_SURVEY_VOTED,
+        type: types.SURVEY_VOTED,
         upvotesFrom,
         downvotesFrom
       });
@@ -84,7 +76,8 @@ export function upvoteSurvey({
   };
 }
 
-export function downvoteProjectSurvey({
+export function downvoteSurvey({
+  surveyId,
   projectSurveyId,
   projectSymbol,
   hasUpvoted,
@@ -92,14 +85,14 @@ export function downvoteProjectSurvey({
 }) {
   return async (dispatch, getState) => {
     try {
-      const [upvotesFrom, downvotesFrom] = await postDownvoteToProjectSurvey({
-        projectSurveyId,
+      const [upvotesFrom, downvotesFrom] = await postDownvoteToSurvey({
+        surveyId,
         projectSymbol,
         hasUpvoted,
         hasDownvoted
       });
       dispatch({
-        type: types.PROJECT_SURVEY_VOTED,
+        type: types.SURVEY_VOTED,
         upvotesFrom,
         downvotesFrom
       });
