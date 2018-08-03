@@ -1,3 +1,4 @@
+##### general
 [x] Auto-merging server/db/models/user.js
 [x] Auto-merging server/db/models/survey-collaborator.js
 [x] Auto-merging server/db/models/project-survey.js
@@ -37,7 +38,6 @@
 [x] Auto-merging client/components/CardSurvey.js
 [x] CONFLICT (content): Merge conflict in client/components/CardSurvey.js
 
-
 ##### add downvote
 [] Auto-merging client/scenes/project/scenes/survey/scenes/Survey/main.js
 [] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/scenes/Survey/main.js
@@ -47,6 +47,7 @@
 [] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/service.js
 [] Auto-merging client/scenes/project/scenes/survey/data/actions.js
 [] CONFLICT (content): Merge conflict in client/scenes/project/scenes/survey/data/actions.js
+
 ##### version toolbar: downvote related
 ###### too many actions, need re-design
 Auto-merging client/scenes/project/scenes/survey/components/VersionToolbar.js
