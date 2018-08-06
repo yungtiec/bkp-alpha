@@ -86,7 +86,9 @@ class VersionToolbar extends Component {
             }
           >
             <i className="fas fa-thumbs-up mr-2" />
-            {surveyMetadata.survey.upvotesFrom ? surveyMetadata.survey.upvotesFrom.length : 0}
+            {surveyMetadata.survey.upvotesFrom
+              ? surveyMetadata.survey.upvotesFrom.length
+              : 0}
           </button>
           <button
             type="button"
@@ -110,63 +112,84 @@ class VersionToolbar extends Component {
               ? surveyMetadata.survey.downvotesFrom.length
               : 0}
           </button>
-
-          <div
-            className="dropdown-menu"
-            aria-labelledby="versionProgressButton"
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={() =>
+              history.push(
+                `/project/${this.props.projectMetadata.symbol}/survey/${
+                  this.props.surveyMetadata.id
+                }`
+              )
+            }
           >
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }/progress`}
-              class="dropdown-item"
+            View disclosure
+          </button>
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-primary dropdown-toggle"
+              type="button"
+              id="versionProgressButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              Milestone
-            </Link>
-            <Link
-              to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                this.props.surveyMetadata.id
-              }/issues`}
-              class="dropdown-item"
-            >
-              Issues
-            </Link>
-          </div>
-        </div>
-        {!uploadMode ? (
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{
-                  project: projectMetadata,
-                  disclosure: surveyMetadata.survey
-                }}
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                  this.props.surveyMetadata.id
+                }/progress`}
               >
-                <button type="button" className="btn btn-outline-primary">
-                  <Link
-                    to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                      orderBy(
-                        this.props.surveyMetadata.versions,
-                        ["hierarchyLevel"],
-                        ["desc"]
-                      )[0].id
-                    }/upload`}
-                  >
-                    Import new version
-                  </Link>
-                </button>
-                <div className="btn-group">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary dropdown-toggle"
-                    type="button"
-                    id="downloadMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    Copy or download
+                View progress
+              </Link>
+            </button>
+            <div
+              className="dropdown-menu"
+              aria-labelledby="versionProgressButton"
+            >
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                  this.props.surveyMetadata.id
+                }/progress`}
+                class="dropdown-item"
+              >
+                Milestone
+              </Link>
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/survey/${
+                  this.props.surveyMetadata.id
+                }/issues`}
+                class="dropdown-item"
+              >
+                Issues
+              </Link>
+            </div>
+          </div>
+
+          {!uploadMode ? (
+            <PunditContainer policies={policies} user={user}>
+              <PunditTypeSet type="Disclosure">
+                <VisibleIf
+                  action="Version"
+                  model={{
+                    project: projectMetadata,
+                    disclosure: surveyMetadata.survey
+                  }}
+                >
+                  <button type="button" className="btn btn-outline-primary">
+                    <Link
+                      to={`/project/${
+                        this.props.projectMetadata.symbol
+                      }/survey/${
+                        orderBy(
+                          this.props.surveyMetadata.versions,
+                          ["hierarchyLevel"],
+                          ["desc"]
+                        )[0].id
+                      }/upload`}
+                    >
+                      Import new version
+                    </Link>
                   </button>
                   <div className="btn-group">
                     <button
@@ -241,31 +264,31 @@ class VersionToolbar extends Component {
                       </div>
                     </div>
                   </div>
-                </div>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
-        ) : uploaded ? (
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{
-                  project: projectMetadata,
-                  disclosure: surveyMetadata.survey
-                }}
-              >
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  onClick={resetUpload}
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
+          ) : uploaded ? (
+            <PunditContainer policies={policies} user={user}>
+              <PunditTypeSet type="Disclosure">
+                <VisibleIf
+                  action="Version"
+                  model={{
+                    project: projectMetadata,
+                    disclosure: surveyMetadata.survey
+                  }}
                 >
-                  Import another file
-                </button>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
-        ) : null}
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    onClick={resetUpload}
+                  >
+                    Import another file
+                  </button>
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
+          ) : null}
+        </div>
       </div>
     );
   }

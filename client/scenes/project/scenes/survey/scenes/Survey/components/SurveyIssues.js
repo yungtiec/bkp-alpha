@@ -29,8 +29,10 @@ export default ({ surveyVersions, projectSymbol }) => {
                           {
                             project_survey: {
                               id: v.id,
-                              project: {
-                                symbol: projectSymbol
+                              survey: {
+                                project: {
+                                  symbol: projectSymbol
+                                }
                               }
                             }
                           },
