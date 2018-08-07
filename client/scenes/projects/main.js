@@ -9,7 +9,7 @@ import {
   fetchLastestSurveysWithStats,
   getSurveyListing
 } from "../../data/reducer";
-import { ListView, CardProject, CardSurvey } from "../../components";
+import { ListProject, ListSurvey } from "../../components";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
 
@@ -33,25 +33,14 @@ class ProjectList extends Component {
 
     return (
       <div className="main-container">
-        <span className="projects-container__sub-header">
-          Recent Documents
-        </span>
-        <ListView
-          viewClassName={"row entity-cards"}
-          rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={surveyIds}
-          rowsById={surveysById}
-          renderRow={CardSurvey}
-        />
+        <span className="projects-container__sub-header">Recent Documents</span>
+        <ListSurvey surveyIds={surveyIds} surveysById={surveysById} />
         {projectSymbolArr && projectSymbolArr.length ? (
           <span className="projects-container__sub-header">Categories</span>
         ) : null}
-        <ListView
-          viewClassName={"row entity-cards"}
-          rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={projectSymbolArr}
-          rowsById={projectsBySymbol}
-          renderRow={CardProject}
+        <ListProject
+          projectSymbolArr={projectSymbolArr}
+          projectsBySymbol={projectsBySymbol}
         />
       </div>
     );

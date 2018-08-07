@@ -8,12 +8,12 @@
   margin-left: 0px !important;
 }
 
-.col-md-12.entity-card__container {
+.col-md-12.entity-card {
   padding-right: 0px;
   padding-left: 0px;
 }
 
-.entity-card__container {
+.entity-card {
   border-bottom: 1px solid #ccc;
 }
 
@@ -65,7 +65,7 @@
   }
 }
 
-.entity__title .entity__ticker {
+.entity__title .entity__subtitle {
   @include breakpoint(xs) {
     margin-left: 0px;
   }
@@ -84,7 +84,7 @@
   flex-wrap: wrap;
 }
 
-.entity__date {
+.entity__text-upper-right {
   @include breakpoint(xs) {
     align-self: flex-end;
   }
@@ -156,7 +156,7 @@
   margin-bottom: 0px;
 }
 
-.entity__ticker {
+.entity__subtitle {
   font-size: 11px;
   margin-left: 15px;
   line-height: 24px;

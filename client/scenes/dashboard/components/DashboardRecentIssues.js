@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { getResponsibleIssues, canLoadMore } from "../data/reducer";
 import { fetchResponsibleIssues } from "../data/actions";
-import { CardIssue } from "./index";
-import { ListView } from "../../../components";
+import { ListIssue } from "../../../components";
 import { ScaleLoader } from "halogenium";
 
 class DashboardRecentIssues extends Component {
@@ -35,12 +34,9 @@ class DashboardRecentIssues extends Component {
             currently has no issue available
           </div>
         ) : (
-          <ListView
-            viewClassName="row entity-cards"
-            rowClassName="col-md-12 entity-card__container  d-flex flex-column"
-            rowsIdArray={this.props.issueIds}
-            rowsById={this.props.issuesById}
-            renderRow={CardIssue}
+          <ListIssue
+            issueCommentIds={this.props.issueIds}
+            issuesByCommentId={this.props.issuesById}
           />
         )}
         {this.props.canLoadMore ? (

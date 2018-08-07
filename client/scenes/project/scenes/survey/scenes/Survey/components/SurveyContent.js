@@ -8,7 +8,6 @@ export default ({
   isClosedForComment,
   surveyQnasById,
   surveyQnaIds,
-  numComments,
   surveyMetadata,
   commentOnClick,
   parent,
@@ -40,7 +39,6 @@ export default ({
             projectSurveyId={surveyMetadata.id}
             isLoggedIn={isLoggedIn}
             isClosedForComment={isClosedForComment}
-            numComments={numComments}
             tags={tags}
             tagFilter={tagFilter}
             addNewCommentSentFromServer={addNewCommentSentFromServer}

@@ -90,6 +90,21 @@ class Survey extends Component {
     this.focusOnContext();
   }
 
+  componentDidUpdate(prevProps) {
+    const givenCommentContext =
+      this.props.location.pathname.indexOf("/comment/") !== -1;
+    if (
+      this.props.location.pathname !== prevProps.location.pathname &&
+      givenCommentContext
+    ) {
+      this.focusOnContext();
+    }
+  }
+
+  componentWillUnmount() {
+    this.resetSidebarContext();
+  }
+
   focusOnContext() {
     const givenCommentContext =
       window.location.pathname.indexOf("/comment/") !== -1;
@@ -112,21 +127,6 @@ class Survey extends Component {
         });
       }
     }
-  }
-
-  componentDidUpdate(prevProps) {
-    const givenCommentContext =
-      this.props.location.pathname.indexOf("/comment/") !== -1;
-    if (
-      this.props.location.pathname !== prevProps.location.pathname &&
-      givenCommentContext
-    ) {
-      this.focusOnContext();
-    }
-  }
-
-  componentWillUnmount() {
-    this.resetSidebarContext();
   }
 
   resetSidebarContext() {
@@ -290,7 +290,6 @@ class Survey extends Component {
                 isClosedForComment={isClosedForComment}
                 surveyQnasById={surveyQnasById}
                 surveyQnaIds={surveyQnaIds}
-                numComments={commentIds.length}
                 surveyMetadata={surveyMetadata}
                 tags={tags}
                 tagFilter={tagFilter}
