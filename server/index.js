@@ -1,3 +1,4 @@
+const sslRedirect = require('heroku-ssl-redirect');
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
@@ -60,6 +61,8 @@ const createApp = () => {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use(sslRedirect());
 
   // auth and api routes
   app.use("/auth", require("./auth"));

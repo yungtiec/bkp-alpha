@@ -8,6 +8,18 @@
   }
   ol,
   ol li {
-    list-style-type: lower-alpha;
+    list-style-type: lower-roman;
+  }
+  li > p {
+    margin-bottom: 5px !important;
+  }
+  li > p {
+    marign-top: 0px !important;
+  }
+  ul li {
+    padding: 0px !important;
+  }
+  ol li {
+    padding: 0px !important;
   }
 }

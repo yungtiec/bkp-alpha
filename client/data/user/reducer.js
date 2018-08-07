@@ -17,7 +17,13 @@ export default function(state = defaultUser, action) {
         first_name: action.profile.firstName,
         last_name: action.profile.lastName,
         name: action.profile.name,
+        displayName: action.profile.displayName,
         organization: action.profile.organization
+      };
+    case types.ONBOARD_STATUS_UPDATED:
+      return {
+        ...state,
+        onboard: true
       };
     case types.MANAGED_PROJECTS_FETCH_SUCCESS:
       return {
@@ -25,11 +31,11 @@ export default function(state = defaultUser, action) {
         projectSymbolArr: action.projectSymbolArr,
         projectsBySymbol: action.projectsBySymbol
       };
-    case types.OWN_PROJECT_SURVEYS_FETCH_SUCCESS:
+    case types.OWN_SURVEYS_FETCH_SUCCESS:
       return {
         ...state,
-        projectSurveysById: action.projectSurveysById,
-        projectSurveyIds: action.projectSurveyIds
+        surveysById: action.surveysById,
+        surveyIds: action.surveyIds
       };
     default:
       return state;
@@ -51,10 +57,10 @@ export function getManagedProjects(state) {
   };
 }
 
-export function getOwnProjectSurveys(state) {
-  const { projectSurveysById, projectSurveyIds } = state.data.user;
+export function getOwnSurveys(state) {
+  const { surveysById, surveyIds } = state.data.user;
   return {
-    projectSurveysById,
-    projectSurveyIds
+    surveysById,
+    surveyIds
   };
 }

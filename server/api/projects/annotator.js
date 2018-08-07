@@ -1,11 +1,18 @@
 const router = require("express").Router({ mergeParams: true });
-const { Comment, Tag, Issue, User, Role, ProjectSurvey } = require("../../db/models");
+const {
+  Comment,
+  Tag,
+  Issue,
+  User,
+  Role,
+  ProjectSurvey
+} = require("../../db/models");
 const { assignIn, pick } = require("lodash");
 const { ensureAuthentication, ensureResourceAccess } = require("..//utils");
 const { IncomingWebhook } = require("@slack/client");
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(slackWebhookUrl);
-const moment = require("moment")
+const moment = require("moment");
 Promise = require("bluebird");
 module.exports = router;
 
@@ -15,7 +22,7 @@ function sendNotificationToSlack(annotation) {
     webhook.send(
       `Incoming annotation at ${annotation.uri}/question/${
         annotation.survey_question_id
-      }/annotation/${
+      }/comment/${
         annotation.id
       }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
       function(err, res) {
@@ -65,24 +72,26 @@ router.post(
         annotator_schema_version,
         reviewed: isAdmin ? "verified" : "pending"
       });
-      const issuePromise = issue
-        ? Issue.create({
-            open: true,
-            comment_id: newComment.id
-          })
-        : null;
-      const tagPromises = Promise.map(tags, async tag => {
-        const [tagInstance, created] = await Tag.findOrCreate({
-          where: { name: tag }
-        });
-        return newComment.addTag(tagInstance.id);
+      const issuePromise = Issue.create({
+        open: true,
+        comment_id: newComment.id
       });
+      // const tagPromises = Promise.map(tags, async tag => {
+      //   const [tagInstance, created] = await Tag.findOrCreate({
+      //     where: { name: tag }
+      //   });
+      //   return newComment.addTag(tagInstance.id);
+      // });
       const ownerPromise = newComment.setOwner(req.user.id);
-      await Promise.all([tagPromises, ownerPromise, issuePromise]);
+      await Promise.all([
+        // tagPromises,
+        ownerPromise,
+        issuePromise
+      ]);
       newComment = await Comment.scope({
         method: ["flatThreadByRootId", { where: { id: newComment.id } }]
       }).findOne();
-      sendNotificationToSlack(newComment);
+      // sendNotificationToSlack(newComment);
       res.send(newComment);
     } catch (err) {
       next(err);

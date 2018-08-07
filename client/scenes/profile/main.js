@@ -12,7 +12,8 @@ import moment from "moment";
 import history from "../../history";
 import {
   fetchUserBasicInfo,
-  changeAccessStatus
+  changeAccessStatus,
+  changeAnonymity
 } from "./scenes/about/data/actions";
 import { getUserBasicInfo } from "./scenes/about/data/reducer";
 import { currentUserIsAdmin, editProfile } from "../../data/reducer";
@@ -44,7 +45,14 @@ class Profile extends Component {
   }
 
   render() {
-    const { basicInfo, match, isAdmin, myUserId, editProfile } = this.props;
+    const {
+      basicInfo,
+      match,
+      isAdmin,
+      myUserId,
+      editProfile,
+      changeAnonymity
+    } = this.props;
     const activeTab = window.location.pathname.split("/")[3];
     const isMyProfile =
       match.params.userId === "profile" || match.params.userId === myUserId;
@@ -77,6 +85,7 @@ class Profile extends Component {
               <ProfileAbout
                 isMyProfile={isMyProfile}
                 editProfile={editProfile}
+                changeAnonymity={changeAnonymity}
                 {...basicInfo}
                 {...props}
               />
@@ -109,7 +118,9 @@ const mapState = (state, ownProps) => {
 const actions = {
   fetchUserBasicInfo,
   changeAccessStatus,
-  editProfile
+  changeAnonymity,
+  editProfile,
+  changeAnonymity
 };
 
 export default withRouter(connect(mapState, actions)(Profile));

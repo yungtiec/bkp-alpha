@@ -5,19 +5,23 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import moment from "moment";
 import { batchActions } from "redux-batched-actions";
+import { updateOnboardStatus, loadModal } from "../../../../../../data/reducer";
 import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   sortCommentBy,
   updateIssueFilter,
   toggleSidebar,
+  toggleSidebarContext,
+  toggleAnnotationHighlight,
   updateVerificationStatusInView,
   updateEngagementTabInView,
-  getSidebarContext,
-  updateSidebarContext
+  getSidebarCommentContext,
+  updateSidebarCommentContext
 } from "../../reducer";
 import {
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey
+  upvoteSurvey,
+  downvoteSurvey
 } from "../../data/actions";
 import {
   fetchCommentsBySurvey,
@@ -110,15 +114,19 @@ const mapState = state => {
   const surveyMetadata = getSelectedSurvey(state);
   const {
     sidebarOpen,
+    annotationHighlight,
     verificationStatus,
     commentSortBy,
-    commentIssueFilter
+    commentIssueFilter,
+    sidebarContext
   } = state.scenes.project.scenes.survey;
+
   return {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
-    userEmail: !!state.data.user.id && state.data.user.email,
+    anonymity: !!state.data.user.id && state.data.user.anonymity,
+    onboard: state.data.user.onboard,
     isClosedForComment:
       Number(surveyMetadata.comment_until_unix) -
         Number(moment().format("x")) <=
@@ -135,10 +143,12 @@ const mapState = state => {
     unfilteredCommentIds,
     // tab, sort, filter
     sidebarOpen,
+    annotationHighlight,
     verificationStatus,
     commentSortBy,
     commentIssueFilter,
-    sidebarContext: getSidebarContext(state),
+    sidebarContext,
+    sidebarCommentContext: getSidebarCommentContext(state),
     // tags
     tags: getAllTags(state),
     tagFilter: getTagFilter(state),
@@ -149,16 +159,21 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey,
+  upvoteSurvey,
+  downvoteSurvey,
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,
   sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
-  updateSidebarContext,
+  updateSidebarCommentContext,
   toggleSidebar,
-  updateVerificationStatusInView
+  toggleSidebarContext,
+  toggleAnnotationHighlight,
+  updateVerificationStatusInView,
+  updateOnboardStatus,
+  loadModal
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

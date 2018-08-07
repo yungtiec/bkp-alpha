@@ -1,3 +1,3 @@
 import React from "react";
 
-export default () => "nope";
+export default () => <div className="main-container">nope</div>;

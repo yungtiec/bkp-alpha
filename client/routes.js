@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Route, Switch } from "react-router-dom";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   Projects,
@@ -9,13 +9,16 @@ import {
   Admin,
   Unauthorized,
   Upload,
-  Leaderboard,
-  Dashboard
+  ActivityBoard,
+  Dashboard,
+  Landing
 } from "./scenes";
 import {
   Login,
   Signup,
   Layout,
+  RequestPasswordReset,
+  ResetPassword,
   LayoutWithNav,
   RouteWithLayout
 } from "./components";
@@ -36,10 +39,22 @@ class Routes extends Component {
           <RouteWithLayout layout={Layout} path="/login" component={Login} />
           <RouteWithLayout layout={Layout} path="/signup" component={Signup} />
           <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/dashboard"
-            component={Dashboard}
+            layout={Layout}
+            path="/request-password-reset"
+            component={RequestPasswordReset}
           />
+          <RouteWithLayout
+            layout={Layout}
+            path="/reset-password/:token"
+            component={ResetPassword}
+          />
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/dashboard"
+              component={Dashboard}
+            />
+          )}
           <RouteWithLayout
             layout={LayoutWithNav}
             path="/projects"
@@ -50,21 +65,24 @@ class Routes extends Component {
             path="/project/:symbol"
             component={Project}
           />
+          {isLoggedIn && (
+            <RouteWithLayout
+              layout={LayoutWithNav}
+              path="/upload"
+              component={Upload}
+            />
+          )}
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/upload"
-            component={Upload}
-          />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/leaderboard"
-            component={Leaderboard}
+            path="/activity-board"
+            component={ActivityBoard}
           />
           <RouteWithLayout
             layout={LayoutWithNav}
             path="/unauthorized"
             component={Unauthorized}
           />
+          <Route path="/landing" component={Landing} />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
@@ -80,10 +98,8 @@ class Routes extends Component {
             />
           )}
           {/* Displays our Login component as a fallback */}
-          {!isLoggedIn && <Route component={Login} />}
-          {isLoggedIn && (
-            <RouteWithLayout layout={LayoutWithNav} component={Projects} />
-          )}
+          {!isLoggedIn && <Route component={Landing} />}
+          {isLoggedIn && <Redirect to="/project/BKP/survey/3" />}
         </Switch>
       </div>
     );

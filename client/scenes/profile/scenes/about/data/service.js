@@ -11,3 +11,7 @@ export function postAccessStatus({ userId, accessStatus }) {
     })
     .then(res => res.data);
 }
+
+export function putAnonymity() {
+  return axios.put(`/auth/profile/anonymity`).then(res => res.data);
+}

@@ -10,24 +10,99 @@ import {
   scroller
 } from "react-scroll";
 import { connect } from "react-redux";
-import { SurveyContent, SurveyProgress, SurveyIssues } from "./components";
 import {
+  SurveyContent,
+  SurveyProgress,
+  SurveyIssues,
   SidebarComments,
-  SidebarHeader,
-  SurveyHeader,
-  VersionToolbar
-} from "../../components";
+  SidebarTableOfContents
+} from "./components";
+import { SurveyHeader, VersionToolbar } from "../../components";
 import { findCommentsInQnaByText } from "../../utils";
 import { SidebarLayout, CustomScrollbar } from "../../../../../../components";
+import Joyride from "react-joyride";
 
 class Survey extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.state = {
+      run: this.props.isLoggedIn && !this.props.onboard,
+      steps: [
+        {
+          content: (
+            <div>
+              <p>
+                Welcome to the public comment initiative for The Brooklyn
+                project's Consumer Token Framework. Your feedback is important
+                to us. By leaving comments and upvoting comments you find
+                helpful, you will provide a basis for a better framework. The
+                public comment initiative will be closed on{" "}
+                <b>15 August 2018</b>. A final version of the framework will
+                incorporate the feedback received before the deadline and is
+                scheduled to be released shortly after.
+              </p>
+            </div>
+          ),
+          placement: "center",
+          disableBeacon: true,
+          styles: {
+            options: {
+              zIndex: 10000
+            }
+          },
+          target: "body"
+        },
+        {
+          target: "project-survey__upvote-btn",
+          content: "What do you think about the framework overall?",
+          disableBeacon: true,
+          placement: "top"
+        },
+        {
+          target: "div.qna__answer p:first-of-type",
+          content: "Select text from document to make an annotation.",
+          disableBeacon: true,
+          placement: "top"
+        },
+        {
+          target: ".page-comment",
+          content: "Tell us what you think about the framework.",
+          disableBeacon: true,
+          placement: "left"
+        },
+        {
+          target: ".page-comment",
+          content: (
+            <div>
+              Wish to comment anonymously? Change the default setting in your
+              profile page.
+            </div>
+          ),
+          disableBeacon: true,
+          placement: "left"
+        }
+      ]
+    };
   }
 
   componentDidMount(nextProps) {
     this.focusOnContext();
+  }
+
+  componentDidUpdate(prevProps) {
+    const givenCommentContext =
+      this.props.location.pathname.indexOf("/comment/") !== -1;
+    if (
+      this.props.location.pathname !== prevProps.location.pathname &&
+      givenCommentContext
+    ) {
+      this.focusOnContext();
+    }
+  }
+
+  componentWillUnmount() {
+    this.resetSidebarContext();
   }
 
   focusOnContext() {
@@ -45,33 +120,17 @@ class Survey extends Component {
         scroller.scrollTo(`qna-${qnaId}`);
       }
       if (this.props.commentsById[Number(commentId)]) {
-        this.props.updateSidebarContext({
+        this.props.updateSidebarCommentContext({
           selectedCommentId: Number(commentId),
+          selectedText: "",
           focusOnce: true
         });
       }
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const givenCommentContext =
-      this.props.location.pathname.indexOf("/comment/") !== -1;
-    if (
-      (JSON.stringify(prevProps.commentsById) !==
-        JSON.stringify(this.props.commentsById) ||
-        this.props.location.pathname !== prevProps.location.pathname) &&
-      givenCommentContext
-    ) {
-      this.focusOnContext();
-    }
-  }
-
-  componentWillUnmount() {
-    this.resetSidebarContext();
-  }
-
   resetSidebarContext() {
-    this.props.updateSidebarContext({
+    this.props.updateSidebarCommentContext({
       selectedText: "",
       selectedComments: null,
       focusOnce: false,
@@ -96,36 +155,47 @@ class Survey extends Component {
       this.props.toggleSidebar();
     }
     if (comments && comments.length) {
-      this.props.updateSidebarContext({
+      this.props.updateSidebarCommentContext({
         focusQnaId: qnaId,
-        selectedText
+        selectedText,
+        focusOnce: true
       });
     }
   }
 
   getSelectedComments() {
-    const { sidebarContext, unfilteredCommentIds, commentsById } = this.props;
-    if (sidebarContext.selectedText)
+    const {
+      sidebarCommentContext,
+      unfilteredCommentIds,
+      commentsById
+    } = this.props;
+    if (sidebarCommentContext.selectedText)
       return findCommentsInQnaByText({
         commentIds: unfilteredCommentIds,
         commentsById: commentsById,
-        text: sidebarContext.selectedText,
-        qnaId: sidebarContext.focusQnaId
+        text: sidebarCommentContext.selectedText,
+        qnaId: sidebarCommentContext.focusQnaId
       });
     else if (
-      sidebarContext.selectedCommentId &&
-      commentsById[sidebarContext.selectedCommentId]
+      sidebarCommentContext.selectedCommentId &&
+      commentsById[sidebarCommentContext.selectedCommentId]
     )
-      return [commentsById[sidebarContext.selectedCommentId]];
+      return [commentsById[sidebarCommentContext.selectedCommentId]];
     else return [];
   }
 
-  resetContext() {
-    this.props.updateSidebarContext({
+  resetSidebarCommentContext() {
+    this.props.updateSidebarCommentContext({
       selectedText: "",
       focusQnaId: "",
       selectedCommentId: ""
     });
+  }
+
+  handleJoyrideCallback(data) {
+    if (data.status === "finished") {
+      this.props.updateOnboardStatus();
+    }
   }
 
   render() {
@@ -138,8 +208,8 @@ class Survey extends Component {
       commentIds,
       unfilteredCommentIds,
       isLoggedIn,
+      anonymity,
       isClosedForComment,
-      userEmail,
       match,
       width,
       commentSortBy,
@@ -149,32 +219,50 @@ class Survey extends Component {
       tagFilter,
       updateTagFilter,
       addNewCommentSentFromServer,
-      sidebarContext,
+      sidebarCommentContext,
       commentIssueFilter,
       updateIssueFilter,
       addNewComment,
       sidebarOpen,
-      verificationStatus,
+      sidebarContext,
+      annotationHighlight,
       toggleSidebar,
-      updateVerificationStatusInView,
-      upvoteProjectSurvey
+      toggleSidebarContext,
+      upvoteSurvey,
+      downvoteSurvey,
+      loadModal
     } = this.props;
 
     const selectedComments = this.getSelectedComments();
 
     return (
       <div>
+        <Joyride
+          continuous
+          showProgress
+          steps={this.state.steps}
+          run={this.state.run}
+          callback={this.handleJoyrideCallback}
+          styles={{
+            options: {
+              primaryColor: "#2540ce"
+            }
+          }}
+        />
         <SurveyHeader
           surveyMetadata={surveyMetadata}
           projectMetadata={projectMetadata}
         />
-        <VersionToolbar
-          projectMetadata={projectMetadata}
-          surveyMetadata={surveyMetadata}
-          surveyQnasById={surveyQnasById}
-          surveyQnaIds={surveyQnaIds}
-          upvoteProjectSurvey={upvoteProjectSurvey}
-        />
+        {isLoggedIn && (
+          <VersionToolbar
+            projectMetadata={projectMetadata}
+            surveyMetadata={surveyMetadata}
+            surveyQnasById={surveyQnasById}
+            surveyQnaIds={surveyQnaIds}
+            upvoteSurvey={upvoteSurvey}
+            downvoteSurvey={downvoteSurvey}
+          />
+        )}
         <Switch>
           <Route
             path={`${this.props.match.path}/issues`}
@@ -202,7 +290,6 @@ class Survey extends Component {
                 isClosedForComment={isClosedForComment}
                 surveyQnasById={surveyQnasById}
                 surveyQnaIds={surveyQnaIds}
-                numComments={commentIds.length}
                 surveyMetadata={surveyMetadata}
                 tags={tags}
                 tagFilter={tagFilter}
@@ -212,13 +299,34 @@ class Survey extends Component {
             )}
           />
         </Switch>
+        <div className="d-flex project-survey__footer">
+          <a
+            href="https://tinyurl.com/y94wspyg"
+            target="_blank"
+            className="mr-4 mb-3"
+          >
+            <span className="text-secondary">privacy policy</span>
+          </a>
+          <a
+            href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
+            target="_blank"
+            className="mr-4 mb-3"
+          >
+            <span className="text-secondary">terms of use</span>
+          </a>
+          <a className="mb-3" onClick={() => loadModal("FEEDBACK_MODAL")}>
+            <span className="text-secondary">
+              report bugs or give feedback on the app
+            </span>
+          </a>
+        </div>
         <SidebarLayout
           width={width}
           selectedComments={selectedComments}
           sidebarOpen={sidebarOpen}
-          verificationStatus={verificationStatus}
           toggleSidebar={toggleSidebar}
-          updateVerificationStatusInView={updateVerificationStatusInView}
+          sidebarContext={sidebarContext}
+          toggleSidebarContext={toggleSidebarContext}
         >
           <CustomScrollbar
             scrollbarContainerWidth={
@@ -226,41 +334,39 @@ class Survey extends Component {
                 ? "350px"
                 : this.props.width > 1300 ? "450px" : "410px"
             }
-            scrollbarContainerHeight="calc(100% - 70px)"
+            scrollbarContainerHeight="calc(100% - 100px)"
             autoHide={true}
             scrollbarThumbColor="rgb(233, 236, 239)"
           >
-            <Element
-              name="sidebar-contents"
-              id="sidebar-contents"
-              className="sidebar-contents"
-            >
-              <SidebarHeader
+            {sidebarContext === "comments" && (
+              <SidebarComments
+                isLoggedIn={isLoggedIn}
+                anonymity={anonymity}
+                commentIds={commentIds}
+                commentsById={commentsById}
+                surveyMetadata={surveyMetadata}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
-                commentIds={commentIds}
-                selectedComments={selectedComments}
+                tags={tags}
                 tagFilter={tagFilter}
                 updateTagFilter={updateTagFilter}
                 tagsWithCountInSurvey={tagsWithCountInSurvey}
-                isLoggedIn={isLoggedIn}
-                isClosedForComment={isClosedForComment}
-                resetSelection={this.resetContext}
                 commentIssueFilter={commentIssueFilter}
                 updateIssueFilter={updateIssueFilter}
-                tags={tags}
-                surveyMetadata={surveyMetadata}
+                isClosedForComment={isClosedForComment}
                 addNewComment={addNewComment}
-              />
-              <SidebarComments
-                commentIds={commentIds}
-                commentsById={commentsById}
-                selectedText={sidebarContext.selectedText}
                 selectedComments={selectedComments}
-                tags={tags}
+                selectedText={sidebarCommentContext.selectedText}
+                resetCommentSelection={this.resetSidebarCommentContext}
                 parent={this}
               />
-            </Element>
+            )}
+            {sidebarContext === "tableOfContents" && (
+              <SidebarTableOfContents
+                surveyQnasById={surveyQnasById}
+                surveyQnaIds={surveyQnaIds}
+              />
+            )}
           </CustomScrollbar>
         </SidebarLayout>
       </div>

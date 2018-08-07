@@ -1,11 +1,15 @@
-.qna__container {
-  margin-bottom: 2rem;
+.qna__question h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: left;
+  line-height: 1.58;
 }
 
-.qna__question h3 {
-  font-family: "Vollkorn", serif;
+.qna__question h2 {
+  text-decoration: underline;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 1rem;
   text-align: left;
   line-height: 1.58;

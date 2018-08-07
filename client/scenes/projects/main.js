@@ -6,10 +6,10 @@ import PropTypes from "prop-types";
 import { fetchAllProjects } from "../../data/projects/actions";
 import { getAllProjects } from "../../data/projects/reducer";
 import {
-  fetchPublishedProjectSurveyStats,
-  getProjectSurveys
+  fetchLastestSurveysWithStats,
+  getSurveyListing
 } from "../../data/reducer";
-import { ListView, CardProject, CardSurvey } from "../../components";
+import { ListProject, ListSurvey } from "../../components";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
 
@@ -27,27 +27,20 @@ class ProjectList extends Component {
     const {
       projectsBySymbol,
       projectSymbolArr,
-      projectSurveysById,
-      latestProjectSurveyIds
+      surveysById,
+      surveyIds
     } = this.props;
 
     return (
       <div className="main-container">
-        <span className="projects-container__sub-header">Recent Disclosures</span>
-        <ListView
-          viewClassName={"row entity-cards"}
-          rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={latestProjectSurveyIds}
-          rowsById={projectSurveysById}
-          renderRow={CardSurvey}
-        />
-        <span className="projects-container__sub-header">Projects</span>
-        <ListView
-          viewClassName={"row entity-cards"}
-          rowClassName={"col-md-12 entity-card__container"}
-          rowsIdArray={projectSymbolArr}
-          rowsById={projectsBySymbol}
-          renderRow={CardProject}
+        <span className="projects-container__sub-header">Recent Documents</span>
+        <ListSurvey surveyIds={surveyIds} surveysById={surveysById} />
+        {projectSymbolArr && projectSymbolArr.length ? (
+          <span className="projects-container__sub-header">Categories</span>
+        ) : null}
+        <ListProject
+          projectSymbolArr={projectSymbolArr}
+          projectsBySymbol={projectsBySymbol}
         />
       </div>
     );
@@ -56,14 +49,12 @@ class ProjectList extends Component {
 
 const mapState = state => {
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
-  const { projectSurveysById, latestProjectSurveyIds } = getProjectSurveys(
-    state
-  );
+  const { surveysById, surveyIds } = getSurveyListing(state);
   return {
     projectsBySymbol,
     projectSymbolArr,
-    projectSurveysById,
-    latestProjectSurveyIds
+    surveysById,
+    surveyIds
   };
 };
 
@@ -72,7 +63,7 @@ const actions = dispatch => {
     loadInitialData() {
       batchActions([
         dispatch(fetchAllProjects()),
-        dispatch(fetchPublishedProjectSurveyStats())
+        dispatch(fetchLastestSurveysWithStats())
       ]);
     }
   };

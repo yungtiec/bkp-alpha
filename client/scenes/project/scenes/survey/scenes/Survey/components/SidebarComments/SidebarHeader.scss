@@ -1,0 +1,53 @@
+
+
+.sidebar__title-container {
+  display: flex;
+  align-items: start;
+  padding: 0px 5px;
+  margin: 10px 0px;
+}
+
+.sidebar__title {
+  color: white;
+  line-height: 2.5;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.sidebar__title.active {
+  font-weight: 800;
+}
+
+.sidebar__title.reset-selection {
+  cursor: pointer;
+}
+
+.sidebar__tag-filter-container {
+  margin-bottom: 30px;
+  padding: 0 5px;
+  width: 100%;
+  display: flex;
+}
+
+.sidebar__sort-by,
+.sidebar__issue-filter-container {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0 5px;
+  display: flex;
+}
+
+.sidebar__sort-by .Select,
+.sidebar__tag-filter-container .Select,
+.sidebar__issue-filter-container .Select  {
+  flex: 1;
+}
+
+.sidebar__sort-by span,
+.sidebar__tag-filter-container .select-label,
+.sidebar__issue-filter-container .select-label {
+  line-height: 2.5;
+  margin-right: 5px;
+  color: white;
+  font-size: 14px;
+}

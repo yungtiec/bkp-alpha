@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import CheckboxTree from "react-checkbox-tree";
-import { checkSidebarFilter } from "../../reducer";
+import { checkSidebarFilter } from "../reducer";
 
 const nodes = [
   {
@@ -40,7 +40,7 @@ class AdminProjectSurveySidebar extends Component {
         onlyLeafCheckboxes={true}
         checked={this.props.checked}
         expanded={this.state.expanded}
-        onCheck={checked => this.props.checkSidebarFilter(checked)}
+        onCheck={this.props.checkSidebarFilter}
         onExpand={expanded => this.setState({ expanded })}
       />
     );

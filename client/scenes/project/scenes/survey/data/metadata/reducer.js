@@ -1,7 +1,15 @@
-import _ from "lodash";
+import {cloneDeep} from "lodash";
 import * as types from "../actionTypes";
 
+
 const initialState = {};
+
+const addVotesToSurvey = (action, state) => {
+  var newState = cloneDeep(state);
+  newState.survey.downvotesFrom = action.downvotesFrom;
+  newState.survey.upvotesFrom = action.upvotesFrom;
+  return newState
+}
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
@@ -10,11 +18,8 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         ...action.surveyMetadata
       };
-    case types.PROJECT_SURVEY_UPVOTED:
-      return {
-        ...state,
-        upvotesFrom: action.upvotesFrom
-      };
+    case types.SURVEY_VOTED:
+      return addVotesToSurvey(action, state)
     default:
       return state;
   }

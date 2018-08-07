@@ -2,14 +2,21 @@ import { omit } from "lodash";
 import * as types from "./data/actionTypes";
 import { reducer as dataReducer } from "./data/reducer";
 
-const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
-const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
-const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
-const COMMENT_CONTEXT_UPDATED = "survey.COMMENT_CONTEXT_UPDATED";
-const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
+export const SIDEBAR_OPEN_TOGGLE = "survey.SIDEBAR_OPEN_TOGGLE";
+export const ANNOTATION_HIGHLIGHT_TOGGLE = "survey.ANNOTATION_HIGHLIGHT_TOGGLE";
+export const VERIFICATION_STATUS_IN_VIEW = "survey.VERIFICATION_STATUS_IN_VIEW";
+export const COMMENT_SORT_BY = "survey.COMMENT_SORT_BY";
+export const SIDEBAR_COMMENT_CONTEXT_UPDATED =
+  "survey.SIDEBAR_COMMENT_CONTEXT_UPDATED";
+export const SIDEBAR_CONTEXT_UPDATED = "survey.SIDEBAR_CONTEXT_UPDATED";
+export const ISSUE_FILTER_UPDATED = "survey.ISSUE_FILTER_UPDATED";
 
 export const toggleSidebar = () => ({
   type: SIDEBAR_OPEN_TOGGLE
+});
+
+export const toggleAnnotationHighlight = () => ({
+  type: ANNOTATION_HIGHLIGHT_TOGGLE
 });
 
 export const updateVerificationStatusInView = verificationStatus => ({
@@ -22,9 +29,9 @@ export const sortCommentBy = commentSortBy => ({
   commentSortBy
 });
 
-export const updateSidebarContext = sidebarContext => ({
-  type: COMMENT_CONTEXT_UPDATED,
-  sidebarContext
+export const updateSidebarCommentContext = sidebarCommentContext => ({
+  type: SIDEBAR_COMMENT_CONTEXT_UPDATED,
+  sidebarCommentContext
 });
 
 export const updateIssueFilter = issueFilter => ({
@@ -32,30 +39,50 @@ export const updateIssueFilter = issueFilter => ({
   issueFilter
 });
 
+export const toggleSidebarContext = () => ({
+  type: SIDEBAR_CONTEXT_UPDATED
+});
+
 const initialState = {
   sidebarOpen: true,
+  annotationHighlight: true,
   verificationStatus: "all",
   commentSortBy: "position",
   commentIssueFilter: [],
-  sidebarContext: {
+  sidebarCommentContext: {
     selectedText: "",
     selectedCommentId: null,
     focusOnce: false
-  }
+  },
+  sidebarContext: "comments" // options are comment and table of contents
 };
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
+    case "environment.CHANGE_WIDTH_AND_HEIGHT":
+      if (action.width < 600) return { ...state, sidebarOpen: false };
+      else return { ...state, sidebarOpen: true };
     case VERIFICATION_STATUS_IN_VIEW:
       return { ...state, verificationStatus: action.verificationStatus };
     case SIDEBAR_OPEN_TOGGLE:
       return { ...state, sidebarOpen: !state.sidebarOpen };
-    case COMMENT_SORT_BY:
-      return { ...state, commentSortBy: action.commentSortBy };
-    case COMMENT_CONTEXT_UPDATED:
+    case ANNOTATION_HIGHLIGHT_TOGGLE:
+      return { ...state, annotationHighlight: !state.annotationHighlight };
+    case SIDEBAR_CONTEXT_UPDATED:
       return {
         ...state,
-        sidebarContext: { ...state.sidebarContext, ...action.sidebarContext }
+        sidebarContext:
+          state.sidebarContext === "comments" ? "tableOfContents" : "comments"
+      };
+    case COMMENT_SORT_BY:
+      return { ...state, commentSortBy: action.commentSortBy };
+    case SIDEBAR_COMMENT_CONTEXT_UPDATED:
+      return {
+        ...state,
+        sidebarCommentContext: {
+          ...state.sidebarCommentContext,
+          ...action.sidebarCommentContext
+        }
       };
     case ISSUE_FILTER_UPDATED:
       return {
@@ -71,5 +98,5 @@ export default function reduce(state = initialState, action) {
   }
 }
 
-export const getSidebarContext = state =>
-  state.scenes.project.scenes.survey.sidebarContext;
+export const getSidebarCommentContext = state =>
+  state.scenes.project.scenes.survey.sidebarCommentContext;

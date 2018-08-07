@@ -9,14 +9,14 @@ import {
 } from "../../../../../../components";
 import history from "../../../../../../history";
 
-class AdminProjectSurveyList extends Component {
+class AdminSurveyList extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
   }
 
   render() {
-    const { projectSurveyIds, projectSurveysById } = this.props;
+    const { surveyIds, surveysById } = this.props;
     const columns = [
       { Header: "disclosure", accessor: "id", fixed: true, width: 110 },
       {
@@ -29,7 +29,7 @@ class AdminProjectSurveyList extends Component {
       { Header: "issues", accessor: "num_issues", width: 80 },
       { Header: "pending comments", accessor: "num_pending_comments" }
     ];
-    const data = projectSurveyIds.map(id => projectSurveysById[id]);
+    const data = surveyIds.map(id => surveysById[id]);
 
     return (
       <div className="project-survey-list__container  main-container">
@@ -40,7 +40,12 @@ class AdminProjectSurveyList extends Component {
           getTrProps={(state, rowInfo, column, instance) => {
             return {
               onClick: (e, t) => {
-                history.push(`/admin/project-survey/${rowInfo.row.id}`);
+                // history.push(`/admin/project-survey/${rowInfo.row.id}`);
+                history.push(
+                  `/project/${rowInfo.original.project.id}/survey/${
+                    rowInfo.original.latest_project_survey.id
+                  }`
+                );
               }
             };
           }}
@@ -52,7 +57,7 @@ class AdminProjectSurveyList extends Component {
 
 export default withRouter(
   requiresAuthorization({
-    Component: AdminProjectSurveyList,
+    Component: AdminSurveyList,
     roleRequired: ["admin"]
   })
 );

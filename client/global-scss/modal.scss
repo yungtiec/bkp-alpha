@@ -1,0 +1,9 @@
+@import "./breakpoint";
+
+@include breakpoint(xs) {
+  .ReactModal__Content {
+    width: inherit !important;
+    left: 5px !important;
+    right: 5px !important;
+  }
+}

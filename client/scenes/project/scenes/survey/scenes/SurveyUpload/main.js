@@ -2,18 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Select from "react-select";
-import { UploadInterface, IssueInput } from "./components";
+import { UploadInterface, IssueInput, OutstandingIssue } from "./components";
 import {
   SidebarLayout,
   CustomScrollbar,
   requiresAuthorization,
   ProjectScorecardInputs
 } from "../../../../../../components";
-import {
-  SurveyHeader,
-  VersionToolbar,
-  OutstandingIssue
-} from "../../components";
+import { SurveyHeader, VersionToolbar } from "../../components";
 import {
   Accordion,
   AccordionItem,
@@ -98,7 +94,6 @@ class SurveyUpload extends Component {
   render() {
     const {
       isLoggedIn,
-      userEmail,
       width,
       surveyQnasById,
       surveyQnaIds,
@@ -122,7 +117,7 @@ class SurveyUpload extends Component {
       commentPeriodUnit,
       sidebarOpen,
       toggleSidebar,
-      upvoteProjectSurvey,
+      upvoteSurvey,
       updateProjectScorecard,
       scorecard,
       scorecardCompleted
@@ -143,7 +138,7 @@ class SurveyUpload extends Component {
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
-          upvoteProjectSurvey={upvoteProjectSurvey}
+          upvoteSurvey={upvoteSurvey}
         />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>
@@ -339,7 +334,6 @@ class SurveyUpload extends Component {
                 </button>
               </div>
               <UploadInterface
-                userEmail={userEmail}
                 importedMarkdown={importedMarkdown}
                 importMarkdown={importMarkdown}
                 isLoggedIn={isLoggedIn}
@@ -353,7 +347,6 @@ class SurveyUpload extends Component {
         </Accordion>
         <SidebarLayout
           width={width}
-          uploadMode={true}
           sidebarOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
         >
@@ -434,10 +427,4 @@ class SurveyUpload extends Component {
 
 const mapState = (state, ownProps) => ({ ...ownProps });
 
-export default connect(mapState, {})(
-  requiresAuthorization({
-    Component: SurveyUpload,
-    checkSurveyEditRight: true,
-    roleRequired: ["project_editor", "project_admin", "admin"]
-  })
-);
+export default connect(mapState, {})(SurveyUpload);

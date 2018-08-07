@@ -15,35 +15,26 @@ export default class SurveyHeader extends Component {
   }
 
   render() {
-    const {
-      surveyMetadata,
-      projectMetadata
-    } = this.props;
-    const creator = getFullNameFromUserObject(surveyMetadata.creator);
-    const collaborators = surveyMetadata.collaborators
+    const { surveyMetadata, projectMetadata } = this.props;
+    const creator = surveyMetadata.survey.creator.displayName;
+    const collaborators = surveyMetadata.survey.collaborators
       .map((c, i) => {
         if (
-          i === surveyMetadata.collaborators.length - 1 &&
-          surveyMetadata.collaborators.length > 1
+          i === surveyMetadata.survey.collaborators.length - 1 &&
+          surveyMetadata.survey.collaborators.length > 1
         )
-          return `and ${getFullNameFromUserObject(c)}`;
-        else if (i === 0) return `with ${getFullNameFromUserObject(c)}`;
-        else return `, ${getFullNameFromUserObject(c)}`;
+          return ` and ${c.displayName}`;
+        else if (i === 0) return `with ${c.displayName}`;
+        else return `, ${c.displayName}`;
       })
       .join("");
 
     return (
       <div className="project-survey__header">
-        <p className="project-survey__back-btn" onClick={this.goBack}>
-          back to project page
-        </p>
         <ProjectSymbolBlueBox name={projectMetadata.name} />
-        <p className="survey__title">{`${surveyMetadata.title}`}</p>
+        <p className="survey__title">{`${surveyMetadata.survey.title}`}</p>
         <p className="survey__subtitle  mb-4">
-          {`disclosure created by ${creator} ${collaborators}`}
-          <a href class="survey__request-btn ml-2">
-            request editing right
-          </a>
+          {`document version 0.4.0 created by ${creator} ${collaborators}`}
         </p>
       </div>
     );

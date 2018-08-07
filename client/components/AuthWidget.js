@@ -52,7 +52,9 @@ class AuthWidget extends Component {
       inNavbar,
       width,
       isAdmin,
-      user
+      user,
+      dataTip,
+      dataFor
     } = this.props;
     const className = inNavbar ? "auth-widget--navbar" : "auth-widget";
     const avatarColor = inNavbar ? "#459DF9" : "#ffffff";
@@ -60,7 +62,12 @@ class AuthWidget extends Component {
 
     if (isLoggedIn)
       return (
-        <div className={className} ref={this.setWrapperRef}>
+        <div
+          className={className}
+          ref={this.setWrapperRef}
+          data-tip={dataTip}
+          data-for={dataFor}
+        >
           <div className={`${className}__avatar-container`}>
             <Avatar
               name={name.trim() ? name : "?"}
@@ -87,21 +94,32 @@ class AuthWidget extends Component {
               )}
               {width < 600 ? (
                 <Link
-                  to="/projects"
+                  to="/project/BKP/survey/3"
                   style={{ display: "block", margin: "0px" }}
                 >
-                  <div className={`${className}__dropdown-item`}>projects</div>
+                  <div className={`${className}__dropdown-item`}>framework</div>
                 </Link>
               ) : (
                 ""
               )}
               {width < 600 ? (
+                <a
+                  href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                  target="_blank"
+                  style={{ display: "block", margin: "0px" }}
+                >
+                  <div className={`${className}__dropdown-item`}>discuss</div>
+                </a>
+              ) : (
+                ""
+              )}
+              {width < 600 && isAdmin ? (
                 <Link
-                  to="/leaderboard"
+                  to="/activity-board"
                   style={{ display: "block", margin: "0px" }}
                 >
                   <div className={`${className}__dropdown-item`}>
-                    leaderboard
+                    activity board
                   </div>
                 </Link>
               ) : (

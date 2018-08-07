@@ -1,9 +1,13 @@
 import * as types from "./actionTypes";
 import {
   getSurveyByProjectSurveyId,
-  postUpvoteToProjectSurvey
+  postUpvoteToSurvey,
+  postDownvoteToSurvey,
+  putOnboardStatus
 } from "./service";
 import { keyBy, omit, assignIn, pick, sortBy } from "lodash";
+import { notify } from "reapop";
+import { loadModal } from "../../../../../data/reducer";
 
 export function fetchQuestionsByProjectSurveyId({
   projectSurveyId,
@@ -16,7 +20,7 @@ export function fetchQuestionsByProjectSurveyId({
         projectSurveyId
       );
       const surveyQnas = sortBy(
-        projectSurvey.survey.survey_questions,
+        projectSurvey.survey_questions,
         ["order_in_survey"],
         ["asc"]
       );
@@ -24,31 +28,11 @@ export function fetchQuestionsByProjectSurveyId({
       const surveyQnaIds = surveyQnas.map(qna => qna.id);
       const surveyVersions = projectSurvey.ancestors
         .concat([
-          omit(projectSurvey, [
-            "ancestors",
-            "descendents",
-            "survey.survey_questions"
-          ])
+          omit(projectSurvey, ["ancestors", "descendents", "survey_questions"])
         ])
         .concat(projectSurvey.descendents);
       projectSurvey.versions = surveyVersions;
-      const surveyMetadata = assignIn(
-        pick(projectSurvey, [
-          "title",
-          "description",
-          "id",
-          "creator",
-          "collaborators",
-          "versions",
-          "hierarchyLevel",
-          "resolvedIssues",
-          "comment_until_unix",
-          "createdAt",
-          "upvotesFrom",
-          "scorecard"
-        ]),
-        omit(projectSurvey.survey, ["survey_questions", "id"])
-      );
+      const surveyMetadata = omit(projectSurvey, ["survey_questions"]);
       dispatch({
         type: types.PROJECT_SURVEY_FETCH_SUCCESS,
         surveyQnasById,
@@ -61,22 +45,62 @@ export function fetchQuestionsByProjectSurveyId({
   };
 }
 
-export function upvoteProjectSurvey({
+export function upvoteSurvey({
+  surveyId,
   projectSurveyId,
   projectSymbol,
-  hasUpvoted
+  hasUpvoted,
+  hasDownvoted
 }) {
   return async (dispatch, getState) => {
     try {
-      const upvotesFrom = await postUpvoteToProjectSurvey({
-        projectSurveyId,
+      const [upvotesFrom, downvotesFrom] = await postUpvoteToSurvey({
+        surveyId,
         projectSymbol,
-        hasUpvoted
+        hasUpvoted,
+        hasDownvoted
       });
       dispatch({
-        type: types.PROJECT_SURVEY_UPVOTED,
-        upvotesFrom
+        type: types.SURVEY_VOTED,
+        upvotesFrom,
+        downvotesFrom
       });
+      dispatch(
+        loadModal("COMMENT_MODAL", {
+          projectSurveyId
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
+
+export function downvoteSurvey({
+  surveyId,
+  projectSurveyId,
+  projectSymbol,
+  hasUpvoted,
+  hasDownvoted
+}) {
+  return async (dispatch, getState) => {
+    try {
+      const [upvotesFrom, downvotesFrom] = await postDownvoteToSurvey({
+        surveyId,
+        projectSymbol,
+        hasUpvoted,
+        hasDownvoted
+      });
+      dispatch({
+        type: types.SURVEY_VOTED,
+        upvotesFrom,
+        downvotesFrom
+      });
+      dispatch(
+        loadModal("COMMENT_MODAL", {
+          projectSurveyId
+        })
+      );
     } catch (err) {
       console.log(err);
     }

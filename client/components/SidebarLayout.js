@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { AuthWidget } from "./index";
 import { connect } from "react-redux";
+import ReactTooltip from "react-tooltip";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -13,28 +14,14 @@ class Sidebar extends Component {
     autoBind(this);
   }
 
-  toggleHighlights() {
-    const next = !this.state.showHighlights;
-    this.setState({
-      showHighlights: next
-    });
-    if (!next) {
-      $(".annotator-hl").addClass("hidden");
-    } else {
-      $(".annotator-hl").removeClass("hidden");
-    }
-  }
-
   render() {
     const {
-      updateVerificationStatusInView,
       toggleSidebar,
       sidebarOpen,
-      selectedComments,
-      verificationStatus,
       width,
       children,
-      uploadMode
+      sidebarContext,
+      toggleSidebarContext
     } = this.props;
     var style = sidebarOpen
       ? {
@@ -45,30 +32,56 @@ class Sidebar extends Component {
           marginLeft: "-10px"
         };
     var sizeBtnAngle = sidebarOpen ? "right" : "left";
-    var eye = this.state.showHighlights ? "eye" : "eye-slash";
+    var book = sidebarContext === "comments" ? "list-ul" : "arrow-left";
     var tabStyle = {
       width: width < 767 ? "348px" : width > 1300 ? "-448px" : "408px"
     };
 
     return (
-      <div className="social-sidebar" style={style}>
+      <div className="sidebar" style={style}>
         <div className="annotation-coordinate__container" />
-        <div className="social-sidebar__toolbar">
-          {sidebarOpen && <AuthWidget />}
-          <button className="social-toolbar__size-btn" onClick={toggleSidebar}>
+        <div className="sidebar__toolbar">
+          {sidebarOpen && <AuthWidget dataTip={true} dataFor="auth-widget" />}
+          {sidebarOpen && (
+            <ReactTooltip id="auth-widget" type="dark">
+              <span>Your profile</span>
+            </ReactTooltip>
+          )}
+          <button
+            data-tip
+            data-for="hide-sidebar"
+            className="social-toolbar__size-btn"
+            onClick={toggleSidebar}
+          >
             <i className={`fas fa-angle-${sizeBtnAngle}`} />
           </button>
-          {uploadMode ? null : (
-            <button
-              className="social-toolbar__visibility-btn"
-              onClick={this.toggleHighlights}
-            >
-              <i className={`fas fa-${eye}`} />
-            </button>
-          )}
+          <ReactTooltip id="hide-sidebar" type="dark">
+            <span>{sidebarOpen ? "Hide sidebar" : "Show sidebar"}</span>
+          </ReactTooltip>
+          {sidebarOpen &&
+            toggleSidebarContext && (
+              <button
+                data-tip
+                data-for="table-of-contents"
+                className="social-toolbar__table-of-contents-btn"
+                onClick={toggleSidebarContext}
+              >
+                <i className={`fas fa-${book}`} />
+              </button>
+            )}
+          {sidebarOpen &&
+            toggleSidebarContext && (
+              <ReactTooltip id="table-of-contents" type="dark">
+                <span>
+                  {sidebarContext === "comments"
+                    ? "Table of contents"
+                    : "back to comments"}
+                </span>
+              </ReactTooltip>
+            )}
         </div>
         <div>
-          <div className="social-sidebar__logo-consensys">
+          <div className="sidebar__logo-consensys">
             <img
               width="100px"
               height="auto"
@@ -78,55 +91,6 @@ class Sidebar extends Component {
           </div>
         </div>
         {children}
-      </div>
-    );
-  }
-
-  renderVerificationStatusTab({
-    tabStyle,
-    verificationStatus,
-    selectedComments
-  }) {
-    return (
-      <div
-        className="social-sidebar__status-tab-container"
-        role="group"
-        aria-label="Basic example"
-        style={tabStyle}
-      >
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "all" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("all")}
-        >
-          all
-        </button>
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "verified" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("verified")}
-        >
-          verified
-        </button>
-        <button
-          type="button"
-          className={`social-sidebar__status-tab ${verificationStatus ===
-            "pending" &&
-            selectedComments &&
-            !selectedComments.length &&
-            "active"}`}
-          onClick={() => this.props.updateVerificationStatusInView("pending")}
-        >
-          pending
-        </button>
       </div>
     );
   }

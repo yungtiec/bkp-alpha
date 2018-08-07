@@ -55,9 +55,28 @@ const User = db.define(
     restricted_access: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
+    },
+    anonymity: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    onboard: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    reset_password_token: {
+      type: Sequelize.STRING
+    },
+    reset_password_expiration: {
+      type: Sequelize.INTEGER
     }
   },
   {
+    getterMethods: {
+      displayName() {
+        return this.anonymity ? "Anonymous" : this.name;
+      }
+    },
     scopes: {
       comments: function({
         userId,
@@ -86,7 +105,9 @@ const User = db.define(
             "name",
             "first_name",
             "last_name",
-            "organization"
+            "organization",
+            "anonymity",
+            "onboard"
           ],
           include: [commentQueryObj]
         };
@@ -142,6 +163,8 @@ const User = db.define(
             "last_name",
             "organization",
             "restricted_access",
+            "anonymity",
+            "onboard",
             "createdAt"
           ],
           include: [
@@ -290,7 +313,8 @@ User.getContributions = async function({
       num_comments: comments.length,
       num_issues: numCommentIssues,
       num_upvotes: numCommentUpvotes,
-      num_spam: numCommentSpam
+      num_spam: numCommentSpam,
+      num_notifications: notifications.length
     },
     forListing ? omit(user.toJSON(), ["roles"]) : user.toJSON()
   );
@@ -358,12 +382,14 @@ function getCommentQueryObj({
         duplicating: false,
         include: [
           {
-            model: db.model("project"),
-            attributes: ["id", "symbol", "name"]
-          },
-          {
             model: db.model("survey"),
-            attributes: ["id", "title"]
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: db.model("project"),
+                attributes: ["id", "symbol", "name"]
+              }
+            ]
           }
         ]
       }
@@ -372,12 +398,14 @@ function getCommentQueryObj({
         required: true,
         include: [
           {
-            model: db.model("project"),
-            attributes: ["id", "symbol", "name"]
-          },
-          {
             model: db.model("survey"),
-            attributes: ["id", "title"]
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: db.model("project"),
+                attributes: ["id", "symbol", "name"]
+              }
+            ]
           }
         ]
       };

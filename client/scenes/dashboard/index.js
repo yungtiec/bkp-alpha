@@ -5,9 +5,9 @@ import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
 import {
   fetchManagedProjects,
-  fetchOwnProjectSurveys,
+  fetchOwnSurveys,
   getManagedProjects,
-  getOwnProjectSurveys
+  getOwnSurveys
 } from "../../data/reducer";
 import { batchActions } from "redux-batched-actions";
 import { omit } from "lodash";
@@ -37,12 +37,12 @@ class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
       this.props.fetchManagedProjects(),
-      this.props.fetchOwnProjectSurveys()
+      this.props.fetchOwnSurveys()
     ]);
   }
 
   render() {
-    if (!this.props.projectSurveyIds || !this.props.projectSymbolArr)
+    if (!this.props.surveyIds || !this.props.projectSymbolArr)
       return null;
     return <LoadableDashboard {...this.props} />;
   }
@@ -50,15 +50,15 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { projectSymbolArr, projectsBySymbol } = getManagedProjects(state);
-  const { projectSurveysById, projectSurveyIds } = getOwnProjectSurveys(state);
+  const { surveysById, surveyIds } = getOwnSurveys(state);
   return {
-    projectSurveysById,
-    projectSurveyIds,
+    surveysById,
+    surveyIds,
     projectSymbolArr,
     projectsBySymbol,
     user: omit(state.data.user, [
-      "projectSurveysById",
-      "projectSurveyIds",
+      "surveysById",
+      "surveyIds",
       "projectSymbolArr",
       "projectsBySymbol"
     ])
@@ -67,7 +67,7 @@ const mapState = state => {
 
 const actions = {
   fetchManagedProjects,
-  fetchOwnProjectSurveys
+  fetchOwnSurveys
 };
 
 export default connect(mapState, actions)(MyComponent);

@@ -3,7 +3,14 @@ import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { auth, signinWithUport } from "../../data/reducer";
+import { withRouter } from "react-router-dom";
+import {
+  auth,
+  signinWithUport,
+  requestPasswordReset,
+  resetPassword,
+  verifyUportOnMobile
+} from "../../data/reducer";
 import { Link } from "react-router-dom";
 import { InputEmail, InputPassword, InputText } from "../index";
 import Formsy from "formsy-react";
@@ -18,6 +25,14 @@ class AuthForm extends Component {
     this.state = { canSubmit: false };
   }
 
+  componentDidMount() {
+    console.log(window.location.href.split("access_token=")[1])
+    if (window.location.href.split("access_token=").length > 1) {
+      console.log("??", window.location.href.split("access_token=")[1])
+      this.props.verifyUportOnMobile(window.location.href.split("access_token=")[1]);
+    }
+  }
+
   disableButton() {
     this.setState({ canSubmit: false });
   }
@@ -29,17 +44,220 @@ class AuthForm extends Component {
   handleSubmit(authMethod, model) {
     const email = model.email;
     const password = model.password;
-    var userInfo =
-      authMethod === "login"
-        ? { email, password }
-        : {
-            email,
-            password,
-            first_name: model.firstName,
-            last_name: model.lastName,
-            organization: model.organization
-          };
-    this.props.auth(userInfo, authMethod);
+    if (authMethod === "requestPasswordReset") {
+      this.props.requestPasswordReset(email);
+    } else if (authMethod === "resetPassword") {
+      this.props.resetPassword({
+        password,
+        token: this.props.match.params.token
+      });
+    } else {
+      var userInfo =
+        authMethod === "login"
+          ? { email, password }
+          : {
+              email,
+              password,
+              first_name: model.firstName,
+              last_name: model.lastName,
+              organization: model.organization
+            };
+      this.props.auth(userInfo, authMethod);
+    }
+  }
+
+  renderAuthenticationForm() {
+    const {
+      authMethod,
+      authMethodLabel,
+      handleSubmit,
+      error,
+      signinWithUport
+    } = this.props;
+
+    return (
+      <Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        <div className="form-group row oauth-btns">
+          <a href="/auth/google">
+            <img
+              width="191px"
+              height="46px"
+              src="/assets/btn_google_signin_dark_normal_web.png"
+            />
+          </a>
+          <a onClick={signinWithUport}>
+            <img
+              width="191px"
+              height="46px"
+              src="/assets/btn_uport_signin_dark_normal_web.png"
+            />
+          </a>
+        </div>
+        <div className="d-flex" style={{ margin: "0px -30px" }}>
+          <div
+            style={{
+              border: "1px solid #c2c2c2",
+              borderWidth: "0 0 1px 0",
+              width: "45%"
+            }}
+          />
+          <span style={{ marginTop: "4px" }}>or</span>
+          <div
+            style={{
+              border: "1px solid #c2c2c2",
+              borderWidth: "0 0 1px 0",
+              width: "45%"
+            }}
+          />
+        </div>
+        {authMethod === "signup" && (
+          <div className="form-group row">
+            <div style={{ margin: "0 1% 0 0", width: "49%" }}>
+              <label htmlFor="firstName">
+                <small>First Name</small>
+              </label>
+              <InputText name="firstName" required />
+            </div>
+            <div style={{ margin: "0 0 0 1%", width: "49%" }}>
+              <label htmlFor="lastName">
+                <small>Last Name</small>
+              </label>
+              <InputText name="lastName" required />
+            </div>
+          </div>
+        )}
+        {authMethod === "signup" && (
+          <div className="form-group row d-flex flex-column">
+            <label htmlFor="organization">
+              <small>Organization</small>
+            </label>
+            <InputText name="organization" />
+          </div>
+        )}
+        <div className="form-group row d-flex flex-column">
+          <label htmlFor="email">
+            <small>Email</small>
+          </label>
+          <InputEmail
+            name="email"
+            validations="isEmail"
+            validationError="This is not a valid email"
+            required
+          />
+        </div>
+        <div className="form-group row d-flex flex-column">
+          <label htmlFor="password">
+            <small>Password</small>
+          </label>
+          <InputPassword
+            name="password"
+            validations="minLength:8"
+            validationError="Password must have a minimum length of 8 characters"
+            required
+          />
+        </div>
+        {authMethod === "login" ? (
+          <Link to="/request-password-reset" className="row">
+            forget password?
+          </Link>
+        ) : null}
+        {authMethod === "signup" && (
+          <div className="form-group row d-flex flex-column">
+            <label htmlFor="password">
+              <small>Confirm password</small>
+            </label>
+            <InputPassword
+              name="confirm"
+              validations="equalsField:password"
+              validationError="Password and confirmation password do not match"
+            />
+          </div>
+        )}
+        <div className="form-group row auth-form__submit-btn-container">
+          <button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          </button>
+        </div>
+        {error && error.response && <div>{error.response.data}</div>}
+      </Formsy>
+    );
+  }
+
+  renderRequestPasswordResetForm() {
+    const { authMethod, authMethodLabel, handleSubmit } = this.props;
+    return (
+      <Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        <div className="form-group row d-flex flex-column">
+          <label htmlFor="email">
+            <small>Email</small>
+          </label>
+          <InputEmail
+            name="email"
+            validations="isEmail"
+            validationError="This is not a valid email"
+            required
+          />
+        </div>
+        <div className="form-group row auth-form__submit-btn-container">
+          <button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          </button>
+        </div>
+      </Formsy>
+    );
+  }
+
+  renderResetPasswordForm() {
+    const { authMethod, authMethodLabel } = this.props;
+
+    return (
+      <Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        <div className="form-group row d-flex flex-column">
+          <label htmlFor="password">
+            <small>Password</small>
+          </label>
+          <InputPassword
+            name="password"
+            validations="minLength:8"
+            validationError="Password must have a minimum length of 8 characters"
+            required
+          />
+        </div>
+        <div className="form-group row d-flex flex-column">
+          <label htmlFor="password">
+            <small>Confirm password</small>
+          </label>
+          <InputPassword
+            name="confirm"
+            validations="equalsField:password"
+            validationError="Password and confirmation password do not match"
+          />
+        </div>
+        <div className="form-group row auth-form__submit-btn-container">
+          <button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          </button>
+        </div>
+      </Formsy>
+    );
   }
 
   render() {
@@ -54,122 +272,22 @@ class AuthForm extends Component {
     return (
       <div className="auth-page">
         <div className="auth-page__header">
-          <div className="logo-tbp">
+          <Link className="logo-tbp my-0 mx-0" to="/landing">
             <img
               width="120px"
               height="auto"
               className="logo__large"
               src="/assets/the-brooklyn-project-logo-white-transparent.png"
             />
-          </div>
+          </Link>
         </div>
         <div className="auth__form-wrapper">
           <div className="auth__form-contents">
-            <Formsy
-              className="auth__form"
-              onValidSubmit={model => this.handleSubmit(authMethod, model)}
-              name={authMethod}
-              onValid={this.enableButton}
-              onInvalid={this.disableButton}
-            >
-              <div className="form-group row oauth-btns">
-                <a href="/auth/google">
-                  <img
-                    width="191px"
-                    height="46px"
-                    src="/assets/btn_google_signin_dark_normal_web.png"
-                  />
-                </a>
-                <a onClick={signinWithUport}>
-                  <img
-                    width="191px"
-                    height="46px"
-                    src="/assets/btn_uport_signin_dark_normal_web.png"
-                  />
-                </a>
-              </div>
-              <div className="d-flex" style={{ margin: "0px -30px" }}>
-                <div
-                  style={{
-                    border: "1px solid #c2c2c2",
-                    borderWidth: "0 0 1px 0",
-                    width: "45%"
-                  }}
-                />
-                <span style={{ marginTop: "4px" }}>or</span>
-                <div
-                  style={{
-                    border: "1px solid #c2c2c2",
-                    borderWidth: "0 0 1px 0",
-                    width: "45%"
-                  }}
-                />
-              </div>
-              {authMethod === "signup" && (
-                <div className="form-group row">
-                  <div style={{ margin: "0 1% 0 0", width: "49%" }}>
-                    <label htmlFor="firstName">
-                      <small>First Name</small>
-                    </label>
-                    <InputText name="firstName" required />
-                  </div>
-                  <div style={{ margin: "0 0 0 1%", width: "49%" }}>
-                    <label htmlFor="lastName">
-                      <small>Last Name</small>
-                    </label>
-                    <InputText name="lastName" required />
-                  </div>
-                </div>
-              )}
-              {authMethod === "signup" && (
-                <div className="form-group row d-flex flex-column">
-                  <label htmlFor="organization">
-                    <small>Organization</small>
-                  </label>
-                  <InputText name="organization" />
-                </div>
-              )}
-              <div className="form-group row d-flex flex-column">
-                <label htmlFor="email">
-                  <small>Email</small>
-                </label>
-                <InputEmail
-                  name="email"
-                  validations="isEmail"
-                  validationError="This is not a valid email"
-                  required
-                />
-              </div>
-              <div className="form-group row d-flex flex-column">
-                <label htmlFor="password">
-                  <small>Password</small>
-                </label>
-                <InputPassword
-                  name="password"
-                  // validations="minLength:8"
-                  // validationError="Password must have a minimum length of 8 characters"
-                  required
-                />
-              </div>
-              {authMethod === "signup" && (
-                <div className="form-group row d-flex flex-column">
-                  <label htmlFor="password">
-                    <small>Confirm password</small>
-                  </label>
-                  <InputPassword
-                    name="confirm"
-                    validations="equalsField:password"
-                    validationError="Password and confirmation password do not match"
-                  />
-                </div>
-              )}
-              <div className="form-group row auth-form__submit-btn-container">
-                <button className="btn btn-outline-primary" type="submit">
-                  {authMethodLabel}
-                </button>
-              </div>
-              {error && error.response && <div>{error.response.data}</div>}
-            </Formsy>
+            {authMethod === "requestPasswordReset"
+              ? this.renderRequestPasswordResetForm()
+              : authMethod === "resetPassword"
+                ? this.renderResetPasswordForm()
+                : this.renderAuthenticationForm()}
           </div>
           <div className="auth-form__form-footer">
             <div className="auth-form__form-footer__left">
@@ -177,13 +295,28 @@ class AuthForm extends Component {
                 <a
                   href="https://thebrooklynproject.consensys.net/"
                   target="_blank"
+                  className="ml-0"
                 >
                   <span>About</span>
+                </a>
+                <a
+                  href="https://tinyurl.com/y94wspyg"
+                  target="_blank"
+                  style={{ width: "100px" }}
+                >
+                  <span>privacy policy</span>
+                </a>
+                <a
+                  href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
+                  target="_blank"
+                  style={{ width: "100px" }}
+                >
+                  <span>terms of use</span>
                 </a>
               </nav>
             </div>
             <div className="auth-form__form-footer__right">
-              <p id="no-acct-msg" className="message__has-account">
+              <p id="no-acct-msg" className="message__has-account my-2">
                 {authMethod === "signup"
                   ? "Already have an account?"
                   : "Don't have an account?"}
@@ -228,8 +361,32 @@ const mapSignup = state => {
   };
 };
 
-export const Login = connect(mapLogin, { auth, signinWithUport })(AuthForm);
-export const Signup = connect(mapSignup, { auth, signinWithUport })(AuthForm);
+const mapRequestPasswordReset = state => {
+  return {
+    authMethod: "requestPasswordReset",
+    authMethodLabel: "Request password reset"
+  };
+};
+
+const mapResetPassword = state => {
+  return {
+    authMethod: "resetPassword",
+    authMethodLabel: "Reset password"
+  };
+};
+
+export const Login = withRouter(
+  connect(mapLogin, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
+export const Signup = withRouter(
+  connect(mapSignup, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
+export const RequestPasswordReset = connect(mapRequestPasswordReset, {
+  requestPasswordReset
+})(AuthForm);
+export const ResetPassword = withRouter(
+  connect(mapResetPassword, { resetPassword })(AuthForm)
+);
 
 /**
  * PROP TYPES

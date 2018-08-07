@@ -40,7 +40,7 @@ Notification.notifyRootAndParent = function({
   var notification = {
     sender_id: sender ? sender.id : null,
     uri,
-    message: `${sender.email} ${messageFragment}`,
+    message: `${sender.displayName} ${messageFragment}`,
     status: "unread"
   };
   var notifications = [];
@@ -64,7 +64,9 @@ Notification.notify = function({ sender, comment, messageFragment }) {
   Notification.create({
     sender_id: sender ? sender.id : null,
     uri,
-    message: sender ? `${sender.email} ${messageFragment}` : messageFragment,
+    message: sender
+      ? `${sender.displayName} ${messageFragment}`
+      : messageFragment,
     status: "unread",
     recipient_id: comment.owner_id
   });
@@ -95,7 +97,7 @@ Notification.notifyCollaborators = function({
 }) {
   return Notification.create({
     message: `${
-      sender.email
+      sender.displayName
     } ${action} ${projectSymbol}/${parentSurveyTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
@@ -115,11 +117,7 @@ function getContextUri(comment) {
     comment.ancestors && comment.ancestors.length
       ? comment.ancestors[0]
       : comment;
-  return rootItem && rootItem.uri
-    ? `${rootItem.uri}/question/${comment.survey_question_id}/comment/${
-        rootItem.id
-      }`
-    : `/project/${comment.project_survey.project.symbol}/survey/${
-        comment.project_survey.id
-      }/comment/${rootItem.id}`;
+  return `/project/${comment.project_survey.project.symbol}/survey/${
+    comment.project_survey.id
+  }/comment/${rootItem.id}`;
 }

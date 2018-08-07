@@ -5,7 +5,7 @@
  */
 export { default as Navbar } from "./Navbar";
 export { default as SearchBar } from "./SearchBar";
-export { Login, Signup } from "./AuthForm";
+export { Login, Signup, RequestPasswordReset, ResetPassword } from "./AuthForm";
 export { default as ListView } from "./ListView";
 export { default as ListRow } from "./ListRow";
 export { default as AuthWidget } from "./AuthWidget";
@@ -20,9 +20,12 @@ export { default as CustomScrollbar } from "./CustomScrollbar";
 export { default as requiresAuthorization } from "./requiresAuthorization";
 export { default as TagChip } from "./TagChip";
 export { default as StackableTable } from "./StackableTable";
-export { default as CardProject } from "./CardProject";
-export { default as CardSurvey } from "./CardSurvey";
+export { default as ListProject } from "./ListProject";
+export { default as ListSurvey } from "./ListSurvey";
+export { default as ListIssue } from "./ListIssue";
+export { default as ListItem } from "./ListItem";
 export { default as SidebarLayout } from "./SidebarLayout";
 export { InputEmail, InputPassword, InputText } from "./FormsyInputs/Inputs";
 export { default as ScoreInput } from "./FormsyInputs/ScoreInput";
 export { default as ProjectScorecardInputs } from "./ProjectScorecardInputs";
+export { default as FeedbackModal } from "./FeedbackModal";

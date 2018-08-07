@@ -31,7 +31,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       markdown,
       resolvedIssueIds,
       newIssues,
-      collaboratorEmails: collaboratorEmails.map(c => c.value),
+      collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
       scorecard

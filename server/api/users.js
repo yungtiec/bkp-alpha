@@ -7,7 +7,7 @@ const {
   Role,
   Annotation,
   Project,
-  ProjectSurvey,
+  Survey,
   Comment,
   Issue
 } = require("../db/models");
@@ -96,7 +96,7 @@ router.get(
           .concat(p.admins || [])
           .concat(p.editors || [])
           .filter(c => c.id !== req.user.id);
-        return _.assignIn(p, { collaboratorOptions });
+        return _.assignIn(p.toJSON ? p.toJSON() : p, { collaboratorOptions });
       });
       res.send(projects);
     } catch (err) {
@@ -111,49 +111,36 @@ router.get(
   ensureCorrectRole,
   async (req, res, next) => {
     try {
-      var projectSurveys;
-      var ownProjectSurveys, collaboratorProjectSurveys;
+      var surveys;
+      var ownSurveys, collaboratorSurveys;
       switch (req.user.roles[0].name) {
         case "admin":
-          projectSurveys = await ProjectSurvey.scope(
-            "allRootsWithDescendants"
-          ).findAll();
+          surveys = await Survey.scope("includeVersions").findAll();
           break;
         case "project_admin":
         case "project_editor":
-          ownProjectSurveys = await ProjectSurvey.scope(
-            "allRootsWithDescendants"
-          ).findAll({
+          ownSurveys = await Survey.scope("includeVersions").findAll({
             where: { creator_id: req.user.id }
           });
-          collaboratorProjectSurveys = await req.user.getCollaboratedProjectSurveys(
-            {
-              include: [
-                { model: db.model("project_survey"), as: "descendents" },
-                {
-                  model: db.model("survey")
-                },
-                {
-                  model: db.model("project")
-                }
-              ],
-              order: [
-                ["createdAt", "DESC"],
-                [
-                  { model: db.model("project_survey"), as: "descendents" },
-                  "hierarchyLevel",
-                  "DESC"
-                ]
-              ]
-            }
-          );
-          projectSurveys = ownProjectSurveys.concat(collaboratorProjectSurveys);
+          collaboratorSurveys = await req.user.getCollaboratedSurveys({
+            include: [
+              { model: db.model("project_survey") },
+              {
+                model: db.model("project")
+              }
+            ],
+            order: [
+              ["createdAt", "DESC"],
+              [{ model: db.model("project_survey") }, "hierarchyLevel", "DESC"]
+            ]
+          });
+          surveys = ownSurveys.concat(collaboratorSurveys);
           break;
         default:
-          projectSurveys = [];
+          surveys = [];
           break;
       }
-      res.send(projectSurveys);
+      res.send(surveys);
     } catch (err) {
       next(err);
     }

@@ -22,7 +22,7 @@ const AdminListSidebar = () => (
               : ""
           }`}
         >
-          disclosures
+          documents
         </li>
       </Link>
     </ul>

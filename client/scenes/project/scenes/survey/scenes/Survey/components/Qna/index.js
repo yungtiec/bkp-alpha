@@ -6,6 +6,7 @@ import Question from "./Question";
 import Answers from "./Answers";
 import annotator from "annotator";
 import { draw, undraw } from "../../../../../../../../annotator/highlight";
+import history from "../../../../../../../../history";
 import { isEmpty } from "lodash";
 
 class QnaBox extends Component {
@@ -24,7 +25,6 @@ class QnaBox extends Component {
         qna,
         match,
         isLoggedIn,
-        pollData,
         tagFilter,
         projectSurveyId
       } = this.props;
@@ -124,7 +124,10 @@ class QnaBox extends Component {
     const { qna } = this.props;
 
     return (
-      <div className="qna__container" ref={el => (this[`qna-${qna.id}`] = el)}>
+      <div
+        className={qna.isDividerTitle ? "" : "mb-4"}
+        ref={el => (this[`qna-${qna.id}`] = el)}
+      >
         {this.props.children}
       </div>
     );

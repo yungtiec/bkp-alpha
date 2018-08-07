@@ -7,7 +7,7 @@ import { batchActions } from "redux-batched-actions";
 import { fetchProjectBySymbol } from "../../../../data/actions";
 import {
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey
+  upvoteSurvey
 } from "../../data/actions";
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
@@ -88,7 +88,6 @@ const mapState = state => {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
-    userEmail: !!state.data.user.id && state.data.user.email,
     sidebarOpen: state.scenes.project.scenes.survey.sidebarOpen,
     // project metadata
     projectMetadata: getSelectedProject(state),
@@ -115,7 +114,7 @@ const mapState = state => {
 const actions = {
   fetchProjectBySymbol,
   fetchQuestionsByProjectSurveyId,
-  upvoteProjectSurvey,
+  upvoteSurvey,
   fetchCommentsBySurvey,
   importMarkdown,
   uploadMarkdownToServer,

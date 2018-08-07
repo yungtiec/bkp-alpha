@@ -33,14 +33,14 @@ class Navbar extends Component {
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
-            <div className="logo-header">
+            <Link className="logo-header my-0 ml-0" to="/landing">
               <img
                 width="100px"
                 height="auto"
                 className="logo__large"
                 src="/assets/the-brooklyn-project-logo.png"
               />
-            </div>
+            </Link>
             {width > 600 && isAdmin ? (
               <Link to="/admin" className="navbar__nav-item">
                 admin
@@ -49,15 +49,26 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="/projects" className="navbar__nav-item">
-                projects
+              <Link to="/project/BKP/survey/3" className="navbar__nav-item">
+                framework
               </Link>
             ) : (
               ""
             )}
             {width > 600 ? (
-              <Link to="/leaderboard" className="navbar__nav-item">
-                leaderboard
+              <a
+                href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                target="_blank"
+                className="navbar__nav-item"
+              >
+                discuss
+              </a>
+            ) : (
+              ""
+            )}
+            {width && isAdmin > 600 ? (
+              <Link to="/activity-board" className="navbar__nav-item">
+                activity board
               </Link>
             ) : (
               ""
