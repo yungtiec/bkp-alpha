@@ -5,7 +5,7 @@ import {
   IfElseButton,
   VisibleIf
 } from "react-pundit";
-import policies from "../../../../../../policies.js";
+import policies from "../../../../../../../../policies.js";
 import { connect } from "react-redux";
 
 const ActionableIssueTag = ({

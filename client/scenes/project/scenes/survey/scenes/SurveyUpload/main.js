@@ -2,18 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Select from "react-select";
-import { UploadInterface, IssueInput } from "./components";
+import { UploadInterface, IssueInput, OutstandingIssue } from "./components";
 import {
   SidebarLayout,
   CustomScrollbar,
   requiresAuthorization,
   ProjectScorecardInputs
 } from "../../../../../../components";
-import {
-  SurveyHeader,
-  VersionToolbar,
-  OutstandingIssue
-} from "../../components";
+import { SurveyHeader, VersionToolbar } from "../../components";
 import {
   Accordion,
   AccordionItem,

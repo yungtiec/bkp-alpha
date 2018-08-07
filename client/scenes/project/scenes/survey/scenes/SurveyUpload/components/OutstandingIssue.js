@@ -4,8 +4,6 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import moment from "moment";
 import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
-import { CommentBox } from "../index";
-import ActionBar from "./ActionBar";
 
 export default class OutstandingIssue extends Component {
   constructor(props) {

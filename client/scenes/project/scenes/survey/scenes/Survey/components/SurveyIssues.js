@@ -21,7 +21,7 @@ export default ({ surveyVersions, projectSymbol }) => {
                 {commentsWithIssue.filter(c => c.reviewed !== "spam").map(c => (
                   <div
                     key={`outstanding-issue__${c.issue.id}`}
-                    className="entity-card__container p-3"
+                    className="entity-card p-3"
                     style={{ cursor: "pointer" }}
                     onClick={() =>
                       seeCommentContext(

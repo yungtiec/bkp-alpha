@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Modal from "react-modal";
-import { hideModal } from "../../../../../../data/reducer";
-import { addNewComment } from "../../data/comments/actions";
+import { hideModal } from "../../../../../../../../data/reducer";
+import { addNewComment } from "../../../../data/comments/actions";
 import { CommentBox, CommentBoxWithTagField } from "../index";
 
 class Comment extends Component {

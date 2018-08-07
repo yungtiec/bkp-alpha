@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Modal from "react-modal";
-import { hideModal } from "../../../../../../data/reducer";
-import { editComment } from "../../data/comments/actions";
-import { getAllTags } from "../../data/tags/reducer";
+import { hideModal } from "../../../../../../../../data/reducer";
+import { editComment } from "../../../../data/comments/actions";
+import { getAllTags } from "../../../../data/tags/reducer";
 import { CommentBox, CommentBoxWithTagField } from "../index";
-import { TagChip } from "../../../../../../components";
+import { TagChip } from "../../../../../../../../components";
 import Select from "react-select";
 
 class EditCommentModal extends Component {

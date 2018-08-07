@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import autoBind from "react-autobind";
 import Select from "react-select";
 import { keys } from "lodash";
-import { CommentBoxWithTagField, Countdown } from "../../../../components";
+import { CommentBoxWithTagField, Countdown } from "../index";
 
 export default class SidebarHeader extends Component {
   constructor(props) {

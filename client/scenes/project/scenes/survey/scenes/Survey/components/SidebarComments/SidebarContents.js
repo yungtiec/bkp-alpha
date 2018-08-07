@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import { CommentItem } from "../../../../components";
+import { CommentItem } from "../index";
 import { Link as ScrollLink, Element } from "react-scroll";
 import {
   replyToComment,

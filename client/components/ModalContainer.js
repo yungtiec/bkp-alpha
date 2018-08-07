@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 /** Modal Components */
-import { EditCommentModal } from "../scenes/project/scenes/survey/components";
-import { CommentModal } from "../scenes/project/scenes/survey/components";
+import { EditCommentModal } from "../scenes/project/scenes/survey/scenes/Survey/components";
+import { CommentModal } from "../scenes/project/scenes/survey/scenes/Survey/components";
 import { ProjectEditorModal } from "../scenes/project/components";
 import FeedbackModal from "./FeedbackModal";
 
@@ -20,7 +20,6 @@ const styles = {
 };
 
 const ModalContainer = ({ modalType, modalProps }) => {
-
   if (!modalType) {
     return null;
   }
