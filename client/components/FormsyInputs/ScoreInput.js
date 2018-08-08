@@ -18,7 +18,6 @@ class ScoreInput extends React.Component {
   }
 
   validateValue(event) {
-    console.log(event.currentTarget)
     this.props.setValue(event.currentTarget.value);
   }
 

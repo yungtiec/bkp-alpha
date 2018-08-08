@@ -334,16 +334,18 @@ User.getCommentsAndCount = async function(queryObj) {
   var { comments } = await User.scope({
     method: ["commentCount", cloneDeep(queryObj)]
   }).findOne();
-  pagedComments = user.comments.map(comment => {
-    comment = comment.toJSON();
-    if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
-    if (comment.parent.ancestors.length) {
-      comment.ancestors = comment.parent.ancestors.concat(comment.parent);
-    } else {
-      comment.ancestors = [comment.parent];
-    }
-    return comment;
-  });
+  pagedComments = user.comments
+    .filter(comment => comment.project_survey)
+    .map(comment => {
+      comment = comment.toJSON();
+      if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
+      if (comment.parent.ancestors.length) {
+        comment.ancestors = comment.parent.ancestors.concat(comment.parent);
+      } else {
+        comment.ancestors = [comment.parent];
+      }
+      return comment;
+    });
   return { pagedComments, commentCount: comments.length };
 };
 
@@ -378,12 +380,15 @@ function getCommentQueryObj({
   var projectSurveyQuery = projects
     ? {
         model: db.model("project_survey"),
-        where: { project_id: projects },
         duplicating: false,
+        // required: true,
+        // leads to error missing FROM-clause entry for table "comments->project_survey->survey->project"
+        // filter projects by filtering the comments null project_survey
         include: [
           {
             model: db.model("survey"),
-            attributes: ["id", "title"],
+            attributes: ["id", "title", "project_id"],
+            where: { project_id: projects },
             include: [
               {
                 model: db.model("project"),

@@ -1,7 +1,6 @@
-import "./index.scss";
+import "./About.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import { withRouter } from "react-router-dom";
 
 class ProfileAbout extends Component {
   constructor(props) {
@@ -12,7 +11,7 @@ class ProfileAbout extends Component {
       firstName: this.props.first_name,
       lastName: this.props.last_name,
       name: this.props.name,
-      organization: this.props.organization,
+      organization: this.props.organization
     };
   }
 
@@ -39,13 +38,14 @@ class ProfileAbout extends Component {
             </p>
           </div>
         )}
-        {!this.props.name.trim() && (
-          <div className="profile-about__restricted-access">
-            <p className="text-center mt-3 text-danger">
-              Please fill in your name.
-            </p>
-          </div>
-        )}
+        {!this.props.name ||
+          (!this.props.name.trim() && (
+            <div className="profile-about__restricted-access">
+              <p className="text-center mt-3 text-danger">
+                Please fill in your name.
+              </p>
+            </div>
+          ))}
         <div className="profile-about__field">
           <span>
             <input
@@ -130,5 +130,4 @@ class ProfileAbout extends Component {
   }
 }
 
-export default withRouter(ProfileAbout);
-
+export default ProfileAbout;

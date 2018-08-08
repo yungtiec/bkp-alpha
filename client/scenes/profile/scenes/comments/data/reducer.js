@@ -1,6 +1,5 @@
-import { keyBy, keys, values, groupBy, orderBy, assignIn, forIn } from "lodash";
+import { pick } from "lodash";
 import * as types from "./actionTypes";
-import moment from "moment";
 
 const initialState = {
   commentsById: {},
@@ -47,3 +46,13 @@ export const getUserComments = state => {
     commentIds
   };
 };
+
+export const getPageAndFilter = state =>
+  pick(state.scenes.profile.scenes.comments.data, [
+    "pageLimit",
+    "pageOffset",
+    "pageCount",
+    "pageProjectFilter",
+    "pageSurveyFilter",
+    "checked"
+  ]);

@@ -150,6 +150,7 @@ export const updatePageSurveyFilter = pageSurveyFilter => ({
 });
 
 export const checkSidebarFilter = (userId, checked) => {
+  console.log(userId, checked)
   return async (dispatch, getState) => {
     try {
       userId = userId === "profile" ? getState().data.user.id : userId;
