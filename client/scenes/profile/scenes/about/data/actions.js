@@ -10,6 +10,7 @@ export function fetchUserBasicInfo(userIdParam) {
       if (
         userIdParam !== "profile" &&
         Number(userIdParam) !== user.id &&
+        user.roles.length &&
         user.roles[0].name !== "admin"
       )
         history.push("/unauthorized");

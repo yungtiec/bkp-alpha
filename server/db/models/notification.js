@@ -117,7 +117,7 @@ function getContextUri(comment) {
     comment.ancestors && comment.ancestors.length
       ? comment.ancestors[0]
       : comment;
-  return `/project/${comment.project_survey.project.symbol}/survey/${
+  return `/project/${comment.project_survey.survey.project.symbol}/survey/${
     comment.project_survey.id
   }/comment/${rootItem.id}`;
 }

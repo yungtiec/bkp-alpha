@@ -1,18 +1,20 @@
-import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
+import history from "../../../../history";
+
+// actions - notifications
 import {
-  getAllProjects,
-  getProjectSurveys,
   fetchUserNotifications,
-  getUserNotifications
+  getUserNotifications,
+  updateNotificationStatus,
+  updateAllNotificationStatus
 } from "../../../../data/reducer";
 
-const LoadableUserNotifications = Loadable({
-  loader: () => import("./main"),
+const LoadableQueryNotifications = Loadable({
+  loader: () => import("./Notifications"),
   loading: () => (
     <SquareLoader
       className="route__loader"
@@ -34,11 +36,11 @@ class MyComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchUserNotifications();
+    this.props.fetch();
   }
 
   render() {
-    return <LoadableUserNotifications {...this.props} />;
+    return <LoadableQueryNotifications {...this.props} />;
   }
 }
 
@@ -51,8 +53,16 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const actions = {
-  fetchUserNotifications
+const mapDispatch = (dispatch, ownProps) => {
+  return {
+    fetch: () => dispatch(fetchUserNotifications()),
+    markAllAsRead: () => dispatch(updateAllNotificationStatus("read")),
+    updateStatus: notification => {
+      dispatch(updateNotificationStatus(notification, "read"));
+      if (notification.uri)
+        history.push(notification.uri.replace(window.origin, ""));
+    }
+  };
 };
 
-export default withRouter(connect(mapState, actions)(MyComponent));
+export default withRouter(connect(mapState, mapDispatch)(MyComponent));
