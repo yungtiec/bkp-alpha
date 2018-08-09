@@ -31,7 +31,7 @@ module.exports = router;
 router.get("/:projectSurveyId", async (req, res, next) => {
   try {
     const projectSurvey = await ProjectSurvey.scope({
-      method: ["byIdWithAllEngagements", req.params.projectSurveyId]
+      method: ["byIdWithMetadata", req.params.projectSurveyId]
     }).findOne();
     res.send(projectSurvey);
   } catch (err) {

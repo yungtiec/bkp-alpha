@@ -6,8 +6,10 @@ import { fetchProjectBySymbol } from "./data/actions";
 import { getAllProjectSurveys } from "./data/surveys/reducer";
 import { getSelectedProject } from "./data/metadata/reducer";
 
-const LoadableProject = Loadable({
-  loader: () => import("./main"),
+const LoadableProject = Loadable.Map({
+  loader: {
+    project: () => import("./main")
+  },
   loading: () => (
     <SquareLoader
       className="route__loader"
@@ -17,8 +19,8 @@ const LoadableProject = Loadable({
     />
   ),
   render(loaded, props) {
-    let Project = loaded.default;
-    return <Project {...props} />;
+    let Project = loaded.project.default;
+    return <Project {...props} loadedSurvey={loaded.survey} />;
   },
   delay: 400
 });

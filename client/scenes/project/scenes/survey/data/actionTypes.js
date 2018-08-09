@@ -1,7 +1,0 @@
-export const PROJECT_SURVEY_FETCH_SUCCESS =
-  "project.survey.PROJECT_SURVEY_FETCH_SUCCESS";
-export const PROJECT_SURVEY_FETCH_REQUEST =
-  "project.survey.PROJECT_SURVEY_FETCH_REQUEST";
-export const PROJECT_SURVEY_FETCH_ERROR =
-  "project.survey.PROJECT_SURVEY_FETCH_ERROR";
-export const SURVEY_VOTED = "project.survey.SURVEY_VOTED";

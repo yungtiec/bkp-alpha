@@ -11,7 +11,8 @@ import {
   Upload,
   ActivityBoard,
   Dashboard,
-  Landing
+  Landing,
+  Survey
 } from "./scenes";
 import {
   Login,
@@ -59,6 +60,11 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/projects"
             component={Projects}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/project/:symbol/survey/:projectSurveyId"
+            component={Survey}
           />
           <RouteWithLayout
             layout={LayoutWithNav}

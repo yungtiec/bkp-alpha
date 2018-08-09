@@ -1,9 +1,10 @@
 export { default as Projects } from "./projects";
 export { default as Project } from "./project";
+export { default as Survey } from "./survey";
 export { default as Profile } from "./profile/QueryProfile";
 export { default as Admin } from "./admin";
 export { default as Unauthorized } from "./errors/unauthorized";
 export { default as Upload } from "./upload";
 export { default as ActivityBoard } from "./activity-board";
 export { default as Dashboard } from "./dashboard";
-export { default as Landing } from "./landing";
+export { default as Landing } from "./landing/Landing";

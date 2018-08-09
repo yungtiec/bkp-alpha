@@ -41,7 +41,7 @@ router.get("/:symbol", async (req, res, next) => {
       .concat(project.admins || [])
       .concat(project.editors || [])
       .filter(c => c.id !== req.user.id) : [];
-    res.send(_.assignIn(project, { collaboratorOptions }));
+    res.send(project);
   } catch (err) {
     next(err);
   }

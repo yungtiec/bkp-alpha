@@ -31,89 +31,10 @@ const ProjectSurvey = db.define(
   {
     hierarchy: true,
     scopes: {
-      byIdWithAllEngagements: function(projectSurveyId) {
+      byIdWithMetadata: function(projectSurveyId) {
         return {
           where: { id: projectSurveyId },
           include: [
-            {
-              model: db.model("issue"),
-              as: "resolvedIssues",
-              required: false,
-              include: [
-                {
-                  model: db.model("comment"),
-                  required: false
-                }
-              ]
-            },
-            {
-              model: db.model("project_survey"),
-              as: "ancestors",
-              attributes: ["id", "hierarchyLevel", "creator_id", "createdAt"],
-              include: [
-                { model: db.model("survey") },
-                {
-                  model: db.model("user"),
-                  as: "creator"
-                },
-                {
-                  model: db.model("issue"),
-                  as: "resolvedIssues",
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("comment"),
-                      required: false
-                    }
-                  ]
-                },
-                {
-                  model: db.model("comment"),
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("issue"),
-                      required: false,
-                      where: { open: true }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              model: db.model("project_survey"),
-              as: "descendents",
-              attributes: ["id", "hierarchyLevel", "creator_id", "createdAt"],
-              include: [
-                { model: db.model("survey") },
-                {
-                  model: db.model("user"),
-                  as: "creator"
-                },
-                {
-                  model: db.model("issue"),
-                  as: "resolvedIssues",
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("comment"),
-                      required: false
-                    }
-                  ]
-                },
-                {
-                  model: db.model("comment"),
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("issue"),
-                      required: false,
-                      where: { open: true }
-                    }
-                  ]
-                }
-              ]
-            },
             {
               model: db.model("user"),
               as: "creator"
@@ -122,7 +43,60 @@ const ProjectSurvey = db.define(
               model: db.model("survey"),
               include: [
                 {
-                  model: db.model("project")
+                  model: db.model("project"),
+                  include: [
+                    {
+                      model: db.model("user"),
+                      through: db.model("project_admin"),
+                      as: "admins"
+                    },
+                    {
+                      model: db.model("user"),
+                      through: db.model("project_editor"),
+                      as: "editors"
+                    }
+                  ]
+                },
+                {
+                  model: db.model("project_survey"),
+                  attributes: [
+                    "id",
+                    "hierarchyLevel",
+                    "creator_id",
+                    "createdAt"
+                  ],
+                  include: [
+                    { model: db.model("survey") },
+                    {
+                      model: db.model("user"),
+                      as: "creator"
+                    },
+                    {
+                      model: db.model("issue"),
+                      as: "resolvedIssues", // use in SurveyProgress
+                      required: false,
+                      include: [
+                        {
+                          model: db.model("comment"),
+                          required: false
+                        }
+                      ]
+                    },
+                    {
+                      model: db.model("comment"), // use in SurveyIssues
+                      required: false,
+                      include: [
+                        {
+                          model: db.model("issue"),
+                          required: false,
+                          where: { open: true }
+                        }
+                      ]
+                    }
+                  ],
+                  order: [
+                    [{ model: db.model("project_survey") }, "hierarchyLevel"]
+                  ]
                 },
                 {
                   model: db.model("user"),
@@ -148,18 +122,14 @@ const ProjectSurvey = db.define(
                   attributes: ["name", "first_name", "last_name", "email", "id"]
                 }
               ]
-            },
-            {
-              model: db.model("comment"),
-              required: false,
-              include: [
-                {
-                  model: db.model("issue"),
-                  required: false,
-                  where: { open: true }
-                }
-              ]
-            },
+            }
+          ]
+        };
+      },
+      byIdWithSurveyQuestions: function(projectSurveyId) {
+        return {
+          where: { id: projectSurveyId },
+          include: [
             {
               model: db.model("survey_question"),
               include: [
@@ -179,16 +149,6 @@ const ProjectSurvey = db.define(
                 }
               ]
             }
-          ],
-          order: [
-            [
-              { model: db.model("project_survey"), as: "ancestors" },
-              "hierarchyLevel"
-            ],
-            [
-              { model: db.model("project_survey"), as: "descendents" },
-              "hierarchyLevel"
-            ]
           ]
         };
       }

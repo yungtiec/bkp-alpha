@@ -4,6 +4,7 @@ module.exports = router;
 router.use("/users", require("./users"));
 router.use("/projects", require("./projects"));
 router.use("/surveys", require("./surveys"));
+router.use("/project-surveys", require("./project-surveys"));
 router.use("/issues", require("./issues"));
 router.use("/tags", require("./tags"));
 router.use("/notifications", require("./notifications"));

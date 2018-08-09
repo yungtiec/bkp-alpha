@@ -6,7 +6,7 @@ import { default as adminReducer } from "./admin/reducer";
 import { default as uploadReducer } from "./upload/reducer";
 import { default as activityBoardReducer } from "./activity-board/reducer";
 import { default as dashboardReducer } from "./dashboard/reducer";
-
+import { default as surveyReducer } from "./survey/reducer";
 
 export default combineReducers({
   project: projectReducer,
@@ -14,5 +14,6 @@ export default combineReducers({
   admin: adminReducer,
   upload: uploadReducer,
   activityBoard: activityBoardReducer,
-  dashboard: dashboardReducer
+  dashboard: dashboardReducer,
+  survey: surveyReducer
 });
