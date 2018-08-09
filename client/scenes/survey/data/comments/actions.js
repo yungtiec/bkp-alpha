@@ -38,7 +38,8 @@ export const addNewComment = ({
 }) => {
   return async (dispatch, getState) => {
     try {
-      const projectSymbol = getState().data.metadata.symbol;
+      const projectSymbol = getState().scenes.survey.data.metadata.survey
+        .project.symbol;
       const postedComment = await postComment({
         projectSymbol,
         projectSurveyId,
@@ -64,7 +65,8 @@ export const addNewComment = ({
 export const addNewCommentSentFromServer = comment => {
   return (dispatch, getState) => {
     try {
-      const projectSymbol = getState().data.metadata.symbol;
+      const projectSymbol = getState().scenes.survey.data.metadata.survey
+        .project.symbol;
       const projectSurveyId = getState().scenes.survey.data.metadata.id;
       dispatch({
         type: types.COMMENT_ADDED,
@@ -96,7 +98,8 @@ export const replyToComment = ({
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({
-        projectSymbol: getState().data.metadata.symbol,
+        projectSymbol: getState().scenes.survey.data.metadata.survey.project
+          .symbol,
         projectSurveyId,
         rootId,
         parentId,
@@ -116,7 +119,8 @@ export const upvoteComment = ({ rootId, comment, hasUpvoted }) => {
   return async (dispatch, getState) => {
     try {
       const { commentId, upvotesFrom } = await postUpvoteToComment({
-        projectSymbol: getState().data.metadata.symbol,
+        projectSymbol: getState().scenes.survey.data.metadata.survey.project
+          .symbol,
         projectSurveyId: comment.project_survey_id,
         commentId: comment.id,
         hasUpvoted
@@ -143,7 +147,8 @@ export const editComment = ({
   return async (dispatch, getState) => {
     try {
       const rootComment = await updateComment({
-        projectSymbol: getState().data.metadata.symbol,
+        projectSymbol: getState().scenes.survey.data.metadata.survey.project
+          .symbol,
         projectSurveyId,
         commentId,
         newComment,

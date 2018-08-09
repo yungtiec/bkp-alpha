@@ -4,12 +4,12 @@ module.exports = {
   Comment: (action, model, user) => {
     if (!user || isEmpty(user)) return false;
     const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
-    const isAdmin = userRole.name === "admin";
+    const isAdmin = userRole === "admin";
     const isProjectAdmin =
-      userRole.name === "project_admin" &&
+      userRole === "project_admin" &&
       !!find(model.project.admins, a => a.id === user.id);
     const isProjectEditor =
-      userRole.name === "project_editor" &&
+      userRole === "project_editor" &&
       !!find(model.project.editors, a => a.id === user.id);
     const isCommentOwner = user.id === model.comment.owner_id;
     const needVerification = model.comment.reviewed === "pending";
@@ -33,16 +33,16 @@ module.exports = {
   },
   Disclosure: (action, model, user) => {
     if (!user || isEmpty(user)) return false;
-    const isAdmin = userRole.name === "admin";
+    const isAdmin = userRole === "admin";
     const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
     const isProjectAdmin = model.project
-      ? userRole.name === "project_admin" &&
+      ? userRole === "project_admin" &&
         !!find(model.project.admins, a => a.id === user.id)
-      : userRole.name === "project_admin";
+      : userRole === "project_admin";
     const isProjectEditor = model.project
-      ? userRole.name === "project_editor" &&
+      ? userRole === "project_editor" &&
         !!find(model.project.editors, a => a.id === user.id)
-      : userRole.name === "project_editor";
+      : userRole === "project_editor";
     const isDisclosureOwner = model.disclosure
       ? model.disclosure.creator_id === user.id
       : null;

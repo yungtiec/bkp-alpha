@@ -7,7 +7,7 @@ import { assignIn } from "lodash";
 export default ({ surveyMetadata, projectSymbol }) => (
   <div className="project-survey" id="project-survey">
     <Timeline style={{ margin: 0, fontWeight: 400, fontSize: "14px" }}>
-      {surveyMetadata.versions.map(version => {
+      {surveyMetadata.survey.project_surveys.map(version => {
         const creator = version.creator.name;
         var collaborators = surveyMetadata.survey.collaborators.filter(
           sc =>

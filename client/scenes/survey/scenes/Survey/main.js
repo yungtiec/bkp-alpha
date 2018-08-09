@@ -267,7 +267,7 @@ class Survey extends Component {
             path={`${this.props.match.path}/issues`}
             render={props => (
               <SurveyIssues
-                surveyVersions={surveyMetadata.versions}
+                surveyVersions={surveyMetadata.survey.project_surveys}
                 projectSymbol={surveyMetadata.survey.project.symbol}
               />
             )}

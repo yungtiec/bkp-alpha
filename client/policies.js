@@ -2,14 +2,15 @@ const { find, isEmpty } = require("lodash");
 
 module.exports = {
   Comment: (action, model, user) => {
-    if (!user || isEmpty(user) || !user.roles || !user.roles.length)
+    if (!user || isEmpty(user))
       return false;
-    const isAdmin = user.roles[0].name === "admin";
+    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const isAdmin = userRole === "admin";
     const isProjectAdmin =
-      user.roles[0].name === "project_admin" &&
+      userRole === "project_admin" &&
       !!find(model.project.admins, a => a.id === user.id);
     const isProjectEditor =
-      user.roles[0].name === "project_editor" &&
+      userRole === "project_editor" &&
       !!find(model.project.editors, a => a.id === user.id);
     const isCommentOwner = user.id === model.comment.owner_id;
     const needVerification = model.comment.reviewed === "pending";
@@ -30,17 +31,18 @@ module.exports = {
     }
   },
   Disclosure: (action, model, user) => {
-    if (!user || isEmpty(user) || !user.roles || !user.roles.length)
+    if (!user || isEmpty(user))
       return false;
-    const isAdmin = user.roles[0].name === "admin";
+    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project
-      ? user.roles[0].name === "project_admin" &&
+      ? userRole === "project_admin" &&
         !!find(model.project.admins, a => a.id === user.id)
-      : user.roles[0].name === "project_admin";
+      : userRole === "project_admin";
     const isProjectEditor = model.project
-      ? user.roles[0].name === "project_editor" &&
+      ? userRole === "project_editor" &&
         !!find(model.project.editors, a => a.id === user.id)
-      : user.roles[0].name === "project_editor";
+      : userRole === "project_editor";
     const isDisclosureOwner = model.disclosure
       ? model.disclosure.creator.id === user.id
       : null;
@@ -61,11 +63,12 @@ module.exports = {
   },
   Project: (action, model, user) => {
     if (!user || isEmpty(user) || !user.roles.length) return false;
-    const isAdmin = user.roles[0].name === "admin";
+    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project
-      ? user.roles[0].name === "project_admin" &&
+      ? userRole === "project_admin" &&
         !!find(model.project.admins, a => a.id === user.id)
-      : user.roles[0].name === "project_admin";
+      : userRole === "project_admin";
 
     switch (action) {
       case "ManageEditors":
