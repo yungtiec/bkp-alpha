@@ -251,7 +251,7 @@ async function updateExistingProjectSurvey({
 }) {
   try {
     var parentProjectSurvey = await ProjectSurvey.scope({
-      method: ["byIdWithAllEngagements", Number(parentProjectSurveyId)]
+      method: ["byIdWithMetadata", Number(parentProjectSurveyId)]
     }).findOne();
     var project = await Project.findOne({
       where: { symbol: parentProjectSurvey.survey.project.symbol },

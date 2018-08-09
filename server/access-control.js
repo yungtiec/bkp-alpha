@@ -33,8 +33,8 @@ module.exports = {
   },
   Disclosure: (action, model, user) => {
     if (!user || isEmpty(user)) return false;
-    const isAdmin = userRole === "admin";
     const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project
       ? userRole === "project_admin" &&
         !!find(model.project.admins, a => a.id === user.id)

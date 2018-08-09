@@ -98,7 +98,6 @@ class SurveyUpload extends Component {
       surveyQnasById,
       surveyQnaIds,
       surveyMetadata,
-      projectMetadata,
       outstandingIssues,
       notify,
       importedMarkdown,
@@ -118,6 +117,7 @@ class SurveyUpload extends Component {
       sidebarOpen,
       toggleSidebar,
       upvoteSurvey,
+      downvoteSurvey,
       updateProjectScorecard,
       scorecard,
       scorecardCompleted
@@ -127,18 +127,19 @@ class SurveyUpload extends Component {
       <div className="project-survey">
         <SurveyHeader
           surveyMetadata={surveyMetadata}
-          projectMetadata={projectMetadata}
+          projectMetadata={surveyMetadata.survey.project}
         />
         <VersionToolbar
           uploadMode={true}
           uploaded={!!importedMarkdown}
           uploadMarkdownToServer={uploadMarkdownToServer}
           resetUpload={() => importMarkdown(null)}
-          projectMetadata={projectMetadata}
+          projectMetadata={surveyMetadata.survey.project}
           surveyMetadata={surveyMetadata}
           surveyQnasById={surveyQnasById}
           surveyQnaIds={surveyQnaIds}
           upvoteSurvey={upvoteSurvey}
+          downvoteSurvey={downvoteSurvey}
         />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>
@@ -340,7 +341,7 @@ class SurveyUpload extends Component {
                 surveyQnasById={surveyQnasById}
                 surveyQnaIds={surveyQnaIds}
                 surveyMetadata={surveyMetadata}
-                projectMetadata={projectMetadata}
+                projectMetadata={surveyMetadata.survey.project}
               />
             </AccordionItemBody>
           </AccordionItem>

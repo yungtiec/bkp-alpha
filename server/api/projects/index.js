@@ -37,11 +37,39 @@ router.get("/:symbol", async (req, res, next) => {
       where: { name: "admin" }
     }).then(role => role.getUsers());
     const project = await Project.getProjectWithStats(req.params.symbol);
-    const collaboratorOptions = req.user && req.user.id ? admins
-      .concat(project.admins || [])
-      .concat(project.editors || [])
-      .filter(c => c.id !== req.user.id) : [];
+    const collaboratorOptions =
+      req.user && req.user.id
+        ? admins
+            .concat(project.admins || [])
+            .concat(project.editors || [])
+            .filter(c => c.id !== req.user.id)
+        : [];
     res.send(project);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/:symbol/collaborator-options", async (req, res, next) => {
+  try {
+    const project = await Project.findOne({
+      where: { symbol: req.params.symbol }
+    });
+    const [projectAdmins, projectEditors, admins] = await Promise.all([
+      project.getAdmins(),
+      project.getEditors(),
+      Role.findOne({
+        where: { name: "admin" }
+      }).then(role => role.getUsers())
+    ]);
+    const collaboratorOptions =
+      req.user && req.user.id
+        ? admins
+            .concat(project.admins || [])
+            .concat(project.editors || [])
+            .filter(c => c.id !== req.user.id)
+        : [];
+    res.send(collaboratorOptions);
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export function getCollaboratorOptions(symbol) {
+  return axios
+    .get(`/api/projects/${symbol}/collaborator-options`)
+    .then(res => res.data);
+}
+
 export function postMarkdown({
   parentProjectSurveyId,
   markdown,

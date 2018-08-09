@@ -58,7 +58,7 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state,
         collaboratorEmails: action.surveyMetadata.survey.collaborators.map(
-          c => c.email
+          c => ({ label: c.email, value: c.email })
         ),
         scorecard: action.surveyMetadata.scorecard
       };

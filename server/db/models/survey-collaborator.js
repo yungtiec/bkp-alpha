@@ -20,7 +20,8 @@ const SurveyCollaborator = db.define("survey_collaborator", {
     type: Sequelize.INTEGER
   },
   revoked_access: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 });
 

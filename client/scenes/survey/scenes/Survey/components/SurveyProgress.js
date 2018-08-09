@@ -57,7 +57,7 @@ export default ({ surveyMetadata, projectSymbol }) => (
                   return (
                     <div
                       key={`resolved-issue__${issue.id}`}
-                      className="entity-card__container p-3"
+                      className="entity-card p-3"
                       style={{ cursor: "pointer" }}
                       onClick={() =>
                         seeCommentContext(
@@ -65,8 +65,10 @@ export default ({ surveyMetadata, projectSymbol }) => (
                             {
                               project_survey: {
                                 id: comment.project_survey_id,
-                                project: {
-                                  symbol: projectSymbol
+                                survey: {
+                                  project: {
+                                    symbol: projectSymbol
+                                  }
                                 }
                               }
                             },

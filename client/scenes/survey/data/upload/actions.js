@@ -1,11 +1,11 @@
 import * as types from "./actionTypes";
-import { postMarkdown } from "./services";
+import { postMarkdown, getCollaboratorOptions } from "./services";
 import history from "../../../../history";
 import { orderBy } from "lodash";
 
-export const fetchCollaboratorOptions = projectSurveyId => async dispatch => {
+export const fetchCollaboratorOptions = projectSymbol => async dispatch => {
   try {
-    const collaboratorOptions = await getCollaboratorOptions(projectSurveyId);
+    const collaboratorOptions = await getCollaboratorOptions(projectSymbol);
     dispatch({
       type: types.COLLABORATOR_OPTIONS_FETCHED_SUCCESS,
       collaboratorOptions
@@ -24,11 +24,12 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const parentProjectSurveyId = orderBy(
-      state.scenes.survey.data.metadata.versions,
+      state.scenes.survey.data.metadata.survey.project_surveys,
       ["hierarchyLevel"],
       ["desc"]
     )[0].id;
-    const projectSymbol = state.data.metadata.symbol;
+    const projectSymbol =
+      state.scenes.survey.data.metadata.survey.project.symbol;
     const {
       markdown,
       resolvedIssueIds,

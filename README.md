@@ -8,6 +8,9 @@
   - current naming: /projects/:symbol/surveys/:surveyId/project-surveys/:projectSurveyId
   - new naming: /projects/:symbol/document/:documentId/versions/:versionsId
 
+## Re-design
+- navigating versions
+
 ## Disclosure markdown format
 
 If you have no experience writing markdown files

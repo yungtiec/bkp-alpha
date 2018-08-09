@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
-import { upvoteSurvey } from "../../data/metadata/actions";
 import {
-  getAllSurveyQuestions,
-  fetchQuestionsByProjectSurveyId
-} from "../../data/qnas/reducer";
+  upvoteSurvey,
+  downvoteSurvey,
+  fetchMetadataByProjectSurveyId
+} from "../../data/metadata/actions";
+import { getAllSurveyQuestions } from "../../data/qnas/reducer";
+import { fetchQuestionsByProjectSurveyId } from "../../data/qnas/actions";
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 import { getSelectedSurvey } from "../../data/metadata/reducer";
@@ -58,13 +60,14 @@ const LoadableSurveyUpload = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
+      this.props.fetchMetadataByProjectSurveyId(
+        this.props.match.params.projectSurveyId
+      ),
       this.props.fetchQuestionsByProjectSurveyId(
         this.props.match.params.projectSurveyId
       ),
       this.props.fetchCommentsBySurvey(this.props.match.params.projectSurveyId),
-      this.props.fetchCollaboratorOptions(
-        this.props.match.params.projectSurveyId
-      )
+      this.props.fetchCollaboratorOptions(this.props.match.params.symbol)
     ]);
   }
 
@@ -110,7 +113,9 @@ const mapState = state => {
 const actions = {
   fetchCollaboratorOptions,
   fetchQuestionsByProjectSurveyId,
+  fetchMetadataByProjectSurveyId,
   upvoteSurvey,
+  downvoteSurvey,
   fetchCommentsBySurvey,
   importMarkdown,
   uploadMarkdownToServer,
