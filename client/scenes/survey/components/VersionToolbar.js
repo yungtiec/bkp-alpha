@@ -40,7 +40,6 @@ class VersionToolbar extends Component {
       surveyQnasById,
       surveyQnaIds,
       uploadMode,
-      uploaded,
       loadModal,
       user,
       width,
@@ -264,26 +263,6 @@ class VersionToolbar extends Component {
                       </div>
                     </div>
                   </div>
-                </VisibleIf>
-              </PunditTypeSet>
-            </PunditContainer>
-          ) : uploaded ? (
-            <PunditContainer policies={policies} user={user}>
-              <PunditTypeSet type="Disclosure">
-                <VisibleIf
-                  action="Version"
-                  model={{
-                    project: projectMetadata,
-                    disclosure: surveyMetadata.survey
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary"
-                    onClick={resetUpload}
-                  >
-                    Import another file
-                  </button>
                 </VisibleIf>
               </PunditTypeSet>
             </PunditContainer>

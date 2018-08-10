@@ -10,6 +10,7 @@
 
 ## Re-design
 - navigating versions
+- admin dashboard
 
 ## Disclosure markdown format
 

@@ -5,7 +5,11 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import moment from "moment";
 import { batchActions } from "redux-batched-actions";
+
+// global
 import { updateOnboardStatus, loadModal } from "../../../../data/reducer";
+
+// survey UI context
 import {
   sortCommentBy,
   updateIssueFilter,
@@ -17,20 +21,28 @@ import {
   getSidebarCommentContext,
   updateSidebarCommentContext
 } from "../../reducer";
+
+// survey/qnas
 import { fetchQuestionsByProjectSurveyId } from "../../data/qnas/actions";
+import { getAllSurveyQuestions } from "../../data/qnas/reducer";
+
+// survey/metadata
 import {
   upvoteSurvey,
   downvoteSurvey,
   fetchMetadataByProjectSurveyId
 } from "../../data/metadata/actions";
+import { getSelectedSurvey } from "../../data/metadata/reducer";
+
+// survey/comments
 import {
   fetchCommentsBySurvey,
   addNewCommentSentFromServer,
   addNewComment
 } from "../../data/comments/actions";
-import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { getAllComments } from "../../data/comments/reducer";
-import { getSelectedSurvey } from "../../data/metadata/reducer";
+
+// survey/tags
 import {
   getAllTags,
   getTagsWithCountInSurvey,
@@ -39,7 +51,7 @@ import {
 import { updateTagFilter } from "../../data/tags/actions";
 
 const LoadableSurvey = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./Survey"),
   loading: () => (
     <SquareLoader
       className="route__loader"
@@ -117,47 +129,54 @@ const mapState = state => {
   } = state.scenes.survey;
 
   return {
-    // global metadata
+    // global
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
     anonymity: !!state.data.user.id && state.data.user.anonymity,
     onboard: state.data.user.onboard,
+    // metadata
     isClosedForComment:
       Number(surveyMetadata.comment_until_unix) -
         Number(moment().format("x")) <=
       0,
-    // metadata
     surveyMetadata,
-    // survey data
+    // qnas
     surveyQnasById,
     surveyQnaIds,
-    // ann
+    // comments
     commentsById,
     commentIds,
     unfilteredCommentIds,
-    // tab, sort, filter
+    // tags
+    tags: getAllTags(state),
+    tagFilter: getTagFilter(state),
+    tagsWithCountInSurvey: getTagsWithCountInSurvey(state),
+    // UI context
     sidebarOpen,
     annotationHighlight,
     verificationStatus,
     commentSortBy,
     commentIssueFilter,
     sidebarContext,
-    sidebarCommentContext: getSidebarCommentContext(state),
-    // tags
-    tags: getAllTags(state),
-    tagFilter: getTagFilter(state),
-    tagsWithCountInSurvey: getTagsWithCountInSurvey(state)
+    sidebarCommentContext: getSidebarCommentContext(state)
   };
 };
 
 const actions = {
+  // global
+  updateOnboardStatus,
+  loadModal,
+  // metadata
   fetchMetadataByProjectSurveyId,
-  fetchQuestionsByProjectSurveyId,
   upvoteSurvey,
   downvoteSurvey,
+  // qnas
+  fetchQuestionsByProjectSurveyId,
+  // comments
   fetchCommentsBySurvey,
   addNewComment,
   addNewCommentSentFromServer,
+  // UI context
   sortCommentBy,
   updateTagFilter,
   updateIssueFilter,
@@ -165,9 +184,7 @@ const actions = {
   toggleSidebar,
   toggleSidebarContext,
   toggleAnnotationHighlight,
-  updateVerificationStatusInView,
-  updateOnboardStatus,
-  loadModal
+  updateVerificationStatusInView
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

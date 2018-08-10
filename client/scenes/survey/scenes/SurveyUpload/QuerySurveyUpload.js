@@ -4,17 +4,21 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
+import { notify } from "reapop";
+// metadata
 import {
   upvoteSurvey,
   downvoteSurvey,
   fetchMetadataByProjectSurveyId
 } from "../../data/metadata/actions";
+import { getSelectedSurvey } from "../../data/metadata/reducer";
+// qnas
 import { getAllSurveyQuestions } from "../../data/qnas/reducer";
 import { fetchQuestionsByProjectSurveyId } from "../../data/qnas/actions";
+// comments
 import { fetchCommentsBySurvey } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
-import { getSelectedSurvey } from "../../data/metadata/reducer";
-import { toggleSidebar } from "../../reducer";
+// upload
 import {
   getImportedMarkdown,
   getResolvedIssueId,
@@ -38,10 +42,11 @@ import {
   updateCommentPeriodValue,
   updateProjectScorecard
 } from "../../data/upload/actions";
-import { notify } from "reapop";
+// UI context
+import { toggleSidebar } from "../../reducer";
 
 const LoadableSurveyUpload = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./SurveyUpload"),
   loading: () => (
     <SquareLoader
       className="route__loader"
@@ -89,19 +94,20 @@ const mapState = state => {
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
     sidebarOpen: state.scenes.survey.sidebarOpen,
-    // project metadata
+    // metadata
     surveyMetadata: getSelectedSurvey(state),
-    // survey data
+    // qnas
     surveyQnasById,
     surveyQnaIds,
     // outstanding issues
     outstandingIssues: getOutstandingIssues(state),
+    // upload
     importedMarkdown: getImportedMarkdown(state),
     resolvedIssueIds: getResolvedIssueId(state),
     collaboratorEmails: getCollaboratorEmails(state),
     collaboratorOptions: getCollaboratorOptions(state),
     newIssues: getNewIssues(state),
-    // comment period
+    // comment
     commentPeriodUnit: getCommentPeriodUnit(state),
     commentPeriodValue: getCommentPeriodValue(state),
     // scorecard
@@ -111,12 +117,18 @@ const mapState = state => {
 };
 
 const actions = {
-  fetchCollaboratorOptions,
+  // global UI context
+  notify,
+  // qnas
   fetchQuestionsByProjectSurveyId,
+  // metadata
   fetchMetadataByProjectSurveyId,
   upvoteSurvey,
   downvoteSurvey,
+  // comments
   fetchCommentsBySurvey,
+  // upload
+  fetchCollaboratorOptions,
   importMarkdown,
   uploadMarkdownToServer,
   selectIssueToResolve,
@@ -125,9 +137,9 @@ const actions = {
   removeIssue,
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
-  notify,
-  toggleSidebar,
-  updateProjectScorecard
+  updateProjectScorecard,
+  // UI context
+  toggleSidebar
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

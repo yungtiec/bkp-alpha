@@ -1,3 +1,4 @@
+import "./Project.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loadable from "react-loadable";
@@ -8,7 +9,7 @@ import { getSelectedProject } from "./data/metadata/reducer";
 
 const LoadableProject = Loadable.Map({
   loader: {
-    project: () => import("./main")
+    project: () => import("./Project")
   },
   loading: () => (
     <SquareLoader

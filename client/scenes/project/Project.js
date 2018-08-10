@@ -1,4 +1,3 @@
-import "./index.scss";
 import React, { Component } from "react";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import moment from "moment";

@@ -373,6 +373,4 @@ class Survey extends Component {
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps });
-
-export default connect(mapState, {})(Survey);
+export default Survey;

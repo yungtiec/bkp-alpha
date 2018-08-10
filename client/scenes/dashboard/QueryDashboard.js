@@ -1,4 +1,3 @@
-import "./index.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loadable from "react-loadable";
@@ -13,7 +12,7 @@ import { batchActions } from "redux-batched-actions";
 import { omit } from "lodash";
 
 const LoadableDashboard = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./Dashboard"),
   loading: () => (
     <SquareLoader
       className="route__loader"

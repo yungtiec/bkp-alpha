@@ -131,7 +131,6 @@ class SurveyUpload extends Component {
         />
         <VersionToolbar
           uploadMode={true}
-          uploaded={!!importedMarkdown}
           uploadMarkdownToServer={uploadMarkdownToServer}
           resetUpload={() => importMarkdown(null)}
           projectMetadata={surveyMetadata.survey.project}

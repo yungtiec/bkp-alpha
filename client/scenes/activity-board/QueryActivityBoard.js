@@ -7,7 +7,7 @@ import { fetchUsers } from "./data/actions";
 import { getUsers } from "./data/reducer";
 
 const LoadableLeaderboard = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./ActivityBoard"),
   loading: () => (
     <SquareLoader
       className="route__loader"

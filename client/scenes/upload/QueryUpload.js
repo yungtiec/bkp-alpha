@@ -32,7 +32,7 @@ import {
 import { notify } from "reapop";
 
 const LoadableSurveyUpload = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./Upload"),
   loading: () => (
     <SquareLoader
       className="route__loader"

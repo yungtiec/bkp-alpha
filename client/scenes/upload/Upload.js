@@ -392,11 +392,7 @@ class Upload extends Component {
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps });
-
-export default connect(mapState, {})(
-  requiresAuthorization({
-    Component: Upload,
-    roleRequired: ["project_editor", "project_admin", "admin"]
-  })
-);
+export default requiresAuthorization({
+  Component: Upload,
+  roleRequired: ["project_editor", "project_admin", "admin"]
+});

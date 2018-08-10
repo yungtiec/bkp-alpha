@@ -73,7 +73,7 @@ const actions = (dispatch, ownProps) => {
       dispatch(
         changeAccessStatus({
           userId: ownProps.match.params.userId,
-          accessStatus: "restricted"
+          accessStatus: "restore"
         })
       )
   };

@@ -1,12 +1,12 @@
-import "./index.scss";
+import "./SurveyContainer.scss";
 import "./annotator.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, route, Switch, Route, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import SurveyUpload from "./scenes/SurveyUpload";
-import Survey from "./scenes/Survey";
+import QuerySurveyUpload from "./scenes/SurveyUpload/QuerySurveyUpload";
+import QuerySurvey from "./scenes/Survey/QuerySurvey";
 import autoBind from "react-autobind";
 
 class SurveyContainer extends Component {
@@ -47,7 +47,7 @@ class SurveyContainer extends Component {
             path={`${this.props.match.path}/upload`}
             render={props => <SurveyUpload />}
           />
-          <Route render={props => <Survey />} />
+          <Route render={props => <QuerySurvey />} />
         </Switch>
       </div>
     );
