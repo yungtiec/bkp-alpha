@@ -111,60 +111,83 @@ class VersionToolbar extends Component {
               ? surveyMetadata.survey.downvotesFrom.length
               : 0}
           </button>
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={() =>
-              history.push(
-                `/project/${this.props.projectMetadata.symbol}/survey/${
-                  this.props.surveyMetadata.id
-                }`
-              )
-            }
-          >
-            View disclosure
-          </button>
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              id="versionProgressButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                  this.props.surveyMetadata.id
-                }/progress`}
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
               >
-                View progress
-              </Link>
-            </button>
-            <div
-              className="dropdown-menu"
-              aria-labelledby="versionProgressButton"
-            >
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                  this.props.surveyMetadata.id
-                }/progress`}
-                class="dropdown-item"
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={() =>
+                    history.push(
+                      `/project/${this.props.projectMetadata.symbol}/survey/${
+                        this.props.surveyMetadata.id
+                      }`
+                    )
+                  }
+                >
+                  View disclosure
+                </button>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
+          <PunditContainer policies={policies} user={user}>
+            <PunditTypeSet type="Disclosure">
+              <VisibleIf
+                action="Version"
+                model={{
+                  project: projectMetadata,
+                  disclosure: surveyMetadata.survey
+                }}
               >
-                Milestone
-              </Link>
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/survey/${
-                  this.props.surveyMetadata.id
-                }/issues`}
-                class="dropdown-item"
-              >
-                Issues
-              </Link>
-            </div>
-          </div>
-
+                <div className="btn-group">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary dropdown-toggle"
+                    type="button"
+                    id="versionProgressButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <Link
+                      to={`/project/${
+                        this.props.projectMetadata.symbol
+                      }/survey/${this.props.surveyMetadata.id}/progress`}
+                    >
+                      View progress
+                    </Link>
+                  </button>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby="versionProgressButton"
+                  >
+                    <Link
+                      to={`/project/${
+                        this.props.projectMetadata.symbol
+                      }/survey/${this.props.surveyMetadata.id}/progress`}
+                      class="dropdown-item"
+                    >
+                      Milestone
+                    </Link>
+                    <Link
+                      to={`/project/${
+                        this.props.projectMetadata.symbol
+                      }/survey/${this.props.surveyMetadata.id}/issues`}
+                      class="dropdown-item"
+                    >
+                      Issues
+                    </Link>
+                  </div>
+                </div>
+              </VisibleIf>
+            </PunditTypeSet>
+          </PunditContainer>
           {!uploadMode ? (
             <PunditContainer policies={policies} user={user}>
               <PunditTypeSet type="Disclosure">

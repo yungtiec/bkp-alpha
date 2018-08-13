@@ -2,7 +2,7 @@ import "./AdminListContainer.scss";
 import React, { Component } from "react";
 import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import history from "../../../../history";
-import QuerySurveyList from "./scenes/SurveyList/QuerySurveyList";
+import QueryAdminSurveyList from "./scenes/SurveyList/QueryAdminSurveyList";
 import QueryUserList from "./scenes/UserList/QueryUserList";
 import { AdminListSidebar } from "./components";
 
@@ -13,7 +13,7 @@ const AdminListContainer = ({ match }) => {
       <Switch>
         <Route
           path={`${match.url}/project-surveys`}
-          component={QuerySurveyList}
+          component={QueryAdminSurveyList}
         />
         <Route path={`${match.url}/users`} component={QueryUserList} />
         <Redirect
