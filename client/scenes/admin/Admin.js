@@ -3,7 +3,7 @@ import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import history from "../../history";
 import { requiresAuthorization } from "../../components";
 import ProjectSurvey from "./scenes/ProjectSurvey";
-import Lists from "./scenes/Lists";
+import AdminListContainer from "./scenes/Lists/AdminListContainer";
 
 const Admin = ({ match }) => {
   return (
@@ -13,7 +13,7 @@ const Admin = ({ match }) => {
           path={`${match.url}/project-survey/:projectSurveyId`}
           component={ProjectSurvey}
         />
-        <Route path={`${match.url}/list`} component={Lists} />
+        <Route path={`${match.url}/list`} component={AdminListContainer} />
         <Redirect from={`${match.url}`} exact to={`${match.url}/list`} />
       </Switch>
     </div>

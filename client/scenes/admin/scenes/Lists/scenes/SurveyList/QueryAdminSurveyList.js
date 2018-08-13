@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { fetchUsers } from "./data/actions";
-import { getUsers } from "./data/reducer";
+import { fetchLastestSurveysWithStats } from "../../../../../../data/reducer";
+import { getSurveyListing } from "../../../../../../data/reducer";
 
-const LoadableAdminUserList = Loadable({
-  loader: () => import("./main"),
+const LoadableAdminProjectSurveyList = Loadable({
+  loader: () => import("./AdminSurveyList"),
   loading: () => (
     <SquareLoader
       className="route__loader"
@@ -17,8 +17,8 @@ const LoadableAdminUserList = Loadable({
     />
   ),
   render(loaded, props) {
-    let AdminUserList = loaded.default;
-    return <AdminUserList {...props} />;
+    let AdminProjectSurveyList = loaded.default;
+    return <AdminProjectSurveyList {...props} />;
   },
   delay: 400
 });
@@ -34,22 +34,23 @@ class MyComponent extends Component {
   }
 
   render() {
-    return <LoadableAdminUserList {...this.props} />;
+    if (!this.props.surveysById || !this.props.surveyIds) return null;
+    else return <LoadableAdminProjectSurveyList {...this.props} />;
   }
 }
 
 const mapState = state => {
-  const { usersById, userIds } = getUsers(state);
+  const { surveysById, surveyIds } = getSurveyListing(state);
   return {
-    usersById,
-    userIds
+    surveysById,
+    surveyIds
   };
 };
 
 const actions = dispatch => {
   return {
     loadInitialData() {
-      dispatch(fetchUsers());
+      dispatch(fetchLastestSurveysWithStats());
     }
   };
 };

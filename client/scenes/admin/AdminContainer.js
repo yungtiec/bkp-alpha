@@ -3,7 +3,7 @@ import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
 
 const LoadableAdmin = Loadable({
-  loader: () => import("./main"),
+  loader: () => import("./Admin"),
   loading: () => (
     <SquareLoader
       className="route__loader"

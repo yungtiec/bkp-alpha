@@ -3,7 +3,7 @@ import * as types from "./actionTypes";
 
 const initialState = {
   commentsById: {},
-  commentIds: [],
+  commentIds: null,
   pageCount: 0,
   pageLimit: 10,
   pageOffset: 0,

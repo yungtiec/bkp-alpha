@@ -397,7 +397,7 @@ router.post(
           sender: "",
           comment,
           messageFragment: `${req.user.name} closed your issue in ${
-            comment.project_survey.project.symbol
+            comment.project_survey.survey.project.symbol
           }/${comment.project_survey.survey.title}.`
         });
       }
