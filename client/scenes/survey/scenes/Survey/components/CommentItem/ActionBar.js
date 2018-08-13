@@ -24,25 +24,22 @@ const ActionBar = ({
           <div className="btn-group" role="group" aria-label="Basic example">
             <button
               type="button"
-              className="btn btn-outline-danger btn-sm"
+              className={`btn ${
+                item.reviewed === "spam" ? "btn-danger" : "btn-outline-danger"
+              } btn-sm`}
               onClick={labelAsSpam}
             >
               spam
             </button>
             <button
               type="button"
-              className="btn btn-outline-primary btn-sm"
+              className={`btn ${
+                item.reviewed === "verified" ? "btn-primary" : "btn-outline-primary"
+              } btn-sm`}
               onClick={labelAsNotSpam}
             >
               verify
             </button>
-          </div>
-        </VisibleIf>
-        <VisibleIf
-          action="Reviewed"
-          model={{ project: projectMetadata, comment: item }}
-        >
-          <div className={`comment-item__verified-message`}>
           </div>
         </VisibleIf>
         <div />
@@ -64,10 +61,4 @@ const ActionBar = ({
   </div>
 );
 
-const mapState = (state, ownProps) => ({
-  ...ownProps,
-  user: state.data.user,
-  projectMetadata: state.scenes.project.data.metadata
-});
-
-export default connect(mapState, {})(ActionBar);
+export default ActionBar;

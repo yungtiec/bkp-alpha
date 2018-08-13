@@ -7,6 +7,8 @@ import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
 import { CommentBox } from "../index";
 import ActionBar from "./ActionBar";
 import ActionableIssueTag from "./ActionableIssueTag";
+import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import policies from "../../../../../../policies.js";
 
 export default class CommentItem extends Component {
   constructor(props) {
@@ -20,47 +22,63 @@ export default class CommentItem extends Component {
   }
 
   render() {
-    const { comment } = this.props;
+    const { comment, user, projectMetadata } = this.props;
 
     return (
-      <div className="comment-item">
-        {this.renderMainComment(comment)}
-        {this.state.showReplies && (
-          <p
-            className="my-3 comment-item__collapse-btn"
-            onClick={this.toggleShowReplies}
+      <PunditContainer policies={policies} user={user}>
+        <PunditTypeSet type="Comment">
+          <VisibleIf
+            action="Read"
+            model={{ project: projectMetadata, comment }}
           >
-            - Collapse replies
-          </p>
-        )}
-        {comment.descendents.length < 3 || this.state.showReplies ? (
-          <div className="ml-3">
-            {this.renderReplies(comment.descendents, comment.id)}
-          </div>
-        ) : (
-          <p className="my-3" onClick={this.toggleShowReplies}>
-            + View {comment.descendents.length} replies
-          </p>
-        )}
-        {this.state.isCommenting ? (
-          <div>
-            {this.state.replyTarget && (
-              <span className="ml-1">{`replying to ${
-                this.state.replyTarget.owner.displayName
-              }`}</span>
-            )}
-            <CommentBox
-              rootId={comment.id}
-              parentId={
-                this.state.replyTarget ? this.state.replyTarget.id : comment.id
-              }
-              projectSurveyId={comment.project_survey_id}
-              onSubmit={this.props.replyToItem}
-              onCancel={this.hideCommentBox}
-            />
-          </div>
-        ) : null}
-      </div>
+            <div className="comment-item">
+              {this.renderMainComment()}
+              {this.state.showReplies && (
+                <p
+                  className="my-3 comment-item__collapse-btn"
+                  onClick={this.toggleShowReplies}
+                >
+                  - Collapse replies
+                </p>
+              )}
+              {comment.descendents.length < 3 || this.state.showReplies ? (
+                <div className="ml-3">
+                  {this.renderReplies(comment.descendents, comment.id)}
+                </div>
+              ) : (
+                <p className="my-3" onClick={this.toggleShowReplies}>
+                  + View{" "}
+                  {
+                    comment.descendents.filter(c => c.reviewed !== "spam")
+                      .length
+                  }{" "}
+                  replies
+                </p>
+              )}
+              {this.state.isCommenting ? (
+                <div>
+                  {this.state.replyTarget && (
+                    <span className="ml-1">{`replying to ${
+                      this.state.replyTarget.owner.displayName
+                    }`}</span>
+                  )}
+                  <CommentBox
+                    rootId={comment.id}
+                    parentId={
+                      this.state.replyTarget
+                        ? this.state.replyTarget.id
+                        : comment.id
+                    }
+                    projectSurveyId={comment.project_survey_id}
+                    onSubmit={this.props.replyToItem}
+                    onCancel={this.hideCommentBox}
+                  />
+                </div>
+              ) : null}
+            </div>
+          </VisibleIf>
+        </PunditTypeSet>
+      </PunditContainer>
     );
   }
 
@@ -115,7 +133,8 @@ export default class CommentItem extends Component {
     }));
   }
 
-  renderMainComment(comment) {
+  renderMainComment() {
+    const { comment, user, projectMetadata } = this.props;
     const hasUpvoted = find(
       comment.upvotesFrom,
       upvotedUser => upvotedUser.id === this.props.user.id
@@ -141,7 +160,9 @@ export default class CommentItem extends Component {
         style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
         <div className="comment-item__header">
-          <p className="comment-item__owner-name">{comment.owner.displayName}</p>
+          <p className="comment-item__owner-name">
+            {comment.owner.displayName}
+          </p>
           <p>{moment(comment.createdAt).fromNow()}</p>
         </div>
         {comment.quote && (
@@ -180,6 +201,8 @@ export default class CommentItem extends Component {
         ) : null}
         <ActionBar
           item={comment}
+          projectMetadata={projectMetadata}
+          user={user}
           hasUpvoted={hasUpvoted}
           initReplyToThis={initReplyToThis}
           upvoteItem={upvoteItem}
@@ -192,6 +215,7 @@ export default class CommentItem extends Component {
   }
 
   renderReplies(replies, rootId) {
+    const { user, projectMetadata } = this.props;
     return orderBy(
       replies.map(
         reply =>
@@ -242,6 +266,8 @@ export default class CommentItem extends Component {
           )}
           <ActionBar
             item={reply}
+            projectMetadata={projectMetadata}
+            user={user}
             hasUpvoted={hasUpvoted}
             initReplyToThis={initReplyToThis}
             upvoteItem={upvoteItem}

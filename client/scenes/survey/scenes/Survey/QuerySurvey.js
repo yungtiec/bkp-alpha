@@ -115,9 +115,12 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { surveyQnasById, surveyQnaIds } = getAllSurveyQuestions(state);
-  const { commentsById, commentIds, unfilteredCommentIds } = getAllComments(
-    state
-  );
+  const {
+    commentsById,
+    commentIds,
+    unfilteredCommentIds,
+    nonSpamCommentIds
+  } = getAllComments(state);
   const surveyMetadata = getSelectedSurvey(state);
   const {
     sidebarOpen,
@@ -146,6 +149,7 @@ const mapState = state => {
     // comments
     commentsById,
     commentIds,
+    nonSpamCommentIds,
     unfilteredCommentIds,
     // tags
     tags: getAllTags(state),

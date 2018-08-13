@@ -2,8 +2,8 @@ import * as types from "./actionTypes";
 import { values, orderBy, cloneDeep, keys, assignIn } from "lodash";
 
 const initialState = {
-  surveysById: {},
-  surveyIds: [],
+  surveysById: null,
+  surveyIds: null,
   offset: 0,
   limit: 10,
   count: null,
@@ -15,7 +15,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.SURVEY_LISTING_FETCH_SUCCESS:
       return {
         ...state,
-        surveysById: assignIn(action.surveysById, state.surveysById),
+        surveysById: assignIn(action.surveysById, state.surveysById || {}),
         surveyIds: (state.surveyIds || []).concat(action.surveyIds),
         offset: action.offset,
         count: action.count

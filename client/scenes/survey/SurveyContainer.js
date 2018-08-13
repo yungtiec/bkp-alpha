@@ -45,7 +45,7 @@ class SurveyContainer extends Component {
         <Switch>
           <Route
             path={`${this.props.match.path}/upload`}
-            render={props => <SurveyUpload />}
+            render={props => <QuerySurveyUpload />}
           />
           <Route render={props => <QuerySurvey />} />
         </Switch>

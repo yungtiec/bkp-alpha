@@ -8,7 +8,7 @@ export default ({ surveyIds, surveysById }) => {
     <div className="row entity-cards">
       {surveyIds.map(id => (
         <ListItem
-          cardKey={id}
+          key={id}
           cardHref={`/project/${surveysById[id].project_symbol ||
             (surveysById[id].project &&
               surveysById[id].project.symbol)}/survey/${

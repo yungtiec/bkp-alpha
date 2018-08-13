@@ -37,6 +37,7 @@ function renderSidebarWithSelectedComments(props) {
   const {
     selectedComments,
     commentsById,
+    projectMetadata,
     selectedText,
     parent,
     replyToComment,
@@ -55,11 +56,13 @@ function renderSidebarWithSelectedComments(props) {
   return (
     <div>
       {selectedComments
-        .filter(a => commentsById[a.id].reviewed !== "spam")
+        // .filter(a => commentsById[a.id].reviewed !== "spam")
         .map(comment => (
           <CommentItem
             key={`comment-${comment.id}`}
             comment={comment}
+            projectMetadata={projectMetadata}
+            user={user}
             replyToItem={replyToComment}
             initiateReplyToItem={initiateReplyToComment}
             cancelReplyToItem={cancelReplyToComment}
@@ -81,6 +84,7 @@ function renderSidebarWithAllComments(props) {
   const {
     commentIds,
     commentsById,
+    projectMetadata,
     selectedText,
     parent,
     replyToComment,
@@ -97,7 +101,7 @@ function renderSidebarWithAllComments(props) {
     admin
   } = props;
   return commentIds
-    .filter(id => commentsById[id].reviewed !== "spam")
+    // .filter(id => commentsById[id].reviewed !== "spam")
     .map(id => (
       <Element key={`comment-${id}__element`} name={`comment-${id}`}>
         <ScrollLink
@@ -112,6 +116,8 @@ function renderSidebarWithAllComments(props) {
           <CommentItem
             key={`comment-${id}`}
             comment={commentsById[id]}
+            projectMetadata={projectMetadata}
+            user={user}
             replyToItem={replyToComment}
             initiateReplyToItem={initiateReplyToComment}
             cancelReplyToItem={cancelReplyToComment}

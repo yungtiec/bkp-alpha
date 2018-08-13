@@ -4,7 +4,6 @@ import autoBind from "react-autobind";
 import { StackableTable, requiresAuthorization } from "../../components";
 
 const ActivityBoard = ({ userIds, usersById }) => {
-  const { userIds, usersById } = this.props;
   const columns = [
     {
       id: "user",

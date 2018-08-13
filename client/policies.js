@@ -2,8 +2,7 @@ const { find, isEmpty } = require("lodash");
 
 module.exports = {
   Comment: (action, model, user) => {
-    if (!user || isEmpty(user))
-      return false;
+    if (!user || isEmpty(user)) return false;
     const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
     const isAdmin = userRole === "admin";
     const isProjectAdmin =
@@ -16,14 +15,17 @@ module.exports = {
     const needVerification = model.comment.reviewed === "pending";
 
     switch (action) {
+      case "Read":
+        return (
+          model.comment.reviewed !== "spam" ||
+          (isAdmin || isProjectAdmin || isProjectEditor)
+        );
       case "Reviewed":
         return (
           !(isAdmin || isProjectAdmin || isProjectEditor) || !needVerification
         );
       case "Verify":
-        return (
-          (isAdmin || isProjectAdmin || isProjectEditor) && needVerification
-        );
+        return isAdmin || isProjectAdmin || isProjectEditor;
       case "Issue":
         return isAdmin || isProjectAdmin || isProjectEditor || isCommentOwner;
       case "Edit":
@@ -31,8 +33,7 @@ module.exports = {
     }
   },
   Disclosure: (action, model, user) => {
-    if (!user || isEmpty(user))
-      return false;
+    if (!user || isEmpty(user)) return false;
     const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
     const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project

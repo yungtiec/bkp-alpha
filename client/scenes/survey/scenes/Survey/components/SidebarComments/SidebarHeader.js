@@ -58,7 +58,7 @@ export default class SidebarHeader extends Component {
     const {
       isLoggedIn,
       selectedComments,
-      commentIds,
+      nonSpamCommentIds,
       commentSortBy,
       tagsWithCountInSurvey,
       tagFilter,
@@ -74,7 +74,7 @@ export default class SidebarHeader extends Component {
       <div>
         {selectedComments && !selectedComments.length ? (
           <div className="sidebar__title-container">
-            <p className="sidebar__title">Comments ({commentIds.length})</p>
+            <p className="sidebar__title">Comments ({nonSpamCommentIds.length})</p>
           </div>
         ) : (
           <div className="sidebar__title-container">
@@ -82,7 +82,7 @@ export default class SidebarHeader extends Component {
               className="sidebar__title active reset-selection"
               onClick={this.props.resetCommentSelection}
             >
-              Show all Comments ({commentIds.length})
+              Show all Comments ({nonSpamCommentIds.length})
             </p>
           </div>
         )}

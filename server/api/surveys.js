@@ -32,6 +32,7 @@ router.get("/", async (req, res, next) => {
       limit: req.query.limit,
       offset: req.query.offset
     });
+    console.log(surveys)
     res.send({ count, surveys });
   } catch (err) {
     next(err);

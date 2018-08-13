@@ -14,6 +14,7 @@ export const findCommentsInQnaByText = ({
     .map(aid => commentsById[aid])
     .filter(
       comment =>
+        comment.reviewed !== "spam" &&
         qnaId === comment.survey_question_id &&
         comment.quote.trim().indexOf(text.trim()) !== -1
     );

@@ -20,9 +20,7 @@ module.exports = {
           !(isAdmin || isProjectAdmin || isProjectEditor) || !needVerification
         );
       case "Verify":
-        return (
-          (isAdmin || isProjectAdmin || isProjectEditor) && needVerification
-        );
+        return isAdmin || isProjectAdmin || isProjectEditor;
       case "AutoVerify":
         return isAdmin || isProjectAdmin || isProjectEditor;
       case "Issue":

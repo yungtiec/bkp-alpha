@@ -8,7 +8,7 @@ export default ({ projectSymbolArr, projectsBySymbol }) => {
     <div className="row entity-cards">
       {projectSymbolArr.map(symbol => (
         <ListItem
-          cardKey={symbol}
+          key={symbol}
           cardHref={`/project/${projectsBySymbol[symbol].symbol}`}
           mainTitle={projectsBySymbol[symbol].name}
           subtitle={`(${projectsBySymbol[symbol].symbol})`}

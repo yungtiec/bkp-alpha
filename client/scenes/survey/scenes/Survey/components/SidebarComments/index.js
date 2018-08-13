@@ -8,7 +8,9 @@ export default ({
   anonymity,
   commentIds,
   commentsById,
+  nonSpamCommentIds,
   surveyMetadata,
+  projectMetadata,
   commentSortBy,
   sortCommentBy,
   tags,
@@ -32,7 +34,7 @@ export default ({
     <SidebarHeader
       commentSortBy={commentSortBy}
       sortCommentBy={sortCommentBy}
-      commentIds={commentIds}
+      nonSpamCommentIds={nonSpamCommentIds}
       selectedComments={selectedComments}
       tagFilter={tagFilter}
       updateTagFilter={updateTagFilter}
@@ -53,6 +55,7 @@ export default ({
       commentsById={commentsById}
       selectedText={selectedText}
       selectedComments={selectedComments}
+      projectMetadata={projectMetadata}
       tags={tags}
       parent={parent}
     />

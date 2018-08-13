@@ -284,20 +284,12 @@ function getStartAndEndIndexInSurveyQna(surveyQnaIds, surveyQnasById, comment) {
 
 export function getAllComments(state) {
   var filteredCommentIds;
-  const verificationStatus =
-    state.scenes.survey.verificationStatus;
+  const verificationStatus = state.scenes.survey.verificationStatus;
   const sortFn = sortFns[state.scenes.survey.commentSortBy];
-  var {
-    commentIds,
-    commentsById
-  } = state.scenes.survey.data.comments;
+  var { commentIds, commentsById } = state.scenes.survey.data.comments;
   const tagFilter = state.scenes.survey.data.tags.filter;
-  const commentIssueFilter =
-    state.scenes.survey.commentIssueFilter;
-  const {
-    surveyQnaIds,
-    surveyQnasById
-  } = state.scenes.survey.data.qnas;
+  const commentIssueFilter = state.scenes.survey.commentIssueFilter;
+  const { surveyQnaIds, surveyQnasById } = state.scenes.survey.data.qnas;
   const commentCollection = values(commentsById).map(comment => {
     const range = getStartAndEndIndexInSurveyQna(
       surveyQnaIds,
@@ -310,9 +302,7 @@ export function getAllComments(state) {
     );
   });
   var sortedComments = sortFn(commentCollection);
-  var sortedCommentIds = sortedComments
-    .map(a => a.id)
-    .filter(cid => commentsById[cid].reviewed !== "spam");
+  var sortedCommentIds = sortedComments.map(a => a.id);
   filteredCommentIds = filterByTags({
     tagFilter,
     commentIds: sortedCommentIds,
@@ -323,29 +313,18 @@ export function getAllComments(state) {
     commentsById,
     commentIds: filteredCommentIds
   });
-  if (verificationStatus === "all") {
-    return {
-      unfilteredCommentIds: sortedCommentIds,
-      commentIds: filteredCommentIds,
-      commentsById
-    };
-  } else {
-    filteredCommentIds = filteredCommentIds.filter(
-      cid =>
-        commentsById[cid].reviewed === verificationStatus &&
-        commentsById[cid].reviewed !== "spam"
-    );
-    return {
-      commentIds: filteredCommentIds,
-      commentsById,
-      unfilteredCommentIds: sortedCommentIds
-    };
-  }
+  return {
+    commentIds: filteredCommentIds,
+    commentsById,
+    unfilteredCommentIds: sortedCommentIds,
+    nonSpamCommentIds: sortedCommentIds.filter(
+      cid => commentsById[cid].reviewed !== "spam"
+    )
+  };
 }
 
 export const getOutstandingIssues = state => {
-  const commentsById =
-    state.scenes.survey.data.comments.commentsById;
+  const commentsById = state.scenes.survey.data.comments.commentsById;
   if (!commentsById) return null;
   const comments = values(commentsById)
     .filter(item => item.reviewed !== "spam" && item.issue && item.issue.open)

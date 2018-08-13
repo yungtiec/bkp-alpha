@@ -31,13 +31,13 @@ class MyComponent extends React.Component {
 
   render() {
     if (
-      !isEmpty(this.props.projectsBySymbol) ||
-      !isEmpty(this.props.surveysById) ||
-      !this.props.surveyIds.length ||
-      !this.props.projectSymbolArr.length
+      !this.props.projectsBySymbol ||
+      !this.props.surveysById ||
+      !this.props.surveyIds ||
+      !this.props.projectSymbolArr
     )
       return null;
-    else return <LoadableProjects />;
+    else return <LoadableProjects {...this.props} />;
   }
 }
 

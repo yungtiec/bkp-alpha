@@ -205,6 +205,7 @@ class Survey extends Component {
       surveyMetadata,
       commentsById,
       commentIds,
+      nonSpamCommentIds,
       unfilteredCommentIds,
       isLoggedIn,
       anonymity,
@@ -342,8 +343,10 @@ class Survey extends Component {
                 isLoggedIn={isLoggedIn}
                 anonymity={anonymity}
                 commentIds={commentIds}
+                nonSpamCommentIds={nonSpamCommentIds}
                 commentsById={commentsById}
                 surveyMetadata={surveyMetadata}
+                projectMetadata={surveyMetadata.survey.project}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
                 tags={tags}

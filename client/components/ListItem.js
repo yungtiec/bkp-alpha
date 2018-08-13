@@ -3,7 +3,6 @@ import { keys } from "lodash";
 import { Link } from "react-router-dom";
 
 export default ({
-  cardKey,
   cardHref,
   mainTitle,
   subtitle,
@@ -13,7 +12,7 @@ export default ({
   metadataArray
 }) => {
   return (
-    <div className="col-md-12 entity-card" key={cardKey}>
+    <div className="col-md-12 entity-card">
       <Link to={cardHref}>
         <div className="entity__block">
           <div className="entity__header">
