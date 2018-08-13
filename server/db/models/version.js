@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 const _ = require("lodash");
 
-const ProjectSurvey = db.define(
-  "project_survey",
+const Version = db.define(
+  "version",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -31,16 +31,16 @@ const ProjectSurvey = db.define(
   {
     hierarchy: true,
     scopes: {
-      byIdWithMetadata: function(projectSurveyId) {
+      byIdWithMetadata: function(versionId) {
         return {
-          where: { id: projectSurveyId },
+          where: { id: versionId },
           include: [
             {
               model: db.model("user"),
               as: "creator"
             },
             {
-              model: db.model("survey"),
+              model: db.model("document"),
               include: [
                 {
                   model: db.model("project"),
@@ -58,7 +58,7 @@ const ProjectSurvey = db.define(
                   ]
                 },
                 {
-                  model: db.model("project_survey"),
+                  model: db.model("version"),
                   attributes: [
                     "id",
                     "hierarchyLevel",
@@ -66,7 +66,7 @@ const ProjectSurvey = db.define(
                     "createdAt"
                   ],
                   include: [
-                    { model: db.model("survey") },
+                    { model: db.model("document") },
                     {
                       model: db.model("user"),
                       as: "creator"
@@ -95,14 +95,14 @@ const ProjectSurvey = db.define(
                     }
                   ],
                   order: [
-                    [{ model: db.model("project_survey") }, "hierarchyLevel"]
+                    [{ model: db.model("version") }, "hierarchyLevel"]
                   ]
                 },
                 {
                   model: db.model("user"),
                   as: "collaborators",
                   through: {
-                    model: db.model("survey_collaborator"),
+                    model: db.model("document_collaborator"),
                     where: { revoked_access: { [Sequelize.Op.not]: true } }
                   },
                   required: false
@@ -126,21 +126,21 @@ const ProjectSurvey = db.define(
           ]
         };
       },
-      byIdWithSurveyQuestions: function(projectSurveyId) {
+      byIdWithVersionQuestions: function(versionId) {
         return {
-          where: { id: projectSurveyId },
+          where: { id: versionId },
           include: [
             {
-              model: db.model("survey_question"),
+              model: db.model("document_question"),
               include: [
                 {
                   model: db.model("question")
                 },
                 {
-                  model: db.model("project_survey_answer"),
+                  model: db.model("version_answer"),
                   include: [
                     {
-                      model: db.model("project_survey_answer"),
+                      model: db.model("version_answer"),
                       as: "descendents",
                       hierarchy: true,
                       required: false
@@ -156,4 +156,4 @@ const ProjectSurvey = db.define(
   }
 );
 
-module.exports = ProjectSurvey;
+module.exports = Version;

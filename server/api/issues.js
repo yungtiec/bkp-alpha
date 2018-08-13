@@ -12,8 +12,8 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
   try {
     var issues = await Comment.findAndCountAll({
       where: {
-        project_survey_id: {
-          [Sequelize.Op.or]: req.query.projectSurveyIds.map(id => Number(id))
+        version_id: {
+          [Sequelize.Op.or]: req.query.versionIds.map(id => Number(id))
         }
       },
       include: [
@@ -29,11 +29,11 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
           attributes: ["first_name", "last_name", "name", "email", "anonymity"]
         },
         {
-          model: db.model("project_survey"),
-          attributes: ["survey_id", "id"],
+          model: db.model("version"),
+          attributes: ["document_id", "id"],
           include: [
             {
-              model: db.model("survey"),
+              model: db.model("document"),
               attributes: ["project_id", "title"],
               include: [
                 {

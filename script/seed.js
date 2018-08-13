@@ -41,6 +41,7 @@ async function seed() {
 
 async function seedUser(projects) {
   const userCsv = fs.readFileSync("./data/users.csv", "utf8");
+  const adminRole = await Role.findOne({ where: { name: "admin" } });
   await parse(userCsv, {
     columns: true,
     auto_parse: true
@@ -54,10 +55,8 @@ async function seedUser(projects) {
 
         return User.create(_.omit(entry, ["id"]))
           .then(async user => {
-            if (user.first_name === "Admin") return await user.addRole(1);
-            else if (user.first_name === "Tammy" || user.first_name === "Ron")
-              return await user.addRole(2);
-            else if (user.first_name === "Leslie") return await user.addRole(3);
+            if (user.last_name === "Admin")
+              return await user.addRole(adminRole.id);
             else return user;
           })
           .catch(err => {
@@ -125,7 +124,8 @@ async function seedSurveyFromMarkdown({
   var survey = await Survey.create({
     title: markdownParsor.title,
     description: markdownParsor.description,
-    project_id: project.id
+    project_id: project.id,
+    creator_id: 1
   });
   var projectSurvey = await ProjectSurvey.create({
     survey_id: survey.id,

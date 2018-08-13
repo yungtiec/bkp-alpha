@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const SurveyCollaborator = db.define("survey_collaborator", {
+const DocumentCollaborator = db.define("document_collaborator", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -13,10 +13,10 @@ const SurveyCollaborator = db.define("survey_collaborator", {
   user_id: {
     type: Sequelize.INTEGER
   },
-  survey_id: {
+  document_id: {
     type: Sequelize.INTEGER
   },
-  project_survey_version: {
+  document_version_number: {
     type: Sequelize.INTEGER
   },
   revoked_access: {
@@ -25,4 +25,4 @@ const SurveyCollaborator = db.define("survey_collaborator", {
   }
 });
 
-module.exports = SurveyCollaborator;
+module.exports = DocumentCollaborator;

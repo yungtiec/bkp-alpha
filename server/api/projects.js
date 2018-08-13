@@ -1,23 +1,14 @@
 const router = require("express").Router();
-const db = require("../../db");
+const db = require("../db");
 const {
-  Annotation,
   User,
   Role,
-  Tag,
-  ProjectSurveyComment,
-  Issue,
   Project,
-  ProjectSurvey,
   ProjectEditor,
-  ProjectAdmin,
-  Survey,
-  Question,
-  SurveyQuestion,
-  ProjectSurveyAnswer
-} = require("../../db/models");
+  ProjectAdmin
+} = require("../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("../utils");
+const { ensureAuthentication, ensureAdminRole } = require("./utils");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 module.exports = router;
@@ -140,10 +131,3 @@ router.delete("/:symbol/editors/:projectEditorId", async (req, res, next) => {
     next(err);
   }
 });
-
-router.use("/:symbol/surveys", require("./surveys"));
-router.use("/:symbol/surveys/:projectSurveyId/comments", require("./comments"));
-router.use(
-  "/:symbol/surveys/:projectSurveyId/annotator",
-  require("./annotator")
-);

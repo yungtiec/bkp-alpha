@@ -1,14 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
-const {
-  Comment,
-  Tag,
-  Issue,
-  User,
-  Role,
-  ProjectSurvey
-} = require("../../db/models");
+const { Comment, Tag, Issue, User, Role, Version } = require("../../db/models");
 const { assignIn, pick } = require("lodash");
-const { ensureAuthentication, ensureResourceAccess } = require("..//utils");
+const { ensureAuthentication, ensureResourceAccess } = require("../utils");
 const { IncomingWebhook } = require("@slack/client");
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(slackWebhookUrl);
@@ -21,7 +14,7 @@ function sendNotificationToSlack(annotation) {
   if (process.env.NODE_ENV === "production")
     webhook.send(
       `Incoming annotation at ${annotation.uri}/question/${
-        annotation.survey_question_id
+        annotation.version_question_id
       }/comment/${
         annotation.id
       }\nor view it in your admin panel at https://tbp-annotator.herokuapp.com/admin`,
@@ -47,25 +40,23 @@ router.post(
         text,
         uri,
         annotator_schema_version,
-        survey_question_id,
-        project_survey_id,
+        version_question_id,
+        version_id,
         tags,
         issue
       } = req.body;
       const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
-      const projectSurvey = await ProjectSurvey.findById(project_survey_id);
+      const version = await Version.findById(version_id);
       const isClosedForComment =
-        Number(projectSurvey.comment_until_unix) -
-          Number(moment().format("x")) <=
-        0;
+        Number(version.comment_until_unix) - Number(moment().format("x")) <= 0;
       if (isClosedForComment) {
         res.sendStatus(404);
         return;
       }
       var newComment = await Comment.create({
         uri,
-        survey_question_id,
-        project_survey_id,
+        version_question_id,
+        version_id,
         quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
         comment: text,
         ranges,
@@ -103,8 +94,8 @@ router.get("/", async (req, res, next) => {
   try {
     var comments = await Comment.findAll({
       where: {
-        project_survey_id: req.query.project_survey_id,
-        survey_question_id: req.query.survey_question_id,
+        version_id: req.query.version_id,
+        version_question_id: req.query.version_question_id,
         reviewed: { $not: "spam" },
         hierarchyLevel: 1
       },

@@ -8,9 +8,8 @@ const {
   Tag,
   Issue,
   Notification,
-  ProjectSurvey,
+  Version,
   Project,
-  Survey,
   ProjectAdmin,
   ProjectEditor
 } = require("../../db/models");
@@ -31,7 +30,7 @@ router.get("/", async (req, res, next) => {
         "flatThreadByRootId",
         {
           where: {
-            project_survey_id: req.params.projectSurveyId,
+            version_id: req.params.versionId,
             hierarchyLevel: 1
           }
         }
@@ -51,7 +50,7 @@ router.post(
     try {
       var [issue, comment] = await Comment.create({
         owner_id: req.user.id,
-        project_survey_id: Number(req.params.projectSurveyId),
+        version_id: Number(req.params.versionId),
         comment: req.body.newComment
       }).then(comment =>
         Promise.all([
@@ -59,7 +58,7 @@ router.post(
             open: true,
             comment_id: comment.id
           }),
-          Comment.scope("withProjectSurveys").findOne({
+          Comment.scope("withVersions").findOne({
             where: { id: comment.id }
           })
         ])
@@ -68,7 +67,7 @@ router.post(
         "AutoVerify",
         {
           comment,
-          project: comment.project_survey.survey.project
+          project: comment.version.document.project
         },
         req.user
       );
@@ -157,7 +156,7 @@ router.post(
         sender: user,
         comment: _.assignIn(reply.toJSON(), {
           ancestors,
-          project_survey: ancestry.project_survey
+          version: ancestry.version
         }),
         parent,
         messageFragment: "replied to your post"
@@ -333,14 +332,14 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      var comment = await Comment.scope("withProjectSurveys").findOne({
+      var comment = await Comment.scope("withVersions").findOne({
         where: { id: req.params.commentId }
       });
       const canVerify = permission(
         "Verify",
         {
           comment,
-          project: comment.project_survey.survey.project
+          project: comment.version.document.project
         },
         req.user
       );
@@ -363,7 +362,7 @@ router.post(
   async (req, res, next) => {
     try {
       var comment = await Comment.scope({
-        method: ["withProjectSurveys", { model: Issue }]
+        method: ["withVersions", { model: Issue }]
       }).findOne({
         where: { id: req.params.commentId }
       });
@@ -371,7 +370,7 @@ router.post(
         "Issue",
         {
           comment,
-          project: comment.project_survey.survey.project
+          project: comment.version.document.project
         },
         req.user
       );
@@ -397,8 +396,8 @@ router.post(
           sender: "",
           comment,
           messageFragment: `${req.user.name} closed your issue in ${
-            comment.project_survey.survey.project.symbol
-          }/${comment.project_survey.survey.title}.`
+            comment.version.document.project.symbol
+          }/${comment.version.document.title}.`
         });
       }
       if (req.body.open && req.user.id !== comment.owner_id) {
@@ -408,8 +407,8 @@ router.post(
           messageFragment: `${
             req.user.name
           } opened an issue on your comment in ${
-            comment.project_survey.survey.project.symbol
-          }/${comment.project_survey.survey.title}.`
+            comment.version.document.project.symbol
+          }/${comment.version.document.title}.`
         });
       }
 

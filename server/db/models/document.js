@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 const _ = require("lodash");
 
-const Survey = db.define(
-  "survey",
+const Document = db.define(
+  "document",
   {
     title: {
       type: Sequelize.STRING,
@@ -16,10 +16,10 @@ const Survey = db.define(
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
-    original_survey_id: {
+    original_document_id: {
       type: Sequelize.INTEGER
     },
-    original_project_survey_version: {
+    original_version_number: {
       type: Sequelize.INTEGER
     },
     project_id: {
@@ -34,14 +34,14 @@ const Survey = db.define(
       includeVersions: function() {
         return {
           include: [
-            { model: db.model("project_survey") },
+            { model: db.model("version") },
             {
               model: db.model("project")
             }
           ],
           order: [
             ["createdAt", "DESC"],
-            [{ model: db.model("project_survey") }, "hierarchyLevel", "DESC"]
+            [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
           ]
         };
       },
@@ -59,7 +59,7 @@ const Survey = db.define(
               attributes: ["name", "first_name", "last_name", "email", "id"]
             },
             {
-              model: db.model("project_survey"),
+              model: db.model("version"),
               include: [
                 {
                   model: db.model("comment"),
@@ -104,7 +104,7 @@ const Survey = db.define(
               model: db.model("user"),
               as: "collaborators",
               through: {
-                model: db.model("survey_collaborator"),
+                model: db.model("document_collaborator"),
                 where: { revoked_access: { [Sequelize.Op.not]: true } }
               },
               required: false
@@ -115,7 +115,7 @@ const Survey = db.define(
           ],
           order: [
             ["createdAt", "DESC"],
-            [{ model: db.model("project_survey") }, "hierarchyLevel", "DESC"]
+            [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
           ]
         };
       }
@@ -123,26 +123,26 @@ const Survey = db.define(
   }
 );
 
-Survey.getSurveysWithStats = async function({ offset, limit }) {
-  var surveyQueryResult = await Survey.scope(
+Document.getDocumentsWithStats = async function({ offset, limit }) {
+  var documentQueryResult = await Document.scope(
     "includeVersionsWithAllEngagements"
   ).findAndCountAll({
     limit,
     offset
   });
-  var count = surveyQueryResult.count;
-  var surveys = surveyQueryResult.rows.map(computeSurveyStats);
-  return { count, surveys };
+  var count = documentQueryResult.count;
+  var documents = documentQueryResult.rows.map(computeDocumentStats);
+  return { count, documents };
 };
 
-module.exports = Survey;
+module.exports = Document;
 
-function computeSurveyStats(survey) {
-  const issues = survey.project_surveys.reduce(
+function computeDocumentStats(document) {
+  const issues = document.versions.reduce(
     (issueArr, ps) => ps.comments.filter(c => !!c.issue).concat(issueArr),
     []
   );
-  const comments = survey.project_surveys.reduce(
+  const comments = document.versions.reduce(
     (commentArr, ps) => ps.comments.concat(commentArr),
     []
   );
@@ -157,18 +157,18 @@ function computeSurveyStats(survey) {
   );
   return _.assignIn(
     {
-      num_versions: survey.project_surveys.length,
+      num_versions: document.versions.length,
       num_outstanding_issues: issues.filter(c => !c.issue.open).length,
       num_resolved_issues: issues.filter(c => c.issue.open).length,
       num_issues: issues.length,
       num_pending_comments: comments.filter(c => c.reviewed === "pending")
         .length,
       num_total_comments: comments.filter(c => c.reviewed !== "spam").length,
-      num_upvotes: survey.upvotesFrom.length,
-      num_downvotes: survey.upvotesFrom.length,
-      latest_project_survey: survey.project_surveys[0]
+      num_upvotes: document.upvotesFrom.length,
+      num_downvotes: document.upvotesFrom.length,
+      latest_version: document.versions[0]
     },
-    _.omit(survey.toJSON(), ["project_surveys"])
+    _.omit(document.toJSON(), ["versions"])
   );
 }
 

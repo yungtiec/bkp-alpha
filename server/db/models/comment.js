@@ -8,10 +8,10 @@ const Comment = db.define(
     uri: {
       type: Sequelize.STRING
     },
-    survey_question_id: {
+    version_question_id: {
       type: Sequelize.INTEGER
     },
-    survey_answer_id: {
+    version_answer_id: {
       type: Sequelize.INTEGER
     },
     quote: {
@@ -38,21 +38,21 @@ const Comment = db.define(
   {
     hierarchy: true,
     scopes: {
-      withProjectSurveys: function(moreIncludeOptions) {
+      withVersions: function(moreIncludeOptions) {
         var options = {
           include: [
             {
-              model: db.model("project_survey"),
+              model: db.model("version"),
               include: [
                 {
-                  model: db.model("survey"),
+                  model: db.model("document"),
                   attributes: ["title"],
                   include: [
                     {
                       model: db.model("user"),
                       as: "collaborators",
                       through: {
-                        model: db.model("survey_collaborator"),
+                        model: db.model("document_collaborator"),
                         where: { revoked_access: { [Sequelize.Op.not]: true } }
                       },
                       required: false
@@ -104,10 +104,10 @@ const Comment = db.define(
               ]
             },
             {
-              model: db.model("project_survey"),
+              model: db.model("version"),
               include: [
                 {
-                  model: db.model("survey"),
+                  model: db.model("document"),
                   include: [
                     {
                       model: db.model("project"),
@@ -166,10 +166,10 @@ const Comment = db.define(
               attributes: ["name", "id"]
             },
             {
-              model: db.model("project_survey"),
+              model: db.model("version"),
               include: [
                 {
-                  model: db.model("survey"),
+                  model: db.model("document"),
                   include: [
                     {
                       model: db.model("project"),
@@ -184,11 +184,11 @@ const Comment = db.define(
               attributes: ["open", "id"],
               include: [
                 {
-                  model: db.model("project_survey"),
-                  as: "resolvingProjectSurvey",
+                  model: db.model("version"),
+                  as: "resolvingVersion",
                   include: [
                     {
-                      model: db.model("survey"),
+                      model: db.model("document"),
                       include: [
                         {
                           model: db.model("project"),

@@ -1,18 +1,18 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const ProjectSurveyAnswer = db.define(
-  "project_survey_answer",
+const VersionAnswer = db.define(
+  "version_answer",
   {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    project_survey_id: {
+    version_id: {
       type: Sequelize.INTEGER
     },
-    survey_question_id: {
+    version_question_id: {
       type: Sequelize.INTEGER
     },
     json: {
@@ -27,4 +27,4 @@ const ProjectSurveyAnswer = db.define(
   }
 );
 
-module.exports = ProjectSurveyAnswer;
+module.exports = VersionAnswer;

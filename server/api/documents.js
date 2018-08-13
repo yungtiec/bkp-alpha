@@ -4,13 +4,13 @@ const permission = require("../access-control")["Disclosure"];
 const {
   User,
   Project,
-  ProjectSurvey,
-  Survey,
-  SurveyQuestion,
-  ProjectSurveyAnswer,
+  Version,
+  Document,
+  VersionQuestion,
+  VersionAnswer,
   Notification,
   Question,
-  SurveyCollaborator,
+  DocumentCollaborator,
   Issue,
   ProjectAdmin,
   ProjectEditor
@@ -28,12 +28,11 @@ module.exports = router;
 
 router.get("/", async (req, res, next) => {
   try {
-    const { count, surveys } = await Survey.getSurveysWithStats({
+    const { count, documents } = await Document.getDocumentsWithStats({
       limit: req.query.limit,
       offset: req.query.offset
     });
-    console.log(surveys)
-    res.send({ count, surveys });
+    res.send({ count, documents });
   } catch (err) {
     next(err);
   }
@@ -45,7 +44,7 @@ router.post(
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      createNewProjectSurvey({
+      createNewDocument({
         markdown: req.body.markdown,
         collaboratorEmails: req.body.collaboratorEmails.map(
           emailOption => emailOption.value
@@ -65,20 +64,20 @@ router.post(
 );
 
 router.post(
-  "/:surveyId/upvote",
+  "/:documentId/upvote",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
       if (req.body.hasDownvoted)
-        await req.user.removeDownvotedSurveys(req.params.surveyId);
+        await req.user.removeDownvotedDocuments(req.params.documentId);
       if (!req.body.hasUpvoted) {
-        await req.user.addUpvotedSurveys(req.params.surveyId);
+        await req.user.addUpvotedDocuments(req.params.documentId);
       } else {
-        await req.user.removeUpvotedSurveys(req.params.surveyId);
+        await req.user.removeUpvotedDocuments(req.params.documentId);
       }
-      const [upvotesFrom, downvotesFrom] = await Survey.findById(
-        req.params.surveyId
+      const [upvotesFrom, downvotesFrom] = await Document.findById(
+        req.params.documentId
       ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
       res.send([upvotesFrom, downvotesFrom]);
     } catch (err) {
@@ -88,20 +87,20 @@ router.post(
 );
 
 router.post(
-  "/:surveyId/downvote",
+  "/:documentId/downvote",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
       if (req.body.hasUpvoted)
-        await req.user.removeUpvotedSurveys(req.params.surveyId);
+        await req.user.removeUpvotedDocuments(req.params.documentId);
       if (!req.body.hasDownvoted) {
-        await req.user.addDownvotedSurveys(req.params.surveyId);
+        await req.user.addDownvotedDocuments(req.params.documentId);
       } else {
-        await req.user.removeDownvotedSurveys(req.params.surveyId);
+        await req.user.removeDownvotedDocuments(req.params.documentId);
       }
-      const [upvotesFrom, downvotesFrom] = await Survey.findById(
-        req.params.surveyId
+      const [upvotesFrom, downvotesFrom] = await Document.findById(
+        req.params.documentId
       ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
       res.send([upvotesFrom, downvotesFrom]);
     } catch (err) {
@@ -111,13 +110,13 @@ router.post(
 );
 
 router.post(
-  "/:parentProjectSurveyId",
+  "/:parentVersionId",
   ensureAuthentication,
   ensureResourceAccess,
   async (req, res, next) => {
     try {
-      updateExistingProjectSurvey({
-        parentProjectSurveyId: req.params.parentProjectSurveyId,
+      addVersionToExistingDocument({
+        parentVersionId: req.params.parentVersionId,
         markdown: req.body.markdown,
         resolvedIssueIds: req.body.resolvedIssueIds,
         newIssues: req.body.newIssues,
@@ -137,7 +136,7 @@ router.post(
   }
 );
 
-async function createNewProjectSurvey({
+async function createNewDocument({
   markdown,
   collaboratorEmails,
   commentPeriodUnit,
@@ -170,7 +169,7 @@ async function createNewProjectSurvey({
       return;
     }
     var markdownParsor = new MarkdownParsor({ markdown: markdown });
-    var survey = await Survey.create({
+    var document = await Document.create({
       title: markdownParsor.title,
       creator_id: creator.id,
       project_id: project.id,
@@ -179,8 +178,8 @@ async function createNewProjectSurvey({
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
-    var projectSurvey = await ProjectSurvey.create({
-      survey_id: survey.id,
+    var verion = await Version.create({
+      document_id: document.id,
       creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
@@ -197,17 +196,17 @@ async function createNewProjectSurvey({
           }
         }).spread(async (question, created) => {
           var answer = markdownParsor.findAnswerToQuestion(
-            questionObject.order_in_survey
+            questionObject.order_in_version
           );
-          var surveyQuestion = await SurveyQuestion.create({
-            survey_id: survey.id,
+          var versionQuestion = await VersionQuestion.create({
+            document_id: document.id,
             question_id: question.id,
-            order_in_survey: questionObject.order_in_survey
+            order_in_version: questionObject.order_in_version
           });
-          await ProjectSurveyAnswer.create({
+          await VersionAnswer.create({
             markdown: answer,
-            survey_question_id: surveyQuestion.id,
-            project_survey_id: projectSurvey.id
+            version_question_id: versionQuestion.id,
+            version_id: verion.id
           });
           return question;
         })
@@ -215,30 +214,30 @@ async function createNewProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          SurveyCollaborator.create({
+          DocumentCollaborator.create({
             user_id: user ? user.id : null,
             email,
-            survey_id: survey.id
+            document_id: document.id
           }).then(collaborator => {
             return Notification.notifyCollaborators({
               sender: creator,
               collaboratorId: user.id,
-              projectSurveyId: projectSurvey.id,
+              verionId: verion.id,
               projectSymbol: project.symbol,
-              parentSurveyTitle: survey.title,
+              parentVersionTitle: document.title,
               action: "created"
             });
           })
         )
     );
-    res.send(projectSurvey);
+    res.send(verion);
   } catch (err) {
     next(err);
   }
 }
 
-async function updateExistingProjectSurvey({
-  parentProjectSurveyId,
+async function addVersionToExistingDocument({
+  parentVersionId,
   markdown,
   resolvedIssueIds,
   newIssues,
@@ -251,11 +250,11 @@ async function updateExistingProjectSurvey({
   next
 }) {
   try {
-    var parentProjectSurvey = await ProjectSurvey.scope({
-      method: ["byIdWithMetadata", Number(parentProjectSurveyId)]
+    var parentVersion = await Version.scope({
+      method: ["byIdWithMetadata", Number(parentVersionId)]
     }).findOne();
     var project = await Project.findOne({
-      where: { symbol: parentProjectSurvey.survey.project.symbol },
+      where: { symbol: parentVersion.document.project.symbol },
       include: [
         {
           model: User,
@@ -271,7 +270,7 @@ async function updateExistingProjectSurvey({
     });
     const canVersion = permission(
       "Version",
-      { project, disclosure: parentProjectSurvey.survey },
+      { project, disclosure: parentVersion.document },
       creator
     );
     if (!canVersion) {
@@ -282,15 +281,15 @@ async function updateExistingProjectSurvey({
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
-    var projectSurvey = await ProjectSurvey.create({
-      survey_id: parentProjectSurvey.survey.id,
+    var verion = await Version.create({
+      document_id: parentVersion.document.id,
       creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });
-    await parentProjectSurvey.addChild(projectSurvey.id);
-    var survey = await Survey.findById(parentProjectSurvey.survey.id).then(s =>
-      s.update({ latest_version: parentProjectSurvey.hierarchyLevel + 1 })
+    await parentVersion.addChild(verion.id);
+    var document = await Document.findById(parentVersion.document.id).then(s =>
+      s.update({ latest_version: parentVersion.hierarchyLevel + 1 })
     );
     var questionInstances = await Promise.map(
       markdownParsor.questions,
@@ -304,34 +303,34 @@ async function updateExistingProjectSurvey({
           }
         }).spread(async (question, created) => {
           var answer = markdownParsor.findAnswerToQuestion(
-            questionObject.order_in_survey
+            questionObject.order_in_version
           );
-          var surveyQuestion = await SurveyQuestion.create({
-            project_survey_id: projectSurvey.id,
+          var versionQuestion = await VersionQuestion.create({
+            version_id: verion.id,
             question_id: question.id,
-            order_in_survey: questionObject.order_in_survey
+            order_in_version: questionObject.order_in_version
           });
-          await ProjectSurveyAnswer.create({
+          await VersionAnswer.create({
             markdown: answer,
-            survey_question_id: surveyQuestion.id,
-            project_survey_id: projectSurvey.id
+            version_question_id: versionQuestion.id,
+            version_id: verion.id
           });
           return question;
         })
     );
-    var prevCollaboratorEmails = parentProjectSurvey.survey.collaborators.map(
+    var prevCollaboratorEmails = parentVersion.document.collaborators.map(
       user => user.email
     );
     var removedCollaborators = _.difference(
       prevCollaboratorEmails,
       collaboratorEmails
     ).map(async email =>
-      SurveyCollaborator.update(
+      DocumentCollaborator.update(
         { revoked_access: true },
         {
           where: {
             email,
-            survey_id: parentProjectSurvey.survey.id
+            document_id: parentVersion.document.id
           }
         }
       )
@@ -339,21 +338,21 @@ async function updateExistingProjectSurvey({
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
-          SurveyCollaborator.findOrCreate({
+          DocumentCollaborator.findOrCreate({
             where: {
               user_id: user.id,
-              survey_id: parentProjectSurvey.survey.id
+              document_id: parentVersion.document.id
             },
             defaults: {
               user_id: user ? user.id : null,
               email,
-              survey_id: parentProjectSurvey.survey.id,
-              project_survey_version: projectSurvey.hierarchyLevel
+              document_id: parentVersion.document.id,
+              version_version: verion.hierarchyLevel
             }
           }).then(async (collaborator, created) => {
             var updated;
             if (collaborator.revoked_access) {
-              collaborator = await SurveyCollaborator.update(
+              collaborator = await DocumentCollaborator.update(
                 {
                   revoked_access: false
                 },
@@ -365,9 +364,9 @@ async function updateExistingProjectSurvey({
               return Notification.notifyCollaborators({
                 sender: creator,
                 collaboratorId: user.id,
-                projectSurveyId: projectSurvey.id,
+                verionId: verion.id,
                 projectSymbol: project.symbol,
-                parentSurveyTitle: parentProjectSurvey.survey.title,
+                parentVersionTitle: parentVersion.document.title,
                 action: "updated"
               });
           })
@@ -375,7 +374,7 @@ async function updateExistingProjectSurvey({
     );
     var resolvedCurrentIssues = resolvedIssueIds.map(async issueId =>
       Issue.update(
-        { open: false, resolving_project_survey_id: projectSurvey.id },
+        { open: false, resolving_version_id: verion.id },
         { where: { id: Number(issueId) } }
       )
     );
@@ -383,18 +382,18 @@ async function updateExistingProjectSurvey({
       Comment.create({
         comment: newIssue,
         reviewed: "verified",
-        project_survey_id: parentProjectSurveyId,
+        version_id: parentVersionId,
         owner_id: creator.id
       }).then(comment =>
         Issue.create({
           open: false,
           comment_id: comment.id,
-          resolving_project_survey_id: projectSurvey.id
+          resolving_version_id: verion.id
         })
       )
     );
     var engagedUsers = await getEngagedUsers({
-      projectSurvey: parentProjectSurvey,
+      verion: parentVersion,
       creator,
       collaboratorEmails
     });
@@ -407,14 +406,14 @@ async function updateExistingProjectSurvey({
           engagedUsers.map(engagedUser =>
             Notification.notifyEngagedUserOnUpdate({
               engagedUser,
-              projectSurveyId: projectSurvey.id,
+              verionId: verion.id,
               projectSymbol: project.symbol,
-              parentSurveyTitle: parentProjectSurvey.survey.title
+              parentVersionTitle: parentVersion.document.title
             })
           )
         )
     );
-    res.send(projectSurvey);
+    res.send(verion);
   } catch (err) {
     next(err);
   }

@@ -40,14 +40,14 @@ const Project = db.define(
               as: "editors"
             },
             {
-              model: db.model("survey"),
+              model: db.model("document"),
               include: [
                 { model: db.model("user"), as: "creator" },
                 {
                   model: db.model("user"),
                   as: "collaborators",
                   through: {
-                    model: db.model("survey_collaborator"),
+                    model: db.model("document_collaborator"),
                     where: { revoked_access: { [Sequelize.Op.not]: true } }
                   },
                   required: false
@@ -58,15 +58,14 @@ const Project = db.define(
                   attributes: ["name", "first_name", "last_name", "email"]
                 },
                 {
-                  model: db.model("survey"),
+                  model: db.model("document"),
                   as: "forkFrom"
                 },
                 {
-                  model: db.model("project_survey"),
+                  model: db.model("versions"),
                   required: false,
                   include: [
                     { model: db.model("user"), as: "creator" },
-                    { model: db.model("project_survey"), as: "descendents" },
                     {
                       model: db.model("comment"),
                       required: false,
@@ -100,16 +99,12 @@ const Project = db.define(
                         ]
                       ]
                     }
-                  ],
-                  order: [
-                    ["createdAt", "DESC"],
-                    [
-                      { model: db.model("project_survey"), as: "descendents" },
-                      "hierarchyLevel",
-                      "DESC"
-                    ]
                   ]
                 }
+              ],
+              order: [
+                ["createdAt", "DESC"],
+                [{ model: db.model("versions") }, "hierarchyLevel", "DESC"]
               ]
             }
           ]
@@ -143,15 +138,15 @@ module.exports = Project;
  *
  */
 
-async function getProjectStats(projectInstance, includeSurveys) {
+async function getProjectStats(projectInstance, includeDocuments) {
   var project = projectInstance.toJSON();
-  var surveys = project.surveys;
-  const numSurveys = surveys.length;
-  const numComments = surveys.reduce((count, survey) => {
-    const numTotalComments = survey.project_surveys
+  var documents = project.documents;
+  const numSurveys = documents.length;
+  const numComments = documents.reduce((count, document) => {
+    const numTotalComments = document.versions
       .slice(-1)[0]
       .comments.filter(c => c.reviewed !== "spam").length;
-    const numTotalReplies = survey.project_surveys
+    const numTotalReplies = document.versions
       .slice(-1)[0]
       .comments.reduce(
         (count, comment) =>
@@ -163,19 +158,19 @@ async function getProjectStats(projectInstance, includeSurveys) {
       );
     return numTotalComments + numTotalReplies + count;
   }, 0);
-  const numCommentIssues = surveys.reduce(
-    (count, survey) =>
-      survey.project_surveys.slice(-1)[0].comments.filter(a => !!a.issue)
-        .length + count,
+  const numCommentIssues = documents.reduce(
+    (count, document) =>
+      document.versions.slice(-1)[0].comments.filter(a => !!a.issue).length +
+      count,
     0
   );
-  const surveysWithStats =
-    surveys && surveys.length
-      ? surveys.map(s => {
-          const numTotalComments = s.project_surveys
+  const documentsWithStats =
+    documents && documents.length
+      ? documents.map(s => {
+          const numTotalComments = s.versions
             .slice(-1)[0]
             .comments.filter(c => c.reviewed !== "spam").length;
-          const numTotalReplies = s.project_surveys
+          const numTotalReplies = s.versions
             .slice(-1)[0]
             .comments.reduce(
               (count, comment) =>
@@ -185,23 +180,23 @@ async function getProjectStats(projectInstance, includeSurveys) {
                   : count,
               0
             );
-          const numCommentIssues = s.project_surveys
+          const numCommentIssues = s.versions
             .slice(-1)[0]
             .comments.filter(a => !!a.issue).length;
 
           return _.assignIn(s, {
             num_total_comments: numTotalComments + numTotalReplies,
             num_issues: numCommentIssues,
-            num_versions: s.project_surveys.length,
+            num_versions: s.versions.length,
             project_symbol: project.symbol
           });
         })
       : [];
   var assignees = {
-    num_surveys: numSurveys,
+    num_documents: numSurveys,
     num_total_comments: numComments,
     num_issues: numCommentIssues
   };
-  if (includeSurveys) assignees.surveys = surveysWithStats;
-  return _.assignIn(_.omit(project, ["surveys"]), assignees);
+  if (includeDocuments) assignees.documents = documentsWithStats;
+  return _.assignIn(_.omit(project, ["documents"]), assignees);
 }

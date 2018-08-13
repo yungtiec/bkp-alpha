@@ -335,7 +335,7 @@ User.getCommentsAndCount = async function(queryObj) {
     method: ["commentCount", cloneDeep(queryObj)]
   }).findOne();
   pagedComments = user.comments
-    .filter(comment => comment.project_survey)
+    .filter(comment => comment.version)
     .map(comment => {
       comment = comment.toJSON();
       if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
@@ -379,14 +379,14 @@ function getCommentQueryObj({
 }) {
   var projectSurveyQuery = projects
     ? {
-        model: db.model("project_survey"),
+        model: db.model("version"),
         duplicating: false,
         // required: true,
-        // leads to error missing FROM-clause entry for table "comments->project_survey->survey->project"
-        // filter projects by filtering the comments null project_survey
+        // leads to error missing FROM-clause entry for table "comments->version->document->project"
+        // filter projects by filtering the comments null version
         include: [
           {
-            model: db.model("survey"),
+            model: db.model("document"),
             attributes: ["id", "title", "project_id"],
             where: { project_id: projects },
             include: [
@@ -399,11 +399,11 @@ function getCommentQueryObj({
         ]
       }
     : {
-        model: db.model("project_survey"),
+        model: db.model("version"),
         required: true,
         include: [
           {
-            model: db.model("survey"),
+            model: db.model("document"),
             attributes: ["id", "title"],
             include: [
               {
@@ -466,7 +466,7 @@ function getCommentQueryObj({
     commentQueryObj.order = [
       [
         {
-          model: db.model("project_survey")
+          model: db.model("version")
         },
         "id",
         "ASC"

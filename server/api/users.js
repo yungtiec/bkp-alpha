@@ -5,9 +5,8 @@ const router = require("express").Router();
 const {
   User,
   Role,
-  Annotation,
   Project,
-  Survey,
+  Document,
   Comment,
   Issue
 } = require("../db/models");
@@ -106,41 +105,41 @@ router.get(
 );
 
 router.get(
-  "/:userId/surveys",
+  "/:userId/documents",
   ensureAuthentication,
   ensureCorrectRole,
   async (req, res, next) => {
     try {
-      var surveys;
-      var ownSurveys, collaboratorSurveys;
+      var documents;
+      var ownDocuments, collaboratorDocuments;
       switch (req.user.roles[0].name) {
         case "admin":
-          surveys = await Survey.scope("includeVersions").findAll();
+          documents = await Document.scope("includeVersions").findAll();
           break;
         case "project_admin":
         case "project_editor":
-          ownSurveys = await Survey.scope("includeVersions").findAll({
+          ownDocuments = await Document.scope("includeVersions").findAll({
             where: { creator_id: req.user.id }
           });
-          collaboratorSurveys = await req.user.getCollaboratedSurveys({
+          collaboratorDocuments = await req.user.getCollaboratedDocuments({
             include: [
-              { model: db.model("project_survey") },
+              { model: db.model("version") },
               {
                 model: db.model("project")
               }
             ],
             order: [
               ["createdAt", "DESC"],
-              [{ model: db.model("project_survey") }, "hierarchyLevel", "DESC"]
+              [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
             ]
           });
-          surveys = ownSurveys.concat(collaboratorSurveys);
+          documents = ownDocuments.concat(collaboratorDocuments);
           break;
         default:
-          surveys = [];
+          documents = [];
           break;
       }
-      res.send(surveys);
+      res.send(documents);
     } catch (err) {
       next(err);
     }
