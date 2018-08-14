@@ -13,14 +13,14 @@ export function fetchProjectBySymbol(symbol) {
       const currentProject = getState().scenes.project.data.metadata;
       if (currentProject.symbol === symbol) return;
       const project = await getProjectBySymbol(symbol);
-      const projectMetadata = omit(project, ["surveys"]);
-      const surveysById = keyBy(project.surveys, "id");
-      const surveyIds = project.surveys.map(ps => ps.id);
+      const projectMetadata = omit(project, ["documents"]);
+      const documentsById = keyBy(project.documents, "id");
+      const documentIds = project.documents.map(ps => ps.id);
       dispatch({
         type: types.PROJECT_FETCH_SUCCESS,
         projectMetadata,
-        surveysById,
-        surveyIds
+        documentsById,
+        documentIds
       });
     } catch (error) {
       console.error(error);

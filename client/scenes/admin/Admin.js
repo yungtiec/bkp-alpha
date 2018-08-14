@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter, route, Switch, Route, Redirect } from "react-router-dom";
 import history from "../../history";
 import { requiresAuthorization } from "../../components";
-import ProjectSurvey from "./scenes/ProjectSurvey";
+import Version from "./scenes/Version";
 import AdminListContainer from "./scenes/Lists/AdminListContainer";
 
 const Admin = ({ match }) => {
@@ -10,8 +10,8 @@ const Admin = ({ match }) => {
     <div className="admin-container">
       <Switch>
         <Route
-          path={`${match.url}/project-survey/:projectSurveyId`}
-          component={ProjectSurvey}
+          path={`${match.url}/project-document/:versionId`}
+          component={Version}
         />
         <Route path={`${match.url}/list`} component={AdminListContainer} />
         <Redirect from={`${match.url}`} exact to={`${match.url}/list`} />

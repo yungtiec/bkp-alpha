@@ -5,12 +5,12 @@ const {
   Permission,
   Role,
   Project,
-  ProjectSurvey,
-  ProjectSurveyAnswer,
+  Version,
+  VersionAnswer,
   Question,
   QuestionCategory,
-  Survey,
-  SurveyQuestion
+  Document,
+  VersionQuestion
 } = require("../server/db/models");
 const _ = require("lodash");
 const MarkdownParsor = require("./markdown-parser");
@@ -27,12 +27,12 @@ async function seed() {
   var projects = await seedProject();
   await seedPermission();
   await seedUser(projects);
-  var survey2 = await seedSurveyFromMarkdown({
+  var survey2 = await seedDocumentFromMarkdown({
     project: projects[0],
     surveyCreatorId: 1,
     filepath: "./data/vpp-2.md"
   });
-  var survey1 = await seedSurveyFromMarkdown({
+  var survey1 = await seedDocumentFromMarkdown({
     project: projects[0],
     surveyCreatorId: 1,
     filepath: "./data/vpp-1.md"
@@ -95,15 +95,15 @@ async function seedProject() {
   );
 }
 
-async function seedSurvey({ project, survey, questions }) {
-  var survey = await Survey.create(survey);
-  var projectSurvey = await ProjectSurvey.create({
+async function seedDocument({ project, survey, questions }) {
+  var survey = await Document.create(survey);
+  var version = await Version.create({
     project_id: project.id,
     survey_id: survey.id
   });
   var questions = await Promise.map(questions, (question, i) =>
     Question.create(question).then(async question => {
-      await SurveyQuestion.create({
+      await VersionQuestion.create({
         survey_id: survey.id,
         question_id: question.id,
         order_in_survey: i
@@ -114,20 +114,20 @@ async function seedSurvey({ project, survey, questions }) {
   return survey;
 }
 
-async function seedSurveyFromMarkdown({
+async function seedDocumentFromMarkdown({
   project,
   survey,
   surveyCreatorId,
   filepath
 }) {
   var markdownParsor = new MarkdownParsor({ filepath });
-  var survey = await Survey.create({
+  var survey = await Document.create({
     title: markdownParsor.title,
     description: markdownParsor.description,
     project_id: project.id,
     creator_id: 1
   });
-  var projectSurvey = await ProjectSurvey.create({
+  var version = await Version.create({
     survey_id: survey.id,
     creator_id: surveyCreatorId
   });
@@ -140,15 +140,15 @@ async function seedSurveyFromMarkdown({
         var answer = markdownParsor.findAnswerToQuestion(
           questionObject.order_in_survey
         );
-        var surveyQuestion = await SurveyQuestion.create({
+        var surveyQuestion = await VersionQuestion.create({
           project_survey_id: survey.id,
           question_id: question.id,
           order_in_survey: questionObject.order_in_survey
         });
-        await ProjectSurveyAnswer.create({
+        await VersionAnswer.create({
           markdown: answer,
           survey_question_id: surveyQuestion.id,
-          project_survey_id: projectSurvey.id
+          project_survey_id: version.id
         });
         return question;
       })

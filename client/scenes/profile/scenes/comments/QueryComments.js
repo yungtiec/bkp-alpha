@@ -61,7 +61,7 @@ const mapState = (state, ownProps) => {
     pageOffset,
     pageCount,
     pageProjectFilter,
-    pageSurveyFilter,
+    pageDocumentFilter,
     checked
   } = getPageAndFilter(state);
   return {
@@ -73,7 +73,7 @@ const mapState = (state, ownProps) => {
     pageOffset,
     pageCount,
     pageProjectFilter,
-    pageSurveyFilter,
+    pageDocumentFilter,
     checked
   };
 };

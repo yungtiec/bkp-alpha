@@ -31,7 +31,7 @@ import {
 } from "../../data/reducer";
 import { notify } from "reapop";
 
-const LoadableSurveyUpload = Loadable({
+const LoadableDocumentUpload = Loadable({
   loader: () => import("./Upload"),
   loading: () => (
     <SquareLoader
@@ -58,7 +58,7 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    return <LoadableSurveyUpload {...this.props} />;
+    return <LoadableDocumentUpload {...this.props} />;
   }
 }
 

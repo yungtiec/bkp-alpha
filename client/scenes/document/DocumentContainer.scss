@@ -1,0 +1,44 @@
+@import "../../breakpoint";
+
+.project-document {
+  max-width: 740px;
+  padding: 20px 0px 6rem;
+}
+
+.project-document__back-btn {
+  cursor: pointer;
+  width: 150px;
+}
+
+.project-document__header .document__title {
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1.58;
+  text-transform: capitalize;
+  width: 70%;
+  @include breakpoint(xs) {
+    width: 100%;
+    font-size: 36px;
+    line-height: 40px;
+  }
+  @include breakpoint(sm) {
+    width: 100%;
+  }
+}
+
+.project-document__header .document__subtitle {
+  font-size: 1.2rem;
+  color: #838383;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.document__request-btn {
+  text-decoration: underline;
+  color: #4a9ff6 !important;
+}
+
+.project-document__footer {
+  @include breakpoint(xs) {
+    flex-direction: column;
+  }
+}

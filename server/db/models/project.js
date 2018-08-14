@@ -62,7 +62,7 @@ const Project = db.define(
                   as: "forkFrom"
                 },
                 {
-                  model: db.model("versions"),
+                  model: db.model("version"),
                   required: false,
                   include: [
                     { model: db.model("user"), as: "creator" },
@@ -104,7 +104,7 @@ const Project = db.define(
               ],
               order: [
                 ["createdAt", "DESC"],
-                [{ model: db.model("versions") }, "hierarchyLevel", "DESC"]
+                [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
               ]
             }
           ]

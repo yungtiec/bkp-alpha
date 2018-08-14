@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
 import { fetchProjectBySymbol } from "./data/actions";
-import { getAllProjectSurveys } from "./data/surveys/reducer";
+import { getAllVersions } from "./data/documents/reducer";
 import { getSelectedProject } from "./data/metadata/reducer";
 
 const LoadableProject = Loadable.Map({
@@ -21,7 +21,7 @@ const LoadableProject = Loadable.Map({
   ),
   render(loaded, props) {
     let Project = loaded.project.default;
-    return <Project {...props} loadedSurvey={loaded.survey} />;
+    return <Project {...props} loadedDocument={loaded.document} />;
   },
   delay: 400
 });
@@ -41,10 +41,10 @@ class MyComponent extends React.Component {
 }
 
 const mapState = state => {
-  const { surveysById, surveyIds } = getAllProjectSurveys(state);
+  const { documentsById, documentIds } = getAllVersions(state);
   return {
-    surveysById,
-    surveyIds,
+    documentsById,
+    documentIds,
     metadata: getSelectedProject(state)
   };
 };

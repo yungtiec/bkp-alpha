@@ -34,9 +34,9 @@ export default class UploadInterface extends Component {
     } = this.props;
 
     return (
-      <div className="project-survey" id="project-survey">
+      <div className="project-document" id="project-document">
         {importedMarkdown ? null : (
-          <div className="project-survey__upload-dropzone">
+          <div className="project-document__upload-dropzone">
             <Dropzone
               onDrop={this.onDrop}
               multiple={false}

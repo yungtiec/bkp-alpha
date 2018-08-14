@@ -6,7 +6,7 @@ import { isEmpty } from "lodash";
 export default function requiresAuthorization({
   Component,
   roleRequired,
-  checkSurveyEditRight
+  checkDocumentEditRight
 }) {
   class AuthorizationComponent extends React.Component {
     componentDidMount() {

@@ -19,14 +19,14 @@ export default ({ comment, path, children }) => {
       <div className="reply-comment__parent">
         <div
           className={`reply-comment__parent-header ${
-            comment.project_survey ? "reply-comment__parent-header--mobile" : ""
+            comment.version ? "reply-comment__parent-header--mobile" : ""
           }`}
         >
-          {comment.project_survey && comment.project_survey.survey ? (
-            <div className="reply-comment__survey-title-container">
-              <span className="reply-comment__survey-title">
-                {comment.project_survey.survey.project.name}:{" "}
-                {comment.project_survey.survey.title}
+          {comment.version && comment.version.document ? (
+            <div className="reply-comment__document-title-container">
+              <span className="reply-comment__document-title">
+                {comment.version.document.project.name}:{" "}
+                {comment.version.document.title}
               </span>
             </div>
           ) : (
@@ -47,8 +47,8 @@ export default ({ comment, path, children }) => {
             </span>
           </p>
         </div>
-        {comment.project_survey &&
-          comment.project_survey.survey && (
+        {comment.version &&
+          comment.version.document && (
             <p className="reply-comment__user">
               <span>
                 <Avatar name={parent.owner.displayName} size={40} color={"#999999"} />

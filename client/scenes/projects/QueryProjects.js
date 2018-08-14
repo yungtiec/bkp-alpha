@@ -6,8 +6,8 @@ import { isEmpty } from "lodash";
 import { fetchAllProjects } from "../../data/projects/actions";
 import { getAllProjects } from "../../data/projects/reducer";
 import {
-  fetchLastestSurveysWithStats,
-  getSurveyListing
+  fetchLastestDocumentsWithStats,
+  getDocumentListing
 } from "../../data/reducer";
 import { batchActions } from "redux-batched-actions";
 
@@ -32,8 +32,8 @@ class MyComponent extends React.Component {
   render() {
     if (
       !this.props.projectsBySymbol ||
-      !this.props.surveysById ||
-      !this.props.surveyIds ||
+      !this.props.documentsById ||
+      !this.props.documentIds ||
       !this.props.projectSymbolArr
     )
       return null;
@@ -43,12 +43,12 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { projectsBySymbol, projectSymbolArr } = getAllProjects(state);
-  const { surveysById, surveyIds } = getSurveyListing(state);
+  const { documentsById, documentIds } = getDocumentListing(state);
   return {
     projectsBySymbol,
     projectSymbolArr,
-    surveysById,
-    surveyIds
+    documentsById,
+    documentIds
   };
 };
 
@@ -57,7 +57,7 @@ const actions = dispatch => {
     loadInitialData() {
       batchActions([
         dispatch(fetchAllProjects()),
-        dispatch(fetchLastestSurveysWithStats())
+        dispatch(fetchLastestDocumentsWithStats())
       ]);
     }
   };

@@ -10,8 +10,8 @@ export default ({ issueCommentIds, issuesByCommentId }) => {
         <ListItem
           cardKey={id}
           cardHref={`/project/${
-            issuesByCommentId[id].project_survey.survey.project.symbol
-          }/survey/${issuesByCommentId[id].project_survey.id}/comment/${
+            issuesByCommentId[id].version.document.project.symbol
+          }/document/${issuesByCommentId[id].version.id}/comment/${
             issuesByCommentId[id].id
           }`}
           mainTitle={issuesByCommentId[id].comment}
@@ -20,8 +20,8 @@ export default ({ issueCommentIds, issuesByCommentId }) => {
           mainText={""}
           metadataArray={[
             `in ${
-              issuesByCommentId[id].project_survey.survey.project.symbol
-            } - ${issuesByCommentId[id].project_survey.survey.title}`,
+              issuesByCommentId[id].version.document.project.symbol
+            } - ${issuesByCommentId[id].version.document.title}`,
             moment(issuesByCommentId[id].createdAt).fromNow()
           ]}
         />

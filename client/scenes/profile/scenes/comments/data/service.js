@@ -5,7 +5,7 @@ export function getUserComments({
   offset,
   limit,
   projects,
-  surveys,
+  documents,
   reviewStatus = [],
   issueStatus = []
 } = {}) {
@@ -15,7 +15,7 @@ export function getUserComments({
         offset,
         limit,
         projects,
-        surveys,
+        documents,
         reviewStatus,
         issueStatus
       }

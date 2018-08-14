@@ -9,14 +9,14 @@ export default ({ comment, path, children }) => (
   <div className="main-comment__main">
     <div
       className={`main-comment__header ${
-        comment.project_survey ? "main-comment__header--mobile" : ""
+        comment.version ? "main-comment__header--mobile" : ""
       }`}
     >
-      {comment.project_survey && comment.project_survey.survey ? (
+      {comment.version && comment.version.document ? (
         <div>
-          <span className="main-comment__survey-title">
-            {comment.project_survey.survey.project.name}:{" "}
-            {comment.project_survey.survey.title}
+          <span className="main-comment__document-title">
+            {comment.version.document.project.name}:{" "}
+            {comment.version.document.title}
           </span>
         </div>
       ) : (
@@ -48,8 +48,8 @@ export default ({ comment, path, children }) => (
         </span>
       </p>
     </div>
-    {comment.project_survey &&
-      comment.project_survey.survey && (
+    {comment.version &&
+      comment.version.document && (
         <p className="main-comment__user">
           {comment.owner && (
             <span>

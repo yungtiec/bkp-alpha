@@ -2,20 +2,20 @@ import React, { Component } from "react";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import moment from "moment";
 import { ProjectBanner } from "./components";
-import { ListSurvey } from "../../components";
+import { ListDocument } from "../../components";
 
 const ProjectIndex = props => {
-  const { surveysById, surveyIds, metadata } = props;
+  const { documentsById, documentIds, metadata } = props;
   return (
     <div className="main-container">
-      <div className="surveys-container">
+      <div className="documents-container">
         <ProjectBanner metadata={metadata} />
-        <span className="surveys-container__sub-header">
-          {surveyIds.length
+        <span className="documents-container__sub-header">
+          {documentIds.length
             ? "Browse disclosures"
             : `${metadata.name} currently has no disclosure document`}
         </span>
-        <ListSurvey surveyIds={surveyIds} surveysById={surveysById} />
+        <ListDocument documentIds={documentIds} documentsById={documentsById} />
       </div>
     </div>
   );

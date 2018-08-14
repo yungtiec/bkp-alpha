@@ -73,7 +73,7 @@ const ProjectBanner = ({ metadata, user, loadModal }) => (
           <span class="project-metrics__stat-label">Disclosures</span>
           <div class="project-metrics__stat-value">
             <span class="project-metrics__stat-number">
-              {metadata.num_surveys}
+              {metadata.num_documents}
             </span>
           </div>
         </div>
