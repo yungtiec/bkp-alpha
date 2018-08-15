@@ -27,14 +27,14 @@ async function seed() {
   var projects = await seedProject();
   await seedPermission();
   await seedUser(projects);
-  var survey2 = await seedDocumentFromMarkdown({
+  var document2 = await seedDocumentFromMarkdown({
     project: projects[0],
-    surveyCreatorId: 1,
+    documentCreatorId: 1,
     filepath: "./data/vpp-2.md"
   });
-  var survey1 = await seedDocumentFromMarkdown({
+  var document1 = await seedDocumentFromMarkdown({
     project: projects[0],
-    surveyCreatorId: 1,
+    documentCreatorId: 1,
     filepath: "./data/vpp-1.md"
   });
 }
@@ -95,41 +95,41 @@ async function seedProject() {
   );
 }
 
-async function seedDocument({ project, survey, questions }) {
-  var survey = await Document.create(survey);
+async function seedDocument({ project, document, questions }) {
+  var document = await Document.create(document);
   var version = await Version.create({
     project_id: project.id,
-    survey_id: survey.id
+    document_id: document.id
   });
   var questions = await Promise.map(questions, (question, i) =>
     Question.create(question).then(async question => {
       await VersionQuestion.create({
-        survey_id: survey.id,
+        version_id: version.id,
         question_id: question.id,
-        order_in_survey: i
+        order_in_version: i
       });
       return question;
     })
   );
-  return survey;
+  return document;
 }
 
 async function seedDocumentFromMarkdown({
   project,
-  survey,
-  surveyCreatorId,
+  document,
+  documentCreatorId,
   filepath
 }) {
   var markdownParsor = new MarkdownParsor({ filepath });
-  var survey = await Document.create({
+  var document = await Document.create({
     title: markdownParsor.title,
     description: markdownParsor.description,
     project_id: project.id,
     creator_id: 1
   });
   var version = await Version.create({
-    survey_id: survey.id,
-    creator_id: surveyCreatorId
+    document_id: document.id,
+    creator_id: documentCreatorId
   });
   var questionInstances = await Promise.map(
     markdownParsor.questions,
@@ -138,17 +138,17 @@ async function seedDocumentFromMarkdown({
         markdown: `### ${questionObject.question}`
       }).then(async question => {
         var answer = markdownParsor.findAnswerToQuestion(
-          questionObject.order_in_survey
+          questionObject.order_in_version
         );
-        var surveyQuestion = await VersionQuestion.create({
-          project_survey_id: survey.id,
+        var versionQuestion = await VersionQuestion.create({
+          version_id: version.id,
           question_id: question.id,
-          order_in_survey: questionObject.order_in_survey
+          order_in_version: questionObject.order_in_version
         });
         await VersionAnswer.create({
           markdown: answer,
-          survey_question_id: surveyQuestion.id,
-          project_survey_id: version.id
+          version_question_id: versionQuestion.id,
+          version_id: version.id
         });
         return question;
       })

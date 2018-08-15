@@ -40,6 +40,7 @@ class DocumentContainer extends Component {
   }
 
   render() {
+
     return (
       <div className="main-container">
         <Switch>

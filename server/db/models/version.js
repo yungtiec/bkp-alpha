@@ -10,7 +10,7 @@ const Version = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    survey_id: {
+    document_id: {
       type: Sequelize.INTEGER
     },
     submitted: {
@@ -131,7 +131,7 @@ const Version = db.define(
           where: { id: versionId },
           include: [
             {
-              model: db.model("document_question"),
+              model: db.model("version_question"),
               include: [
                 {
                   model: db.model("question")

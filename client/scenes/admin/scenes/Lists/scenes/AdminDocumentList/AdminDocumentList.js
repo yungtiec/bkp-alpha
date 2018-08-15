@@ -34,7 +34,7 @@ const AdminDocumentList = ({ documentIds, documentsById }) => {
               // history.push(`/admin/project-document/${rowInfo.row.id}`);
               history.push(
                 `/project/${rowInfo.original.project.id}/document/${
-                  rowInfo.original.latest_version.id
+                  rowInfo.original.versions[0].id
                 }`
               );
             }

@@ -22,13 +22,4 @@ class MyComponent extends React.Component {
   }
 }
 
-const mapState = (state, ownProps) => ({ ...ownProps });
-
-const actions = (dispatch, ownProps) => {
-  return {
-    changeAnonymity: () => dispatch(changeAnonymity()),
-    editProfile: props => dispatch(editProfile(props))
-  };
-};
-
-export default connect(mapState, actions)(MyComponent);
+export default MyComponent;

@@ -157,10 +157,10 @@ Comment.belongsTo(Version, {
 ==============================================*/
 
 Version.belongsTo(Document, {
-  foreignKey: "survey_id"
+  foreignKey: "document_id"
 });
 Document.hasMany(Version, {
-  foreignKey: "survey_id"
+  foreignKey: "document_id"
 });
 
 Document.belongsTo(Project, {
@@ -187,8 +187,8 @@ Version.belongsToMany(Question, {
   through: VersionQuestion,
   foreignKey: "version_id"
 });
-VersionQuestion.belongsTo(Document, {
-  foreignKey: "document_id"
+VersionQuestion.belongsTo(Version, {
+  foreignKey: "version_id"
 });
 VersionQuestion.belongsTo(Question, {
   foreignKey: "question_id"
@@ -196,8 +196,8 @@ VersionQuestion.belongsTo(Question, {
 Question.hasMany(VersionQuestion, {
   foreignKey: "question_id"
 });
-Document.hasMany(VersionQuestion, {
-  foreignKey: "document_id"
+Version.hasMany(VersionQuestion, {
+  foreignKey: "version_id"
 });
 
 VersionQuestion.belongsToMany(Version, {

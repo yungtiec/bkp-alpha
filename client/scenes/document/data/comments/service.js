@@ -1,9 +1,7 @@
 import axios from "axios";
 
-export function getCommentsByDocument(versionId) {
-  return axios
-    .get(`/api/projects/-/documents/${versionId}/comments`)
-    .then(res => res.data);
+export function getCommentsByVersionId(versionId) {
+  return axios.get(`/api/versions/${versionId}/comments`).then(res => res.data);
 }
 
 export function postComment({
@@ -14,14 +12,11 @@ export function postComment({
   issueOpen
 }) {
   return axios
-    .post(
-      `/api/projects/${projectSymbol}/documents/${versionId}/comments`,
-      {
-        newComment,
-        tags,
-        issueOpen
-      }
-    )
+    .post(`/api/versions/${versionId}/comments`, {
+      newComment,
+      tags,
+      issueOpen
+    })
     .then(res => res.data);
 }
 
@@ -33,13 +28,10 @@ export function postReplyToComment({
   newComment
 }) {
   return axios
-    .post(
-      `/api/projects/${projectSymbol}/documents/${versionId}/comments/${parentId}/reply`,
-      {
-        rootId,
-        newComment
-      }
-    )
+    .post(`/api/versions/${versionId}/comments/${parentId}/reply`, {
+      rootId,
+      newComment
+    })
     .then(res => res.data);
 }
 
@@ -50,10 +42,10 @@ export function postUpvoteToComment({
   hasUpvoted
 }) {
   return axios
-    .post(
-      `/api/projects/${projectSymbol}/documents/${versionId}/comments/${commentId}/upvote`,
-      { commentId, hasUpvoted }
-    )
+    .post(`/api/versions/${versionId}/comments/${commentId}/upvote`, {
+      commentId,
+      hasUpvoted
+    })
     .then(res => res.data);
 }
 
@@ -66,21 +58,22 @@ export function updateComment({
   issueOpen
 }) {
   return axios
-    .post(
-      `/api/projects/${projectSymbol}/documents/${versionId}/comments/${commentId}/edit`,
-      { newComment, tags, issueOpen }
-    )
+    .post(`/api/versions/${versionId}/comments/${commentId}/edit`, {
+      newComment,
+      tags,
+      issueOpen
+    })
     .then(res => res.data);
 }
 
 export function postPendingCommentStatus({ comment, reviewed }) {
-  return axios.post(`/api/projects/-/documents/-/comments/${comment.id}/verify`, {
+  return axios.post(`/api/versions/-/comments/${comment.id}/verify`, {
     reviewed
   });
 }
 
 export function updateCommentIssueStatus({ comment, open }) {
-  return axios.post(`/api/projects/-/documents/-/comments/${comment.id}/issue`, {
+  return axios.post(`/api/versions/-/comments/${comment.id}/issue`, {
     open
   });
 }

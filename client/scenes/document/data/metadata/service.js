@@ -30,6 +30,6 @@ export function postDownvoteToDocument({
 
 export function getMetadataByVersionId(versionId) {
   return axios
-    .get(`/api/version/${versionId}/metadata`)
+    .get(`/api/versions/${versionId}/metadata`)
     .then(res => res.data);
 }

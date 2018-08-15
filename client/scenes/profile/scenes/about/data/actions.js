@@ -27,6 +27,10 @@ export function fetchUserBasicInfo(userIdParam) {
   };
 }
 
+export function resetUserData() {
+  return { type: types.BASIC_INFO_RESET };
+}
+
 export function changeAccessStatus({ userId, accessStatus }) {
   return async (dispatch, getState) => {
     try {

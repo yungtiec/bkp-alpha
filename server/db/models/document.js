@@ -168,7 +168,7 @@ function computeDocumentStats(document) {
       num_downvotes: document.upvotesFrom.length,
       latest_version: document.versions[0]
     },
-    _.omit(document.toJSON(), ["versions"])
+    document.toJSON()
   );
 }
 

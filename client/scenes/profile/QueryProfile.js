@@ -3,10 +3,15 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Loadable from "react-loadable";
 import { SquareLoader } from "halogenium";
-import { currentUserIsAdmin, editProfile } from "../../data/reducer";
+import {
+  currentUserIsAdmin,
+  editProfile,
+  changeAnonymity
+} from "../../data/reducer";
 import {
   fetchUserBasicInfo,
-  changeAccessStatus
+  changeAccessStatus,
+  resetUserData
 } from "./scenes/about/data/actions";
 import { getUserBasicInfo } from "./scenes/about/data/reducer";
 
@@ -75,7 +80,10 @@ const actions = (dispatch, ownProps) => {
           userId: ownProps.match.params.userId,
           accessStatus: "restore"
         })
-      )
+      ),
+    changeAnonymity: () => dispatch(changeAnonymity()),
+    editProfile: props => dispatch(editProfile(props)),
+    resetUserData: () => dispatch(resetUserData())
   };
 };
 

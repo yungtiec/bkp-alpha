@@ -21,13 +21,7 @@ class QnaBox extends Component {
   componentDidMount() {
     const self = this;
     if (!this.annotation) {
-      const {
-        qna,
-        match,
-        isLoggedIn,
-        tagFilter,
-        versionId
-      } = this.props;
+      const { qna, match, isLoggedIn, tagFilter, versionId } = this.props;
       var app = new annotator.App();
       var pageUri = function() {
         return {
@@ -59,7 +53,7 @@ class QnaBox extends Component {
         .include(annotator.storage.http, {
           prefix: `${
             window.location.origin
-          }/api/projects/-/documents/${versionId}/annotator`,
+          }/api/versions/${versionId}/annotator`,
           urls: {
             create: "/",
             update: "/update/:id",

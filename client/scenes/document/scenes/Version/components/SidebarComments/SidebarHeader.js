@@ -108,8 +108,7 @@ export default class SidebarHeader extends Component {
             ) : null}
           </div>
         ) : null}
-        {!isLoggedIn &&
-          !isClosedForComment && (
+        {!isLoggedIn && (
             <div className="comment-item mt-4">
               <div className="comment-item__main">
                 <div className="comment-item__header">

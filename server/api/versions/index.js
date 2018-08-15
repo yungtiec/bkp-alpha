@@ -26,5 +26,5 @@ router.get("/:id/questions", async (req, res, next) => {
   }
 });
 
-router.use("/versions/:versionId/comments", require("./comments"));
-router.use("/versions/:versionId/annotator", require("./annotator"));
+router.use("/:versionId/comments", require("./comments"));
+router.use("/:versionId/annotator", require("./annotator"));

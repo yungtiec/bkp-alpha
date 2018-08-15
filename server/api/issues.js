@@ -10,10 +10,11 @@ module.exports = router;
 
 router.get("/", ensureAuthentication, async (req, res, next) => {
   try {
+    console.log(req.query);
     var issues = await Comment.findAndCountAll({
       where: {
         version_id: {
-          [Sequelize.Op.or]: req.query.versionIds.map(id => Number(id))
+          [Sequelize.Op.or]: (req.query.versionIds || []).map(id => Number(id))
         }
       },
       include: [

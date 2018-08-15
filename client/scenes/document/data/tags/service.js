@@ -1,12 +1,12 @@
 import axios from "axios";
 
 export function deleteTag({ commentId, tagId }) {
-  return axios.put(`/api/projects/-/documents/-/comments/${commentId}/tags/${tagId}`);
+  return axios.put(`/api/versions/-/comments/${commentId}/tags/${tagId}`);
 }
 
 export function putTag({ commentId, tagName }) {
   return axios
-    .put(`/api/projects/-/documents/-/comments/${commentId}/tags`, { tagName })
+    .put(`/api/versions/-/comments/${commentId}/tags`, { tagName })
     .then(res => res.data);
 }
 
