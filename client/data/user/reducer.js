@@ -34,8 +34,8 @@ export default function(state = defaultUser, action) {
     case types.OWN_SURVEYS_FETCH_SUCCESS:
       return {
         ...state,
-        surveysById: action.surveysById,
-        surveyIds: action.surveyIds
+        documentsById: action.documentsById,
+        documentIds: action.documentIds
       };
     default:
       return state;
@@ -57,10 +57,10 @@ export function getManagedProjects(state) {
   };
 }
 
-export function getOwnSurveys(state) {
-  const { surveysById, surveyIds } = state.data.user;
+export function getOwnDocuments(state) {
+  const { documentsById, documentIds } = state.data.user;
   return {
-    surveysById,
-    surveyIds
+    documentsById,
+    documentIds
   };
 }

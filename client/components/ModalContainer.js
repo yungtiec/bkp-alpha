@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 /** Modal Components */
-import { EditCommentModal } from "../scenes/project/scenes/survey/scenes/Survey/components";
-import { CommentModal } from "../scenes/project/scenes/survey/scenes/Survey/components";
+import { EditCommentModal } from "../scenes/document/scenes/Version/components";
+import { CommentModal } from "../scenes/document/scenes/Version/components";
 import { ProjectEditorModal } from "../scenes/project/components";
 import FeedbackModal from "./FeedbackModal";
 

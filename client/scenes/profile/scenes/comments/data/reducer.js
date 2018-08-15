@@ -3,12 +3,12 @@ import * as types from "./actionTypes";
 
 const initialState = {
   commentsById: {},
-  commentIds: [],
+  commentIds: null,
   pageCount: 0,
   pageLimit: 10,
   pageOffset: 0,
   pageProjectFilter: [],
-  pageSurveyFilter: [],
+  pageDocumentFilter: [],
   checked: []
 };
 
@@ -28,7 +28,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.PAGE_PROJECT_FILTER_UPDATED:
       return { ...state, pageProjectFilter: action.pageProjectFilter };
     case types.PAGE_SURVEY_FILTER_UPDATED:
-      return { ...state, pageSurveyFilter: action.pageSurveyFilter };
+      return { ...state, pageDocumentFilter: action.pageDocumentFilter };
     case types.SIDEBAR_FILTER_CHECKED:
       return { ...state, checked: action.checked };
     default:
@@ -53,6 +53,6 @@ export const getPageAndFilter = state =>
     "pageOffset",
     "pageCount",
     "pageProjectFilter",
-    "pageSurveyFilter",
+    "pageDocumentFilter",
     "checked"
   ]);

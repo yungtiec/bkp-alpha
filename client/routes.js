@@ -11,7 +11,8 @@ import {
   Upload,
   ActivityBoard,
   Dashboard,
-  Landing
+  Landing,
+  Document
 } from "./scenes";
 import {
   Login,
@@ -62,6 +63,11 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
+            path="/project/:symbol/document/:versionId"
+            component={Document}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
             path="/project/:symbol"
             component={Project}
           />
@@ -99,7 +105,7 @@ class Routes extends Component {
           )}
           {/* Displays our Login component as a fallback */}
           {!isLoggedIn && <Route component={Landing} />}
-          {isLoggedIn && <Redirect to="/project/BKP/survey/3" />}
+          {isLoggedIn && <Redirect to="/project/BKP/document/3" />}
         </Switch>
       </div>
     );

@@ -11,6 +11,8 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         ...action.profile
       };
+    case types.BASIC_INFO_RESET:
+      return {};
     case types.ACCESS_STATUS_UPDATED:
       newState = cloneDeep(state);
       newState.restricted_access = action.accessStatus === "restricted";

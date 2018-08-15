@@ -72,7 +72,7 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, "..", "public")));
 
-  app.get("/project/:symbol/survey/public/:file", (req, res, next) => {
+  app.get("/project/:symbol/document/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/:route/public/:file", (req, res, next) => {
@@ -82,30 +82,30 @@ const createApp = () => {
     res.redirect(`/${req.params.file}`);
   });
   app.get(
-    "/project/:symbol/survey/:surveyId/question/:questionId/comment/public/:file",
+    "/project/:symbol/document/:documentId/question/:questionId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
   );
   app.get(
-    "/project/:symbol/survey/:surveyId/public/:file",
+    "/project/:symbol/document/:documentId/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
   );
   app.get(
-    "/project/:symbol/survey/:surveyId/comment/public/:file",
+    "/project/:symbol/document/:documentId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
   );
-  app.get("/admin/project-survey/public/:file", (req, res, next) => {
+  app.get("/admin/version/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/admin/list/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
-  app.get("/admin/list/project-surveys/public/:file", (req, res, next) => {
+  app.get("/admin/list/versions/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/user/:userId/public/:file", (req, res, next) => {

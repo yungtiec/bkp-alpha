@@ -94,7 +94,7 @@ class AuthWidget extends Component {
               )}
               {width < 600 ? (
                 <Link
-                  to="/project/BKP/survey/3"
+                  to="/project/BKP/document/3"
                   style={{ display: "block", margin: "0px" }}
                 >
                   <div className={`${className}__dropdown-item`}>framework</div>

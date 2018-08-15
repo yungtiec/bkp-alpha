@@ -5,11 +5,11 @@ import { getResponsibleIssues } from "./service";
 export const fetchResponsibleIssues = () => async (dispatch, getState) => {
   try {
     const state = getState();
-    const { surveysById } = state.data.user;
+    const { documentsById } = state.data.user;
     const { issueOffset, issueLimit } = state.scenes.dashboard.data;
     const { count, rows } = await getResponsibleIssues({
-      projectSurveyIds: values(surveysById).reduce((idArray, s) => {
-        return idArray.concat(s.project_surveys.map(ps => ps.id));
+      versionIds: values(documentsById).reduce((idArray, s) => {
+        return idArray.concat(s.versions.map(ps => ps.id));
       }, []),
       offset: issueOffset,
       limit: issueLimit

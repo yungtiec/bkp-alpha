@@ -5,7 +5,7 @@ import { default as modalReducer } from "./modal/reducer";
 import { default as searchReducer } from "./search/reducer";
 import { default as environmentReducer } from "./environment/reducer";
 import { default as projectsReducer } from "./projects/reducer";
-import { default as surveysReducer } from "./surveys/reducer";
+import { default as documentsReducer } from "./documents/reducer";
 import { default as notificationsReducer } from "./notifications/reducer";
 
 export default combineReducers({
@@ -14,7 +14,7 @@ export default combineReducers({
   search: searchReducer,
   environment: environmentReducer,
   projects: projectsReducer,
-  surveys: surveysReducer,
+  documents: documentsReducer,
   notifications: notificationsReducer
 });
 
@@ -28,7 +28,7 @@ export * from "./environment/reducer";
 export * from "./environment/actions";
 export * from "./projects/reducer";
 export * from "./projects/actions";
-export * from "./surveys/reducer";
-export * from "./surveys/actions";
+export * from "./documents/reducer";
+export * from "./documents/actions";
 export * from "./notifications/reducer";
 export * from "./notifications/actions";

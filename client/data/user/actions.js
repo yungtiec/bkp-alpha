@@ -38,7 +38,7 @@ export const auth = (userInfo, method) => dispatch => {
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/survey/3");
+        else history.push("/project/BKP/document/3");
       },
       authError => {
         // rare example: a good use case for parallel (non-catch) error handler
@@ -80,7 +80,7 @@ export const signinWithUport = () => dispatch =>
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/survey/3");
+        else history.push("/project/BKP/document/3");
       },
       authError => {
         dispatch(getUser({ error: authError }));
@@ -100,7 +100,7 @@ export const verifyUportOnMobile = accessToken => async dispatch => {
         pathname: "/user/profile",
         state: { edit: true, basicInfoMissing: true }
       });
-    else history.push("/project/BKP/survey/3");
+    else history.push("/project/BKP/document/3");
   } catch (authError) {
     dispatch(getUser({ error: authError }));
   }
@@ -123,17 +123,17 @@ export const fetchManagedProjects = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchOwnSurveys = () => async (dispatch, getState) => {
+export const fetchOwnDocuments = () => async (dispatch, getState) => {
   try {
-    const surveys = await axios
-      .get(`api/users/-/surveys`)
+    const documents = await axios
+      .get(`api/users/-/documents`)
       .then(res => res.data);
-    const surveysById = keyBy(surveys, "id");
-    const surveyIds = surveys.map(ps => ps.id);
+    const documentsById = keyBy(documents, "id");
+    const documentIds = documents.map(ps => ps.id);
     dispatch({
       type: types.OWN_SURVEYS_FETCH_SUCCESS,
-      surveysById,
-      surveyIds
+      documentsById,
+      documentIds
     });
   } catch (err) {
     console.log(err);
@@ -195,7 +195,7 @@ export const resetPassword = ({ password, token }) => dispatch =>
           pathname: "/user/profile",
           state: { edit: true, basicInfoMissing: true }
         });
-      else history.push("/project/BKP/survey/3");
+      else history.push("/project/BKP/document/3");
     })
     .catch(err => {
       if (err.response && err.response.status === 404) {

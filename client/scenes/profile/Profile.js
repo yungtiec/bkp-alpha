@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ProfileBanner, ProfileNavbar } from "./components";
-import { QueryNotifications, QueryComments, QueryAbout } from "./scenes";
+import { QueryNotifications, QueryComments, About } from "./scenes";
 import autoBind from "react-autobind";
 import moment from "moment";
 
@@ -27,9 +27,11 @@ const Profile = ({
   isAdmin,
   myUserId,
   restrictAccess,
-  restoreAccess
+  restoreAccess,
+  resetUserData,
+  changeAnonymity,
+  editProfile
 }) => {
-
   const activeTab = window.location.pathname.split("/")[3];
   const isMyProfile =
     match.params.userId === "profile" || match.params.userId === myUserId;
@@ -41,7 +43,7 @@ const Profile = ({
         isAdmin={isAdmin}
         restrictedAccess={basicInfo.restricted_access}
         numComments={basicInfo.num_comments}
-        numProjectSurveyComments={basicInfo.num_project_survey_comments}
+        numVersionComments={basicInfo.num_version_comments}
         numIssues={basicInfo.num_issues}
         joinDate={moment(basicInfo.createdAt).format("MMM YYYY")}
         managedProjects={basicInfo.managedProjects}
@@ -59,8 +61,10 @@ const Profile = ({
         <Route
           path={`${match.url}/about`}
           render={props => (
-            <QueryAbout
+            <About
               changeAnonymity={changeAnonymity}
+              editProfile={editProfile}
+              resetUserData={resetUserData}
               {...basicInfo}
               {...props}
             />

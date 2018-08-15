@@ -48,7 +48,8 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    return <LoadableUserComments {...this.props} />;
+    if (!this.props.commentIds || !this.props.projectSymbolArr) return null;
+    else return <LoadableUserComments {...this.props} />;
   }
 }
 
@@ -60,7 +61,7 @@ const mapState = (state, ownProps) => {
     pageOffset,
     pageCount,
     pageProjectFilter,
-    pageSurveyFilter,
+    pageDocumentFilter,
     checked
   } = getPageAndFilter(state);
   return {
@@ -72,7 +73,7 @@ const mapState = (state, ownProps) => {
     pageOffset,
     pageCount,
     pageProjectFilter,
-    pageSurveyFilter,
+    pageDocumentFilter,
     checked
   };
 };

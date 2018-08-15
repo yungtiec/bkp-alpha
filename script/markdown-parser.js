@@ -10,7 +10,7 @@ const extractDescription = $ =>  $("h2").text()
 const extractQuestions = $ => {
   var questions = [];
   $("h3").each(function(i, h3) {
-    questions[i] = { question: $(this).text(), order_in_survey: i };
+    questions[i] = { question: $(this).text(), order_in_version: i };
   });
   return questions;
 };

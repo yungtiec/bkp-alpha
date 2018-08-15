@@ -6,7 +6,7 @@ import { isEmpty } from "lodash";
 export default function requiresAuthorization({
   Component,
   roleRequired,
-  checkSurveyEditRight
+  checkDocumentEditRight
 }) {
   class AuthorizationComponent extends React.Component {
     componentDidMount() {
@@ -22,13 +22,7 @@ export default function requiresAuthorization({
         isEmpty(this.props.user) ||
         (roleRequired &&
           !isEmpty(this.props.user) &&
-          !roleRequired.indexOf(this.props.user.roles[0].name) === -1) ||
-        (checkSurveyEditRight &&
-          (this.props.user.email !== this.props.surveyMetadata.creator.email &&
-            !this.props.surveyMetadata.collaborators.reduce(
-              (bool, c) => c.email === this.props.user.email || bool,
-              false
-            )))
+          !roleRequired.indexOf(this.props.user.roles[0].name) === -1)
       ) {
         history.push("/unauthorized");
       }
@@ -46,7 +40,6 @@ export default function requiresAuthorization({
   const mapStateToProps = state => {
     return {
       user: state.data.user,
-      surveyMetadata: state.scenes.project.scenes.survey.data.metadata
     };
   };
 

@@ -7,7 +7,6 @@ module.exports = router;
 
 router.post("/", ensureAuthentication, async (req, res, next) => {
   try {
-    console.log(req.body.feedback);
     if (process.env.NODE_ENV === "production")
       webhook.send(req.body.feedback, function(err, result) {
         if (err) {

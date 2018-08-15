@@ -9,7 +9,7 @@ export function postMarkdown({
   scorecard
 }) {
   return axios
-    .post(`/api/surveys`, {
+    .post(`/api/documents`, {
       markdown,
       collaboratorEmails,
       commentPeriodValue,

@@ -14,10 +14,10 @@ const AdminListSidebar = () => (
           users
         </li>
       </Link>
-      <Link to="project-surveys">
+      <Link to="version">
         <li
           className={`admin-list-navbar__item ${
-            window.location.pathname.includes("list/project-surveys")
+            window.location.pathname.includes("list/version")
               ? "active"
               : ""
           }`}

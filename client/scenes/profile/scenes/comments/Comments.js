@@ -12,7 +12,7 @@ export default ({
   pageLimit,
   pageOffset,
   pageProjectFilter,
-  pageSurveyFilter,
+  pageDocumentFilter,
   checked,
   checkSidebarFilter,
   updatePageOffset,

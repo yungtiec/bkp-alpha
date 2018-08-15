@@ -3,8 +3,8 @@ import * as types from "./actionTypes";
 import { combineReducers } from "redux";
 
 const initialState = {
-  projectsBySymbol: {},
-  projectSymbolArr: []
+  projectsBySymbol: null,
+  projectSymbolArr: null
 };
 
 export default function reduce(state = initialState, action = {}) {
@@ -13,7 +13,7 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state,
         projectSymbolArr: action.projectSymbolArr,
-        projectsBySymbol: action.projectsBySymbol
+        projectsBySymbol: action.projectsBySymbol || {}
       };
     default:
       return state;

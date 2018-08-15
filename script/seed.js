@@ -5,12 +5,12 @@ const {
   Permission,
   Role,
   Project,
-  ProjectSurvey,
-  ProjectSurveyAnswer,
+  Version,
+  VersionAnswer,
   Question,
   QuestionCategory,
-  Survey,
-  SurveyQuestion
+  Document,
+  VersionQuestion
 } = require("../server/db/models");
 const _ = require("lodash");
 const MarkdownParsor = require("./markdown-parser");
@@ -27,20 +27,21 @@ async function seed() {
   var projects = await seedProject();
   await seedPermission();
   await seedUser(projects);
-  var survey2 = await seedSurveyFromMarkdown({
+  var document2 = await seedDocumentFromMarkdown({
     project: projects[0],
-    surveyCreatorId: 1,
+    documentCreatorId: 1,
     filepath: "./data/vpp-2.md"
   });
-  var survey1 = await seedSurveyFromMarkdown({
+  var document1 = await seedDocumentFromMarkdown({
     project: projects[0],
-    surveyCreatorId: 1,
+    documentCreatorId: 1,
     filepath: "./data/vpp-1.md"
   });
 }
 
 async function seedUser(projects) {
   const userCsv = fs.readFileSync("./data/users.csv", "utf8");
+  const adminRole = await Role.findOne({ where: { name: "admin" } });
   await parse(userCsv, {
     columns: true,
     auto_parse: true
@@ -54,10 +55,8 @@ async function seedUser(projects) {
 
         return User.create(_.omit(entry, ["id"]))
           .then(async user => {
-            if (user.first_name === "Admin") return await user.addRole(1);
-            else if (user.first_name === "Tammy" || user.first_name === "Ron")
-              return await user.addRole(2);
-            else if (user.first_name === "Leslie") return await user.addRole(3);
+            if (user.last_name === "Admin")
+              return await user.addRole(adminRole.id);
             else return user;
           })
           .catch(err => {
@@ -96,40 +95,41 @@ async function seedProject() {
   );
 }
 
-async function seedSurvey({ project, survey, questions }) {
-  var survey = await Survey.create(survey);
-  var projectSurvey = await ProjectSurvey.create({
+async function seedDocument({ project, document, questions }) {
+  var document = await Document.create(document);
+  var version = await Version.create({
     project_id: project.id,
-    survey_id: survey.id
+    document_id: document.id
   });
   var questions = await Promise.map(questions, (question, i) =>
     Question.create(question).then(async question => {
-      await SurveyQuestion.create({
-        survey_id: survey.id,
+      await VersionQuestion.create({
+        version_id: version.id,
         question_id: question.id,
-        order_in_survey: i
+        order_in_version: i
       });
       return question;
     })
   );
-  return survey;
+  return document;
 }
 
-async function seedSurveyFromMarkdown({
+async function seedDocumentFromMarkdown({
   project,
-  survey,
-  surveyCreatorId,
+  document,
+  documentCreatorId,
   filepath
 }) {
   var markdownParsor = new MarkdownParsor({ filepath });
-  var survey = await Survey.create({
+  var document = await Document.create({
     title: markdownParsor.title,
     description: markdownParsor.description,
-    project_id: project.id
+    project_id: project.id,
+    creator_id: 1
   });
-  var projectSurvey = await ProjectSurvey.create({
-    survey_id: survey.id,
-    creator_id: surveyCreatorId
+  var version = await Version.create({
+    document_id: document.id,
+    creator_id: documentCreatorId
   });
   var questionInstances = await Promise.map(
     markdownParsor.questions,
@@ -138,17 +138,17 @@ async function seedSurveyFromMarkdown({
         markdown: `### ${questionObject.question}`
       }).then(async question => {
         var answer = markdownParsor.findAnswerToQuestion(
-          questionObject.order_in_survey
+          questionObject.order_in_version
         );
-        var surveyQuestion = await SurveyQuestion.create({
-          project_survey_id: survey.id,
+        var versionQuestion = await VersionQuestion.create({
+          version_id: version.id,
           question_id: question.id,
-          order_in_survey: questionObject.order_in_survey
+          order_in_version: questionObject.order_in_version
         });
-        await ProjectSurveyAnswer.create({
+        await VersionAnswer.create({
           markdown: answer,
-          survey_question_id: surveyQuestion.id,
-          project_survey_id: projectSurvey.id
+          version_question_id: versionQuestion.id,
+          version_id: version.id
         });
         return question;
       })

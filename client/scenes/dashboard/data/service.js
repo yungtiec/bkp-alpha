@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export const getResponsibleIssues = ({ projectSurveyIds, offset, limit }) =>
+export const getResponsibleIssues = ({ versionIds, offset, limit }) =>
   axios
-    .get("/api/issues", {
-      params: {
-        projectSurveyIds,
-        offset,
-        limit
-      }
-    })
-    .then(res => res.data);
+  .get("/api/issues", {
+    params: {
+      versionIds,
+      offset,
+      limit
+    }
+  })
+  .then(res => res.data);

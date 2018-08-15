@@ -21,7 +21,7 @@ export { default as requiresAuthorization } from "./requiresAuthorization";
 export { default as TagChip } from "./TagChip";
 export { default as StackableTable } from "./StackableTable";
 export { default as ListProject } from "./ListProject";
-export { default as ListSurvey } from "./ListSurvey";
+export { default as ListDocument } from "./ListDocument";
 export { default as ListIssue } from "./ListIssue";
 export { default as ListItem } from "./ListItem";
 export { default as SidebarLayout } from "./SidebarLayout";

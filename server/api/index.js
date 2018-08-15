@@ -1,9 +1,13 @@
+// api design for nested resources
+// https://stackoverflow.com/questions/20951419/what-are-best-practices-for-rest-nested-resources
+
 const router = require("express").Router();
 module.exports = router;
 
 router.use("/users", require("./users"));
 router.use("/projects", require("./projects"));
-router.use("/surveys", require("./surveys"));
+router.use("/documents", require("./documents"));
+router.use("/versions", require("./versions"));
 router.use("/issues", require("./issues"));
 router.use("/tags", require("./tags"));
 router.use("/notifications", require("./notifications"));

@@ -1,3 +1,18 @@
+## Refactor
+- frontend approach to data: https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md
+- naming
+  - survey => document, repo, root?
+  - projectSurveys => version, document:
+- frontend url design:
+  - like github https://github.com/FullstackAcademy/boilermaker/tree/deploy
+  - current naming: /projects/:symbol/surveys/:surveyId/project-surveys/:projectSurveyId
+  - new naming: /projects/:symbol/document/:documentId/versions/:versionsId
+  - plural
+
+## Re-design
+- navigating versions
+- admin dashboard
+
 ## Disclosure markdown format
 
 If you have no experience writing markdown files

@@ -19,7 +19,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       selectedProject,
       scorecard
     } = state.scenes.upload.data.upload;
-    const projectSurvey = await postMarkdown({
+    const version = await postMarkdown({
       markdown,
       collaboratorEmails,
       commentPeriodValue,
@@ -28,7 +28,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       scorecard
     });
     history.push(
-      `/project/${selectedProject.symbol}/survey/${projectSurvey.id}`
+      `/project/${selectedProject.symbol}/document/${version.id}`
     );
     dispatch({
       type: types.MARKDOWN_UPLOADED

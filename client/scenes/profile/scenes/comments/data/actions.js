@@ -37,14 +37,14 @@ export function fetchUserComments(userId) {
         pageLimit,
         pageOffset,
         pageProjectFilter,
-        pageSurveyFilter
+        pageDocumentFilter
       } = state.scenes.profile.scenes.comments.data;
       const { comments, commentCount } = await getUserComments({
         userId,
         offset: pageOffset,
         limit: pageLimit,
         projects: pageProjectFilter,
-        surveys: pageSurveyFilter
+        documents: pageDocumentFilter
       });
       const commentsById = keyBy(comments, "id");
       dispatch({
@@ -72,7 +72,7 @@ export const updatePageOffset = (userId, pageOffset) => {
       const {
         pageLimit,
         pageProjectFilter,
-        pageSurveyFilter,
+        pageDocumentFilter,
         checked
       } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
@@ -81,7 +81,7 @@ export const updatePageOffset = (userId, pageOffset) => {
         offset: pageOffset,
         limit: pageLimit,
         projects: pageProjectFilter,
-        surveys: pageSurveyFilter,
+        documents: pageDocumentFilter,
         reviewStatus,
         issueStatus
       });
@@ -112,7 +112,7 @@ export const updatePageProjectFilter = (userId, pageProjectFilter) => {
       const {
         pageLimit,
         pageOffset,
-        pageSurveyFilter,
+        pageDocumentFilter,
         checked
       } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
@@ -121,7 +121,7 @@ export const updatePageProjectFilter = (userId, pageProjectFilter) => {
         offset: pageOffset,
         limit: pageLimit,
         projects: pageProjectFilter,
-        surveys: pageSurveyFilter,
+        documents: pageDocumentFilter,
         reviewStatus,
         issueStatus
       });
@@ -144,9 +144,9 @@ export const updatePageProjectFilter = (userId, pageProjectFilter) => {
   };
 };
 
-export const updatePageSurveyFilter = pageSurveyFilter => ({
+export const updatePageDocumentFilter = pageDocumentFilter => ({
   type: types.PAGE_SURVEY_FILTER_UPDATED,
-  pageSurveyFilter
+  pageDocumentFilter
 });
 
 export const checkSidebarFilter = (userId, checked) => {
@@ -159,7 +159,7 @@ export const checkSidebarFilter = (userId, checked) => {
         pageLimit,
         pageOffset,
         pageProjectFilter,
-        pageSurveyFilter
+        pageDocumentFilter
       } = state.scenes.profile.scenes.comments.data;
       const { reviewStatus, issueStatus } = extractReviewAndIssueStats(checked);
       const { comments, commentCount } = await getUserComments({
@@ -167,7 +167,7 @@ export const checkSidebarFilter = (userId, checked) => {
         offset: pageOffset,
         limit: pageLimit,
         projects: pageProjectFilter,
-        surveys: pageSurveyFilter,
+        documents: pageDocumentFilter,
         reviewStatus,
         issueStatus
       });

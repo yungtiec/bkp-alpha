@@ -6,13 +6,7 @@ class ProfileAbout extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    this.state = {
-      edit: this.props.location.state && this.props.location.state.edit,
-      firstName: this.props.first_name,
-      lastName: this.props.last_name,
-      name: this.props.name,
-      organization: this.props.organization
-    };
+    this.state = {};
   }
 
   handleChange(evt) {
@@ -24,6 +18,28 @@ class ProfileAbout extends Component {
     this.setState(prevState => ({
       edit: !prevState.edit
     }));
+  }
+
+  componentDidMount() {
+    this.setState({
+      edit: this.props.location.state && this.props.location.state.edit,
+      firstName: this.props.first_name,
+      lastName: this.props.last_name,
+      name: this.props.name,
+      organization: this.props.organization
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.name !== nextProps.name) {
+      this.setState({
+        edit: nextProps.location.state && nextProps.location.state.edit,
+        firstName: nextProps.first_name,
+        lastName: nextProps.last_name,
+        name: nextProps.name,
+        organization: nextProps.organization
+      });
+    }
   }
 
   render() {

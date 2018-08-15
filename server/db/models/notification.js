@@ -74,15 +74,15 @@ Notification.notify = function({ sender, comment, messageFragment }) {
 
 Notification.notifyEngagedUserOnUpdate = function({
   engagedUser,
-  projectSurveyId,
+  versionId,
   projectSymbol,
-  parentSurveyTitle
+  versionTitle
 }) {
   return Notification.create({
-    message: `You might be interested in the updated version of ${projectSymbol}/${parentSurveyTitle}`,
+    message: `You might be interested in the updated version of ${projectSymbol}/${versionTitle}`,
     status: "unread",
     recipient_id: engagedUser.id,
-    uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
+    uri: `/projects/${projectSymbol}/documents/-/versions/${versionId}`,
     disclosure_updated: true
   });
 };
@@ -90,18 +90,18 @@ Notification.notifyEngagedUserOnUpdate = function({
 Notification.notifyCollaborators = function({
   sender,
   collaboratorId,
-  projectSurveyId,
+  versionId,
   projectSymbol,
-  parentSurveyTitle,
+  versionTitle,
   action
 }) {
   return Notification.create({
     message: `${
       sender.displayName
-    } ${action} ${projectSymbol}/${parentSurveyTitle} and added you as collaborator`,
+    } ${action} ${projectSymbol}/${versionTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
-    uri: `/project/${projectSymbol}/survey/${projectSurveyId}`,
+    uri: `/projects/${projectSymbol}/documents/-/versions/${versionId}`,
     disclosure_updated: true
   });
 };
@@ -117,7 +117,7 @@ function getContextUri(comment) {
     comment.ancestors && comment.ancestors.length
       ? comment.ancestors[0]
       : comment;
-  return `/project/${comment.project_survey.survey.project.symbol}/survey/${
-    comment.project_survey.id
-  }/comment/${rootItem.id}`;
+  return `/projects/${
+    comment.version.document.project.symbol
+  }/documents/-/versions/${comment.version.id}/comments/${rootItem.id}`;
 }

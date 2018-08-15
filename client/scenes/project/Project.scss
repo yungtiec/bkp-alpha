@@ -1,0 +1,33 @@
+@import "../../breakpoint";
+
+.project-container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 36px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.project__title {
+  margin-bottom: 20px;
+}
+
+.project__title span {
+  font-size: 28px;
+  margin-right: 10px;
+}
+
+.project__title p {
+  line-height: 2;
+}
+
+.documents-container__sub-header {
+  margin-bottom: 20px;
+  display: block;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 32px;
+  color: #999;
+  margin-top: 40px;
+}

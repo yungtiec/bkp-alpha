@@ -29,10 +29,10 @@ export function getCommentContextPath(comment) {
       : comment;
   return comment.uri
     ? `${rootItem.uri.replace(window.origin, "")}/question/${
-        comment.survey_question_id
+        comment.version_question_id
       }/comment/${rootItem.id}`
-    : `/project/${comment.project_survey.survey.project.symbol}/survey/${
-        comment.project_survey.id
+    : `/project/${comment.version.document.project.symbol}/document/${
+        comment.version.id
       }/comment/${rootItem.id}`;
 }
 
