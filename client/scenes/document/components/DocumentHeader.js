@@ -14,7 +14,11 @@ export default class DocumentHeader extends Component {
   }
 
   render() {
-    const { documentMetadata, projectMetadata } = this.props;
+    const {
+      documentMetadata,
+      projectMetadata,
+      isClosedForComment
+    } = this.props;
     const creator = documentMetadata.document.creator.displayName;
     const collaborators = documentMetadata.document.collaborators
       .map((c, i) => {
@@ -30,8 +34,16 @@ export default class DocumentHeader extends Component {
 
     return (
       <div className="project-document__header">
-        <ProjectSymbolBlueBox name={projectMetadata.name} />
-        <p className="document__title">{`${documentMetadata.document.title}`}</p>
+        <ProjectSymbolBlueBox
+          name={
+            !isClosedForComment
+              ? "public comment initiative"
+              : "public comment (closed) - check back soon for updates"
+          }
+        />
+        <p className="document__title">{`${
+          documentMetadata.document.title
+        }`}</p>
         <p className="document__subtitle  mb-4">
           {`document version 0.4.0 created by ${creator} ${collaborators}`}
         </p>

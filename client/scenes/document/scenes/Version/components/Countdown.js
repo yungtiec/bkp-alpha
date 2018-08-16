@@ -14,7 +14,10 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
     return (
       <div className="comment-item__main">
         <div className="comment-item__header">
-          <p className="mb-2">This document is closed for comment</p>
+          <p className="mb-2" style={{ color: "white" }}>
+            Thank you for your feedback. The public comment period is now closed.
+            We are finalizing version 1.0, which we will post here in the coming weeks.
+          </p>
         </div>
       </div>
     );
@@ -28,13 +31,10 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
               Time left to leave a comment
               <i class="ml-2 fas fa-question-circle" />
             </p>
-            <ReactTooltip
-              id="countdown-explaination"
-              type="light"
-            >
+            <ReactTooltip id="countdown-explaination" type="light">
               <span>
-                Once the countdown ends, the editors will go over your
-                feedback, edit the document and publish a new version.
+                Once the countdown ends, the editors will go over your feedback,
+                edit the document and publish a new version.
               </span>
             </ReactTooltip>
           </div>

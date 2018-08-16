@@ -12,7 +12,8 @@ const ActionBar = ({
   hasUpvoted,
   upvoteItem,
   labelAsSpam,
-  labelAsNotSpam
+  labelAsNotSpam,
+  isClosedForComment
 }) => (
   <div className="comment-item__action--bottom">
     <PunditContainer policies={policies} user={user}>
@@ -34,7 +35,9 @@ const ActionBar = ({
             <button
               type="button"
               className={`btn ${
-                item.reviewed === "verified" ? "btn-primary" : "btn-outline-primary"
+                item.reviewed === "verified"
+                  ? "btn-primary"
+                  : "btn-outline-primary"
               } btn-sm`}
               onClick={labelAsNotSpam}
             >
@@ -50,7 +53,9 @@ const ActionBar = ({
           >
             <i className="fas fa-edit" onClick={openModal} />
           </VisibleIf>
-          <i className="fas fa-reply" onClick={initReplyToThis} />
+          {!isClosedForComment && (
+            <i className="fas fa-reply" onClick={initReplyToThis} />
+          )}
           <span className={`${hasUpvoted ? "upvoted" : ""}`}>
             <i className="fas fa-thumbs-up" onClick={upvoteItem} />
             {item.upvotesFrom ? item.upvotesFrom.length : 0}

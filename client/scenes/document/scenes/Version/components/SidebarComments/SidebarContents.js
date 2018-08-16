@@ -35,6 +35,7 @@ const SidebarContents = props => {
 
 function renderSidebarWithSelectedComments(props) {
   const {
+    isClosedForComment,
     selectedComments,
     commentsById,
     projectMetadata,
@@ -60,6 +61,7 @@ function renderSidebarWithSelectedComments(props) {
         .map(comment => (
           <CommentItem
             key={`comment-${comment.id}`}
+            isClosedForComment={isClosedForComment}
             comment={comment}
             projectMetadata={projectMetadata}
             user={user}
@@ -85,6 +87,7 @@ function renderSidebarWithAllComments(props) {
     commentIds,
     commentsById,
     projectMetadata,
+    isClosedForComment,
     selectedText,
     parent,
     replyToComment,
@@ -100,40 +103,43 @@ function renderSidebarWithAllComments(props) {
     isLoggedIn,
     admin
   } = props;
-  return commentIds
-    // .filter(id => commentsById[id].reviewed !== "spam")
-    .map(id => (
-      <Element key={`comment-${id}__element`} name={`comment-${id}`}>
-        <ScrollLink
-          key={`comment-${id}__scrolllink`}
-          className={`comment-${id}`}
-          activeClass="active"
-          to={`qna-${commentsById[id].version_question_id}`}
-          smooth="easeInOutCubic"
-          duration={300}
-          spy={true}
-        >
-          <CommentItem
-            key={`comment-${id}`}
-            comment={commentsById[id]}
-            projectMetadata={projectMetadata}
-            user={user}
-            replyToItem={replyToComment}
-            initiateReplyToItem={initiateReplyToComment}
-            cancelReplyToItem={cancelReplyToComment}
-            verifyItemAsAdmin={verifyCommentAsAdmin}
-            upvoteItem={upvoteComment}
-            editItem={editComment}
-            changeItemIssueStatus={changeCommentIssueStatus}
-            loadModal={loadModal}
-            notify={notify}
-            user={user}
-            isLoggedIn={isLoggedIn}
-            admin={admin}
-          />
-        </ScrollLink>
-      </Element>
-    ));
+  return (
+    commentIds
+      // .filter(id => commentsById[id].reviewed !== "spam")
+      .map(id => (
+        <Element key={`comment-${id}__element`} name={`comment-${id}`}>
+          <ScrollLink
+            key={`comment-${id}__scrolllink`}
+            className={`comment-${id}`}
+            activeClass="active"
+            to={`qna-${commentsById[id].version_question_id}`}
+            smooth="easeInOutCubic"
+            duration={300}
+            spy={true}
+          >
+            <CommentItem
+              key={`comment-${id}`}
+              isClosedForComment={isClosedForComment}
+              comment={commentsById[id]}
+              projectMetadata={projectMetadata}
+              user={user}
+              replyToItem={replyToComment}
+              initiateReplyToItem={initiateReplyToComment}
+              cancelReplyToItem={cancelReplyToComment}
+              verifyItemAsAdmin={verifyCommentAsAdmin}
+              upvoteItem={upvoteComment}
+              editItem={editComment}
+              changeItemIssueStatus={changeCommentIssueStatus}
+              loadModal={loadModal}
+              notify={notify}
+              user={user}
+              isLoggedIn={isLoggedIn}
+              admin={admin}
+            />
+          </ScrollLink>
+        </Element>
+      ))
+  );
 }
 
 const mapState = (state, ownProps) => ({

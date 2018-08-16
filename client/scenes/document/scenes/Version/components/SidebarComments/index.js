@@ -51,6 +51,7 @@ export default ({
     />
     <SidebarContents
       isLoggedIn={isLoggedIn}
+      isClosedForComment={isClosedForComment}
       commentIds={commentIds}
       commentsById={commentsById}
       selectedText={selectedText}
