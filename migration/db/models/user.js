@@ -16,20 +16,20 @@ const User = db.define(
       unique: true
     },
     password: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
       // Making `.password` act like a func hides it when serializing to JSON.
       // This is a hack to get around Sequelize's lack of a "private" option.
-      get() {
-        return () => this.getDataValue("password");
-      }
+      // get() {
+      //   return () => this.getDataValue("password");
+      // }
     },
     salt: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
       // Making `.salt` act like a function hides it when serializing to JSON.
       // This is a hack to get around Sequelize's lack of a "private" option.
-      get() {
-        return () => this.getDataValue("salt");
-      }
+      // get() {
+      //   return () => this.getDataValue("salt");
+      // }
     },
     googleId: {
       type: Sequelize.STRING
@@ -334,18 +334,16 @@ User.getCommentsAndCount = async function(queryObj) {
   var { comments } = await User.scope({
     method: ["commentCount", cloneDeep(queryObj)]
   }).findOne();
-  pagedComments = user.comments
-    .filter(comment => comment.version)
-    .map(comment => {
-      comment = comment.toJSON();
-      if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
-      if (comment.parent.ancestors.length) {
-        comment.ancestors = comment.parent.ancestors.concat(comment.parent);
-      } else {
-        comment.ancestors = [comment.parent];
-      }
-      return comment;
-    });
+  pagedComments = user.comments.map(comment => {
+    comment = comment.toJSON();
+    if (!comment.parentId) return assignIn({ ancestors: [] }, comment);
+    if (comment.parent.ancestors.length) {
+      comment.ancestors = comment.parent.ancestors.concat(comment.parent);
+    } else {
+      comment.ancestors = [comment.parent];
+    }
+    return comment;
+  });
   return { pagedComments, commentCount: comments.length };
 };
 
@@ -364,7 +362,7 @@ const setName = user => {
 };
 
 const hookChain = user => {
-  // setSaltAndPassword(user);
+  setSaltAndPassword(user);
   setName(user);
 };
 
@@ -379,38 +377,31 @@ function getCommentQueryObj({
 }) {
   var projectSurveyQuery = projects
     ? {
-        model: db.model("version"),
+        model: db.model("project_survey"),
+        where: { project_id: projects },
         duplicating: false,
-        // required: true,
-        // leads to error missing FROM-clause entry for table "comments->version->document->project"
-        // filter projects by filtering the comments null version
         include: [
           {
-            model: db.model("document"),
-            attributes: ["id", "title", "project_id"],
-            where: { project_id: projects },
-            include: [
-              {
-                model: db.model("project"),
-                attributes: ["id", "symbol", "name"]
-              }
-            ]
+            model: db.model("project"),
+            attributes: ["id", "symbol", "name"]
+          },
+          {
+            model: db.model("survey"),
+            attributes: ["id", "title"]
           }
         ]
       }
     : {
-        model: db.model("version"),
+        model: db.model("project_survey"),
         required: true,
         include: [
           {
-            model: db.model("document"),
-            attributes: ["id", "title"],
-            include: [
-              {
-                model: db.model("project"),
-                attributes: ["id", "symbol", "name"]
-              }
-            ]
+            model: db.model("project"),
+            attributes: ["id", "symbol", "name"]
+          },
+          {
+            model: db.model("survey"),
+            attributes: ["id", "title"]
           }
         ]
       };
@@ -466,7 +457,7 @@ function getCommentQueryObj({
     commentQueryObj.order = [
       [
         {
-          model: db.model("version")
+          model: db.model("project_survey")
         },
         "id",
         "ASC"
