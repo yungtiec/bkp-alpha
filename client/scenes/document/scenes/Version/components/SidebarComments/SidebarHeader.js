@@ -74,7 +74,9 @@ export default class SidebarHeader extends Component {
       <div>
         {selectedComments && !selectedComments.length ? (
           <div className="sidebar__title-container">
-            <p className="sidebar__title">Comments ({nonSpamCommentIds.length})</p>
+            <p className="sidebar__title">
+              Comments ({nonSpamCommentIds.length})
+            </p>
           </div>
         ) : (
           <div className="sidebar__title-container">
@@ -91,10 +93,16 @@ export default class SidebarHeader extends Component {
           this.renderCommentSortBy({
             commentSortBy
           })}
-        {selectedComments && !selectedComments.length && isLoggedIn ? (
-          <div className="comment-item page-comment">
-            <Countdown timeInUnix={Number(documentMetadata.comment_until_unix)} />
-            {!isClosedForComment ? (
+        {selectedComments && !selectedComments.length ? (
+          <div
+            className={`comment-item ${
+              isClosedForComment ? "page-comment--highlight" : "page-comment"
+            }`}
+          >
+            <Countdown
+              timeInUnix={Number(documentMetadata.comment_until_unix)}
+            />
+            {!isClosedForComment && isLoggedIn ? (
               <CommentBoxWithTagField
                 showTags={true}
                 showIssueCheckbox={true}
@@ -109,23 +117,42 @@ export default class SidebarHeader extends Component {
           </div>
         ) : null}
         {!isLoggedIn && (
-            <div className="comment-item mt-4">
-              <div className="comment-item__main">
-                <div className="comment-item__header">
+          <div className="comment-item mt-4">
+            <div className="comment-item__main">
+              <div className="comment-item__header">
+                {isClosedForComment ? (
                   <p className="mb-0">
-                    <Link to="/login" className="text-primary">
-                      Login
+                    <Link to="/login" className="text-primary font-weight-bold">
+                      Log in
                     </Link>{" "}
                     or{" "}
-                    <Link to="/signup" className="text-primary">
-                      signup
+                    <Link
+                      to="/signup"
+                      className="text-primary font-weight-bold"
+                    >
+                      Sign up here
+                    </Link>{" "}
+                    for notifications
+                  </p>
+                ) : (
+                  <p className="mb-0">
+                    <Link to="/login" className="text-primary font-weight-bold">
+                      Log in
+                    </Link>{" "}
+                    or{" "}
+                    <Link
+                      to="/signup"
+                      className="text-primary font-weight-bold"
+                    >
+                      sign up
                     </Link>{" "}
                     to comment
                   </p>
-                </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
   }

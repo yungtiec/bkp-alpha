@@ -252,6 +252,7 @@ class Document extends Component {
         <DocumentHeader
           documentMetadata={documentMetadata}
           projectMetadata={documentMetadata.document.project}
+          isClosedForComment={isClosedForComment}
         />
         {isLoggedIn && (
           <VersionToolbar

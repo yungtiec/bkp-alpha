@@ -201,6 +201,7 @@ export default class CommentItem extends Component {
         ) : null}
         <ActionBar
           item={comment}
+          isClosedForComment={this.props.isClosedForComment}
           projectMetadata={projectMetadata}
           user={user}
           hasUpvoted={hasUpvoted}
@@ -266,6 +267,7 @@ export default class CommentItem extends Component {
           )}
           <ActionBar
             item={reply}
+            isClosedForComment={this.props.isClosedForComment}
             projectMetadata={projectMetadata}
             user={user}
             hasUpvoted={hasUpvoted}
