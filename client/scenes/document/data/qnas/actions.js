@@ -9,7 +9,7 @@ export function fetchQuestionsByVersionId(versionId) {
       var version = await getQuestionsByVersionId(versionId);
       const documentQnas = sortBy(
         version.version_questions,
-        ["order_in_document"],
+        ["order_in_version"],
         ["asc"]
       );
       const documentQnasById = keyBy(documentQnas, "id");

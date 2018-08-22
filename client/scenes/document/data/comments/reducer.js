@@ -226,7 +226,7 @@ function sortCommentsByPosition(commentCollection) {
   if (!commentCollection.length) return [];
   return orderBy(
     commentCollection,
-    ["range.order_in_document", "range.startIndex", "range.endIndex"],
+    ["range.order_in_version", "range.startIndex", "range.endIndex"],
     ["asc", "asc", "asc"]
   );
 }
@@ -271,8 +271,8 @@ function getStartAndEndIndexInDocumentQna(documentQnaIds, documentQnasById, comm
       );
     const startIndex = documentQnaContent.indexOf(comment.quote);
     const endIndex = startIndex + comment.quote.length;
-    const order_in_document = documentQuestion.order_in_document;
-    return { startIndex, endIndex, order_in_document };
+    const order_in_version = documentQuestion.order_in_version;
+    return { startIndex, endIndex, order_in_version };
   } catch (err) {}
 }
 

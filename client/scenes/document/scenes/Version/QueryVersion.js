@@ -102,7 +102,6 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    console.log("??")
     if (
       !this.props.documentMetadata.id ||
       !this.props.documentQnaIds ||

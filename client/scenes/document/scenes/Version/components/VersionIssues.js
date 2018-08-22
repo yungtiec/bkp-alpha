@@ -29,6 +29,7 @@ export default ({ documentVersions, projectSymbol }) => {
                             version: {
                               id: v.id,
                               document: {
+                                id: v.document.id,
                                 project: {
                                   symbol: projectSymbol
                                 }

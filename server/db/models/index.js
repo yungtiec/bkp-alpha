@@ -14,6 +14,7 @@ const Issue = require("./issue");
 const Notification = require("./notification");
 const ProjectAdmin = require("./project-admin");
 const ProjectEditor = require("./project-editor");
+Comment.isHierarchy();
 
 /*=============================================
 =            role based authorization         =

@@ -11,7 +11,7 @@ export default ({ documentIds, documentsById }) => {
           key={id}
           cardHref={`/project/${documentsById[id].project_symbol ||
             (documentsById[id].project &&
-              documentsById[id].project.symbol)}/document/${
+              documentsById[id].project.symbol)}/document/${id}/version/${
             documentsById[id].latest_version
               ? documentsById[id].latest_version.id
               : documentsById[id].versions[0].id

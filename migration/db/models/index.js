@@ -1,4 +1,3 @@
-
 var Project = require("./project");
 var Survey = require("./survey");
 var Question = require("./question");
@@ -15,11 +14,10 @@ var Comment = require("./comment");
 var Issue = require("./issue");
 var QuestionCategory = require("./question-category");
 var Role = require("./role");
-
-ProjectSurvey.isHierarchy()
-ProjectSurveyAnswer.isHierarchy()
-Comment.isHierarchy()
-QuestionCategory.isHierarchy()
+ProjectSurvey.isHierarchy();
+ProjectSurveyAnswer.isHierarchy();
+Comment.isHierarchy();
+QuestionCategory.isHierarchy();
 
 /*=============================================
 =            role based authorization         =

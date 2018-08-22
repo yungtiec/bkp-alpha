@@ -15,7 +15,9 @@ export default ({ documentMetadata, projectSymbol }) => (
               version.hierarchyLevel && sc.email !== version.creator.email
         );
         if (version.creator.email !== documentMetadata.document.creator.email)
-          collaborators = collaborators.concat(documentMetadata.document.creator);
+          collaborators = collaborators.concat(
+            documentMetadata.document.creator
+          );
         collaborators = collaborators
           .map((c, i) => {
             if (i === collaborators.length - 1 && collaborators.length > 1)
@@ -66,6 +68,7 @@ export default ({ documentMetadata, projectSymbol }) => (
                               version: {
                                 id: comment.version_id,
                                 document: {
+                                  id: documentMetadata.document.id,
                                   project: {
                                     symbol: projectSymbol
                                   }

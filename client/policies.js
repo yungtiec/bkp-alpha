@@ -2,8 +2,11 @@ const { find, isEmpty } = require("lodash");
 
 module.exports = {
   Comment: (action, model, user) => {
-    if (!user || isEmpty(user)) return false;
-    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    if ((!user || isEmpty(user)) && action !== "Read") return false;
+    const userRole =
+      !user || !user.roles || !user.roles.length
+        ? "contributer"
+        : user.roles[0].name;
     const isAdmin = userRole === "admin";
     const isProjectAdmin =
       userRole === "project_admin" &&

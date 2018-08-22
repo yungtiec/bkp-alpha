@@ -125,7 +125,7 @@ class VersionToolbar extends Component {
                   className="btn btn-outline-primary"
                   onClick={() =>
                     history.push(
-                      `/project/${this.props.projectMetadata.symbol}/document/${
+                      `/project/${this.props.projectMetadata.symbol}/document/${documentMetadata.document.id}/version/${
                         this.props.documentMetadata.id
                       }`
                     )
@@ -158,7 +158,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${this.props.documentMetadata.id}/progress`}
+                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/progress`}
                     >
                       View progress
                     </Link>
@@ -170,7 +170,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${this.props.documentMetadata.id}/progress`}
+                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/progress`}
                       class="dropdown-item"
                     >
                       Milestone
@@ -178,7 +178,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${this.props.documentMetadata.id}/issues`}
+                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/issues`}
                       class="dropdown-item"
                     >
                       Issues
@@ -202,7 +202,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${
+                      }/document/${documentMetadata.document.id}/version/${
                         orderBy(
                           this.props.documentMetadata.document.versions,
                           ["hierarchyLevel"],

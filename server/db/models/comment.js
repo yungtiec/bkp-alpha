@@ -5,6 +5,11 @@ const { assignIn } = require("lodash");
 const Comment = db.define(
   "comment",
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     uri: {
       type: Sequelize.STRING
     },
@@ -36,7 +41,6 @@ const Comment = db.define(
     }
   },
   {
-    hierarchy: true,
     scopes: {
       withVersions: function(moreIncludeOptions) {
         var options = {
