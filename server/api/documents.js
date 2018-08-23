@@ -178,7 +178,7 @@ async function createNewDocument({
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
-    var verion = await Version.create({
+    var version = await Version.create({
       document_id: document.id,
       creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
@@ -186,30 +186,21 @@ async function createNewDocument({
     });
     var questionInstances = await Promise.map(
       markdownParsor.questions,
-      questionObject =>
-        Question.findOrCreate({
-          where: {
-            markdown: `### ${questionObject.question.trim()}`
-          },
-          defaults: {
-            markdown: `### ${questionObject.question.trim()}`
-          }
-        }).spread(async (question, created) => {
-          var answer = markdownParsor.findAnswerToQuestion(
-            questionObject.order_in_version
-          );
-          var versionQuestion = await VersionQuestion.create({
-            document_id: document.id,
-            question_id: question.id,
-            order_in_version: questionObject.order_in_version
-          });
-          await VersionAnswer.create({
-            markdown: answer,
-            version_question_id: versionQuestion.id,
-            version_id: verion.id
-          });
-          return question;
-        })
+      async questionObject => {
+        var answer = markdownParsor.findAnswerToQuestion(
+          questionObject.order_in_version
+        );
+        var versionQuestion = await VersionQuestion.create({
+          version_id: version.id,
+          markdown: `### ${questionObject.question.trim()}`,
+          order_in_version: questionObject.order_in_version
+        });
+        await VersionAnswer.create({
+          markdown: answer,
+          version_question_id: versionQuestion.id,
+          version_id: version.id
+        });
+      }
     );
     var collaborators = collaboratorEmails.map(
       async email =>
@@ -222,7 +213,7 @@ async function createNewDocument({
             return Notification.notifyCollaborators({
               sender: creator,
               collaboratorId: user.id,
-              verionId: verion.id,
+              versionId: version.id,
               projectSymbol: project.symbol,
               parentVersionTitle: document.title,
               action: "created"
@@ -230,7 +221,7 @@ async function createNewDocument({
           })
         )
     );
-    res.send(verion);
+    res.send(version);
   } catch (err) {
     next(err);
   }
@@ -281,42 +272,34 @@ async function addVersionToExistingDocument({
     var commentUntilInUnix = moment()
       .add(commentPeriodValue, commentPeriodUnit)
       .format("x");
-    var verion = await Version.create({
+    var version = await Version.create({
       document_id: parentVersion.document.id,
       creator_id: creator.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });
-    await parentVersion.addChild(verion.id);
+    await parentVersion.addChild(version.id);
     var document = await Document.findById(parentVersion.document.id).then(s =>
       s.update({ latest_version: parentVersion.hierarchyLevel + 1 })
     );
     var questionInstances = await Promise.map(
       markdownParsor.questions,
-      questionObject =>
-        Question.findOrCreate({
-          where: {
-            markdown: `### ${questionObject.question.trim()}`
-          },
-          defaults: {
-            markdown: `### ${questionObject.question.trim()}`
-          }
-        }).spread(async (question, created) => {
-          var answer = markdownParsor.findAnswerToQuestion(
-            questionObject.order_in_version
-          );
-          var versionQuestion = await VersionQuestion.create({
-            version_id: verion.id,
-            question_id: question.id,
-            order_in_version: questionObject.order_in_version
-          });
-          await VersionAnswer.create({
-            markdown: answer,
-            version_question_id: versionQuestion.id,
-            version_id: verion.id
-          });
-          return question;
-        })
+      async questionObject => {
+        var answer = markdownParsor.findAnswerToQuestion(
+          questionObject.order_in_version
+        );
+        var versionQuestion = await VersionQuestion.create({
+          version_id: version.id,
+          markdown: `### ${questionObject.question.trim()}`,
+          order_in_version: questionObject.order_in_version
+        });
+        await VersionAnswer.create({
+          markdown: answer,
+          version_question_id: versionQuestion.id,
+          version_id: version.id
+        });
+        return question;
+      }
     );
     var prevCollaboratorEmails = parentVersion.document.collaborators.map(
       user => user.email
@@ -347,7 +330,7 @@ async function addVersionToExistingDocument({
               user_id: user ? user.id : null,
               email,
               document_id: parentVersion.document.id,
-              version_version: verion.hierarchyLevel
+              version_version: version.hierarchyLevel
             }
           }).then(async (collaborator, created) => {
             var updated;
@@ -364,7 +347,7 @@ async function addVersionToExistingDocument({
               return Notification.notifyCollaborators({
                 sender: creator,
                 collaboratorId: user.id,
-                verionId: verion.id,
+                versionId: version.id,
                 projectSymbol: project.symbol,
                 parentVersionTitle: parentVersion.document.title,
                 action: "updated"
@@ -374,7 +357,7 @@ async function addVersionToExistingDocument({
     );
     var resolvedCurrentIssues = resolvedIssueIds.map(async issueId =>
       Issue.update(
-        { open: false, resolving_version_id: verion.id },
+        { open: false, resolving_version_id: version.id },
         { where: { id: Number(issueId) } }
       )
     );
@@ -388,12 +371,12 @@ async function addVersionToExistingDocument({
         Issue.create({
           open: false,
           comment_id: comment.id,
-          resolving_version_id: verion.id
+          resolving_version_id: version.id
         })
       )
     );
     var engagedUsers = await getEngagedUsers({
-      verion: parentVersion,
+      version: parentVersion,
       creator,
       collaboratorEmails
     });
@@ -406,14 +389,14 @@ async function addVersionToExistingDocument({
           engagedUsers.map(engagedUser =>
             Notification.notifyEngagedUserOnUpdate({
               engagedUser,
-              verionId: verion.id,
+              versionId: version.id,
               projectSymbol: project.symbol,
               parentVersionTitle: parentVersion.document.title
             })
           )
         )
     );
-    res.send(verion);
+    res.send(version);
   } catch (err) {
     next(err);
   }

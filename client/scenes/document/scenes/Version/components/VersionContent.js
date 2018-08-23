@@ -46,7 +46,7 @@ export default ({
             <Question
               key={`qna-${id}__question`}
               qnaId={id}
-              question={documentQnasById[id].question}
+              question={documentQnasById[id]}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />

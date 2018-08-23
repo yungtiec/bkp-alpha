@@ -176,17 +176,14 @@ const migrateDocuments = async () => {
     });
     var versionQuestions = await Promise.all(
       projectSurvey.survey.survey_questions.map(async sq => {
-        var question = await upgradedDb.model("question").create({
-          id: sq.question.id,
-          markdown: sq.question.markdown
-        });
         var versionQuestion = await upgradedDb
           .model("version_question")
           .create({
             id: sq.id,
-            question_id: question.id,
+            // question_id: question.id,
             order_in_version: sq.order_in_survey,
-            version_id: version.id
+            version_id: version.id,
+            markdown: sq.question.markdown
           });
         var versionAnswers = await Promise.all(
           sq.project_survey_answers.map(psq => {

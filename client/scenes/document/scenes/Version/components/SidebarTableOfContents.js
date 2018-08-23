@@ -21,7 +21,7 @@ export default ({ documentQnasById, documentQnaIds }) => (
         duration={300}
         spy={true}
       >
-        {documentQnasById[id].question.markdown.replace("### ", "")}
+        {documentQnasById[id].markdown.replace("### ", "")}
       </ScrollLink>
     ))}
   </div>

@@ -94,9 +94,7 @@ const Version = db.define(
                       ]
                     }
                   ],
-                  order: [
-                    [{ model: db.model("version") }, "hierarchyLevel"]
-                  ]
+                  order: [[{ model: db.model("version") }, "hierarchyLevel"]]
                 },
                 {
                   model: db.model("user"),
@@ -133,9 +131,6 @@ const Version = db.define(
             {
               model: db.model("version_question"),
               include: [
-                {
-                  model: db.model("question")
-                },
                 {
                   model: db.model("version_answer"),
                   include: [

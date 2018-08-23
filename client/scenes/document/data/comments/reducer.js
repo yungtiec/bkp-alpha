@@ -264,7 +264,7 @@ function getStartAndEndIndexInDocumentQna(documentQnaIds, documentQnasById, comm
     if (!documentQnaIds.length) return;
     const documentQuestion = documentQnasById[comment.version_question_id];
     const documentQnaContent =
-      documentQuestion.question.markdown +
+      documentQuestion.markdown +
       documentQuestion.version_answers.reduce(
         (string, answer) => answer.markdown + " ",
         ""
