@@ -12,7 +12,7 @@ function getDocumentMarkdown({ documentTitle, documentQnaIds, documentQnasById }
   const newline = "\n\n";
   var documentMarkdown = "# " + documentTitle + newline;
   documentQnaIds.forEach(sid => {
-    documentMarkdown += documentQnasById[sid].question.markdown;
+    documentMarkdown += documentQnasById[sid].markdown;
     documentMarkdown += documentQnasById[sid].version_answers[0].markdown;
     if (documentQnasById[sid].version_answers[0].children.length)
       documentQnasById[sid].version_answers[0].children.forEach(child => {

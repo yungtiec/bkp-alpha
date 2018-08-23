@@ -27,13 +27,9 @@ export function getCommentContextPath(comment) {
     comment.ancestors && comment.ancestors.length
       ? find(comment.ancestors, a => a.hierarchyLevel === 1)
       : comment;
-  return comment.uri
-    ? `${rootItem.uri.replace(window.origin, "")}/question/${
-        comment.version_question_id
-      }/comment/${rootItem.id}`
-    : `/project/${comment.version.document.project.symbol}/document/${
-        comment.version.id
-      }/comment/${rootItem.id}`;
+  return `/project/${comment.version.document.project.symbol}/document/${
+    comment.version.document.id
+  }/version/${comment.version.id}/comment/${rootItem.id}`;
 }
 
 export function seeCommentContext(comment) {

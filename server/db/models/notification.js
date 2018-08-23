@@ -3,6 +3,11 @@ const db = require("../db");
 const { assignIn, uniqBy } = require("lodash");
 
 const Notification = db.define("notification", {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   recipient_id: {
     type: Sequelize.INTEGER,
     allowNull: false
@@ -82,7 +87,7 @@ Notification.notifyEngagedUserOnUpdate = function({
     message: `You might be interested in the updated version of ${projectSymbol}/${versionTitle}`,
     status: "unread",
     recipient_id: engagedUser.id,
-    uri: `/projects/${projectSymbol}/documents/-/versions/${versionId}`,
+    uri: `/project/${projectSymbol}/document/-/version/${versionId}`,
     disclosure_updated: true
   });
 };
@@ -101,7 +106,7 @@ Notification.notifyCollaborators = function({
     } ${action} ${projectSymbol}/${versionTitle} and added you as collaborator`,
     status: "unread",
     recipient_id: collaboratorId,
-    uri: `/projects/${projectSymbol}/documents/-/versions/${versionId}`,
+    uri: `/project/${projectSymbol}/document/-/version/${versionId}`,
     disclosure_updated: true
   });
 };
@@ -117,7 +122,7 @@ function getContextUri(comment) {
     comment.ancestors && comment.ancestors.length
       ? comment.ancestors[0]
       : comment;
-  return `/projects/${
-    comment.version.document.project.symbol
-  }/documents/-/versions/${comment.version.id}/comments/${rootItem.id}`;
+  return `/project/${comment.version.document.project.symbol}/document/${
+    comment.version.document.id
+  }/version/${comment.version.id}/comment/${rootItem.id}`;
 }

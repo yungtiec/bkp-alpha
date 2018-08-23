@@ -63,7 +63,7 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/project/:symbol/document/:versionId"
+            path="/project/:symbol/document/:documentId/version/:versionId"
             component={Document}
           />
           <RouteWithLayout
@@ -105,7 +105,7 @@ class Routes extends Component {
           )}
           {/* Displays our Login component as a fallback */}
           {!isLoggedIn && <Route component={Landing} />}
-          {isLoggedIn && <Redirect to="/project/BKP/document/3" />}
+          {isLoggedIn && <Redirect to="/project/BKP/document/1/version/1" />}
         </Switch>
       </div>
     );

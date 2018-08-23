@@ -30,12 +30,7 @@ export const fetchCommentsByVersionId = versionId => {
   };
 };
 
-export const addNewComment = ({
-  versionId,
-  newComment,
-  tags,
-  issueOpen
-}) => {
+export const addNewComment = ({ versionId, newComment, tags, issueOpen }) => {
   return async (dispatch, getState) => {
     try {
       const projectSymbol = getState().scenes.document.data.metadata.document
@@ -52,9 +47,9 @@ export const addNewComment = ({
         comment: postedComment
       });
       history.push(
-        `/project/${projectSymbol}/document/${versionId}/comment/${
-          postedComment.id
-        }`
+        `/project/${projectSymbol}/document/${
+          postedComment.version.document.id
+        }/version/${versionId}/comment/${postedComment.id}`
       );
     } catch (err) {
       console.log(err);
@@ -73,9 +68,9 @@ export const addNewCommentSentFromServer = comment => {
         comment
       });
       history.push(
-        `/project/${projectSymbol}/document/${versionId}/comment/${
-          comment.id
-        }`
+        `/project/${projectSymbol}/document/${
+          comment.version.document.id
+        }/version/${versionId}/comment/${comment.id}`
       );
     } catch (err) {
       console.log(err);
@@ -89,12 +84,7 @@ export const cancelReplyToComment = ({ accessors, parent }) => ({
   parent
 });
 
-export const replyToComment = ({
-  rootId,
-  parentId,
-  newComment,
-  versionId
-}) => {
+export const replyToComment = ({ rootId, parentId, newComment, versionId }) => {
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({

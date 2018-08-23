@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./QnaContainer.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";

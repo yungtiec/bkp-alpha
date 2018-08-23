@@ -16,7 +16,7 @@ import { getSelectedDocument } from "../../data/metadata/reducer";
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
 // comments
-import { fetchCommentsByDocument } from "../../data/comments/actions";
+import { fetchCommentsByVersionId } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 // upload
 import {
@@ -71,7 +71,7 @@ class MyComponent extends React.Component {
       this.props.fetchQuestionsByVersionId(
         this.props.match.params.versionId
       ),
-      this.props.fetchCommentsByDocument(this.props.match.params.versionId),
+      this.props.fetchCommentsByVersionId(this.props.match.params.versionId),
       this.props.fetchCollaboratorOptions(this.props.match.params.symbol)
     ]);
   }
@@ -126,7 +126,7 @@ const actions = {
   upvoteDocument,
   downvoteDocument,
   // comments
-  fetchCommentsByDocument,
+  fetchCommentsByVersionId,
   // upload
   fetchCollaboratorOptions,
   importMarkdown,

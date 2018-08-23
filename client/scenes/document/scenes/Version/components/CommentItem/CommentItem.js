@@ -119,12 +119,16 @@ export default class CommentItem extends Component {
     this.props.verifyItemAsAdmin({
       comment,
       rootId,
-      reviewed: "verified"
+      reviewed: comment.reviewed === "verified" ? "pending" : "verified"
     });
   }
 
   labelAsSpam(comment, rootId) {
-    this.props.verifyItemAsAdmin({ comment, rootId, reviewed: "spam" });
+    this.props.verifyItemAsAdmin({
+      comment,
+      rootId,
+      reviewed: comment.reviewed === "spam" ? "pending" : "spam"
+    });
   }
 
   toggleShowReplies() {

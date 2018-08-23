@@ -1,5 +1,9 @@
 import * as types from "./actionTypes";
-import { getQuestionsByVersionId } from "./services";
+import {
+  getQuestionsByVersionId,
+  postEditedQuestion,
+  postEditedAnswer
+} from "./services";
 import { keyBy, omit, sortBy } from "lodash";
 import { notify } from "reapop";
 
@@ -9,7 +13,7 @@ export function fetchQuestionsByVersionId(versionId) {
       var version = await getQuestionsByVersionId(versionId);
       const documentQnas = sortBy(
         version.version_questions,
-        ["order_in_document"],
+        ["order_in_version"],
         ["asc"]
       );
       const documentQnasById = keyBy(documentQnas, "id");
@@ -21,6 +25,63 @@ export function fetchQuestionsByVersionId(versionId) {
       });
     } catch (error) {
       console.error(error);
+    }
+  };
+}
+
+export function editQuestion({ versionQuestionId, markdown }) {
+  return async (dispatch, getState) => {
+    try {
+      var newlyAddedVersionQuestion = await postEditedQuestion({
+        versionQuestionId,
+        markdown,
+        reverting: false
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTION_EDITED,
+        newlyAddedVersionQuestion,
+        prevVersionQuestionId: versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
+export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
+  return async (dispatch, getState) => {
+    try {
+      var newlyAddedVersionAnswer = await postEditedAnswer({
+        versionAnswerId,
+        markdown,
+        reverting: false
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_ANSWER_EDITED,
+        newlyAddedVersionAnswer,
+        prevVersionAnswerId: versionAnswerId,
+        versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
     }
   };
 }

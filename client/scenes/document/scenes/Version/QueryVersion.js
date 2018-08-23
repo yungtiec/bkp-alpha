@@ -23,7 +23,11 @@ import {
 } from "../../reducer";
 
 // document/qnas
-import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
+import {
+  fetchQuestionsByVersionId,
+  editQuestion,
+  editAnswer
+} from "../../data/qnas/actions";
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 
 // document/metadata
@@ -102,7 +106,6 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    console.log("??")
     if (
       !this.props.documentMetadata.id ||
       !this.props.documentQnaIds ||
@@ -177,6 +180,8 @@ const actions = {
   downvoteDocument,
   // qnas
   fetchQuestionsByVersionId,
+  editQuestion,
+  editAnswer,
   // comments
   fetchCommentsByVersionId,
   addNewComment,

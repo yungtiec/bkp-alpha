@@ -72,29 +72,35 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, "..", "public")));
 
-  app.get("/project/:symbol/document/public/:file", (req, res, next) => {
-    res.redirect(`/${req.params.file}`);
-  });
   app.get("/:route/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
+  app.get("/project/:symbol/document/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
   app.get(
-    "/project/:symbol/document/:documentId/question/:questionId/comment/public/:file",
+    "/project/:symbol/document/:documentId/version/:versionId/question/:questionId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
   );
   app.get(
-    "/project/:symbol/document/:documentId/public/:file",
+    "/project/:symbol/document/:documentId/version/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }
   );
   app.get(
-    "/project/:symbol/document/:documentId/comment/public/:file",
+    "/project/:symbol/document/:documentId/version/:versionId/public/:file",
+    (req, res, next) => {
+      res.redirect(`/${req.params.file}`);
+    }
+  );
+  app.get(
+    "/project/:symbol/document/:documentId/version/:versionId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
     }

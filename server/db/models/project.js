@@ -5,6 +5,11 @@ const _ = require("lodash");
 const Project = db.define(
   "project",
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     name: {
       type: Sequelize.STRING,
       unique: true,

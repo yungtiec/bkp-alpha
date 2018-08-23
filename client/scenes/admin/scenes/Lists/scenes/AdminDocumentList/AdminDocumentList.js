@@ -31,11 +31,10 @@ const AdminDocumentList = ({ documentIds, documentsById }) => {
         getTrProps={(state, rowInfo, column, instance) => {
           return {
             onClick: (e, t) => {
-              // history.push(`/admin/project-document/${rowInfo.row.id}`);
               history.push(
                 `/project/${rowInfo.original.project.id}/document/${
-                  rowInfo.original.versions[0].id
-                }`
+                  rowInfo.original.id
+                }/version/${rowInfo.original.versions[0].id}`
               );
             }
           };

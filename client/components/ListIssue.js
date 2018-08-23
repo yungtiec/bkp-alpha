@@ -11,17 +11,17 @@ export default ({ issueCommentIds, issuesByCommentId }) => {
           cardKey={id}
           cardHref={`/project/${
             issuesByCommentId[id].version.document.project.symbol
-          }/document/${issuesByCommentId[id].version.id}/comment/${
-            issuesByCommentId[id].id
-          }`}
+          }/document/${issuesByCommentId[id].version.document.id}/version/${
+            issuesByCommentId[id].version.id
+          }/comment/${issuesByCommentId[id].id}`}
           mainTitle={issuesByCommentId[id].comment}
           subtitle={""}
           textUpperRight={`by ${issuesByCommentId[id].owner.displayName}`}
           mainText={""}
           metadataArray={[
-            `in ${
-              issuesByCommentId[id].version.document.project.symbol
-            } - ${issuesByCommentId[id].version.document.title}`,
+            `in ${issuesByCommentId[id].version.document.project.symbol} - ${
+              issuesByCommentId[id].version.document.title
+            }`,
             moment(issuesByCommentId[id].createdAt).fromNow()
           ]}
         />

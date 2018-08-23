@@ -63,7 +63,7 @@ const Landing = ({ user, logout }) => (
                 <div className="col-lg-12 my-auto">
                   <Link
                     class="btn btn-landing btn-xl"
-                    to="project/BKP/document/3"
+                    to="project/BKP/document/1/version/1"
                   >
                     View Framework
                   </Link>

@@ -8,13 +8,20 @@ const VersionQuestion = db.define("version_question", {
     autoIncrement: true
   },
   version_id: {
-    type: Sequelize.INTEGER,
-  },
-  question_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER
   },
   order_in_version: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER
+  },
+  markdown: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  category_id: {
+    type: Sequelize.INTEGER
+  },
+  latest: {
+    type: Sequelize.BOOLEAN
   }
 });
 

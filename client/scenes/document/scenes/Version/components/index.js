@@ -1,4 +1,4 @@
-export { default as Qna } from "./Qna";
+export { default as Qna } from "./Qna/QnaContainer";
 export { default as Question } from "./Qna/Question";
 export { default as Answers } from "./Qna/Answers";
 export { default as VersionContent } from "./VersionContent";

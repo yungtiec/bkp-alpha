@@ -70,7 +70,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     }),
     (req, res) => {
       if (!req.user.name.trim()) res.redirect("/user/profile/about");
-      else res.redirect("/project/BKP/survey/3");
+      else res.redirect("/project/BKP/document/1/version/1");
     }
   );
 }

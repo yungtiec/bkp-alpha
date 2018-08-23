@@ -45,7 +45,7 @@ export default class DocumentHeader extends Component {
           documentMetadata.document.title
         }`}</p>
         <p className="document__subtitle  mb-4">
-          {`document version 0.4.0 created by ${creator} ${collaborators}`}
+          {`document version ${documentMetadata.version_number} created by ${creator} ${collaborators}`}
         </p>
       </div>
     );

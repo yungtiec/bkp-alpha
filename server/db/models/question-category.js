@@ -7,9 +7,6 @@ const QuestionCategory = db.define(
     name: {
       type: Sequelize.INTEGER
     }
-  },
-  {
-    hierarchy: true
   }
 );
 

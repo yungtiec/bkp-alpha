@@ -9,9 +9,9 @@ const VersionAnswer = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    version_id: {
-      type: Sequelize.INTEGER
-    },
+    // version_id: {
+    //   type: Sequelize.INTEGER
+    // },
     version_question_id: {
       type: Sequelize.INTEGER
     },
@@ -20,10 +20,10 @@ const VersionAnswer = db.define(
     },
     markdown: {
       type: Sequelize.TEXT
+    },
+    latest: {
+      type: Sequelize.BOOLEAN
     }
-  },
-  {
-    hierarchy: true
   }
 );
 
