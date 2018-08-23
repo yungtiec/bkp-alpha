@@ -31,6 +31,13 @@ const updateQuestions = (state, action) => {
   return state;
 };
 
+const updateAnswer = (state, action) => {
+  state.documentQnasById[action.versionQuestionId].version_answers = [
+    action.newlyAddedVersionAnswer
+  ];
+  return state;
+};
+
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
     case types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS:
@@ -40,6 +47,8 @@ export default function reduce(state = initialState, action = {}) {
       };
     case types.PROJECT_SURVEY_QUESTION_EDITED:
       return updateQuestions(cloneDeep(state), action);
+    case types.PROJECT_SURVEY_ANSWER_EDITED:
+      return updateAnswer(cloneDeep(state), action);
     default:
       return state;
   }

@@ -1,5 +1,9 @@
 import * as types from "./actionTypes";
-import { getQuestionsByVersionId, postEditedQuestion } from "./services";
+import {
+  getQuestionsByVersionId,
+  postEditedQuestion,
+  postEditedAnswer
+} from "./services";
 import { keyBy, omit, sortBy } from "lodash";
 import { notify } from "reapop";
 
@@ -39,7 +43,36 @@ export function editQuestion({ versionQuestionId, markdown }) {
         prevVersionQuestionId: versionQuestionId
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
+export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
+  return async (dispatch, getState) => {
+    try {
+      var newlyAddedVersionAnswer = await postEditedAnswer({
+        versionAnswerId,
+        markdown,
+        reverting: false
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_ANSWER_EDITED,
+        newlyAddedVersionAnswer,
+        prevVersionAnswerId: versionAnswerId,
+        versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
       dispatch(
         notify({
           title: "Something went wrong",

@@ -204,6 +204,7 @@ class Document extends Component {
       documentQnasById,
       documentQnaIds,
       editQuestion,
+      editAnswer,
       documentMetadata,
       commentsById,
       commentIds,
@@ -294,6 +295,7 @@ class Document extends Component {
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
                 editQuestion={editQuestion}
+                editAnswer={editAnswer}
                 documentMetadata={documentMetadata}
                 tags={tags}
                 tagFilter={tagFilter}

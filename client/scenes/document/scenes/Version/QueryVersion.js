@@ -23,7 +23,11 @@ import {
 } from "../../reducer";
 
 // document/qnas
-import { fetchQuestionsByVersionId, editQuestion } from "../../data/qnas/actions";
+import {
+  fetchQuestionsByVersionId,
+  editQuestion,
+  editAnswer
+} from "../../data/qnas/actions";
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 
 // document/metadata
@@ -177,6 +181,7 @@ const actions = {
   // qnas
   fetchQuestionsByVersionId,
   editQuestion,
+  editAnswer,
   // comments
   fetchCommentsByVersionId,
   addNewComment,

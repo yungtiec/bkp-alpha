@@ -15,3 +15,13 @@ export function postEditedQuestion({ versionQuestionId, markdown, reverting }) {
     })
     .then(res => res.data);
 }
+
+export function postEditedAnswer({ versionAnswerId, markdown, reverting }) {
+  return axios
+    .post(`/api/versions/-/answers`, {
+      versionAnswerId,
+      markdown,
+      reverting
+    })
+    .then(res => res.data);
+}

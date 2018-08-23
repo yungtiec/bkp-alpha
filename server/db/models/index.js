@@ -190,26 +190,28 @@ Version.hasMany(VersionQuestion, {
   foreignKey: "version_id"
 });
 
-VersionQuestion.belongsToMany(Version, {
-  through: VersionAnswer,
-  foreignKey: "version_question_id"
-});
-Version.belongsToMany(VersionQuestion, {
-  through: VersionAnswer,
-  foreignKey: "version_id"
-});
-VersionAnswer.belongsTo(Version, {
-  foreignKey: "version_id"
-});
+// VersionQuestion.belongsToMany(Version, {
+//   through: VersionAnswer,
+//   foreignKey: "version_question_id"
+// });
+// Version.belongsToMany(VersionQuestion, {
+//   through: VersionAnswer,
+//   foreignKey: "version_id"
+// });
+// VersionAnswer.belongsTo(Version, {
+//   foreignKey: "version_id"
+// });
 VersionAnswer.belongsTo(VersionQuestion, {
-  foreignKey: "version_question_id"
+  foreignKey: "version_question_id",
+  // constraints: false
 });
 VersionQuestion.hasMany(VersionAnswer, {
-  foreignKey: "version_question_id"
+  foreignKey: "version_question_id",
+  // constraints: false
 });
-Version.hasMany(VersionAnswer, {
-  foreignKey: "version_id"
-});
+// Version.hasMany(VersionAnswer, {
+//   foreignKey: "version_id"
+// });
 
 User.hasMany(Version, {
   foreignKey: "creator_id",

@@ -189,7 +189,7 @@ const migrateDocuments = async () => {
           sq.project_survey_answers.map(psq => {
             upgradedDb.model("version_answer").create({
               id: psq.id,
-              version_id: version.id,
+              // version_id: version.id,
               version_question_id: versionQuestion.id,
               json: psq.json,
               markdown: psq.markdown,
