@@ -180,10 +180,10 @@ const migrateDocuments = async () => {
           .model("version_question")
           .create({
             id: sq.id,
-            // question_id: question.id,
             order_in_version: sq.order_in_survey,
             version_id: version.id,
-            markdown: sq.question.markdown
+            markdown: sq.question.markdown,
+            latest: true
           });
         var versionAnswers = await Promise.all(
           sq.project_survey_answers.map(psq => {
@@ -192,7 +192,8 @@ const migrateDocuments = async () => {
               version_id: version.id,
               version_question_id: versionQuestion.id,
               json: psq.json,
-              markdown: psq.markdown
+              markdown: psq.markdown,
+              latest: true
             });
           })
         );
@@ -254,9 +255,6 @@ const setSequenceManually = async () => {
     `ALTER SEQUENCE "notifications_id_seq" RESTART WITH ${25};`
   );
   await upgradedDb.query(`ALTER SEQUENCE "projects_id_seq" RESTART WITH ${2};`);
-  await upgradedDb.query(
-    `ALTER SEQUENCE "questions_id_seq" RESTART WITH ${46};`
-  );
   await upgradedDb.query(`ALTER SEQUENCE "roles_id_seq" RESTART WITH ${4};`);
   await upgradedDb.query(
     `ALTER SEQUENCE "version_answers_id_seq" RESTART WITH ${46};`

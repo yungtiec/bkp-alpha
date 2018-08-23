@@ -26,10 +26,12 @@ const Version = db.define(
     },
     scorecard: {
       type: Sequelize.JSONB
+    },
+    version_number: {
+      type: Sequelize.TEXT
     }
   },
   {
-    hierarchy: true,
     scopes: {
       byIdWithMetadata: function(versionId) {
         return {
@@ -130,18 +132,24 @@ const Version = db.define(
           include: [
             {
               model: db.model("version_question"),
+              where: { latest: true },
               include: [
                 {
                   model: db.model("version_answer"),
-                  include: [
-                    {
-                      model: db.model("version_answer"),
-                      as: "descendents",
-                      hierarchy: true,
-                      required: false
-                    }
-                  ]
+                  where: { latest: true }
+                },
+                {
+                  model: db.model("version_question"),
+                  as: "ancestors",
+                  required: false
                 }
+              ],
+              order: [
+                [
+                  { model: db.model("version_question"), as: "ancestors" },
+                  "hierarchyLevel",
+                  "DESC"
+                ]
               ]
             }
           ]

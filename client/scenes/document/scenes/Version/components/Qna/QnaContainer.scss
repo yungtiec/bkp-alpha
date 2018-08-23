@@ -1,9 +1,11 @@
+.mde-preview-content .qna__question h3,
 .qna__question h3 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 1rem;
   text-align: left;
   line-height: 1.58;
+  border-bottom: none !important;
 }
 
 .qna__question h2 {
@@ -13,6 +15,10 @@
   margin-bottom: 1rem;
   text-align: left;
   line-height: 1.58;
+}
+
+.qna__question--editing {
+  border: 5px solid #eee;
 }
 
 .qna__answer p {
@@ -35,4 +41,23 @@
 
 .qna__answer li:last-child {
   border-bottom: 0;
+}
+
+.editing-toolbar__hover-target {
+  position: relative;
+  padding-left: 50px;
+  margin-left: -50px;
+
+  &:hover &ed {
+    display: block;
+    opacity: 1;
+  }
+
+  &ed {
+    display: none;
+    position: absolute;
+    top: -3px;
+    left: -10px;
+    opacity: 0;
+  }
 }

@@ -20,10 +20,10 @@ const VersionAnswer = db.define(
     },
     markdown: {
       type: Sequelize.TEXT
+    },
+    latest: {
+      type: Sequelize.BOOLEAN
     }
-  },
-  {
-    hierarchy: true
   }
 );
 

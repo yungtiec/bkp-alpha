@@ -8,6 +8,7 @@ export default ({
   isClosedForComment,
   documentQnasById,
   documentQnaIds,
+  editQuestion,
   documentMetadata,
   commentOnClick,
   parent,
@@ -47,6 +48,7 @@ export default ({
               key={`qna-${id}__question`}
               qnaId={id}
               question={documentQnasById[id]}
+              editQuestion={editQuestion}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />

@@ -1,3 +1,4 @@
+import 'react-mde/lib/styles/css/react-mde-all.css';
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
@@ -202,6 +203,7 @@ class Document extends Component {
     const {
       documentQnasById,
       documentQnaIds,
+      editQuestion,
       documentMetadata,
       commentsById,
       commentIds,
@@ -291,6 +293,7 @@ class Document extends Component {
                 isClosedForComment={isClosedForComment}
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
+                editQuestion={editQuestion}
                 documentMetadata={documentMetadata}
                 tags={tags}
                 tagFilter={tagFilter}

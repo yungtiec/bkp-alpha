@@ -15,16 +15,7 @@ router.get("/:id/metadata", async (req, res, next) => {
   }
 });
 
-router.get("/:id/questions", async (req, res, next) => {
-  try {
-    const version = await Version.scope({
-      method: ["byIdWithVersionQuestions", req.params.id]
-    }).findOne();
-    res.send(version);
-  } catch (err) {
-    next(err);
-  }
-});
+router.use("/:versionId/questions", require("./questions"))
 
 router.use("/:versionId/comments", require("./comments"));
 router.use("/:versionId/annotator", require("./annotator"));

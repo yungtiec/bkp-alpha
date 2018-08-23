@@ -18,10 +18,6 @@ function getDocumentMarkdown({ documentTitle, documentQnaIds, documentQnasById }
   documentQnaIds.forEach(sid => {
     documentMarkdown += documentQnasById[sid].markdown;
     documentMarkdown += documentQnasById[sid].version_answers[0].markdown;
-    if (documentQnasById[sid].version_answers[0].children.length)
-      documentQnasById[sid].version_answers[0].children.forEach(child => {
-        documentMarkdown += child.markdown;
-      });
   });
   return documentMarkdown;
 }

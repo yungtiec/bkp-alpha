@@ -7,14 +7,17 @@ const DocumentCollaborator = require("./document-collaborator");
 const Version = require("./version");
 const VersionAnswer = require("./version-answer");
 const VersionQuestion = require("./version-question");
-// const Question = require("./question");
 const QuestionCategory = require("./question-category");
 const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
 const ProjectAdmin = require("./project-admin");
 const ProjectEditor = require("./project-editor");
+
 Comment.isHierarchy();
+VersionAnswer.isHierarchy();
+VersionQuestion.isHierarchy();
+Version.isHierarchy();
 
 /*=============================================
 =            role based authorization         =
@@ -180,23 +183,9 @@ Document.belongsTo(User, {
   as: "creator"
 });
 
-// Question.belongsToMany(Version, {
-//   through: VersionQuestion,
-//   foreignKey: "question_id"
-// });
-// Version.belongsToMany(Question, {
-//   through: VersionQuestion,
-//   foreignKey: "version_id"
-// });
 VersionQuestion.belongsTo(Version, {
   foreignKey: "version_id"
 });
-// VersionQuestion.belongsTo(Question, {
-//   foreignKey: "question_id"
-// });
-// Question.hasMany(VersionQuestion, {
-//   foreignKey: "question_id"
-// });
 Version.hasMany(VersionQuestion, {
   foreignKey: "version_id"
 });
@@ -287,7 +276,6 @@ module.exports = {
   Project,
   Version,
   VersionAnswer,
-  // Question,
   QuestionCategory,
   Document,
   VersionQuestion,

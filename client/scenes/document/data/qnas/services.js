@@ -5,3 +5,13 @@ export function getQuestionsByVersionId(versionId) {
     .get(`/api/versions/${versionId}/questions`)
     .then(res => res.data);
 }
+
+export function postEditedQuestion({ versionQuestionId, markdown, reverting }) {
+  return axios
+    .post(`/api/versions/-/questions`, {
+      versionQuestionId,
+      markdown,
+      reverting
+    })
+    .then(res => res.data);
+}

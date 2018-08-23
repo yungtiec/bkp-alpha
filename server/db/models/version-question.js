@@ -10,9 +10,6 @@ const VersionQuestion = db.define("version_question", {
   version_id: {
     type: Sequelize.INTEGER
   },
-  // question_id: {
-  //   type: Sequelize.INTEGER
-  // },
   order_in_version: {
     type: Sequelize.INTEGER
   },
@@ -22,6 +19,9 @@ const VersionQuestion = db.define("version_question", {
   },
   category_id: {
     type: Sequelize.INTEGER
+  },
+  latest: {
+    type: Sequelize.BOOLEAN
   }
 });
 
