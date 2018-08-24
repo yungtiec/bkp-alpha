@@ -34,7 +34,9 @@ export function fetchQuestionsByVersionId(versionId) {
 export function editQuestion({ versionQuestionId, markdown }) {
   return async (dispatch, getState) => {
     try {
+      const versionId = getState().scenes.document.data.metadata.id;
       var newlyAddedVersionQuestion = await postEditedQuestion({
+        versionId,
         versionQuestionId,
         markdown,
         reverting: false
@@ -65,7 +67,9 @@ export function revertToPrevQuestion({
 }) {
   return async (dispatch, getState) => {
     try {
+      const versionId = getState().scenes.document.data.metadata.id;
       var versionQuestion = await postQuestionVersion({
+        versionId,
         versionQuestionId,
         prevVersionQuestionId,
         reverting: true
@@ -93,7 +97,9 @@ export function revertToPrevQuestion({
 export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
   return async (dispatch, getState) => {
     try {
+      const versionId = getState().scenes.document.data.metadata.id;
       var newlyAddedVersionAnswer = await postEditedAnswer({
+        versionId,
         versionAnswerId,
         markdown,
         reverting: false
@@ -126,7 +132,9 @@ export function revertToPrevAnswer({
 }) {
   return async (dispatch, getState) => {
     try {
+      const versionId = getState().scenes.document.data.metadata.id;
       var versionAnswer = await postAnswerVersion({
+        versionId,
         versionQuestionId,
         versionAnswerId,
         prevVersionAnswerId,

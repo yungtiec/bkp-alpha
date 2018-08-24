@@ -203,11 +203,19 @@ const migrateDocuments = async () => {
     var comments = Promise.each(
       _.sortBy(projectSurvey.comments, ["id"]),
       async c => {
+        var commentedVersionAnswer = await upgradedDb
+          .model("version_answer")
+          .findOne({
+            where: { version_question_id: c.survey_question_id }
+          });
         var comment = await upgradedDb.model("comment").create({
           id: c.id,
           uri: c.uri,
           version_question_id: c.survey_question_id
             ? c.survey_question_id
+            : null,
+          version_answer_id: commentedVersionAnswer
+            ? commentedVersionAnswer.id
             : null,
           quote: c.quote,
           comment: c.comment,

@@ -5,6 +5,8 @@ import { find, keyBy, clone } from "lodash";
 import Markmirror from "react-markmirror";
 import moment from "moment";
 import { sortBy } from "lodash";
+import policies from "../../../../../../policies.js";
+import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 
 export default class Answers extends Component {
   constructor(props) {
@@ -155,16 +157,28 @@ export default class Answers extends Component {
             <ReactMarkdown className="qna__answer" source={answer.markdown} />
           </div>
         )}
-        {!this.state.editing && (
-          <div className="editing-toolbar__hover-targeted">
-            <button
-              className="btn btn-secondary"
-              onClick={this.handleEditingOnClick}
+        <PunditContainer policies={policies} user={this.props.user}>
+          <PunditTypeSet type="Disclosure">
+            <VisibleIf
+              action="Create"
+              model={{
+                project: this.props.documentMetadata.document.project,
+                disclosure: this.props.documentMetadata.document
+              }}
             >
-              Edit
-            </button>
-          </div>
-        )}
+              {!this.state.editing && (
+                <div className="editing-toolbar__hover-targeted">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={this.handleEditingOnClick}
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
+            </VisibleIf>
+          </PunditTypeSet>
+        </PunditContainer>
       </div>
     );
   }

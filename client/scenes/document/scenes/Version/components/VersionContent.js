@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { Element } from "react-scroll";
 import { Qna, Question, Answers, VersionScorecard } from "./index";
 import { isEmpty } from "lodash";
+import { connect } from "react-redux";
+import { getSelectedDocument } from "../../../data/metadata/reducer";
 
-export default ({
+const VersionContent = ({
+  user,
   isLoggedIn,
   isClosedForComment,
   documentQnasById,
@@ -53,6 +56,8 @@ export default ({
               question={documentQnasById[id]}
               editQuestion={editQuestion}
               revertToPrevQuestion={revertToPrevQuestion}
+              user={user}
+              documentMetadata={documentMetadata}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
@@ -61,6 +66,8 @@ export default ({
               qnaId={id}
               answer={documentQnasById[id].version_answers[0]}
               revertToPrevAnswer={revertToPrevAnswer}
+              user={user}
+              documentMetadata={documentMetadata}
               editAnswer={editAnswer}
               handleCommentOnClick={commentOnClick}
             />
@@ -70,3 +77,10 @@ export default ({
     })}
   </div>
 );
+
+const mapState = (state, ownProps) => ({
+  ...ownProps,
+  user: state.data.user
+});
+
+export default connect(mapState, {})(VersionContent);

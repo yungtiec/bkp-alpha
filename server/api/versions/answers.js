@@ -1,12 +1,26 @@
 const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
 const { Version, VersionQuestion, VersionAnswer } = require("../../db/models");
+const permission = require("../../access-control")["Disclosure"];
+const { ensureAuthentication } = require("../utils");
 const _ = require("lodash");
 Promise = require("bluebird");
 module.exports = router;
 
-router.post("/", async (req, res, next) => {
+router.post("/", ensureAuthentication, async (req, res, next) => {
   try {
+    var version = await Version.scope({
+      method: ["byIdWithMetadata", Number(req.params.versionId)]
+    }).findOne();
+    const canVersion = permission(
+      "Version",
+      { project: version.document.project, disclosure: version.document },
+      req.user
+    );
+    if (!canVersion) {
+      res.sendStatus(403);
+      return;
+    }
     if (!req.body.reverting) {
       var currentVersionAnswer = await VersionAnswer.findOne({
         where: { id: req.body.versionAnswerId },

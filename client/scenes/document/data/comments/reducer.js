@@ -218,6 +218,21 @@ function filterByIssue({ commentIssueFilter, commentsById, commentIds }) {
 
 /**
  *
+ * filter version answer
+ *
+ */
+
+function filterByVersionAnswer({ versionAnswerIds, commentsById, commentIds }) {
+  if (!versionAnswerIds || !versionAnswerIds.length) return commentIds;
+  return filter(commentIds, cid => {
+    return versionAnswerIds.reduce((bool, versionAnswerId) => {
+      return bool || commentsById[cid].version_answer_id === versionAnswerId;
+    }, false);
+  });
+}
+
+/**
+ *
  * sort fns
  *
  */
@@ -259,7 +274,11 @@ function splitRangePath(path) {
   return flatten(elements);
 }
 
-function getStartAndEndIndexInDocumentQna(documentQnaIds, documentQnasById, comment) {
+function getStartAndEndIndexInDocumentQna(
+  documentQnaIds,
+  documentQnasById,
+  comment
+) {
   try {
     if (!documentQnaIds.length) return;
     const documentQuestion = documentQnasById[comment.version_question_id];
@@ -290,6 +309,9 @@ export function getAllComments(state) {
   const tagFilter = state.scenes.document.data.tags.filter;
   const commentIssueFilter = state.scenes.document.commentIssueFilter;
   const { documentQnaIds, documentQnasById } = state.scenes.document.data.qnas;
+  const versionAnswerIds =
+    documentQnaIds &&
+    documentQnaIds.map(id => documentQnasById[id].version_answers[0].id);
   const commentCollection = values(commentsById).map(comment => {
     const range = getStartAndEndIndexInDocumentQna(
       documentQnaIds,
@@ -310,6 +332,11 @@ export function getAllComments(state) {
   });
   filteredCommentIds = filterByIssue({
     commentIssueFilter,
+    commentsById,
+    commentIds: filteredCommentIds
+  });
+  filteredCommentIds = filterByVersionAnswer({
+    versionAnswerIds,
     commentsById,
     commentIds: filteredCommentIds
   });

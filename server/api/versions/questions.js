@@ -1,6 +1,14 @@
 const router = require("express").Router({ mergeParams: true });
 const db = require("../../db");
-const { Version, VersionQuestion, VersionAnswer } = require("../../db/models");
+const {
+  Version,
+  VersionQuestion,
+  VersionAnswer,
+  Comment
+} = require("../../db/models");
+const permission = require("../../access-control")["Disclosure"];
+const { ensureAuthentication } = require("../utils");
+
 const _ = require("lodash");
 Promise = require("bluebird");
 module.exports = router;
@@ -31,8 +39,20 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", ensureAuthentication, async (req, res, next) => {
   try {
+    var version = await Version.scope({
+      method: ["byIdWithMetadata", Number(req.params.versionId)]
+    }).findOne();
+    const canVersion = permission(
+      "Version",
+      { project: version.document.project, disclosure: version.document },
+      req.user
+    );
+    if (!canVersion) {
+      res.sendStatus(403);
+      return;
+    }
     if (!req.body.reverting) {
       var currentVersionQuestion = await VersionQuestion.findOne({
         where: { id: req.body.versionQuestionId },
@@ -67,10 +87,16 @@ router.post("/", async (req, res, next) => {
         }),
         currentVersionQuestion.update({ latest: false })
       ]);
-      var versionAnswer = await VersionAnswer.update(
-        { version_question_id: newlyAddedVersionQuestion.id },
-        { where: { version_question_id: req.body.versionQuestionId } }
-      );
+      var [versionAnswers, comments] = await Promise.all([
+        VersionAnswer.update(
+          { version_question_id: newlyAddedVersionQuestion.id },
+          { where: { version_question_id: req.body.versionQuestionId } }
+        ),
+        Comment.update(
+          { version_question_id: newlyAddedVersionQuestion.id },
+          { where: { version_question_id: req.body.versionQuestionId } }
+        )
+      ]);
       newlyAddedVersionQuestion = await VersionQuestion.findOne({
         where: { id: newlyAddedVersionQuestion.id },
         include: [
