@@ -9,9 +9,6 @@ const VersionAnswer = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    // version_id: {
-    //   type: Sequelize.INTEGER
-    // },
     version_question_id: {
       type: Sequelize.INTEGER
     },

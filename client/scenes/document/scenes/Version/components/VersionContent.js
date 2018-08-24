@@ -2,14 +2,19 @@ import React, { Component } from "react";
 import { Element } from "react-scroll";
 import { Qna, Question, Answers, VersionScorecard } from "./index";
 import { isEmpty } from "lodash";
+import { connect } from "react-redux";
+import { getSelectedDocument } from "../../../data/metadata/reducer";
 
-export default ({
+const VersionContent = ({
+  user,
   isLoggedIn,
   isClosedForComment,
   documentQnasById,
   documentQnaIds,
   editQuestion,
   editAnswer,
+  revertToPrevQuestion,
+  revertToPrevAnswer,
   documentMetadata,
   commentOnClick,
   parent,
@@ -28,15 +33,15 @@ export default ({
         addNewCommentSentFromServer={addNewCommentSentFromServer}
       />
     ) : null}
-    {documentQnaIds.map(id => {
+    {documentQnaIds.map((id, i) => {
       return (
         <Element
           name={`qna-${id}`}
           ref={el => (parent[`qna-${id}`] = el)}
-          key={`qna-${id}`}
+          key={`qna-${documentQnasById[id].order_in_version}`}
         >
           <Qna
-            key={`qna-${id}`}
+            key={`qna-${documentQnasById[id].order_in_version}`}
             qna={documentQnasById[id]}
             versionId={documentMetadata.id}
             isLoggedIn={isLoggedIn}
@@ -46,10 +51,13 @@ export default ({
             addNewCommentSentFromServer={addNewCommentSentFromServer}
           >
             <Question
-              key={`qna-${id}__question`}
+              key={`qna-${documentQnasById[id].order_in_version}__question`}
               qnaId={id}
               question={documentQnasById[id]}
               editQuestion={editQuestion}
+              revertToPrevQuestion={revertToPrevQuestion}
+              user={user}
+              documentMetadata={documentMetadata}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
@@ -57,6 +65,9 @@ export default ({
               key={`qna-${id}__answers`}
               qnaId={id}
               answer={documentQnasById[id].version_answers[0]}
+              revertToPrevAnswer={revertToPrevAnswer}
+              user={user}
+              documentMetadata={documentMetadata}
               editAnswer={editAnswer}
               handleCommentOnClick={commentOnClick}
             />
@@ -66,3 +77,10 @@ export default ({
     })}
   </div>
 );
+
+const mapState = (state, ownProps) => ({
+  ...ownProps,
+  user: state.data.user
+});
+
+export default connect(mapState, {})(VersionContent);

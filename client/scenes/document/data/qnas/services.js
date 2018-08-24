@@ -6,9 +6,14 @@ export function getQuestionsByVersionId(versionId) {
     .then(res => res.data);
 }
 
-export function postEditedQuestion({ versionQuestionId, markdown, reverting }) {
+export function postEditedQuestion({
+  versionId,
+  versionQuestionId,
+  markdown,
+  reverting
+}) {
   return axios
-    .post(`/api/versions/-/questions`, {
+    .post(`/api/versions/${versionId}/questions`, {
       versionQuestionId,
       markdown,
       reverting
@@ -16,11 +21,48 @@ export function postEditedQuestion({ versionQuestionId, markdown, reverting }) {
     .then(res => res.data);
 }
 
-export function postEditedAnswer({ versionAnswerId, markdown, reverting }) {
+export function postQuestionVersion({
+  versionId,
+  versionQuestionId,
+  prevVersionQuestionId,
+  reverting
+}) {
   return axios
-    .post(`/api/versions/-/answers`, {
+    .post(`/api/versions/${versionId}/questions`, {
+      versionQuestionId,
+      prevVersionQuestionId,
+      reverting
+    })
+    .then(res => res.data);
+}
+
+export function postEditedAnswer({
+  versionId,
+  versionAnswerId,
+  markdown,
+  reverting
+}) {
+  return axios
+    .post(`/api/versions/${versionId}/answers`, {
       versionAnswerId,
       markdown,
+      reverting
+    })
+    .then(res => res.data);
+}
+
+export function postAnswerVersion({
+  versionId,
+  versionQuestionId,
+  versionAnswerId,
+  prevVersionAnswerId,
+  reverting
+}) {
+  return axios
+    .post(`/api/versions/${versionId}/answers`, {
+      versionQuestionId,
+      versionAnswerId,
+      prevVersionAnswerId,
       reverting
     })
     .then(res => res.data);
