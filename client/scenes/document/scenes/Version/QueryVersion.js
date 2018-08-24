@@ -26,7 +26,9 @@ import {
 import {
   fetchQuestionsByVersionId,
   editQuestion,
-  editAnswer
+  editAnswer,
+  revertToPrevQuestion,
+  revertToPrevAnswer
 } from "../../data/qnas/actions";
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 
@@ -182,6 +184,8 @@ const actions = {
   fetchQuestionsByVersionId,
   editQuestion,
   editAnswer,
+  revertToPrevQuestion,
+  revertToPrevAnswer,
   // comments
   fetchCommentsByVersionId,
   addNewComment,

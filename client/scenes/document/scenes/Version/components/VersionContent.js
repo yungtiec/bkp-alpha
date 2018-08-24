@@ -10,6 +10,8 @@ export default ({
   documentQnaIds,
   editQuestion,
   editAnswer,
+  revertToPrevQuestion,
+  revertToPrevAnswer,
   documentMetadata,
   commentOnClick,
   parent,
@@ -50,6 +52,7 @@ export default ({
               qnaId={id}
               question={documentQnasById[id]}
               editQuestion={editQuestion}
+              revertToPrevQuestion={revertToPrevQuestion}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
@@ -57,6 +60,7 @@ export default ({
               key={`qna-${id}__answers`}
               qnaId={id}
               answer={documentQnasById[id].version_answers[0]}
+              revertToPrevAnswer={revertToPrevAnswer}
               editAnswer={editAnswer}
               handleCommentOnClick={commentOnClick}
             />

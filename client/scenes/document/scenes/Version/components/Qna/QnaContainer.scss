@@ -18,7 +18,7 @@
 }
 
 .qna__question--editing {
-  border: 5px solid #eee;
+  border: 16px solid #eee;
 }
 
 .qna__answer p {
@@ -60,4 +60,14 @@
     left: -10px;
     opacity: 0;
   }
+}
+
+.markmirror__toolbar.myapp__toolbar .dropdown-item.active {
+  font-weight: 800;
+  background-color: white;
+}
+
+.markmirror__toolbar.myapp__toolbar .dropdown {
+  display: inline-block;
+  float: right;
 }

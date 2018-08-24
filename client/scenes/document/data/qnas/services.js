@@ -16,11 +16,41 @@ export function postEditedQuestion({ versionQuestionId, markdown, reverting }) {
     .then(res => res.data);
 }
 
+export function postQuestionVersion({
+  versionQuestionId,
+  prevVersionQuestionId,
+  reverting
+}) {
+  return axios
+    .post(`/api/versions/-/answers`, {
+      versionQuestionId,
+      prevVersionQuestionId,
+      reverting
+    })
+    .then(res => res.data);
+}
+
 export function postEditedAnswer({ versionAnswerId, markdown, reverting }) {
   return axios
     .post(`/api/versions/-/answers`, {
       versionAnswerId,
       markdown,
+      reverting
+    })
+    .then(res => res.data);
+}
+
+export function postAnswerVersion({
+  versionQuestionId,
+  versionAnswerId,
+  prevVersionAnswerId,
+  reverting
+}) {
+  return axios
+    .post(`/api/versions/-/answers`, {
+      versionQuestionId,
+      versionAnswerId,
+      prevVersionAnswerId,
       reverting
     })
     .then(res => res.data);

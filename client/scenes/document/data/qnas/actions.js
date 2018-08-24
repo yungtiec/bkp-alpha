@@ -2,7 +2,9 @@ import * as types from "./actionTypes";
 import {
   getQuestionsByVersionId,
   postEditedQuestion,
-  postEditedAnswer
+  postEditedAnswer,
+  postQuestionVersion,
+  postAnswerVersion
 } from "./services";
 import { keyBy, omit, sortBy } from "lodash";
 import { notify } from "reapop";
@@ -57,6 +59,37 @@ export function editQuestion({ versionQuestionId, markdown }) {
   };
 }
 
+export function revertToPrevQuestion({
+  versionQuestionId,
+  prevVersionQuestionId
+}) {
+  return async (dispatch, getState) => {
+    try {
+      var versionQuestion = await postQuestionVersion({
+        versionQuestionId,
+        prevVersionQuestionId,
+        reverting: true
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTION_REVERTED,
+        prevVersionQuestionId,
+        versionQuestion
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
 export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
   return async (dispatch, getState) => {
     try {
@@ -69,6 +102,40 @@ export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
         type: types.PROJECT_SURVEY_ANSWER_EDITED,
         newlyAddedVersionAnswer,
         prevVersionAnswerId: versionAnswerId,
+        versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
+export function revertToPrevAnswer({
+  versionQuestionId,
+  versionAnswerId,
+  prevVersionAnswerId
+}) {
+  return async (dispatch, getState) => {
+    try {
+      var versionAnswer = await postAnswerVersion({
+        versionQuestionId,
+        versionAnswerId,
+        prevVersionAnswerId,
+        reverting: true
+      });
+      dispatch({
+        type: types.PROJECT_SURVEY_ANSWER_REVERTED,
+        versionAnswer,
+        prevVersionAnswerId,
         versionQuestionId
       });
     } catch (error) {

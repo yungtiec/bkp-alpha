@@ -57,7 +57,7 @@ export default class Question extends Component {
             />
 
             <ReactMarkdown
-              className="qna__question qna__question--editing mb-2 pt-3 px-3"
+              className="markdown-body qna__question qna__question--editing mb-2 p-3"
               source={this.state.markdown}
             />
             <div className="d-flex justify-content-end my-3">

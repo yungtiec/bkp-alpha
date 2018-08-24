@@ -136,17 +136,61 @@ const Version = db.define(
               include: [
                 {
                   model: db.model("version_answer"),
-                  where: { latest: true }
+                  where: { latest: true },
+                  include: [
+                    {
+                      model: db.model("version_answer"),
+                      as: "ancestors",
+                      attribute: ["id", "createdAt"],
+                      required: false
+                    },
+                    {
+                      model: db.model("version_answer"),
+                      as: "descendents",
+                      attribute: ["id", "createdAt"],
+                      required: false
+                    }
+                  ],
+                  order: [
+                    [
+                      {
+                        model: db.model("version_answer"),
+                        as: "descendents"
+                      },
+                      "hierarchyLevel",
+                      "DESC"
+                    ],
+                    [
+                      {
+                        model: db.model("version_answer"),
+                        as: "ancestors"
+                      },
+                      "hierarchyLevel",
+                      "DESC"
+                    ]
+                  ]
                 },
                 {
                   model: db.model("version_question"),
                   as: "ancestors",
+                  attribute: ["id", "createdAt"],
+                  required: false
+                },
+                {
+                  model: db.model("version_question"),
+                  as: "descendents",
+                  attribute: ["id", "createdAt"],
                   required: false
                 }
               ],
               order: [
                 [
                   { model: db.model("version_question"), as: "ancestors" },
+                  "hierarchyLevel",
+                  "DESC"
+                ],
+                [
+                  { model: db.model("version_question"), as: "descendents" },
                   "hierarchyLevel",
                   "DESC"
                 ]
