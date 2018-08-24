@@ -22,7 +22,7 @@ export function postQuestionVersion({
   reverting
 }) {
   return axios
-    .post(`/api/versions/-/answers`, {
+    .post(`/api/versions/-/questions`, {
       versionQuestionId,
       prevVersionQuestionId,
       reverting

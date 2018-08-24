@@ -61,8 +61,8 @@ router.post("/", async (req, res, next) => {
           order_in_version: latestVersionQuestion.order_in_version,
           markdown: req.body.markdown,
           latest: true
-        }).then(nq => {
-          nq.setParent(latestVersionQuestion.id);
+        }).then(async nq => {
+          await nq.setParent(latestVersionQuestion.id);
           return nq;
         }),
         currentVersionQuestion.update({ latest: false })
@@ -81,13 +81,30 @@ router.post("/", async (req, res, next) => {
               {
                 model: db.model("version_answer"),
                 as: "ancestors",
-                attribute: ["id", "createdAt"],
+                attributes: ["id", "createdAt"],
+                required: false
+              },
+              {
+                model: db.model("version_answer"),
+                as: "descendents",
+                attributes: ["id", "createdAt"],
                 required: false
               }
             ],
             order: [
               [
-                { model: db.model("version_answer"), as: "ancestors" },
+                {
+                  model: db.model("version_answer"),
+                  as: "descendents"
+                },
+                "hierarchyLevel",
+                "DESC"
+              ],
+              [
+                {
+                  model: db.model("version_answer"),
+                  as: "ancestors"
+                },
                 "hierarchyLevel",
                 "DESC"
               ]
@@ -96,7 +113,7 @@ router.post("/", async (req, res, next) => {
           {
             model: VersionQuestion,
             as: "ancestors",
-            attribute: ["id", "createdAt"]
+            attributes: ["id", "createdAt"]
           }
         ],
         order: [
@@ -107,25 +124,23 @@ router.post("/", async (req, res, next) => {
           ]
         ]
       });
-      newlyAddedVersionQuestion.history = newlyAddedVersionQuestion.ancestors
-        .concat(_.omit(newlyAddedVersionQuestion, ["ancestors"]))
-        .concat(newlyAddedVersionQuestion.descendents);
-      delete newlyAddedVersionQuestion["ancestors"];
-      delete newlyAddedVersionQuestion["descendents"];
-      newlyAddedVersionQuestion.version_answers[0].history = newlyAddedVersionQuestion.version_answers[0].ancestors
-        .concat(
+      newlyAddedVersionQuestion = newlyAddedVersionQuestion.toJSON();
+      newlyAddedVersionQuestion.history = (
+        newlyAddedVersionQuestion.ancestors || []
+      )
+        .concat([_.omit(newlyAddedVersionQuestion, ["ancestors"])])
+        .concat(newlyAddedVersionQuestion.descendents || []);
+      newlyAddedVersionQuestion.version_answers[0].history = (
+        newlyAddedVersionQuestion.version_answers[0].ancestors || []
+      )
+        .concat([
           _.omit(newlyAddedVersionQuestion.version_answers[0], ["ancestors"])
-        )
-        .concat(version_answers[0].descendents);
-      delete newlyAddedVersionQuestion.version_answers[0]["ancestors"];
-      delete newlyAddedVersionQuestion.version_answers[0]["descendents"];
+        ])
+        .concat(newlyAddedVersionQuestion.version_answers[0].descendents || []);
+
       res.send(newlyAddedVersionQuestion);
     } else {
-      var [
-        versionAnswer,
-        prevVersionQuestion,
-        versionQuestion
-      ] = await Promise.all([
+      var [versionAnswer, prevVersionQuestion] = await Promise.all([
         (VersionAnswer.update(
           { version_question_id: req.body.versionQuestionId },
           { where: { version_question_id: req.body.prevVersionQuestionId } }
@@ -133,54 +148,55 @@ router.post("/", async (req, res, next) => {
         VersionQuestion.update(
           { latest: false },
           { where: { id: req.body.prevVersionQuestionId } }
-        ),
-        VersionQuestion.findOne({
-          where: { id: req.body.versionQuestionId },
-          include: [
-            {
-              model: db.model("version_answer"),
-              where: { latest: true },
-              include: [
-                {
-                  model: db.model("version_answer"),
-                  as: "ancestors",
-                  attribute: ["id", "createdAt"],
-                  required: false
-                },
-                {
-                  model: db.model("version_answer"),
-                  as: "descendents",
-                  attribute: ["id", "createdAt"],
-                  required: false
-                }
-              ],
-              order: [
-                [
-                  {
-                    model: db.model("version_answer"),
-                    as: "descendents"
-                  },
-                  "hierarchyLevel",
-                  "DESC"
-                ],
-                [
-                  {
-                    model: db.model("version_answer"),
-                    as: "ancestors"
-                  },
-                  "hierarchyLevel",
-                  "DESC"
-                ]
-              ]
-            }
-          ]
-        }).then(vq => vq.update({ latest: true })))
+        ))
       ]);
-      versionQuestion.version_answers[0].history = versionQuestion.version_answers[0].ancestors
+      var versionQuestion = await VersionQuestion.findOne({
+        where: { id: req.body.versionQuestionId },
+        include: [
+          {
+            model: db.model("version_answer"),
+            where: { latest: true },
+            include: [
+              {
+                model: db.model("version_answer"),
+                as: "ancestors",
+                attributes: ["id", "createdAt"],
+                required: false
+              },
+              {
+                model: db.model("version_answer"),
+                as: "descendents",
+                attributes: ["id", "createdAt"],
+                required: false
+              }
+            ],
+            order: [
+              [
+                {
+                  model: db.model("version_answer"),
+                  as: "descendents"
+                },
+                "hierarchyLevel",
+                "DESC"
+              ],
+              [
+                {
+                  model: db.model("version_answer"),
+                  as: "ancestors"
+                },
+                "hierarchyLevel",
+                "DESC"
+              ]
+            ]
+          }
+        ]
+      }).then(vq => vq.update({ latest: true }));
+      versionQuestion = versionQuestion.toJSON();
+      versionQuestion.version_answers[0].history = (
+        versionQuestion.version_answers[0].ancestors || []
+      )
         .concat(_.omit(versionQuestion.version_answers[0], ["ancestors"]))
-        .concat(version_answers[0].descendents);
-      delete versionQuestion.version_answers[0]["ancestors"];
-      delete versionQuestion.version_answers[0]["descendents"];
+        .concat(versionQuestion.version_answers[0].descendents || []);
       res.send(versionQuestion);
     }
   } catch (err) {

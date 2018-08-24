@@ -141,13 +141,13 @@ const Version = db.define(
                     {
                       model: db.model("version_answer"),
                       as: "ancestors",
-                      attribute: ["id", "createdAt"],
+                      attributes: ["id", "createdAt"],
                       required: false
                     },
                     {
                       model: db.model("version_answer"),
                       as: "descendents",
-                      attribute: ["id", "createdAt"],
+                      attributes: ["id", "createdAt"],
                       required: false
                     }
                   ],
@@ -173,13 +173,13 @@ const Version = db.define(
                 {
                   model: db.model("version_question"),
                   as: "ancestors",
-                  attribute: ["id", "createdAt"],
+                  attributes: ["id", "createdAt"],
                   required: false
                 },
                 {
                   model: db.model("version_question"),
                   as: "descendents",
-                  attribute: ["id", "createdAt"],
+                  attributes: ["id", "createdAt"],
                   required: false
                 }
               ],

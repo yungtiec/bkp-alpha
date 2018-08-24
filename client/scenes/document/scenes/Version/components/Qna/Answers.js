@@ -4,6 +4,7 @@ import autoBind from "react-autobind";
 import { find, keyBy, clone } from "lodash";
 import Markmirror from "react-markmirror";
 import moment from "moment";
+import { sortBy } from "lodash";
 
 export default class Answers extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export default class Answers extends Component {
               markdown: this.props.answer.markdown,
               versionAnswerIdBeforeReverting: this.props.answer.id
             };
-      this.setState(newState);
+      this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(
         () => this.markMirror && this.markMirror.setupCodemirror(),
         200
@@ -49,16 +50,15 @@ export default class Answers extends Component {
       markdown: this.state.markdown,
       versionQuestionId: this.props.qnaId
     });
+    this.setState({
+      editing: false
+    });
   }
 
   handleCancel() {
     this.setState({
       editing: false
     });
-    console.log(
-      this.state.versionAnswerIdBeforeReverting,
-      this.props.answer.id
-    );
     if (this.state.versionAnswerIdBeforeReverting !== this.props.answer.id)
       this.props.revertToPrevAnswer({
         versionQuestionId: this.props.qnaId,
@@ -93,7 +93,7 @@ export default class Answers extends Component {
             previous edits
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {answer.history.map(h => (
+            {sortBy(answer.history, ["hierarchyLevel"], "asc").map(h => (
               <a
                 class={`dropdown-item ${h.id === answer.id ? "active" : ""}`}
                 onClick={() =>

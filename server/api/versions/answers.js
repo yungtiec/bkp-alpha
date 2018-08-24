@@ -30,8 +30,8 @@ router.post("/", async (req, res, next) => {
           version_question_id: latestVersionAnswer.version_question_id,
           markdown: req.body.markdown,
           latest: true
-        }).then(na => {
-          na.setParent(latestVersionAnswer.id);
+        }).then(async na => {
+          await na.setParent(latestVersionAnswer.id);
           return na;
         }),
         currentVersionAnswer.update({ latest: false })
@@ -42,13 +42,13 @@ router.post("/", async (req, res, next) => {
           {
             model: db.model("version_answer"),
             as: "ancestors",
-            attribute: ["id", "createdAt"],
+            attributes: ["id", "createdAt"],
             required: false
           },
           {
             model: db.model("version_answer"),
             as: "descendents",
-            attribute: ["id", "createdAt"],
+            attributes: ["id", "createdAt"],
             required: false
           }
         ],
@@ -71,11 +71,13 @@ router.post("/", async (req, res, next) => {
           ]
         ]
       });
-      newlyAddedVersionAnswer.history = newlyAddedVersionAnswer.ancestors
+      newlyAddedVersionAnswer = newlyAddedVersionAnswer.toJSON();
+      newlyAddedVersionAnswer.history = (
+        newlyAddedVersionAnswer.ancestors || []
+      )
         .concat(_.omit(newlyAddedVersionAnswer, ["ancestors"]))
-        .concat(newlyAddedVersionAnswer.descendents);
-      delete newlyAddedVersionAnswer["ancestors"];
-      delete newlyAddedVersionAnswer["descendents"];
+        .concat(newlyAddedVersionAnswer.descendents || []);
+
       res.send(newlyAddedVersionAnswer);
     } else {
       var [prevVersionAnswer, versionAnswer] = await Promise.all([

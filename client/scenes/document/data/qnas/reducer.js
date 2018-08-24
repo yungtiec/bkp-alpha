@@ -32,17 +32,20 @@ const updateQuestions = (state, action) => {
 };
 
 const revertQuestion = (state, action) => {
+  var documentQnas;
   var history = cloneDeep(
     state.documentQnasById[action.prevVersionQuestionId].history
   );
   delete state.documentQnasById[action.prevVersionQuestionId];
   state.documentQnasById[action.versionQuestion.id] = action.versionQuestion;
+  state.documentQnasById[action.versionQuestion.id].history = history;
   documentQnas = sortBy(
     values(state.documentQnasById),
     ["order_in_version"],
     ["asc"]
   );
   state.documentQnaIds = documentQnas.map(qna => qna.id);
+  console.log(state)
   return state;
 };
 

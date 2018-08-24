@@ -30,15 +30,15 @@ export default ({
         addNewCommentSentFromServer={addNewCommentSentFromServer}
       />
     ) : null}
-    {documentQnaIds.map(id => {
+    {documentQnaIds.map((id, i) => {
       return (
         <Element
           name={`qna-${id}`}
           ref={el => (parent[`qna-${id}`] = el)}
-          key={`qna-${id}`}
+          key={`qna-${documentQnasById[id].order_in_version}`}
         >
           <Qna
-            key={`qna-${id}`}
+            key={`qna-${documentQnasById[id].order_in_version}`}
             qna={documentQnasById[id]}
             versionId={documentMetadata.id}
             isLoggedIn={isLoggedIn}
@@ -48,7 +48,7 @@ export default ({
             addNewCommentSentFromServer={addNewCommentSentFromServer}
           >
             <Question
-              key={`qna-${id}__question`}
+              key={`qna-${documentQnasById[id].order_in_version}__question`}
               qnaId={id}
               question={documentQnasById[id]}
               editQuestion={editQuestion}
