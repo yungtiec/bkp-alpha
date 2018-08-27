@@ -139,6 +139,8 @@ export default class Answers extends Component {
   render() {
     const { answer, qnaId, handleCommentOnClick } = this.props;
 
+    console.log(this.props.documentMetadata);
+
     return (
       <div className="qna__answer-container editing-toolbar__hover-target">
         {this.state.editing ? (

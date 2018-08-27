@@ -226,7 +226,11 @@ function filterByVersionAnswer({ versionAnswerIds, commentsById, commentIds }) {
   if (!versionAnswerIds || !versionAnswerIds.length) return commentIds;
   return filter(commentIds, cid => {
     return versionAnswerIds.reduce((bool, versionAnswerId) => {
-      return bool || commentsById[cid].version_answer_id === versionAnswerId;
+      return (
+        bool ||
+        !commentsById[cid].version_answer_id ||
+        commentsById[cid].version_answer_id === versionAnswerId
+      );
     }, false);
   });
 }

@@ -164,8 +164,30 @@ export default class CommentItem extends Component {
         style={comment.descendents.length ? { borderBottom: "1px solid" } : {}}
       >
         <div className="comment-item__header">
-          <p className="comment-item__owner-name">
-            {comment.owner.displayName}
+          <p className="comment-item__owner-name d-flex flex-direction-column">
+            <PunditContainer policies={policies} user={comment.owner}>
+              <PunditTypeSet type="Comment">
+                <VisibleIf
+                  action="isProjectAdmin"
+                  model={{ project: projectMetadata, comment }}
+                >
+                  <span class="text-primary">
+                    <i class="text-primary mr-2 fas fa-certificate" />
+                    {projectMetadata.name}
+                  </span>
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
+            <PunditContainer policies={policies} user={comment.owner}>
+              <PunditTypeSet type="Comment">
+                <VisibleIf
+                  action="isNotProjectAdmin"
+                  model={{ project: projectMetadata, comment }}
+                >
+                  <span>{comment.owner.displayName}</span>
+                </VisibleIf>
+              </PunditTypeSet>
+            </PunditContainer>
           </p>
           <p>{moment(comment.createdAt).fromNow()}</p>
         </div>
@@ -254,7 +276,31 @@ export default class CommentItem extends Component {
           key={`comment-item__reply-${reply.id}`}
         >
           <div className="comment-item__header">
-            <p>{reply.owner.displayName}</p>
+            <p className="comment-item__owner-name d-flex flex-direction-column">
+              <PunditContainer policies={policies} user={reply.owner}>
+                <PunditTypeSet type="Comment">
+                  <VisibleIf
+                    action="isProjectAdmin"
+                    model={{ project: projectMetadata, comment: reply }}
+                  >
+                    <span class="text-primary">
+                      <i class="text-primary mr-2 fas fa-certificate" />
+                      {projectMetadata.name}
+                    </span>
+                  </VisibleIf>
+                </PunditTypeSet>
+              </PunditContainer>
+              <PunditContainer policies={policies} user={reply.owner}>
+                <PunditTypeSet type="Comment">
+                  <VisibleIf
+                    action="isNotProjectAdmin"
+                    model={{ project: projectMetadata, comment: reply }}
+                  >
+                    <span>{reply.owner.displayName}</span>
+                  </VisibleIf>
+                </PunditTypeSet>
+              </PunditContainer>
+            </p>
             <p>{moment(reply.createdAt).fromNow()}</p>
           </div>
           {reply.reviewed === "spam" ? (

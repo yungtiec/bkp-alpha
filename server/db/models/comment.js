@@ -99,6 +99,7 @@ const Comment = db.define(
               model: db.model("user"),
               as: "owner",
               attributes: [
+                "id",
                 "first_name",
                 "last_name",
                 "name",
@@ -158,11 +159,17 @@ const Comment = db.define(
               model: db.model("user"),
               as: "owner",
               attributes: [
+                "id",
                 "first_name",
                 "last_name",
                 "name",
                 "email",
                 "anonymity"
+              ],
+              include: [
+                {
+                  model: db.model("role")
+                }
               ]
             },
             {
@@ -217,11 +224,17 @@ const Comment = db.define(
                   model: db.model("user"),
                   as: "owner",
                   attributes: [
+                    "id",
                     "first_name",
                     "last_name",
                     "name",
                     "email",
                     "anonymity"
+                  ],
+                  include: [
+                    {
+                      model: db.model("role")
+                    }
                   ]
                 },
                 {
@@ -233,11 +246,17 @@ const Comment = db.define(
                       model: db.model("user"),
                       as: "owner",
                       attributes: [
+                        "id",
                         "first_name",
                         "last_name",
                         "name",
                         "email",
                         "anonymity"
+                      ],
+                      include: [
+                        {
+                          model: db.model("role")
+                        }
                       ]
                     }
                   ]

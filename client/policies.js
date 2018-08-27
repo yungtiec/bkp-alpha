@@ -7,6 +7,7 @@ module.exports = {
       !user || !user.roles || !user.roles.length
         ? "contributer"
         : user.roles[0].name;
+
     const isAdmin = userRole === "admin";
     const isProjectAdmin =
       userRole === "project_admin" &&
@@ -33,6 +34,10 @@ module.exports = {
         return isAdmin || isProjectAdmin || isProjectEditor || isCommentOwner;
       case "Edit":
         return isCommentOwner;
+      case "isProjectAdmin":
+        return isProjectAdmin;
+      case "isNotProjectAdmin":
+        return !isProjectAdmin;
     }
   },
   Disclosure: (action, model, user) => {
@@ -46,7 +51,7 @@ module.exports = {
     const isProjectEditor = model.project
       ? userRole === "project_editor" &&
         !!find(model.project.editors, a => a.id === user.id)
-      : userRole === "project_editor";
+      : userRole === "editor";
     const isDisclosureOwner = model.disclosure
       ? model.disclosure.creator.id === user.id
       : null;
