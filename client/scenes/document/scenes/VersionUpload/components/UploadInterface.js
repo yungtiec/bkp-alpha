@@ -5,19 +5,19 @@ import autoBind from "react-autobind";
 import { DocumentHeader } from "../../../components/index";
 import Dropzone from "react-dropzone";
 import ReactMarkdown from "react-markdown";
-import Diff from "text-diff";
+import { TextDiff } from "../../../../../utils";
 import sanitizeHtml from "sanitize-html";
 
-function getDocumentMarkdown({ documentTitle, documentQnaIds, documentQnasById }) {
+function getDocumentMarkdown({
+  documentTitle,
+  documentQnaIds,
+  documentQnasById
+}) {
   const newline = "\n\n";
   var documentMarkdown = "# " + documentTitle + newline;
   documentQnaIds.forEach(sid => {
     documentMarkdown += documentQnasById[sid].markdown;
     documentMarkdown += documentQnasById[sid].version_answers[0].markdown;
-    if (documentQnasById[sid].version_answers[0].children.length)
-      documentQnasById[sid].version_answers[0].children.forEach(child => {
-        documentMarkdown += child.markdown;
-      });
   });
   return documentMarkdown;
 }
@@ -26,13 +26,12 @@ export default class UploadInterface extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-
+    this.diff = new TextDiff();
     const self = this;
     this.fileReader = new FileReader();
     this.fileReader.onload = function(e) {
       self.props.importMarkdown(self.fileReader.result);
     };
-    this.diff = new Diff();
   }
 
   onDrop(file) {

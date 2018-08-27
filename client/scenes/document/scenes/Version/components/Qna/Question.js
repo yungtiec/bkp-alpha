@@ -7,13 +7,19 @@ import moment from "moment";
 import { sortBy } from "lodash";
 import policies from "../../../../../../policies.js";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import { TextDiff } from "../../../../../../utils";
 
 export default class Question extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.diff = new TextDiff();
     this.state = {
       markdown: this.props.question.markdown,
+      diff: this.diff.main(
+        this.props.question.markdown,
+        this.props.question.markdown
+      ),
       editing: false,
       versionQuestionIdBeforeReverting: this.props.question.id
     };
@@ -23,7 +29,13 @@ export default class Question extends Component {
     if (this.props.qnaId !== prevProps.qnaId) {
       var newState =
         this.props.question.history.length === prevProps.question.history.length
-          ? { markdown: this.props.question.markdown }
+          ? {
+              markdown: this.props.question.markdown,
+              diff: this.diff.main(
+                this.props.question.markdown,
+                this.props.question.markdown
+              )
+            }
           : {
               markdown: this.props.question.markdown,
               versionQuestionIdBeforeReverting: this.props.question.id
@@ -31,7 +43,6 @@ export default class Question extends Component {
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(() => {
         this.markMirror && this.markMirror.setupCodemirror();
-        console.log(this.state);
       }, 200);
     }
   }
@@ -43,7 +54,10 @@ export default class Question extends Component {
   }
 
   handleValueChange(markdown) {
-    this.setState({ markdown });
+    this.setState({
+      markdown,
+      diff: this.diff.main(this.props.question.markdown, markdown)
+    });
   }
 
   handleSubmit() {
@@ -52,13 +66,19 @@ export default class Question extends Component {
       markdown: this.state.markdown
     });
     this.setState({
-      editing: false
+      editing: false,
+      diff: this.diff.main(this.state.markdown, this.state.markdown)
     });
   }
 
   handleCancel() {
     this.setState({
-      editing: false
+      editing: false,
+      diff: this.diff.main(
+        this.props.question.markdown,
+        this.props.question.markdown
+      ),
+      markdown: this.props.question.markdown
     });
     if (this.state.versionQuestionIdBeforeReverting !== this.props.question.id)
       this.props.revertToPrevQuestion({
@@ -132,8 +152,8 @@ export default class Question extends Component {
               ref={el => (this.markMirror = el)}
             />
             <ReactMarkdown
-              className="markdown-body qna__question qna__question--editing mb-2 p-3"
-              source={this.state.markdown}
+              className="markdown-body markdown-body--text-diff qna__question qna__question--editing mb-2 p-3"
+              source={this.diff.getMarkdownWithdifference(this.state.diff)}
             />
             <div className="d-flex justify-content-end my-3">
               <button className="btn btn-primary" onClick={this.handleSubmit}>
