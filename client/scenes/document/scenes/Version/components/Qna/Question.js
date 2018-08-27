@@ -29,7 +29,13 @@ export default class Question extends Component {
     if (this.props.qnaId !== prevProps.qnaId) {
       var newState =
         this.props.question.history.length === prevProps.question.history.length
-          ? { markdown: this.props.question.markdown }
+          ? {
+              markdown: this.props.question.markdown,
+              diff: this.diff.main(
+                this.props.question.markdown,
+                this.props.question.markdown
+              )
+            }
           : {
               markdown: this.props.question.markdown,
               versionQuestionIdBeforeReverting: this.props.question.id
@@ -48,10 +54,10 @@ export default class Question extends Component {
   }
 
   handleValueChange(markdown) {
-    this.setState(prevState => ({
+    this.setState({
       markdown,
       diff: this.diff.main(this.props.question.markdown, markdown)
-    }));
+    });
   }
 
   handleSubmit() {
@@ -60,13 +66,19 @@ export default class Question extends Component {
       markdown: this.state.markdown
     });
     this.setState({
-      editing: false
+      editing: false,
+      diff: this.diff.main(this.state.markdown, this.state.markdown)
     });
   }
 
   handleCancel() {
     this.setState({
-      editing: false
+      editing: false,
+      diff: this.diff.main(
+        this.props.question.markdown,
+        this.props.question.markdown
+      ),
+      markdown: this.props.question.markdown
     });
     if (this.state.versionQuestionIdBeforeReverting !== this.props.question.id)
       this.props.revertToPrevQuestion({

@@ -17,7 +17,7 @@ Diff.prototype.getMarkdownWithdifference = function(diffs) {
       .replace(pattern_amp, "&amp;")
       .replace(pattern_lt, "&lt;")
       .replace(pattern_gt, "&gt;")
-      .replace(pattern_br, "<br/>");
+      // .replace(pattern_br, "<br/>");
     switch (op) {
       case DIFF_INSERT:
         markdown[x] = "*" + text + "*";
