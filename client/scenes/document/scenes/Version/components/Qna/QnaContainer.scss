@@ -71,3 +71,12 @@
   display: inline-block;
   float: right;
 }
+
+.markdown-body--text-diff {
+  em {
+    background-color: #d0f5d0;
+  }
+  del {
+    background: #ffc4c4;
+  }
+}

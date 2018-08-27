@@ -1,5 +1,5 @@
 import { find } from "lodash";
-import history from "./history";
+import history from "../history";
 
 /**
  * itemCollection has a tree like structure
@@ -35,3 +35,5 @@ export function getCommentContextPath(comment) {
 export function seeCommentContext(comment) {
   return history.push(getCommentContextPath(comment));
 }
+
+export { default as TextDiff } from "./text-diff";
