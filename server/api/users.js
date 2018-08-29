@@ -15,11 +15,8 @@ const { ensureAuthentication } = require("./utils");
 module.exports = router;
 
 const ensureCorrectRole = (req, res, next) => {
-  if (
-    !req.user.roles ||
-    !req.user.roles.length ||
-    req.user.roles[0].name === "user"
-  ) {
+  if (!req.user.roles || !req.user.roles.length) {
+    console.log(req.user.roles);
     res.send([]);
     return;
   } else {
@@ -112,14 +109,62 @@ router.get(
     try {
       var documents;
       var ownDocuments, collaboratorDocuments;
+
       switch (req.user.roles[0].name) {
         case "admin":
           documents = await Document.scope("includeVersions").findAll();
           break;
+        case "editor":
+          ownDocuments = await Document.findAll({
+            include: [
+              { model: db.model("version") },
+              {
+                model: Project,
+                required: true,
+                include: [
+                  {
+                    model: User,
+                    through: db.model("project_editor"),
+                    as: "editors",
+                    where: { id: req.user.id },
+                    required: true
+                  }
+                ]
+              }
+            ]
+          });
+          collaboratorDocuments = await req.user.getCollaboratedDocuments({
+            include: [
+              { model: db.model("version") },
+              {
+                model: db.model("project")
+              }
+            ],
+            order: [
+              ["createdAt", "DESC"],
+              [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
+            ]
+          });
+          documents = ownDocuments.concat(collaboratorDocuments);
+          break;
         case "project_admin":
-        case "project_editor":
-          ownDocuments = await Document.scope("includeVersions").findAll({
-            where: { creator_id: req.user.id }
+          ownDocuments = await Document.findAll({
+            include: [
+              { model: db.model("version") },
+              {
+                model: Project,
+                required: true,
+                include: [
+                  {
+                    model: User,
+                    through: db.model("project_admin"),
+                    as: "admins",
+                    where: { id: req.user.id },
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
           collaboratorDocuments = await req.user.getCollaboratedDocuments({
             include: [

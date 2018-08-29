@@ -178,8 +178,8 @@ export default class Question extends Component {
             <VisibleIf
               action="Create"
               model={{
-                project: this.props.documentMetadata.document.project,
-                disclosure: this.props.documentMetadata.document
+                project: this.props.versionMetadata.document.project,
+                disclosure: this.props.versionMetadata.document
               }}
             >
               {!this.state.editing && (

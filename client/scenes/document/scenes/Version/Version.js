@@ -207,7 +207,7 @@ class Document extends Component {
       editAnswer,
       revertToPrevQuestion,
       revertToPrevAnswer,
-      documentMetadata,
+      versionMetadata,
       commentsById,
       commentIds,
       nonSpamCommentIds,
@@ -255,14 +255,14 @@ class Document extends Component {
           }}
         />
         <DocumentHeader
-          documentMetadata={documentMetadata}
-          projectMetadata={documentMetadata.document.project}
+          versionMetadata={versionMetadata}
+          projectMetadata={versionMetadata.document.project}
           isClosedForComment={isClosedForComment}
         />
         {isLoggedIn && (
           <VersionToolbar
-            projectMetadata={documentMetadata.document.project}
-            documentMetadata={documentMetadata}
+            projectMetadata={versionMetadata.document.project}
+            versionMetadata={versionMetadata}
             documentQnasById={documentQnasById}
             documentQnaIds={documentQnaIds}
             upvoteDocument={upvoteDocument}
@@ -274,8 +274,8 @@ class Document extends Component {
             path={`${this.props.match.path}/issues`}
             render={props => (
               <VersionIssues
-                documentVersions={documentMetadata.document.versions}
-                projectSymbol={documentMetadata.document.project.symbol}
+                documentVersions={versionMetadata.document.versions}
+                projectSymbol={versionMetadata.document.project.symbol}
               />
             )}
           />
@@ -283,8 +283,8 @@ class Document extends Component {
             path={`${this.props.match.path}/progress`}
             render={() => (
               <VersionProgress
-                documentMetadata={documentMetadata}
-                projectSymbol={documentMetadata.document.project.symbol}
+                versionMetadata={versionMetadata}
+                projectSymbol={versionMetadata.document.project.symbol}
               />
             )}
           />
@@ -300,7 +300,7 @@ class Document extends Component {
                 editAnswer={editAnswer}
                 revertToPrevQuestion={revertToPrevQuestion}
                 revertToPrevAnswer={revertToPrevAnswer}
-                documentMetadata={documentMetadata}
+                versionMetadata={versionMetadata}
                 tags={tags}
                 tagFilter={tagFilter}
                 commentOnClick={this.commentOnClick}
@@ -355,8 +355,8 @@ class Document extends Component {
                 commentIds={commentIds}
                 nonSpamCommentIds={nonSpamCommentIds}
                 commentsById={commentsById}
-                documentMetadata={documentMetadata}
-                projectMetadata={documentMetadata.document.project}
+                versionMetadata={versionMetadata}
+                projectMetadata={versionMetadata.document.project}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
                 tags={tags}

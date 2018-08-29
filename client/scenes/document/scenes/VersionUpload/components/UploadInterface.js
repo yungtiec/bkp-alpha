@@ -46,14 +46,14 @@ export default class UploadInterface extends Component {
       isLoggedIn,
       documentQnasById,
       documentQnaIds,
-      documentMetadata,
+      versionMetadata,
       projectMetadata,
       importedMarkdown,
       importMarkdown,
       uploadMarkdownToServer
     } = this.props;
     const originalMarkdown = getDocumentMarkdown({
-      documentTitle: documentMetadata.title,
+      documentTitle: versionMetadata.title,
       documentQnaIds,
       documentQnasById
     });

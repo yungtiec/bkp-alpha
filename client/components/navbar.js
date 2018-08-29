@@ -49,7 +49,10 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="/project/BKP/document/1/version/1" className="navbar__nav-item">
+              <Link
+                to="/project/BKP/document/1/version/1"
+                className="navbar__nav-item"
+              >
                 framework
               </Link>
             ) : (
@@ -79,6 +82,19 @@ class Navbar extends Component {
                   <VisibleIf action="Create" model={{}}>
                     <Link to="/upload" className="navbar__nav-item">
                       create
+                    </Link>
+                  </VisibleIf>
+                </PunditTypeSet>
+              </PunditContainer>
+            ) : (
+              ""
+            )}
+            {width > 600 ? (
+              <PunditContainer policies={policies} user={user}>
+                <PunditTypeSet type="Disclosure">
+                  <VisibleIf action="Create" model={{}}>
+                    <Link to="/dashboard" className="navbar__nav-item">
+                      dashboard
                     </Link>
                   </VisibleIf>
                 </PunditTypeSet>

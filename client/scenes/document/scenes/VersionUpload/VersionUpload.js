@@ -97,7 +97,7 @@ class VersionUpload extends Component {
       width,
       documentQnasById,
       documentQnaIds,
-      documentMetadata,
+      versionMetadata,
       outstandingIssues,
       notify,
       importedMarkdown,
@@ -126,15 +126,15 @@ class VersionUpload extends Component {
     return (
       <div className="project-document">
         <DocumentHeader
-          documentMetadata={documentMetadata}
-          projectMetadata={documentMetadata.document.project}
+          versionMetadata={versionMetadata}
+          projectMetadata={versionMetadata.document.project}
         />
         <VersionToolbar
           uploadMode={true}
           uploadMarkdownToServer={uploadMarkdownToServer}
           resetUpload={() => importMarkdown(null)}
-          projectMetadata={documentMetadata.document.project}
-          documentMetadata={documentMetadata}
+          projectMetadata={versionMetadata.document.project}
+          versionMetadata={versionMetadata}
           documentQnasById={documentQnasById}
           documentQnaIds={documentQnaIds}
           upvoteDocument={upvoteDocument}
@@ -339,8 +339,8 @@ class VersionUpload extends Component {
                 isLoggedIn={isLoggedIn}
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
-                documentMetadata={documentMetadata}
-                projectMetadata={documentMetadata.document.project}
+                versionMetadata={versionMetadata}
+                projectMetadata={versionMetadata.document.project}
               />
             </AccordionItemBody>
           </AccordionItem>

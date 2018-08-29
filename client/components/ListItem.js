@@ -8,6 +8,7 @@ export default ({
   subtitle,
   textUpperRight,
   mainText,
+  quote,
   tagArray,
   metadataArray
 }) => {
@@ -16,9 +17,20 @@ export default ({
       <Link to={cardHref}>
         <div className="entity__block">
           <div className="entity__header">
-            <div className="entity__title">
-              <span>{mainTitle}</span>
-              <span className="entity__subtitle">{subtitle}</span>
+            <div className="d-flex flex-column entity__header-content--left">
+              {quote ? (
+                <div
+                  className="entity__quote"
+                  class="pl-3 mb-4"
+                  style={{ borderLeft: "3px solid grey" }}
+                >
+                  <span>{quote}</span>
+                </div>
+              ) : null}
+              <div className="entity__title">
+                <span>{mainTitle}</span>
+                <span className="entity__subtitle">{subtitle}</span>
+              </div>
             </div>
             <p className="entity__text-upper-right">{textUpperRight}</p>
           </div>

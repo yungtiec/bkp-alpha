@@ -139,8 +139,6 @@ export default class Answers extends Component {
   render() {
     const { answer, qnaId, handleCommentOnClick } = this.props;
 
-    console.log(this.props.documentMetadata);
-
     return (
       <div className="qna__answer-container editing-toolbar__hover-target">
         {this.state.editing ? (
@@ -185,8 +183,8 @@ export default class Answers extends Component {
             <VisibleIf
               action="Create"
               model={{
-                project: this.props.documentMetadata.document.project,
-                disclosure: this.props.documentMetadata.document
+                project: this.props.versionMetadata.document.project,
+                disclosure: this.props.versionMetadata.document
               }}
             >
               {!this.state.editing && (

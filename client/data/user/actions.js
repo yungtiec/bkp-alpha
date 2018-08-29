@@ -109,7 +109,7 @@ export const verifyUportOnMobile = accessToken => async dispatch => {
 export const fetchManagedProjects = () => async (dispatch, getState) => {
   try {
     const projects = await axios
-      .get(`api/users/-/projects`)
+      .get(`/api/users/-/projects`)
       .then(res => res.data);
     const projectsBySymbol = keyBy(projects, "symbol");
     const projectSymbolArr = projects.map(project => project.symbol);
@@ -126,8 +126,9 @@ export const fetchManagedProjects = () => async (dispatch, getState) => {
 export const fetchOwnDocuments = () => async (dispatch, getState) => {
   try {
     const documents = await axios
-      .get(`api/users/-/documents`)
+      .get(`/api/users/-/documents`)
       .then(res => res.data);
+    console.log(documents)
     const documentsById = keyBy(documents, "id");
     const documentIds = documents.map(ps => ps.id);
     dispatch({

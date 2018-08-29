@@ -10,10 +10,10 @@ import { loadModal } from "../../../../data/reducer";
 export function fetchMetadataByVersionId(versionId) {
   return async (dispatch, getState) => {
     try {
-      var documentMetadata = await getMetadataByVersionId(versionId);
+      var versionMetadata = await getMetadataByVersionId(versionId);
       dispatch({
         type: types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS,
-        documentMetadata
+        versionMetadata
       });
     } catch (error) {
       console.error(error);

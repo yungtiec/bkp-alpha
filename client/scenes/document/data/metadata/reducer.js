@@ -16,7 +16,7 @@ export default function reduce(state = initialState, action = {}) {
     case types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
-        ...action.documentMetadata
+        ...action.versionMetadata
       };
     case types.SURVEY_VOTED:
       return addVotesToDocument(action, state)
@@ -25,7 +25,7 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
-export function getSelectedDocument(state) {
+export function getVersionMetadata(state) {
   return state.scenes.document.data.metadata;
 }
 

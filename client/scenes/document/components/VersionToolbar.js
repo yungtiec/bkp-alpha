@@ -32,7 +32,7 @@ class VersionToolbar extends Component {
     const {
       resetUpload,
       projectMetadata,
-      documentMetadata,
+      versionMetadata,
       documentQnasById,
       documentQnaIds,
       uploadMode,
@@ -44,18 +44,18 @@ class VersionToolbar extends Component {
     } = this.props;
 
     const documentMarkdown = getDocumentMarkdown({
-      documentTitle: documentMetadata.title,
+      documentTitle: versionMetadata.title,
       documentQnaIds,
       documentQnasById
     });
 
     const hasUpvoted = !!find(
-      documentMetadata.document.upvotesFrom,
+      versionMetadata.document.upvotesFrom,
       upvotedUser => upvotedUser.id === user.id
     );
 
     const hasDownvoted = !!find(
-      documentMetadata.document.downvotesFrom,
+      versionMetadata.document.downvotesFrom,
       downvotedUser => downvotedUser.id === user.id
     );
 
@@ -73,16 +73,16 @@ class VersionToolbar extends Component {
             onClick={() =>
               upvoteDocument({
                 projectSymbol: projectMetadata.symbol,
-                documentId: documentMetadata.document.id,
-                versionId: documentMetadata.id,
+                documentId: versionMetadata.document.id,
+                versionId: versionMetadata.id,
                 hasUpvoted,
                 hasDownvoted
               })
             }
           >
             <i className="fas fa-thumbs-up mr-2" />
-            {documentMetadata.document.upvotesFrom
-              ? documentMetadata.document.upvotesFrom.length
+            {versionMetadata.document.upvotesFrom
+              ? versionMetadata.document.upvotesFrom.length
               : 0}
           </button>
           <button
@@ -95,16 +95,16 @@ class VersionToolbar extends Component {
             onClick={() =>
               downvoteDocument({
                 projectSymbol: projectMetadata.symbol,
-                documentId: documentMetadata.document.id,
-                versionId: documentMetadata.id,
+                documentId: versionMetadata.document.id,
+                versionId: versionMetadata.id,
                 hasUpvoted,
                 hasDownvoted
               })
             }
           >
             <i className="fas fa-thumbs-down mr-2" />
-            {documentMetadata.document.downvotesFrom
-              ? documentMetadata.document.downvotesFrom.length
+            {versionMetadata.document.downvotesFrom
+              ? versionMetadata.document.downvotesFrom.length
               : 0}
           </button>
           <PunditContainer policies={policies} user={user}>
@@ -113,7 +113,7 @@ class VersionToolbar extends Component {
                 action="Version"
                 model={{
                   project: projectMetadata,
-                  disclosure: documentMetadata.document
+                  disclosure: versionMetadata.document
                 }}
               >
                 <button
@@ -121,8 +121,8 @@ class VersionToolbar extends Component {
                   className="btn btn-outline-primary"
                   onClick={() =>
                     history.push(
-                      `/project/${this.props.projectMetadata.symbol}/document/${documentMetadata.document.id}/version/${
-                        this.props.documentMetadata.id
+                      `/project/${this.props.projectMetadata.symbol}/document/${versionMetadata.document.id}/version/${
+                        this.props.versionMetadata.id
                       }`
                     )
                   }
@@ -138,7 +138,7 @@ class VersionToolbar extends Component {
                 action="Version"
                 model={{
                   project: projectMetadata,
-                  disclosure: documentMetadata.document
+                  disclosure: versionMetadata.document
                 }}
               >
                 <div className="btn-group">
@@ -154,7 +154,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/progress`}
+                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/progress`}
                     >
                       View progress
                     </Link>
@@ -166,7 +166,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/progress`}
+                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/progress`}
                       class="dropdown-item"
                     >
                       Milestone
@@ -174,7 +174,7 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${documentMetadata.document.id}/version/${this.props.documentMetadata.id}/issues`}
+                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/issues`}
                       class="dropdown-item"
                     >
                       Issues
@@ -191,16 +191,16 @@ class VersionToolbar extends Component {
                   action="Version"
                   model={{
                     project: projectMetadata,
-                    disclosure: documentMetadata.document
+                    disclosure: versionMetadata.document
                   }}
                 >
                   <button type="button" className="btn btn-outline-primary">
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${documentMetadata.document.id}/version/${
+                      }/document/${versionMetadata.document.id}/version/${
                         orderBy(
-                          this.props.documentMetadata.document.versions,
+                          this.props.versionMetadata.document.versions,
                           ["hierarchyLevel"],
                           ["desc"]
                         )[0].id
@@ -271,7 +271,7 @@ class VersionToolbar extends Component {
                             download(
                               documentMarkdown,
                               `${this.props.projectMetadata.symbol.toLowerCase()}-${
-                                this.props.documentMetadata.id
+                                this.props.versionMetadata.id
                               }.md`,
                               "text/markdown"
                             )

@@ -2,6 +2,19 @@ import React, { Component } from "react";
 import { Element } from "react-scroll";
 import { keys, capitalize } from "lodash";
 
+const scorecardOrder = [
+  "consumer_token_design",
+  "project_governance_and_operation",
+  "responsible_token_distribution",
+  "use_of_token_distribution_proceeds",
+  "token_inventory",
+  "mitigation_of_conflicts_and_improper_trading",
+  "token_safety_and_security",
+  "marketing_practices",
+  "protecting_and_empowering_consumers",
+  "compliance_with_application_laws"
+];
+
 export default ({ scorecard, parent }) => (
   <Element
     name="qna-scorecard"
@@ -11,7 +24,7 @@ export default ({ scorecard, parent }) => (
     <div className="qna__container">
       <div>
         <div className="qna__question">
-          <h3>consumer token framework scorecard</h3>
+          <h3>Consumer token framework scorecard</h3>
         </div>
         <div className="qna__answer-container">
           <div className="markdown-body">
@@ -24,7 +37,7 @@ export default ({ scorecard, parent }) => (
                   </tr>
                 </thead>
                 <tbody>
-                  {keys(scorecard).map(principleKey => {
+                  {scorecardOrder.map(principleKey => {
                     var principle = capitalize(principleKey.replace(/_/g, " "));
                     return (
                       <tr>

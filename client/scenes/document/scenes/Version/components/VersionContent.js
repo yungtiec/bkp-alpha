@@ -3,7 +3,6 @@ import { Element } from "react-scroll";
 import { Qna, Question, Answers, VersionScorecard } from "./index";
 import { isEmpty } from "lodash";
 import { connect } from "react-redux";
-import { getSelectedDocument } from "../../../data/metadata/reducer";
 
 const VersionContent = ({
   user,
@@ -15,7 +14,7 @@ const VersionContent = ({
   editAnswer,
   revertToPrevQuestion,
   revertToPrevAnswer,
-  documentMetadata,
+  versionMetadata,
   commentOnClick,
   parent,
   tags,
@@ -23,11 +22,11 @@ const VersionContent = ({
   addNewCommentSentFromServer
 }) => (
   <div className="project-document" id="project-document">
-    {documentMetadata.scorecard && !isEmpty(documentMetadata.scorecard) ? (
+    {versionMetadata.scorecard && !isEmpty(versionMetadata.scorecard) ? (
       <VersionScorecard
-        scorecard={documentMetadata.scorecard}
+        scorecard={versionMetadata.scorecard}
         parent={parent}
-        versionId={documentMetadata.id}
+        versionId={versionMetadata.id}
         isLoggedIn={isLoggedIn}
         isClosedForComment={isClosedForComment}
         addNewCommentSentFromServer={addNewCommentSentFromServer}
@@ -43,7 +42,7 @@ const VersionContent = ({
           <Qna
             key={`qna-${documentQnasById[id].order_in_version}`}
             qna={documentQnasById[id]}
-            versionId={documentMetadata.id}
+            versionId={versionMetadata.id}
             isLoggedIn={isLoggedIn}
             isClosedForComment={isClosedForComment}
             tags={tags}
@@ -57,7 +56,7 @@ const VersionContent = ({
               editQuestion={editQuestion}
               revertToPrevQuestion={revertToPrevQuestion}
               user={user}
-              documentMetadata={documentMetadata}
+              versionMetadata={versionMetadata}
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
@@ -67,7 +66,7 @@ const VersionContent = ({
               answer={documentQnasById[id].version_answers[0]}
               revertToPrevAnswer={revertToPrevAnswer}
               user={user}
-              documentMetadata={documentMetadata}
+              versionMetadata={versionMetadata}
               editAnswer={editAnswer}
               handleCommentOnClick={commentOnClick}
             />

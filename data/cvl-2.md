@@ -16,7 +16,7 @@
 
 
 
-### score and assessment
+### Score and assessment
 
 | score | assessment                                                   |
 | :---- | :----------------------------------------------------------- |
@@ -150,9 +150,9 @@ The sale will use an assessment test to determine eligibility to purchase tokens
 
 - Intent to consume CVL through use on the platform.
 - Reasonable understanding of the functions of CVL and its underlying technology.
-- A risk profile consistent with purchasing this type of product. 
+- A risk profile consistent with purchasing this type of product.
 
-The terms of the token distribution, specifically lockups, vesting, and transfer restrictions, are not absolutely necessary until the token sale. However, Civil could still disclose planned distribution to founders and whether or not there will be a vesting period. 
+The terms of the token distribution, specifically lockups, vesting, and transfer restrictions, are not absolutely necessary until the token sale. However, Civil could still disclose planned distribution to founders and whether or not there will be a vesting period.
 
 
 
@@ -172,8 +172,8 @@ The terms of the token distribution, specifically lockups, vesting, and transfer
 
 
 
-###### Analysis: 
+###### Analysis:
 
-The planned and actual use of proceeds, broken down by function line, is addressed above in Principle 2’s explanations of the 8 organizational units. A summary showing the breakdown of minimum, target, and stretch capital goals for each unit can be found on pages 17 and 18 of the whitepaper. 
+The planned and actual use of proceeds, broken down by function line, is addressed above in Principle 2’s explanations of the 8 organizational units. A summary showing the breakdown of minimum, target, and stretch capital goals for each unit can be found on pages 17 and 18 of the whitepaper.
 
 The token sale proceeds and regular updates on the use of funds will not be applicable until the token distribution. The salaries and remunerations of team members are undisclosed.

@@ -173,7 +173,9 @@ export default class CommentItem extends Component {
                 >
                   <span class="text-primary">
                     <i class="text-primary mr-2 fas fa-certificate" />
-                    {projectMetadata.name}
+                    {`${comment.owner.displayName} (from ${
+                      projectMetadata.symbol
+                    })`}
                   </span>
                 </VisibleIf>
               </PunditTypeSet>

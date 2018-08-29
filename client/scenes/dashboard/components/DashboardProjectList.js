@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default ({ projectSymbolArr, projectsBySymbol }) => (
   <div className="d-flex flex-column mt-3">
-    <p className="dashboard-listing__title mb-2 pb-3 pl-1">Projects</p>
+    <p className="dashboard-listing__title mb-2 pb-3 pl-1">My Projects</p>
     {projectSymbolArr && projectSymbolArr.length ? (
       projectSymbolArr.map(s => (
         <div

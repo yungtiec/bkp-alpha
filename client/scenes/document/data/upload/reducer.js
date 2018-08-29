@@ -57,10 +57,10 @@ export default function reduce(state = initialState, action = {}) {
     case PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
-        collaboratorEmails: action.documentMetadata.document.collaborators.map(
+        collaboratorEmails: action.versionMetadata.document.collaborators.map(
           c => ({ label: c.email, value: c.email })
         ),
-        scorecard: action.documentMetadata.scorecard
+        scorecard: action.versionMetadata.scorecard
       };
     case types.MARKDOWN_IMPORTED:
       return {
