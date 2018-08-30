@@ -27,19 +27,28 @@ class ScoreInput extends React.Component {
 
     return (
       <div className="score-input__container">
-        <div className="d-flex justify-content-between align-items-start score-input__div">
-          <div className="d-flex flex-column mx-0">
-            <span>{this.props.label}</span>
-            <span className="text-danger score-input__error">
-              {errorMessage}
-            </span>
-          </div>
+        <div
+          className={`${
+            this.props.label
+              ? "d-flex justify-content-between align-items-start score-input__div"
+              : ""
+          }`}
+          style={this.props.zeroMargin ? { margin: 0 } : {}}
+        >
+          {this.props.label ? (
+            <div className="d-flex flex-column mx-0">
+              <span>{this.props.label}</span>
+              <span className="text-danger score-input__error">
+                {errorMessage}
+              </span>
+            </div>
+          ) : null}
           <input
             className="score-input"
             onChange={this.changeValue}
             onBlur={this.validateValue}
             type="Number"
-            className=""
+            style={this.props.zeroMargin ? { margin: 0 } : {}}
             value={this.props.getValue() || ""}
           />
         </div>

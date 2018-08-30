@@ -87,13 +87,13 @@ export function downvoteDocument({
 export function editScorecard({ versionId, scorecard }) {
   return async (dispatch, getState) => {
     try {
-      const scorecard = await putScorecard({
+      const updatedScorecard = await putScorecard({
         versionId,
         scorecard
       });
       dispatch({
         type: types.VERSION_SCORECARD_UPDATED,
-        scorecard
+        scorecard: updatedScorecard
       });
     } catch (err) {
       console.log(err);

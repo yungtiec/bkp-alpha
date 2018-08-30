@@ -17,9 +17,8 @@ router.get("/:id/metadata", async (req, res, next) => {
 
 router.put("/:id/scorecard", async (req, res, next) => {
   try {
-    const version = await Version.update(
-      { scorecard: req.body.scorecard },
-      { where: { id: req.params.id } }
+    const version = await Version.findById(req.params.id).then(v =>
+      v.update({ scorecard: req.body.scorecard })
     );
     res.send(version.scorecard);
   } catch (err) {

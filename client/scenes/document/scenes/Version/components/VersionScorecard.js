@@ -3,6 +3,8 @@ import { Element } from "react-scroll";
 import { keys, capitalize, isEqual } from "lodash";
 import autoBind from "react-autobind";
 import { ContentEditingContainer } from "./index";
+import { ScoreInput } from "../../../../../components";
+import Formsy from "formsy-react";
 
 const scorecardOrder = [
   "consumer_token_design",
@@ -39,6 +41,29 @@ export default class VersionScorecard extends Component {
     });
   }
 
+  handleScorecardChange(currentValues, isChanged) {
+    this.setState({
+      scorecard: this.scorecard.getModel()
+    });
+  }
+
+  handleSubmit() {
+    this.props.editScorecard({
+      scorecard: this.state.scorecard,
+      versionId: this.props.versionMetadata.id
+    });
+    this.setState({
+      editing: false
+    });
+  }
+
+  handleCancel() {
+    this.setState({
+      editing: false,
+      scorecard: this.props.scorecard
+    });
+  }
+
   render() {
     const {
       user,
@@ -47,6 +72,9 @@ export default class VersionScorecard extends Component {
       editScorecard,
       versionMetadata
     } = this.props;
+    const validations = "isWithin:[1, 10]";
+    const validationError = "the score must be within 1 to 10";
+
     return (
       <Element
         name="qna-scorecard"
@@ -69,35 +97,71 @@ export default class VersionScorecard extends Component {
               disclosure: this.props.versionMetadata.document
             }}
           >
-            {this.state.editing ? null : (
-              <div className="markdown-body">
-                <div className="qna__answer">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th className="text-left">principle</th>
-                        <th className="text-left">score</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {scorecardOrder.map(principleKey => {
-                        var principle = capitalize(
-                          principleKey.replace(/_/g, " ")
-                        );
-                        return (
-                          <tr>
-                            <td className="text-left">{principle}</td>
+            <Formsy
+              ref={f => (this.scorecard = f)}
+              className=""
+              onChange={this.handleScorecardChange}
+              name="project-scorecard__form"
+            >
+              <div
+                className="markdown-body qna__answer"
+                style={{ width: "100%", margin: 0 }}
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th className="text-left">principle</th>
+                      <th className="text-left">score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {scorecardOrder.map(principleKey => {
+                      var principle = capitalize(
+                        principleKey.replace(/_/g, " ")
+                      );
+                      return (
+                        <tr>
+                          <td className="text-left">{principle}</td>
+
+                          {this.state.editing ? (
+                            <td className="">
+                              <ScoreInput
+                                name={principleKey}
+                                validations={validations}
+                                validationError={validationError}
+                                value={scorecard[principleKey]}
+                                zeroMargin={true}
+                                required
+                              />
+                            </td>
+                          ) : (
                             <td className="text-left">
                               {scorecard[principleKey]}
                             </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {this.state.editing ? (
+                  <div className="d-flex justify-content-end my-3">
+                    <button
+                      className="btn btn-primary"
+                      onClick={this.handleSubmit}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="btn btn-secondary ml-2"
+                      onClick={this.handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : null}
               </div>
-            )}
+            </Formsy>
           </ContentEditingContainer>
         </div>
       </Element>
