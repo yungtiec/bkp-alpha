@@ -10,6 +10,7 @@ const VersionContent = ({
   isClosedForComment,
   documentQnasById,
   documentQnaIds,
+  editScorecard,
   editQuestion,
   editAnswer,
   revertToPrevQuestion,
@@ -25,11 +26,13 @@ const VersionContent = ({
     {versionMetadata.scorecard && !isEmpty(versionMetadata.scorecard) ? (
       <VersionScorecard
         scorecard={versionMetadata.scorecard}
+        editScorecard={editScorecard}
         parent={parent}
         versionId={versionMetadata.id}
         isLoggedIn={isLoggedIn}
         isClosedForComment={isClosedForComment}
-        addNewCommentSentFromServer={addNewCommentSentFromServer}
+        versionMetadata={versionMetadata}
+        user={user}
       />
     ) : null}
     {documentQnaIds.map((id, i) => {

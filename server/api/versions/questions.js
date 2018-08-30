@@ -18,7 +18,6 @@ router.get("/", async (req, res, next) => {
     var rawVersion = await Version.scope({
       method: ["byIdWithVersionQuestions", req.params.versionId]
     }).findOne();
-    console.log(rawVersion, req.params.versionId)
     var version_questions = rawVersion.version_questions.map(vq => {
       vq = vq.toJSON();
       vq.history = vq.ancestors

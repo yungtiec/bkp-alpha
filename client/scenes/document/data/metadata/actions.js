@@ -2,7 +2,8 @@ import * as types from "./actionTypes";
 import {
   postUpvoteToDocument,
   postDownvoteToDocument,
-  getMetadataByVersionId
+  getMetadataByVersionId,
+  putScorecard
 } from "./service";
 import { notify } from "reapop";
 import { loadModal } from "../../../../data/reducer";
@@ -77,6 +78,23 @@ export function downvoteDocument({
           versionId
         })
       );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
+
+export function editScorecard({ versionId, scorecard }) {
+  return async (dispatch, getState) => {
+    try {
+      const scorecard = await putScorecard({
+        versionId,
+        scorecard
+      });
+      dispatch({
+        type: types.VERSION_SCORECARD_UPDATED,
+        scorecard
+      });
     } catch (err) {
       console.log(err);
     }

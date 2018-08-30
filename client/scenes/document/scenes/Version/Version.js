@@ -205,6 +205,7 @@ class Document extends Component {
       documentQnaIds,
       editQuestion,
       editAnswer,
+      editScorecard,
       revertToPrevQuestion,
       revertToPrevAnswer,
       versionMetadata,
@@ -296,6 +297,7 @@ class Document extends Component {
                 isClosedForComment={isClosedForComment}
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
+                editScorecard={editScorecard}
                 editQuestion={editQuestion}
                 editAnswer={editAnswer}
                 revertToPrevQuestion={revertToPrevQuestion}

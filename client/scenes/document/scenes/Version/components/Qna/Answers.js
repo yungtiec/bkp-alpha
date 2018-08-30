@@ -7,6 +7,7 @@ import moment from "moment";
 import { sortBy } from "lodash";
 import policies from "../../../../../../policies.js";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import { ContentEditingContainer } from "../index";
 import { TextDiff } from "../../../../../../utils";
 
 export default class Answers extends Component {
@@ -48,7 +49,7 @@ export default class Answers extends Component {
     }
   }
 
-  handleEditingOnClick() {
+  handleEditOnClick() {
     this.setState({
       editing: true
     });
@@ -140,7 +141,18 @@ export default class Answers extends Component {
     const { answer, qnaId, handleCommentOnClick } = this.props;
 
     return (
-      <div className="qna__answer-container editing-toolbar__hover-target">
+      <ContentEditingContainer
+        otherClassNames="qna__answer-container"
+        editing={this.state.editing}
+        handleEditOnClick={this.handleEditOnClick}
+        user={this.props.user}
+        punditType="Disclosure"
+        punditAction="Create"
+        punditModel={{
+          project: this.props.versionMetadata.document.project,
+          disclosure: this.props.versionMetadata.document
+        }}
+      >
         {this.state.editing ? (
           <div>
             <Markmirror
@@ -178,29 +190,7 @@ export default class Answers extends Component {
             <ReactMarkdown className="qna__answer" source={answer.markdown} />
           </div>
         )}
-        <PunditContainer policies={policies} user={this.props.user}>
-          <PunditTypeSet type="Disclosure">
-            <VisibleIf
-              action="Create"
-              model={{
-                project: this.props.versionMetadata.document.project,
-                disclosure: this.props.versionMetadata.document
-              }}
-            >
-              {!this.state.editing && (
-                <div className="editing-toolbar__hover-targeted">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={this.handleEditingOnClick}
-                  >
-                    Edit
-                  </button>
-                </div>
-              )}
-            </VisibleIf>
-          </PunditTypeSet>
-        </PunditContainer>
-      </div>
+      </ContentEditingContainer>
     );
   }
 }

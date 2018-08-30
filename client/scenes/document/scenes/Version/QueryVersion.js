@@ -36,7 +36,8 @@ import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import {
   upvoteDocument,
   downvoteDocument,
-  fetchMetadataByVersionId
+  fetchMetadataByVersionId,
+  editScorecard
 } from "../../data/metadata/actions";
 import { getVersionMetadata } from "../../data/metadata/reducer";
 
@@ -180,6 +181,7 @@ const actions = {
   fetchMetadataByVersionId,
   upvoteDocument,
   downvoteDocument,
+  editScorecard,
   // qnas
   fetchQuestionsByVersionId,
   editQuestion,
