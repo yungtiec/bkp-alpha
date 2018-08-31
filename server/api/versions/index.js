@@ -15,6 +15,17 @@ router.get("/:id/metadata", async (req, res, next) => {
   }
 });
 
+router.put("/:id/scorecard", async (req, res, next) => {
+  try {
+    const version = await Version.findById(req.params.id).then(v =>
+      v.update({ scorecard: req.body.scorecard })
+    );
+    res.send(version.scorecard);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.use("/:versionId/questions", require("./questions"));
 router.use("/:versionId/answers", require("./answers"));
 

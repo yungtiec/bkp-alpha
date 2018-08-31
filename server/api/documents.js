@@ -193,12 +193,14 @@ async function createNewDocument({
         var versionQuestion = await VersionQuestion.create({
           version_id: version.id,
           markdown: `### ${questionObject.question.trim()}`,
-          order_in_version: questionObject.order_in_version
+          order_in_version: questionObject.order_in_version,
+          latest: true
         });
         await VersionAnswer.create({
           markdown: answer,
           version_question_id: versionQuestion.id,
-          version_id: version.id
+          version_id: version.id,
+          latest: true
         });
       }
     );

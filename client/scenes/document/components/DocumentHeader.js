@@ -15,16 +15,16 @@ export default class DocumentHeader extends Component {
 
   render() {
     const {
-      documentMetadata,
+      versionMetadata,
       projectMetadata,
       isClosedForComment
     } = this.props;
-    const creator = documentMetadata.document.creator.displayName;
-    const collaborators = documentMetadata.document.collaborators
+    const creator = versionMetadata.document.creator.displayName;
+    const collaborators = versionMetadata.document.collaborators
       .map((c, i) => {
         if (
-          i === documentMetadata.document.collaborators.length - 1 &&
-          documentMetadata.document.collaborators.length > 1
+          i === versionMetadata.document.collaborators.length - 1 &&
+          versionMetadata.document.collaborators.length > 1
         )
           return ` and ${c.displayName}`;
         else if (i === 0) return `with ${c.displayName}`;
@@ -42,10 +42,10 @@ export default class DocumentHeader extends Component {
           }
         />
         <p className="document__title">{`${
-          documentMetadata.document.title
+          versionMetadata.document.title
         }`}</p>
         <p className="document__subtitle  mb-4">
-          {`document version ${documentMetadata.version_number} created by ${creator} ${collaborators}`}
+          {`document version ${versionMetadata.version_number} created by ${creator} ${collaborators}`}
         </p>
       </div>
     );

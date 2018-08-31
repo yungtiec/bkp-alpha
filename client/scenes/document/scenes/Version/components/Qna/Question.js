@@ -7,6 +7,7 @@ import moment from "moment";
 import { sortBy } from "lodash";
 import policies from "../../../../../../policies.js";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
+import { ContentEditingContainer } from "../index";
 import { TextDiff } from "../../../../../../utils";
 
 export default class Question extends Component {
@@ -47,7 +48,7 @@ export default class Question extends Component {
     }
   }
 
-  handleEditingOnClick() {
+  handleEditOnClick() {
     this.setState({
       editing: true
     });
@@ -88,7 +89,7 @@ export default class Question extends Component {
   }
 
   renderToolbar(markmirror, renderButton) {
-    const { qnaId, question, revertToPrevQuestion } = this.props;
+    const { user, qnaId, question, revertToPrevQuestion } = this.props;
 
     return (
       <div className="markmirror__toolbar myapp__toolbar">
@@ -134,11 +135,20 @@ export default class Question extends Component {
 
   render() {
     return (
-      <div
-        id={`qna-${this.props.qnaId}__question`}
-        className="editing-toolbar__hover-target"
-        onClick={e => {
+      <ContentEditingContainer
+        containerId={`qna-${this.props.qnaId}__question`}
+        otherClassNames=""
+        handleContainerOnClick={e => {
           this.props.handleCommentOnClick(e, this.props.qnaId);
+        }}
+        editing={this.state.editing}
+        handleEditOnClick={this.handleEditOnClick}
+        user={this.props.user}
+        punditType="Disclosure"
+        punditAction="Create"
+        punditModel={{
+          project: this.props.versionMetadata.document.project,
+          disclosure: this.props.versionMetadata.document
         }}
       >
         {this.state.editing ? (
@@ -173,29 +183,7 @@ export default class Question extends Component {
             source={this.props.question.markdown}
           />
         )}
-        <PunditContainer policies={policies} user={this.props.user}>
-          <PunditTypeSet type="Disclosure">
-            <VisibleIf
-              action="Create"
-              model={{
-                project: this.props.documentMetadata.document.project,
-                disclosure: this.props.documentMetadata.document
-              }}
-            >
-              {!this.state.editing && (
-                <div className="editing-toolbar__hover-targeted">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={this.handleEditingOnClick}
-                  >
-                    Edit
-                  </button>
-                </div>
-              )}
-            </VisibleIf>
-          </PunditTypeSet>
-        </PunditContainer>
-      </div>
+      </ContentEditingContainer>
     );
   }
 }

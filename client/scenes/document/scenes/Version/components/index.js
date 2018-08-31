@@ -15,3 +15,4 @@ export {
 } from "./CommentBox/CommentBoxWithTagField";
 export { default as EditCommentModal } from "./CommentItem/EditCommentModal";
 export { default as Countdown } from "./Countdown";
+export { default as ContentEditingContainer } from "./ContentEditingContainer";

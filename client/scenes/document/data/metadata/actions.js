@@ -2,7 +2,8 @@ import * as types from "./actionTypes";
 import {
   postUpvoteToDocument,
   postDownvoteToDocument,
-  getMetadataByVersionId
+  getMetadataByVersionId,
+  putScorecard
 } from "./service";
 import { notify } from "reapop";
 import { loadModal } from "../../../../data/reducer";
@@ -10,10 +11,10 @@ import { loadModal } from "../../../../data/reducer";
 export function fetchMetadataByVersionId(versionId) {
   return async (dispatch, getState) => {
     try {
-      var documentMetadata = await getMetadataByVersionId(versionId);
+      var versionMetadata = await getMetadataByVersionId(versionId);
       dispatch({
         type: types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS,
-        documentMetadata
+        versionMetadata
       });
     } catch (error) {
       console.error(error);
@@ -77,6 +78,23 @@ export function downvoteDocument({
           versionId
         })
       );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
+
+export function editScorecard({ versionId, scorecard }) {
+  return async (dispatch, getState) => {
+    try {
+      const updatedScorecard = await putScorecard({
+        versionId,
+        scorecard
+      });
+      dispatch({
+        type: types.VERSION_SCORECARD_UPDATED,
+        scorecard: updatedScorecard
+      });
     } catch (err) {
       console.log(err);
     }

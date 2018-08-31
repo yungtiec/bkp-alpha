@@ -8,11 +8,11 @@ async function migrate() {
   try {
     await Promise.all([deprecatedDb.sync(), upgradedDb.sync({ force: true })]);
     await Promise.all([
-      migrateProjects(),
       migrateUsers()
         .then(migrateRoles)
         .then(migrateUserRoles)
         .then(migrateNotifications),
+      migrateProjects(),
       migrateDocuments()
     ]);
     await setSequenceManually();
@@ -25,6 +25,16 @@ async function migrate() {
 
 const migrateUsers = async () => {
   const users = await deprecatedDb.model("user").findAll({ raw: true });
+  await upgradedDb.model("user").create({
+    id: 48,
+    first_name: "Civil",
+    last_name: "Admin",
+    organization: "Civil",
+    email: "civil@test.account",
+    password:
+      "45363dcdc78c06c9aa3915d2f12db059dfa97c3b355ec23c5a201f54f5f2a987",
+    salt: "AfVCQNa8E6igJBOUovkU7g=="
+  });
   await upgradedDb.model("user").bulkCreate(users);
 };
 
@@ -55,11 +65,24 @@ const migrateUserRoles = async () => {
   const userRoles = await deprecatedDb
     .model("user_role")
     .findAll({ raw: true });
+  await upgradedDb.model("user_role").create({
+    user_id: 48,
+    role_id: 2
+  });
   await upgradedDb.model("user_role").bulkCreate(userRoles);
 };
 
 const migrateProjects = async () => {
   const projects = await deprecatedDb.model("project").findAll({ raw: true });
+  const civil = await upgradedDb.model("project").create({
+    id: 2,
+    name: "civil",
+    symbol: "CVL"
+  });
+  await upgradedDb.model("project_admin").create({
+    user_id: 48,
+    project_id: 2
+  });
   await upgradedDb.model("project").bulkCreate(projects);
 };
 
@@ -224,7 +247,9 @@ const migrateDocuments = async () => {
           hierarchyLevel: c.hierarchyLevel,
           parentId: c.parentId ? c.parentId : null,
           owner_id: c.owner_id,
-          version_id: version.id
+          version_id: version.id,
+          createdAt: c.createdAt,
+          updatedAt: c.updatedAt
         });
         var upvotesFrom = await Promise.all(
           c.upvotesFrom.map(u =>
@@ -251,7 +276,7 @@ const migrateDocuments = async () => {
 };
 
 const setSequenceManually = async () => {
-  await upgradedDb.query(`ALTER SEQUENCE "users_id_seq" RESTART WITH ${46};`);
+  await upgradedDb.query(`ALTER SEQUENCE "users_id_seq" RESTART WITH ${49};`);
   await upgradedDb.query(
     `ALTER SEQUENCE "comments_id_seq" RESTART WITH ${46};`
   );
@@ -262,7 +287,7 @@ const setSequenceManually = async () => {
   await upgradedDb.query(
     `ALTER SEQUENCE "notifications_id_seq" RESTART WITH ${25};`
   );
-  await upgradedDb.query(`ALTER SEQUENCE "projects_id_seq" RESTART WITH ${2};`);
+  await upgradedDb.query(`ALTER SEQUENCE "projects_id_seq" RESTART WITH ${3};`);
   await upgradedDb.query(`ALTER SEQUENCE "roles_id_seq" RESTART WITH ${4};`);
   await upgradedDb.query(
     `ALTER SEQUENCE "version_answers_id_seq" RESTART WITH ${46};`

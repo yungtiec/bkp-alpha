@@ -28,7 +28,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       scorecard
     });
     history.push(
-      `/project/${selectedProject.symbol}/document/${version.id}`
+      `/project/${selectedProject.symbol}/document/-/version/${version.id}`
     );
     dispatch({
       type: types.MARKDOWN_UPLOADED

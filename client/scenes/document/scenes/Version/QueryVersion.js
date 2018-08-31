@@ -36,9 +36,10 @@ import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import {
   upvoteDocument,
   downvoteDocument,
-  fetchMetadataByVersionId
+  fetchMetadataByVersionId,
+  editScorecard
 } from "../../data/metadata/actions";
-import { getSelectedDocument } from "../../data/metadata/reducer";
+import { getVersionMetadata } from "../../data/metadata/reducer";
 
 // document/comments
 import {
@@ -109,7 +110,7 @@ class MyComponent extends React.Component {
 
   render() {
     if (
-      !this.props.documentMetadata.id ||
+      !this.props.versionMetadata.id ||
       !this.props.documentQnaIds ||
       !this.props.commentIds ||
       !this.props.commentsById
@@ -127,7 +128,7 @@ const mapState = state => {
     unfilteredCommentIds,
     nonSpamCommentIds
   } = getAllComments(state);
-  const documentMetadata = getSelectedDocument(state);
+  const versionMetadata = getVersionMetadata(state);
   const {
     sidebarOpen,
     annotationHighlight,
@@ -145,10 +146,10 @@ const mapState = state => {
     onboard: state.data.user.onboard,
     // metadata
     isClosedForComment:
-      Number(documentMetadata.comment_until_unix) -
+      Number(versionMetadata.comment_until_unix) -
         Number(moment().format("x")) <=
       0,
-    documentMetadata,
+    versionMetadata,
     // qnas
     documentQnasById,
     documentQnaIds,
@@ -180,6 +181,7 @@ const actions = {
   fetchMetadataByVersionId,
   upvoteDocument,
   downvoteDocument,
+  editScorecard,
   // qnas
   fetchQuestionsByVersionId,
   editQuestion,

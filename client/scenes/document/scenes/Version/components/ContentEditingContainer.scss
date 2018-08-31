@@ -1,0 +1,19 @@
+
+.editing-toolbar__hover-target {
+  position: relative;
+  padding-left: 50px;
+  margin-left: -50px;
+
+  &:hover &ed {
+    display: block;
+    opacity: 1;
+  }
+
+  &ed {
+    display: none;
+    position: absolute;
+    top: -3px;
+    left: -10px;
+    opacity: 0;
+  }
+}

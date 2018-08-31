@@ -143,6 +143,24 @@ class AuthWidget extends Component {
               ) : (
                 ""
               )}
+              {width < 600 ? (
+                <PunditContainer policies={policies} user={user}>
+                  <PunditTypeSet type="Disclosure">
+                    <VisibleIf action="Create" model={{}}>
+                      <Link
+                        to="/dashboard"
+                        style={{ display: "block", margin: "0px" }}
+                      >
+                        <div className={`${className}__dropdown-item`}>
+                          dashboard
+                        </div>
+                      </Link>
+                    </VisibleIf>
+                  </PunditTypeSet>
+                </PunditContainer>
+              ) : (
+                ""
+              )}
               <div
                 className={`${className}__dropdown-item last`}
                 onClick={logout}

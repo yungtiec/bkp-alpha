@@ -71,8 +71,8 @@
   }
 }
 
-.entity__header div {
-  width: 70%;
+.entity__header .entity__header-content--left {
+  width: 73%;
   @include breakpoint(xs) {
     width: 100%;
   }
@@ -85,6 +85,7 @@
 }
 
 .entity__text-upper-right {
+  align-self: start;
   @include breakpoint(xs) {
     align-self: flex-end;
   }

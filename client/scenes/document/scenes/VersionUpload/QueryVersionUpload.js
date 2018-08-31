@@ -11,7 +11,7 @@ import {
   downvoteDocument,
   fetchMetadataByVersionId
 } from "../../data/metadata/actions";
-import { getSelectedDocument } from "../../data/metadata/reducer";
+import { getVersionMetadata } from "../../data/metadata/reducer";
 // qnas
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
@@ -78,7 +78,7 @@ class MyComponent extends React.Component {
 
   render() {
     if (
-      !this.props.documentMetadata.id ||
+      !this.props.versionMetadata.id ||
       !this.props.documentQnaIds ||
       !this.props.outstandingIssues
     )
@@ -95,7 +95,7 @@ const mapState = state => {
     isLoggedIn: !!state.data.user.id,
     sidebarOpen: state.scenes.document.sidebarOpen,
     // metadata
-    documentMetadata: getSelectedDocument(state),
+    versionMetadata: getVersionMetadata(state),
     // qnas
     documentQnasById,
     documentQnaIds,

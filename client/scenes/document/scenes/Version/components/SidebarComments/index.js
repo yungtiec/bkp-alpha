@@ -9,7 +9,7 @@ export default ({
   commentIds,
   commentsById,
   nonSpamCommentIds,
-  documentMetadata,
+  versionMetadata,
   projectMetadata,
   commentSortBy,
   sortCommentBy,
@@ -46,7 +46,7 @@ export default ({
       commentIssueFilter={commentIssueFilter}
       updateIssueFilter={updateIssueFilter}
       tags={tags}
-      documentMetadata={documentMetadata}
+      versionMetadata={versionMetadata}
       addNewComment={addNewComment}
     />
     <SidebarContents

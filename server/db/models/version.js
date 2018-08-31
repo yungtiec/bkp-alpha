@@ -128,7 +128,7 @@ const Version = db.define(
       },
       byIdWithVersionQuestions: function(versionId) {
         return {
-          where: { id: versionId },
+          where: { id: Number(versionId) },
           include: [
             {
               model: db.model("version_question"),
