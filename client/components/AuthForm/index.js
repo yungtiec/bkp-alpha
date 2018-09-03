@@ -26,9 +26,7 @@ class AuthForm extends Component {
   }
 
   componentDidMount() {
-    console.log(window.location.href.split("access_token=")[1])
     if (window.location.href.split("access_token=").length > 1) {
-      console.log("??", window.location.href.split("access_token=")[1])
       this.props.verifyUportOnMobile(window.location.href.split("access_token=")[1]);
     }
   }

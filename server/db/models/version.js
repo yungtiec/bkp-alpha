@@ -64,6 +64,7 @@ const Version = db.define(
                   attributes: [
                     "id",
                     "hierarchyLevel",
+                    "version_number",
                     "creator_id",
                     "createdAt"
                   ],
