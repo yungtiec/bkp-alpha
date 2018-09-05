@@ -1,28 +1,24 @@
-const router = require("express").Router();
-const db = require("../db");
 const {
   User,
   Role,
   Project,
   ProjectEditor,
   ProjectAdmin
-} = require("../db/models");
+} = require("../../db/models");
 const _ = require("lodash");
-const { ensureAuthentication, ensureAdminRole } = require("./utils");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-module.exports = router;
 
-router.get("/", async (req, res, next) => {
+const getProjects = async (req, res, next) => {
   try {
     const projects = await Project.getProjects();
     res.send(projects);
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.get("/:symbol", async (req, res, next) => {
+const getProject = async (req, res, next) => {
   try {
     const admins = await Role.findOne({
       where: { name: "admin" }
@@ -39,9 +35,9 @@ router.get("/:symbol", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.get("/:symbol/collaborator-options", async (req, res, next) => {
+const getProjectCollaboratorOptions = async (req, res, next) => {
   try {
     const project = await Project.findOne({
       where: { symbol: req.params.symbol }
@@ -64,9 +60,9 @@ router.get("/:symbol/collaborator-options", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.post("/:symbol/editors", async (req, res, next) => {
+const postProjectEditors = async (req, res, next) => {
   try {
     var candidate = await User.findOne({
       where: { email: req.body.editorEmail },
@@ -119,9 +115,9 @@ router.post("/:symbol/editors", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.delete("/:symbol/editors/:projectEditorId", async (req, res, next) => {
+const deleteProjectEditor = async (req, res, next) => {
   try {
     await ProjectEditor.findById(Number(req.params.projectEditorId)).then(e =>
       e.destroy()
@@ -130,4 +126,12 @@ router.delete("/:symbol/editors/:projectEditorId", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
+
+module.exports = {
+  getProjects,
+  getProject,
+  getProjectCollaboratorOptions,
+  postProjectEditors,
+  deleteProjectEditor
+};

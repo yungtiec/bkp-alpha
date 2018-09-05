@@ -113,7 +113,7 @@ class ProjectEditorControl extends Component {
               <div className="collaborator-actions">
                 <span
                   className="px-2 py-1"
-                  onClick={() => removeEditor(e.project_editor.id)}
+                  onClick={() => removeEditor(e.id)}
                 >
                   <i class="fas fa-times text-danger" />
                 </span>

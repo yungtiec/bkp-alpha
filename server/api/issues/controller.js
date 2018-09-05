@@ -1,14 +1,11 @@
 const Sequelize = require("sequelize");
-const router = require("express").Router();
-const db = require("../db");
-const { Comment, Issue } = require("../db/models");
+const db = require("../../db");
+const { Comment, Issue } = require("../../db/models");
 const moment = require("moment");
 const _ = require("lodash");
-const { ensureAuthentication } = require("./utils");
 Promise = require("bluebird");
-module.exports = router;
 
-router.get("/", ensureAuthentication, async (req, res, next) => {
+const getIssues = async (req, res, next) => {
   try {
     var issues;
     issues =
@@ -65,4 +62,8 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+}
+
+module.exports = {
+  getIssues
+}

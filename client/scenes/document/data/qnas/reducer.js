@@ -45,7 +45,6 @@ const revertQuestion = (state, action) => {
     ["asc"]
   );
   state.documentQnaIds = documentQnas.map(qna => qna.id);
-  console.log(state)
   return state;
 };
 

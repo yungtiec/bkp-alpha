@@ -1,20 +1,17 @@
-const router = require("express").Router();
-const { Tag } = require("../db/models");
-const { ensureAuthentication } = require("./utils");
+const { Tag } = require("../../db/models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-module.exports = router;
 
-router.get("/", async (req, res, next) => {
+const getTags = async (req, res, next) => {
   try {
     const tags = await Tag.findAll();
     res.send(tags);
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.get("/autocomplete", async (req, res, next) => {
+const getAutocompleteTags = async (req, res, next) => {
   try {
     const tags = await Tag.findAll({
       where: { name: { [Op.iLike]: `%${req.query.term}%` } }
@@ -25,4 +22,9 @@ router.get("/autocomplete", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
+
+module.exports = {
+  getTags,
+  getAutocompleteTags
+};
