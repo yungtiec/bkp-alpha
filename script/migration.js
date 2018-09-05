@@ -25,16 +25,6 @@ async function migrate() {
 
 const migrateUsers = async () => {
   const users = await deprecatedDb.model("user").findAll({ raw: true });
-  await upgradedDb.model("user").create({
-    id: 48,
-    first_name: "Civil",
-    last_name: "Admin",
-    organization: "Civil",
-    email: "civil@test.account",
-    password:
-      "45363dcdc78c06c9aa3915d2f12db059dfa97c3b355ec23c5a201f54f5f2a987",
-    salt: "AfVCQNa8E6igJBOUovkU7g=="
-  });
   await upgradedDb.model("user").bulkCreate(users);
 };
 

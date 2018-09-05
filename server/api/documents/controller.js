@@ -1,6 +1,4 @@
-const router = require("express").Router({ mergeParams: true });
-const db = require("../db");
-const permission = require("../access-control")["Disclosure"];
+const permission = require("../../access-control")["Disclosure"];
 const {
   User,
   Project,
@@ -14,19 +12,14 @@ const {
   Issue,
   ProjectAdmin,
   ProjectEditor
-} = require("../db/models");
+} = require("../../db/models");
+const { getEngagedUsers } = require("../utils");
 const moment = require("moment");
 const _ = require("lodash");
-const {
-  ensureAuthentication,
-  ensureResourceAccess,
-  getEngagedUsers
-} = require("./utils");
-const MarkdownParsor = require("../../script/markdown-parser");
+const MarkdownParsor = require("../../../script/markdown-parser");
 Promise = require("bluebird");
-module.exports = router;
 
-router.get("/", async (req, res, next) => {
+const getDocuments = async (req, res, next) => {
   try {
     const { count, documents } = await Document.getDocumentsWithStats({
       limit: req.query.limit,
@@ -36,120 +29,12 @@ router.get("/", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.post(
-  "/",
-  ensureAuthentication,
-  ensureResourceAccess,
-  async (req, res, next) => {
-    try {
-      createNewDocument({
-        markdown: req.body.markdown,
-        collaboratorEmails: req.body.collaboratorEmails.map(
-          emailOption => emailOption.value
-        ),
-        commentPeriodUnit: req.body.commentPeriodUnit,
-        commentPeriodValue: req.body.commentPeriodValue,
-        selectedProjectSymbol: req.body.selectedProjectSymbol,
-        scorecard: req.body.scorecard,
-        creator: req.user,
-        res,
-        next
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-router.post(
-  "/:documentId/upvote",
-  ensureAuthentication,
-  ensureResourceAccess,
-  async (req, res, next) => {
-    try {
-      if (req.body.hasDownvoted)
-        await req.user.removeDownvotedDocuments(req.params.documentId);
-      if (!req.body.hasUpvoted) {
-        await req.user.addUpvotedDocuments(req.params.documentId);
-      } else {
-        await req.user.removeUpvotedDocuments(req.params.documentId);
-      }
-      const [upvotesFrom, downvotesFrom] = await Document.findById(
-        req.params.documentId
-      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
-      res.send([upvotesFrom, downvotesFrom]);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-router.post(
-  "/:documentId/downvote",
-  ensureAuthentication,
-  ensureResourceAccess,
-  async (req, res, next) => {
-    try {
-      if (req.body.hasUpvoted)
-        await req.user.removeUpvotedDocuments(req.params.documentId);
-      if (!req.body.hasDownvoted) {
-        await req.user.addDownvotedDocuments(req.params.documentId);
-      } else {
-        await req.user.removeDownvotedDocuments(req.params.documentId);
-      }
-      const [upvotesFrom, downvotesFrom] = await Document.findById(
-        req.params.documentId
-      ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
-      res.send([upvotesFrom, downvotesFrom]);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-router.post(
-  "/:parentVersionId",
-  ensureAuthentication,
-  ensureResourceAccess,
-  async (req, res, next) => {
-    try {
-      addVersionToExistingDocument({
-        parentVersionId: req.params.parentVersionId,
-        markdown: req.body.markdown,
-        resolvedIssueIds: req.body.resolvedIssueIds,
-        newIssues: req.body.newIssues,
-        collaboratorEmails: req.body.collaboratorEmails.map(
-          emailOption => emailOption.value
-        ),
-        commentPeriodUnit: req.body.commentPeriodUnit,
-        commentPeriodValue: req.body.commentPeriodValue,
-        scorecard: req.body.scorecard,
-        creator: req.user,
-        res,
-        next
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-async function createNewDocument({
-  markdown,
-  collaboratorEmails,
-  commentPeriodUnit,
-  commentPeriodValue,
-  selectedProjectSymbol,
-  scorecard,
-  creator,
-  res,
-  next
-}) {
+const postDocument = async (req, res, next) => {
   try {
     var project = await Project.findOne({
-      where: { symbol: selectedProjectSymbol },
+      where: { symbol: req.body.selectedProjectSymbol },
       include: [
         {
           model: User,
@@ -163,26 +48,26 @@ async function createNewDocument({
         }
       ]
     });
-    const canCreate = permission("Create", { project }, creator);
+    const canCreate = permission("Create", { project }, req.user);
     if (!canCreate) {
       res.sendStatus(403);
       return;
     }
-    var markdownParsor = new MarkdownParsor({ markdown: markdown });
+    var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
     var document = await Document.create({
       title: markdownParsor.title,
-      creator_id: creator.id,
+      creator_id: req.user.id,
       project_id: project.id,
       latest_version: 1
     });
     var commentUntilInUnix = moment()
-      .add(commentPeriodValue, commentPeriodUnit)
+      .add(req.body.commentPeriodValue, req.body.commentPeriodUnit)
       .format("x");
     var version = await Version.create({
       document_id: document.id,
-      creator_id: creator.id,
+      creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
-      scorecard
+      scorecard: req.body.scorecard
     });
     var questionInstances = await Promise.map(
       markdownParsor.questions,
@@ -204,47 +89,84 @@ async function createNewDocument({
         });
       }
     );
-    var collaborators = collaboratorEmails.map(
-      async email =>
-        await User.findOne({ where: { email } }).then(user =>
-          DocumentCollaborator.create({
-            user_id: user ? user.id : null,
-            email,
-            document_id: document.id
-          }).then(collaborator => {
-            return Notification.notifyCollaborators({
-              sender: creator,
-              collaboratorId: user.id,
-              versionId: version.id,
-              projectSymbol: project.symbol,
-              parentVersionTitle: document.title,
-              action: "created"
-            });
-          })
-        )
-    );
+    var collaborators = req.body.collaboratorEmails
+      .map(emailOption => emailOption.value)
+      .map(
+        async email =>
+          await User.findOne({ where: { email } }).then(user =>
+            DocumentCollaborator.create({
+              user_id: user ? user.id : null,
+              email,
+              document_id: document.id
+            }).then(collaborator => {
+              return Notification.notifyCollaborators({
+                sender: req.user,
+                collaboratorId: user.id,
+                versionId: version.id,
+                projectSymbol: project.symbol,
+                parentVersionTitle: document.title,
+                action: "created"
+              });
+            })
+          )
+      );
     res.send(version);
   } catch (err) {
     next(err);
   }
-}
+};
 
-async function addVersionToExistingDocument({
-  parentVersionId,
-  markdown,
-  resolvedIssueIds,
-  newIssues,
-  collaboratorEmails,
-  commentPeriodValue,
-  commentPeriodUnit,
-  scorecard,
-  creator,
-  res,
-  next
-}) {
+const postUpvote = async (req, res, next) => {
   try {
+    if (req.body.hasDownvoted)
+      await req.user.removeDownvotedDocuments(req.params.documentId);
+    if (!req.body.hasUpvoted) {
+      await req.user.addUpvotedDocuments(req.params.documentId);
+    } else {
+      await req.user.removeUpvotedDocuments(req.params.documentId);
+    }
+    const [upvotesFrom, downvotesFrom] = await Document.findById(
+      req.params.documentId
+    ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+    res.send([upvotesFrom, downvotesFrom]);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const postDownvote = async (req, res, next) => {
+  try {
+    if (req.body.hasUpvoted)
+      await req.user.removeUpvotedDocuments(req.params.documentId);
+    if (!req.body.hasDownvoted) {
+      await req.user.addDownvotedDocuments(req.params.documentId);
+    } else {
+      await req.user.removeDownvotedDocuments(req.params.documentId);
+    }
+    const [upvotesFrom, downvotesFrom] = await Document.findById(
+      req.params.documentId
+    ).then(ps => Promise.all([ps.getUpvotesFrom(), ps.getDownvotesFrom()]));
+    res.send([upvotesFrom, downvotesFrom]);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const postNewVersion = async (req, res, next) => {
+  try {
+    var {
+      markdown,
+      resolvedIssueIds,
+      newIssues,
+      commentPeriodUnit,
+      commentPeriodValue,
+      scorecard
+    } = req.body;
+    var collaboratorEmails = req.body.collaboratorEmails.map(
+      emailOption => emailOption.value
+    );
     var parentVersion = await Version.scope({
-      method: ["byIdWithMetadata", Number(parentVersionId)]
+      method: ["byIdWithMetadata", Number(req.params.parentVersionId)]
     }).findOne();
     var project = await Project.findOne({
       where: { symbol: parentVersion.document.project.symbol },
@@ -264,7 +186,7 @@ async function addVersionToExistingDocument({
     const canVersion = permission(
       "Version",
       { project, disclosure: parentVersion.document },
-      creator
+      req.user
     );
     if (!canVersion) {
       res.sendStatus(403);
@@ -276,7 +198,7 @@ async function addVersionToExistingDocument({
       .format("x");
     var version = await Version.create({
       document_id: parentVersion.document.id,
-      creator_id: creator.id,
+      creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
       scorecard
     });
@@ -293,14 +215,16 @@ async function addVersionToExistingDocument({
         var versionQuestion = await VersionQuestion.create({
           version_id: version.id,
           markdown: `### ${questionObject.question.trim()}`,
-          order_in_version: questionObject.order_in_version
+          order_in_version: questionObject.order_in_version,
+          latest: true
         });
         await VersionAnswer.create({
           markdown: answer,
           version_question_id: versionQuestion.id,
-          version_id: version.id
+          version_id: version.id,
+          latest: true
         });
-        return question;
+        return versionQuestion;
       }
     );
     var prevCollaboratorEmails = parentVersion.document.collaborators.map(
@@ -347,7 +271,7 @@ async function addVersionToExistingDocument({
             }
             if (created || updated)
               return Notification.notifyCollaborators({
-                sender: creator,
+                sender: req.user,
                 collaboratorId: user.id,
                 versionId: version.id,
                 projectSymbol: project.symbol,
@@ -367,8 +291,8 @@ async function addVersionToExistingDocument({
       Comment.create({
         comment: newIssue,
         reviewed: "verified",
-        version_id: parentVersionId,
-        owner_id: creator.id
+        version_id: req.params.parentVersionId,
+        owner_id: req.user.id
       }).then(comment =>
         Issue.create({
           open: false,
@@ -379,7 +303,7 @@ async function addVersionToExistingDocument({
     );
     var engagedUsers = await getEngagedUsers({
       version: parentVersion,
-      creator,
+      creator: req.user,
       collaboratorEmails
     });
     await Promise.all(
@@ -402,4 +326,12 @@ async function addVersionToExistingDocument({
   } catch (err) {
     next(err);
   }
-}
+};
+
+module.exports = {
+  getDocuments,
+  postDocument,
+  postUpvote,
+  postDownvote,
+  postNewVersion
+};

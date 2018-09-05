@@ -3,8 +3,8 @@ import {
   getQuestionsByVersionId,
   postEditedQuestion,
   postEditedAnswer,
-  postQuestionVersion,
-  postAnswerVersion
+  putQuestionVersion,
+  putAnswerVersion
 } from "./services";
 import { keyBy, omit, sortBy } from "lodash";
 import { notify } from "reapop";
@@ -38,8 +38,7 @@ export function editQuestion({ versionQuestionId, markdown }) {
       var newlyAddedVersionQuestion = await postEditedQuestion({
         versionId,
         versionQuestionId,
-        markdown,
-        reverting: false
+        markdown
       });
       dispatch({
         type: types.PROJECT_SURVEY_QUESTION_EDITED,
@@ -68,11 +67,10 @@ export function revertToPrevQuestion({
   return async (dispatch, getState) => {
     try {
       const versionId = getState().scenes.document.data.metadata.id;
-      var versionQuestion = await postQuestionVersion({
+      var versionQuestion = await putQuestionVersion({
         versionId,
         versionQuestionId,
-        prevVersionQuestionId,
-        reverting: true
+        prevVersionQuestionId
       });
       dispatch({
         type: types.PROJECT_SURVEY_QUESTION_REVERTED,
@@ -101,8 +99,7 @@ export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
       var newlyAddedVersionAnswer = await postEditedAnswer({
         versionId,
         versionAnswerId,
-        markdown,
-        reverting: false
+        markdown
       });
       dispatch({
         type: types.PROJECT_SURVEY_ANSWER_EDITED,
@@ -133,12 +130,11 @@ export function revertToPrevAnswer({
   return async (dispatch, getState) => {
     try {
       const versionId = getState().scenes.document.data.metadata.id;
-      var versionAnswer = await postAnswerVersion({
+      var versionAnswer = await putAnswerVersion({
         versionId,
         versionQuestionId,
         versionAnswerId,
-        prevVersionAnswerId,
-        reverting: true
+        prevVersionAnswerId
       });
       dispatch({
         type: types.PROJECT_SURVEY_ANSWER_REVERTED,

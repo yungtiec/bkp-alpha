@@ -42,7 +42,10 @@ module.exports = {
   },
   Disclosure: (action, model, user) => {
     if (!user || isEmpty(user)) return false;
-    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const userRole =
+      !user || !user.roles || !user.roles.length
+        ? "contributer"
+        : user.roles[0].name;
     const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project
       ? userRole === "project_admin" &&
@@ -72,7 +75,10 @@ module.exports = {
   },
   Project: (action, model, user) => {
     if (!user || isEmpty(user) || !user.roles.length) return false;
-    const userRole = !user.roles.length ? "contributer" : user.roles[0].name;
+    const userRole =
+      !user || !user.roles || !user.roles.length
+        ? "contributer"
+        : user.roles[0].name;
     const isAdmin = userRole === "admin";
     const isProjectAdmin = model.project
       ? userRole === "project_admin" &&

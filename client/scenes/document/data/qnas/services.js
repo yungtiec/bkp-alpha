@@ -9,29 +9,25 @@ export function getQuestionsByVersionId(versionId) {
 export function postEditedQuestion({
   versionId,
   versionQuestionId,
-  markdown,
-  reverting
+  markdown
 }) {
   return axios
     .post(`/api/versions/${versionId}/questions`, {
       versionQuestionId,
-      markdown,
-      reverting
+      markdown
     })
     .then(res => res.data);
 }
 
-export function postQuestionVersion({
+export function putQuestionVersion({
   versionId,
   versionQuestionId,
-  prevVersionQuestionId,
-  reverting
+  prevVersionQuestionId
 }) {
   return axios
-    .post(`/api/versions/${versionId}/questions`, {
+    .put(`/api/versions/${versionId}/questions`, {
       versionQuestionId,
-      prevVersionQuestionId,
-      reverting
+      prevVersionQuestionId
     })
     .then(res => res.data);
 }
@@ -39,31 +35,27 @@ export function postQuestionVersion({
 export function postEditedAnswer({
   versionId,
   versionAnswerId,
-  markdown,
-  reverting
+  markdown
 }) {
   return axios
     .post(`/api/versions/${versionId}/answers`, {
       versionAnswerId,
-      markdown,
-      reverting
+      markdown
     })
     .then(res => res.data);
 }
 
-export function postAnswerVersion({
+export function putAnswerVersion({
   versionId,
   versionQuestionId,
   versionAnswerId,
-  prevVersionAnswerId,
-  reverting
+  prevVersionAnswerId
 }) {
   return axios
-    .post(`/api/versions/${versionId}/answers`, {
+    .put(`/api/versions/${versionId}/answers`, {
       versionQuestionId,
       versionAnswerId,
-      prevVersionAnswerId,
-      reverting
+      prevVersionAnswerId
     })
     .then(res => res.data);
 }

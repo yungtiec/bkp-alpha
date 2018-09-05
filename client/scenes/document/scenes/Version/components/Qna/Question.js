@@ -22,25 +22,22 @@ export default class Question extends Component {
         this.props.question.markdown
       ),
       editing: false,
-      versionQuestionIdBeforeReverting: this.props.question.id
+      versionQuestionIdBeforeReverting: this.props.question.id,
+      versionQuestionBeforeReverting: this.props.question.markdown
     };
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.qnaId !== prevProps.qnaId) {
-      var newState =
-        this.props.question.history.length === prevProps.question.history.length
-          ? {
-              markdown: this.props.question.markdown,
-              diff: this.diff.main(
-                this.props.question.markdown,
-                this.props.question.markdown
-              )
-            }
-          : {
-              markdown: this.props.question.markdown,
-              versionQuestionIdBeforeReverting: this.props.question.id
-            };
+      var newState = {
+        markdown: this.props.question.markdown,
+        diff: this.diff.main(
+          this.props.question.markdown,
+          this.props.question.markdown
+        ),
+        versionQuestionIdBeforeReverting: this.props.question.id,
+        versionQuestionBeforeReverting: this.props.question.markdown
+      };
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(() => {
         this.markMirror && this.markMirror.setupCodemirror();
@@ -62,10 +59,14 @@ export default class Question extends Component {
   }
 
   handleSubmit() {
-    this.props.editQuestion({
-      versionQuestionId: this.props.qnaId,
-      markdown: this.state.markdown
-    });
+    if (
+      this.state.versionQuestionBeforeReverting.trim() !==
+      this.state.markdown.trim()
+    )
+      this.props.editQuestion({
+        versionQuestionId: this.props.qnaId,
+        markdown: this.state.markdown
+      });
     this.setState({
       editing: false,
       diff: this.diff.main(this.state.markdown, this.state.markdown)

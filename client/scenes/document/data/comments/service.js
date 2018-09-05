@@ -58,7 +58,7 @@ export function updateComment({
   issueOpen
 }) {
   return axios
-    .post(`/api/versions/${versionId}/comments/${commentId}/edit`, {
+    .put(`/api/versions/${versionId}/comments/${commentId}/edit`, {
       newComment,
       tags,
       issueOpen
@@ -67,13 +67,13 @@ export function updateComment({
 }
 
 export function postPendingCommentStatus({ comment, reviewed }) {
-  return axios.post(`/api/versions/-/comments/${comment.id}/verify`, {
+  return axios.put(`/api/versions/-/comments/${comment.id}/verify`, {
     reviewed
   });
 }
 
 export function updateCommentIssueStatus({ comment, open }) {
-  return axios.post(`/api/versions/-/comments/${comment.id}/issue`, {
+  return axios.put(`/api/versions/-/comments/${comment.id}/issue`, {
     open
   });
 }

@@ -22,25 +22,22 @@ export default class Answers extends Component {
         this.props.answer.markdown
       ),
       editing: false,
-      versionAnswerIdBeforeReverting: this.props.answer.id
+      versionAnswerIdBeforeReverting: this.props.answer.id,
+      versionAnswerBeforeReverting: this.props.answer.markdown
     };
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.answer.id !== prevProps.answer.id) {
-      var newState =
-        this.props.answer.history.length === prevProps.answer.history.length
-          ? {
-              markdown: this.props.answer.markdown,
-              diff: this.diff.main(
-                this.props.answer.markdown,
-                this.props.answer.markdown
-              )
-            }
-          : {
-              markdown: this.props.answer.markdown,
-              versionAnswerIdBeforeReverting: this.props.answer.id
-            };
+      var newState = {
+        markdown: this.props.answer.markdown,
+        diff: this.diff.main(
+          this.props.answer.markdown,
+          this.props.answer.markdown
+        ),
+        versionAnswerIdBeforeReverting: this.props.answer.id,
+        versionAnswerBeforeReverting: this.props.answer.markdown
+      };
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(
         () => this.markMirror && this.markMirror.setupCodemirror(),
@@ -63,11 +60,15 @@ export default class Answers extends Component {
   }
 
   handleSubmit() {
-    this.props.editAnswer({
-      versionAnswerId: this.props.answer.id,
-      markdown: this.state.markdown,
-      versionQuestionId: this.props.qnaId
-    });
+    if (
+      this.state.versionAnswerBeforeReverting.trim() !==
+      this.state.markdown.trim()
+    )
+      this.props.editAnswer({
+        versionAnswerId: this.props.answer.id,
+        markdown: this.state.markdown,
+        versionQuestionId: this.props.qnaId
+      });
     this.setState({
       editing: false,
       diff: this.diff.main(this.state.markdown, this.state.markdown)

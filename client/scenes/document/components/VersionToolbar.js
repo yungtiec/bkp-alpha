@@ -12,7 +12,11 @@ import { loadModal } from "../../../data/reducer";
 import policies from "../../../policies.js";
 import ReactTooltip from "react-tooltip";
 
-function getDocumentMarkdown({ documentTitle, documentQnaIds, documentQnasById }) {
+function getDocumentMarkdown({
+  documentTitle,
+  documentQnaIds,
+  documentQnasById
+}) {
   const newline = "\n\n";
   var documentMarkdown = "# " + documentTitle + newline;
   documentQnaIds.forEach(sid => {
@@ -107,31 +111,38 @@ class VersionToolbar extends Component {
               ? versionMetadata.document.downvotesFrom.length
               : 0}
           </button>
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{
-                  project: projectMetadata,
-                  disclosure: versionMetadata.document
-                }}
-              >
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  onClick={() =>
-                    history.push(
-                      `/project/${this.props.projectMetadata.symbol}/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }`
-                    )
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-primary dropdown-toggle"
+              type="button"
+              id="versionMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {`Version ${this.props.versionMetadata.version_number}`}
+            </button>
+            <div className="dropdown-menu" aria-labelledby="versionMenuButton">
+              {this.props.versionMetadata.document.versions.map(v => (
+                <Link
+                  key={`version-dropdown__item-${v.id}`}
+                  class="dropdown-item"
+                  to={`/project/${this.props.projectMetadata.symbol}/document/${
+                    versionMetadata.document.id
+                  }/version/${v.id}`}
+                  style={
+                    v.hierarchyLevel ===
+                    this.props.versionMetadata.hierarchyLevel
+                      ? { fontWeight: 700 }
+                      : {}
                   }
                 >
-                  View disclosure
-                </button>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
+                  {`Version ${v.version_number}`}
+                </Link>
+              ))}
+            </div>
+          </div>
           <PunditContainer policies={policies} user={user}>
             <PunditTypeSet type="Disclosure">
               <VisibleIf
@@ -154,7 +165,9 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/progress`}
+                      }/document/${versionMetadata.document.id}/version/${
+                        this.props.versionMetadata.id
+                      }/progress`}
                     >
                       View progress
                     </Link>
@@ -166,7 +179,9 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/progress`}
+                      }/document/${versionMetadata.document.id}/version/${
+                        this.props.versionMetadata.id
+                      }/progress`}
                       class="dropdown-item"
                     >
                       Milestone
@@ -174,7 +189,9 @@ class VersionToolbar extends Component {
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${this.props.versionMetadata.id}/issues`}
+                      }/document/${versionMetadata.document.id}/version/${
+                        this.props.versionMetadata.id
+                      }/issues`}
                       class="dropdown-item"
                     >
                       Issues

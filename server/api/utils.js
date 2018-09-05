@@ -73,11 +73,11 @@ const ensureResourceAccess = async (req, res, next) => {
 };
 
 const getEngagedUsers = async ({
-  projectSurvey,
+  version,
   creator,
   collaboratorEmails
 }) => {
-  var comments = await projectSurvey.getComments({
+  var comments = await version.getComments({
     include: [
       {
         model: User,

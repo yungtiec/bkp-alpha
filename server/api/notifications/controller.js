@@ -1,11 +1,7 @@
 const Sequelize = require("sequelize");
-const db = require("../db");
-const router = require("express").Router();
-const { User, Role, Notification } = require("../db/models");
-const { ensureAuthentication } = require("./utils");
-module.exports = router;
+const { User, Role, Notification } = require("../../db/models");
 
-router.get("/", ensureAuthentication, async (req, res, next) => {
+const getNotifications = async (req, res, next) => {
   try {
     const { notifications } = await User.scope({
       method: ["notifications", req.user.id]
@@ -21,9 +17,9 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
   } catch (err) {
     console.log(err);
   }
-});
+};
 
-router.put("/", ensureAuthentication, async (req, res, next) => {
+const bulkPutNotificationStatus = async (req, res, next) => {
   try {
     await Promise.map(req.body.notificationIds, nid =>
       Notification.findById(nid).then(notification =>
@@ -34,9 +30,9 @@ router.put("/", ensureAuthentication, async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.put("/:notificationId", ensureAuthentication, async (req, res, next) => {
+const putNotificationStatus = async (req, res, next) => {
   try {
     const notification = await Notification.findById(req.params.notificationId);
     await notification.update({ status: "read" });
@@ -44,4 +40,10 @@ router.put("/:notificationId", ensureAuthentication, async (req, res, next) => {
   } catch (err) {
     console.log(err);
   }
-});
+};
+
+module.exports = {
+  getNotifications,
+  bulkPutNotificationStatus,
+  putNotificationStatus
+};
