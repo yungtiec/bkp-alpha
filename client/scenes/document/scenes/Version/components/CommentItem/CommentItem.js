@@ -221,7 +221,9 @@ export default class CommentItem extends Component {
             <Link
               to={`/project/${
                 comment.issue.resolvingVersion.document.project.symbol
-              }/document/${comment.issue.resolvingVersion.id}`}
+              }/document/${
+                comment.issue.resolvingVersion.document.id
+              }/version/${comment.issue.resolvingVersion.id}`}
             >{`issue resolved in document v${
               comment.issue.resolvingVersion.hierarchyLevel
             }`}</Link>

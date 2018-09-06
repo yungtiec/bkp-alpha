@@ -15,7 +15,7 @@ export default ({ documentVersions, projectSymbol }) => {
             <p>
               Version {v.version_number} - {v.document.title}
             </p>
-            {commentsWithIssue.length ? (
+            {commentsWithIssue.filter(c => c.reviewed !== "spam").length ? (
               <div className="entity-cards mb-4">
                 {commentsWithIssue.filter(c => c.reviewed !== "spam").map(c => (
                   <div
