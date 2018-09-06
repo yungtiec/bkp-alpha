@@ -143,64 +143,48 @@ class VersionToolbar extends Component {
               ))}
             </div>
           </div>
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{
-                  project: projectMetadata,
-                  disclosure: versionMetadata.document
-                }}
+
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-primary dropdown-toggle"
+              type="button"
+              id="versionProgressButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/document/${
+                  versionMetadata.document.id
+                }/version/${this.props.versionMetadata.id}/progress`}
               >
-                <div className="btn-group">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary dropdown-toggle"
-                    type="button"
-                    id="versionProgressButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/progress`}
-                    >
-                      View progress
-                    </Link>
-                  </button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="versionProgressButton"
-                  >
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/progress`}
-                      class="dropdown-item"
-                    >
-                      Milestone
-                    </Link>
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/issues`}
-                      class="dropdown-item"
-                    >
-                      Issues
-                    </Link>
-                  </div>
-                </div>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
+                View progress
+              </Link>
+            </button>
+            <div
+              className="dropdown-menu"
+              aria-labelledby="versionProgressButton"
+            >
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/document/${
+                  versionMetadata.document.id
+                }/version/${this.props.versionMetadata.id}/progress`}
+                class="dropdown-item"
+              >
+                Milestone
+              </Link>
+              <Link
+                to={`/project/${this.props.projectMetadata.symbol}/document/${
+                  versionMetadata.document.id
+                }/version/${this.props.versionMetadata.id}/issues`}
+                class="dropdown-item"
+              >
+                Issues
+              </Link>
+            </div>
+          </div>
+
           {!uploadMode ? (
             <PunditContainer policies={policies} user={user}>
               <PunditTypeSet type="Disclosure">
