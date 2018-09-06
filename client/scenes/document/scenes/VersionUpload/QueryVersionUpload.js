@@ -20,15 +20,7 @@ import { fetchCommentsByVersionId } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 // upload
 import {
-  getImportedMarkdown,
-  getResolvedIssueId,
-  getCollaboratorEmails,
-  getCollaboratorOptions,
-  getNewIssues,
-  getCommentPeriodUnit,
-  getCommentPeriodValue,
-  getProjectScorecardStatus,
-  getProjectScorecard
+  getVersionUploadMetadata
 } from "../../data/upload/reducer";
 import {
   fetchCollaboratorOptions,
@@ -40,6 +32,7 @@ import {
   removeIssue,
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
+  updateVersionNumber,
   updateProjectScorecard
 } from "../../data/upload/actions";
 // UI context
@@ -65,12 +58,8 @@ const LoadableVersionUpload = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
-      this.props.fetchMetadataByVersionId(
-        this.props.match.params.versionId
-      ),
-      this.props.fetchQuestionsByVersionId(
-        this.props.match.params.versionId
-      ),
+      this.props.fetchMetadataByVersionId(this.props.match.params.versionId),
+      this.props.fetchQuestionsByVersionId(this.props.match.params.versionId),
       this.props.fetchCommentsByVersionId(this.props.match.params.versionId),
       this.props.fetchCollaboratorOptions(this.props.match.params.symbol)
     ]);
@@ -89,6 +78,18 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { documentQnasById, documentQnaIds } = getAllDocumentQuestions(state);
+  const {
+    importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted
+  } = getVersionUploadMetadata(state);
   return {
     // global metadata
     width: state.data.environment.width,
@@ -102,17 +103,18 @@ const mapState = state => {
     // outstanding issues
     outstandingIssues: getOutstandingIssues(state),
     // upload
-    importedMarkdown: getImportedMarkdown(state),
-    resolvedIssueIds: getResolvedIssueId(state),
-    collaboratorEmails: getCollaboratorEmails(state),
-    collaboratorOptions: getCollaboratorOptions(state),
-    newIssues: getNewIssues(state),
+    versionNumber,
+    importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
     // comment
-    commentPeriodUnit: getCommentPeriodUnit(state),
-    commentPeriodValue: getCommentPeriodValue(state),
+    commentPeriodUnit,
+    commentPeriodValue,
     // scorecard
-    scorecardCompleted: getProjectScorecardStatus(state),
-    scorecard: getProjectScorecard(state)
+    scorecardCompleted,
+    scorecard
   };
 };
 
@@ -137,6 +139,7 @@ const actions = {
   removeIssue,
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
+  updateVersionNumber,
   updateProjectScorecard,
   // UI context
   toggleSidebar

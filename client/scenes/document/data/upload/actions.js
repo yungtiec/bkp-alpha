@@ -30,6 +30,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     )[0].id;
     const projectSymbol =
       state.scenes.document.data.metadata.document.project.symbol;
+    const documentId = state.scenes.document.data.metadata.document.id;
     const {
       markdown,
       resolvedIssueIds,
@@ -37,6 +38,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     } = state.scenes.document.data.upload;
     const version = await postMarkdown({
@@ -47,9 +49,14 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     });
-    history.push(`/project/${projectSymbol}/document/${version.id}`);
+    history.push(
+      `/project/${projectSymbol}/document/${documentId}/version/${
+        version.id
+      }`
+    );
     dispatch({
       type: types.MARKDOWN_UPLOADED
     });
@@ -91,4 +98,9 @@ export const updateCommentPeriodValue = commentPeriodValue => ({
 export const updateProjectScorecard = projectScorecard => ({
   type: types.PROJECT_SCORECARD_UPDATED,
   projectScorecard
+});
+
+export const updateVersionNumber = versionNumber => ({
+  type: types.VERSION_NUMBER_UPDATED,
+  versionNumber
 });

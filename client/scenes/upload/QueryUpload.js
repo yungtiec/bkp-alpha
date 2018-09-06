@@ -5,15 +5,7 @@ import { withRouter } from "react-router-dom";
 import { SquareLoader } from "halogenium";
 import { batchActions } from "redux-batched-actions";
 import { toggleSidebar } from "./reducer";
-import {
-  getImportedMarkdown,
-  getCollaboratorEmails,
-  getCollaboratorOptions,
-  getCommentPeriodUnit,
-  getCommentPeriodValue,
-  getSelectedProject,
-  getProjectScorecardStatus
-} from "./data/upload/reducer";
+import { getUploadMetadata } from "./data/upload/reducer";
 import {
   importMarkdown,
   uploadMarkdownToServer,
@@ -22,7 +14,8 @@ import {
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
   updateSelectedProject,
-  updateProjectScorecard
+  updateProjectScorecard,
+  updateVersionNumber
 } from "./data/upload/actions";
 import {
   fetchAllProjects,
@@ -64,19 +57,32 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { projectsBySymbol, projectSymbolArr } = getManagedProjects(state);
+  const {
+    importedMarkdown,
+    selectedProject,
+    collaboratorEmails,
+    collaboratorOptions,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted
+  } = getUploadMetadata(state);
   return {
     // global metadata
     width: state.data.environment.width,
     isLoggedIn: !!state.data.user.id,
     currentUser: state.data.user,
     sidebarOpen: state.scenes.upload.sidebarOpen,
-    importedMarkdown: getImportedMarkdown(state),
-    collaboratorEmails: getCollaboratorEmails(state),
-    collaboratorOptions: getCollaboratorOptions(state),
-    commentPeriodUnit: getCommentPeriodUnit(state),
-    commentPeriodValue: getCommentPeriodValue(state),
-    selectedProject: getSelectedProject(state),
-    scorecardCompleted: getProjectScorecardStatus(state),
+    importedMarkdown,
+    selectedProject,
+    collaboratorEmails,
+    collaboratorOptions,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted,
     projectsBySymbol,
     projectSymbolArr
   };
@@ -94,7 +100,8 @@ const actions = {
   notify,
   toggleSidebar,
   fetchAllProjects,
-  updateProjectScorecard
+  updateProjectScorecard,
+  updateVersionNumber
 };
 
 export default withRouter(connect(mapState, actions)(MyComponent));

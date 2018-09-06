@@ -14,6 +14,7 @@ export function postMarkdown({
   collaboratorEmails,
   commentPeriodUnit,
   commentPeriodValue,
+  versionNumber,
   scorecard
 }) {
   return axios
@@ -24,6 +25,7 @@ export function postMarkdown({
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     })
     .then(res => res.data);

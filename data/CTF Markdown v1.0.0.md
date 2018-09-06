@@ -1,11 +1,8 @@
-# The Brooklyn Project
-
-
 ### Introduction
 
-The following is a draft framework for the establishment of consumer tokens, which are described in more detail in [The Brooklyn Project Token Taxonomy](https://thebrooklynproject.consensys.net/token-taxonomy). The framework contains principles and practices covering important aspects of consumer token projects, and outlines a set of “collaborative disclosures” on which projects and communities should focus their attention.
+The following is a draft framework for the establishment of consumer tokens, which are described in more detail in [The Brooklyn Project Token Taxonomy](https://thebrooklynproject.consensys.net/token-taxonomy). The framework contains principles and practices covering important aspects of consumer token projects, and outlines a set of “ transparency goals” on which projects and communities should focus their attention.
 
-The principles, practices and collaborative disclosures are intended to provide a framework for long-term oriented behavior and to help establish trust between the initiators of consumer token projects, their collaborators, the purchasers of the tokens, and the public at large. The framework represents the latest thinking, but best practices are expected to evolve based on ongoing experimentation and interaction between projects and their communities. The framework encourages projects to embrace transparency as a core principle and harness the input from their community members to improve how they structure, organize and manage themselves.
+The principles, practices and transparency goals are intended to provide a framework for long-term oriented behavior and to help establish trust between the initiators of consumer token projects, their collaborators, the purchasers of the tokens, and the public at large. The framework represents the latest thinking, but best practices are expected to evolve based on ongoing experimentation and interaction between projects and their communities. The framework encourages projects to embrace transparency as a core principle and harness the input from their community members to improve how they structure, organize and manage themselves.
 
 The framework is designed to work with centralized and decentralized consumer token projects. This is significant, because many of today’s legal and regulatory norms struggle to account for decentralized projects that rely on a network of actors, many of whom are not bound together by traditional contracts or corporate structures. Although the setup and characteristics of consumer token projects differ, many problems they share are identical to those faced by traditional legal entities and markets—problems such as trust, cooperation, fairness, and safety.
 
@@ -13,24 +10,24 @@ The framework represents a first step towards establishing standards for consume
 
 ### Application of the framework
 
-A major challenge with “frameworks” is that recommended practices can be blindly applied as if they are specific rules deserve uniform application. This can result in a meaningless compliance exercise. Mindful implementation of this framework requires careful thinking about which practices make most sense for a project. In this way, the review of practices becomes a value-adding process.
+A major challenge with “frameworks” is that recommended practices can be blindly applied as if they are specific rules that deserve uniform application. This can result in a meaningless compliance exercise. Mindful implementation of this framework requires careful thinking about which practices make most sense for a project. In this way, the review of practices becomes a value-adding process.
 
-The current version consists of two parts: **principles and practices** which relate to the behavior of projects and **collaborative disclosures** which relate to the transparency of a project.
+The current version consists of two parts: **principles and practices** which relate to the behavior of projects and **collaborative transparency goals** which relate to the transparency of a project.
 
-**Part 1: Principles and Practices:**
+**Part 1: Principles and Practices**
 
   - Principles: The highest level of abstraction and core building blocks of the consumer token framework are the principles. They guide what each project should strive to achieve. Principles build upon one another serving as reinforcement. They hold true across all projects.
 
   - Practices: Although practices are designed to be relevant across the majority of projects, they should be tailored to each project. Every project should include a narrative account referencing each of the practices that are being implemented and the rationale for the approach that has been taken given the specifics of the project. Practices should be tailored to the needs of a project and all stakeholders should be able to understand why a particular approach has been taken.
 
 
-**Part 2: Collaborative Disclosures:**
+**Part 2: Transparency Goals**
 
-  - The framework encourages projects to create “collaborative disclosures”: to tap into the expertise of their communities to scrutinize and enhance the information available about projects. Recommended topics for disclosure are included for each of the principles in the framework. These recommendations are intended as guidance and serve as a starting point for projects and their communities to collaboratively develop comprehensive disclosures. Disclosures could be made in a variety of ways: a stand-alone document, blog post, or integrated into an existing white paper. Disclosures may be initiated by a project team but should be refined based on input from the wider community.
+  - The framework encourages projects to achieve transparency goals on how they approach the principles and practices outlined in this framework. The framework introduces the notion of  “collaborative transparency,” where tight collaboration with the community plays a paramount role in improving the transparency of projects. Transparency is not a one-way street, but achieved by tapping the expertise of project and industry communities to scrutinize and enhance the information available about projects. Projects and communities can in theory achieve transparency in a variety of ways, including through whitepapers, other stand-alone documents, blog posts, or social media.
 
 ### Open assessments
 
-To enhance transparency, assist in the evaluation of projects, and contribute to the improvement of the framework, projects and their communities should publicly describe which aspects of the framework their projects are applying based on reasonable and good faith efforts. The more reflection that goes into an assessment, the greater the chance it will fulfill its purpose and the greater the likelihood that all relevant parties will be able to understand and evaluate the rationale for a given approach.
+In addition to obvious benefits of enhancing transparency and consumer protection, the rationale for setting transparency goals is to assist in the community-driven evaluation of projects and continuous improvement of the framework. The contemplated process involves projects and their communities publicly describing which aspects of the framework their projects are applying based on reasonable and good faith efforts. The more reflection that goes into assessing these descriptions, the greater the chance that transparency will fulfill its purpose and the greater the likelihood that all relevant parties will be able to understand and evaluate the rationale for a given approach.
 
 ### Use of alternative practices
 
@@ -59,7 +56,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 
 1. Define an appropriate organizational and governance structure for the project and review it periodically for improvement.
 2. Delineate aspects of the project controlled centrally by the project team or other entity, and aspects of the project controlled in a decentralized fashion by a network of people.
-3. Delineate aspects of the project that will be "open source" and/or "forkable" by anyone in the public.
+3. Delineate aspects of the project that will be “open source” and/or “forkable” by anyone in the public.
 4. Ensure the backgrounds of key people involved in the project are easily accessible and not misrepresented.
 5. Track and provide ongoing transparency regarding project progress.
 
@@ -71,7 +68,7 @@ This framework offers a set of voluntary principles and leading practices. It is
    1. Token bonuses, discounts, and other preferential terms that give purchasers the expectation that they will earn a passive return on their purchase.
    2. Distribution of tokens to individuals who intend only to speculate on price appreciation of the token and do not intend to use the token.
    3. Distribution of tokens to individuals in quantities that are not in line with the reasonable expected use or consumption of such tokens by a purchaser.
-   4. Selling tokens in quantities that exceed the cost and risk that a buyer can reasonably bear.
+   4. Selling tokens in quantities exceeding the cost or risk a token purchaser can reasonably bear.
 2. Ensure the terms of the token distribution are transparent.
 
 ### Principle 4: Purpose of Token Distribution
@@ -95,7 +92,8 @@ This framework offers a set of voluntary principles and leading practices. It is
 *The project should strive to create a level playing field in any secondary markets.*
 
 1. Identify, manage, and mitigate potential conflicts of interest including self-dealing by project leaders.
-2. Do not engage in intentional conduct to manipulate the value of the token, i.e., by spreading false or misleading information, improperly affecting the number of tokens available for purchase, or rigging token quotes or prices on any forums.
+2. Do not engage in intentional conduct to manipulate the value of the token, i.e. by spreading false or misleading information, improperly affecting the number of tokens available for purchase, or rigging token quotes or prices on any forums.
+
 
 ### Principle 7: Token Safety and Security
 
@@ -110,9 +108,9 @@ This framework offers a set of voluntary principles and leading practices. It is
 *Marketing should be fair and accurately reflect the project and product.*
 
 1. Ensure all product advertising is fair and does not mislead token purchasers.
-2. When reasonably possible, ensure promises about governance provisions made in whitepapers, blog posts and websites marketed to buyers are aligned with rules encoded in a project's smart contracts.
-3. Avoid marketing the token as a financial investment unless in full compliance with applicable laws governing securities or financial products.
-4. Avoid marketing the ability of buyers to re-trade the token for passive financial profit on speculative secondary markets.
+2. When reasonably possible, ensure promises about governance provisions made in whitepapers, blog posts and websites marketed to token purchasers are aligned with rules encoded in a project’s smart contracts.
+3. Avoid marketing the token as a security or financial investment unless in full compliance with applicable laws governing securities or financial products.
+4. Avoid marketing the ability of token purchasers to re-trade the token for passive financial profit on speculative secondary markets.
 
 ### Principle 9: Protecting and Empowering Consumers
 
@@ -121,17 +119,22 @@ This framework offers a set of voluntary principles and leading practices. It is
 1. Implement effective mechanisms for redressing or refunding token purchasers, in whole or part, as appropriate, including if the project is canceled or abandoned.
 2. Implement effective mechanisms for token purchasers to be recognized or receive value for their contributions to the projects (e.g. through bounties).
 3. Confirm responsibilities, applicable restrictions and expectations of token purchasers in one or more legally binding documents.
+4. Confirm responsibilities, applicable restrictions and expectations of token projects in one or more legally binding documents.
 
 ### Principle 10: Compliance with Applicable Laws
 
-*The project and related organizations should engage in reasonable best efforts to comply with applicable laws, including securities, data privacy, anti-money laundering, and tax laws.*
+*The project and related organizations should engage in reasonable best efforts to comply with applicable laws, including securities, truth-in-advertising, data privacy, anti-money laundering, and tax laws.*
 
-1. Comply with all applicable securities regulations to the extent the token distribution may be considered a securities offering.
-2. Comply with applicable tax laws.
-3. Comply with applicable data protection and privacy laws (e.g., GDPR).
-4. Comply with applicable know-your-customer (KYC) and anti-money laundering laws.
+1. Comply with all applicable laws, e.g.:Securities regulations.
+  1. Tax laws.
+  2. Truth-in-advertising laws.
+  3. Data protection and privacy laws (e.g., GDPR).
+  4. Know-your-customer (KYC), anti-money laundering, and financial sanctions.
+  5. State and federal money service business laws and regulations.
 
-### PART 2: COLLABORATIVE DISCLOSURES
+### PART 2: TRANSPARENCY GOALS
+
+Transparency may be initiated by a project team or community members and should incorporate community feedback
 
 ### principle 1: Consumer Token Design
 
@@ -141,9 +144,9 @@ This framework offers a set of voluntary principles and leading practices. It is
 ### principle 2: Project Governance and Operation
 
 1. Description of how and by whom the project will operate and be governed.
-2. Relevant holding or operating company and in what jurisdiction(s) it operates.
+2. Relevant holding or operating company(ies) and in what jurisdiction(s) it operates and, if regulated, its status.
 3. Identities and backgrounds of key people in the project.
-4. Description of which portions of the project are decentralized, centralized, open-sourced, or "forkable".
+4. Description of what part of project is decentralized, centralized, open-sourced or “forkable”.
 5. Project roadmap, including key technical and project milestones.
 6. Regular updates on project progress towards milestones and use of funds.
 
@@ -151,7 +154,7 @@ This framework offers a set of voluntary principles and leading practices. It is
 
 1. Purpose of any token distributions.
 2. Legal identity(ies), if any, that distribute(d) or plan to distribute tokens.
-3. Conditions that a buyer must meet in order to be eligible to buy or receive tokens.
+3. Conditions that a token purchaser must meet in order to be eligible to buy or receive tokens.
 4. The terms of any token distributions—including to founders, employees, and advisors—such as the price paid and number of tokens received, as well as any lockups, vesting, or transfer restrictions.
 5. Project’s status/progress at the time of token distributions.
 6. Steps taken to minimize or eliminate distribution to people who intend only to speculate on the price of the token and do not intend to use the token for its intended purpose (e.g. “user quizzes”, “self-signed attestations”, etc.).
@@ -160,10 +163,11 @@ This framework offers a set of voluntary principles and leading practices. It is
 
 ### principle 4: Use of Token Proceeds
 
-1. The planned and actual use of proceeds, broken down by function line.
-2. The aggregate amount of tokens reserved for the remuneration of team members.
-3. Token sale proceeds.
-4. Regular updates on the project’s progress and use of funds.
+1. The planned use of proceeds.
+2. The actual use of proceeds, down by function line.
+3. The aggregate amount of tokens reserved for the remuneration of team members.
+4. Token sale proceeds.
+5. Regular updates on the project’s progress and use of funds, preferably on an ongoing basis at specified dates or intervals (e.g. quarterly).
 
 ### principle 5: Token Supply
 
@@ -187,18 +191,18 @@ This framework offers a set of voluntary principles and leading practices. It is
 1. Steps taken to comply with the marketing principles outlined in this document.
 2. Explanations of the relationship between promises made in marketing materials about a token’s governance provisions and a project’s actual smart contracts (e.g. related to token supply, insider vesting schedules, modifiability of the governance rules).
 3. Links to project website(s) and social media accounts (e.g., Telegram, Reddit, Slack).
-4. Mechanisms to identify issues—e.g., bounty programs to find, report, or correct marketing or sales errors.
+4. Mechanisms for the community to identify issues—e.g., bounty programs to find, report, or correct marketing or sales errors.
 
 ### principle 9: Protecting and Empowering Consumers
 
 1. Description of the rights and obligations of token holders.
-2. Description of how buyers can receive a refund if the project is scaled down or cancelled.
-3. Description of scenarios that may trigger a full or partial reversal of the token sale.
+2. Description of any refund policies and the conditions and procedures, if any, that apply to refund requests.
+3. Description of risks related to project completion and how buyers can be reimbursed if the project is scaled down or cancelled.
 4. Privacy policy.
 
 ### principle 10: Compliance with Applicable Laws
 
-1. Statement of Good Faith affirming that the token and distributions comply with applicable laws and regulations, including securities, data privacy, KYC, anti-money laundering, and tax laws.
+1. Statement of Good Faith affirming the token and distributions comply with applicable laws and regulations, including securities, data privacy, truth-in-advertising, KYC, anti-money laundering, and tax laws.
 2. Statement of whether the project has received legal and other professional advice in connection with the matters outlined in its Statement of Good Faith.
 
 ### Future updates to the framework
@@ -209,5 +213,5 @@ The development of these guidelines is an open-source initiative led by The Broo
 
 **THIS DOCUMENT SHOULD BE VIEWED AS STARTING A CONVERSATION, WITHOUT PREJUDICE TO ANY PARTICULAR PERSON, ENTITY, OR PROJECT. NOTHING HEREIN SHOULD BE VIEWED AS AN INDUSTRY “BEST PRACTICE” OR STANDARD MERELY BY VIRTUE OF INCLUSION IN THIS DRAFT DOCUMENT. TO THE CONTRARY, THE DRAFT LIKELY GOES BEYOND MANY CURRENT INDUSTRY “BEST” PRACTICES.**
 
-**THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP OR PRIVILEGE WITH OR AMONG ANYONE, AND NOBODY SHOULD RELY ON THIS DOCUMENT AS LEGAL ADVICE.  IF YOU ARE INVOLVED IN A TOKEN PROJECT, YOU SHOULD CONSULT AND RELY UPON YOUR OWN LEGAL COUNSEL FOR LEGAL ADVICE.**
+**THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP OR PRIVILEGE WITH OR AMONG ANYONE, AND NOBODY SHOULD RELY ON THIS DOCUMENT AS LEGAL ADVICE.  IF YOU ARE INVOLVED IN A TOKEN PROJECT, YOU SHOULD CONSULT AND RELY UPON YOUR OWN LEGAL COUNSEL FOR LEGAL ADVICE.**
 

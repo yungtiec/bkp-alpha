@@ -67,7 +67,8 @@ const postDocument = async (req, res, next) => {
       document_id: document.id,
       creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
-      scorecard: req.body.scorecard
+      scorecard: req.body.scorecard,
+      version_number: req.body.versionNumber
     });
     var questionInstances = await Promise.map(
       markdownParsor.questions,
@@ -160,6 +161,7 @@ const postNewVersion = async (req, res, next) => {
       newIssues,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     } = req.body;
     var collaboratorEmails = req.body.collaboratorEmails.map(
@@ -200,6 +202,7 @@ const postNewVersion = async (req, res, next) => {
       document_id: parentVersion.document.id,
       creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
+      version_number: versionNumber,
       scorecard
     });
     await parentVersion.addChild(version.id);

@@ -3,6 +3,7 @@ import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
   markdown: null,
+  versionNumber: '',
   collaboratorEmails: [],
   commentPeriodValue: 3,
   commentPeriodUnit: "days",
@@ -50,6 +51,11 @@ export default function reduce(state = initialState, action = {}) {
         selectedProject: action.selectedProject,
         collaboratorOptions: action.selectedProject.collaboratorOptions
       };
+    case types.VERSION_NUMBER_UPDATED:
+      return {
+        ...state,
+        versionNumber: action.versionNumber
+      };
     case types.PROJECT_SCORECARD_UPDATED:
       return {
         ...state,
@@ -60,34 +66,30 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
-export function getImportedMarkdown(state) {
-  return state.scenes.upload.data.upload.markdown;
-}
-
-export function getCollaboratorEmails(state) {
-  return state.scenes.upload.data.upload.collaboratorEmails;
-}
-
-export function getCommentPeriodUnit(state) {
-  return state.scenes.upload.data.upload.commentPeriodUnit;
-}
-
-export function getCommentPeriodValue(state) {
-  return state.scenes.upload.data.upload.commentPeriodValue;
-}
-
-export function getSelectedProject(state) {
-  return state.scenes.upload.data.upload.selectedProject;
-}
-
-export function getCollaboratorOptions(state) {
-  return state.scenes.upload.data.upload.collaboratorOptions;
-}
-
-export function getProjectScorecardStatus(state) {
-  const scorecard = state.scenes.upload.data.upload.scorecard;
-  return (
-    !isEmpty(scorecard) &&
-    values(scorecard).reduce((bool, score) => !!score && bool, true)
-  );
+export function getUploadMetadata(state) {
+  var {
+    markdown: importedMarkdown,
+    versionNumber,
+    selectedProject,
+    collaboratorEmails,
+    collaboratorOptions,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard
+  } = state.scenes.upload.data.upload;
+  return {
+    importedMarkdown,
+    versionNumber,
+    selectedProject,
+    collaboratorEmails,
+    collaboratorOptions,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted:
+      !isEmpty(scorecard) &&
+      values(scorecard).reduce((bool, score) => !!score && bool, true)
+  };
 }
