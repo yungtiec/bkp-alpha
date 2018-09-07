@@ -39,7 +39,7 @@ class Document extends Component {
                 to us. By leaving comments and upvoting comments you find
                 helpful, you will provide a basis for a better framework. The
                 public comment initiative will be closed on{" "}
-                <b>6 September 2018</b>. An updated version of the framework will
+                <b>6 December 2018</b>. An updated version of the framework will
                 incorporate the feedback received before the deadline and is
                 scheduled to be released shortly after.
               </p>
