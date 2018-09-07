@@ -62,7 +62,7 @@ export const addNewCommentSentFromServer = comment => {
     try {
       const projectSymbol = getState().scenes.document.data.documentMetadata
         .project.symbol;
-      const versionId = getState().scenes.document.data.metadata.id;
+      const versionId = getState().scenes.document.data.versionMetadata.id;
       dispatch({
         type: types.COMMENT_ADDED,
         comment

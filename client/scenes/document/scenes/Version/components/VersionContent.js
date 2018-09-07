@@ -42,10 +42,10 @@ const VersionContent = ({
         <Element
           name={`qna-${id}`}
           ref={el => (parent[`qna-${id}`] = el)}
-          key={`qna-${documentQnasById[id].order_in_version}`}
+          key={`qna-${id}--${documentQnasById[id].order_in_version}`}
         >
           <Qna
-            key={`qna-${documentQnasById[id].order_in_version}`}
+            key={`qna-${id}--${documentQnasById[id].order_in_version}`}
             qna={documentQnasById[id]}
             versionId={versionMetadata.id}
             isLoggedIn={isLoggedIn}
