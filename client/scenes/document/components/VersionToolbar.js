@@ -152,7 +152,6 @@ class VersionToolbar extends Component {
               })}
             </div>
           </div>
-
           <div className="btn-group">
             <button
               type="button"

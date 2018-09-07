@@ -24,13 +24,13 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const parentVersionId = orderBy(
-      state.scenes.document.data.metadata.document.versions,
+      state.scenes.document.data.documentMetadata.versions,
       ["hierarchyLevel"],
       ["desc"]
     )[0].id;
     const projectSymbol =
-      state.scenes.document.data.metadata.document.project.symbol;
-    const documentId = state.scenes.document.data.metadata.document.id;
+      state.scenes.document.data.documentMetadata.project.symbol;
+    const documentId = state.scenes.document.data.documentMetadata.id;
     const {
       markdown,
       resolvedIssueIds,

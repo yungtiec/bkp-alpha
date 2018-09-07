@@ -33,7 +33,7 @@ export const fetchCommentsByVersionId = versionId => {
 export const addNewComment = ({ versionId, newComment, tags, issueOpen }) => {
   return async (dispatch, getState) => {
     try {
-      const projectSymbol = getState().scenes.document.data.metadata.document
+      const projectSymbol = getState().scenes.document.data.documentMetadata
         .project.symbol;
       const postedComment = await postComment({
         projectSymbol,
@@ -60,7 +60,7 @@ export const addNewComment = ({ versionId, newComment, tags, issueOpen }) => {
 export const addNewCommentSentFromServer = comment => {
   return (dispatch, getState) => {
     try {
-      const projectSymbol = getState().scenes.document.data.metadata.document
+      const projectSymbol = getState().scenes.document.data.documentMetadata
         .project.symbol;
       const versionId = getState().scenes.document.data.metadata.id;
       dispatch({
@@ -88,7 +88,7 @@ export const replyToComment = ({ rootId, parentId, newComment, versionId }) => {
   return async (dispatch, getState) => {
     try {
       const rootComment = await postReplyToComment({
-        projectSymbol: getState().scenes.document.data.metadata.document.project
+        projectSymbol: getState().scenes.document.data.documentMetadata.project
           .symbol,
         versionId,
         rootId,
@@ -109,7 +109,7 @@ export const upvoteComment = ({ rootId, comment, hasUpvoted }) => {
   return async (dispatch, getState) => {
     try {
       const { commentId, upvotesFrom } = await postUpvoteToComment({
-        projectSymbol: getState().scenes.document.data.metadata.document.project
+        projectSymbol: getState().scenes.document.data.documentMetadata.project
           .symbol,
         versionId: comment.version_id,
         commentId: comment.id,
@@ -137,7 +137,7 @@ export const editComment = ({
   return async (dispatch, getState) => {
     try {
       const rootComment = await updateComment({
-        projectSymbol: getState().scenes.document.data.metadata.document.project
+        projectSymbol: getState().scenes.document.data.documentMetadata.project
           .symbol,
         versionId,
         commentId,
