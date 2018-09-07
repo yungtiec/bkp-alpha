@@ -152,46 +152,6 @@ class VersionToolbar extends Component {
               })}
             </div>
           </div>
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              id="versionProgressButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/document/${
-                  documentMetadata.id
-                }/progress`}
-              >
-                View progress
-              </Link>
-            </button>
-            <div
-              className="dropdown-menu"
-              aria-labelledby="versionProgressButton"
-            >
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/document/${
-                  documentMetadata.id
-                }/progress`}
-                class="dropdown-item"
-              >
-                Milestone
-              </Link>
-              <Link
-                to={`/project/${this.props.projectMetadata.symbol}/document/${
-                  documentMetadata.id
-                }/issues`}
-                class="dropdown-item"
-              >
-                Issues
-              </Link>
-            </div>
-          </div>
           <button type="button" className="btn btn-outline-primary">
             <a
               href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
@@ -316,3 +276,41 @@ const mapState = (state, ownProps) => ({
 });
 
 export default connect(mapState, { notify, loadModal })(VersionToolbar);
+
+// <div className="btn-group">
+//   <button
+//     type="button"
+//     className="btn btn-outline-primary dropdown-toggle"
+//     type="button"
+//     id="versionProgressButton"
+//     data-toggle="dropdown"
+//     aria-haspopup="true"
+//     aria-expanded="false"
+//   >
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/progress`}
+//     >
+//       View progress
+//     </Link>
+//   </button>
+//   <div className="dropdown-menu" aria-labelledby="versionProgressButton">
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/progress`}
+//       class="dropdown-item"
+//     >
+//       Milestone
+//     </Link>
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/issues`}
+//       class="dropdown-item"
+//     >
+//       Issues
+//     </Link>
+//   </div>
+// </div>;
