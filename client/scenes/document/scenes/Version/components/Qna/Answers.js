@@ -150,8 +150,8 @@ export default class Answers extends Component {
         punditType="Disclosure"
         punditAction="Create"
         punditModel={{
-          project: this.props.versionMetadata.document.project,
-          disclosure: this.props.versionMetadata.document
+          project: this.props.documentMetadata.project,
+          disclosure: this.props.documentMetadata
         }}
       >
         {this.state.editing ? (

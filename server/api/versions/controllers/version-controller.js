@@ -4,7 +4,7 @@ const { Project, Version, VersionAnswer } = require("../../../db/models");
 const getMetadata = async (req, res, next) => {
   try {
     const version = await Version.scope({
-      method: ["byIdWithMetadata", req.params.versionId]
+      method: ["basic", req.params.versionId]
     }).findOne();
     res.send(version);
   } catch (err) {

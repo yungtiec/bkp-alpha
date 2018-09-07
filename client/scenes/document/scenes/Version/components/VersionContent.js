@@ -68,6 +68,7 @@ const VersionContent = ({
             />
             <Answers
               key={`qna-${id}__answers`}
+              documentMetadata={documentMetadata}
               qnaId={id}
               answer={documentQnasById[id].version_answers[0]}
               revertToPrevAnswer={revertToPrevAnswer}
