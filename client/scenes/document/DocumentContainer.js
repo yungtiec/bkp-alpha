@@ -65,6 +65,12 @@ class DocumentContainer extends Component {
 
     return (
       <div className="main-container">
+        <DocumentHeader
+          versionMetadata={latestVersionMetadata}
+          documentMetadata={documentMetadata}
+          projectMetadata={documentMetadata.project}
+          isClosedForComment={isClosedForComment}
+        />
         <VersionToolbar
           projectMetadata={documentMetadata.project}
           versionMetadata={versionMetadata}
