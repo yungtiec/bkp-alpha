@@ -16,15 +16,16 @@ export default class DocumentHeader extends Component {
   render() {
     const {
       versionMetadata,
+      documentMetadata,
       projectMetadata,
       isClosedForComment
     } = this.props;
-    const creator = versionMetadata.document.creator.displayName;
-    const collaborators = versionMetadata.document.collaborators
+    const creator = documentMetadata.creator.displayName;
+    const collaborators = documentMetadata.collaborators
       .map((c, i) => {
         if (
-          i === versionMetadata.document.collaborators.length - 1 &&
-          versionMetadata.document.collaborators.length > 1
+          i === documentMetadata.collaborators.length - 1 &&
+          documentMetadata.collaborators.length > 1
         )
           return ` and ${c.displayName}`;
         else if (i === 0) return `with ${c.displayName}`;
@@ -41,11 +42,11 @@ export default class DocumentHeader extends Component {
               : "public comment (closed) - check back soon for updates"
           }
         />
-        <p className="document__title">{`${
-          versionMetadata.document.title
-        }`}</p>
+        <p className="document__title">{`${documentMetadata.title}`}</p>
         <p className="document__subtitle  mb-4">
-          {`document version ${versionMetadata.version_number} created by ${creator} ${collaborators}`}
+          {`latest version ${
+            versionMetadata.version_number
+          } created by ${creator} ${collaborators}`}
         </p>
       </div>
     );

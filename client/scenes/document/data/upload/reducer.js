@@ -1,10 +1,11 @@
 import * as types from "./actionTypes";
-import { PROJECT_SURVEY_METADATA_FETCH_SUCCESS } from "../metadata/actionTypes";
+import { DOCUMENT_METADATA_FETCH_SUCCESS } from "../documentMetadata/actionTypes";
+import { PROJECT_SURVEY_METADATA_FETCH_SUCCESS } from "../versionMetadata/actionTypes";
 import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
   markdown: null,
-  versionNumber: '',
+  versionNumber: "",
   resolvedIssueIds: [],
   collaboratorEmails: [],
   collaboratorOptions: [],
@@ -55,12 +56,17 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         collaboratorOptions: action.collaboratorOptions
       };
+    case DOCUMENT_METADATA_FETCH_SUCCESS:
+      return {
+        ...state,
+        collaboratorEmails: action.documentMetadata.collaborators.map(c => ({
+          label: c.email,
+          value: c.email
+        }))
+      };
     case PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
-        collaboratorEmails: action.versionMetadata.document.collaborators.map(
-          c => ({ label: c.email, value: c.email })
-        ),
         scorecard: action.versionMetadata.scorecard
       };
     case types.MARKDOWN_IMPORTED:

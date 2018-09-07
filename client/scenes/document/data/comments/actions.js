@@ -9,12 +9,12 @@ import {
 } from "./service";
 import { getAllTags } from "../tags/service";
 import * as types from "./actionTypes";
-import { keyBy, omit, assignIn, pick, cloneDeep, values } from "lodash";
+import { keyBy, omit, assignIn, pick, cloneDeep, values, maxBy } from "lodash";
 import { notify } from "reapop";
 import history from "../../../../history";
 
 export const fetchCommentsByVersionId = versionId => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
       const comments = await getCommentsByVersionId(versionId);
       const tags = await getAllTags();

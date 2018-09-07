@@ -6,11 +6,13 @@ export function getQuestionsByVersionId(versionId) {
     .then(res => res.data);
 }
 
-export function postEditedQuestion({
-  versionId,
-  versionQuestionId,
-  markdown
-}) {
+export function getLatestQuestionsByDocumentId(documentId) {
+  return axios
+    .get(`/api/documents/${documentId}/questions`)
+    .then(res => res.data);
+}
+
+export function postEditedQuestion({ versionId, versionQuestionId, markdown }) {
   return axios
     .post(`/api/versions/${versionId}/questions`, {
       versionQuestionId,
@@ -32,11 +34,7 @@ export function putQuestionVersion({
     .then(res => res.data);
 }
 
-export function postEditedAnswer({
-  versionId,
-  versionAnswerId,
-  markdown
-}) {
+export function postEditedAnswer({ versionId, versionAnswerId, markdown }) {
   return axios
     .post(`/api/versions/${versionId}/answers`, {
       versionAnswerId,

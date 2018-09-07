@@ -118,6 +118,7 @@ class VersionUpload extends Component {
     const {
       isLoggedIn,
       width,
+      documentMetadata,
       documentQnasById,
       documentQnaIds,
       versionMetadata,
@@ -149,21 +150,6 @@ class VersionUpload extends Component {
 
     return (
       <div className="project-document">
-        <DocumentHeader
-          versionMetadata={versionMetadata}
-          projectMetadata={versionMetadata.document.project}
-        />
-        <VersionToolbar
-          uploadMode={true}
-          uploadMarkdownToServer={uploadMarkdownToServer}
-          resetUpload={() => importMarkdown(null)}
-          projectMetadata={versionMetadata.document.project}
-          versionMetadata={versionMetadata}
-          documentQnasById={documentQnasById}
-          documentQnaIds={documentQnaIds}
-          upvoteDocument={upvoteDocument}
-          downvoteDocument={downvoteDocument}
-        />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>
             <AccordionItemTitle>
@@ -389,7 +375,7 @@ class VersionUpload extends Component {
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
                 versionMetadata={versionMetadata}
-                projectMetadata={versionMetadata.document.project}
+                projectMetadata={documentMetadata.project}
               />
             </AccordionItemBody>
           </AccordionItem>

@@ -36,8 +36,93 @@ const Document = db.define(
   },
   {
     scopes: {
-      includeVersions: function() {
+      includeVersionsWithOutstandingIssues: function(documentId) {
         return {
+          where: { id: Number(documentId) },
+          include: [
+            {
+              model: db.model("project"),
+              include: [
+                {
+                  model: db.model("user"),
+                  through: db.model("project_admin"),
+                  as: "admins"
+                },
+                {
+                  model: db.model("user"),
+                  through: db.model("project_editor"),
+                  as: "editors"
+                }
+              ]
+            },
+            {
+              model: db.model("version"),
+              attributes: [
+                "id",
+                "hierarchyLevel",
+                "version_number",
+                "creator_id",
+                "createdAt"
+              ],
+              include: [
+                { model: db.model("document") },
+                {
+                  model: db.model("user"),
+                  as: "creator"
+                },
+                {
+                  model: db.model("issue"),
+                  as: "resolvedIssues", // use in SurveyProgress
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("comment"),
+                      required: false
+                    }
+                  ]
+                },
+                {
+                  model: db.model("comment"), // use in SurveyIssues
+                  required: false,
+                  include: [
+                    {
+                      model: db.model("issue"),
+                      required: false,
+                      where: { open: true }
+                    }
+                  ]
+                }
+              ],
+              order: [[{ model: db.model("version") }, "hierarchyLevel"]]
+            },
+            {
+              model: db.model("user"),
+              as: "collaborators",
+              through: {
+                model: db.model("document_collaborator"),
+                where: { revoked_access: { [Sequelize.Op.not]: true } }
+              },
+              required: false
+            },
+            {
+              model: db.model("user"),
+              as: "creator"
+            },
+            {
+              model: db.model("user"),
+              as: "upvotesFrom",
+              attributes: ["name", "first_name", "last_name", "email", "id"]
+            },
+            {
+              model: db.model("user"),
+              as: "downvotesFrom",
+              attributes: ["name", "first_name", "last_name", "email", "id"]
+            }
+          ]
+        };
+      },
+      includeVersions: function(documentId) {
+        var options = {
           include: [
             { model: db.model("version") },
             {
@@ -49,6 +134,8 @@ const Document = db.define(
             [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
           ]
         };
+        if (documentId) options.where = { id: documentId };
+        return options;
       },
       includeVersionsWithAllEngagements: function() {
         return {

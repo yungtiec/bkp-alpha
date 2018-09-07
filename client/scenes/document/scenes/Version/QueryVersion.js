@@ -34,12 +34,15 @@ import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 
 // document/metadata
 import {
-  upvoteDocument,
-  downvoteDocument,
   fetchMetadataByVersionId,
   editScorecard
-} from "../../data/metadata/actions";
-import { getVersionMetadata } from "../../data/metadata/reducer";
+} from "../../data/versionMetadata/actions";
+import { getVersionMetadata } from "../../data/versionMetadata/reducer";
+import {
+  upvoteDocument,
+  downvoteDocument
+} from "../../data/documentMetadata/actions";
+import { getDocumentMetadata } from "../../data/documentMetadata/reducer";
 
 // document/comments
 import {
@@ -87,7 +90,6 @@ class MyComponent extends React.Component {
     const prevProjectSymbol = prevProps.match.params.symbol;
     const versionId = this.props.match.params.versionId;
     const prevVersionId = prevProps.match.params.versionId;
-
     if (
       projectSymbol &&
       versionId &&
@@ -128,7 +130,6 @@ const mapState = state => {
     unfilteredCommentIds,
     nonSpamCommentIds
   } = getAllComments(state);
-  const versionMetadata = getVersionMetadata(state);
   const {
     sidebarOpen,
     annotationHighlight,
@@ -137,6 +138,7 @@ const mapState = state => {
     commentIssueFilter,
     sidebarContext
   } = state.scenes.document;
+  const versionMetadata = getVersionMetadata(state);
 
   return {
     // global
@@ -150,6 +152,7 @@ const mapState = state => {
         Number(moment().format("x")) <=
       0,
     versionMetadata,
+    documentMetadata: getDocumentMetadata(state),
     // qnas
     documentQnasById,
     documentQnaIds,

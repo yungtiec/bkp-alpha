@@ -8,10 +8,11 @@ import { notify } from "reapop";
 // metadata
 import {
   upvoteDocument,
-  downvoteDocument,
-  fetchMetadataByVersionId
-} from "../../data/metadata/actions";
-import { getVersionMetadata } from "../../data/metadata/reducer";
+  downvoteDocument
+} from "../../data/documentMetadata/actions";
+import { fetchMetadataByVersionId } from "../../data/versionMetadata/actions";
+import { getVersionMetadata } from "../../data/versionMetadata/reducer";
+import { getDocumentMetadata } from "../../data/documentMetadata/reducer";
 // qnas
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
@@ -19,9 +20,7 @@ import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
 import { fetchCommentsByVersionId } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 // upload
-import {
-  getVersionUploadMetadata
-} from "../../data/upload/reducer";
+import { getVersionUploadMetadata } from "../../data/upload/reducer";
 import {
   fetchCollaboratorOptions,
   importMarkdown,
@@ -97,6 +96,7 @@ const mapState = state => {
     sidebarOpen: state.scenes.document.sidebarOpen,
     // metadata
     versionMetadata: getVersionMetadata(state),
+    documentMetadata: getDocumentMetadata(state),
     // qnas
     documentQnasById,
     documentQnaIds,

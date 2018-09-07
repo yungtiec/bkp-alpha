@@ -8,6 +8,7 @@ const VersionContent = ({
   user,
   isLoggedIn,
   isClosedForComment,
+  documentMetadata,
   documentQnasById,
   documentQnaIds,
   editScorecard,
@@ -25,6 +26,7 @@ const VersionContent = ({
   <div className="project-document" id="project-document">
     {versionMetadata.scorecard && !isEmpty(versionMetadata.scorecard) ? (
       <VersionScorecard
+        documentMetadata={documentMetadata}
         scorecard={versionMetadata.scorecard}
         editScorecard={editScorecard}
         parent={parent}
@@ -54,6 +56,7 @@ const VersionContent = ({
           >
             <Question
               key={`qna-${documentQnasById[id].order_in_version}__question`}
+              documentMetadata={documentMetadata}
               qnaId={id}
               question={documentQnasById[id]}
               editQuestion={editQuestion}

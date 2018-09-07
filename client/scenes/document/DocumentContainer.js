@@ -2,12 +2,23 @@ import "./DocumentContainer.scss";
 import "./annotator.scss";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, route, Switch, Route, Link } from "react-router-dom";
+import {
+  withRouter,
+  route,
+  Switch,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
+import { maxBy } from "lodash";
 import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
 import QueryVersionUpload from "./scenes/VersionUpload/QueryVersionUpload";
 import QueryVersion from "./scenes/Version/QueryVersion";
 import autoBind from "react-autobind";
+import { DocumentHeader, VersionToolbar } from "./components";
+import { VersionIssues, VersionProgress } from "./scenes/Version/components";
+import history from "../../history";
 
 class DocumentContainer extends Component {
   constructor(props) {
@@ -40,15 +51,64 @@ class DocumentContainer extends Component {
   }
 
   render() {
+    const {
+      documentMetadata,
+      latestVersionMetadata,
+      versionMetadata,
+      isClosedForComment,
+      documentQnasById,
+      documentQnaIds,
+      upvoteDocument,
+      downvoteDocument,
+      match
+    } = this.props;
 
     return (
       <div className="main-container">
+        <DocumentHeader
+          versionMetadata={latestVersionMetadata}
+          documentMetadata={documentMetadata}
+          projectMetadata={documentMetadata.project}
+          isClosedForComment={isClosedForComment}
+        />
+        <VersionToolbar
+          projectMetadata={documentMetadata.project}
+          versionMetadata={versionMetadata}
+          latestVersionMetadata={latestVersionMetadata}
+          documentMetadata={documentMetadata}
+          documentQnasById={documentQnasById}
+          documentQnaIds={documentQnaIds}
+          upvoteDocument={upvoteDocument}
+          downvoteDocument={downvoteDocument}
+        />
         <Switch>
           <Route
-            path={`${this.props.match.path}/upload`}
+            path={`${match.path}/issues`}
+            render={props => (
+              <VersionIssues
+                documentVersions={documentMetadata.versions}
+                projectSymbol={documentMetadata.project.symbol}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/progress`}
+            render={() => (
+              <VersionProgress
+                documentMetadata={documentMetadata}
+                projectSymbol={documentMetadata.project.symbol}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/version/:versionId/upload`}
             render={props => <QueryVersionUpload />}
           />
-          <Route render={props => <QueryVersion />} />
+          <Route
+            path={`${match.path}/version/:versionId`}
+            render={props => <QueryVersion />}
+          />
+          <Redirect to={`${match.path}/progress`} />
         </Switch>
       </div>
     );

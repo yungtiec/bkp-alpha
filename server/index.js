@@ -82,6 +82,12 @@ const createApp = () => {
     res.redirect(`/${req.params.file}`);
   });
   app.get(
+    "/project/:symbol/document/:documentId/public/:file",
+    (req, res, next) => {
+      res.redirect(`/${req.params.file}`);
+    }
+  );
+  app.get(
     "/project/:symbol/document/:documentId/version/:versionId/question/:questionId/comment/public/:file",
     (req, res, next) => {
       res.redirect(`/${req.params.file}`);
