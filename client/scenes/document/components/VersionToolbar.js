@@ -192,7 +192,15 @@ class VersionToolbar extends Component {
               </Link>
             </div>
           </div>
-
+          <button type="button" className="btn btn-outline-primary">
+            <a
+              href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View pdf
+            </a>
+          </button>
           {!uploadMode ? (
             <PunditContainer policies={policies} user={user}>
               <PunditTypeSet type="Disclosure">
