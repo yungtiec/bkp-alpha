@@ -24,6 +24,7 @@ class Upload extends Component {
     autoBind(this);
     this.state = {
       activeAccordionItemId: 0,
+      versionNumberError: false,
       projectError: false,
       scorecardError: false,
       isScorecard: false,
@@ -37,6 +38,15 @@ class Upload extends Component {
 
   handleCommentPeriodValueChange(evt) {
     this.props.updateCommentPeriodValue(evt.target.value);
+  }
+
+  handleVersionNumberChange(evt) {
+    this.props.updateVersionNumber(evt.target.value);
+    if (evt.target.value.trim())
+      this.setState(prevState => ({
+        ...prevState,
+        versionNumberError: false
+      }));
   }
 
   handleProjectSelectChange(selected) {
@@ -66,13 +76,19 @@ class Upload extends Component {
         activeAccordionItemId: key,
         projectError: !this.props.selectedProject
       }));
-    if (key > 3)
+    if (key > 1)
+      this.setState(prevState => ({
+        ...prevState,
+        activeAccordionItemId: key,
+        versionNumberError: !this.props.versionNumber
+      }));
+    if (key > 4)
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: key,
         scorecardError: this.state.isScorecard && !this.props.scorecardCompleted
       }));
-    if (key === 0 || key === 3)
+    if (key === 0 || key === 1 || key === 4)
       this.setState({
         activeAccordionItemId: key
       });
@@ -84,7 +100,12 @@ class Upload extends Component {
         ...prevState,
         projectError: !this.props.selectedProject
       }));
-    else if (
+    else if (currentField === "versionNumber" && !this.props.versionNumber) {
+      this.setState(prevState => ({
+        ...prevState,
+        versionNumberError: !this.props.versionNumber
+      }));
+    } else if (
       currentField === "scorecard" &&
       this.state.isScorecard &&
       !this.props.scorecardCompleted
@@ -96,7 +117,7 @@ class Upload extends Component {
     else
       this.setState(prevState => ({
         ...prevState,
-        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 5,
+        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 6,
         scorecardError: false,
         projectError: !this.props.selectedProject
       }));
@@ -106,6 +127,7 @@ class Upload extends Component {
     if (
       !!this.props.importedMarkdown &&
       !!this.props.selectedProject &&
+      !!this.props.versionNumber &&
       ((this.state.isScorecard && this.props.scorecardCompleted) ||
         !this.state.isScorecard)
     ) {
@@ -126,6 +148,7 @@ class Upload extends Component {
       importedMarkdown,
       importMarkdown,
       uploadMarkdownToServer,
+      versionNumber,
       collaboratorOptions,
       updateCollaborators,
       collaboratorEmails,
@@ -183,6 +206,31 @@ class Upload extends Component {
             </AccordionItem>
             <AccordionItem expanded={this.state.activeAccordionItemId === 1}>
               <AccordionItemTitle>
+                <p className="upload-accordion__item-header">Version number</p>
+              </AccordionItemTitle>
+              <AccordionItemBody>
+                <div className="d-flex flex-column">
+                  <p>set version number</p>
+                  <input
+                    name="version-number"
+                    type="string"
+                    value={versionNumber}
+                    onChange={this.handleVersionNumberChange}
+                  />
+                  {this.state.versionNumberError ? (
+                    <p className="text-danger mt-2">version number required</p>
+                  ) : null}
+                  <button
+                    onClick={() => this.next("versionNumber")}
+                    className="btn btn-primary mt-4 align-self-end"
+                  >
+                    next
+                  </button>
+                </div>
+              </AccordionItemBody>
+            </AccordionItem>
+            <AccordionItem expanded={this.state.activeAccordionItemId === 2}>
+              <AccordionItemTitle>
                 <p className="upload-accordion__item-header">
                   Collaborators (optional)
                 </p>
@@ -210,7 +258,7 @@ class Upload extends Component {
                 </div>
               </AccordionItemBody>
             </AccordionItem>
-            <AccordionItem expanded={this.state.activeAccordionItemId === 2}>
+            <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
               <AccordionItemTitle>
                 <p className="upload-accordion__item-header">Comment period</p>
               </AccordionItemTitle>
@@ -244,7 +292,7 @@ class Upload extends Component {
                 </div>
               </AccordionItemBody>
             </AccordionItem>
-            <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
+            <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
               <AccordionItemTitle>
                 <p className="upload-accordion__item-header">
                   Project score (optional)
@@ -280,7 +328,7 @@ class Upload extends Component {
                 </div>
               </AccordionItemBody>
             </AccordionItem>
-            <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
+            <AccordionItem expanded={this.state.activeAccordionItemId === 5}>
               <AccordionItemTitle>
                 <p className="upload-accordion__item-header">
                   Disclosure markdown
@@ -336,6 +384,15 @@ class Upload extends Component {
                   }
                 />
                 <Step
+                  title="version number"
+                  description="set version number for this document"
+                  status={
+                    this.state.versionNumberError
+                      ? "error"
+                      : this.state.activeAccordionItemId > 1 ? "finish" : "wait"
+                  }
+                />
+                <Step
                   title="collaborators"
                   description="select collaborator(s) to work on your disclosure"
                 />
@@ -349,7 +406,7 @@ class Upload extends Component {
                   status={
                     this.state.scorecardError
                       ? "error"
-                      : this.state.activeAccordionItemId > 3 ? "finish" : "wait"
+                      : this.state.activeAccordionItemId > 4 ? "finish" : "wait"
                   }
                 />
                 <Step
@@ -358,7 +415,7 @@ class Upload extends Component {
                   status={
                     !importedMarkdown
                       ? "wait"
-                      : this.state.activeAccordionItemId === 4
+                      : this.state.activeAccordionItemId === 5
                         ? "finish"
                         : "wait"
                   }

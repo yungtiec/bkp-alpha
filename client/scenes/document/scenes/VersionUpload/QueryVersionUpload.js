@@ -8,10 +8,11 @@ import { notify } from "reapop";
 // metadata
 import {
   upvoteDocument,
-  downvoteDocument,
-  fetchMetadataByVersionId
-} from "../../data/metadata/actions";
-import { getVersionMetadata } from "../../data/metadata/reducer";
+  downvoteDocument
+} from "../../data/documentMetadata/actions";
+import { fetchMetadataByVersionId } from "../../data/versionMetadata/actions";
+import { getVersionMetadata } from "../../data/versionMetadata/reducer";
+import { getDocumentMetadata } from "../../data/documentMetadata/reducer";
 // qnas
 import { getAllDocumentQuestions } from "../../data/qnas/reducer";
 import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
@@ -19,17 +20,7 @@ import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
 import { fetchCommentsByVersionId } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
 // upload
-import {
-  getImportedMarkdown,
-  getResolvedIssueId,
-  getCollaboratorEmails,
-  getCollaboratorOptions,
-  getNewIssues,
-  getCommentPeriodUnit,
-  getCommentPeriodValue,
-  getProjectScorecardStatus,
-  getProjectScorecard
-} from "../../data/upload/reducer";
+import { getVersionUploadMetadata } from "../../data/upload/reducer";
 import {
   fetchCollaboratorOptions,
   importMarkdown,
@@ -40,6 +31,7 @@ import {
   removeIssue,
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
+  updateVersionNumber,
   updateProjectScorecard
 } from "../../data/upload/actions";
 // UI context
@@ -65,12 +57,8 @@ const LoadableVersionUpload = Loadable({
 class MyComponent extends React.Component {
   componentDidMount() {
     batchActions([
-      this.props.fetchMetadataByVersionId(
-        this.props.match.params.versionId
-      ),
-      this.props.fetchQuestionsByVersionId(
-        this.props.match.params.versionId
-      ),
+      this.props.fetchMetadataByVersionId(this.props.match.params.versionId),
+      this.props.fetchQuestionsByVersionId(this.props.match.params.versionId),
       this.props.fetchCommentsByVersionId(this.props.match.params.versionId),
       this.props.fetchCollaboratorOptions(this.props.match.params.symbol)
     ]);
@@ -89,6 +77,18 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { documentQnasById, documentQnaIds } = getAllDocumentQuestions(state);
+  const {
+    importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted
+  } = getVersionUploadMetadata(state);
   return {
     // global metadata
     width: state.data.environment.width,
@@ -96,23 +96,25 @@ const mapState = state => {
     sidebarOpen: state.scenes.document.sidebarOpen,
     // metadata
     versionMetadata: getVersionMetadata(state),
+    documentMetadata: getDocumentMetadata(state),
     // qnas
     documentQnasById,
     documentQnaIds,
     // outstanding issues
     outstandingIssues: getOutstandingIssues(state),
     // upload
-    importedMarkdown: getImportedMarkdown(state),
-    resolvedIssueIds: getResolvedIssueId(state),
-    collaboratorEmails: getCollaboratorEmails(state),
-    collaboratorOptions: getCollaboratorOptions(state),
-    newIssues: getNewIssues(state),
+    versionNumber,
+    importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
     // comment
-    commentPeriodUnit: getCommentPeriodUnit(state),
-    commentPeriodValue: getCommentPeriodValue(state),
+    commentPeriodUnit,
+    commentPeriodValue,
     // scorecard
-    scorecardCompleted: getProjectScorecardStatus(state),
-    scorecard: getProjectScorecard(state)
+    scorecardCompleted,
+    scorecard
   };
 };
 
@@ -137,6 +139,7 @@ const actions = {
   removeIssue,
   updateCommentPeriodUnit,
   updateCommentPeriodValue,
+  updateVersionNumber,
   updateProjectScorecard,
   // UI context
   toggleSidebar

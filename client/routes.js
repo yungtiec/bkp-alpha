@@ -63,7 +63,7 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/project/:symbol/document/:documentId/version/:versionId"
+            path="/project/:symbol/document/:documentId"
             component={Document}
           />
           <RouteWithLayout

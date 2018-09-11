@@ -39,7 +39,7 @@ class Document extends Component {
                 to us. By leaving comments and upvoting comments you find
                 helpful, you will provide a basis for a better framework. The
                 public comment initiative will be closed on{" "}
-                <b>15 August 2018</b>. A final version of the framework will
+                <b>6 December 2018</b>. An updated version of the framework will
                 incorporate the feedback received before the deadline and is
                 scheduled to be released shortly after.
               </p>
@@ -201,6 +201,7 @@ class Document extends Component {
 
   render() {
     const {
+      documentMetadata,
       documentQnasById,
       documentQnaIds,
       editQuestion,
@@ -255,62 +256,24 @@ class Document extends Component {
             }
           }}
         />
-        <DocumentHeader
-          versionMetadata={versionMetadata}
-          projectMetadata={versionMetadata.document.project}
+        <VersionContent
+          parent={this}
+          isLoggedIn={isLoggedIn}
           isClosedForComment={isClosedForComment}
+          documentMetadata={documentMetadata}
+          documentQnasById={documentQnasById}
+          documentQnaIds={documentQnaIds}
+          editScorecard={editScorecard}
+          editQuestion={editQuestion}
+          editAnswer={editAnswer}
+          revertToPrevQuestion={revertToPrevQuestion}
+          revertToPrevAnswer={revertToPrevAnswer}
+          versionMetadata={versionMetadata}
+          tags={tags}
+          tagFilter={tagFilter}
+          commentOnClick={this.commentOnClick}
+          addNewCommentSentFromServer={addNewCommentSentFromServer}
         />
-        {isLoggedIn && (
-          <VersionToolbar
-            projectMetadata={versionMetadata.document.project}
-            versionMetadata={versionMetadata}
-            documentQnasById={documentQnasById}
-            documentQnaIds={documentQnaIds}
-            upvoteDocument={upvoteDocument}
-            downvoteDocument={downvoteDocument}
-          />
-        )}
-        <Switch>
-          <Route
-            path={`${this.props.match.path}/issues`}
-            render={props => (
-              <VersionIssues
-                documentVersions={versionMetadata.document.versions}
-                projectSymbol={versionMetadata.document.project.symbol}
-              />
-            )}
-          />
-          <Route
-            path={`${this.props.match.path}/progress`}
-            render={() => (
-              <VersionProgress
-                versionMetadata={versionMetadata}
-                projectSymbol={versionMetadata.document.project.symbol}
-              />
-            )}
-          />
-          <Route
-            render={() => (
-              <VersionContent
-                parent={this}
-                isLoggedIn={isLoggedIn}
-                isClosedForComment={isClosedForComment}
-                documentQnasById={documentQnasById}
-                documentQnaIds={documentQnaIds}
-                editScorecard={editScorecard}
-                editQuestion={editQuestion}
-                editAnswer={editAnswer}
-                revertToPrevQuestion={revertToPrevQuestion}
-                revertToPrevAnswer={revertToPrevAnswer}
-                versionMetadata={versionMetadata}
-                tags={tags}
-                tagFilter={tagFilter}
-                commentOnClick={this.commentOnClick}
-                addNewCommentSentFromServer={addNewCommentSentFromServer}
-              />
-            )}
-          />
-        </Switch>
         <div className="d-flex project-document__footer">
           <a
             href="https://tinyurl.com/y94wspyg"
@@ -358,7 +321,7 @@ class Document extends Component {
                 nonSpamCommentIds={nonSpamCommentIds}
                 commentsById={commentsById}
                 versionMetadata={versionMetadata}
-                projectMetadata={versionMetadata.document.project}
+                projectMetadata={documentMetadata.project}
                 commentSortBy={commentSortBy}
                 sortCommentBy={sortCommentBy}
                 tags={tags}

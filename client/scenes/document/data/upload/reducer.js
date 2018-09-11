@@ -1,9 +1,11 @@
 import * as types from "./actionTypes";
-import { PROJECT_SURVEY_METADATA_FETCH_SUCCESS } from "../metadata/actionTypes";
+import { DOCUMENT_METADATA_FETCH_SUCCESS } from "../documentMetadata/actionTypes";
+import { PROJECT_SURVEY_METADATA_FETCH_SUCCESS } from "../versionMetadata/actionTypes";
 import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
   markdown: null,
+  versionNumber: "",
   resolvedIssueIds: [],
   collaboratorEmails: [],
   collaboratorOptions: [],
@@ -54,12 +56,17 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         collaboratorOptions: action.collaboratorOptions
       };
+    case DOCUMENT_METADATA_FETCH_SUCCESS:
+      return {
+        ...state,
+        collaboratorEmails: action.documentMetadata.collaborators.map(c => ({
+          label: c.email,
+          value: c.email
+        }))
+      };
     case PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
-        collaboratorEmails: action.versionMetadata.document.collaborators.map(
-          c => ({ label: c.email, value: c.email })
-        ),
         scorecard: action.versionMetadata.scorecard
       };
     case types.MARKDOWN_IMPORTED:
@@ -96,6 +103,11 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         commentPeriodValue: action.commentPeriodValue
       };
+    case types.VERSION_NUMBER_UPDATED:
+      return {
+        ...state,
+        versionNumber: action.versionNumber
+      };
     case types.PROJECT_SCORECARD_UPDATED:
       return {
         ...state,
@@ -106,41 +118,30 @@ export default function reduce(state = initialState, action = {}) {
   }
 }
 
-export function getImportedMarkdown(state) {
-  return state.scenes.document.data.upload.markdown;
-}
-
-export function getResolvedIssueId(state) {
-  return state.scenes.document.data.upload.resolvedIssueIds;
-}
-
-export function getCollaboratorEmails(state) {
-  return state.scenes.document.data.upload.collaboratorEmails;
-}
-
-export function getCollaboratorOptions(state) {
-  return state.scenes.document.data.upload.collaboratorOptions;
-}
-
-export function getNewIssues(state) {
-  return state.scenes.document.data.upload.newIssues;
-}
-
-export function getCommentPeriodUnit(state) {
-  return state.scenes.document.data.upload.commentPeriodUnit;
-}
-
-export function getCommentPeriodValue(state) {
-  return state.scenes.document.data.upload.commentPeriodValue;
-}
-export function getProjectScorecardStatus(state) {
-  const scorecard = state.scenes.document.data.upload.scorecard;
-  return (
-    !isEmpty(scorecard) &&
-    values(scorecard).reduce((bool, score) => !!score && bool, true)
-  );
-}
-
-export function getProjectScorecard(state) {
-  return state.scenes.document.data.upload.scorecard;
+export function getVersionUploadMetadata(state) {
+  var {
+    markdown: importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard
+  } = state.scenes.document.data.upload;
+  return {
+    importedMarkdown,
+    resolvedIssueIds,
+    collaboratorEmails,
+    collaboratorOptions,
+    newIssues,
+    versionNumber,
+    commentPeriodUnit,
+    commentPeriodValue,
+    scorecard,
+    scorecardCompleted:
+      !isEmpty(scorecard) &&
+      values(scorecard).reduce((bool, score) => !!score && bool, true)
+  };
 }

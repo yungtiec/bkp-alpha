@@ -185,7 +185,8 @@ const migrateDocuments = async () => {
       scorecard: projectSurvey.scorecard,
       parentId: projectSurvey.parentId,
       hierarchyLevel: projectSurvey.hierarchyLevel,
-      creator_id: projectSurvey.creator_id
+      creator_id: projectSurvey.creator_id,
+      version_number: '0.4.0'
     });
     var versionQuestions = await Promise.all(
       projectSurvey.survey.survey_questions.map(async sq => {

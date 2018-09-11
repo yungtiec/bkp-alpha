@@ -70,7 +70,8 @@ export default class VersionScorecard extends Component {
       scorecard,
       parent,
       editScorecard,
-      versionMetadata
+      versionMetadata,
+      documentMetadata
     } = this.props;
     const validations = "isWithin:[1, 10]";
     const validationError = "the score must be within 1 to 10";
@@ -93,8 +94,8 @@ export default class VersionScorecard extends Component {
             punditType="Disclosure"
             punditAction="Create"
             punditModel={{
-              project: this.props.versionMetadata.document.project,
-              disclosure: this.props.versionMetadata.document
+              project: this.props.documentMetadata.project,
+              disclosure: this.props.documentMetadata
             }}
           >
             <Formsy

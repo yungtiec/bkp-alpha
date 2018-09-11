@@ -112,6 +112,13 @@ class QnaBox extends Component {
       $(".annotator-adder").css("cursor", "pointer");
       $(".annotator-adder").css("height", "inherit");
     }
+    var self = this;
+    const { qna, match, isLoggedIn, tagFilter, versionId } = this.props;
+    self.annotator.annotations.load({
+      uri: `${window.location.origin}${match.url}`,
+      version_id: versionId,
+      version_question_id: qna.id
+    });
   }
 
   render() {

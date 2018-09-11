@@ -1,13 +1,36 @@
 import * as types from "./actionTypes";
 import {
   getQuestionsByVersionId,
+  getLatestQuestionsByDocumentId,
   postEditedQuestion,
   postEditedAnswer,
   putQuestionVersion,
   putAnswerVersion
 } from "./services";
-import { keyBy, omit, sortBy } from "lodash";
+import { keyBy, omit, sortBy, maxBy } from "lodash";
 import { notify } from "reapop";
+
+export function fetchLatestQuestionsByDocumentId(documentId) {
+  return async (dispatch, getState) => {
+    try {
+      var version = await getLatestQuestionsByDocumentId(documentId);
+      const documentQnas = sortBy(
+        version.version_questions,
+        ["order_in_version"],
+        ["asc"]
+      );
+      const documentQnasById = keyBy(documentQnas, "id");
+      const documentQnaIds = documentQnas.map(qna => qna.id);
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
+        documentQnasById,
+        documentQnaIds
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
 
 export function fetchQuestionsByVersionId(versionId) {
   return async (dispatch, getState) => {
@@ -34,7 +57,7 @@ export function fetchQuestionsByVersionId(versionId) {
 export function editQuestion({ versionQuestionId, markdown }) {
   return async (dispatch, getState) => {
     try {
-      const versionId = getState().scenes.document.data.metadata.id;
+      const versionId = getState().scenes.document.data.versionMetadata.id;
       var newlyAddedVersionQuestion = await postEditedQuestion({
         versionId,
         versionQuestionId,
@@ -66,7 +89,7 @@ export function revertToPrevQuestion({
 }) {
   return async (dispatch, getState) => {
     try {
-      const versionId = getState().scenes.document.data.metadata.id;
+      const versionId = getState().scenes.document.data.versionMetadata.id;
       var versionQuestion = await putQuestionVersion({
         versionId,
         versionQuestionId,
@@ -95,7 +118,7 @@ export function revertToPrevQuestion({
 export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
   return async (dispatch, getState) => {
     try {
-      const versionId = getState().scenes.document.data.metadata.id;
+      const versionId = getState().scenes.document.data.versionMetadata.id;
       var newlyAddedVersionAnswer = await postEditedAnswer({
         versionId,
         versionAnswerId,
@@ -129,7 +152,7 @@ export function revertToPrevAnswer({
 }) {
   return async (dispatch, getState) => {
     try {
-      const versionId = getState().scenes.document.data.metadata.id;
+      const versionId = getState().scenes.document.data.versionMetadata.id;
       var versionAnswer = await putAnswerVersion({
         versionId,
         versionQuestionId,

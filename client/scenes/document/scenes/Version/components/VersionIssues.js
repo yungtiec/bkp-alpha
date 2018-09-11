@@ -6,16 +6,16 @@ import { assignIn } from "lodash";
 export default ({ documentVersions, projectSymbol }) => {
   return (
     <div className="project-document" id="project-document">
-      {documentVersions.map((v, i) => {
+      {documentVersions.map(v => {
         const commentsWithIssue = v.comments.filter(
           c => c.issue && c.issue.open
         );
         return (
-          <div key={`document-issues__version-${i}`}>
+          <div key={`document-issues__version-${v.version_number}`}>
             <p>
-              Version {i + 1} - {v.document.title}
+              Version {v.version_number} - {v.document.title}
             </p>
-            {commentsWithIssue.length ? (
+            {commentsWithIssue.filter(c => c.reviewed !== "spam").length ? (
               <div className="entity-cards mb-4">
                 {commentsWithIssue.filter(c => c.reviewed !== "spam").map(c => (
                   <div

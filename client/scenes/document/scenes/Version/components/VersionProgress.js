@@ -4,19 +4,19 @@ import { Timeline, TimelineEvent } from "react-event-timeline";
 import { seeCommentContext } from "../../../../../utils";
 import { assignIn } from "lodash";
 
-export default ({ versionMetadata, projectSymbol }) => (
+export default ({ documentMetadata, projectSymbol }) => (
   <div className="project-document" id="project-document">
     <Timeline style={{ margin: 0, fontWeight: 400, fontSize: "14px" }}>
-      {versionMetadata.document.versions.map(version => {
+      {documentMetadata.versions.map(version => {
         const creator = version.creator.name;
-        var collaborators = versionMetadata.document.collaborators.filter(
+        var collaborators = documentMetadata.collaborators.filter(
           sc =>
             sc.document_collaborator.version_version <=
               version.hierarchyLevel && sc.email !== version.creator.email
         );
-        if (version.creator.email !== versionMetadata.document.creator.email)
+        if (version.creator.email !== documentMetadata.creator.email)
           collaborators = collaborators.concat(
-            versionMetadata.document.creator
+            documentMetadata.creator
           );
         collaborators = collaborators
           .map((c, i) => {
@@ -68,7 +68,7 @@ export default ({ versionMetadata, projectSymbol }) => (
                               version: {
                                 id: comment.version_id,
                                 document: {
-                                  id: versionMetadata.document.id,
+                                  id: documentMetadata.id,
                                   project: {
                                     symbol: projectSymbol
                                   }

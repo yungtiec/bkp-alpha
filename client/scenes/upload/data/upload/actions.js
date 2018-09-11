@@ -13,6 +13,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     const state = getState();
     const {
       markdown,
+      versionNumber,
       collaboratorEmails,
       commentPeriodValue,
       commentPeriodUnit,
@@ -21,6 +22,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     } = state.scenes.upload.data.upload;
     const version = await postMarkdown({
       markdown,
+      versionNumber,
       collaboratorEmails,
       commentPeriodValue,
       commentPeriodUnit,
@@ -61,4 +63,9 @@ export const updateSelectedProject = selectedProject => ({
 export const updateProjectScorecard = projectScorecard => ({
   type: types.PROJECT_SCORECARD_UPDATED,
   projectScorecard
+});
+
+export const updateVersionNumber = versionNumber => ({
+  type: types.VERSION_NUMBER_UPDATED,
+  versionNumber
 });

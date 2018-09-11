@@ -1,5 +1,9 @@
 import axios from "axios";
 
+export function getMetadataByDocumentId(documentId) {
+  return axios.get(`/api/documents/${documentId}`).then(res => res.data);
+}
+
 export function postUpvoteToDocument({
   documentId,
   projectSymbol,
@@ -25,15 +29,5 @@ export function postDownvoteToDocument({
       hasUpvoted,
       hasDownvoted
     })
-    .then(res => res.data);
-}
-
-export function getMetadataByVersionId(versionId) {
-  return axios.get(`/api/versions/${versionId}/metadata`).then(res => res.data);
-}
-
-export function putScorecard({ versionId, scorecard }) {
-  return axios
-    .put(`/api/versions/${versionId}/scorecard`, { scorecard })
     .then(res => res.data);
 }

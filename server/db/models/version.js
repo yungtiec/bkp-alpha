@@ -33,6 +33,17 @@ const Version = db.define(
   },
   {
     scopes: {
+      basic: function(versionId) {
+        return {
+          where: { id: versionId },
+          include: [
+            {
+              model: db.model("user"),
+              as: "creator"
+            }
+          ]
+        };
+      },
       byIdWithMetadata: function(versionId) {
         return {
           where: { id: versionId },

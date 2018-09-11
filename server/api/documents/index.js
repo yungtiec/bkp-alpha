@@ -9,6 +9,8 @@ module.exports = router;
 
 router
   .get("/", documentController.getDocuments)
+  .get("/:documentId", documentController.getDocument)
+  .get("/:documentId/questions", documentController.getDocumentLatestQuestion)
   .post(
     "/",
     ensureAuthentication,

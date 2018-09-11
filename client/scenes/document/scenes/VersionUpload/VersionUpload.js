@@ -25,6 +25,7 @@ class VersionUpload extends Component {
     this.state = {
       activeAccordionItemId: 0,
       scorecardError: false,
+      versionNumberError: false,
       isScorecard: false,
       uploadClicked: false
     };
@@ -38,8 +39,23 @@ class VersionUpload extends Component {
     this.props.updateCommentPeriodValue(evt.target.value);
   }
 
+  handleVersionNumberChange(evt) {
+    this.props.updateVersionNumber(evt.target.value);
+    if (evt.target.value.trim())
+      this.setState(prevState => ({
+        ...prevState,
+        versionNumberError: false
+      }));
+  }
+
   handleAccordionChange(key) {
-    if (key > 4)
+    if (key > 0)
+      this.setState(prevState => ({
+        ...prevState,
+        activeAccordionItemId: key,
+        versionNumberError: !this.props.versionNumber
+      }));
+    if (key > 5)
       this.setState(prevState => ({
         ...prevState,
         activeAccordionItemId: key,
@@ -62,7 +78,12 @@ class VersionUpload extends Component {
   }
 
   next(currentField) {
-    if (
+    if (currentField === "versionNumber" && !this.props.versionNumber) {
+      this.setState(prevState => ({
+        ...prevState,
+        versionNumberError: !this.props.versionNumber
+      }));
+    } else if (
       currentField === "scorecard" &&
       this.state.isScorecard &&
       !this.props.scorecardCompleted
@@ -74,14 +95,16 @@ class VersionUpload extends Component {
     else
       this.setState(prevState => ({
         ...prevState,
-        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 6,
-        scorecardError: false
+        activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 7,
+        scorecardError: false,
+        versionNumberError: !this.props.versionNumber
       }));
   }
 
   submit() {
     if (
       !!this.props.importedMarkdown &&
+      !!this.props.versionNumber &&
       ((this.state.isScorecard && this.props.scorecardCompleted) ||
         !this.state.isScorecard)
     ) {
@@ -95,6 +118,7 @@ class VersionUpload extends Component {
     const {
       isLoggedIn,
       width,
+      documentMetadata,
       documentQnasById,
       documentQnaIds,
       versionMetadata,
@@ -114,6 +138,7 @@ class VersionUpload extends Component {
       updateCommentPeriod,
       commentPeriodValue,
       commentPeriodUnit,
+      versionNumber,
       sidebarOpen,
       toggleSidebar,
       upvoteDocument,
@@ -125,23 +150,33 @@ class VersionUpload extends Component {
 
     return (
       <div className="project-document">
-        <DocumentHeader
-          versionMetadata={versionMetadata}
-          projectMetadata={versionMetadata.document.project}
-        />
-        <VersionToolbar
-          uploadMode={true}
-          uploadMarkdownToServer={uploadMarkdownToServer}
-          resetUpload={() => importMarkdown(null)}
-          projectMetadata={versionMetadata.document.project}
-          versionMetadata={versionMetadata}
-          documentQnasById={documentQnasById}
-          documentQnaIds={documentQnaIds}
-          upvoteDocument={upvoteDocument}
-          downvoteDocument={downvoteDocument}
-        />
         <Accordion onChange={this.handleAccordionChange}>
           <AccordionItem expanded={this.state.activeAccordionItemId === 0}>
+            <AccordionItemTitle>
+              <p className="upload-accordion__item-header">Version number</p>
+            </AccordionItemTitle>
+            <AccordionItemBody>
+              <div className="d-flex flex-column">
+                <p>set version number</p>
+                <input
+                  name="version-number"
+                  type="string"
+                  value={versionNumber}
+                  onChange={this.handleVersionNumberChange}
+                />
+                {this.state.versionNumberError ? (
+                  <p className="text-danger mt-2">version number required</p>
+                ) : null}
+                <button
+                  onClick={() => this.next("versionNumber")}
+                  className="btn btn-primary mt-4 align-self-end"
+                >
+                  next
+                </button>
+              </div>
+            </AccordionItemBody>
+          </AccordionItem>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 1}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">
                 Collaborators (optional)
@@ -170,7 +205,7 @@ class VersionUpload extends Component {
               </div>
             </AccordionItemBody>
           </AccordionItem>
-          <AccordionItem expanded={this.state.activeAccordionItemId === 1}>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 2}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">Comment period</p>
             </AccordionItemTitle>
@@ -204,7 +239,7 @@ class VersionUpload extends Component {
               </div>
             </AccordionItemBody>
           </AccordionItem>
-          <AccordionItem expanded={this.state.activeAccordionItemId === 2}>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">issues (part 1)</p>
             </AccordionItemTitle>
@@ -237,7 +272,7 @@ class VersionUpload extends Component {
               </div>
             </AccordionItemBody>
           </AccordionItem>
-          <AccordionItem expanded={this.state.activeAccordionItemId === 3}>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">issues (part 2)</p>
             </AccordionItemTitle>
@@ -278,7 +313,7 @@ class VersionUpload extends Component {
               </div>
             </AccordionItemBody>
           </AccordionItem>
-          <AccordionItem expanded={this.state.activeAccordionItemId === 4}>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 5}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">
                 Project score (optional)
@@ -315,7 +350,7 @@ class VersionUpload extends Component {
               </div>
             </AccordionItemBody>
           </AccordionItem>
-          <AccordionItem expanded={this.state.activeAccordionItemId === 5}>
+          <AccordionItem expanded={this.state.activeAccordionItemId === 6}>
             <AccordionItemTitle>
               <p className="upload-accordion__item-header">
                 Disclosure markdown
@@ -340,7 +375,7 @@ class VersionUpload extends Component {
                 documentQnasById={documentQnasById}
                 documentQnaIds={documentQnaIds}
                 versionMetadata={versionMetadata}
-                projectMetadata={versionMetadata.document.project}
+                projectMetadata={documentMetadata.project}
               />
             </AccordionItemBody>
           </AccordionItem>
@@ -363,6 +398,15 @@ class VersionUpload extends Component {
                 current={this.state.activeAccordionItemId}
                 direction="vertical"
               >
+                <Step
+                  title="version number"
+                  description="set version number for this document"
+                  status={
+                    this.state.versionNumberError
+                      ? "error"
+                      : this.state.activeAccordionItemId > 1 ? "finish" : "wait"
+                  }
+                />
                 <Step
                   title="collaborators"
                   description="select collaborator(s) to work on your disclosure"

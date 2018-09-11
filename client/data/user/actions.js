@@ -38,7 +38,7 @@ export const auth = (userInfo, method) => dispatch => {
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/document/1/version/1");
+        else history.push("/project/BKP/document/1/version/2");
       },
       authError => {
         // rare example: a good use case for parallel (non-catch) error handler
@@ -80,7 +80,7 @@ export const signinWithUport = () => dispatch =>
             pathname: "/user/profile",
             state: { edit: true, basicInfoMissing: true }
           });
-        else history.push("/project/BKP/document/1/version/1");
+        else history.push("/project/BKP/document/1/version/2");
       },
       authError => {
         dispatch(getUser({ error: authError }));

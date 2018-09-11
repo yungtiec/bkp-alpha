@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../history";
-import { orderBy, find } from "lodash";
+import { orderBy, find, isEmpty } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import { loadModal } from "../../../data/reducer";
 import policies from "../../../policies.js";
@@ -36,7 +36,8 @@ class VersionToolbar extends Component {
     const {
       resetUpload,
       projectMetadata,
-      versionMetadata,
+      documentMetadata,
+      latestVersionMetadata,
       documentQnasById,
       documentQnaIds,
       uploadMode,
@@ -48,18 +49,18 @@ class VersionToolbar extends Component {
     } = this.props;
 
     const documentMarkdown = getDocumentMarkdown({
-      documentTitle: versionMetadata.title,
+      documentTitle: latestVersionMetadata.title,
       documentQnaIds,
       documentQnasById
     });
 
     const hasUpvoted = !!find(
-      versionMetadata.document.upvotesFrom,
+      documentMetadata.upvotesFrom,
       upvotedUser => upvotedUser.id === user.id
     );
 
     const hasDownvoted = !!find(
-      versionMetadata.document.downvotesFrom,
+      documentMetadata.downvotesFrom,
       downvotedUser => downvotedUser.id === user.id
     );
 
@@ -77,16 +78,16 @@ class VersionToolbar extends Component {
             onClick={() =>
               upvoteDocument({
                 projectSymbol: projectMetadata.symbol,
-                documentId: versionMetadata.document.id,
-                versionId: versionMetadata.id,
+                documentId: documentMetadata.id,
+                versionId: latestVersionMetadata.id,
                 hasUpvoted,
                 hasDownvoted
               })
             }
           >
             <i className="fas fa-thumbs-up mr-2" />
-            {versionMetadata.document.upvotesFrom
-              ? versionMetadata.document.upvotesFrom.length
+            {documentMetadata.upvotesFrom
+              ? documentMetadata.upvotesFrom.length
               : 0}
           </button>
           <button
@@ -99,16 +100,16 @@ class VersionToolbar extends Component {
             onClick={() =>
               downvoteDocument({
                 projectSymbol: projectMetadata.symbol,
-                documentId: versionMetadata.document.id,
-                versionId: versionMetadata.id,
+                documentId: documentMetadata.id,
+                versionId: latestVersionMetadata.id,
                 hasUpvoted,
                 hasDownvoted
               })
             }
           >
             <i className="fas fa-thumbs-down mr-2" />
-            {versionMetadata.document.downvotesFrom
-              ? versionMetadata.document.downvotesFrom.length
+            {documentMetadata.downvotesFrom
+              ? documentMetadata.downvotesFrom.length
               : 0}
           </button>
           <div className="btn-group">
@@ -121,86 +122,45 @@ class VersionToolbar extends Component {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              {`Version ${this.props.versionMetadata.version_number}`}
+              {`Version ${
+                !isEmpty(this.props.versionMetadata)
+                  ? this.props.versionMetadata.version_number
+                  : this.props.latestVersionMetadata.version_number
+              }`}
             </button>
             <div className="dropdown-menu" aria-labelledby="versionMenuButton">
-              {this.props.versionMetadata.document.versions.map(v => (
-                <Link
-                  key={`version-dropdown__item-${v.id}`}
-                  class="dropdown-item"
-                  to={`/project/${this.props.projectMetadata.symbol}/document/${
-                    versionMetadata.document.id
-                  }/version/${v.id}`}
-                  style={
-                    v.hierarchyLevel ===
-                    this.props.versionMetadata.hierarchyLevel
-                      ? { fontWeight: 700 }
-                      : {}
-                  }
-                >
-                  {`Version ${v.version_number}`}
-                </Link>
-              ))}
+              {this.props.documentMetadata.versions.map(v => {
+                var versionMetadata = !isEmpty(this.props.versionMetadata)
+                  ? this.props.versionMetadata
+                  : this.props.latestVersionMetadata;
+                return (
+                  <Link
+                    key={`version-dropdown__item-${v.id}`}
+                    class="dropdown-item"
+                    to={`/project/${
+                      this.props.projectMetadata.symbol
+                    }/document/${documentMetadata.id}/version/${v.id}`}
+                    style={
+                      v.hierarchyLevel === versionMetadata.hierarchyLevel
+                        ? { fontWeight: 700 }
+                        : {}
+                    }
+                  >
+                    {`Version ${v.version_number}`}
+                  </Link>
+                );
+              })}
             </div>
           </div>
-          <PunditContainer policies={policies} user={user}>
-            <PunditTypeSet type="Disclosure">
-              <VisibleIf
-                action="Version"
-                model={{
-                  project: projectMetadata,
-                  disclosure: versionMetadata.document
-                }}
-              >
-                <div className="btn-group">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary dropdown-toggle"
-                    type="button"
-                    id="versionProgressButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/progress`}
-                    >
-                      View progress
-                    </Link>
-                  </button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="versionProgressButton"
-                  >
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/progress`}
-                      class="dropdown-item"
-                    >
-                      Milestone
-                    </Link>
-                    <Link
-                      to={`/project/${
-                        this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
-                        this.props.versionMetadata.id
-                      }/issues`}
-                      class="dropdown-item"
-                    >
-                      Issues
-                    </Link>
-                  </div>
-                </div>
-              </VisibleIf>
-            </PunditTypeSet>
-          </PunditContainer>
+          <button type="button" className="btn btn-outline-primary">
+            <a
+              href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View pdf
+            </a>
+          </button>
           {!uploadMode ? (
             <PunditContainer policies={policies} user={user}>
               <PunditTypeSet type="Disclosure">
@@ -208,16 +168,16 @@ class VersionToolbar extends Component {
                   action="Version"
                   model={{
                     project: projectMetadata,
-                    disclosure: versionMetadata.document
+                    disclosure: documentMetadata
                   }}
                 >
                   <button type="button" className="btn btn-outline-primary">
                     <Link
                       to={`/project/${
                         this.props.projectMetadata.symbol
-                      }/document/${versionMetadata.document.id}/version/${
+                      }/document/${documentMetadata.id}/version/${
                         orderBy(
-                          this.props.versionMetadata.document.versions,
+                          documentMetadata.versions,
                           ["hierarchyLevel"],
                           ["desc"]
                         )[0].id
@@ -288,7 +248,7 @@ class VersionToolbar extends Component {
                             download(
                               documentMarkdown,
                               `${this.props.projectMetadata.symbol.toLowerCase()}-${
-                                this.props.versionMetadata.id
+                                this.props.latestVersionMetadata.id
                               }.md`,
                               "text/markdown"
                             )
@@ -316,3 +276,41 @@ const mapState = (state, ownProps) => ({
 });
 
 export default connect(mapState, { notify, loadModal })(VersionToolbar);
+
+// <div className="btn-group">
+//   <button
+//     type="button"
+//     className="btn btn-outline-primary dropdown-toggle"
+//     type="button"
+//     id="versionProgressButton"
+//     data-toggle="dropdown"
+//     aria-haspopup="true"
+//     aria-expanded="false"
+//   >
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/progress`}
+//     >
+//       View progress
+//     </Link>
+//   </button>
+//   <div className="dropdown-menu" aria-labelledby="versionProgressButton">
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/progress`}
+//       class="dropdown-item"
+//     >
+//       Milestone
+//     </Link>
+//     <Link
+//       to={`/project/${this.props.projectMetadata.symbol}/document/${
+//         documentMetadata.id
+//       }/issues`}
+//       class="dropdown-item"
+//     >
+//       Issues
+//     </Link>
+//   </div>
+// </div>;

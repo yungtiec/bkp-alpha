@@ -24,12 +24,13 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const parentVersionId = orderBy(
-      state.scenes.document.data.metadata.document.versions,
+      state.scenes.document.data.documentMetadata.versions,
       ["hierarchyLevel"],
       ["desc"]
     )[0].id;
     const projectSymbol =
-      state.scenes.document.data.metadata.document.project.symbol;
+      state.scenes.document.data.documentMetadata.project.symbol;
+    const documentId = state.scenes.document.data.documentMetadata.id;
     const {
       markdown,
       resolvedIssueIds,
@@ -37,6 +38,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     } = state.scenes.document.data.upload;
     const version = await postMarkdown({
@@ -47,9 +49,14 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     });
-    history.push(`/project/${projectSymbol}/document/${version.id}`);
+    history.push(
+      `/project/${projectSymbol}/document/${documentId}/version/${
+        version.id
+      }`
+    );
     dispatch({
       type: types.MARKDOWN_UPLOADED
     });
@@ -91,4 +98,9 @@ export const updateCommentPeriodValue = commentPeriodValue => ({
 export const updateProjectScorecard = projectScorecard => ({
   type: types.PROJECT_SCORECARD_UPDATED,
   projectScorecard
+});
+
+export const updateVersionNumber = versionNumber => ({
+  type: types.VERSION_NUMBER_UPDATED,
+  versionNumber
 });

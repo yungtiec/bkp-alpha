@@ -31,6 +31,50 @@ const getDocuments = async (req, res, next) => {
   }
 };
 
+const getDocument = async (req, res, next) => {
+  try {
+    const document = await Document.scope({
+      method: ["includeVersionsWithOutstandingIssues", req.params.documentId]
+    }).findOne();
+    res.send(document);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getDocumentLatestQuestion = async (req, res, next) => {
+  try {
+    const document = await Document.scope({
+      method: ["includeVersions", req.params.documentId]
+    }).findOne();
+    const latestVersionId = _.maxBy(document.versions, "hierarchyLevel").id;
+    var rawVersion = await Version.scope({
+      method: ["byIdWithVersionQuestions", latestVersionId]
+    }).findOne();
+    var version_questions = rawVersion.version_questions.map(vq => {
+      vq = addHistory(vq);
+      vq.version_answers[0] = addHistory(vq.version_answers[0]);
+      return vq;
+    });
+    var version = _.assignIn(rawVersion.toJSON(), { version_questions });
+    res.send(version);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const addHistory = versionQuestionOrAnswer => {
+  versionQuestionOrAnswer = versionQuestionOrAnswer.toJSON
+    ? versionQuestionOrAnswer.toJSON()
+    : versionQuestionOrAnswer;
+  versionQuestionOrAnswer.history = (versionQuestionOrAnswer.ancestors || [])
+    .concat([_.omit(versionQuestionOrAnswer, ["ancestors"])])
+    .concat(versionQuestionOrAnswer.descendents || []);
+  delete versionQuestionOrAnswer["ancestors"];
+  delete versionQuestionOrAnswer["descendents"];
+  return versionQuestionOrAnswer;
+};
+
 const postDocument = async (req, res, next) => {
   try {
     var project = await Project.findOne({
@@ -67,7 +111,8 @@ const postDocument = async (req, res, next) => {
       document_id: document.id,
       creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
-      scorecard: req.body.scorecard
+      scorecard: req.body.scorecard,
+      version_number: req.body.versionNumber
     });
     var questionInstances = await Promise.map(
       markdownParsor.questions,
@@ -160,6 +205,7 @@ const postNewVersion = async (req, res, next) => {
       newIssues,
       commentPeriodUnit,
       commentPeriodValue,
+      versionNumber,
       scorecard
     } = req.body;
     var collaboratorEmails = req.body.collaboratorEmails.map(
@@ -200,6 +246,7 @@ const postNewVersion = async (req, res, next) => {
       document_id: parentVersion.document.id,
       creator_id: req.user.id,
       comment_until_unix: commentUntilInUnix,
+      version_number: versionNumber,
       scorecard
     });
     await parentVersion.addChild(version.id);
@@ -330,6 +377,8 @@ const postNewVersion = async (req, res, next) => {
 
 module.exports = {
   getDocuments,
+  getDocument,
+  getDocumentLatestQuestion,
   postDocument,
   postUpvote,
   postDownvote,

@@ -13,9 +13,7 @@ export default ({ documentIds, documentsById }) => {
             className="dashboard-listing__item py-2 pl-1"
           >
             <Link
-              to={`/project/${
-                documentsById[id].project.symbol
-              }/document/${id}/version/${documentsById[id].versions[0].id}`}
+              to={`/project/${documentsById[id].project.symbol}/document/${id}`}
               className="d-flex align-items-start"
             >
               <p className="mb-0">{documentsById[id].project.symbol}</p>

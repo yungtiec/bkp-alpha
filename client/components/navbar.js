@@ -50,7 +50,7 @@ class Navbar extends Component {
             )}
             {width > 600 ? (
               <Link
-                to="/project/BKP/document/1/version/1"
+                to="/project/BKP/document/1/version/2"
                 className="navbar__nav-item"
               >
                 framework
