@@ -1,17 +1,5 @@
 ## Refactor
-- frontend approach to data: https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md
-- naming
-  - survey => document, repo, root?
-  - projectSurveys => version, document:
-- frontend url design:
-  - like github https://github.com/FullstackAcademy/boilermaker/tree/deploy
-  - current naming: /projects/:symbol/surveys/:surveyId/project-surveys/:projectSurveyId
-  - new naming: /projects/:symbol/document/:documentId/versions/:versionsId
-  - plural
-
-## Re-design
-- navigating versions
-- admin dashboard
+https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md
 
 ## Disclosure markdown format
 
@@ -36,9 +24,9 @@ Now that you've got the code, follow these steps to get acclimated:
 
 * Update project name and description in `package.json` and `.travis.yml` files
 * `npm install`, or `yarn install` - whatever you're into
-* Create two postgres databases: `annotator` and `annotator-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
-  * By default, running `npm test` will use `annotator-test`, while regular development uses `annotator`
-* Create a file called `secrets.js` in the project root
+* Create two postgres databases: `bkp-alpha` and `bkp-alpha-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
+  * By default, running `npm test` will use `bkp-alpha-test`, while regular development uses `bkp-alpha`
+* Config file`secrets.js` in the project root
   * This file is `.gitignore`'d, and will *only* be required in your *development* environment
   * Its purpose is to attach the secret env variables that you'll use while developing
 
