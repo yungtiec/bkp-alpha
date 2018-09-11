@@ -45,5 +45,12 @@ In our app, we have different user roles, and each has permission to perform a c
 Check out ``policy.js`` in the client directory and ``access-control.js`` in the server directory for permission settings.
 
 # Backend
-- [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
+
+### Express.js
+
+### [Sequelize](http://docs.sequelizejs.com/manual/installation/getting-started.html)
+
+The official documentation is a great resource to learn.
+
+### [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
 
