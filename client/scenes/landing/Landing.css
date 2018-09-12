@@ -420,8 +420,23 @@ footer img {
 @media (max-width: 767px) {
   .btn-xl {
     padding: 15px 5px;
+    width: 10rem;
+    font-size: 12px;
+  }
+}
+@media (min-width: 374px) and (max-width: 500px) {
+  .btn-xl {
+    padding: 15px 5px;
+    width: 10rem;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 373px) {
+  .btn-xl {
+    padding: 15px 5px;
     width: 8rem;
-    font-size: 14px;
+    font-size: 10px;
   }
 }
 

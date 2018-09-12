@@ -65,7 +65,7 @@ const Landing = ({ user, logout }) => (
                     class="btn btn-landing btn-xl"
                     to="project/BKP/document/1/version/2"
                   >
-                    View Framework
+                    Collaborate on Framework
                   </Link>
                   <a
                     class="btn btn-landing btn-xl ml-2"
@@ -73,7 +73,7 @@ const Landing = ({ user, logout }) => (
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Download pdf
+                    View pdf
                   </a>
                 </div>
               </div>
@@ -117,8 +117,7 @@ const Landing = ({ user, logout }) => (
           </div>
           <div class="col-sm-11">
             <p>
-              Recommended disclosures that provide a frame of reference for
-              smart transparency.
+              Recommended transparency goals that provide projects and their communities a frame of reference for smart, useful transparency practices.
             </p>
           </div>
         </div>
