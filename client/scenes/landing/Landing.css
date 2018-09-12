@@ -376,7 +376,7 @@ footer img {
 
 .btn-landing {
   border-color: #2744cb;
-  background: #2744cb
+  background: #2744cb;
 }
 
 .btn-landing:hover,
@@ -415,6 +415,14 @@ footer img {
 .btn-xl {
   padding: 15px 25px;
   width: 14rem;
+}
+
+@media (max-width: 767px) {
+  .btn-xl {
+    padding: 15px 5px;
+    width: 8rem;
+    font-size: 14px;
+  }
 }
 
 /* General styles */

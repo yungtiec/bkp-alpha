@@ -65,15 +65,15 @@ const Landing = ({ user, logout }) => (
                     class="btn btn-landing btn-xl"
                     to="project/BKP/document/1/version/2"
                   >
-                    View Framework in App
+                    View Framework
                   </Link>
                   <a
-                    class="btn btn-landing btn-xl ml-3"
+                    class="btn btn-landing btn-xl ml-2"
                     href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Download pdf here
+                    Download pdf
                   </a>
                 </div>
               </div>
