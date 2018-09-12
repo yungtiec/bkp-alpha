@@ -65,8 +65,16 @@ const Landing = ({ user, logout }) => (
                     class="btn btn-landing btn-xl"
                     to="project/BKP/document/1/version/2"
                   >
-                    View Framework
+                    View Framework in App
                   </Link>
+                  <a
+                    class="btn btn-landing btn-xl ml-3"
+                    href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download pdf here
+                  </a>
                 </div>
               </div>
             </div>
@@ -146,7 +154,11 @@ const Landing = ({ user, logout }) => (
       <div className="container d-flex flex-column align-items-center">
         <img src="assets/consensys-logo-white-transparent.png" />
         <div className="mt-5">
-          <a href="https://tinyurl.com/y94wspyg" target="_blank" className="mr-4">
+          <a
+            href="https://tinyurl.com/y94wspyg"
+            target="_blank"
+            className="mr-4"
+          >
             privacy policy
           </a>
           <a

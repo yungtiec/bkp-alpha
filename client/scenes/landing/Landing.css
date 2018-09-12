@@ -413,7 +413,8 @@ footer img {
 }
 
 .btn-xl {
-  padding: 15px 45px;
+  padding: 15px 25px;
+  width: 14rem;
 }
 
 /* General styles */
