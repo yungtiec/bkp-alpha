@@ -64,15 +64,6 @@ const migrateUserRoles = async () => {
 
 const migrateProjects = async () => {
   const projects = await deprecatedDb.model("project").findAll({ raw: true });
-  const civil = await upgradedDb.model("project").create({
-    id: 2,
-    name: "civil",
-    symbol: "CVL"
-  });
-  await upgradedDb.model("project_admin").create({
-    user_id: 48,
-    project_id: 2
-  });
   await upgradedDb.model("project").bulkCreate(projects);
 };
 
@@ -186,7 +177,7 @@ const migrateDocuments = async () => {
       parentId: projectSurvey.parentId,
       hierarchyLevel: projectSurvey.hierarchyLevel,
       creator_id: projectSurvey.creator_id,
-      version_number: '0.4.0'
+      version_number: "0.4.0"
     });
     var versionQuestions = await Promise.all(
       projectSurvey.survey.survey_questions.map(async sq => {
@@ -259,7 +250,8 @@ const migrateDocuments = async () => {
         Promise.map(issues, issue =>
           upgradedDb.model("issue").create({
             open: issue.open,
-            comment_id: issue.comment_id ? issue.comment_id : null
+            comment_id: issue.comment_id ? issue.comment_id : null,
+            resolving_version_id: issue.resolving_project_survey_id
           })
         )
       );
@@ -272,21 +264,21 @@ const setSequenceManually = async () => {
     `ALTER SEQUENCE "comments_id_seq" RESTART WITH ${46};`
   );
   await upgradedDb.query(
-    `ALTER SEQUENCE "documents_id_seq" RESTART WITH ${2};`
+    `ALTER SEQUENCE "documents_id_seq" RESTART WITH ${3};`
   );
   await upgradedDb.query(`ALTER SEQUENCE "issues_id_seq" RESTART WITH ${33};`);
   await upgradedDb.query(
-    `ALTER SEQUENCE "notifications_id_seq" RESTART WITH ${25};`
+    `ALTER SEQUENCE "notifications_id_seq" RESTART WITH ${30};`
   );
   await upgradedDb.query(`ALTER SEQUENCE "projects_id_seq" RESTART WITH ${3};`);
   await upgradedDb.query(`ALTER SEQUENCE "roles_id_seq" RESTART WITH ${4};`);
   await upgradedDb.query(
-    `ALTER SEQUENCE "version_answers_id_seq" RESTART WITH ${46};`
+    `ALTER SEQUENCE "version_answers_id_seq" RESTART WITH ${74};`
   );
   await upgradedDb.query(
-    `ALTER SEQUENCE "version_questions_id_seq" RESTART WITH ${46};`
+    `ALTER SEQUENCE "version_questions_id_seq" RESTART WITH ${74};`
   );
-  await upgradedDb.query(`ALTER SEQUENCE "versions_id_seq" RESTART WITH ${2};`);
+  await upgradedDb.query(`ALTER SEQUENCE "versions_id_seq" RESTART WITH ${3};`);
 };
 
 migrate();

@@ -1,5 +1,5 @@
 {
-  "name": "annotation",
+  "name": "bkp-alpha",
   "version": "1.0.0",
   "description": "bkp annotator app",
   "main": "index.js",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
-    "@slack/client": "^4.1.0",
+    "@slack/client": "^4.6.0",
     "annotator": "git+https://github.com/yungtiec/tbp-annotator.git",
     "axios": "^0.15.3",
     "babel-plugin-import-inspector": "^2.0.0",

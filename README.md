@@ -1,44 +1,12 @@
-## Refactor
-- frontend approach to data: https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md
-- naming
-  - survey => document, repo, root?
-  - projectSurveys => version, document:
-- frontend url design:
-  - like github https://github.com/FullstackAcademy/boilermaker/tree/deploy
-  - current naming: /projects/:symbol/surveys/:surveyId/project-surveys/:projectSurveyId
-  - new naming: /projects/:symbol/document/:documentId/versions/:versionsId
-  - plural
-
-## Re-design
-- navigating versions
-- admin dashboard
-
-## Disclosure markdown format
-
-If you have no experience writing markdown files
-
-- checkout two markdown files in the data folder
-- checkout [github markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for how to write a markdown file that gets rendered with links, image, quotes...etc.
-
-
-
-### strict rules
-
-These are the rules specific to our application. Please follow them when writing disclosures so that our server can parse and store your works!
-
-- H1 (#  disclosure title) is reserved for disclosure title
-- H3 (### section title) is reserved for section title
-
-
-## Config
+# Config
 
 Now that you've got the code, follow these steps to get acclimated:
 
 * Update project name and description in `package.json` and `.travis.yml` files
 * `npm install`, or `yarn install` - whatever you're into
-* Create two postgres databases: `annotator` and `annotator-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
-  * By default, running `npm test` will use `annotator-test`, while regular development uses `annotator`
-* Create a file called `secrets.js` in the project root
+* Create two postgres databases: `bkp-alpha` and `bkp-alpha-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
+  * By default, running `npm test` will use `bkp-alpha-test`, while regular development uses `bkp-alpha`
+* Config file`secrets.js` in the project root
   * This file is `.gitignore`'d, and will *only* be required in your *development* environment
   * Its purpose is to attach the secret env variables that you'll use while developing
 
@@ -73,12 +41,11 @@ Either way, you'll need to set up your deployment server to start:
 1. Set up the [Heroku command line tools](https://devcenter.heroku.com/articles/heroku-cli)
 2. `heroku login`
 3. Add a git remote for heroku:
-  - **If you're creating a new app...**
-    1. `heroku create` or `heroku create your-app-name` if you have a name in mind.
-    2. `heroku addons:create heroku-postgresql:hobby-dev` to add ("provision") a postgres database to your heroku dyno
-
-  - **If you already have a Heroku app...**
-    1.  `heroku git:remote your-app-name` You'll need to be a collaborator on the app.
+  - `git remote add production https://git.heroku.com/bkp-alpha.git` This is for production.
+  - `git remote add development https://git.heroku.com/bkp-alpha-test.git` This is for development.
+4. Getting data for local development
+  - `heroku pg:pull DATABASE_URL bkp-alpha --app bkp-alpha`
+  - create a database named `bkp-alpha-test` for testing
 
 ### When you're ready to deploy
 
@@ -117,3 +84,75 @@ That's it! From now on, whenever `master` is updated on GitHub, Travis will auto
 Now, you should be deployed!
 
 Why do all of these steps? The big reason is because we don't want our production server to be cluttered up with dev dependencies like webpack, but at the same time we don't want our development git-tracking to be cluttered with production build files like bundle.js! By doing these steps, we make sure our development and production environments both stay nice and clean!
+
+# Frontend
+
+### Folder structure
+
+The code is structured following the fractal project structure. Here's a couple articles on using such strucutre.
+- [How to use Redux on highly scalable javascript applications?](https://medium.com/@alexmngn/how-to-use-redux-on-highly-scalable-javascript-applications-4e4b8cb5ef38)
+- [Fractal Project Structure](https://github.com/davezuko/react-redux-starter-kit/wiki/Fractal-Project-Structure)
+
+> Large, mature apps tend to naturally organize themselves in this way—analogous to large, mature trees (as in actual trees :evergreen_tree:). The trunk is the router, branches are route bundles, and leaves are views composed of common/shared components/containers. Global application and UI state should be placed on or close to the trunk (or perhaps at the base of a huge branch, eg. /app route).
+
+A few benefits include:
+- Routes can be bundled into chunks and loaded on demand
+- Ideally, logic is self-contained so that each route can be broken down into its own repo if needed.
+- It fits nicely with react-router v4 new way of nesting routes. In react-router-v4 you don't nest ``<Routes />``. Instead, you put them inside another ``<Component />``.
+
+Drawbacks I can speak of:
+- ``../../../../../`` in import statement.
+  - plan on using webpack or babel plugin for aliasing modules
+
+### Data component
+
+Read the data component part of [this article](https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md):
+
+### Dependencies
+
+##### [Annotator.js](http://annotatorjs.org/)
+
+It's part of the JQuery ecosystem, not React so the data flow of annotations is not managed by redux. We have to do some DOM manipulation when ``<QnaContainer />`` is mounted and updated.
+
+#### [Reapop](https://github.com/LouisBarranqueiro/reapop)
+
+A React and Redux toast
+
+#### [React Modal](https://github.com/reactjs/react-modal)
+
+We use a reducer to manage modal state. Check out [this article](
+https://stackoverflow.com/questions/35623656/how-can-i-display-a-modal-dialog-in-redux-that-performs-asynchronous-actions) for details implementation
+
+#### [React Pundit](https://github.com/jcgertig/react-pundit)
+
+Check out the [access control chart](https://drive.google.com/file/d/1p4ss0x2ps65ej-VKh72zQzalKb6Ic1P-/view?usp=sharing) for the app.
+
+In our app, we have different user roles, and each has permission to perform a certain set of actions. For example, in a document, both editors and project admins can verify comments and edit content, but project admin can also appoint editors. The button for appointing editors is only visible to project admins. In this case, We use React Pundit to manage access control down to component level.
+
+Check out ``policy.js`` in the client directory and ``access-control.js`` in the server directory for permission settings.
+
+# Backend
+
+### Express.js
+
+### [Sequelize](http://docs.sequelizejs.com/manual/installation/getting-started.html)
+
+The official documentation is a great resource to learn.
+
+### [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
+
+# Markdown parser
+
+## Disclosure markdown format
+
+If you have no experience writing markdown files
+
+- checkout two markdown files in the data folder
+- checkout [github markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for how to write a markdown file that gets rendered with links, image, quotes...etc.
+
+### strict rules
+
+These are the rules specific to our application. Please follow them when writing disclosures so that our server can parse and store your works!
+
+- H1 (#  disclosure title) is reserved for disclosure title
+- H3 (### section title) is reserved for section title
