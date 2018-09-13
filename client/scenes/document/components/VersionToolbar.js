@@ -154,7 +154,7 @@ class VersionToolbar extends Component {
           </div>
           <button type="button" className="btn btn-outline-primary">
             <a
-              href="https://drive.google.com/file/d/1XjDGO2GCkHee0kdomC4sYS1iE-y8RSnL/view"
+              href="https://static1.squarespace.com/static/5a329be3d7bdce9ea2f3a738/t/5b9a09b50ebbe8e9409e291a/1536821696423/The+Brooklyn+Project%E2%80%94Framework+Version+1+09_06_18.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
