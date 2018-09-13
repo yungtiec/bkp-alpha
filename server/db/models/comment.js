@@ -39,13 +39,6 @@ module.exports = (db, DataTypes) => {
       reviewed: {
         type: DataTypes.ENUM("pending", "spam", "verified"),
         defaultValue: "pending"
-      },
-      owner_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "user",
-          key: "id"
-        }
       }
     },
     {
@@ -307,6 +300,19 @@ module.exports = (db, DataTypes) => {
       as: "upvotesFrom",
       through: "comment_upvote",
       foreignKey: "comment_id"
+    });
+    Comment.belongsToMany(models.Tag, {
+      through: "comment_tag",
+      foreignKey: "comment_id"
+    });
+    Comment.hasOne(models.Issue, {
+      foreignKey: "comment_id"
+    });
+    Comment.belongsTo(models.Version, {
+      foreignKey: "version_id"
+    });
+    Comment.belongsTo(models.VersionQuestion, {
+      foreignKey: "version_question_id"
     });
   };
 
