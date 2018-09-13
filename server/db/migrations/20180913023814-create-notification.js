@@ -1,21 +1,26 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('notifications', {
+    return queryInterface.createTable("notifications", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       recipient_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "user",
+          key: "id"
+        }
       },
       sender_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "user",
+          key: "id"
+        }
       },
       uri: {
         type: Sequelize.TEXT
@@ -24,7 +29,8 @@ module.exports = {
         type: Sequelize.TEXT
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM,
+        values: ["seen", "read", "unread"]
       },
       read_date: {
         type: Sequelize.DATE
@@ -43,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('notifications');
+    return queryInterface.dropTable("notifications");
   }
 };

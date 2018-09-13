@@ -3,19 +3,19 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("documents", {
       id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
       title: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       description: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       forked: {
-        type: DataTypes.BOOLEAN,
+        type: Sequelize.BOOLEAN,
         defaultValue: false,
         references: {
           model: "document",
@@ -23,31 +23,31 @@ module.exports = {
         }
       },
       original_document_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "document",
           key: "id"
         }
       },
       original_version_number: {
-        type: DataTypes.INTEGER
+        type: Sequelize.INTEGER
       },
       project_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "project",
           key: "id"
         }
       },
       creator_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "user",
           key: "id"
         }
       },
       latest_version: {
-        type: DataTypes.INTEGER
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

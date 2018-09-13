@@ -1,54 +1,54 @@
 "use strict";
 module.exports = {
-  up: (queryInterface, DataTypes) => {
+  up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("comments", {
       id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
       uri: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       version_question_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "version_question",
           key: "id"
         }
       },
       version_answer_id: {
-        type: DataTypes.INTEGER
+        type: Sequelize.INTEGER
       },
       quote: {
-        type: DataTypes.TEXT
+        type: Sequelize.TEXT
       },
       comment: {
-        type: DataTypes.TEXT
+        type: Sequelize.TEXT
       },
       annotator_schema_version: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       ranges: {
-        type: DataTypes.ARRAY(DataTypes.JSON)
+        type: Sequelize.ARRAY(Sequelize.JSON)
       },
       upvotes: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         defaultValue: 0
       },
       reviewed: {
-        type: DataTypes.ENUM("pending", "spam", "verified"),
+        type: Sequelize.ENUM("pending", "spam", "verified"),
         defaultValue: "pending"
       },
       owner_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "user",
           key: "id"
         }
       },
       version_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "version",
           key: "id"
@@ -56,10 +56,10 @@ module.exports = {
       },
       // sequelize hierarchy
       hierarchyLevel: {
-        type: DataTypes.INTEGER
+        type: Sequelize.INTEGER
       },
       parentId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: "comment",
           key: "id"

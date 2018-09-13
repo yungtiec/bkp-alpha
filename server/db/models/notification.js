@@ -5,44 +5,45 @@ const { assignIn, uniqBy } = require("lodash");
 module.exports = (db, DataTypes) => {
   const Notification = sequelize.define("notification", {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     recipient_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: "user",
-        key: "id"
-      }
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     sender_id: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "user",
-        key: "id"
-      }
+      type: DataTypes.INTEGER
     },
     uri: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     message: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     status: {
-      type: Sequelize.ENUM,
+      type: DataTypes.ENUM,
       values: ["seen", "read", "unread"]
     },
     read_date: {
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     },
     disclosure_updated: {
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     }
   });
   Notification.associate = function(models) {
-    // associations can be defined here
+    Notification.belongsTo(User, {
+      foreignKey: "recipient_id",
+      as: "recipient",
+      constraints: false
+    });
+    Notification.belongsTo(User, {
+      foreignKey: "sender_id",
+      as: "sender",
+      constraints: false
+    });
   };
   Notification.notifyRootAndParent = function({
     sender,
