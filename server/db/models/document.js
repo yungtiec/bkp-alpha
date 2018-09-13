@@ -23,25 +23,13 @@ module.exports = (db, DataTypes) => {
         defaultValue: false
       },
       original_document_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "version",
-          key: "id"
-        }
+        type: DataTypes.INTEGER
       },
       original_version_number: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "document",
-          key: "id"
-        }
+        type: DataTypes.INTEGER
       },
       project_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "project",
-          key: "id"
-        }
+        type: DataTypes.INTEGER
       },
       latest_version: {
         type: DataTypes.INTEGER
@@ -228,7 +216,33 @@ module.exports = (db, DataTypes) => {
     }
   );
   Document.associate = function(models) {
-    // associations can be defined here
+    Document.hasMany(models.Version, {
+      foreignKey: "document_id"
+    });
+    Document.belongsTo(models.Project, {
+      foreignKey: "project_id"
+    });
+    Document.belongsTo(models.User, {
+      foreignKey: "creator_id",
+      as: "creator"
+    });
+    Document.belongsToMany(models.User, {
+      as: "upvotesFrom",
+      through: "document_upvote",
+      foreignKey: "document_id"
+    });
+    Document.hasMany(models.Document, {
+      foreignKey: "original_document_id"
+    });
+    Document.belongsTo(models.Document, {
+      foreignKey: "original_document_id",
+      as: "forkFrom"
+    });
+    Document.belongsToMany(models.User, {
+      through: "document_collaborator",
+      foreignKey: "document_id",
+      as: "collaborators"
+    });
   };
 
   Document.getDocumentsWithStats = async function({ offset, limit }) {
