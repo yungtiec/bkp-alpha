@@ -19,9 +19,6 @@ const VersionQuestion = db.define(
       type: Sequelize.TEXT,
       allowNull: false
     },
-    category_id: {
-      type: Sequelize.INTEGER
-    },
     latest: {
       type: Sequelize.BOOLEAN
     }

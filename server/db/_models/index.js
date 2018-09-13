@@ -7,7 +7,6 @@ const DocumentCollaborator = require("./document-collaborator");
 const Version = require("./version");
 const VersionAnswer = require("./version-answer");
 const VersionQuestion = require("./version-question");
-const QuestionCategory = require("./question-category");
 const Tag = require("./tag");
 const Issue = require("./issue");
 const Notification = require("./notification");
@@ -278,7 +277,6 @@ module.exports = {
   Project,
   Version,
   VersionAnswer,
-  QuestionCategory,
   Document,
   VersionQuestion,
   Tag,

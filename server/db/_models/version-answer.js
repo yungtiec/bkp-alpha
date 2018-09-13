@@ -12,9 +12,6 @@ const VersionAnswer = db.define(
     version_question_id: {
       type: Sequelize.INTEGER
     },
-    json: {
-      type: Sequelize.JSON
-    },
     markdown: {
       type: Sequelize.TEXT
     },
