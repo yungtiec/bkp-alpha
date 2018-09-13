@@ -227,8 +227,26 @@ module.exports = (db, DataTypes) => {
       }
     }
   );
+
+  Version.isHierarchy();
   Version.associate = function(models) {
-    // associations can be defined here
+    Version.hasMany(models.Issue, {
+      foreignKey: "resolving_version_id",
+      as: "resolvedIssues"
+    });
+    Version.hasMany(models.Comment, {
+      foreignKey: "version_id"
+    });
+    Version.belongsTo(models.Document, {
+      foreignKey: "document_id"
+    });
+    Version.hasMany(models.VersionQuestion, {
+      foreignKey: "version_id"
+    });
+    Version.belongsTo(models.User, {
+      foreignKey: "creator_id",
+      as: "creator"
+    });
   };
   return Version;
 };

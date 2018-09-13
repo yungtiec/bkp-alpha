@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("project_admins", {
+    return queryInterface.createTable("user_roles", {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -9,10 +9,10 @@ module.exports = {
           key: "id"
         }
       },
-      project_id: {
+      role_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "project",
+          model: "role",
           key: "id"
         }
       },
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("project_admins");
+    return queryInterface.dropTable("user_roles");
   }
 };

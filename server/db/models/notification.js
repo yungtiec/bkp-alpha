@@ -34,12 +34,12 @@ module.exports = (db, DataTypes) => {
     }
   });
   Notification.associate = function(models) {
-    Notification.belongsTo(User, {
+    Notification.belongsTo(models.User, {
       foreignKey: "recipient_id",
       as: "recipient",
       constraints: false
     });
-    Notification.belongsTo(User, {
+    Notification.belongsTo(models.User, {
       foreignKey: "sender_id",
       as: "sender",
       constraints: false

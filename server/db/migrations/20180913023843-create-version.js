@@ -1,24 +1,26 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('versions', {
+    return queryInterface.createTable("versions", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       document_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "document",
+          key: "id"
+        }
       },
       submitted: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       reviewed: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       comment_until_unix: {
         type: Sequelize.BIGINT
@@ -36,10 +38,20 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      }, // sequelize hierarchy
+      hierarchyLevel: {
+        type: Sequelize.INTEGER
+      },
+      parentId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "version",
+          key: "id"
+        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('versions');
+    return queryInterface.dropTable("versions");
   }
 };

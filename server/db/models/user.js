@@ -217,7 +217,63 @@ module.exports = (db, DataTypes) => {
     }
   );
   User.associate = function(models) {
-    // associations can be defined here
+    User.belongsToMany(models.Role, {
+      through: "user_role",
+      foreignKey: "user_id"
+    });
+    User;
+    User.hasMany(models.Notification, {
+      foreignKey: "recipient_id",
+      as: "notifications",
+      constraints: false
+    });
+    User.hasMany(models.Notification, {
+      foreignKey: "sender_id",
+      as: "activities",
+      constraints: false
+    });
+    User.belongsToMany(models.Project, {
+      through: "project_admin",
+      as: "managedProjects",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.Project, {
+      through: "project_editor",
+      as: "editedProjects",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.Comment, {
+      as: "upvotedComments",
+      through: "comment_upvote",
+      foreignKey: "user_id"
+    });
+    User.hasMany(models.Comment, {
+      foreignKey: "owner_id",
+      as: "comments"
+    });
+    User.hasMany(models.Document, {
+      foreignKey: "creator_id",
+      as: "documents"
+    });
+    User.hasMany(models.Version, {
+      foreignKey: "creator_id",
+      as: "createdVersions"
+    });
+    User.belongsToMany(models.Document, {
+      as: "upvotedDocuments",
+      through: "document_upvote",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.Document, {
+      as: "downvotedDocuments",
+      through: "document_downvote",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.Document, {
+      through: "document_collaborator",
+      foreignKey: "user_id",
+      as: "collaboratedDocuments"
+    });
   };
   /**
    * instanceMethods

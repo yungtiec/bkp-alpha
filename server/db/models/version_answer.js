@@ -16,8 +16,11 @@ module.exports = (db, DataTypes) => {
       type: DataTypes.BOOLEAN
     }
   });
+  VersionAnswer.isHierarchy();
   VersionAnswer.associate = function(models) {
-    // associations can be defined here
+    VersionAnswer.belongsTo(models.VersionQuestion, {
+      foreignKey: "version_question_id"
+    });
   };
   return VersionAnswer;
 };

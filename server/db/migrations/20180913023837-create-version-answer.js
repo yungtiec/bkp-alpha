@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('version_answers', {
+    return queryInterface.createTable("version_answers", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       version_question_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "version_question",
+          key: "id"
+        }
       },
       markdown: {
         type: Sequelize.TEXT
@@ -27,10 +27,20 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      }, // sequelize hierarchy
+      hierarchyLevel: {
+        type: Sequelize.INTEGER
+      },
+      parentId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "version_answer",
+          key: "id"
+        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('version_answers');
+    return queryInterface.dropTable("version_answers");
   }
 };

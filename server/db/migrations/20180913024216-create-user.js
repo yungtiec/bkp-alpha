@@ -1,24 +1,31 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable("users", {
       id: {
-        allowNull: false,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        primaryKey: true
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        // Making `.password` act like a func hides it when serializing to JSON.
+        // This is a hack to get around Sequelize's lack of a "private" option.
+        get() {
+          return () => this.getDataValue("password");
+        }
       },
       salt: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        // Making `.salt` act like a function hides it when serializing to JSON.
+        // This is a hack to get around Sequelize's lack of a "private" option.
+        get() {
+          return () => this.getDataValue("salt");
+        }
       },
       googleId: {
         type: Sequelize.STRING
@@ -42,13 +49,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       restricted_access: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       anonymity: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       onboard: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       reset_password_token: {
         type: Sequelize.STRING
@@ -67,6 +77,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.dropTable("users");
   }
 };

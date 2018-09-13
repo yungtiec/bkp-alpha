@@ -124,7 +124,19 @@ module.exports = (db, DataTypes) => {
     }
   );
   Project.associate = function(models) {
-    // associations can be defined here
+    Project.belongsToMany(models.User, {
+      through: "project_admin",
+      as: "admins",
+      foreignKey: "project_id"
+    });
+    Project.belongsToMany(models.User, {
+      through: "project_editor",
+      as: "editors",
+      foreignKey: "project_id"
+    });
+    Project.hasMany(models.Document, {
+      foreignKey: "project_id"
+    });
   };
   Project.getProjectWithStats = async function(projectSymbol) {
     const projectInstance = await Project.scope({

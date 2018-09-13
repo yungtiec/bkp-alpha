@@ -1,23 +1,22 @@
 "use strict";
 module.exports = (db, DataTypes) => {
-  const Role = db.define(
-    "role",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      name: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
-      }
+  const Role = db.define("role", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    {}
-  );
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    }
+  });
   Role.associate = function(models) {
-    // associations can be defined here
+    Role.belongsToMany(models.User, {
+      through: "user_role",
+      foreignKey: "role_id"
+    });
   };
   return Role;
 };

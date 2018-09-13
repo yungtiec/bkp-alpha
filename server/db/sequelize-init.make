@@ -33,3 +33,5 @@ sequelize model:create --name document_upvote --attributes user_id:integer,docum
 sequelize model:create --name document_downvote --attributes user_id:integer,document_id:integer
 
 sequelize model:create --name comment_tag --attributes comment_id:integer,tag_id:integer
+
+sequelize model:create --name user_role --attributes user_id:integer,role_id:integer
