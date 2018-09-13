@@ -19,16 +19,21 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: Sequelize.STRING
     },
+    comment_id: {
+      type: Sequelize.INTEGER
+    },
     resolving_version_id: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "version",
-        key: "id"
-      }
+      type: Sequelize.INTEGER
     }
   });
   Issue.associate = function(models) {
-    // associations can be defined here
+    Issue.belongsTo(model.Comment, {
+      foreignKey: "comment_id"
+    });
+    Issue.belongsTo(model.Version, {
+      foreignKey: "resolving_version_id",
+      as: "resolvingVersion"
+    });
   };
   return Issue;
 };

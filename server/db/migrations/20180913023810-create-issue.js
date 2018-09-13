@@ -1,15 +1,11 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('issues', {
+    return queryInterface.createTable("issues", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       name: {
         type: Sequelize.STRING
@@ -18,13 +14,25 @@ module.exports = {
         type: Sequelize.TEXT
       },
       open: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
       type: {
         type: Sequelize.STRING
       },
+      comment_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "comment",
+          key: "id"
+        }
+      },
       resolving_version_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "version",
+          key: "id"
+        }
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +45,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('issues');
+    return queryInterface.dropTable("issues");
   }
 };
