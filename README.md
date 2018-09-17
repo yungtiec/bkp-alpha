@@ -44,7 +44,7 @@ Either way, you'll need to set up your deployment server to start:
   - `git remote add production https://git.heroku.com/bkp-alpha.git` This is for production.
   - `git remote add staging https://git.heroku.com/bkp-alpha-test.git` This is for staging.
 4. Getting data for local development
-  - `heroku pg:pull DATABASE_URL bkp-alpha --app bkp-alpha`
+  - `heroku pg:pull DATABASE_URL bkp-dev --app bkp-alpha`
   - create a database named `bkp-alpha-test` for testing
 
 ### When you're ready to deploy

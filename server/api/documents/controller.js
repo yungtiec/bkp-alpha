@@ -51,7 +51,6 @@ const getDocumentLatestQuestion = async (req, res, next) => {
     var rawVersion = await Version.scope({
       method: ["byIdWithVersionQuestions", latestVersionId]
     }).findOne();
-    console.log(rawVersion)
     var version_questions = rawVersion.version_questions.map(vq => {
       vq = addHistory(vq);
       vq.version_answers[0] = addHistory(vq.version_answers[0]);

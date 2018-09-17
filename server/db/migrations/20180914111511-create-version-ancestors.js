@@ -2,7 +2,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("versionsancestors", {
-      commentId: {
+      versionId: {
         type: Sequelize.INTEGER,
         references: {
           model: "versions",
