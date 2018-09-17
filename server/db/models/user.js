@@ -82,7 +82,7 @@ module.exports = (db, DataTypes) => {
   );
   User.associate = function(models) {
     User.belongsToMany(models.role, {
-      through: "user_roles",
+      through: "user_role",
       foreignKey: "user_id"
     });
     User;

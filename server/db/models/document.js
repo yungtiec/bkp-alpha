@@ -108,10 +108,14 @@ module.exports = (db, DataTypes) => {
                 model: models["issue"],
                 as: "resolvedIssues", // use in SurveyProgress
                 required: false,
+                where: {
+                  comment_id: {
+                    [Sequelize.Op.not]: null
+                  }
+                },
                 include: [
                   {
-                    model: models["comment"],
-                    required: false
+                    model: models["comment"]
                   }
                 ]
               },

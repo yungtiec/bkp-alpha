@@ -49,7 +49,7 @@ const getIssues = async (req, res, next) => {
                 include: [
                   {
                     model: Document,
-                    attributes: ["project_id", "title"],
+                    attributes: ["id", "project_id", "title"],
                     include: [
                       {
                         model: Project,

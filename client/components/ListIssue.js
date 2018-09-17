@@ -11,9 +11,9 @@ export default ({ issueCommentIds, issuesByCommentId }) => {
           cardKey={id}
           cardHref={`/project/${
             issuesByCommentId[id].version.document.project.symbol
-          }/document/-/version/${issuesByCommentId[id].version.id}/comment/${
-            issuesByCommentId[id].id
-          }`}
+          }/document/${issuesByCommentId[id].version.document.id}/version/${
+            issuesByCommentId[id].version.id
+          }/comment/${issuesByCommentId[id].id}`}
           quote={issuesByCommentId[id].quote}
           mainTitle={issuesByCommentId[id].comment}
           subtitle={""}

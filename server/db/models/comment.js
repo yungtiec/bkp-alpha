@@ -73,7 +73,7 @@ module.exports = (db, DataTypes) => {
             include: [
               {
                 model: models.document,
-                attributes: ["title"],
+                attributes: ["id", "title"],
                 include: [
                   {
                     model: models.user,

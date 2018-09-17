@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { maxBy } from "lodash";
 
 export default ({ documentIds, documentsById }) => {
   return (
@@ -13,7 +14,11 @@ export default ({ documentIds, documentsById }) => {
             className="dashboard-listing__item py-2 pl-1"
           >
             <Link
-              to={`/project/${documentsById[id].project.symbol}/document/${id}`}
+              to={`/project/${
+                documentsById[id].project.symbol
+              }/document/${id}/version/${
+                maxBy(documentsById[id].versions, "hierarchyLevel").id
+              }`}
               className="d-flex align-items-start"
             >
               <p className="mb-0">{documentsById[id].project.symbol}</p>

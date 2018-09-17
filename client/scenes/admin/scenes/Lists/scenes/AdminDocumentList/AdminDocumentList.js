@@ -6,6 +6,7 @@ import {
   StackableTable
 } from "../../../../../../components";
 import history from "../../../../../../history";
+import { maxBy } from "lodash";
 
 const AdminDocumentList = ({ documentIds, documentsById }) => {
   const columns = [
@@ -34,6 +35,8 @@ const AdminDocumentList = ({ documentIds, documentsById }) => {
               history.push(
                 `/project/${rowInfo.original.project.id}/document/${
                   rowInfo.original.id
+                }/version/${
+                  maxBy(rowInfo.original.versions, "hierarchyLevel").id
                 }`
               );
             }
