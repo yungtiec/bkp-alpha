@@ -405,7 +405,7 @@ module.exports = (db, DataTypes) => {
   };
 
   const hookChain = user => {
-    // setSaltAndPassword(user);
+    setSaltAndPassword(user);
     setName(user);
   };
 
