@@ -148,6 +148,8 @@ We have a scheduler that run the following command everyday to make sure the sta
 `heroku pg:copy bkp-alpha::DATABASE_URL DATABASE_URL --app bkp-alpha-test
 `
 
+Read [here](https://github.com/IcaliaLabs/guides/wiki/Sync-staging-&-production-databases-with-heroku) about the setup
+
 We can also do it manually with a simple tool named `parity`
 
 https://robots.thoughtbot.com/how-to-back-up-a-heroku-production-database-to-staging
