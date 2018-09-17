@@ -2,8 +2,7 @@
 
 const { expect } = require("chai");
 const db = require("../index");
-const User = db.model("user");
-const Role = db.model("role");
+const { User, Role } = require("../index");
 Promise = require("bluebird");
 
 describe("User model", () => {
@@ -32,6 +31,5 @@ describe("User model", () => {
         expect(cody.correctPassword("bonez")).to.be.equal(false);
       });
     }); // end describe('correctPassword')
-
   }); // end describe('instanceMethods')
 }); // end describe('User model')

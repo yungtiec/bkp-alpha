@@ -1,12 +1,12 @@
 const { expect } = require("chai");
-const db = require("../index");
-const Comment = db.model("comment");
+const db = require("./index");
+const { Comment } = require("./index");
 
 var parent, child, grandChild;
 
 describe("Comment thread", () => {
   before(async () => {
-    await db.sync({ force: true });
+    await db.sequelize.sync({ force: true });
     parent = await Comment.create({
       uri: "http://localhost:8080/project/DG/survey/3",
       quote:
