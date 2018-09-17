@@ -13,8 +13,8 @@ module.exports = (db, DataTypes) => {
     }
   });
   Role.associate = function(models) {
-    Role.belongsToMany(models.User, {
-      through: "user_role",
+    Role.belongsToMany(models.user, {
+      through: "user_roles",
       foreignKey: "role_id"
     });
   };

@@ -6,9 +6,6 @@ module.exports = (db, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    version_question_id: {
-      type: DataTypes.INTEGER
-    },
     markdown: {
       type: DataTypes.TEXT
     },
@@ -18,7 +15,7 @@ module.exports = (db, DataTypes) => {
   });
   VersionAnswer.isHierarchy();
   VersionAnswer.associate = function(models) {
-    VersionAnswer.belongsTo(models.VersionQuestion, {
+    VersionAnswer.belongsTo(models.version_question, {
       foreignKey: "version_question_id"
     });
   };

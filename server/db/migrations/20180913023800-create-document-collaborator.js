@@ -11,20 +11,6 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "user",
-          key: "id"
-        }
-      },
-      document_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "document",
-          key: "id"
-        }
-      },
       document_version_number: {
         type: Sequelize.INTEGER
       },

@@ -7,7 +7,8 @@ const {
   Project,
   Document,
   Comment,
-  Issue
+  Issue,
+  Version
 } = require("../../db/models");
 const { assignIn } = require("lodash");
 
@@ -36,13 +37,13 @@ const getUserProjects = async (req, res, next) => {
     var includeQuery = {
       include: [
         {
-          model: db.model("user"),
-          through: db.model("project_admin"),
+          model: User,
+          through: "project_admin",
           as: "admins"
         },
         {
-          model: db.model("user"),
-          through: db.model("project_editor"),
+          model: User,
+          through: "project_editor",
           as: "editors"
         }
       ]
@@ -90,14 +91,14 @@ const getUserDocuments = async (req, res, next) => {
       case "editor":
         ownDocuments = await Document.findAll({
           include: [
-            { model: db.model("version") },
+            { model: Version },
             {
               model: Project,
               required: true,
               include: [
                 {
                   model: User,
-                  through: db.model("project_editor"),
+                  through: "project_editor",
                   as: "editors",
                   where: { id: req.user.id },
                   required: true
@@ -108,14 +109,14 @@ const getUserDocuments = async (req, res, next) => {
         });
         collaboratorDocuments = await req.user.getCollaboratedDocuments({
           include: [
-            { model: db.model("version") },
+            { model: Version },
             {
-              model: db.model("project")
+              model: Project
             }
           ],
           order: [
             ["createdAt", "DESC"],
-            [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
+            [{ model: Version }, "hierarchyLevel", "DESC"]
           ]
         });
         documents = ownDocuments.concat(collaboratorDocuments);
@@ -123,14 +124,14 @@ const getUserDocuments = async (req, res, next) => {
       case "project_admin":
         ownDocuments = await Document.findAll({
           include: [
-            { model: db.model("version") },
+            { model: Version },
             {
               model: Project,
               required: true,
               include: [
                 {
                   model: User,
-                  through: db.model("project_admin"),
+                  through: "project_admin",
                   as: "admins",
                   where: { id: req.user.id },
                   required: true
@@ -141,14 +142,14 @@ const getUserDocuments = async (req, res, next) => {
         });
         collaboratorDocuments = await req.user.getCollaboratedDocuments({
           include: [
-            { model: db.model("version") },
+            { model: Version },
             {
-              model: db.model("project")
+              model: Project
             }
           ],
           order: [
             ["createdAt", "DESC"],
-            [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
+            [{ model: Version }, "hierarchyLevel", "DESC"]
           ]
         });
         documents = ownDocuments.concat(collaboratorDocuments);
@@ -198,7 +199,7 @@ const getUserComments = async (req, res, next) => {
     };
   }
   try {
-    const { comments, commentCount } = await User.getCommentsAndCount(queryObj);
+    const { pagedComments, commentCount } = await User.getCommentsAndCount(queryObj);
     res.send({ comments: pagedComments, commentCount: commentCount });
   } catch (err) {
     next(err);

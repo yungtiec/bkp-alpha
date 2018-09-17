@@ -7,21 +7,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      recipient_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "user",
-          key: "id"
-        }
-      },
-      sender_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "user",
-          key: "id"
-        }
-      },
       uri: {
         type: Sequelize.TEXT
       },

@@ -16,35 +16,10 @@ module.exports = {
       },
       forked: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        references: {
-          model: "document",
-          key: "id"
-        }
-      },
-      original_document_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "document",
-          key: "id"
-        }
+        defaultValue: false
       },
       original_version_number: {
         type: Sequelize.INTEGER
-      },
-      project_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "project",
-          key: "id"
-        }
-      },
-      creator_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "user",
-          key: "id"
-        }
       },
       latest_version: {
         type: Sequelize.INTEGER

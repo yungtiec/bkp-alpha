@@ -49,6 +49,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "morgan": "^1.8.1",
+    "mysql2": "^1.6.1",
     "normalize.css": "^8.0.0",
     "npm": "^6.1.0",
     "passport": "^0.3.2",

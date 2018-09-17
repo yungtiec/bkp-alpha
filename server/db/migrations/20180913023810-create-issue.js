@@ -20,20 +20,6 @@ module.exports = {
       type: {
         type: Sequelize.STRING
       },
-      comment_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "comment",
-          key: "id"
-        }
-      },
-      resolving_version_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version",
-          key: "id"
-        }
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

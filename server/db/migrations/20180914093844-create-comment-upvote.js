@@ -1,18 +1,18 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("comment_tags", {
-      comment_id: {
+    return queryInterface.createTable("comment_upvotes", {
+      user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "comment",
+          model: "users",
           key: "id"
         }
       },
-      tag_id: {
+      comment_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "tag",
+          model: "comments",
           key: "id"
         }
       },
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("comment_tags");
+    return queryInterface.dropTable("comment_upvotes");
   }
 };

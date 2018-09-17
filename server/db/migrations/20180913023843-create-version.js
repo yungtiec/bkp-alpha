@@ -7,13 +7,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      document_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "document",
-          key: "id"
-        }
-      },
       submitted: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
@@ -41,13 +34,6 @@ module.exports = {
       }, // sequelize hierarchy
       hierarchyLevel: {
         type: Sequelize.INTEGER
-      },
-      parentId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version",
-          key: "id"
-        }
       }
     });
   },

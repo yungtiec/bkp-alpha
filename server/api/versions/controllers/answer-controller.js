@@ -50,13 +50,13 @@ const postAnswer = async (req, res, next) => {
       where: { id: newlyAddedVersionAnswer.id },
       include: [
         {
-          model: db.model("version_answer"),
+          model: VersionAnswer,
           as: "ancestors",
           attributes: ["id", "createdAt"],
           required: false
         },
         {
-          model: db.model("version_answer"),
+          model: VersionAnswer,
           as: "descendents",
           attributes: ["id", "createdAt"],
           required: false
@@ -65,7 +65,7 @@ const postAnswer = async (req, res, next) => {
       order: [
         [
           {
-            model: db.model("version_answer"),
+            model: VersionAnswer,
             as: "descendents"
           },
           "hierarchyLevel",
@@ -73,7 +73,7 @@ const postAnswer = async (req, res, next) => {
         ],
         [
           {
-            model: db.model("version_answer"),
+            model: VersionAnswer,
             as: "ancestors"
           },
           "hierarchyLevel",

@@ -1,5 +1,5 @@
 Promise = require("bluebird");
-const db = require("../server/db");
+const db = require("../server/db/models");
 const {
   User,
   Permission,
@@ -22,7 +22,7 @@ const csv_parse = require("csv-parse");
 const parse = Promise.promisify(csv_parse);
 
 async function seed() {
-  await db.sync({ force: true });
+  await db.sequelize.sync({ force: true });
   console.log("db synced!");
   var projects = await seedProject();
   await seedPermission();
@@ -133,25 +133,23 @@ async function seedDocumentFromMarkdown({
   });
   var questionInstances = await Promise.map(
     markdownParsor.questions,
-    questionObject =>
-      Question.create({
-        markdown: `### ${questionObject.question}`
-      }).then(async question => {
-        var answer = markdownParsor.findAnswerToQuestion(
-          questionObject.order_in_version
-        );
-        var versionQuestion = await VersionQuestion.create({
-          version_id: version.id,
-          question_id: question.id,
-          order_in_version: questionObject.order_in_version
-        });
-        await VersionAnswer.create({
-          markdown: answer,
-          version_question_id: versionQuestion.id,
-          version_id: version.id
-        });
-        return question;
-      })
+    async questionObject => {
+      var answer = markdownParsor.findAnswerToQuestion(
+        questionObject.order_in_version
+      );
+      var versionQuestion = await VersionQuestion.create({
+        version_id: version.id,
+        order_in_version: questionObject.order_in_version,
+        markdown: `### ${questionObject.question}`,
+        latest: true
+      });
+      await VersionAnswer.create({
+        markdown: answer,
+        version_question_id: versionQuestion.id,
+        version_id: version.id,
+        latest: true
+      });
+    }
   );
 }
 
@@ -163,7 +161,7 @@ seed()
   })
   .then(() => {
     console.log("closing db connection");
-    db.close();
+    db.sequelize.close();
     console.log("db connection closed");
   });
 

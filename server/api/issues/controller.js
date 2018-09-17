@@ -1,6 +1,13 @@
 const Sequelize = require("sequelize");
 const db = require("../../db");
-const { Comment, Issue } = require("../../db/models");
+const {
+  Comment,
+  Issue,
+  User,
+  Version,
+  Document,
+  Project
+} = require("../../db/models");
 const moment = require("moment");
 const _ = require("lodash");
 Promise = require("bluebird");
@@ -25,7 +32,7 @@ const getIssues = async (req, res, next) => {
                 required: true
               },
               {
-                model: db.model("user"),
+                model: User,
                 as: "owner",
 
                 attributes: [
@@ -37,15 +44,15 @@ const getIssues = async (req, res, next) => {
                 ]
               },
               {
-                model: db.model("version"),
+                model: Version,
                 attributes: ["document_id", "id"],
                 include: [
                   {
-                    model: db.model("document"),
+                    model: Document,
                     attributes: ["project_id", "title"],
                     include: [
                       {
-                        model: db.model("project"),
+                        model: Project,
                         attributes: ["symbol"]
                       }
                     ]
@@ -62,8 +69,8 @@ const getIssues = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}
+};
 
 module.exports = {
   getIssues
-}
+};

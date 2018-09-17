@@ -3,18 +3,11 @@ const Sequelize = require("sequelize");
 const { assignIn, uniqBy } = require("lodash");
 
 module.exports = (db, DataTypes) => {
-  const Notification = sequelize.define("notification", {
+  const Notification = db.define("notification", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
-    },
-    recipient_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    sender_id: {
-      type: DataTypes.INTEGER
     },
     uri: {
       type: DataTypes.TEXT
@@ -34,12 +27,12 @@ module.exports = (db, DataTypes) => {
     }
   });
   Notification.associate = function(models) {
-    Notification.belongsTo(models.User, {
+    Notification.belongsTo(models.user, {
       foreignKey: "recipient_id",
       as: "recipient",
       constraints: false
     });
-    Notification.belongsTo(models.User, {
+    Notification.belongsTo(models.user, {
       foreignKey: "sender_id",
       as: "sender",
       constraints: false

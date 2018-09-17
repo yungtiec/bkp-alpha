@@ -2,35 +2,29 @@
 module.exports = (sequelize, DataTypes) => {
   const Issue = sequelize.define("issue", {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     name: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     description: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     open: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
     type: {
-      type: Sequelize.STRING
-    },
-    comment_id: {
-      type: Sequelize.INTEGER
-    },
-    resolving_version_id: {
-      type: Sequelize.INTEGER
+      type: DataTypes.STRING
     }
   });
   Issue.associate = function(models) {
-    Issue.belongsTo(model.Comment, {
+    Issue.belongsTo(models.comment, {
       foreignKey: "comment_id"
     });
-    Issue.belongsTo(model.Version, {
+    Issue.belongsTo(models.version, {
       foreignKey: "resolving_version_id",
       as: "resolvingVersion"
     });

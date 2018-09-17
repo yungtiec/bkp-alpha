@@ -77,204 +77,206 @@ module.exports = (db, DataTypes) => {
         displayName() {
           return this.anonymity ? "Anonymous" : this.name;
         }
-      },
-      scopes: {
-        comments: function({
-          userId,
-          limit,
-          offset,
-          reviewStatus,
-          issueStatus,
-          projects
-        }) {
-          var commentQueryObj = getCommentQueryObj({
-            queryObj: {
-              userId,
-              limit,
-              offset,
-              reviewStatus,
-              projects,
-              issueStatus
-            },
-            order: true
-          });
-          return {
-            where: { id: userId },
-            attributes: [
-              "id",
-              "email",
-              "name",
-              "first_name",
-              "last_name",
-              "organization",
-              "anonymity",
-              "onboard"
-            ],
-            include: [commentQueryObj]
-          };
-        },
-        commentCount: function({
+      }
+    }
+  );
+  User.associate = function(models) {
+    User.belongsToMany(models.role, {
+      through: "user_roles",
+      foreignKey: "user_id"
+    });
+    User;
+    User.hasMany(models.notification, {
+      foreignKey: "recipient_id",
+      as: "notifications",
+      constraints: false
+    });
+    User.hasMany(models.notification, {
+      foreignKey: "sender_id",
+      as: "activities",
+      constraints: false
+    });
+    User.belongsToMany(models.project, {
+      through: "project_admin",
+      as: "managedProjects",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.project, {
+      through: "project_editor",
+      as: "editedProjects",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.comment, {
+      as: "upvotedComments",
+      through: "comment_upvote",
+      foreignKey: "user_id"
+    });
+    User.hasMany(models.comment, {
+      foreignKey: "owner_id",
+      as: "comments"
+    });
+    User.hasMany(models.document, {
+      foreignKey: "creator_id",
+      as: "documents"
+    });
+    User.hasMany(models.version, {
+      foreignKey: "creator_id",
+      as: "createdVersions"
+    });
+    User.belongsToMany(models.document, {
+      as: "upvotedDocuments",
+      through: "document_upvote",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.document, {
+      as: "downvotedDocuments",
+      through: "document_downvote",
+      foreignKey: "user_id"
+    });
+    User.belongsToMany(models.document, {
+      through: "document_collaborator",
+      foreignKey: "user_id",
+      as: "collaboratedDocuments"
+    });
+  };
+
+  User.loadScopes = function(models) {
+    User.addScope("comments", function({
+      userId,
+      limit,
+      offset,
+      reviewStatus,
+      issueStatus,
+      projects
+    }) {
+      var commentQueryObj = getCommentQueryObj({
+        queryObj: {
           userId,
           limit,
           offset,
           reviewStatus,
           projects,
           issueStatus
-        }) {
-          var commentQueryObj = getCommentQueryObj({
-            queryObj: {
-              userId,
-              limit,
-              offset,
-              reviewStatus,
-              projects,
-              issueStatus
-            },
-            order: false,
-            pageCount: true
-          });
-          return {
-            where: { id: userId },
-            attributes: ["id"],
-            include: [commentQueryObj]
-          };
         },
-        roles: function(userId) {
-          return {
-            where: { id: userId },
-            include: [
-              {
-                model: db.model("role")
+        order: true
+      });
+      return {
+        where: { id: userId },
+        attributes: [
+          "id",
+          "email",
+          "name",
+          "first_name",
+          "last_name",
+          "organization",
+          "anonymity",
+          "onboard"
+        ],
+        include: [commentQueryObj]
+      };
+    });
+    User.addScope("commentCount", function({
+      userId,
+      limit,
+      offset,
+      reviewStatus,
+      projects,
+      issueStatus
+    }) {
+      var commentQueryObj = getCommentQueryObj({
+        queryObj: {
+          userId,
+          limit,
+          offset,
+          reviewStatus,
+          projects,
+          issueStatus
+        },
+        order: false,
+        pageCount: true
+      });
+      return {
+        where: { id: userId },
+        attributes: ["id"],
+        include: [commentQueryObj]
+      };
+    });
+    User.addScope("roles", function(userId) {
+      return {
+        where: { id: userId },
+        include: [
+          {
+            model: models.role
+          }
+        ]
+      };
+    });
+    User.addScope("basicInfo", function({ userId, googleId, uportAddress }) {
+      var query;
+      if (userId) query = { id: userId };
+      if (googleId) query = { googleId };
+      if (uportAddress) query = { uportAddress };
+      return {
+        where: query,
+        attributes: [
+          "id",
+          "email",
+          "name",
+          "first_name",
+          "last_name",
+          "organization",
+          "restricted_access",
+          "anonymity",
+          "onboard",
+          "createdAt"
+        ],
+        include: [
+          {
+            model: models.role,
+            attributes: ["name"]
+          },
+          { model: models.project, as: "managedProjects" },
+          { model: models.project, as: "editedProjects" }
+        ]
+      };
+    });
+    User.addScope("notifications", function(userId) {
+      return {
+        where: { id: userId },
+        attributes: ["id"],
+        include: [
+          {
+            model: models.notification,
+            required: false,
+            as: "notifications",
+            where: {
+              status: {
+                [Sequelize.Op.or]: [
+                  { [Sequelize.Op.eq]: "unread" },
+                  { [Sequelize.Op.eq]: "seen" }
+                ]
               }
-            ]
-          };
-        },
-        basicInfo: function({ userId, googleId, uportAddress }) {
-          var query;
-          if (userId) query = { id: userId };
-          if (googleId) query = { googleId };
-          if (uportAddress) query = { uportAddress };
-          return {
-            where: query,
-            attributes: [
-              "id",
-              "email",
-              "name",
-              "first_name",
-              "last_name",
-              "organization",
-              "restricted_access",
-              "anonymity",
-              "onboard",
-              "createdAt"
-            ],
+            },
             include: [
               {
-                model: db.model("role"),
-                attributes: ["name"]
-              },
-              { model: db.model("project"), as: "managedProjects" },
-              { model: db.model("project"), as: "editedProjects" }
-            ]
-          };
-        },
-        notifications: function(userId) {
-          return {
-            where: { id: userId },
-            attributes: ["id"],
-            include: [
-              {
-                model: db.model("notification"),
-                required: false,
-                as: "notifications",
-                where: {
-                  status: {
-                    [Sequelize.Op.or]: [
-                      { [Sequelize.Op.eq]: "unread" },
-                      { [Sequelize.Op.eq]: "seen" }
-                    ]
-                  }
-                },
-                include: [
-                  {
-                    model: db.model("user"),
-                    as: "sender",
-                    attributes: [
-                      "id",
-                      "email",
-                      "name",
-                      "first_name",
-                      "last_name",
-                      "organization"
-                    ]
-                  }
+                model: models.user,
+                as: "sender",
+                attributes: [
+                  "id",
+                  "email",
+                  "name",
+                  "first_name",
+                  "last_name",
+                  "organization"
                 ]
               }
             ]
-          };
-        }
-      }
-    }
-  );
-  User.associate = function(models) {
-    User.belongsToMany(models.Role, {
-      through: "user_role",
-      foreignKey: "user_id"
-    });
-    User;
-    User.hasMany(models.Notification, {
-      foreignKey: "recipient_id",
-      as: "notifications",
-      constraints: false
-    });
-    User.hasMany(models.Notification, {
-      foreignKey: "sender_id",
-      as: "activities",
-      constraints: false
-    });
-    User.belongsToMany(models.Project, {
-      through: "project_admin",
-      as: "managedProjects",
-      foreignKey: "user_id"
-    });
-    User.belongsToMany(models.Project, {
-      through: "project_editor",
-      as: "editedProjects",
-      foreignKey: "user_id"
-    });
-    User.belongsToMany(models.Comment, {
-      as: "upvotedComments",
-      through: "comment_upvote",
-      foreignKey: "user_id"
-    });
-    User.hasMany(models.Comment, {
-      foreignKey: "owner_id",
-      as: "comments"
-    });
-    User.hasMany(models.Document, {
-      foreignKey: "creator_id",
-      as: "documents"
-    });
-    User.hasMany(models.Version, {
-      foreignKey: "creator_id",
-      as: "createdVersions"
-    });
-    User.belongsToMany(models.Document, {
-      as: "upvotedDocuments",
-      through: "document_upvote",
-      foreignKey: "user_id"
-    });
-    User.belongsToMany(models.Document, {
-      as: "downvotedDocuments",
-      through: "document_downvote",
-      foreignKey: "user_id"
-    });
-    User.belongsToMany(models.Document, {
-      through: "document_collaborator",
-      foreignKey: "user_id",
-      as: "collaboratedDocuments"
+          }
+        ]
+      };
     });
   };
+
   /**
    * instanceMethods
    */
@@ -373,7 +375,7 @@ module.exports = (db, DataTypes) => {
     var { comments } = await User.scope({
       method: ["commentCount", cloneDeep(queryObj)]
     }).findOne();
-    pagedComments = user.comments
+    var pagedComments = user.comments
       .filter(comment => comment.version)
       .map(comment => {
         comment = comment.toJSON();
@@ -403,7 +405,7 @@ module.exports = (db, DataTypes) => {
   };
 
   const hookChain = user => {
-    setSaltAndPassword(user);
+    // setSaltAndPassword(user);
     setName(user);
   };
 

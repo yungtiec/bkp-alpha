@@ -1,13 +1,13 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-  const Tag = sequelize.define("tag", {
+module.exports = (db, DataTypes) => {
+  const Tag = db.define("tag", {
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false
     }
   });
   Tag.associate = function(models) {
-    Tag.belongsToMany(models.Comment, {
+    Tag.belongsToMany(models.comment, {
       through: "comment_tag",
       foreignKey: "tag_id"
     });

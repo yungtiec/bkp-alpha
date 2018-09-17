@@ -1,4 +1,4 @@
-const sslRedirect = require('heroku-ssl-redirect');
+const sslRedirect = require("heroku-ssl-redirect");
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
@@ -7,8 +7,8 @@ const compression = require("compression");
 const session = require("express-session");
 const passport = require("passport");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
-const db = require("./db");
-const sessionStore = new SequelizeStore({ db });
+const db = require("./db").sequelize;
+const sessionStore = new SequelizeStore({ db: db });
 const PORT = process.env.PORT || 8000;
 const app = express();
 module.exports = app;
@@ -31,7 +31,7 @@ passport.deserializeUser((id, done) =>
       where: { id },
       include: [
         {
-          model: db.model("role")
+          model: db.models.role
         }
       ]
     })

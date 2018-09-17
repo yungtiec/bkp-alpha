@@ -10,13 +10,6 @@ module.exports = {
       uri: {
         type: Sequelize.STRING
       },
-      version_question_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version_question",
-          key: "id"
-        }
-      },
       version_answer_id: {
         type: Sequelize.INTEGER
       },
@@ -40,30 +33,9 @@ module.exports = {
         type: Sequelize.ENUM("pending", "spam", "verified"),
         defaultValue: "pending"
       },
-      owner_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "user",
-          key: "id"
-        }
-      },
-      version_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version",
-          key: "id"
-        }
-      },
       // sequelize hierarchy
       hierarchyLevel: {
         type: Sequelize.INTEGER
-      },
-      parentId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "comment",
-          key: "id"
-        }
       },
       createdAt: {
         allowNull: false,

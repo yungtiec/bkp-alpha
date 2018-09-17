@@ -3,245 +3,245 @@ const Sequelize = require("sequelize");
 const _ = require("lodash");
 
 module.exports = (db, DataTypes) => {
-  const Document = db.define(
-    "document",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      description: {
-        type: DataTypes.STRING
-      },
-      forked: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
-      original_document_id: {
-        type: DataTypes.INTEGER
-      },
-      original_version_number: {
-        type: DataTypes.INTEGER
-      },
-      project_id: {
-        type: DataTypes.INTEGER
-      },
-      latest_version: {
-        type: DataTypes.INTEGER
-      }
+  const Document = db.define("document", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    {
-      scopes: {
-        includeVersionsWithOutstandingIssues: function(documentId) {
-          return {
-            where: { id: Number(documentId) },
-            include: [
-              {
-                model: db.model("project"),
-                include: [
-                  {
-                    model: db.model("user"),
-                    through: db.model("project_admin"),
-                    as: "admins"
-                  },
-                  {
-                    model: db.model("user"),
-                    through: db.model("project_editor"),
-                    as: "editors"
-                  }
-                ]
-              },
-              {
-                model: db.model("version"),
-                attributes: [
-                  "id",
-                  "hierarchyLevel",
-                  "version_number",
-                  "creator_id",
-                  "createdAt"
-                ],
-                include: [
-                  { model: db.model("document") },
-                  {
-                    model: db.model("user"),
-                    as: "creator"
-                  },
-                  {
-                    model: db.model("issue"),
-                    as: "resolvedIssues", // use in SurveyProgress
-                    required: false,
-                    include: [
-                      {
-                        model: db.model("comment"),
-                        required: false
-                      }
-                    ]
-                  },
-                  {
-                    model: db.model("comment"), // use in SurveyIssues
-                    required: false,
-                    include: [
-                      {
-                        model: db.model("issue"),
-                        required: false,
-                        where: { open: true }
-                      }
-                    ]
-                  }
-                ],
-                order: [[{ model: db.model("version") }, "hierarchyLevel"]]
-              },
-              {
-                model: db.model("user"),
-                as: "collaborators",
-                through: {
-                  model: db.model("document_collaborator"),
-                  where: { revoked_access: { [Sequelize.Op.not]: true } }
-                },
-                required: false
-              },
-              {
-                model: db.model("user"),
-                as: "creator"
-              },
-              {
-                model: db.model("user"),
-                as: "upvotesFrom",
-                attributes: ["name", "first_name", "last_name", "email", "id"]
-              },
-              {
-                model: db.model("user"),
-                as: "downvotesFrom",
-                attributes: ["name", "first_name", "last_name", "email", "id"]
-              }
-            ]
-          };
-        },
-        includeVersions: function(documentId) {
-          var options = {
-            include: [
-              { model: db.model("version") },
-              {
-                model: db.model("project")
-              }
-            ],
-            order: [
-              ["createdAt", "DESC"],
-              [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
-            ]
-          };
-          if (documentId) options.where = { id: documentId };
-          return options;
-        },
-        includeVersionsWithAllEngagements: function() {
-          return {
-            include: [
-              {
-                model: db.model("user"),
-                as: "upvotesFrom",
-                attributes: ["name", "first_name", "last_name", "email", "id"]
-              },
-              {
-                model: db.model("user"),
-                as: "downvotesFrom",
-                attributes: ["name", "first_name", "last_name", "email", "id"]
-              },
-              {
-                model: db.model("version"),
-                include: [
-                  {
-                    model: db.model("comment"),
-                    required: false,
-                    attributes: ["id", "reviewed", "hierarchyLevel"],
-                    where: {
-                      reviewed: {
-                        [Sequelize.Op.or]: [
-                          { [Sequelize.Op.eq]: "pending" },
-                          { [Sequelize.Op.eq]: "verified" }
-                        ]
-                      },
-                      hierarchyLevel: 1
-                    },
-                    include: [
-                      {
-                        model: db.model("issue"),
-                        required: false
-                      },
-                      {
-                        model: db.model("user"),
-                        as: "upvotesFrom",
-                        attributes: ["id"],
-                        required: false
-                      },
-                      { model: db.model("comment"), as: "descendents" }
-                    ],
-                    order: [
-                      [
-                        { model: db.model("comment"), as: "descendents" },
-                        "hierarchyLevel"
-                      ]
-                    ]
-                  }
-                ]
-              },
-              {
-                model: db.model("user"),
-                as: "creator"
-              },
-              {
-                model: db.model("user"),
-                as: "collaborators",
-                through: {
-                  model: db.model("document_collaborator"),
-                  where: { revoked_access: { [Sequelize.Op.not]: true } }
-                },
-                required: false
-              },
-              {
-                model: db.model("project")
-              }
-            ],
-            order: [
-              ["createdAt", "DESC"],
-              [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
-            ]
-          };
-        }
-      }
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    forked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    original_document_id: {
+      type: DataTypes.INTEGER
+    },
+    original_version_number: {
+      type: DataTypes.INTEGER
+    },
+    project_id: {
+      type: DataTypes.INTEGER
+    },
+    latest_version: {
+      type: DataTypes.INTEGER
     }
-  );
+  });
   Document.associate = function(models) {
-    Document.hasMany(models.Version, {
+    Document.hasMany(models.version, {
       foreignKey: "document_id"
     });
-    Document.belongsTo(models.Project, {
+    Document.belongsTo(models.project, {
       foreignKey: "project_id"
     });
-    Document.belongsTo(models.User, {
+    Document.belongsTo(models.user, {
       foreignKey: "creator_id",
       as: "creator"
     });
-    Document.belongsToMany(models.User, {
+    Document.belongsToMany(models.user, {
       as: "upvotesFrom",
       through: "document_upvote",
       foreignKey: "document_id"
     });
-    Document.hasMany(models.Document, {
+    Document.belongsToMany(models.user, {
+      as: "downvotesFrom",
+      through: "document_downvote",
+      foreignKey: "document_id"
+    });
+    Document.hasMany(models.document, {
       foreignKey: "original_document_id"
     });
-    Document.belongsTo(models.Document, {
+    Document.belongsTo(models.document, {
       foreignKey: "original_document_id",
       as: "forkFrom"
     });
-    Document.belongsToMany(models.User, {
+    Document.belongsToMany(models.user, {
       through: "document_collaborator",
       foreignKey: "document_id",
       as: "collaborators"
+    });
+  };
+  Document.loadScopes = function(models) {
+    Document.addScope("includeVersionsWithOutstandingIssues", function(
+      documentId
+    ) {
+      return {
+        where: { id: Number(documentId) },
+        include: [
+          {
+            model: models["project"],
+            include: [
+              {
+                model: models["user"],
+                through: models["project_admin"],
+                as: "admins"
+              },
+              {
+                model: models["user"],
+                through: models["project_editor"],
+                as: "editors"
+              }
+            ]
+          },
+          {
+            model: models["version"],
+            attributes: [
+              "id",
+              "hierarchyLevel",
+              "version_number",
+              "creator_id",
+              "createdAt"
+            ],
+            include: [
+              { model: models["document"] },
+              {
+                model: models["user"],
+                as: "creator"
+              },
+              {
+                model: models["issue"],
+                as: "resolvedIssues", // use in SurveyProgress
+                required: false,
+                include: [
+                  {
+                    model: models["comment"],
+                    required: false
+                  }
+                ]
+              },
+              {
+                model: models["comment"], // use in SurveyIssues
+                required: false,
+                include: [
+                  {
+                    model: models["issue"],
+                    required: false,
+                    where: { open: true }
+                  }
+                ]
+              }
+            ],
+            order: [[{ model: models["version"] }, "hierarchyLevel"]]
+          },
+          {
+            model: models["user"],
+            as: "collaborators",
+            through: {
+              model: models["document_collaborator"],
+              where: { revoked_access: { [Sequelize.Op.not]: true } }
+            },
+            required: false
+          },
+          {
+            model: models["user"],
+            as: "creator"
+          },
+          {
+            model: models["user"],
+            as: "upvotesFrom",
+            attributes: ["name", "first_name", "last_name", "email", "id"]
+          },
+          {
+            model: models["user"],
+            as: "downvotesFrom",
+            attributes: ["name", "first_name", "last_name", "email", "id"]
+          }
+        ]
+      };
+    });
+    Document.addScope("includeVersionsWithAllEngagements", {
+      include: [
+        {
+          model: models["user"],
+          as: "upvotesFrom",
+          attributes: ["name", "first_name", "last_name", "email", "id"]
+        },
+        {
+          model: models["user"],
+          as: "downvotesFrom",
+          attributes: ["name", "first_name", "last_name", "email", "id"]
+        },
+        {
+          model: models["version"],
+          include: [
+            {
+              model: models["comment"],
+              required: false,
+              attributes: ["id", "reviewed", "hierarchyLevel"],
+              where: {
+                reviewed: {
+                  [Sequelize.Op.or]: [
+                    { [Sequelize.Op.eq]: "pending" },
+                    { [Sequelize.Op.eq]: "verified" }
+                  ]
+                },
+                hierarchyLevel: 1
+              },
+              include: [
+                {
+                  model: models["issue"],
+                  required: false
+                },
+                {
+                  model: models["user"],
+                  as: "upvotesFrom",
+                  attributes: ["id"],
+                  required: false
+                },
+                { model: models["comment"], as: "descendents" }
+              ],
+              order: [
+                [
+                  { model: models["comment"], as: "descendents" },
+                  "hierarchyLevel"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          model: models["user"],
+          as: "creator"
+        },
+        {
+          model: models["user"],
+          as: "collaborators",
+          through: {
+            model: models["document_collaborator"],
+            where: { revoked_access: { [Sequelize.Op.not]: true } }
+          },
+          required: false
+        },
+        {
+          model: models["project"]
+        }
+      ],
+      order: [
+        ["createdAt", "DESC"],
+        [{ model: models["version"] }, "hierarchyLevel", "DESC"]
+      ]
+    });
+    Document.addScope("includeVersions", function(documentId) {
+      var options = {
+        include: [
+          { model: models["version"] },
+          {
+            model: models["project"]
+          }
+        ],
+        order: [
+          ["createdAt", "DESC"],
+          [{ model: models["version"] }, "hierarchyLevel", "DESC"]
+        ]
+      };
+      if (documentId) options.where = { id: documentId };
+      return options;
     });
   };
 

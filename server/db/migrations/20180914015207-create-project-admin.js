@@ -1,18 +1,18 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("comment_upvotes", {
+    return queryInterface.createTable("project_admins", {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "user",
+          model: "users",
           key: "id"
         }
       },
-      comment_id: {
+      project_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "comment",
+          model: "projects",
           key: "id"
         }
       },
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("comment_upvotes");
+    return queryInterface.dropTable("project_admins");
   }
 };

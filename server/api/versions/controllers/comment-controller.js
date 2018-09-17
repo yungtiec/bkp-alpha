@@ -104,7 +104,7 @@ const postReply = async (req, res, next) => {
         .getAncestors({
           include: [
             {
-              model: db.model("user"),
+              model: User,
               as: "owner",
               required: false
             }
@@ -177,12 +177,12 @@ const putEditedComment = async (req, res, next) => {
           attributes: ["first_name", "last_name", "email", "name", "anonymity"]
         },
         {
-          model: db.model("tag"),
+          model: Tag,
           attributes: ["name", "id"],
           required: false
         },
         {
-          model: db.model("issue"),
+          model: Issue,
           required: false
         }
       ]

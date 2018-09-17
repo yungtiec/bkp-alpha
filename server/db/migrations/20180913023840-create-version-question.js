@@ -7,13 +7,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      version_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version",
-          key: "id"
-        }
-      },
       order_in_version: {
         type: Sequelize.INTEGER
       },
@@ -34,13 +27,6 @@ module.exports = {
       }, // sequelize hierarchy
       hierarchyLevel: {
         type: Sequelize.INTEGER
-      },
-      parentId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "version_answer",
-          key: "id"
-        }
       }
     });
   },

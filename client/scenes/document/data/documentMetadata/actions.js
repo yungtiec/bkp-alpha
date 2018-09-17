@@ -5,6 +5,7 @@ import {
   postUpvoteToDocument,
   postDownvoteToDocument
 } from "./service";
+import { loadModal } from "../../../data/reducer";
 
 export function fetchMetadataByDocumentId(documentId, versionId) {
   return async (dispatch, getState) => {

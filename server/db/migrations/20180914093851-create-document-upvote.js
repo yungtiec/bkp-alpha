@@ -1,18 +1,18 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("project_admins", {
+    return queryInterface.createTable("document_upvotes", {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "user",
+          model: "users",
           key: "id"
         }
       },
-      project_id: {
+      document_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "project",
+          model: "documents",
           key: "id"
         }
       },
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("project_admins");
+    return queryInterface.dropTable("document_upvotes");
   }
 };
