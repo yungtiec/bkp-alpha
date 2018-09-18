@@ -1,285 +1,308 @@
+"use strict";
 const Sequelize = require("sequelize");
-const db = require("../db");
 const { assignIn } = require("lodash");
 
-const Comment = db.define(
-  "comment",
-  {
+module.exports = (db, DataTypes) => {
+  const Comment = db.define("comment", {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     uri: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     version_question_id: {
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     version_answer_id: {
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     quote: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     comment: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     annotator_schema_version: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     ranges: {
-      type: Sequelize.ARRAY(Sequelize.JSON)
+      type: DataTypes.ARRAY(DataTypes.JSON)
     },
     upvotes: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     reviewed: {
-      type: Sequelize.ENUM("pending", "spam", "verified"),
+      type: DataTypes.ENUM("pending", "spam", "verified"),
       defaultValue: "pending"
     }
-  },
-  {
-    scopes: {
-      withVersions: function(moreIncludeOptions) {
-        var options = {
-          include: [
-            {
-              model: db.model("version"),
-              include: [
-                {
-                  model: db.model("document"),
-                  attributes: ["title"],
-                  include: [
-                    {
-                      model: db.model("user"),
-                      as: "collaborators",
-                      through: {
-                        model: db.model("document_collaborator"),
-                        where: { revoked_access: { [Sequelize.Op.not]: true } }
-                      },
-                      required: false
-                    },
-                    {
-                      model: db.model("project"),
-                      include: [
-                        {
-                          model: db.model("user"),
-                          through: db.model("project_admin"),
-                          as: "admins"
-                        },
-                        {
-                          model: db.model("user"),
-                          through: db.model("project_editor"),
-                          as: "editors"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        };
-        if (moreIncludeOptions)
-          options.include = options.include.concat(moreIncludeOptions);
-        return options;
-      },
-      upvotes: function(commentId) {
-        return {
-          where: { id: commentId },
-          include: [
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email", "id"]
-            },
-            {
-              model: db.model("user"),
-              as: "owner",
-              attributes: [
-                "id",
-                "first_name",
-                "last_name",
-                "name",
-                "email",
-                "id",
-                "anonymity"
-              ]
-            },
-            {
-              model: db.model("version"),
-              include: [
-                {
-                  model: db.model("document"),
-                  include: [
-                    {
-                      model: db.model("project"),
-                      attributes: ["symbol"]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              model: db.model("comment"),
-              as: "ancestors",
-              required: false,
-              attributes: ["id", "owner_id"],
-              include: [
-                {
-                  model: db.model("user"),
-                  as: "owner",
-                  required: false
-                }
-              ],
-              order: [
-                [
+  });
+  Comment.isHierarchy();
+  Comment.associate = function(models) {
+    Comment.belongsTo(models.user, {
+      foreignKey: "owner_id",
+      as: "owner"
+    });
+    Comment.belongsToMany(models.user, {
+      as: "upvotesFrom",
+      through: "comment_upvote",
+      foreignKey: "comment_id"
+    });
+    Comment.belongsToMany(models.tag, {
+      through: "comment_tag",
+      foreignKey: "comment_id"
+    });
+    Comment.hasOne(models.issue, {
+      foreignKey: "comment_id"
+    });
+    Comment.belongsTo(models.version, {
+      foreignKey: "version_id"
+    });
+    Comment.belongsTo(models.version_question, {
+      foreignKey: "version_question_id"
+    });
+  };
+  Comment.loadScopes = function(models) {
+    Comment.addScope("withVersions", function(moreIncludeOptions) {
+      var options = {
+        include: [
+          {
+            model: models.version,
+            include: [
+              {
+                model: models.document,
+                attributes: ["id", "title"],
+                include: [
                   {
-                    model: Comment,
-                    as: "ancestors"
+                    model: models.user,
+                    as: "collaborators",
+                    through: {
+                      model: models.document_collaborator,
+                      where: {
+                        revoked_access: { [Sequelize.Op.not]: true }
+                      }
+                    },
+                    required: false
                   },
-                  "hierarchyLevel"
+                  {
+                    model: models.project,
+                    include: [
+                      {
+                        model: models.user,
+                        through: models.project_admin,
+                        as: "admins"
+                      },
+                      {
+                        model: models.user,
+                        through: models.project_editor,
+                        as: "editors"
+                      }
+                    ]
+                  }
                 ]
-              ]
-            }
-          ]
-        };
-      },
-      flatThreadByRootId: function(options) {
-        var query = {
-          include: [
-            {
-              model: db.model("user"),
-              as: "upvotesFrom",
-              attributes: ["first_name", "last_name", "name", "email", "id"]
-            },
-            {
-              model: db.model("user"),
-              as: "owner",
-              attributes: [
-                "id",
-                "first_name",
-                "last_name",
-                "name",
-                "email",
-                "anonymity"
-              ],
-              include: [
-                {
-                  model: db.model("role")
-                }
-              ]
-            },
-            {
-              model: db.model("tag"),
-              attributes: ["name", "id"]
-            },
-            {
-              model: db.model("version"),
-              include: [
-                {
-                  model: db.model("document"),
-                  include: [
-                    {
-                      model: db.model("project"),
-                      attributes: ["symbol"]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              model: db.model("issue"),
-              attributes: ["open", "id"],
-              include: [
-                {
-                  model: db.model("version"),
-                  as: "resolvingVersion",
-                  include: [
-                    {
-                      model: db.model("document"),
-                      include: [
-                        {
-                          model: db.model("project"),
-                          attributes: ["symbol"]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              model: Comment,
-              required: false,
-              include: [
-                {
-                  model: db.model("user"),
-                  as: "upvotesFrom",
-                  attributes: ["first_name", "last_name", "name", "email", "id"]
-                },
-                {
-                  model: db.model("user"),
-                  as: "owner",
-                  attributes: [
-                    "id",
-                    "first_name",
-                    "last_name",
-                    "name",
-                    "email",
-                    "anonymity"
-                  ],
-                  include: [
-                    {
-                      model: db.model("role")
-                    }
-                  ]
-                },
+              }
+            ]
+          }
+        ]
+      };
+      if (moreIncludeOptions)
+        options.include = options.include.concat(moreIncludeOptions);
+      return options;
+    });
+    Comment.addScope("upvotes", function(commentId) {
+      return {
+        where: { id: commentId },
+        include: [
+          {
+            model: models.user,
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "name", "email", "id"]
+          },
+          {
+            model: models.user,
+            as: "owner",
+            attributes: [
+              "id",
+              "first_name",
+              "last_name",
+              "name",
+              "email",
+              "id",
+              "anonymity"
+            ]
+          },
+          {
+            model: models.version,
+            include: [
+              {
+                model: models.document,
+                include: [
+                  {
+                    model: models.project,
+                    attributes: ["symbol"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: models.comment,
+            as: "ancestors",
+            required: false,
+            attributes: ["id", "owner_id"],
+            include: [
+              {
+                model: models.user,
+                as: "owner",
+                required: false
+              }
+            ],
+            order: [
+              [
                 {
                   model: Comment,
-                  as: "parent",
-                  required: false,
-                  include: [
-                    {
-                      model: db.model("user"),
-                      as: "owner",
-                      attributes: [
-                        "id",
-                        "first_name",
-                        "last_name",
-                        "name",
-                        "email",
-                        "anonymity"
-                      ],
-                      include: [
-                        {
-                          model: db.model("role")
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ],
-              as: "descendents"
-            }
-          ],
-          order: [
-            [
+                  as: "ancestors"
+                },
+                "hierarchyLevel"
+              ]
+            ]
+          }
+        ]
+      };
+    });
+    Comment.addScope("flatThreadByRootId", function(options) {
+      var query = {
+        include: [
+          {
+            model: models.user,
+            as: "upvotesFrom",
+            attributes: ["first_name", "last_name", "name", "email", "id"]
+          },
+          {
+            model: models.user,
+            as: "owner",
+            attributes: [
+              "id",
+              "first_name",
+              "last_name",
+              "name",
+              "email",
+              "anonymity"
+            ],
+            include: [
+              {
+                model: models.role
+              }
+            ]
+          },
+          {
+            model: models.tag,
+            attributes: ["name", "id"]
+          },
+          {
+            model: models.version,
+            include: [
+              {
+                model: models.document,
+                include: [
+                  {
+                    model: models.project,
+                    attributes: ["symbol"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: models.issue,
+            attributes: ["open", "id"],
+            include: [
+              {
+                model: models.version,
+                as: "resolvingVersion",
+                include: [
+                  {
+                    model: models.document,
+                    include: [
+                      {
+                        model: models.project,
+                        attributes: ["symbol"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Comment,
+            required: false,
+            include: [
+              {
+                model: models.user,
+                as: "upvotesFrom",
+                attributes: ["first_name", "last_name", "name", "email", "id"]
+              },
+              {
+                model: models.user,
+                as: "owner",
+                attributes: [
+                  "id",
+                  "first_name",
+                  "last_name",
+                  "name",
+                  "email",
+                  "anonymity"
+                ],
+                include: [
+                  {
+                    model: models.role
+                  }
+                ]
+              },
               {
                 model: Comment,
-                as: "descendents"
-              },
-              "createdAt"
-            ]
+                as: "parent",
+                required: false,
+                include: [
+                  {
+                    model: models.user,
+                    as: "owner",
+                    attributes: [
+                      "id",
+                      "first_name",
+                      "last_name",
+                      "name",
+                      "email",
+                      "anonymity"
+                    ],
+                    include: [
+                      {
+                        model: models.role
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            as: "descendents"
+          }
+        ],
+        order: [
+          [
+            {
+              model: Comment,
+              as: "descendents"
+            },
+            "createdAt"
           ]
-        };
-        if (options) query = assignIn(options, query);
-        return query;
-      }
-    }
-  }
-);
-
-module.exports = Comment;
+        ]
+      };
+      if (options) query = assignIn(options, query);
+      return query;
+    });
+  };
+  return Comment;
+};

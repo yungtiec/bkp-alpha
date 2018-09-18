@@ -1,141 +1,153 @@
+"use strict";
 const Sequelize = require("sequelize");
-const db = require("../db");
 const _ = require("lodash");
 
-const Project = db.define(
-  "project",
-  {
+module.exports = (db, DataTypes) => {
+  const Project = db.define("project", {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true,
       allowNull: false
     },
     symbol: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true
     },
     description: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     logo_url: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     },
     website: {
-      type: Sequelize.TEXT
+      type: DataTypes.TEXT
     }
-  },
-  {
-    scopes: {
-      withStats: function(projectSymbol) {
-        var query = {
-          include: [
-            {
-              model: db.model("user"),
-              through: db.model("project_admin"),
-              as: "admins"
-            },
-            {
-              model: db.model("user"),
-              through: db.model("project_editor"),
-              as: "editors"
-            },
-            {
-              model: db.model("document"),
-              include: [
-                { model: db.model("user"), as: "creator" },
-                {
-                  model: db.model("user"),
-                  as: "collaborators",
-                  through: {
-                    model: db.model("document_collaborator"),
-                    where: { revoked_access: { [Sequelize.Op.not]: true } }
-                  },
-                  required: false
+  });
+  Project.associate = function(models) {
+    Project.belongsToMany(models.user, {
+      through: "project_admin",
+      as: "admins",
+      foreignKey: "project_id"
+    });
+    Project.belongsToMany(models.user, {
+      through: "project_editor",
+      as: "editors",
+      foreignKey: "project_id"
+    });
+    Project.hasMany(models.document, {
+      foreignKey: "project_id"
+    });
+  };
+
+  Project.loadScopes = function(models) {
+    Project.addScope("withStats", function(projectSymbol) {
+      var query = {
+        include: [
+          {
+            model: models.user,
+            through: models.project_admin,
+            as: "admins"
+          },
+          {
+            model: models.user,
+            through: models.project_editor,
+            as: "editors"
+          },
+          {
+            model: models.document,
+            include: [
+              { model: models.user, as: "creator" },
+              {
+                model: models.user,
+                as: "collaborators",
+                through: {
+                  model: models.document_collaborator,
+                  where: { revoked_access: { [Sequelize.Op.not]: true } }
                 },
-                {
-                  model: db.model("user"),
-                  as: "upvotesFrom",
-                  attributes: ["name", "first_name", "last_name", "email"]
-                },
-                {
-                  model: db.model("document"),
-                  as: "forkFrom"
-                },
-                {
-                  model: db.model("version"),
-                  required: false,
-                  include: [
-                    { model: db.model("user"), as: "creator" },
-                    {
-                      model: db.model("comment"),
-                      required: false,
-                      attributes: ["id", "reviewed", "hierarchyLevel"],
-                      where: {
-                        reviewed: {
-                          [Sequelize.Op.or]: [
-                            { [Sequelize.Op.eq]: "pending" },
-                            { [Sequelize.Op.eq]: "verified" }
-                          ]
-                        },
-                        hierarchyLevel: 1
-                      },
-                      include: [
-                        {
-                          model: db.model("issue"),
-                          required: false
-                        },
-                        {
-                          model: db.model("user"),
-                          as: "upvotesFrom",
-                          attributes: ["id"],
-                          required: false
-                        },
-                        { model: db.model("comment"), as: "descendents" }
-                      ],
-                      order: [
-                        [
-                          { model: db.model("comment"), as: "descendents" },
-                          "hierarchyLevel"
+                required: false
+              },
+              {
+                model: models.user,
+                as: "upvotesFrom",
+                attributes: ["name", "first_name", "last_name", "email"]
+              },
+              {
+                model: models.document,
+                as: "forkFrom"
+              },
+              {
+                model: models.version,
+                required: false,
+                include: [
+                  { model: models.user, as: "creator" },
+                  {
+                    model: models.comment,
+                    required: false,
+                    attributes: ["id", "reviewed", "hierarchyLevel"],
+                    where: {
+                      reviewed: {
+                        [Sequelize.Op.or]: [
+                          { [Sequelize.Op.eq]: "pending" },
+                          { [Sequelize.Op.eq]: "verified" }
                         ]
+                      },
+                      hierarchyLevel: 1
+                    },
+                    include: [
+                      {
+                        model: models.issue,
+                        required: false
+                      },
+                      {
+                        model: models.user,
+                        as: "upvotesFrom",
+                        attributes: ["id"],
+                        required: false
+                      },
+                      { model: models.comment, as: "descendents" }
+                    ],
+                    order: [
+                      [
+                        { model: models.comment, as: "descendents" },
+                        "hierarchyLevel"
                       ]
-                    }
-                  ]
-                }
-              ],
-              order: [
-                ["createdAt", "DESC"],
-                [{ model: db.model("version") }, "hierarchyLevel", "DESC"]
-              ]
-            }
-          ]
-        };
-        if (projectSymbol) {
-          query.where = { symbol: projectSymbol };
-        }
-        return query;
+                    ]
+                  }
+                ]
+              }
+            ],
+            order: [
+              ["createdAt", "DESC"],
+              [{ model: models.version }, "hierarchyLevel", "DESC"]
+            ]
+          }
+        ]
+      };
+      if (projectSymbol) {
+        query.where = { symbol: projectSymbol };
       }
-    }
-  }
-);
+      return query;
+    });
+  };
 
-Project.getProjectWithStats = async function(projectSymbol) {
-  const projectInstance = await Project.scope({
-    method: ["withStats", projectSymbol]
-  }).findOne();
-  return getProjectStats(projectInstance, true);
+  Project.getProjectWithStats = async function(projectSymbol) {
+    const projectInstance = await Project.scope({
+      method: ["withStats", projectSymbol]
+    }).findOne();
+    return getProjectStats(projectInstance, true);
+  };
+
+  Project.getProjects = async function() {
+    const projectInstances = await Project.scope("withStats").findAll();
+    return Promise.map(projectInstances, i => getProjectStats(i, false));
+  };
+  return Project;
 };
-
-Project.getProjects = async function() {
-  const projectInstances = await Project.scope("withStats").findAll();
-  return Promise.map(projectInstances, i => getProjectStats(i, false));
-};
-
-module.exports = Project;
 
 /**
  *

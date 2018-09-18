@@ -56,6 +56,7 @@ export default ({ documentMetadata, projectSymbol }) => (
               <div className="entity-cards">
                 {version.resolvedIssues.map(issue => {
                   const comment = issue.comment;
+                  if (!comment) console.log(issue)
                   return (
                     <div
                       key={`resolved-issue__${issue.id}`}
@@ -80,7 +81,7 @@ export default ({ documentMetadata, projectSymbol }) => (
                         )
                       }
                     >
-                      {comment.quote ? (
+                      {comment && comment.quote ? (
                         <div
                           style={{ borderLeft: "3px solid grey" }}
                           className="pl-3 mb-2"

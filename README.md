@@ -42,9 +42,9 @@ Either way, you'll need to set up your deployment server to start:
 2. `heroku login`
 3. Add a git remote for heroku:
   - `git remote add production https://git.heroku.com/bkp-alpha.git` This is for production.
-  - `git remote add development https://git.heroku.com/bkp-alpha-test.git` This is for development.
+  - `git remote add staging https://git.heroku.com/bkp-alpha-test.git` This is for staging.
 4. Getting data for local development
-  - `heroku pg:pull DATABASE_URL bkp-alpha --app bkp-alpha`
+  - `heroku pg:pull DATABASE_URL bkp-dev --app bkp-alpha`
   - create a database named `bkp-alpha-test` for testing
 
 ### When you're ready to deploy
@@ -140,6 +140,19 @@ Check out ``policy.js`` in the client directory and ``access-control.js`` in the
 The official documentation is a great resource to learn.
 
 ### [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
+
+### Syncing database
+
+We have a scheduler that run the following command everyday to make sure the staging and producation databases are in sync.
+
+`heroku pg:copy bkp-alpha::DATABASE_URL DATABASE_URL --app bkp-alpha-test
+`
+
+Read [here](https://github.com/IcaliaLabs/guides/wiki/Sync-staging-&-production-databases-with-heroku) about the setup
+
+We can also do it manually with a simple tool named `parity`
+
+https://robots.thoughtbot.com/how-to-back-up-a-heroku-production-database-to-staging
 
 # Markdown parser
 
