@@ -51,7 +51,7 @@ module.exports = (db, DataTypes) => {
       foreignKey: "comment_id"
     });
     Comment.belongsToMany(models.tag, {
-      through: "comment_tag",
+      through: "comment_tags",
       foreignKey: "comment_id"
     });
     Comment.hasOne(models.issue, {

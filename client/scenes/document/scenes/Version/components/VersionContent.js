@@ -24,19 +24,6 @@ const VersionContent = ({
   addNewCommentSentFromServer
 }) => (
   <div className="project-document" id="project-document">
-    {versionMetadata.scorecard && !isEmpty(versionMetadata.scorecard) ? (
-      <VersionScorecard
-        documentMetadata={documentMetadata}
-        scorecard={versionMetadata.scorecard}
-        editScorecard={editScorecard}
-        parent={parent}
-        versionId={versionMetadata.id}
-        isLoggedIn={isLoggedIn}
-        isClosedForComment={isClosedForComment}
-        versionMetadata={versionMetadata}
-        user={user}
-      />
-    ) : null}
     {documentQnaIds.map((id, i) => {
       return (
         <Element
@@ -66,6 +53,21 @@ const VersionContent = ({
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
+            {documentQnasById[id].markdown === "### Scorecard" &&
+            versionMetadata.scorecard &&
+            !isEmpty(versionMetadata.scorecard) ? (
+              <VersionScorecard
+                documentMetadata={documentMetadata}
+                scorecard={versionMetadata.scorecard}
+                editScorecard={editScorecard}
+                parent={parent}
+                versionId={versionMetadata.id}
+                isLoggedIn={isLoggedIn}
+                isClosedForComment={isClosedForComment}
+                versionMetadata={versionMetadata}
+                user={user}
+              />
+            ) : null}
             <Answers
               key={`qna-${id}__answers`}
               documentMetadata={documentMetadata}

@@ -8,7 +8,7 @@ module.exports = (db, DataTypes) => {
   });
   Tag.associate = function(models) {
     Tag.belongsToMany(models.comment, {
-      through: "comment_tag",
+      through: "comment_tags",
       foreignKey: "tag_id"
     });
   };
