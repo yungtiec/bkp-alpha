@@ -2,7 +2,7 @@
 
 ### Summary
 
-This scorecard attempts to assess the quality of Civil’s statements and documentation based on the Transparency Goals outlined in The Brooklyn Project’s [Consumer Token Framework](https://framework.thebkp.com/). This assessment focuses on the completeness, clarity and consistency of the disclosures; it does not attempt to opine on the veracity of the disclosures or the merits or substance of the practices described. We invite you and the community to participate in verifying and diligencing these disclosures with us.
+This scorecard attempts to assess the quality of Civil’s statements and documentation based on the Transparency Goals outlined in The Brooklyn Project’s [Consumer Token Framework](https://framework.thebkp.com/). This assessment focuses on the completeness, clarity and consistency of the disclosures; it does not attempt to opine on the veracity of the disclosures or the merits or substance of the practices described. We invite you and the community to participate in verifying and diligencing these disclosures with us. (Conflict notice - This scorecard was prepared by ConsenSys, which is a significant investor in Civil Media Company.)
 
 
 
@@ -12,7 +12,7 @@ This scorecard attempts to assess the quality of Civil’s statements and docume
 
 
 
-### Scorecard
+### Consumer Token Framework Scorecard
 
 The transparency score is a reflection of the following three factors:
 
@@ -114,19 +114,19 @@ The various organizational units in the ecosystem are not directly related and o
 
 ### Principle 3: Responsible Token Distribution
 
-##### Transparency score: 6/10
+##### Transparency score: 10/10
 
 | Disclosure                                                   |                            Status                            | Source                                                       |
 | ------------------------------------------------------------ | :----------------------------------------------------------: | ------------------------------------------------------------ |
 | Purpose of any token distributions                           | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Civil Website Partners page](https://civil.co/partners/); [Medium Post - 100 Percent Pledge](https://blog.joincivil.com/the-100-pledge-fund-independent-journalism-with-our-token-sale-7da6b0ebdfa9) |
 | Legal entity that distributed tokens                         | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Civil Website CVL page](https://civil.co/cvl/)              |
 | Conditions a token purchaser must meet to receive tokens     | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Civil Website - Token Sale Flow](https://civil.co/wp-content/themes/join-civil/src/static/cvl/Token_Sale_Flow.pdf) |
-| Terms of token distributions (e.g., lockups, vesting)        |                             1/2                              | Whitepaper “Civil Council Initial Iteration” (Only for Initial Civil Council Members) |
+| Terms of token distributions (e.g., lockups, vesting)        | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | Whitepaper “Civil Council Initial Iteration” (Only for Initial Civil Council Members); Statement from Civil (below) |
 | Stage of development of the project at time of token distribution | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Token Foundry Project Page (October 2018 Mainnet Launch)](https://tokenfoundry.com/projects/civil) |
 | Steps to limit sale to individuals who do not intend to consume token | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Civil Website - Token Sale Flow](https://civil.co/wp-content/themes/join-civil/src/static/cvl/Token_Sale_Flow.pdf); Token Foundry Registration Process; Medium Post - Proof of Use and Transferability |
 | Specification of whether (or not) anyone owes duties to increase token price | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | Token Foundry Registration Process                           |
 | Restrictions and plans for secondary trading                 | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | [Medium Post - Proof of Use and Transferability](https://blog.joincivil.com/proof-of-use-and-transferability-requirements-for-cvl-tokens-346ff54ff213). |
-| Whether lockups or vesting schedules are enforced through smart contracts or company policy. | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/cancel_grey_27x27.png) | Not available.                                               |
+| Whether lockups or vesting schedules are enforced through smart contracts or company policy. | ![checked](https://bkp-alpha.herokuapp.com//assets/markdown/checkmark_20px.png) | Statement from Civil (below)                                 |
 
 ##### Analysis:
 
@@ -138,7 +138,7 @@ The sale will use an assessment test to determine eligibility to purchase tokens
 - Reasonable understanding of the functions of CVL and its underlying technology.
 - A risk profile consistent with purchasing this type of product.
 
-Tokens allocated to founding Council members will have a two year restriction. If, after one year, Constitutional proposals put forward by the Council are ratified, 50% of these tokens will become unrestricted. If such proposals are ratified by the end of the second year from launch, 100% of the tokens will become unrestricted. In the event that proposals fail to pass, voting members will be terminated from the Council, with their tokens rescinded and reverted back to the Civil Media Company. However, past the Council, the lockups and vesting schedules for other token allocations are not disclosed.
+Tokens allocated to founding Council members will have a two year restriction. If, after one year, Constitutional proposals put forward by the Council are ratified, 50% of these tokens will become unrestricted. If such proposals are ratified by the end of the second year from launch, 100% of the tokens will become unrestricted. In the event that proposals fail to pass, voting members will be terminated from the Council, with their tokens rescinded and reverted back to the Civil Media Company.
 
 The Token Foundry registration process for the CVL sale requires users to attest that they “understand that nobody (including but not limited to anyone associated with the CVL token, the Civil Network, or the CVL token sale) is obligated to, or responsible for, creating any type of financial return for you in association with your purchase of CVL tokens.”
 
@@ -148,7 +148,29 @@ Transferability and resale of CVL tokens will be restricted for at least one yea
 
 Even after a purchaser proves use, for at least one year following the token sale, he or she can only resell tokens to “attested consumers” -- i.e., other people who successfully registered as such through Token Foundry or who otherwise successfully answer questions on the Civil website proving they understand how CVL tokens are used and that they actually intend to use the CVL tokens for their intended purpose.
 
+##### Statement from Civil:
 
+In response to “Terms of token distributions (e.g., lockups, vesting)” and “Whether lockups or vesting schedules are enforced through smart contracts or company policy,” initial allocations of CVL tokens to employees, partners, and newsrooms are subject to the following restrictions, all of which are enforced by smart contract:
+
+- Employee allocations:
+
+- - All tokens released at end of sale.
+  - Limited availability for sale/transfer starting at 3 months with 1/24th being available on the last day of each month
+  - Prior to sale/transfer, must meet the same “proof of use” requirements as initial purchasers of CVL
+  - Once sale/transfer available, until at least October 2019, sale transfer is available only to other individuals who have (i) verified their identity on either Token Foundry or civil.co, and (ii) proven they understand how CVL tokens are used and that they actually intend to use the CVL tokens for their intended purpose.
+
+- Partner allocations:
+
+- - All tokens released at end of sale
+  - Limited availability for sale/transfer starting at 6 months with 1/6th being available on the last day of every 6th month
+  - No proof of use requirement
+  - Once sale/transfer available, until at least October 2019, sale transfer is available only to other individuals who have (i) verified their identity on either Token Foundry or civil.co, and (ii) proven they understand how CVL tokens are used and that they actually intend to use the CVL tokens for their intended purpose.
+
+- Newsroom allocations:
+
+- - All tokens released at end of sale
+  - No proof of use requirement
+  - Once sale/transfer available, until at least October 2019, sale transfer is available only to other individuals who have (i) verified their identity on either Token Foundry or civil.co, and (ii) proven they understand how CVL tokens are used and that they actually intend to use the CVL tokens for their intended purpose.
 
 ### Principle 4: Purpose of Token Distribution
 
@@ -184,13 +206,11 @@ The total token supply will be 100,000,000 CVL. No additional CVL will be create
 
 In the initial public sale commencing September 2018, 34% of the total token supply, a total of 34,000,000 CVL tokens, will be sold to public purchasers who demonstrate an understanding of and intent to use the token.
 
-The remaining token supply is explained as follows: “The Civil Media Company will retain 33% of the CVL token supply for compensatory and reserve purposes. The remaining 33% of the CVL token supply will be sold or granted to mission-aligned, third-party partner organizations (think: media companies, journalism schools, technology companies that wish to help build out Civil’s discovery/sharing/discourse ecosystem).” It is not clear what plans, timelines, or restrictions will apply for the use, release, or potential circulation of these tokens.
-
-
+The remaining token supply is explained as follows: “The Civil Media Company will retain 33% of the CVL token supply for compensatory and reserve purposes. The remaining 33% of the CVL token supply will be sold or granted to mission-aligned, third-party partner organizations (think: media companies, journalism schools, technology companies that wish to help build out Civil’s discovery/sharing/discourse ecosystem).” It is not clear how many of these tokens have already been allocated.
 
 ### Principle 6: Mitigation of Conflicts and Improper Trading
 
-###### Transparency score: 10/10
+##### Transparency score: 10/10
 
 | Disclosure                                    |                            Status                            | Source                                                       |
 | --------------------------------------------- | :----------------------------------------------------------: | ------------------------------------------------------------ |
@@ -239,7 +259,7 @@ In response to “Report of technological audit,” Civil Media Company has enga
 
 ### Principle 8: Marketing Practices
 
-##### Transparency score: 7/10
+##### Transparency score: 8/10
 
 | Disclosure                                                   |                            Status                            | Source                                                       |
 | ------------------------------------------------------------ | :----------------------------------------------------------: | ------------------------------------------------------------ |
@@ -254,7 +274,7 @@ The CVL token is not likened to financial investment on website, whitepaper, or 
 
 The technical details of the Civil registry as well as an overview of the smart contract design is provided in the Whitepaper. Additionally, details on token supply are included in the Civil website FAQ, and discussed in the analysis for Principle 5. While no pseudocode explanations are present (although an audit of the relevant smart contracts is ongoing), there is an ample amount of detail within the Whitepaper explaining the technical mechanisms by which the ecosystem will operate.
 
-It is not clear which token lockups and vesting schedules for token allocations are governed by smart contracts or by company policy.
+Transfer restrictions applicable to initial purchasers of CVL, employees, partners, and newsrooms are enforced by smart contract. It is not clear whether the transfer restrictions that apply to founding Council members are governed by smart contracts or by company policy.
 
 All reviewed marketing materials appear consistent with the marketing practices recommended by the Framework and any undetected inconsistencies (if they exist) will likely surface as part of the feedback on this scorecard.
 
