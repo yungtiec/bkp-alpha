@@ -53,7 +53,8 @@ const VersionContent = ({
               isDividerTitle={documentQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
-            {documentQnasById[id].markdown === "### Scorecard" &&
+            {documentQnasById[id].markdown ===
+              "### Consumer Token Framework Scorecard" &&
             versionMetadata.scorecard &&
             !isEmpty(versionMetadata.scorecard) ? (
               <VersionScorecard

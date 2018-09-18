@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import download from "downloadjs";
 import { Link } from "react-router-dom";
 import history from "../../../history";
-import { orderBy, find, isEmpty } from "lodash";
+import { orderBy, find, isEmpty, maxBy } from "lodash";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import { loadModal } from "../../../data/reducer";
 import policies from "../../../policies.js";
@@ -152,15 +152,19 @@ class VersionToolbar extends Component {
               })}
             </div>
           </div>
-          <button type="button" className="btn btn-outline-primary">
-            <a
-              href="https://static1.squarespace.com/static/5a329be3d7bdce9ea2f3a738/t/5b9a09b50ebbe8e9409e291a/1536821696423/The+Brooklyn+Project%E2%80%94Framework+Version+1+09_06_18.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View pdf
-            </a>
-          </button>
+          {maxBy(documentMetadata.versions, "hierarchyLevel").pdf_link ? (
+            <button type="button" className="btn btn-outline-primary">
+              <a
+                href={
+                  maxBy(documentMetadata.versions, "hierarchyLevel").pdf_link
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View pdf
+              </a>
+            </button>
+          ) : null}
           <PunditContainer policies={policies} user={user}>
             <PunditTypeSet type="Disclosure">
               <VisibleIf
@@ -238,79 +242,6 @@ class VersionToolbar extends Component {
                       Import new version
                     </Link>
                   </button>
-                  <div className="btn-group">
-                    <button
-                      type="button"
-                      className="btn btn-outline-primary dropdown-toggle"
-                      type="button"
-                      id="downloadMenuButton"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      Copy or download
-                    </button>
-                    <div
-                      className="dropdown-menu"
-                      aria-labelledby="downloadMenuButton"
-                    >
-                      <div className="card-body" style={{ width: "18rem" }}>
-                        <h6 className="card-subtitle mb-4 text-secondary">
-                          Edit disclosure in the markdown editor of your choice
-                        </h6>
-                        <p className="card-text">
-                          Don't have an editor in mind?{" "}
-                          <a
-                            href="https://dillinger.io/"
-                            target="_blank"
-                            className="font-weight-bold text-primary"
-                          >
-                            Here's a place to start.
-                          </a>
-                        </p>
-                        <p className="card-text">
-                          Need some pointers on writing markdown file?{" "}
-                          <a
-                            href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                            target="_blank"
-                            className="font-weight-bold text-primary"
-                          >
-                            check out this cheatsheet.
-                          </a>
-                        </p>
-                        <CopyToClipboard
-                          text={documentMarkdown}
-                          onCopy={() =>
-                            this.props.notify({
-                              title: "Copied to clipboard",
-                              message: "Paste in the editor of your choice",
-                              status: "success",
-                              dismissible: true,
-                              dismissAfter: 3000
-                            })
-                          }
-                        >
-                          <a className="card-link text-primary mr-3">
-                            Copy markdown
-                          </a>
-                        </CopyToClipboard>
-                        <a
-                          className="card-link text-primary mr-3"
-                          onClick={() =>
-                            download(
-                              documentMarkdown,
-                              `${this.props.projectMetadata.symbol.toLowerCase()}-${
-                                this.props.latestVersionMetadata.id
-                              }.md`,
-                              "text/markdown"
-                            )
-                          }
-                        >
-                          Download
-                        </a>
-                      </div>
-                    </div>
-                  </div>
                 </VisibleIf>
               </PunditTypeSet>
             </PunditContainer>

@@ -83,9 +83,6 @@ export default class VersionScorecard extends Component {
         key="qna-scorecard"
       >
         <div className="qna__container mb-4">
-          <div className="qna__question">
-            <h3>Consumer token framework scorecard</h3>
-          </div>
           <ContentEditingContainer
             otherClassNames="qna__answer-container"
             editing={this.state.editing}

@@ -96,6 +96,7 @@ module.exports = (db, DataTypes) => {
               "hierarchyLevel",
               "version_number",
               "creator_id",
+              "pdf_link",
               "createdAt"
             ],
             include: [
