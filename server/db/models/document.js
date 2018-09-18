@@ -46,12 +46,12 @@ module.exports = (db, DataTypes) => {
     });
     Document.belongsToMany(models.user, {
       as: "upvotesFrom",
-      through: "document_upvote",
+      through: "document_upvotes",
       foreignKey: "document_id"
     });
     Document.belongsToMany(models.user, {
       as: "downvotesFrom",
-      through: "document_downvote",
+      through: "document_downvotes",
       foreignKey: "document_id"
     });
     Document.hasMany(models.document, {

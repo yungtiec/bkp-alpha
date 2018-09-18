@@ -155,6 +155,8 @@ const postDocument = async (req, res, next) => {
             })
           )
       );
+    version = version.toJSON();
+    version.document = document;
     res.send(version);
   } catch (err) {
     next(err);
@@ -369,6 +371,8 @@ const postNewVersion = async (req, res, next) => {
           )
         )
     );
+    version = version.toJSON();
+    version.document = document;
     res.send(version);
   } catch (err) {
     next(err);

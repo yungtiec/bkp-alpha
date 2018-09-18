@@ -47,7 +47,7 @@ module.exports = (db, DataTypes) => {
     });
     Comment.belongsToMany(models.user, {
       as: "upvotesFrom",
-      through: "comment_upvote",
+      through: "comment_upvotes",
       foreignKey: "comment_id"
     });
     Comment.belongsToMany(models.tag, {
@@ -91,12 +91,12 @@ module.exports = (db, DataTypes) => {
                     include: [
                       {
                         model: models.user,
-                        through: models.project_admin,
+                        through: "project_admins",
                         as: "admins"
                       },
                       {
                         model: models.user,
-                        through: models.project_editor,
+                        through: "project_editors",
                         as: "editors"
                       }
                     ]

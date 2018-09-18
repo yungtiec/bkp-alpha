@@ -76,12 +76,12 @@ module.exports = (db, DataTypes) => {
                 include: [
                   {
                     model: models.user,
-                    through: models.project_admin,
+                    through: "project_admins",
                     as: "admins"
                   },
                   {
                     model: models.user,
-                    through: models.project_editor,
+                    through: "project_editors",
                     as: "editors"
                   }
                 ]

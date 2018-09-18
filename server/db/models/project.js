@@ -30,12 +30,12 @@ module.exports = (db, DataTypes) => {
   });
   Project.associate = function(models) {
     Project.belongsToMany(models.user, {
-      through: "project_admin",
+      through: "project_admins",
       as: "admins",
       foreignKey: "project_id"
     });
     Project.belongsToMany(models.user, {
-      through: "project_editor",
+      through: "project_editors",
       as: "editors",
       foreignKey: "project_id"
     });
@@ -50,12 +50,12 @@ module.exports = (db, DataTypes) => {
         include: [
           {
             model: models.user,
-            through: models.project_admin,
+            through: "project_admins",
             as: "admins"
           },
           {
             model: models.user,
-            through: models.project_editor,
+            through: "project_editors",
             as: "editors"
           },
           {
