@@ -103,6 +103,16 @@ class AuthWidget extends Component {
                 ""
               )}
               {width < 600 ? (
+                <Link
+                  to="/project/CVL/document/2/version/3"
+                  style={{ display: "block", margin: "0px" }}
+                >
+                  <div className={`${className}__dropdown-item`}>Civil Scorecard</div>
+                </Link>
+              ) : (
+                ""
+              )}
+              {width < 600 ? (
                 <a
                   href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
                   target="_blank"
@@ -125,7 +135,7 @@ class AuthWidget extends Component {
               ) : (
                 ""
               )}
-              {width < 600 ? (
+              {width < 970 ? (
                 <PunditContainer policies={policies} user={user}>
                   <PunditTypeSet type="Disclosure">
                     <VisibleIf action="Create" model={{}}>
@@ -143,7 +153,7 @@ class AuthWidget extends Component {
               ) : (
                 ""
               )}
-              {width < 600 ? (
+              {width < 970 ? (
                 <PunditContainer policies={policies} user={user}>
                   <PunditTypeSet type="Disclosure">
                     <VisibleIf action="Create" model={{}}>
