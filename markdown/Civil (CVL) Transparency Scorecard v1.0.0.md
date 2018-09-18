@@ -1,3 +1,5 @@
+# Civil (CVL) Transparency Scorecard
+
 ### Summary
 
 This scorecard attempts to assess the quality of Civil’s statements and documentation based on the Transparency Goals outlined in The Brooklyn Project’s [Consumer Token Framework](https://framework.thebkp.com/). This assessment focuses on the completeness, clarity and consistency of the disclosures; it does not attempt to opine on the veracity of the disclosures or the merits or substance of the practices described. We invite you and the community to participate in verifying and diligencing these disclosures with us.
