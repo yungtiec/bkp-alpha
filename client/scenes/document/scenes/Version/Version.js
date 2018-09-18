@@ -55,7 +55,7 @@ class Document extends Component {
           target: "body"
         },
         {
-          target: "project-document__upvote-btn",
+          target: ".project-document__upvote-btn",
           content: "What do you think about the framework overall?",
           disableBeacon: true,
           placement: "top"
