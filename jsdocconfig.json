@@ -1,11 +1,11 @@
 {
     "tags": {
         "allowUnknownTags": true,
-        "dictionaries": ["jsdoc","closure"]
+        "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
-        "include": [ "." ],
-        "exclude": [ "node_modules" ],
+        "include": ["./server/api"],
+        "exclude": ["node_modules"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -15,6 +15,7 @@
         "monospaceLinks": false
     },
     "opts": {
-      "recurse": true
+        "destination": "./docs",
+        "recurse": true
     }
 }
