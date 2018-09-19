@@ -56,8 +56,8 @@ class DocumentContainer extends Component {
       latestVersionMetadata,
       versionMetadata,
       isClosedForComment,
-      documentQnasById,
-      documentQnaIds,
+      versionQnasById,
+      versionQnaIds,
       upvoteDocument,
       downvoteDocument,
       match
@@ -76,8 +76,8 @@ class DocumentContainer extends Component {
           versionMetadata={versionMetadata}
           latestVersionMetadata={latestVersionMetadata}
           documentMetadata={documentMetadata}
-          documentQnasById={documentQnasById}
-          documentQnaIds={documentQnaIds}
+          versionQnasById={versionQnasById}
+          versionQnaIds={versionQnaIds}
           upvoteDocument={upvoteDocument}
           downvoteDocument={downvoteDocument}
         />

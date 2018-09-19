@@ -82,7 +82,7 @@ module.exports = (db, DataTypes) => {
   );
   User.associate = function(models) {
     User.belongsToMany(models.role, {
-      through: "user_role",
+      through: "user_roles",
       foreignKey: "user_id"
     });
     User;
@@ -97,18 +97,18 @@ module.exports = (db, DataTypes) => {
       constraints: false
     });
     User.belongsToMany(models.project, {
-      through: "project_admin",
+      through: "project_admins",
       as: "managedProjects",
       foreignKey: "user_id"
     });
     User.belongsToMany(models.project, {
-      through: "project_editor",
+      through: "project_editors",
       as: "editedProjects",
       foreignKey: "user_id"
     });
     User.belongsToMany(models.comment, {
       as: "upvotedComments",
-      through: "comment_upvote",
+      through: "comment_upvotes",
       foreignKey: "user_id"
     });
     User.hasMany(models.comment, {
@@ -125,12 +125,12 @@ module.exports = (db, DataTypes) => {
     });
     User.belongsToMany(models.document, {
       as: "upvotedDocuments",
-      through: "document_upvote",
+      through: "document_upvotes",
       foreignKey: "user_id"
     });
     User.belongsToMany(models.document, {
       as: "downvotedDocuments",
-      through: "document_downvote",
+      through: "document_downvotes",
       foreignKey: "user_id"
     });
     User.belongsToMany(models.document, {

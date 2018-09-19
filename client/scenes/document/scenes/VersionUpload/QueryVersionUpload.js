@@ -14,8 +14,8 @@ import { fetchMetadataByVersionId } from "../../data/versionMetadata/actions";
 import { getVersionMetadata } from "../../data/versionMetadata/reducer";
 import { getDocumentMetadata } from "../../data/documentMetadata/reducer";
 // qnas
-import { getAllDocumentQuestions } from "../../data/qnas/reducer";
-import { fetchQuestionsByVersionId } from "../../data/qnas/actions";
+import { getAllDocumentQuestions } from "../../data/versionQnas/reducer";
+import { fetchQuestionsByVersionId } from "../../data/versionQnas/actions";
 // comments
 import { fetchCommentsByVersionId } from "../../data/comments/actions";
 import { getOutstandingIssues } from "../../data/comments/reducer";
@@ -67,7 +67,7 @@ class MyComponent extends React.Component {
   render() {
     if (
       !this.props.versionMetadata.id ||
-      !this.props.documentQnaIds ||
+      !this.props.versionQnaIds ||
       !this.props.outstandingIssues
     )
       return null;
@@ -76,7 +76,7 @@ class MyComponent extends React.Component {
 }
 
 const mapState = state => {
-  const { documentQnasById, documentQnaIds } = getAllDocumentQuestions(state);
+  const { versionQnasById, versionQnaIds } = getAllDocumentQuestions(state);
   const {
     importedMarkdown,
     resolvedIssueIds,
@@ -98,8 +98,8 @@ const mapState = state => {
     versionMetadata: getVersionMetadata(state),
     documentMetadata: getDocumentMetadata(state),
     // qnas
-    documentQnasById,
-    documentQnaIds,
+    versionQnasById,
+    versionQnaIds,
     // outstanding issues
     outstandingIssues: getOutstandingIssues(state),
     // upload

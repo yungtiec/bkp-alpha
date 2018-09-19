@@ -59,6 +59,16 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
+              <Link
+                to="/project/CVL/document/2/version/3"
+                className="navbar__nav-item"
+              >
+                Civil scorecard
+              </Link>
+            ) : (
+              ""
+            )}
+            {width > 600 ? (
               <a
                 href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
                 target="_blank"
@@ -69,14 +79,7 @@ class Navbar extends Component {
             ) : (
               ""
             )}
-            {width && isAdmin > 600 ? (
-              <Link to="/activity-board" className="navbar__nav-item">
-                activity board
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
+            {width > 970 ? (
               <PunditContainer policies={policies} user={user}>
                 <PunditTypeSet type="Disclosure">
                   <VisibleIf action="Create" model={{}}>
@@ -89,7 +92,7 @@ class Navbar extends Component {
             ) : (
               ""
             )}
-            {width > 600 ? (
+            {width > 970 ? (
               <PunditContainer policies={policies} user={user}>
                 <PunditTypeSet type="Disclosure">
                   <VisibleIf action="Create" model={{}}>

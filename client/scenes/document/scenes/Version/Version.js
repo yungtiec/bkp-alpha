@@ -55,7 +55,7 @@ class Document extends Component {
           target: "body"
         },
         {
-          target: "project-document__upvote-btn",
+          target: ".project-document__upvote-btn",
           content: "What do you think about the framework overall?",
           disableBeacon: true,
           placement: "top"
@@ -201,9 +201,12 @@ class Document extends Component {
 
   render() {
     const {
+      versionMetadataLoading,
+      versionQnasLoading,
+      commentsLoading,
       documentMetadata,
-      documentQnasById,
-      documentQnaIds,
+      versionQnasById,
+      versionQnaIds,
       editQuestion,
       editAnswer,
       editScorecard,
@@ -242,112 +245,123 @@ class Document extends Component {
 
     const selectedComments = this.getSelectedComments();
 
-    return (
-      <div>
-        <Joyride
-          continuous
-          showProgress
-          steps={this.state.steps}
-          run={this.state.run}
-          callback={this.handleJoyrideCallback}
-          styles={{
-            options: {
-              primaryColor: "#2540ce"
-            }
-          }}
+    if (versionMetadataLoading || versionQnasLoading || commentsLoading)
+      return (
+        <SquareLoader
+          key="LoadableVersion"
+          className="route__loader"
+          color="#2d4dd1"
+          size="16px"
+          margin="4px"
         />
-        <VersionContent
-          parent={this}
-          isLoggedIn={isLoggedIn}
-          isClosedForComment={isClosedForComment}
-          documentMetadata={documentMetadata}
-          documentQnasById={documentQnasById}
-          documentQnaIds={documentQnaIds}
-          editScorecard={editScorecard}
-          editQuestion={editQuestion}
-          editAnswer={editAnswer}
-          revertToPrevQuestion={revertToPrevQuestion}
-          revertToPrevAnswer={revertToPrevAnswer}
-          versionMetadata={versionMetadata}
-          tags={tags}
-          tagFilter={tagFilter}
-          commentOnClick={this.commentOnClick}
-          addNewCommentSentFromServer={addNewCommentSentFromServer}
-        />
-        <div className="d-flex project-document__footer">
-          <a
-            href="https://tinyurl.com/y94wspyg"
-            target="_blank"
-            className="mr-4 mb-3"
+      );
+    else
+      return (
+        <div>
+          <Joyride
+            continuous
+            showProgress
+            steps={this.state.steps}
+            run={this.state.run}
+            callback={this.handleJoyrideCallback}
+            styles={{
+              options: {
+                primaryColor: "#2540ce"
+              }
+            }}
+          />
+          <VersionContent
+            parent={this}
+            isLoggedIn={isLoggedIn}
+            isClosedForComment={isClosedForComment}
+            documentMetadata={documentMetadata}
+            versionQnasById={versionQnasById}
+            versionQnaIds={versionQnaIds}
+            editScorecard={editScorecard}
+            editQuestion={editQuestion}
+            editAnswer={editAnswer}
+            revertToPrevQuestion={revertToPrevQuestion}
+            revertToPrevAnswer={revertToPrevAnswer}
+            versionMetadata={versionMetadata}
+            tags={tags}
+            tagFilter={tagFilter}
+            commentOnClick={this.commentOnClick}
+            addNewCommentSentFromServer={addNewCommentSentFromServer}
+          />
+          <div className="d-flex project-document__footer">
+            <a
+              href="https://tinyurl.com/y94wspyg"
+              target="_blank"
+              className="mr-4 mb-3"
+            >
+              <span className="text-secondary">privacy policy</span>
+            </a>
+            <a
+              href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
+              target="_blank"
+              className="mr-4 mb-3"
+            >
+              <span className="text-secondary">terms of use</span>
+            </a>
+            <a className="mb-3" onClick={() => loadModal("FEEDBACK_MODAL")}>
+              <span className="text-secondary">
+                report bugs or give feedback on the app
+              </span>
+            </a>
+          </div>
+          <SidebarLayout
+            width={width}
+            selectedComments={selectedComments}
+            sidebarOpen={sidebarOpen}
+            toggleSidebar={toggleSidebar}
+            sidebarContext={sidebarContext}
+            toggleSidebarContext={toggleSidebarContext}
           >
-            <span className="text-secondary">privacy policy</span>
-          </a>
-          <a
-            href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
-            target="_blank"
-            className="mr-4 mb-3"
-          >
-            <span className="text-secondary">terms of use</span>
-          </a>
-          <a className="mb-3" onClick={() => loadModal("FEEDBACK_MODAL")}>
-            <span className="text-secondary">
-              report bugs or give feedback on the app
-            </span>
-          </a>
+            <CustomScrollbar
+              scrollbarContainerWidth={
+                this.props.width < 767
+                  ? "350px"
+                  : this.props.width > 1300 ? "450px" : "410px"
+              }
+              scrollbarContainerHeight="calc(100% - 100px)"
+              autoHide={true}
+              scrollbarThumbColor="rgb(233, 236, 239)"
+            >
+              {sidebarContext === "comments" && (
+                <SidebarComments
+                  isLoggedIn={isLoggedIn}
+                  anonymity={anonymity}
+                  commentIds={commentIds}
+                  nonSpamCommentIds={nonSpamCommentIds}
+                  commentsById={commentsById}
+                  versionMetadata={versionMetadata}
+                  projectMetadata={documentMetadata.project}
+                  commentSortBy={commentSortBy}
+                  sortCommentBy={sortCommentBy}
+                  tags={tags}
+                  tagFilter={tagFilter}
+                  updateTagFilter={updateTagFilter}
+                  tagsWithCountInDocument={tagsWithCountInDocument}
+                  commentIssueFilter={commentIssueFilter}
+                  updateIssueFilter={updateIssueFilter}
+                  isClosedForComment={isClosedForComment}
+                  addNewComment={addNewComment}
+                  selectedComments={selectedComments}
+                  selectedText={sidebarCommentContext.selectedText}
+                  resetCommentSelection={this.resetSidebarCommentContext}
+                  parent={this}
+                />
+              )}
+              {sidebarContext === "tableOfContents" && (
+                <SidebarTableOfContents
+                  versionQnasById={versionQnasById}
+                  versionQnaIds={versionQnaIds}
+                />
+              )}
+            </CustomScrollbar>
+          </SidebarLayout>
         </div>
-        <SidebarLayout
-          width={width}
-          selectedComments={selectedComments}
-          sidebarOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-          sidebarContext={sidebarContext}
-          toggleSidebarContext={toggleSidebarContext}
-        >
-          <CustomScrollbar
-            scrollbarContainerWidth={
-              this.props.width < 767
-                ? "350px"
-                : this.props.width > 1300 ? "450px" : "410px"
-            }
-            scrollbarContainerHeight="calc(100% - 100px)"
-            autoHide={true}
-            scrollbarThumbColor="rgb(233, 236, 239)"
-          >
-            {sidebarContext === "comments" && (
-              <SidebarComments
-                isLoggedIn={isLoggedIn}
-                anonymity={anonymity}
-                commentIds={commentIds}
-                nonSpamCommentIds={nonSpamCommentIds}
-                commentsById={commentsById}
-                versionMetadata={versionMetadata}
-                projectMetadata={documentMetadata.project}
-                commentSortBy={commentSortBy}
-                sortCommentBy={sortCommentBy}
-                tags={tags}
-                tagFilter={tagFilter}
-                updateTagFilter={updateTagFilter}
-                tagsWithCountInDocument={tagsWithCountInDocument}
-                commentIssueFilter={commentIssueFilter}
-                updateIssueFilter={updateIssueFilter}
-                isClosedForComment={isClosedForComment}
-                addNewComment={addNewComment}
-                selectedComments={selectedComments}
-                selectedText={sidebarCommentContext.selectedText}
-                resetCommentSelection={this.resetSidebarCommentContext}
-                parent={this}
-              />
-            )}
-            {sidebarContext === "tableOfContents" && (
-              <SidebarTableOfContents
-                documentQnasById={documentQnasById}
-                documentQnaIds={documentQnaIds}
-              />
-            )}
-          </CustomScrollbar>
-        </SidebarLayout>
-      </div>
-    );
+      );
   }
 }
 

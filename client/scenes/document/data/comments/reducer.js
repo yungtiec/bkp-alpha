@@ -14,6 +14,7 @@ import * as types from "./actionTypes";
 import moment from "moment";
 
 const initialState = {
+  loading: false,
   commentsById: null,
   commentIds: null
 };
@@ -119,10 +120,16 @@ function addTagToComment({ state, comment }) {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    case types.COMMENTS_FETCH_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
     case types.COMMENTS_FETCH_SUCCESS:
       return {
         commentsById: action.commentsById,
-        commentIds: keys(action.commentsById)
+        commentIds: keys(action.commentsById),
+        loading: false
       };
     case types.COMMENT_REPLY_INIT:
       return addEmptyCommentToHierarchy({
@@ -279,20 +286,20 @@ function splitRangePath(path) {
 }
 
 function getStartAndEndIndexInDocumentQna(
-  documentQnaIds,
-  documentQnasById,
+  versionQnaIds,
+  versionQnasById,
   comment
 ) {
   try {
-    if (!documentQnaIds.length) return;
-    const documentQuestion = documentQnasById[comment.version_question_id];
-    const documentQnaContent =
+    if (!versionQnaIds.length) return;
+    const documentQuestion = versionQnasById[comment.version_question_id];
+    const versionQnaContent =
       documentQuestion.markdown +
       documentQuestion.version_answers.reduce(
         (string, answer) => answer.markdown + " ",
         ""
       );
-    const startIndex = documentQnaContent.indexOf(comment.quote);
+    const startIndex = versionQnaContent.indexOf(comment.quote);
     const endIndex = startIndex + comment.quote.length;
     const order_in_version = documentQuestion.order_in_version;
     return { startIndex, endIndex, order_in_version };
@@ -309,17 +316,20 @@ export function getAllComments(state) {
   var filteredCommentIds;
   const verificationStatus = state.scenes.document.verificationStatus;
   const sortFn = sortFns[state.scenes.document.commentSortBy];
-  var { commentIds, commentsById } = state.scenes.document.data.comments;
+  var { commentIds, commentsById, loading } = state.scenes.document.data.comments;
   const tagFilter = state.scenes.document.data.tags.filter;
   const commentIssueFilter = state.scenes.document.commentIssueFilter;
-  const { documentQnaIds, documentQnasById } = state.scenes.document.data.qnas;
+  const {
+    versionQnaIds,
+    versionQnasById
+  } = state.scenes.document.data.versionQnas;
   const versionAnswerIds =
-    documentQnaIds &&
-    documentQnaIds.map(id => documentQnasById[id].version_answers[0].id);
+    versionQnaIds &&
+    versionQnaIds.map(id => versionQnasById[id].version_answers[0].id);
   const commentCollection = values(commentsById).map(comment => {
     const range = getStartAndEndIndexInDocumentQna(
-      documentQnaIds,
-      documentQnasById,
+      versionQnaIds,
+      versionQnasById,
       comment
     );
     return assignIn(
@@ -350,7 +360,8 @@ export function getAllComments(state) {
     unfilteredCommentIds: sortedCommentIds,
     nonSpamCommentIds: sortedCommentIds.filter(
       cid => commentsById[cid].reviewed !== "spam"
-    )
+    ),
+    commentsLoading: loading
   };
 }
 

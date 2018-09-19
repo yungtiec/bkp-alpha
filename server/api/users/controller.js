@@ -38,12 +38,12 @@ const getUserProjects = async (req, res, next) => {
       include: [
         {
           model: User,
-          through: "project_admin",
+          through: "project_admins",
           as: "admins"
         },
         {
           model: User,
-          through: "project_editor",
+          through: "project_editors",
           as: "editors"
         }
       ]
@@ -98,7 +98,7 @@ const getUserDocuments = async (req, res, next) => {
               include: [
                 {
                   model: User,
-                  through: "project_editor",
+                  through: "project_editors",
                   as: "editors",
                   where: { id: req.user.id },
                   required: true
@@ -131,7 +131,7 @@ const getUserDocuments = async (req, res, next) => {
               include: [
                 {
                   model: User,
-                  through: "project_admin",
+                  through: "project_admins",
                   as: "admins",
                   where: { id: req.user.id },
                   required: true

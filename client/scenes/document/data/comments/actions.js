@@ -16,6 +16,9 @@ import history from "../../../../history";
 export const fetchCommentsByVersionId = versionId => {
   return async (dispatch, getState) => {
     try {
+      dispatch({
+        type: types.COMMENTS_FETCH_REQUEST
+      });
       const comments = await getCommentsByVersionId(versionId);
       const tags = await getAllTags();
       const commentsById = keyBy(comments, "id");

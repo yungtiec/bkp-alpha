@@ -4,6 +4,7 @@ import { keys, capitalize, isEqual } from "lodash";
 import autoBind from "react-autobind";
 import { ContentEditingContainer } from "./index";
 import { ScoreInput } from "../../../../../components";
+import { meanBy, values } from "lodash";
 import Formsy from "formsy-react";
 
 const scorecardOrder = [
@@ -75,7 +76,6 @@ export default class VersionScorecard extends Component {
     } = this.props;
     const validations = "isWithin:[1, 10]";
     const validationError = "the score must be within 1 to 10";
-
     return (
       <Element
         name="qna-scorecard"
@@ -83,9 +83,6 @@ export default class VersionScorecard extends Component {
         key="qna-scorecard"
       >
         <div className="qna__container mb-4">
-          <div className="qna__question">
-            <h3>Consumer token framework scorecard</h3>
-          </div>
           <ContentEditingContainer
             otherClassNames="qna__answer-container"
             editing={this.state.editing}
@@ -143,6 +140,16 @@ export default class VersionScorecard extends Component {
                         </tr>
                       );
                     })}
+                    <tr>
+                      <td className="text-left"><b>OVERALL TRANSPARENCY SCORE</b></td>
+                      <td className="text-left">
+                        <b>
+                          {meanBy(values(this.state.scorecard), s =>
+                            Number(s)
+                          ).toFixed(1)}
+                        </b>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
                 {this.state.editing ? (

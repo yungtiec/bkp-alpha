@@ -1,7 +1,9 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep, omit } from "lodash";
 import * as types from "./actionTypes";
 
-const initialState = {};
+const initialState = {
+  loading: false
+};
 
 const updateScorecard = (action, state) => {
   var newState = cloneDeep(state);
@@ -11,10 +13,16 @@ const updateScorecard = (action, state) => {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
+    case types.PROJECT_SURVEY_METADATA_FETCH_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
     case types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
-        ...action.versionMetadata
+        ...action.versionMetadata,
+        loading: false
       };
     case types.VERSION_SCORECARD_UPDATED:
       return updateScorecard(action, state);
@@ -24,5 +32,11 @@ export default function reduce(state = initialState, action = {}) {
 }
 
 export function getVersionMetadata(state) {
-  return state.scenes.document.data.versionMetadata;
+  return {
+    versionMetadata: omit(
+      state.scenes.document.data.versionMetadata,
+      "loading"
+    ),
+    versionMetadataLoading: state.scenes.document.data.versionMetadata.loading
+  };
 }
