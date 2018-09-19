@@ -10,7 +10,7 @@ export function postMarkdown({
   parentVersionId,
   markdown,
   resolvedIssueIds,
-  newIssues,
+  newResolvedIssues,
   collaboratorEmails,
   commentPeriodUnit,
   commentPeriodValue,
@@ -21,7 +21,7 @@ export function postMarkdown({
     .post(`/api/documents/${parentVersionId}`, {
       markdown,
       resolvedIssueIds,
-      newIssues,
+      newResolvedIssues,
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,

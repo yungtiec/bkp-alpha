@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: client/components/AuthForm/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: client/components/AuthForm/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import "./index.scss";
+import React, { Component } from "react";
+import autoBind from "react-autobind";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import {
+  auth,
+  signinWithUport,
+  requestPasswordReset,
+  resetPassword,
+  verifyUportOnMobile
+} from "../../data/reducer";
+import { Link } from "react-router-dom";
+import { InputEmail, InputPassword, InputText } from "../index";
+import Formsy from "formsy-react";
+
+/**
+ * COMPONENT
+ */
+class AuthForm extends Component {
+  constructor(props) {
+    super(props);
+    autoBind(this);
+    this.state = { canSubmit: false };
+  }
+
+  componentDidMount() {
+    if (window.location.href.split("access_token=").length > 1) {
+      this.props.verifyUportOnMobile(window.location.href.split("access_token=")[1]);
+    }
+  }
+
+  disableButton() {
+    this.setState({ canSubmit: false });
+  }
+
+  enableButton() {
+    this.setState({ canSubmit: true });
+  }
+
+  handleSubmit(authMethod, model) {
+    const email = model.email;
+    const password = model.password;
+    if (authMethod === "requestPasswordReset") {
+      this.props.requestPasswordReset(email);
+    } else if (authMethod === "resetPassword") {
+      this.props.resetPassword({
+        password,
+        token: this.props.match.params.token
+      });
+    } else {
+      var userInfo =
+        authMethod === "login"
+          ? { email, password }
+          : {
+              email,
+              password,
+              first_name: model.firstName,
+              last_name: model.lastName,
+              organization: model.organization
+            };
+      this.props.auth(userInfo, authMethod);
+    }
+  }
+
+  renderAuthenticationForm() {
+    const {
+      authMethod,
+      authMethodLabel,
+      handleSubmit,
+      error,
+      signinWithUport
+    } = this.props;
+
+    return (
+      &lt;Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        &lt;div className="form-group row oauth-btns">
+          &lt;a href="/auth/google">
+            &lt;img
+              width="191px"
+              height="46px"
+              src="/assets/btn_google_signin_dark_normal_web.png"
+            />
+          &lt;/a>
+          &lt;a onClick={signinWithUport}>
+            &lt;img
+              width="191px"
+              height="46px"
+              src="/assets/btn_uport_signin_dark_normal_web.png"
+            />
+          &lt;/a>
+        &lt;/div>
+        &lt;div className="d-flex" style={{ margin: "0px -30px" }}>
+          &lt;div
+            style={{
+              border: "1px solid #c2c2c2",
+              borderWidth: "0 0 1px 0",
+              width: "45%"
+            }}
+          />
+          &lt;span style={{ marginTop: "4px" }}>or&lt;/span>
+          &lt;div
+            style={{
+              border: "1px solid #c2c2c2",
+              borderWidth: "0 0 1px 0",
+              width: "45%"
+            }}
+          />
+        &lt;/div>
+        {authMethod === "signup" &amp;&amp; (
+          &lt;div className="form-group row">
+            &lt;div style={{ margin: "0 1% 0 0", width: "49%" }}>
+              &lt;label htmlFor="firstName">
+                &lt;small>First Name&lt;/small>
+              &lt;/label>
+              &lt;InputText name="firstName" required />
+            &lt;/div>
+            &lt;div style={{ margin: "0 0 0 1%", width: "49%" }}>
+              &lt;label htmlFor="lastName">
+                &lt;small>Last Name&lt;/small>
+              &lt;/label>
+              &lt;InputText name="lastName" required />
+            &lt;/div>
+          &lt;/div>
+        )}
+        {authMethod === "signup" &amp;&amp; (
+          &lt;div className="form-group row d-flex flex-column">
+            &lt;label htmlFor="organization">
+              &lt;small>Organization&lt;/small>
+            &lt;/label>
+            &lt;InputText name="organization" />
+          &lt;/div>
+        )}
+        &lt;div className="form-group row d-flex flex-column">
+          &lt;label htmlFor="email">
+            &lt;small>Email&lt;/small>
+          &lt;/label>
+          &lt;InputEmail
+            name="email"
+            validations="isEmail"
+            validationError="This is not a valid email"
+            required
+          />
+        &lt;/div>
+        &lt;div className="form-group row d-flex flex-column">
+          &lt;label htmlFor="password">
+            &lt;small>Password&lt;/small>
+          &lt;/label>
+          &lt;InputPassword
+            name="password"
+            validations="minLength:8"
+            validationError="Password must have a minimum length of 8 characters"
+            required
+          />
+        &lt;/div>
+        {authMethod === "login" ? (
+          &lt;Link to="/request-password-reset" className="row">
+            forget password?
+          &lt;/Link>
+        ) : null}
+        {authMethod === "signup" &amp;&amp; (
+          &lt;div className="form-group row d-flex flex-column">
+            &lt;label htmlFor="password">
+              &lt;small>Confirm password&lt;/small>
+            &lt;/label>
+            &lt;InputPassword
+              name="confirm"
+              validations="equalsField:password"
+              validationError="Password and confirmation password do not match"
+            />
+          &lt;/div>
+        )}
+        &lt;div className="form-group row auth-form__submit-btn-container">
+          &lt;button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          &lt;/button>
+        &lt;/div>
+        {error &amp;&amp; error.response &amp;&amp; &lt;div>{error.response.data}&lt;/div>}
+      &lt;/Formsy>
+    );
+  }
+
+  renderRequestPasswordResetForm() {
+    const { authMethod, authMethodLabel, handleSubmit } = this.props;
+    return (
+      &lt;Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        &lt;div className="form-group row d-flex flex-column">
+          &lt;label htmlFor="email">
+            &lt;small>Email&lt;/small>
+          &lt;/label>
+          &lt;InputEmail
+            name="email"
+            validations="isEmail"
+            validationError="This is not a valid email"
+            required
+          />
+        &lt;/div>
+        &lt;div className="form-group row auth-form__submit-btn-container">
+          &lt;button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          &lt;/button>
+        &lt;/div>
+      &lt;/Formsy>
+    );
+  }
+
+  renderResetPasswordForm() {
+    const { authMethod, authMethodLabel } = this.props;
+
+    return (
+      &lt;Formsy
+        className="auth__form"
+        onValidSubmit={model => this.handleSubmit(authMethod, model)}
+        name={authMethod}
+        onValid={this.enableButton}
+        onInvalid={this.disableButton}
+      >
+        &lt;div className="form-group row d-flex flex-column">
+          &lt;label htmlFor="password">
+            &lt;small>Password&lt;/small>
+          &lt;/label>
+          &lt;InputPassword
+            name="password"
+            validations="minLength:8"
+            validationError="Password must have a minimum length of 8 characters"
+            required
+          />
+        &lt;/div>
+        &lt;div className="form-group row d-flex flex-column">
+          &lt;label htmlFor="password">
+            &lt;small>Confirm password&lt;/small>
+          &lt;/label>
+          &lt;InputPassword
+            name="confirm"
+            validations="equalsField:password"
+            validationError="Password and confirmation password do not match"
+          />
+        &lt;/div>
+        &lt;div className="form-group row auth-form__submit-btn-container">
+          &lt;button className="btn btn-outline-primary" type="submit">
+            {authMethodLabel}
+          &lt;/button>
+        &lt;/div>
+      &lt;/Formsy>
+    );
+  }
+
+  render() {
+    const {
+      authMethod,
+      authMethodLabel,
+      handleSubmit,
+      error,
+      signinWithUport
+    } = this.props;
+
+    return (
+      &lt;div className="auth-page">
+        &lt;div className="auth-page__header">
+          &lt;Link className="logo-tbp my-0 mx-0" to="/landing">
+            &lt;img
+              width="120px"
+              height="auto"
+              className="logo__large"
+              src="/assets/the-brooklyn-project-logo-white-transparent.png"
+            />
+          &lt;/Link>
+        &lt;/div>
+        &lt;div className="auth__form-wrapper">
+          &lt;div className="auth__form-contents">
+            {authMethod === "requestPasswordReset"
+              ? this.renderRequestPasswordResetForm()
+              : authMethod === "resetPassword"
+                ? this.renderResetPasswordForm()
+                : this.renderAuthenticationForm()}
+          &lt;/div>
+          &lt;div className="auth-form__form-footer">
+            &lt;div className="auth-form__form-footer__left">
+              &lt;nav>
+                &lt;a
+                  href="https://thebrooklynproject.consensys.net/"
+                  target="_blank"
+                  className="ml-0"
+                >
+                  &lt;span>About&lt;/span>
+                &lt;/a>
+                &lt;a
+                  href="https://tinyurl.com/y94wspyg"
+                  target="_blank"
+                  style={{ width: "100px" }}
+                >
+                  &lt;span>privacy policy&lt;/span>
+                &lt;/a>
+                &lt;a
+                  href="https://drive.google.com/open?id=1p4F4UVhCohifqb0R5WzfJ8R1nKJOahIV"
+                  target="_blank"
+                  style={{ width: "100px" }}
+                >
+                  &lt;span>terms of use&lt;/span>
+                &lt;/a>
+              &lt;/nav>
+            &lt;/div>
+            &lt;div className="auth-form__form-footer__right">
+              &lt;p id="no-acct-msg" className="message__has-account my-2">
+                {authMethod === "signup"
+                  ? "Already have an account?"
+                  : "Don't have an account?"}
+                &lt;Link
+                  className="btn__sign-in"
+                  to={`/${authMethod === "signup" ? "login" : "signup"}`}
+                >
+                  {authMethod === "signup" ? "Log in" : "Sign up"}
+                &lt;/Link>
+              &lt;/p>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="auth-page__footer">
+          &lt;div className="logo-consensys">
+            &lt;img
+              width="100px"
+              height="auto"
+              className="logo__large"
+              src="/assets/consensys-logo-white-transparent.png"
+            />
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    );
+  }
+}
+
+const mapLogin = state => {
+  return {
+    authMethod: "login",
+    authMethodLabel: "Login",
+    error: state.data.user.error
+  };
+};
+
+const mapSignup = state => {
+  return {
+    authMethod: "signup",
+    authMethodLabel: "Sign Up",
+    error: state.data.user.error
+  };
+};
+
+const mapRequestPasswordReset = state => {
+  return {
+    authMethod: "requestPasswordReset",
+    authMethodLabel: "Request password reset"
+  };
+};
+
+const mapResetPassword = state => {
+  return {
+    authMethod: "resetPassword",
+    authMethodLabel: "Reset password"
+  };
+};
+
+export const Login = withRouter(
+  connect(mapLogin, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
+export const Signup = withRouter(
+  connect(mapSignup, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+);
+export const RequestPasswordReset = connect(mapRequestPasswordReset, {
+  requestPasswordReset
+})(AuthForm);
+export const ResetPassword = withRouter(
+  connect(mapResetPassword, { resetPassword })(AuthForm)
+);
+
+/**
+ * PROP TYPES
+ */
+AuthForm.propTypes = {
+  authMethod: PropTypes.string.isRequired,
+  authMethodLabel: PropTypes.string.isRequired,
+  error: PropTypes.object
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthForm.html">AuthForm</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterByIssue">filterByIssue</a></li><li><a href="global.html#filterByTags">filterByTags</a></li><li><a href="global.html#filterByVersionAnswer">filterByVersionAnswer</a></li><li><a href="global.html#findItemInTreeById">findItemInTreeById</a></li><li><a href="global.html#getAllComments">getAllComments</a></li><li><a href="global.html#getCommentQueryObj">getCommentQueryObj</a></li><li><a href="global.html#getContextUri">getContextUri</a></li><li><a href="global.html#getProjectStats">getProjectStats</a></li><li><a href="global.html#MODAL_COMPONENTS">MODAL_COMPONENTS</a></li><li><a href="global.html#setSaltAndPassword">setSaltAndPassword</a></li><li><a href="global.html#sortCommentsByPosition">sortCommentsByPosition</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Sep 19 2018 13:41:50 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
