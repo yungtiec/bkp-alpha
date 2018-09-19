@@ -4,8 +4,8 @@ Now that you've got the code, follow these steps to get acclimated:
 
 * Update project name and description in `package.json` and `.travis.yml` files
 * `npm install`, or `yarn install` - whatever you're into
-* Create two postgres databases: `bkp-alpha` and `bkp-alpha-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
-  * By default, running `npm test` will use `bkp-alpha-test`, while regular development uses `bkp-alpha`
+* Create two postgres databases: `bkp-dev` and `bkp-test`
+  * By default, running `npm test` will use `bkp-test`, while regular development uses `bkp-dev`
 * Config file`secrets.js` in the project root
   * This file is `.gitignore`'d, and will *only* be required in your *development* environment
   * Its purpose is to attach the secret env variables that you'll use while developing
@@ -18,7 +18,7 @@ Now that you've got the code, follow these steps to get acclimated:
 
 ## Linting
 
-We use a very opionated formatter called JSPrettier.
+We use a very opionated formatter called [JSPrettier](https://prettier.io/).
 
 ## Start
 
@@ -33,7 +33,7 @@ From there, just follow your bliss.
 Ready to go world wide? Here's a guide to deployment! There are two (compatible) ways to deploy:
 
 * automatically, via continuous integration
-* manually, from your local machine
+* manually, from your local machine (current method)
 
 Either way, you'll need to set up your deployment server to start:
 
@@ -45,7 +45,7 @@ Either way, you'll need to set up your deployment server to start:
   - `git remote add staging https://git.heroku.com/bkp-alpha-test.git` This is for staging.
 4. Getting data for local development
   - `heroku pg:pull DATABASE_URL bkp-dev --app bkp-alpha`
-  - create a database named `bkp-alpha-test` for testing
+  - create a database named `bkp-test` for testing
 
 ### When you're ready to deploy
 
@@ -55,12 +55,12 @@ Some developers may prefer to control deployment rather than rely on automation.
 
 1. Make sure that all your work is fully committed and pushed to your master branch on Github.
 2. If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
-3. `npm run deploy` - this will cause the following commands to happen in order:
+3. `npm run deploy` or `npm run deploy-staging` - this will cause the following commands to happen in order:
   - `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
   - `webpack -p`: webpack will run in "production mode"
   - `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
   - `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
-  - `git push --force heroku deploy:master`: push your local "deploy" branch to the "master" branch on heroku
+  - `git push --force REMOTE_NAME deploy:master`: push your local "deploy" branch to the "master" branch on heroku
   - `git checkout master`: return to your master branch
   - `git branch -D deploy`: remove the deploy branch
 
@@ -139,6 +139,22 @@ Check out ``policy.js`` in the client directory and ``access-control.js`` in the
 
 The official documentation is a great resource to learn.
 
+[This article](http://www.duringthedrive.com/2017/05/06/models-migrations-sequelize-node/) is about sequelize migration. Ideally, we make changes to the database through migration, then we run this command for staging/production environment:
+
+`heroku run sequelize db:migrate --env staging_or_production -m --app app-name. `
+
+`server/db/migration/20180918083848-add-version-pdf-column.js` is an example of adding a new column and updating data
+
+TODO: we can incoprate the command in 'npm start':
+
+`
+"scripts": {
+  "start": "sequelize db:migrate && node server"
+},
+`
+
+Every deployment will trigger db:migrate to ensure database update.
+
 ### [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
 
 ### Syncing database
@@ -155,6 +171,10 @@ We can also do it manually with a simple tool named `parity`
 https://robots.thoughtbot.com/how-to-back-up-a-heroku-production-database-to-staging
 
 # Markdown parser
+
+Definitely need to improve the scrip `script/markdown-parser`
+
+Known bug: sections can't have the same title.
 
 ## Disclosure markdown format
 
