@@ -28,7 +28,7 @@ If you want to run the server and/or webpack separately, you can also `npm run s
 
 From there, just follow your bliss.
 
-## Deployment
+## Heroku
 
 Ready to go world wide? Here's a guide to deployment! There are two (compatible) ways to deploy:
 
@@ -139,8 +139,10 @@ Check out ``policy.js`` in the client directory and ``access-control.js`` in the
 
 The official documentation is a great resource to learn.
 
-[This article](http://www.duringthedrive.com/2017/05/06/models-migrations-sequelize-node/) is about sequelize migration. Ideally, we make changes to the database through migration, then we run this command for staging/production environment:
+### Making changes to database
+[This article](http://www.duringthedrive.com/2017/05/06/models-migrations-sequelize-node/) is about sequelize migration. Ideally, we make changes to the database through migration. Checkout `server/db/migrations` folder for examples. When a migration finishes, Sequelize will insert a row in `SequelizeMetadata` in the database. Run `sequelize db:migrate` will perform any pending migration that's not logged in the table.
 
+Run this command for staging/production environment:
 `heroku run sequelize db:migrate --env staging_or_production -m --app app-name. `
 
 `server/db/migration/20180918083848-add-version-pdf-column.js` is an example of adding a new column and updating data
