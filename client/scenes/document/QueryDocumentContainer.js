@@ -14,8 +14,8 @@ import {
   upvoteDocument,
   downvoteDocument
 } from "./data/documentMetadata/actions";
-import { getAllDocumentQuestions } from "./data/qnas/reducer";
-import { fetchLatestQuestionsByDocumentId } from "./data/qnas/actions";
+import { getAllDocumentQuestions } from "./data/versionQnas/reducer";
+import { fetchLatestQuestionsByDocumentId } from "./data/versionQnas/actions";
 import DocumentContainer from "./DocumentContainer";
 import history from "../../history";
 
@@ -48,20 +48,21 @@ class QueryDocumentContainer extends Component {
   }
 
   render() {
-    if (!this.props.documentMetadata.id || !this.props.documentQnaIds)
+    if (!this.props.documentMetadata.id || !this.props.versionQnaIds)
       return null;
     return <DocumentContainer {...this.props} />;
   }
 }
 
 const mapState = state => {
-  const { documentQnasById, documentQnaIds } = getAllDocumentQuestions(state);
+  const { versionQnasById, versionQnaIds } = getAllDocumentQuestions(state);
+  const { versionMetadata, versionMetadataLoading } = getVersionMetadata(state);
   return {
-    documentQnasById,
-    documentQnaIds,
+    versionQnasById,
+    versionQnaIds,
     documentMetadata: getDocumentMetadata(state),
     latestVersionMetadata: getDocumentLatestVersion(state),
-    versionMetadata: getVersionMetadata(state),
+    versionMetadata,
     isClosedForComment: isClosedForComment(state)
   };
 };

@@ -14,17 +14,17 @@ export function fetchLatestQuestionsByDocumentId(documentId) {
   return async (dispatch, getState) => {
     try {
       var version = await getLatestQuestionsByDocumentId(documentId);
-      const documentQnas = sortBy(
+      const versionQnas = sortBy(
         version.version_questions,
         ["order_in_version"],
         ["asc"]
       );
-      const documentQnasById = keyBy(documentQnas, "id");
-      const documentQnaIds = documentQnas.map(qna => qna.id);
+      const versionQnasById = keyBy(versionQnas, "id");
+      const versionQnaIds = versionQnas.map(qna => qna.id);
       dispatch({
         type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
-        documentQnasById,
-        documentQnaIds
+        versionQnasById,
+        versionQnaIds
       });
     } catch (error) {
       console.error(error);
@@ -35,18 +35,21 @@ export function fetchLatestQuestionsByDocumentId(documentId) {
 export function fetchQuestionsByVersionId(versionId) {
   return async (dispatch, getState) => {
     try {
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_REQUEST
+      });
       var version = await getQuestionsByVersionId(versionId);
-      const documentQnas = sortBy(
+      const versionQnas = sortBy(
         version.version_questions,
         ["order_in_version"],
         ["asc"]
       );
-      const documentQnasById = keyBy(documentQnas, "id");
-      const documentQnaIds = documentQnas.map(qna => qna.id);
+      const versionQnasById = keyBy(versionQnas, "id");
+      const versionQnaIds = versionQnas.map(qna => qna.id);
       dispatch({
         type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
-        documentQnasById,
-        documentQnaIds
+        versionQnasById,
+        versionQnaIds
       });
     } catch (error) {
       console.error(error);

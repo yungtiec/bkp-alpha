@@ -119,8 +119,8 @@ class VersionUpload extends Component {
       isLoggedIn,
       width,
       documentMetadata,
-      documentQnasById,
-      documentQnaIds,
+      versionQnasById,
+      versionQnaIds,
       versionMetadata,
       outstandingIssues,
       notify,
@@ -372,8 +372,8 @@ class VersionUpload extends Component {
                 importedMarkdown={importedMarkdown}
                 importMarkdown={importMarkdown}
                 isLoggedIn={isLoggedIn}
-                documentQnasById={documentQnasById}
-                documentQnaIds={documentQnaIds}
+                versionQnasById={versionQnasById}
+                versionQnaIds={versionQnaIds}
                 versionMetadata={versionMetadata}
                 projectMetadata={documentMetadata.project}
               />

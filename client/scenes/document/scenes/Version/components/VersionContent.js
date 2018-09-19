@@ -9,8 +9,8 @@ const VersionContent = ({
   isLoggedIn,
   isClosedForComment,
   documentMetadata,
-  documentQnasById,
-  documentQnaIds,
+  versionQnasById,
+  versionQnaIds,
   editScorecard,
   editQuestion,
   editAnswer,
@@ -24,16 +24,16 @@ const VersionContent = ({
   addNewCommentSentFromServer
 }) => (
   <div className="project-document" id="project-document">
-    {documentQnaIds.map((id, i) => {
+    {versionQnaIds.map((id, i) => {
       return (
         <Element
           name={`qna-${id}`}
           ref={el => (parent[`qna-${id}`] = el)}
-          key={`qna-${id}--${documentQnasById[id].order_in_version}`}
+          key={`qna-${id}--${versionQnasById[id].order_in_version}`}
         >
           <Qna
-            key={`qna-${id}--${documentQnasById[id].order_in_version}`}
-            qna={documentQnasById[id]}
+            key={`qna-${id}--${versionQnasById[id].order_in_version}`}
+            qna={versionQnasById[id]}
             versionId={versionMetadata.id}
             isLoggedIn={isLoggedIn}
             isClosedForComment={isClosedForComment}
@@ -42,18 +42,18 @@ const VersionContent = ({
             addNewCommentSentFromServer={addNewCommentSentFromServer}
           >
             <Question
-              key={`qna-${documentQnasById[id].order_in_version}__question`}
+              key={`qna-${versionQnasById[id].order_in_version}__question`}
               documentMetadata={documentMetadata}
               qnaId={id}
-              question={documentQnasById[id]}
+              question={versionQnasById[id]}
               editQuestion={editQuestion}
               revertToPrevQuestion={revertToPrevQuestion}
               user={user}
               versionMetadata={versionMetadata}
-              isDividerTitle={documentQnasById[id].isDividerTitle}
+              isDividerTitle={versionQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
             />
-            {documentQnasById[id].markdown ===
+            {versionQnasById[id].markdown ===
               "### Consumer Token Framework Scorecard" &&
             versionMetadata.scorecard &&
             !isEmpty(versionMetadata.scorecard) ? (
@@ -73,7 +73,7 @@ const VersionContent = ({
               key={`qna-${id}__answers`}
               documentMetadata={documentMetadata}
               qnaId={id}
-              answer={documentQnasById[id].version_answers[0]}
+              answer={versionQnasById[id].version_answers[0]}
               revertToPrevAnswer={revertToPrevAnswer}
               user={user}
               versionMetadata={versionMetadata}

@@ -29,8 +29,8 @@ import {
   editAnswer,
   revertToPrevQuestion,
   revertToPrevAnswer
-} from "../../data/qnas/actions";
-import { getAllDocumentQuestions } from "../../data/qnas/reducer";
+} from "../../data/versionQnas/actions";
+import { getAllDocumentQuestions } from "../../data/versionQnas/reducer";
 
 // document/metadata
 import {
@@ -60,10 +60,11 @@ import {
 } from "../../data/tags/reducer";
 import { updateTagFilter } from "../../data/tags/actions";
 
-const LoadableDocument = Loadable({
+const LoadableVersion = Loadable({
   loader: () => import("./Version"),
   loading: () => (
     <SquareLoader
+      key="LoadableVersion"
       className="route__loader"
       color="#2d4dd1"
       size="16px"
@@ -103,32 +104,28 @@ class MyComponent extends React.Component {
   }
 
   loadData({ projectSymbol, versionId }) {
-    batchActions([
-      this.props.fetchMetadataByVersionId(versionId),
-      this.props.fetchQuestionsByVersionId(versionId),
-      this.props.fetchCommentsByVersionId(versionId)
-    ]);
+    this.props.fetchMetadataByVersionId(versionId);
+    this.props.fetchQuestionsByVersionId(versionId);
+    this.props.fetchCommentsByVersionId(versionId);
   }
 
   render() {
-    if (
-      !this.props.versionMetadata.id ||
-      !this.props.documentQnaIds ||
-      !this.props.commentIds ||
-      !this.props.commentsById
-    )
-      return null;
-    else return <LoadableDocument {...this.props} />;
+    return <LoadableVersion {...this.props} />;
   }
 }
 
 const mapState = state => {
-  const { documentQnasById, documentQnaIds } = getAllDocumentQuestions(state);
+  const {
+    versionQnasById,
+    versionQnaIds,
+    versionQnasLoading
+  } = getAllDocumentQuestions(state);
   const {
     commentsById,
     commentIds,
     unfilteredCommentIds,
-    nonSpamCommentIds
+    nonSpamCommentIds,
+    commentsLoading
   } = getAllComments(state);
   const {
     sidebarOpen,
@@ -138,7 +135,7 @@ const mapState = state => {
     commentIssueFilter,
     sidebarContext
   } = state.scenes.document;
-  const versionMetadata = getVersionMetadata(state);
+  const { versionMetadata, versionMetadataLoading } = getVersionMetadata(state);
 
   return {
     // global
@@ -151,12 +148,15 @@ const mapState = state => {
       Number(versionMetadata.comment_until_unix) -
         Number(moment().format("x")) <=
       0,
+    versionMetadataLoading,
     versionMetadata,
     documentMetadata: getDocumentMetadata(state),
     // qnas
-    documentQnasById,
-    documentQnaIds,
+    versionQnasLoading,
+    versionQnasById,
+    versionQnaIds,
     // comments
+    commentsLoading,
     commentsById,
     commentIds,
     nonSpamCommentIds,

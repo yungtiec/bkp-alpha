@@ -10,14 +10,14 @@ import sanitizeHtml from "sanitize-html";
 
 function getDocumentMarkdown({
   documentTitle,
-  documentQnaIds,
-  documentQnasById
+  versionQnaIds,
+  versionQnasById
 }) {
   const newline = "\n\n";
   var documentMarkdown = "# " + documentTitle + newline;
-  documentQnaIds.forEach(sid => {
-    documentMarkdown += documentQnasById[sid].markdown;
-    documentMarkdown += documentQnasById[sid].version_answers[0].markdown;
+  versionQnaIds.forEach(sid => {
+    documentMarkdown += versionQnasById[sid].markdown;
+    documentMarkdown += versionQnasById[sid].version_answers[0].markdown;
   });
   return documentMarkdown;
 }
@@ -44,8 +44,8 @@ export default class UploadInterface extends Component {
   render() {
     const {
       isLoggedIn,
-      documentQnasById,
-      documentQnaIds,
+      versionQnasById,
+      versionQnaIds,
       versionMetadata,
       projectMetadata,
       importedMarkdown,
@@ -54,8 +54,8 @@ export default class UploadInterface extends Component {
     } = this.props;
     const originalMarkdown = getDocumentMarkdown({
       documentTitle: versionMetadata.title,
-      documentQnaIds,
-      documentQnasById
+      versionQnaIds,
+      versionQnasById
     });
     var textDiff = importedMarkdown
       ? this.diff.main(originalMarkdown, importedMarkdown)

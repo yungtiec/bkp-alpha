@@ -2,8 +2,10 @@ import { omit } from "lodash";
 import { reducer as dataReducer } from "./data/reducer";
 
 export const SIDEBAR_OPEN_TOGGLE = "document.SIDEBAR_OPEN_TOGGLE";
-export const ANNOTATION_HIGHLIGHT_TOGGLE = "document.ANNOTATION_HIGHLIGHT_TOGGLE";
-export const VERIFICATION_STATUS_IN_VIEW = "document.VERIFICATION_STATUS_IN_VIEW";
+export const ANNOTATION_HIGHLIGHT_TOGGLE =
+  "document.ANNOTATION_HIGHLIGHT_TOGGLE";
+export const VERIFICATION_STATUS_IN_VIEW =
+  "document.VERIFICATION_STATUS_IN_VIEW";
 export const COMMENT_SORT_BY = "document.COMMENT_SORT_BY";
 export const SIDEBAR_COMMENT_CONTEXT_UPDATED =
   "document.SIDEBAR_COMMENT_CONTEXT_UPDATED";

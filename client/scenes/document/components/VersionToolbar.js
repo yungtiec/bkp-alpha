@@ -14,14 +14,14 @@ import ReactTooltip from "react-tooltip";
 
 function getDocumentMarkdown({
   documentTitle,
-  documentQnaIds,
-  documentQnasById
+  versionQnaIds,
+  versionQnasById
 }) {
   const newline = "\n\n";
   var documentMarkdown = "# " + documentTitle + newline;
-  documentQnaIds.forEach(sid => {
-    documentMarkdown += documentQnasById[sid].markdown;
-    documentMarkdown += documentQnasById[sid].version_answers[0].markdown;
+  versionQnaIds.forEach(sid => {
+    documentMarkdown += versionQnasById[sid].markdown;
+    documentMarkdown += versionQnasById[sid].version_answers[0].markdown;
   });
   return documentMarkdown;
 }
@@ -38,8 +38,8 @@ class VersionToolbar extends Component {
       projectMetadata,
       documentMetadata,
       latestVersionMetadata,
-      documentQnasById,
-      documentQnaIds,
+      versionQnasById,
+      versionQnaIds,
       uploadMode,
       loadModal,
       user,
@@ -50,8 +50,8 @@ class VersionToolbar extends Component {
 
     const documentMarkdown = getDocumentMarkdown({
       documentTitle: latestVersionMetadata.title,
-      documentQnaIds,
-      documentQnasById
+      versionQnaIds,
+      versionQnasById
     });
 
     const hasUpvoted = !!find(
