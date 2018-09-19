@@ -106,7 +106,7 @@ Drawbacks I can speak of:
 
 ### Data component
 
-Read the data component part of [this article](https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md):
+Read the data component part of [this article](https://github.com/Automattic/wp-calypso/blob/master/docs/our-approach-to-data.md)
 
 ### Dependencies
 
@@ -145,7 +145,7 @@ The official documentation is a great resource to learn.
 
 `server/db/migration/20180918083848-add-version-pdf-column.js` is an example of adding a new column and updating data
 
-TODO: we can incoprate the command in 'npm start':
+#### TODO: we can incoprate the command in 'npm start':
 
 `
 "scripts": {
@@ -155,7 +155,7 @@ TODO: we can incoprate the command in 'npm start':
 
 Every deployment will trigger db:migrate to ensure database update.
 
-### [data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
+### [Data model](https://www.draw.io/#G1K4UsBG8tFE7T-reoDMfVzxbmNmW9Ioj-)
 
 ### Syncing database
 
@@ -172,7 +172,7 @@ https://robots.thoughtbot.com/how-to-back-up-a-heroku-production-database-to-sta
 
 # Markdown parser
 
-Definitely need to improve the scrip `script/markdown-parser`
+Definitely need to improve the script `script/markdown-parser`
 
 Known bug: sections can't have the same title.
 

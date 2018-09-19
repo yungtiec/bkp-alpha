@@ -9,7 +9,7 @@ const initialState = {
   resolvedIssueIds: [],
   collaboratorEmails: [],
   collaboratorOptions: [],
-  newIssues: [],
+  newResolvedIssues: [],
   commentPeriodValue: 3,
   commentPeriodUnit: "days",
   scorecard: {}
@@ -31,21 +31,21 @@ function updateResolvedIssues(state, action) {
 }
 
 function updateNewIssues(state, action) {
-  var newIssues;
+  var newResolvedIssues;
   switch (action.type) {
     case types.ISSUE_ADDED:
-      newIssues = [action.issue].concat(state.newIssues);
+      newResolvedIssues = [action.issue].concat(state.newResolvedIssues);
       break;
     case types.ISSUE_DELETED:
-      newIssues = state.newIssues.filter(issue => issue !== action.issue);
+      newResolvedIssues = state.newResolvedIssues.filter(issue => issue !== action.issue);
       break;
     default:
-      newIssues = state.newIssues;
+      newResolvedIssues = state.newResolvedIssues;
       break;
   }
   return {
     ...state,
-    newIssues: uniq(newIssues)
+    newResolvedIssues: uniq(newResolvedIssues)
   };
 }
 
@@ -79,7 +79,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         markdown: null,
         resolvedIssueIds: [],
-        newIssues: [],
+        newResolvedIssues: [],
         commentPeriodValue: 3,
         commentPeriodUnit: "days"
       };
@@ -124,7 +124,7 @@ export function getVersionUploadMetadata(state) {
     resolvedIssueIds,
     collaboratorEmails,
     collaboratorOptions,
-    newIssues,
+    newResolvedIssues,
     versionNumber,
     commentPeriodUnit,
     commentPeriodValue,
@@ -135,7 +135,7 @@ export function getVersionUploadMetadata(state) {
     resolvedIssueIds,
     collaboratorEmails,
     collaboratorOptions,
-    newIssues,
+    newResolvedIssues,
     versionNumber,
     commentPeriodUnit,
     commentPeriodValue,

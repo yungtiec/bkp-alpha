@@ -34,7 +34,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
     const {
       markdown,
       resolvedIssueIds,
-      newIssues,
+      newResolvedIssues,
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,
@@ -45,7 +45,7 @@ export const uploadMarkdownToServer = () => async (dispatch, getState) => {
       parentVersionId,
       markdown,
       resolvedIssueIds,
-      newIssues,
+      newResolvedIssues,
       collaboratorEmails,
       commentPeriodUnit,
       commentPeriodValue,

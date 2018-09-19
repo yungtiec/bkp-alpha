@@ -82,7 +82,7 @@ const mapState = state => {
     resolvedIssueIds,
     collaboratorEmails,
     collaboratorOptions,
-    newIssues,
+    newResolvedIssues,
     versionNumber,
     commentPeriodUnit,
     commentPeriodValue,
@@ -108,7 +108,7 @@ const mapState = state => {
     resolvedIssueIds,
     collaboratorEmails,
     collaboratorOptions,
-    newIssues,
+    newResolvedIssues,
     // comment
     commentPeriodUnit,
     commentPeriodValue,

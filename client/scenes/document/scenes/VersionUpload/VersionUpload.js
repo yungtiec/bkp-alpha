@@ -134,7 +134,7 @@ class VersionUpload extends Component {
       collaboratorOptions,
       addNewIssue,
       removeIssue,
-      newIssues,
+      newResolvedIssues,
       updateCommentPeriod,
       commentPeriodValue,
       commentPeriodUnit,
@@ -283,9 +283,9 @@ class VersionUpload extends Component {
                 <div className="mt-3">
                   <div
                     className="entity-cards"
-                    style={!newIssues.length ? { border: "none" } : {}}
+                    style={!newResolvedIssues.length ? { border: "none" } : {}}
                   >
-                    {newIssues.map((item, i) => (
+                    {newResolvedIssues.map((item, i) => (
                       <div
                         className="comment-issue-item"
                         key={`new-issue__${i}`}

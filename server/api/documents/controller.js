@@ -204,7 +204,7 @@ const postNewVersion = async (req, res, next) => {
     var {
       markdown,
       resolvedIssueIds,
-      newIssues,
+      newResolvedIssues,
       commentPeriodUnit,
       commentPeriodValue,
       versionNumber,
@@ -336,7 +336,7 @@ const postNewVersion = async (req, res, next) => {
         { where: { id: Number(issueId) } }
       )
     );
-    var resolvedAddedIssues = newIssues.map(async newIssue =>
+    var resolvedAddedIssues = newResolvedIssues.map(async newIssue =>
       Comment.create({
         comment: newIssue,
         reviewed: "verified",
