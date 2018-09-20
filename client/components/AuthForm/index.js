@@ -27,7 +27,9 @@ class AuthForm extends Component {
 
   componentDidMount() {
     if (window.location.href.split("access_token=").length > 1) {
-      this.props.verifyUportOnMobile(window.location.href.split("access_token=")[1]);
+      this.props.verifyUportOnMobile(
+        window.location.href.split("access_token=")[1]
+      );
     }
   }
 
@@ -82,7 +84,13 @@ class AuthForm extends Component {
         onInvalid={this.disableButton}
       >
         <div className="form-group row oauth-btns">
-          <a href="/auth/google">
+          <a
+            href={`/auth/google?state=${encodeURI(
+              this.props.location.state
+                ? this.props.location.state.lastPath
+                : "/landing"
+            )}`}
+          >
             <img
               width="191px"
               height="46px"
@@ -320,7 +328,16 @@ class AuthForm extends Component {
                   : "Don't have an account?"}
                 <Link
                   className="btn__sign-in"
-                  to={`/${authMethod === "signup" ? "login" : "signup"}`}
+                  to={{
+                    pathname: `/${
+                      authMethod === "signup" ? "login" : "signup"
+                    }`,
+                    state: {
+                      lastPath: this.props.location.state
+                        ? this.props.location.state.lastPath
+                        : "/landing"
+                    }
+                  }}
                 >
                   {authMethod === "signup" ? "Log in" : "Sign up"}
                 </Link>
