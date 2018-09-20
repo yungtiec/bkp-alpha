@@ -110,7 +110,7 @@ export const verifyUportOnMobile = accessToken => async dispatch => {
         pathname: "/user/profile",
         state: { edit: true, basicInfoMissing: true }
       });
-    else history.push("/project/BKP/document/1/version/1");
+    else history.push("/landing");
   } catch (authError) {
     dispatch(getUser({ error: authError }));
   }
@@ -138,7 +138,6 @@ export const fetchOwnDocuments = () => async (dispatch, getState) => {
     const documents = await axios
       .get(`/api/users/-/documents`)
       .then(res => res.data);
-    console.log(documents);
     const documentsById = keyBy(documents, "id");
     const documentIds = documents.map(ps => ps.id);
     dispatch({
