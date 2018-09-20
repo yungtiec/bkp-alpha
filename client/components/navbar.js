@@ -116,7 +116,13 @@ class Navbar extends Component {
                 <i className="fas fa-bell" />
               </Link>
             ) : (
-              <Link to="/login" className="navbar__nav-item last">
+              <Link
+                to={{
+                  pathname: "/login",
+                  state: { lastPath: this.props.location.pathname }
+                }}
+                className="navbar__nav-item last"
+              >
                 login
               </Link>
             )}

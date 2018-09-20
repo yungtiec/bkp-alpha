@@ -5,8 +5,9 @@ import autoBind from "react-autobind";
 import Select from "react-select";
 import { keys } from "lodash";
 import { CommentBoxWithTagField, Countdown } from "../index";
+import { withRouter } from "react-router-dom";
 
-export default class SidebarHeader extends Component {
+class SidebarHeader extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -122,12 +123,21 @@ export default class SidebarHeader extends Component {
               <div className="comment-item__header">
                 {isClosedForComment ? (
                   <p className="mb-0">
-                    <Link to="/login" className="text-primary font-weight-bold">
+                    <Link
+                      to={{
+                        pathname: "/login",
+                        state: { lastPath: this.props.location.pathname }
+                      }}
+                      className="text-primary font-weight-bold"
+                    >
                       Log in
                     </Link>{" "}
                     or{" "}
                     <Link
-                      to="/signup"
+                      to={{
+                        pathname: "/signup",
+                        state: { lastPath: this.props.location.pathname }
+                      }}
                       className="text-primary font-weight-bold"
                     >
                       Sign up here
@@ -136,12 +146,21 @@ export default class SidebarHeader extends Component {
                   </p>
                 ) : (
                   <p className="mb-0">
-                    <Link to="/login" className="text-primary font-weight-bold">
+                    <Link
+                      to={{
+                        pathname: "/login",
+                        state: { lastPath: this.props.location.pathname }
+                      }}
+                      className="text-primary font-weight-bold"
+                    >
                       Log in
                     </Link>{" "}
                     or{" "}
                     <Link
-                      to="/signup"
+                      to={{
+                        pathname: "/signup",
+                        state: { lastPath: this.props.location.pathname }
+                      }}
                       className="text-primary font-weight-bold"
                     >
                       sign up
@@ -157,3 +176,5 @@ export default class SidebarHeader extends Component {
     );
   }
 }
+
+export default withRouter(SidebarHeader);

@@ -61,7 +61,14 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
   passport.use(strategy);
 
-  router.get("/", passport.authenticate("google", { scope: "email" }));
+  router.get(
+    "/",
+    (req, res, next) => {
+      req.session.authRedirectPath = req.query.state;
+      next();
+    },
+    passport.authenticate("google", { scope: "email" })
+  );
 
   router.get(
     "/callback",
@@ -70,7 +77,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     }),
     (req, res) => {
       if (!req.user.name.trim()) res.redirect("/user/profile/about");
-      else res.redirect("/project/BKP/document/1/version/2");
+      else res.redirect(req.session.authRedirectPath);
     }
   );
 }
