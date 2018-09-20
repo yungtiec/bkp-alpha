@@ -66,11 +66,9 @@ const postAnnotatedComment = async (req, res, next) => {
       quote,
       text,
       uri,
-      annotator_schema_version,
       version_question_id,
       version_id,
-      tags,
-      issue
+      tags
     } = req.body;
     const isAdmin = req.user.roles.filter(r => r.name === "admin").length;
     const version = await Version.findById(version_id);
@@ -87,7 +85,6 @@ const postAnnotatedComment = async (req, res, next) => {
       quote: quote.replace("\n  \n\n  \n    \n    \n      Cancel\nSave", ""),
       comment: text,
       ranges,
-      annotator_schema_version,
       reviewed: isAdmin ? "verified" : "pending"
     });
     const issuePromise = Issue.create({

@@ -32,7 +32,14 @@ const Landing = ({ user, logout }) => (
                 {!!user.id ? (
                   <a onClick={logout}>Log Out</a>
                 ) : (
-                  <Link to="login">Log In</Link>
+                  <Link
+                    to={{
+                      pathname: "/login",
+                      state: { lastPath: "/project/BKP/document/1/version/2" }
+                    }}
+                  >
+                    Log In
+                  </Link>
                 )}
               </li>
             </ul>
@@ -117,7 +124,9 @@ const Landing = ({ user, logout }) => (
           </div>
           <div class="col-sm-11">
             <p>
-              Recommended transparency goals that provide projects and their communities a frame of reference for smart, useful transparency practices.
+              Recommended transparency goals that provide projects and their
+              communities a frame of reference for smart, useful transparency
+              practices.
             </p>
           </div>
         </div>
