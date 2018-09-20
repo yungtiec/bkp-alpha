@@ -86,13 +86,7 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
           "process.env": {
-            NODE_ENV: JSON.stringify("production"),
-            UPORT_CLIENT_PRIVATE_KEY: JSON.stringify(
-              process.env.UPORT_CLIENT_PRIVATE_KEY
-            ),
-            UPORT_CLIENT_ADDRESS: JSON.stringify(
-              process.env.UPORT_CLIENT_ADDRESS
-            )
+            NODE_ENV: JSON.stringify("production")
           }
         })
       ]
