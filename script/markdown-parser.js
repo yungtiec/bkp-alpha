@@ -16,6 +16,10 @@ const extractQuestions = $ => {
 };
 
 const getAnswerToQuestion = ({ markdownToParse, question, nextQuestion }) => {
+  /**
+   * bug: Using index is too general. The parser cannot handle two questions with the same markdown, which is faily comment in our documents. For example, we have two sections with the same title 'Principle 1: Consumer Token Design'
+   *
+   */
   const startIndex = markdownToParse.indexOf(question) + question.length;
   const endIndex = markdownToParse.indexOf(`### ${nextQuestion}`);
   return markdownToParse.substring(startIndex, endIndex);
