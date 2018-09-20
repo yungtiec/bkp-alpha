@@ -1,7 +1,0 @@
-process.env.GOOGLE_CLIENT_ID = '390903764750-71qj7rqab1q8iar44phio0j2cki00rsp.apps.googleusercontent.com'
-process.env.GOOGLE_CLIENT_SECRET = 'A6eMrccKYxSM4cGfSCq2tIhs'
-process.env.SENDGRID_API_KEY = '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'
-process.env.SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
-process.env.GOOGLE_CALLBACK = 'http://localhost:8000/auth/google/callback'
-process.env.UPORT_CLIENT_ADDRESS = '2omExjjDCWiNJjXUtozkp77xK92nBzgPh3z'
-process.env.UPORT_CLIENT_PRIVATE_KEY = '6a463bdfb9ef18f6182e0febc38944c0aaac0aecf16f29871b91cea420570307'
