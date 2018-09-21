@@ -20,6 +20,9 @@
     "migrate": "node script/migration",
     "test": "NODE_ENV='test' mocha ./server/**/*.spec.js ./server/**/**/*.spec.js ./client/**/**/*.spec.js --require @babel/polyfill --require @babel/register"
   },
+  "engines": {
+    "node": "8.2.1"
+  },
   "author": "tammychu",
   "license": "MIT",
   "dependencies": {
