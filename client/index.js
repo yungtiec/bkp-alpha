@@ -10,7 +10,7 @@ import "react-accessible-accordion/dist/fancy-example.css";
 import "rc-steps/assets/index.css";
 import "rc-steps/assets/iconfont.css";
 import "bootstrap/dist/css/bootstrap.css";
-import "Tether";
+import "tether/dist/js/tether.min.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "./index.scss";
 import React from "react";
