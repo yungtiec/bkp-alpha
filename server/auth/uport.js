@@ -9,7 +9,6 @@ router.post("/", async (req, res, next) => {
     var user = await User.findOne({
       where: { uportAddress: req.body.address }
     });
-    console.log(req.body);
     if (user)
       user = await User.getContributions({ uportAddress: req.body.address });
     else
@@ -21,11 +20,16 @@ router.post("/", async (req, res, next) => {
       );
     req.login(user, async err => {
       if (err) next(err);
-      res.send(user);
+      res.send({ user, authRedirectPath: req.session.authRedirectPath });
     });
   } catch (err) {
     next(err);
   }
+});
+
+router.post("/auth-redirect-path", async (req, res, next) => {
+  req.session.authRedirectPath = req.body.authRedirectPath;
+  res.sendStatus(200);
 });
 
 router.post("/mobile", async (req, res, next) => {
@@ -45,7 +49,7 @@ router.post("/mobile", async (req, res, next) => {
       );
     req.login(user, async err => {
       if (err) next(err);
-      res.send(user);
+      res.send({ user, authRedirectPath: req.session.authRedirectPath });
     });
   } catch (err) {
     next(err);

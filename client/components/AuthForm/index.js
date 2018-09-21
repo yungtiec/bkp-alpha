@@ -1,5 +1,6 @@
 import "./index.scss";
 import React, { Component } from "react";
+import axios from "axios";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -26,6 +27,18 @@ class AuthForm extends Component {
   }
 
   componentDidMount() {
+    if (
+      this.props.location.state &&
+      this.props.location.state.lastPath &&
+      (this.props.location.state.lastPath !== "/login" ||
+        this.props.location.state.lastPath !== "/signup")
+    ) {
+      axios
+        .post("/auth/uport/auth-redirect-path", {
+          authRedirectPath: this.props.location.state.lastPath
+        })
+        .catch(err => console.log(err));
+    }
     if (window.location.href.split("access_token=").length > 1) {
       this.props.verifyUportOnMobile(
         window.location.href.split("access_token=")[1]
