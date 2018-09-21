@@ -32,10 +32,10 @@ export const auth = (userInfo, method) => dispatch => {
     .then(
       res => {
         dispatch(getUser(res.data));
-        if (res.data.restricted_access) history.push("/user/profile");
+        if (res.data.restricted_access) history.push("/user/profile/about");
         else if (!res.data.name)
           history.push({
-            pathname: "/user/profile",
+            pathname: "/user/profile/about",
             state: { edit: true, basicInfoMissing: true }
           });
         else
@@ -78,18 +78,21 @@ export const signinWithUport = () => dispatch =>
     .then(userProfile => axios.post("/auth/uport", userProfile))
     .then(
       res => {
-        dispatch(getUser(res.data));
-        if (res.data.restricted_access) history.push("/user/profile");
-        else if (!res.data.name)
+        const { user, authRedirectPath } = res.data;
+        dispatch(getUser(user));
+        if (user.restricted_access) history.push("/user/profile/about");
+        else if (!user.name)
           history.push({
-            pathname: "/user/profile",
+            pathname: "/user/profile/about",
             state: { edit: true, basicInfoMissing: true }
           });
         else
           history.push(
-            history.location.state
-              ? history.location.state.lastPath
-              : "/landing"
+            authRedirectPath
+              ? authRedirectPath
+              : history.location.state
+                ? history.location.state.lastPath
+                : "/landing"
           );
       },
       authError => {
@@ -100,17 +103,17 @@ export const signinWithUport = () => dispatch =>
 
 export const verifyUportOnMobile = accessToken => async dispatch => {
   try {
-    const user = await axios
+    const { user, authRedirectPath } = await axios
       .post("/auth/uport/mobile", { accessToken })
       .then(res => res.data);
     dispatch(getUser(user));
-    if (user.restricted_access) history.push("/user/profile");
+    if (user.restricted_access) history.push("/user/profile/about");
     else if (!user.name)
       history.push({
-        pathname: "/user/profile",
+        pathname: "/user/profile/about",
         state: { edit: true, basicInfoMissing: true }
       });
-    else history.push("/landing");
+    else history.push(authRedirectPath || "/landing");
   } catch (authError) {
     dispatch(getUser({ error: authError }));
   }
@@ -199,10 +202,10 @@ export const resetPassword = ({ password, token }) => dispatch =>
           dismissAfter: 3000
         })
       );
-      if (res.data.restricted_access) history.push("/user/profile");
+      if (res.data.restricted_access) history.push("/user/profile/about");
       else if (!res.data.name)
         history.push({
-          pathname: "/user/profile",
+          pathname: "/user/profile/about",
           state: { edit: true, basicInfoMissing: true }
         });
       else history.push("/project/BKP/document/1/version/1");
