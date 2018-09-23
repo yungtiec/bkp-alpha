@@ -1,7 +1,6 @@
 var webpack = require("webpack");
 var path = require("path");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const isDev = process.env.NODE_ENV === "development";
 const secrets = require("./secrets");
 require("image-webpack-loader");
@@ -75,11 +74,6 @@ module.exports = {
               process.env.UPORT_CLIENT_ADDRESS
             )
           }
-        }),
-        new HardSourceWebpackPlugin(),
-        new webpack.DllReferencePlugin({
-          context: __dirname,
-          manifest: require('./public/build/library/library.json')
         })
       ]
     : [
