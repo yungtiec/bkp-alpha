@@ -1,6 +1,6 @@
 const { IncomingWebhook } = require("@slack/client");
-const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
-const webhook = new IncomingWebhook(slackWebhookUrl);
+//const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+//const webhook = new IncomingWebhook(slackWebhookUrl);
 
 const postFeedback = async (req, res, next) => {
   try {
