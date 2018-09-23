@@ -10,6 +10,7 @@ import {
   resetUserData,
   changeAnonymity
 } from "./scenes/about/data/actions";
+import { updateUserPassword } from "./scenes/password/data/actions";
 import { getUserBasicInfo } from "./scenes/about/data/reducer";
 
 const LoadableQueryProfile = Loadable({
@@ -55,7 +56,8 @@ const mapState = state => {
   return {
     basicInfo,
     isAdmin,
-    myUserId: state.data.user && state.data.user.id
+    myUserId: state.data.user && state.data.user.id,
+    passwordUpdate: state.scenes.profile
   };
 };
 
@@ -80,7 +82,10 @@ const actions = (dispatch, ownProps) => {
       ),
     changeAnonymity: () => dispatch(changeAnonymity()),
     editProfile: props => dispatch(editProfile(props)),
-    resetUserData: () => dispatch(resetUserData())
+    resetUserData: () => dispatch(resetUserData()),
+    updateUserPassword: async (myUserId, currentPassword, newPassword) => {
+      return await dispatch(updateUserPassword(myUserId, currentPassword, newPassword));
+    }
   };
 };
 
