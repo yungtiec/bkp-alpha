@@ -109,9 +109,7 @@ router.put("/profile/update-password", async (req, res, next) => {
   try {
     const user = await User.findById(req.body.id);
     const userEmail = user.dataValues.email;
-    console.log(user);
     const isCorrectPassword = user.correctPassword(req.body.currentPassword);
-    console.log(isCorrectPassword);
     if (isCorrectPassword) {
       await user.update({
         password: req.body.newPassword
