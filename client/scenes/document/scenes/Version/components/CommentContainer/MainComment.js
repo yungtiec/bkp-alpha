@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { Link } from "react-router-dom";
+import getUrls from "get-urls";
+import Microlink from "react-microlink";
+import ReactMarkdown from "react-markdown";
 import moment from "moment";
-import { cloneDeep, isEmpty, find, orderBy, assignIn } from "lodash";
+import { clone, find } from "lodash";
 import { CommentBox } from "../index";
 import { ActionableIssueTag, CommentItem } from "./index";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../../policies.js";
+
 
 export default ({
   comment,
@@ -26,6 +30,12 @@ export default ({
     comment.upvotesFrom,
     upvotedUser => upvotedUser.id === user.id
   );
+  const embeddedUrls = Array.from(getUrls(comment.comment));
+  const commentText = embeddedUrls.reduce(
+    (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
+    comment.comment
+  );
+
   return (
     <CommentItem
       containerClassName="comment-item__main"
@@ -72,7 +82,33 @@ export default ({
             : ""}
         </div>
       ) : null}
-      <p className="comment-item__comment">{comment.comment}</p>
+      <ReactMarkdown className="comment-item__comment" source={commentText} />
+      {embeddedUrls.length
+        ? embeddedUrls.map((url, i) => (
+            <Microlink
+              key={`comment-${comment.id}__url-${i}`}
+              apiKey={undefined}
+              autoPlay
+              contrast={false}
+              controls
+              image={["screenshot", "image", "logo"]}
+              loop
+              muted
+              playsInline
+              prerender="auto"
+              reverse={false}
+              screenshot={false}
+              size="normal"
+              style={{
+                marginBottom: "2rem",
+                width: "100%",
+                height: "auto"
+              }}
+              url={url}
+              video={false}
+            />
+          ))
+        : null}
       {comment.issue && comment.issue.resolvingVersion ? (
         <span className="comment-item__issue-resolved">
           <Link
