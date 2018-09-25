@@ -22,8 +22,11 @@ export default ({
   openModal,
   labelAsSpam,
   labelAsNotSpam
-}) => (
-  <div className={containerClassName} style={containerStyle || {}}>
+}) => {
+  const wasEdited = comment.createdAt === comment.updatedAt;
+  console.log(wasEdited);
+  console.log(children);
+  return (<div className={containerClassName} style={containerStyle || {}}>
     <div class="mt-3 comment-item__header">
       <p className="comment-item__owner-name d-flex flex-direction-column">
         <PunditContainer policies={policies} user={comment.owner}>
@@ -68,4 +71,4 @@ export default ({
       labelAsNotSpam={() => labelAsNotSpam(comment, null)}
     />
   </div>
-);
+)};
