@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import CommentBox from "./index";
+import CommentBox from "./CommentBox";
 import Select from "react-select";
 import { TagChip } from "../../../../../../components";
 

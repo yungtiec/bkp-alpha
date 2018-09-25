@@ -105,6 +105,33 @@ router.put("/profile/onboard", async (req, res, next) => {
   }
 });
 
+router.put("/profile/update-password", async (req, res, next) => {
+  try {
+    const user = await User.findById(req.body.id);
+    const userEmail = user.dataValues.email;
+    const isCorrectPassword = user.correctPassword(req.body.currentPassword);
+    if (isCorrectPassword) {
+      await user.update({
+        password: req.body.newPassword
+      });
+      const message = {
+        to : userEmail,
+        from : "The Brooklyn Project <reset-password@thebkp.com>",
+        subject : "The Brooklyn Project - Password Change",
+        text :
+        "You are receiving this because you (or someone else) have changed the password for your account.\n\n" +
+        "If you did not request this, please contact an administrator immediately.\n",
+      };
+      await sgMail.send(message);
+      res.send(200);
+    } else {
+      res.send(403);
+    }
+  } catch (err) {
+    res.send(403);
+  }
+});
+
 router.put("/reset-password", function(req, res, next) {
   const token = crypto.randomBytes(16).toString("hex");
   const message = {
@@ -165,7 +192,7 @@ router.put("/reset-password/:token", async (req, res, next) => {
     } else {
       await user.update({
         reset_password_token: null,
-        reset_passowrd_expiration: null,
+        reset_password_expiration: null,
         password: req.body.password
       });
       req.logIn(user, async function(err) {

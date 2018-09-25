@@ -34,6 +34,15 @@ export default ({ url, activeTab, isMyProfile }) => (
           Comments
         </li>
       </Link>
+      <Link to={`${url}/password`}>
+        <li
+          className={`profile-navbar__item ${
+            activeTab === "password" ? "active" : ""
+            }`}
+        >
+          Password
+        </li>
+      </Link>
     </ul>
   </div>
 );

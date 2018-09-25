@@ -1,4 +1,3 @@
-import "react-mde/lib/styles/css/react-mde-all.css";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
@@ -120,7 +119,10 @@ class Document extends Component {
         qnaId = window.location.pathname.substring(pos).split("/")[2];
         scroller.scrollTo(`qna-${qnaId}`);
       }
-      if (this.props.commentsById[Number(commentId)]) {
+      if (
+        this.props.commentsById &&
+        this.props.commentsById[Number(commentId)]
+      ) {
         this.props.updateSidebarCommentContext({
           selectedCommentId: Number(commentId),
           selectedText: "",
@@ -245,7 +247,14 @@ class Document extends Component {
 
     const selectedComments = this.getSelectedComments();
 
-    if (versionMetadataLoading || versionQnasLoading || commentsLoading)
+    if (
+      !commentIds ||
+      !versionQnaIds ||
+      !versionMetadata.id ||
+      versionMetadataLoading ||
+      versionQnasLoading ||
+      commentsLoading
+    )
       return (
         <SquareLoader
           key="LoadableVersion"
@@ -321,7 +330,9 @@ class Document extends Component {
               scrollbarContainerWidth={
                 this.props.width < 767
                   ? "350px"
-                  : this.props.width > 1300 ? "450px" : "410px"
+                  : this.props.width > 1300
+                    ? "450px"
+                    : "410px"
               }
               scrollbarContainerHeight="calc(100% - 100px)"
               autoHide={true}
