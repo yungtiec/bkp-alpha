@@ -34,8 +34,15 @@
 
 .comment-item__comment {
   color: white;
+  overflow-wrap: break-word;
   @include breakpoint(xs) {
     font-size: 12px;
+  }
+  a {
+    text-decoration: underline;
+  }
+  a:hover {
+    color: #9ca6af;
   }
 }
 
@@ -158,10 +165,14 @@
 }
 
 .comment-item__collapse-btn {
-  padding-bottom: 1.3rem;
+  padding-bottom: 1.1rem;
   border-bottom: 1px solid;
 }
 
 .comment-item__issue-resolved {
   font-size: 12px;
+}
+
+.microlink_card__media {
+  flex: 0 0 100px !important;
 }
