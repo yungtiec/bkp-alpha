@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ProfileBanner, ProfileNavbar } from "./components";
-import { QueryNotifications, QueryComments, About } from "./scenes";
+import { QueryPassword, QueryNotifications, QueryComments, About } from "./scenes";
 import autoBind from "react-autobind";
 import moment from "moment";
 
@@ -30,7 +30,8 @@ const Profile = ({
   restoreAccess,
   resetUserData,
   changeAnonymity,
-  editProfile
+  editProfile,
+  updateUserPassword
 }) => {
   const activeTab = window.location.pathname.split("/")[3];
   const isMyProfile =
@@ -65,6 +66,7 @@ const Profile = ({
               changeAnonymity={changeAnonymity}
               editProfile={editProfile}
               resetUserData={resetUserData}
+              isMyProfile={isMyProfile}
               {...basicInfo}
               {...props}
             />
@@ -75,6 +77,19 @@ const Profile = ({
           <Route
             path={`${match.url}/notifications`}
             component={QueryNotifications}
+          />
+        )}
+        {isMyProfile && (
+          <Route
+            path={`${match.url}/password`}
+            render={props => (
+              <QueryPassword
+                isMyProfile={isMyProfile}
+                updateUserPassword={updateUserPassword}
+                myUserId={myUserId}
+                {...props}
+              />
+            )}
           />
         )}
         <Redirect from="/" exact to="/about" />

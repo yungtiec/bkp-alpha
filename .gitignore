@@ -11,3 +11,5 @@ data/users.csv
 resources
 reference
 old-db-models
+public/build/library
+yarn.lock
