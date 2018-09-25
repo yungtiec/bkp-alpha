@@ -21,7 +21,6 @@ module.exports = {
       'react-loadable',
       'react-markdown',
       'react-markmirror',
-      'react-mde',
       'react-modal',
       'react-paginate',
       'react-pundit',
@@ -40,7 +39,6 @@ module.exports = {
       'loadable-components',
       'lodash',
       'moment',
-      'uport',
       'uport-connect'
     ]
   },
