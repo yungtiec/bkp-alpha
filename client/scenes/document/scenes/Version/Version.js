@@ -1,4 +1,3 @@
-import "react-mde/lib/styles/css/react-mde-all.css";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";

@@ -15,7 +15,7 @@
     "heroku-postbuild": "webpack -p",
     "seed": "node script/seed.js",
     "start": "node server",
-    "start-dev": "NODE_ENV='development' npm run build-client-watch & npm run start-server",
+    "start-dev": "NODE_ENV='development' webpack --config library.webpack.config.js && npm run build-client-watch & npm run start-server",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "migrate": "node script/migration",
     "test": "NODE_ENV='test' mocha ./server/**/*.spec.js ./server/**/**/*.spec.js ./client/**/**/*.spec.js --require @babel/polyfill --require @babel/register"
@@ -83,7 +83,6 @@
     "react-loadable": "^5.3.1",
     "react-markdown": "^3.3.0",
     "react-markmirror": "^0.4.16",
-    "react-mde": "^5.8.0",
     "react-modal": "^3.3.2",
     "react-paginate": "^5.2.3",
     "react-pundit": "^2.0.0",
@@ -108,7 +107,6 @@
     "striptags": "^3.1.1",
     "tether": "^1.4.4",
     "text-diff": "^1.0.1",
-    "uport": "^0.6.2",
     "uport-connect": "^0.7.3",
     "xpath-range": "0.0.5"
   },
