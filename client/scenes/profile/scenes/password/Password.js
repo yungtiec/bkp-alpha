@@ -1,7 +1,7 @@
 import "./Password.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import { InputPassword } from './../../../../components/index.js'
+import { InputPassword } from "./../../../../components/index.js";
 import Formsy from "formsy-react";
 
 class ProfilePassword extends Component {
@@ -18,33 +18,37 @@ class ProfilePassword extends Component {
     this.setState({ [evt.target.name]: evt.target.value });
   }
 
-  async handleSubmit({currentPassword, newPassword}) {
+  async handleSubmit({ currentPassword, newPassword }) {
     const { myUserId } = this.props;
     try {
-      const res = await this.props.updateUserPassword(myUserId, currentPassword, newPassword);
+      const res = await this.props.updateUserPassword(
+        myUserId,
+        currentPassword,
+        newPassword
+      );
       if (res.status === 200) {
         this.setState(prevState => ({
-          currentPassword: '',
-          newPassword: '',
-          newPasswordConfirmation: '',
+          currentPassword: "",
+          newPassword: "",
+          newPasswordConfirmation: "",
           hasPasswordUpdated: true
         }));
       }
-    } catch(err) {
+    } catch (err) {
       this.setState({
         hasPasswordUpdated: false
       });
-      console.log('error');
+      console.log("error");
     }
   }
 
   componentDidMount() {
-    console.log('hey');
+    console.log("hey");
     console.log(this.props);
     this.setState({
-      currentPassword: '',
-      newPassword: '',
-      newPasswordConfirmation: ''
+      currentPassword: "",
+      newPassword: "",
+      newPasswordConfirmation: ""
     });
   }
 
@@ -109,7 +113,7 @@ class ProfilePassword extends Component {
             />
           </div>
           {this.renderUpdatePasswordResponse()}
-          <div className="form-group row auth-form__submit-btn-container">
+          <div className="form-group row auth-form__submit-btn-container justify-content-center">
             <button className="btn btn-outline-primary" type="submit">
               Change Password
             </button>
