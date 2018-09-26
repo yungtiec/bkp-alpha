@@ -59,7 +59,7 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="documents" className="navbar__nav-item">
+              <Link to="/documents" className="navbar__nav-item">
                 documents
               </Link>
             ) : (
