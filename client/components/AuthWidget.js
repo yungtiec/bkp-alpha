@@ -104,7 +104,7 @@ class AuthWidget extends Component {
               )}
               {width < 600 ? (
                 <Link
-                  to="documents"
+                  to="/documents"
                   style={{ display: "block", margin: "0px" }}
                 >
                   <div className={`${className}__dropdown-item`}>documents</div>
