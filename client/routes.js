@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-  Projects,
+  Documents,
   Project,
   Profile,
   Admin,
@@ -58,8 +58,8 @@ class Routes extends Component {
           )}
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/projects"
-            component={Projects}
+            path="/documents"
+            component={Documents}
           />
           <RouteWithLayout
             layout={LayoutWithNav}

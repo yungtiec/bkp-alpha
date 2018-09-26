@@ -12,7 +12,7 @@ import {
 import { batchActions } from "redux-batched-actions";
 
 const LoadableProjects = Loadable({
-  loader: () => import("./Projects"),
+  loader: () => import("./Documents"),
   loading: () => (
     <SquareLoader
       className="route__loader"
