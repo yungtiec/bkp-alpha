@@ -34,7 +34,7 @@ export default ({
     (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
     comment.comment
   );
-  const wasEdited = comment.updatedAt === comment.createdAt;
+  const wasEdited = comment.updatedAt !== comment.createdAt;
 
   return (
     <CommentItem
