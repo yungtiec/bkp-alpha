@@ -1,6 +1,6 @@
 export { default as Profile } from "./profile/QueryProfile";
 export { default as Upload } from "./upload/QueryUpload";
-export { default as Projects } from "./projects/QueryProjects";
+export { default as Documents } from "./documents/QueryDocuments";
 export { default as Project } from "./project/QueryProject";
 export { default as Document } from "./document/QueryDocumentContainer";
 export { default as Dashboard } from "./dashboard/QueryDashboard";

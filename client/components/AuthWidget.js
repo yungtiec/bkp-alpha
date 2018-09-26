@@ -104,10 +104,10 @@ class AuthWidget extends Component {
               )}
               {width < 600 ? (
                 <Link
-                  to="/project/CVL/document/2/version/3"
+                  to="documents"
                   style={{ display: "block", margin: "0px" }}
                 >
-                  <div className={`${className}__dropdown-item`}>Civil Scorecard</div>
+                  <div className={`${className}__dropdown-item`}>documents</div>
                 </Link>
               ) : (
                 ""
