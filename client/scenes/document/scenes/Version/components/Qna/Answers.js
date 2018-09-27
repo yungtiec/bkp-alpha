@@ -21,9 +21,7 @@ export default class Answers extends Component {
         this.props.answer.markdown,
         this.props.answer.markdown
       ),
-      editing: false,
-      versionAnswerIdBeforeReverting: this.props.answer.id,
-      versionAnswerBeforeReverting: this.props.answer.markdown
+      editing: false
     };
   }
 
@@ -34,9 +32,7 @@ export default class Answers extends Component {
         diff: this.diff.main(
           this.props.answer.markdown,
           this.props.answer.markdown
-        ),
-        versionAnswerIdBeforeReverting: this.props.answer.id,
-        versionAnswerBeforeReverting: this.props.answer.markdown
+        )
       };
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(
@@ -84,12 +80,6 @@ export default class Answers extends Component {
       ),
       markdown: this.props.answer.markdown
     });
-    if (this.state.versionAnswerIdBeforeReverting !== this.props.answer.id)
-      this.props.revertToPrevAnswer({
-        versionQuestionId: this.props.qnaId,
-        versionAnswerId: this.state.versionAnswerIdBeforeReverting,
-        prevVersionAnswerId: this.props.answer.id
-      });
   }
 
   renderToolbar(markmirror, renderButton) {
