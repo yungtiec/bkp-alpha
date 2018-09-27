@@ -29,10 +29,10 @@ const VersionContent = ({
         <Element
           name={`qna-${id}`}
           ref={el => (parent[`qna-${id}`] = el)}
-          key={`qna-${id}--${versionQnasById[id].order_in_version}`}
+          key={`qna-${versionQnasById[id].order_in_version}`}
         >
           <Qna
-            key={`qna-${id}--${versionQnasById[id].order_in_version}`}
+            key={`qna-${versionQnasById[id].order_in_version}`}
             qna={versionQnasById[id]}
             versionId={versionMetadata.id}
             isLoggedIn={isLoggedIn}
@@ -42,7 +42,7 @@ const VersionContent = ({
             addNewCommentSentFromServer={addNewCommentSentFromServer}
           >
             <Question
-              key={`qna-${versionQnasById[id].order_in_version}__question`}
+              key={`qna-${id}__question`}
               documentMetadata={documentMetadata}
               qnaId={id}
               question={versionQnasById[id]}
@@ -70,7 +70,7 @@ const VersionContent = ({
               />
             ) : null}
             <Answers
-              key={`qna-${id}__answers`}
+              key={`qna-${versionQnasById[id].version_answers[0].id}__answers`}
               documentMetadata={documentMetadata}
               qnaId={id}
               answer={versionQnasById[id].version_answers[0]}
@@ -92,4 +92,7 @@ const mapState = (state, ownProps) => ({
   user: state.data.user
 });
 
-export default connect(mapState, {})(VersionContent);
+export default connect(
+  mapState,
+  {}
+)(VersionContent);
