@@ -10,10 +10,10 @@ Create a component that automatically generates a React form based on a JSON Sch
 
 #### Scorecard JSON Schema
 - Single data store for the structure of the scorecard form
-- Including validataion rule
+- Including validataion rules
 
 #### Framework v1 JSON
-- Single data store for the framework
+- Single data store for the framework reference, e.g. principle title, each principle's bullet points...etc
 
 #### Scorecard Form Data
 - User's response
