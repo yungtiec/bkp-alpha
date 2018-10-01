@@ -1,0 +1,30 @@
+{
+  "title": "Civil (CVL) Transparency Scorecard",
+  "summary":
+    "This scorecard attempts to assess the quality of Civil’s statements and documentation based on the Transparency Goals outlined in The Brooklyn Project’s Consumer Token Framework. This assessment focuses on the completeness, clarity and consistency of the disclosures; it does not attempt to opine on the veracity of the disclosures or the merits or substance of the practices described. We invite you and the community to participate in verifying and diligencing these disclosures with us. (Conflict notice - This scorecard was prepared by ConsenSys, which is a significant investor in Civil Media Company.)",
+  "sources": [
+    {
+      "title": "whitepaper",
+      "link": "https://"
+    },
+    {
+      "title": "medium announcement",
+      "link": "https://"
+    }
+  ],
+  "principle_1": {
+    "title": "Principle 1: Consumer Token Design",
+    "score": 9,
+    "disclosure_status_table": [
+      {
+        "disclosure": "Description of token’s intrinsic features and operation",
+        "status": "completed"
+      },
+      {
+        "disclosure": "The Brooklyn Project Token Taxonomy classification",
+        "status": "completed"
+      }
+    ],
+    "analysis": "Civil’s CVL token’s design fits within the parameters described in Principle 1 of the Framework. The token does not display financial characteristics, such as equity ownership, a predominant interest in a fund, or passive-earned dividend rights. The token offers the right to participate in curating newsrooms that are following the Civil Constitution via the Civil Registry.The CVL token unlocks two key business features for journalists: self-governance and permanence. As individual token holders are responsible for curating the Civil Registry of Civil newsrooms, the system is self-governing. Through the use of the Ethereum blockchain, information on the platform achieves permanence.Within The Brooklyn Project’s Token Taxonomy, CVL would be considered a consumer token. Through the implementation of a staking mechanism to become or challenge a Civil newsroom, the token confers rights to a “License” activity by allowing holders of CVL to participate in the operation of the Civil Registry. Because the Civil Registry distributes (or redistributes) CVL to successful participants in the Registry, CVL tokens also confer rights to a “Reward” activity."
+  }
+}

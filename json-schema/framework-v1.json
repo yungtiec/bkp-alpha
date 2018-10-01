@@ -1,0 +1,74 @@
+{
+  "principle_1": {
+    "title": "Principle 1: Consumer Token Design",
+    "disclosure_status_table": [
+      {
+        "disclosure": "Description of token’s intrinsic features and operation"
+      },
+      {
+        "disclosure": "The Brooklyn Project Token Taxonomy classification"
+      }
+    ]
+  },
+  "principle_2": {
+    "title": "Principle 2: Project Governance and Operation",
+    "disclosure_status_table": [
+      {
+        "disclosure": "How and by whom the project will be governed"
+      },
+      {
+        "disclosure": "Relevant holding or operating company and jurisdiction"
+      },
+      {
+        "disclosure": "Backgrounds of key people"
+      },
+      {
+        "disclosure":
+          "Description of what part of the project is decentralized, centralized, open-sourced, or “forkable”."
+      },
+      {
+        "disclosure":
+          "Project roadmap, including key technical and project milestones"
+      },
+      {
+        "disclosure": "Updates on milestone progress and funds  "
+      }
+    ]
+  },
+  "principle_3": {
+    "title": "Principle 3: Responsible Token Distribution",
+    "disclosure_status_table": [
+      {
+        "disclosure": "Purpose of any token distributions"
+      },
+      {
+        "disclosure": "Legal entity that distributed tokens"
+      },
+      {
+        "disclosure": "Conditions a token purchaser must meet to receive tokens"
+      },
+      {
+        "disclosure": "Terms of token distributions (e.g., lockups, vesting)"
+      },
+      {
+        "disclosure":
+          "Stage of development of the project at time of token distribution"
+      },
+      {
+        "disclosure":
+          "Steps to limit sale to individuals who do not intend to consume token"
+      },
+      {
+        "disclosure":
+          "Specification of whether (or not) anyone owes duties to increase token price"
+      },
+      {
+        "disclosure": "Restrictions and plans for secondary trading"
+      },
+      {
+        "disclosure":
+          "Whether lockups or vesting schedules are enforced through smart contracts or company policy."
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "title": "Create your own Garde card",
+  "type": "object",
+  "properties": {
+    "title": {
+      "title": "Your scorecard title",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "display": "list",
+      "items": [
+        {
+          "title": "",
+          "links": {
+            "type": "array"
+          }
+          // to be defined
+        }
+      ]
+    },
+    "principle_1": {
+      "id": "principle_1",
+      "type": "object",
+      "display": "section",
+      "title": {
+        "type": "string" // from framework.json
+      },
+      "properties": {
+        "transparency_score": {
+          "type": "number",
+          "display": "scale",
+          "title": "Transparency score"
+        },
+        "disclosure_status_table": {
+          "type": "array",
+          "display": "table",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "disclosure": {
+                  "type": "string" // from framework.json
+                },
+                "status": {
+                  "type": "enum",
+                  "display": "select"
+                }
+              }
+            }
+          ]
+        },
+        "analysis": {
+          "type": "string",
+          "title": "Analysis"
+        }
+      }
+    }
+    // principle_2, principle_3, ...
+  }
+}
