@@ -57,6 +57,50 @@ export function fetchQuestionsByVersionId(versionId) {
   };
 }
 
+export function toggleQuestionEditor({ versionQuestionId }) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTION_EDITOR_IS_OPEN,
+        versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
+export function toggleAnswerEditor({ versionQuestionId }) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: types.PROJECT_SURVEY_ANSWER_EDITOR_IS_OPEN,
+        versionQuestionId
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        notify({
+          title: "Something went wrong",
+          message: "Please try again later",
+          status: "error",
+          dismissible: true,
+          dismissAfter: 3000
+        })
+      );
+    }
+  };
+}
+
 export function editQuestion({ versionQuestionId, markdown }) {
   return async (dispatch, getState) => {
     try {
