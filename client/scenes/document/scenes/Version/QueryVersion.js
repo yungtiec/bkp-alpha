@@ -25,6 +25,8 @@ import {
 // document/qnas
 import {
   fetchQuestionsByVersionId,
+  toggleQuestionEditor,
+  toggleAnswerEditor,
   editQuestion,
   editAnswer,
   revertToPrevQuestion,
@@ -189,6 +191,8 @@ const actions = {
   fetchQuestionsByVersionId,
   editQuestion,
   editAnswer,
+  toggleQuestionEditor,
+  toggleAnswerEditor,
   revertToPrevQuestion,
   revertToPrevAnswer,
   // comments
@@ -206,4 +210,9 @@ const actions = {
   updateVerificationStatusInView
 };
 
-export default withRouter(connect(mapState, actions)(MyComponent));
+export default withRouter(
+  connect(
+    mapState,
+    actions
+  )(MyComponent)
+);

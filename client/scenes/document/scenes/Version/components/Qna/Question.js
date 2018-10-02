@@ -20,8 +20,7 @@ export default class Question extends Component {
       diff: this.diff.main(
         this.props.question.markdown,
         this.props.question.markdown
-      ),
-      editing: false
+      )
     };
   }
 
@@ -42,9 +41,7 @@ export default class Question extends Component {
   }
 
   handleEditOnClick() {
-    this.setState({
-      editing: true
-    });
+    this.props.toggleQuestionEditor({ versionQuestionId: this.props.qnaId });
   }
 
   handleValueChange(markdown) {
@@ -55,23 +52,18 @@ export default class Question extends Component {
   }
 
   handleSubmit() {
-    if (
-      this.state.versionQuestionBeforeReverting.trim() !==
-      this.state.markdown.trim()
-    )
-      this.props.editQuestion({
-        versionQuestionId: this.props.qnaId,
-        markdown: this.state.markdown
-      });
+    this.props.editQuestion({
+      versionQuestionId: this.props.qnaId,
+      markdown: this.state.markdown
+    });
     this.setState({
-      editing: false,
       diff: this.diff.main(this.state.markdown, this.state.markdown)
     });
   }
 
   handleCancel() {
+    this.props.toggleQuestionEditor({ versionQuestionId: this.props.qnaId });
     this.setState({
-      editing: false,
       diff: this.diff.main(
         this.props.question.markdown,
         this.props.question.markdown
@@ -109,12 +101,13 @@ export default class Question extends Component {
             {sortBy(question.history, ["hierarchyLevel"], "asc").map(h => (
               <a
                 class={`dropdown-item ${h.id === question.id ? "active" : ""}`}
-                onClick={() =>
+                onClick={() => {
+                  console.log("hitting this");
                   revertToPrevQuestion({
                     versionQuestionId: h.id,
                     prevVersionQuestionId: question.id
-                  })
-                }
+                  });
+                }}
               >
                 {moment(h.createdAt).format("YYYY/MM/DD, HH:mm")}
               </a>
@@ -133,7 +126,7 @@ export default class Question extends Component {
         handleContainerOnClick={e => {
           this.props.handleCommentOnClick(e, this.props.qnaId);
         }}
-        editing={this.state.editing}
+        editing={this.props.isBeingEdited}
         handleEditOnClick={this.handleEditOnClick}
         user={this.props.user}
         punditType="Disclosure"
@@ -143,7 +136,7 @@ export default class Question extends Component {
           disclosure: this.props.documentMetadata
         }}
       >
-        {this.state.editing ? (
+        {this.props.isBeingEdited ? (
           <div>
             <Markmirror
               key="question-markmirror"
