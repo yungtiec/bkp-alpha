@@ -9,7 +9,7 @@ Create a component that automatically generates a React form based on a JSON Sch
 
 [https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1](https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1)
 
-## Make use existing form generator out there
+## Make use of existing form generator out there
 
 [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form) maintained by modzilla services
 
