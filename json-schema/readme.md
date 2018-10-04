@@ -19,9 +19,13 @@ Based on the first draft of the [scorecard template](https://docs.google.com/doc
 
 #### 1. Step
 
-Per [wireframe](https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1), each step in the wizard is a web page (or a scene according to our project directory structure). We can define a step component for react router to render. This component is going to be a container with title, description and specific child component for each step.
+Per [wireframe](https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1), each step in the wizard is a web page (or a scene according to our project directory structure).
 
-`<Step />` has the following input properties:
+We can define a step component for react router to render and enforce the form validation check in the `next` and `back` logics.
+
+This component is going to be a container with title, description and specific child component for each step.
+
+It has the following input properties:
 
 - id
   - id for the current step
@@ -45,8 +49,7 @@ The logic has to be self-contained so that we can use it in different scenario.
 
 For flexibility
 
-
-## Array and JSON representation for a step by step wizard
+## Array and JSON representation
 
 Refer to json files in this folder
 
