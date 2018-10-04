@@ -1,0 +1,135 @@
+{
+  "overview": {
+    "content": "put content here"
+  },
+  "tokenInformation": {},
+  "listDisclosuresEvaluated": {
+    "schema": {
+      "title": "",
+      "type": "array",
+      "items": [
+        {
+          "title": {
+            "type": "string"
+          },
+          "links": {
+            "type": "string"
+          },
+          "dateAccess": {
+            "type": "number"
+          }
+        }
+      ]
+    },
+    "uiSchema": {},
+    "defaultFormData": {}
+  },
+  "analysisOfDisclosures": {
+    "schema": {
+      "definitions": {
+        "Source": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "link": {
+              "type": "string"
+            },
+            "dateAccess": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        },
+        "DisclosureStatus": {
+          "type": "object",
+          "properties": {
+            "disclosure": {
+              "title": "disclosure",
+              "type": "string" // from framework.json
+            },
+            "status": {
+              "title": "status",
+              "type": "string",
+              "enum": ["N/A", "x", "1/2", "checked"],
+              "enum": ["N/A", "x", "1/2", "checked"]
+            },
+            "sources": {
+              "title": "sources",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Source"
+              }
+            }
+          }
+        }
+      },
+      "title": "Step 3: Analysis of Disclosures",
+      "type": "object",
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "principle1": {
+          "title": "Principle 1: Token Design ",
+          "type": "object",
+          "properties": {
+            "transparencyScore": {
+              "type": "number",
+              "title": "a. Transparency score out of 10 (e.g. “5”)"
+            },
+            "disclosureTable": {
+              "type": "array",
+              "title": "b. List of available disclosures",
+              "items": {
+                "$ref": "#/definitions/DisclosureStatus"
+              }
+            },
+            "analysis": {
+              "title": "Analysis",
+              "type": "string"
+            }
+          }
+        }
+        // principle_2, principle_3, ...
+      }
+    },
+    "uiSchema": {
+      "instruction": {
+        "ui:widget": "Instruction"
+      },
+      "principle1": {
+        "disclosureTable": {
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "disclosure": { "ui:disabled": true }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      }
+    },
+    "defaultFormData": {
+      "principle1": {
+        "disclosureTable": [
+          {
+            "disclosure":
+              "Description of token’s intrinsic features and operation"
+          },
+          {
+            "disclosure": "The Brooklyn Project Token Taxonomy classification"
+          }
+        ]
+      }
+    }
+  }
+}
