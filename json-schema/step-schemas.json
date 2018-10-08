@@ -47,7 +47,7 @@
           "properties": {
             "disclosure": {
               "title": "disclosure",
-              "type": "string" // from framework.json
+              "type": "string"
             },
             "status": {
               "title": "status",
@@ -92,7 +92,6 @@
             }
           }
         }
-        // principle_2, principle_3, ...
       }
     },
     "uiSchema": {

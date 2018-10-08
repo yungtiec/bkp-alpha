@@ -4,22 +4,22 @@
       "id": "overview",
       "title": "Overview",
       "description": "",
-      "childComponent": "Instruction"
+      "childComponentType": "INSTRUCTIONS"
     },
     {
       "id": "tokenInformation",
       "title": "Step 1: Fill out the token information summary",
-      "childComponent": "TokenInformationForm" // Dedicated component instead of using json schema cuz we're asking for necessary metadata here, like token project, reference framework, author. Metadata that's used for making association in the database
+      "childComponentType": "TOKEN_INFORMATION_FORM"
     },
     {
       "id": "listDisclosuresEvaluated",
       "title": "Step 2: List Disclosures Evaluated",
-      "childComponent": "JsonSchemaForm"
+      "childComponentType": "JSON_SCHEMA_FORM"
     },
     {
       "id": "analysisOfDisclosures",
       "title": "Step 3: Analysis of Disclosures",
-      "childComponent": "JsonSchemaForm"
+      "childComponentType": "JSON_SCHEMA_FORM"
     }
   ]
 }
