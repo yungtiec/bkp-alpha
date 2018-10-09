@@ -29,7 +29,7 @@ class FormWizard extends Component {
 
   next() {
     // add validation logics here
-    if (this.props.match.params.stepNumber <= steps.length)
+    if (Number(this.props.match.params.stepNumber) <= steps.length)
       history.push(
         this.props.match.path.replace(
           ":stepNumber",
@@ -39,12 +39,13 @@ class FormWizard extends Component {
   }
 
   back() {
-    history.push(
-      this.props.match.path.replace(
-        ":stepNumber",
-        (Number(this.props.match.params.stepNumber) - 1) % steps.length
-      )
-    );
+    if (Number(this.props.match.params.stepNumber) > 1)
+      history.push(
+        this.props.match.path.replace(
+          ":stepNumber",
+          (Number(this.props.match.params.stepNumber) - 1) % steps.length
+        )
+      );
   }
 
   render() {
@@ -58,7 +59,7 @@ class FormWizard extends Component {
       <div>
         <h2>{title}</h2>
         <p>{description}</p>
-        <ChildComponent {...jsonSchema[id]} />
+        <ChildComponent key={id} {...jsonSchema[id]} />
         <button onClick={this.back}>back</button>
         <button onClick={this.next}>next</button>
       </div>

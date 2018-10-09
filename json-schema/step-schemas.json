@@ -5,24 +5,31 @@
   "tokenInformation": {},
   "listDisclosuresEvaluated": {
     "schema": {
-      "title": "",
-      "type": "array",
-      "items": [
-        {
-          "title": {
-            "type": "string"
-          },
-          "links": {
-            "type": "string"
-          },
-          "dateAccess": {
-            "type": "number"
+      "definitions": {
+        "Source": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "link": {
+              "type": "string"
+            },
+            "dateAccess": {
+              "type": "string",
+              "format": "date"
+            }
           }
         }
-      ]
+      },
+      "title": "",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Source"
+      }
     },
     "uiSchema": {},
-    "defaultFormData": {}
+    "defaultFormData": []
   },
   "analysisOfDisclosures": {
     "schema": {
@@ -71,63 +78,70 @@
         "instruction": {
           "type": "string"
         },
-        "principle1": {
-          "title": "Principle 1: Token Design ",
+        "principles": {
           "type": "object",
           "properties": {
-            "transparencyScore": {
-              "type": "number",
-              "title": "a. Transparency score out of 10 (e.g. “5”)"
-            },
-            "disclosureTable": {
-              "type": "array",
-              "title": "b. List of available disclosures",
-              "items": {
-                "$ref": "#/definitions/DisclosureStatus"
+            "principle1": {
+              "title": "Principle 1: Token Design ",
+              "type": "object",
+              "properties": {
+                "transparencyScore": {
+                  "type": "number",
+                  "title": "a. Transparency score out of 10 (e.g. “5”)"
+                },
+                "disclosureTable": {
+                  "type": "array",
+                  "title": "b. List of available disclosures",
+                  "items": {
+                    "$ref": "#/definitions/DisclosureStatus"
+                  }
+                },
+                "analysis": {
+                  "title": "Analysis",
+                  "type": "string"
+                }
               }
-            },
-            "analysis": {
-              "title": "Analysis",
-              "type": "string"
             }
           }
         }
       }
     },
     "uiSchema": {
-      "instruction": {
-        "ui:widget": "Instruction"
-      },
-      "principle1": {
-        "disclosureTable": {
-          "ui:options": {
-            "addable": false,
-            "orderable": false,
-            "removable": false
+      "principles": {
+        "ui:template": "accordion",
+        "principle1": {
+          "disclosureTable": {
+            "ui:options": {
+              "addable": false,
+              "orderable": false,
+              "removable": false
+            },
+            "items": {
+              "disclosure": { "ui:disabled": true }
+            }
           },
-          "items": {
-            "disclosure": { "ui:disabled": true }
-          }
-        },
-        "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
+          "analysis": {
+            "ui:widget": "textarea",
+            "ui:options": {
+              "rows": 5
+            }
           }
         }
       }
     },
     "defaultFormData": {
-      "principle1": {
-        "disclosureTable": [
-          {
-            "disclosure":
-              "Description of token’s intrinsic features and operation"
-          },
-          {
-            "disclosure": "The Brooklyn Project Token Taxonomy classification"
-          }
-        ]
+      "principles": {
+        "principle1": {
+          "disclosureTable": [
+            {
+              "disclosure":
+                "Description of token’s intrinsic features and operation"
+            },
+            {
+              "disclosure": "The Brooklyn Project Token Taxonomy classification"
+            }
+          ]
+        }
       }
     }
   }
