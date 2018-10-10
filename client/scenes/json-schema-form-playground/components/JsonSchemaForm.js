@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-import AccordionField from "./AccordionField";
+import ObjectFieldTemplate from "./ObjectFieldTemplate";
+import TableArrayFieldTemplate from "./TableArrayFieldTemplate";
+import FieldTemplate from "./FieldTemplate";
+import SelectWidget from "./SelectWidget";
+
 import { withTheme, Form } from "@react-schema-form/core";
 import templates from "@react-schema-form/bootstrap/lib/components/templates";
 import widgets from "@react-schema-form/bootstrap/lib/components/widgets";
 
-templates.ObjectFieldTemplate = AccordionField;
+templates.ObjectFieldTemplate = ObjectFieldTemplate;
+templates.FieldTemplate = FieldTemplate;
+templates.ArrayFieldTemplate = TableArrayFieldTemplate;
+
+widgets.SelectWidget = SelectWidget;
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form

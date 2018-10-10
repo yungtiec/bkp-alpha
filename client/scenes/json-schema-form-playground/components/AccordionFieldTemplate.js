@@ -30,9 +30,8 @@ export default class AccordionField extends Component {
   }
 
   render() {
-    console.log(this.props);
 
-    if (this.props.uiSchema["ui:template"] === "accordion")
+    if (this.props.uiSchema["ui:template"] === "AccordionField")
       return (
         <Accordion onChange={this.handleAccordionChange}>
           {this.props.properties.map((prop, i) => (

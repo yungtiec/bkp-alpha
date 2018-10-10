@@ -14,10 +14,6 @@
             },
             "link": {
               "type": "string"
-            },
-            "dateAccess": {
-              "type": "string",
-              "format": "date"
             }
           }
         }
@@ -28,8 +24,27 @@
         "$ref": "#/definitions/Source"
       }
     },
-    "uiSchema": {},
-    "defaultFormData": []
+    "uiSchema": {
+      "ui:template": "TableArrayField",
+      "ui:template:tableInputTitles": ["Description", "Link", ""],
+      "items": {
+        "ui:template": "TableInputItemField",
+        "title": {
+          "ui:template": "TableInputField",
+          "ui:placeholder": "e.g. project page"
+        },
+        "link": {
+          "ui:template": "TableInputField",
+          "ui:placeholder": "http://..."
+        }
+      }
+    },
+    "defaultFormData": [
+      {
+        "title": "",
+        "link": ""
+      }
+    ]
   },
   "analysisOfDisclosures": {
     "schema": {
@@ -60,7 +75,7 @@
               "title": "status",
               "type": "string",
               "enum": ["N/A", "x", "1/2", "checked"],
-              "enum": ["N/A", "x", "1/2", "checked"]
+              "enumNames": ["N/A", "x", "1/2", "checked"]
             },
             "sources": {
               "title": "sources",
@@ -108,7 +123,7 @@
     },
     "uiSchema": {
       "principles": {
-        "ui:template": "accordion",
+        "ui:template": "AccordionField",
         "principle1": {
           "disclosureTable": {
             "ui:options": {
