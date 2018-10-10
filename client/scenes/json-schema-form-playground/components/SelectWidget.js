@@ -57,7 +57,6 @@ function SelectWidget(props) {
       id={id}
       multi={multiple}
       options={enumOptions}
-      className="form-control"
       value={typeof value === "undefined" ? emptyValue : value}
       required={required}
       disabled={disabled || readonly}

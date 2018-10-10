@@ -6,7 +6,6 @@ import AccordionFieldTemplate from "./AccordionFieldTemplate";
 function ObjectFieldTemplate(props) {
   switch (props.uiSchema["ui:template"]) {
     case "TableInputItemField":
-      console.log("hello")
       return <TableInputItemFieldTemplate {...props} />;
     case "AccordionField":
       return <AccordionFieldTemplate {...props} />;

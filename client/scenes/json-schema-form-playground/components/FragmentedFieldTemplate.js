@@ -2,6 +2,20 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { templates } from "@react-schema-form/bootstrap";
 
+function Label(props) {
+  const { label, required, id } = props;
+  if (!label) {
+    // See #312: Ensure compatibility with old versions of React.
+    return <div />;
+  }
+  return (
+    <label className="col-form-label" htmlFor={id}>
+      {label}
+      {required && <span className="required">{REQUIRED_FIELD_SYMBOL}</span>}
+    </label>
+  );
+}
+
 function Help(props) {
   const { help } = props;
   if (!help) {

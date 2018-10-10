@@ -10,7 +10,7 @@ function FieldTemplate(props) {
     case "TableInputItemField":
       return <FragmentedFieldTemplate {...props} />;
     default:
-      return <templates.FieldTemplate {...props} />;
+      return <FragmentedFieldTemplate {...props} />;
   }
 }
 

@@ -49,40 +49,24 @@
   "analysisOfDisclosures": {
     "schema": {
       "definitions": {
-        "Source": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string"
-            },
-            "link": {
-              "type": "string"
-            },
-            "dateAccess": {
-              "type": "string",
-              "format": "date"
-            }
-          }
-        },
         "DisclosureStatus": {
           "type": "object",
           "properties": {
             "disclosure": {
-              "title": "disclosure",
+              "title": "",
               "type": "string"
             },
             "status": {
-              "title": "status",
+              "title": "",
               "type": "string",
               "enum": ["N/A", "x", "1/2", "checked"],
               "enumNames": ["N/A", "x", "1/2", "checked"]
             },
             "sources": {
-              "title": "sources",
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Source"
-              }
+              "title": "",
+              "type": "string",
+              "enum": ["1", "2", "3"],
+              "enumNames": ["1", "2", "3"]
             }
           }
         }
@@ -126,13 +110,25 @@
         "ui:template": "AccordionField",
         "principle1": {
           "disclosureTable": {
+            "ui:template": "TableArrayField",
+            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
             "ui:options": {
               "addable": false,
               "orderable": false,
               "removable": false
             },
             "items": {
-              "disclosure": { "ui:disabled": true }
+              "disclosure": { "ui:disabled": true },
+              "ui:template": "TableInputItemField",
+              "disclosure": {
+                "ui:template": "TableInputField"
+              },
+              "status": {
+                "ui:template": "TableInputField"
+              },
+              "sources": {
+                "ui:template": "TableInputField"
+              }
             }
           },
           "analysis": {
