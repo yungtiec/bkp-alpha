@@ -37,7 +37,7 @@ export function downvoteDocument({
         hasDownvoted
       });
       dispatch({
-        type: types.SURVEY_VOTED,
+        type: types.DOCUMENT_VOTED,
         upvotesFrom,
         downvotesFrom
       });
@@ -68,7 +68,7 @@ export function upvoteDocument({
         hasDownvoted
       });
       dispatch({
-        type: types.SURVEY_VOTED,
+        type: types.DOCUMENT_VOTED,
         upvotesFrom,
         downvotesFrom
       });
