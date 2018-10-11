@@ -1,3 +1,4 @@
+export { default as Collaborations } from "./collaborations/QueryCollaborations";
 export { default as Profile } from "./profile/QueryProfile";
 export { default as Upload } from "./upload/QueryUpload";
 export { default as Documents } from "./documents/QueryDocuments";
