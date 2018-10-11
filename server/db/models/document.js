@@ -292,7 +292,7 @@ function computeDocumentStats(document) {
         .length,
       num_total_comments: comments.filter(c => c.reviewed !== "spam").length,
       num_upvotes: document.upvotesFrom.length,
-      num_downvotes: document.upvotesFrom.length,
+      num_downvotes: document.downvotesFrom.length,
       latest_version: document.versions[0]
     },
     document.toJSON()
