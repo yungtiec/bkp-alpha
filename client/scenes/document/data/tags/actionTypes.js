@@ -1,1 +1,1 @@
-export const TAG_FILTER_UPDATED = "tag.TAG_FILTER_UPDATED";
+export const TAG_FILTER_UPDATED = "tags.TAG_FILTER_UPDATED";

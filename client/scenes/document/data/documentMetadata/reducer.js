@@ -18,7 +18,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         ...action.documentMetadata
       };
-    case types.SURVEY_VOTED:
+    case types.DOCUMENT_VOTED:
       return addVotesToDocument(action, state);
     default:
       return state;
