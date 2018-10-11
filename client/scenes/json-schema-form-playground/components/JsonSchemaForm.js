@@ -4,6 +4,8 @@ import ObjectFieldTemplate from "./ObjectFieldTemplate";
 import TableArrayFieldTemplate from "./TableArrayFieldTemplate";
 import FieldTemplate from "./FieldTemplate";
 import SelectWidget from "./SelectWidget";
+import MarkdownRenderWidget from "./MarkdownRenderWidget";
+import NonEditableTextWidget from "./NonEditableTextWidget";
 
 import { withTheme, Form } from "@react-schema-form/core";
 import templates from "@react-schema-form/bootstrap/lib/components/templates";
@@ -14,6 +16,8 @@ templates.FieldTemplate = FieldTemplate;
 templates.ArrayFieldTemplate = TableArrayFieldTemplate;
 
 widgets.SelectWidget = SelectWidget;
+widgets.MarkdownRenderWidget = MarkdownRenderWidget;
+widgets.NonEditableTextWidget = NonEditableTextWidget;
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form

@@ -30,7 +30,6 @@ export default class AccordionField extends Component {
   }
 
   render() {
-
     if (this.props.uiSchema["ui:template"] === "AccordionField")
       return (
         <Accordion onChange={this.handleAccordionChange}>
@@ -40,7 +39,9 @@ export default class AccordionField extends Component {
               expanded={this.state.activeAccordionItemId === i}
             >
               <AccordionItemTitle>
-                <p className="upload-accordion__item-header">title</p>
+                <p className="upload-accordion__item-header">
+                  {prop.content.props.schema.title}
+                </p>
               </AccordionItemTitle>
               <AccordionItemBody>{prop.content}</AccordionItemBody>
             </AccordionItem>
