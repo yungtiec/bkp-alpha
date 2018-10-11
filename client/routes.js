@@ -4,6 +4,7 @@ import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   Projects,
+  Collaborations,
   Project,
   Profile,
   Admin,
@@ -48,6 +49,11 @@ class Routes extends Component {
             layout={Layout}
             path="/reset-password/:token"
             component={ResetPassword}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/collaborations"
+            component={Collaborations}
           />
           {isLoggedIn && (
             <RouteWithLayout

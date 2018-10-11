@@ -1,0 +1,43 @@
+.projects-containers__collaboration-header {
+  display: flex;
+  justify-content: center;
+}
+
+.collaborations-header {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.projects-containers__collaboration-sub-header {
+  margin-bottom: 20px;
+  display: block;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  color: black;
+  margin-top: 40px;
+  margin-left: 30px;
+}
+
+.project-row {
+  border-top: 1px solid #ffffff;
+}
+
+.collaborations-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  margin-top: 30px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.main-container-collaborations {
+  display: flex;
+  justify-content: center;
+  background-color: #F4F5F6;
+  padding-bottom: 160px;
+}
