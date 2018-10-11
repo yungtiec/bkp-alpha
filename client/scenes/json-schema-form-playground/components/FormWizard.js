@@ -5,12 +5,18 @@ import { withRouter } from "react-router-dom";
 import { steps } from "../../../../json-schema/step-array.json";
 import jsonSchema from "../../../../json-schema/step-schemas.json";
 import history from "../../../history";
-import { Instructions, TokenInformationForm, JsonSchemaForm } from "./index";
+import {
+  Instructions,
+  TokenInformationForm,
+  JsonSchemaForm,
+  JsonSchemaFormsAccordion
+} from "./index";
 
 const CHILD_COMPONENTS = {
   INSTRUCTIONS: Instructions,
   TOKEN_INFORMATION_FORM: TokenInformationForm,
-  JSON_SCHEMA_FORM: JsonSchemaForm
+  JSON_SCHEMA_FORM: JsonSchemaForm,
+  JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion
 };
 
 class FormWizard extends Component {

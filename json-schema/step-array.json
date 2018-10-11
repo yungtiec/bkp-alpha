@@ -19,7 +19,7 @@
     {
       "id": "analysisOfDisclosures",
       "title": "Step 3: Analysis of Disclosures",
-      "childComponentType": "JSON_SCHEMA_FORM"
+      "childComponentType": "JSON_SCHEMA_FORMS_ACCORDION"
     }
   ]
 }

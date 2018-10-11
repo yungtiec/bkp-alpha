@@ -47,672 +47,1073 @@
     ]
   },
   "analysisOfDisclosures": {
-    "schema": {
-      "definitions": {
-        "DisclosureStatus": {
-          "type": "object",
-          "properties": {
+    "accordionInstructions": "put instructions here",
+    "accordionOrder": [
+      "principle1",
+      "principle2",
+      "principle3",
+      "principle4",
+      "principle5",
+      "principle6",
+      "principle7",
+      "principle8",
+      "principle9",
+      "principle10"
+    ],
+    "principle1": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 1: Token Design ",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
             "disclosure": {
-              "title": "",
-              "type": "string"
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
             },
             "status": {
-              "title": "",
-              "type": "string",
-              "enum": ["N/A", "x", "1/2", "checked"],
-              "enumNames": ["N/A", "x", "1/2", "checked"]
+              "ui:template": "TableInputField"
             },
             "sources": {
-              "title": "",
-              "type": "string",
-              "enum": ["1", "2", "3"],
-              "enumNames": ["1", "2", "3"]
+              "ui:template": "TableInputField"
             }
           }
         },
-        "PrincipleForm": {
-          "type": "object",
-          "properties": {
-            "transparencyScore": {
-              "type": "number",
-              "title": "a. Transparency score out of 10 (e.g. “5”)",
-              "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-            },
-            "disclosureTable": {
-              "type": "array",
-              "title": "b. List of available disclosures",
-              "items": {
-                "$ref": "#/definitions/DisclosureStatus"
-              }
-            },
-            "analysis": {
-              "title": "Analysis",
-              "type": "string"
-            }
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
           }
         }
       },
-      "type": "object",
-      "properties": {
-        "instruction": {
-          "type": "string"
-        },
-        "principles": {
-          "type": "object",
-          "properties": {
-            "principle1": {
-              "title": "Principle 1: Token Design ",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle2": {
-              "title": "Principle 2: Project Governance and Operation",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle3": {
-              "title": "Principle 3: Responsible Token Distribution",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle4": {
-              "title": "Principle 4: Purpose of Token Distribution",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle5": {
-              "title": "Principle 5: Token Supply",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle6": {
-              "title":
-                "Principle 6: Mitigation of Conflicts and Improper Trading",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle7": {
-              "title": "Principle 7: Token Safety and Security",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle8": {
-              "title": "Principle 8: Marketing Practices",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle9": {
-              "title": "Principle 9: Protecting and Empowering Consumers",
-              "$ref": "#/definitions/PrincipleForm"
-            },
-            "principle10": {
-              "title": "Principle 10: Compliance with Applicable Laws",
-              "$ref": "#/definitions/PrincipleForm"
-            }
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure":
+              "Description of token’s intrinsic features and operation"
+          },
+          {
+            "disclosure": "The Brooklyn Project Token Taxonomy classification"
           }
-        }
+        ]
       }
     },
-    "uiSchema": {
-      "instruction": {
-        "ui:widget": "MarkdownRenderWidget"
+    "principle2": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 2: Project Governance and Operation",
+        "$ref": "#/definitions/PrincipleForm"
       },
-      "principles": {
-        "ui:template": "AccordionField",
-        "principle1": {
-          "ui:title": {
-            "hidden": true
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
           },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
             },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
             }
           }
         },
-        "principle2": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle3": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle4": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle5": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle6": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle7": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle8": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle9": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
-          }
-        },
-        "principle10": {
-          "ui:title": {
-            "hidden": true
-          },
-          "transparencyScore": {
-            "ui:widget": "radio",
-            "ui:options": {
-              "inline": true
-            }
-          },
-          "disclosureTable": {
-            "ui:template": "TableArrayField",
-            "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
-            "ui:options": {
-              "addable": false,
-              "orderable": false,
-              "removable": false
-            },
-            "items": {
-              "ui:template": "TableInputItemField",
-              "disclosure": {
-                "ui:template": "TableInputField",
-                "ui:widget": "NonEditableTextWidget"
-              },
-              "status": {
-                "ui:template": "TableInputField"
-              },
-              "sources": {
-                "ui:template": "TableInputField"
-              }
-            }
-          },
-          "analysis": {
-            "ui:widget": "textarea",
-            "ui:options": {
-              "rows": 5
-            }
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
           }
         }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "How and by whom the project will be governed"
+          },
+          {
+            "disclosure":
+              "Relevant holding or operating company and jurisdiction"
+          },
+          {
+            "disclosure": "Backgrounds of key people"
+          },
+          {
+            "disclosure":
+              "Description of what part of the project is decentralized, centralized, open-sourced, or “forkable”"
+          },
+          {
+            "disclosure":
+              "Project roadmap, including key technical and project milestones"
+          },
+          {
+            "disclosure": "Updates on milestone progress and funds"
+          }
+        ]
       }
     },
-    "defaultFormData": {
-      "instruction": "bla bla bla",
-      "principles": {
-        "principle1": {
-          "disclosureTable": [
-            {
-              "disclosure":
-                "Description of token’s intrinsic features and operation"
-            },
-            {
-              "disclosure": "The Brooklyn Project Token Taxonomy classification"
+    "principle3": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
             }
-          ]
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
         },
-        "principle2": {
-          "disclosureTable": [
-            {
-              "disclosure": "How and by whom the project will be governed"
-            },
-            {
-              "disclosure":
-                "Relevant holding or operating company and jurisdiction"
-            },
-            {
-              "disclosure": "Backgrounds of key people"
-            },
-            {
-              "disclosure":
-                "Description of what part of the project is decentralized, centralized, open-sourced, or “forkable”"
-            },
-            {
-              "disclosure":
-                "Project roadmap, including key technical and project milestones"
-            },
-            {
-              "disclosure": "Updates on milestone progress and funds"
-            }
-          ]
+        "title": "Principle 3: Responsible Token Distribution",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
         },
-        "principle3": {
-          "disclosureTable": [
-            {
-              "disclosure": "Purpose of any token distributions"
-            },
-            {
-              "disclosure": "Legal entity that distributed tokens"
-            },
-            {
-              "disclosure": "Conditions a buyer must meet to receive tokens"
-            },
-            {
-              "disclosure": "Terms of token distributions (lockups, vesting)"
-            },
-            {
-              "disclosure": "Project status at time of token distribution"
-            },
-            {
-              "disclosure":
-                "Steps to limit sale to individuals who do not intend to consume token"
-            },
-            {
-              "disclosure": "Clarification of duties to increase token price"
-            },
-            {
-              "disclosure": "Restrictions and plans for secondary trading"
-            }
-          ]
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
         },
-        "principle4": {
-          "disclosureTable": [
-            {
-              "disclosure":
-                "Planned and actual use of proceeds by function line"
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
             },
-            {
-              "disclosure": "Token sale proceeds"
+            "status": {
+              "ui:template": "TableInputField"
             },
-            {
-              "disclosure": "Updates on the project’s progress and funds"
-            },
-            {
-              "disclosure":
-                "The aggregate amount of tokens reserved for the remuneration of team members"
+            "sources": {
+              "ui:template": "TableInputField"
             }
-          ]
+          }
         },
-        "principle5": {
-          "disclosureTable": [
-            {
-              "disclosure": "Initial token supply and eventual supply changes"
-            },
-            {
-              "disclosure":
-                "Differences between token supply and tokens in circulation"
-            },
-            {
-              "disclosure":
-                "Auditability of the token supply governance in production code"
-            }
-          ]
-        },
-        "principle6": {
-          "disclosureTable": [
-            {
-              "disclosure": "Steps to identify, manage, mitigate conflicts"
-            },
-            {
-              "disclosure": "Prevention of improper trading of tokens"
-            }
-          ]
-        },
-        "principle7": {
-          "disclosureTable": [
-            {
-              "disclosure": "Report of technological audit"
-            },
-            {
-              "disclosure": "Mechanisms for notifying users of security risks"
-            },
-            {
-              "disclosure": "Links to project github repositories"
-            }
-          ]
-        },
-        "principle8": {
-          "disclosureTable": [
-            {
-              "disclosure":
-                "Steps taken to comply with the marketing principles outlined in this document"
-            },
-            {
-              "disclosure":
-                "Explanations of the relationship between promises made in marketing materials about a token’s governance provisions and a project’s actual smart contracts (e.g. related to token supply, insider vesting schedules, modifiability of the governance rules)"
-            },
-            {
-              "disclosure": "Links to project website(s) and accounts"
-            },
-            {
-              "disclosure": "Mechanisms to identify issues"
-            }
-          ]
-        },
-        "principle9": {
-          "disclosureTable": [
-            {
-              "disclosure": "Rights and obligations of tokenholders"
-            },
-            {
-              "disclosure": "Refund measures if the project is scaled down"
-            },
-            {
-              "disclosure": "Scenarios that may trigger token sale reversal"
-            },
-            {
-              "disclosure": "Privacy policy"
-            }
-          ]
-        },
-        "principle10": {
-          "disclosureTable": [
-            {
-              "disclosure":
-                "Statement of Good Faith affirming compliance with applicable laws and regulations"
-            },
-            {
-              "disclosure":
-                "Legal and professional advice on Statement of Good Faith"
-            }
-          ]
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
         }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Purpose of any token distributions"
+          },
+          {
+            "disclosure": "Legal entity that distributed tokens"
+          },
+          {
+            "disclosure": "Conditions a buyer must meet to receive tokens"
+          },
+          {
+            "disclosure": "Terms of token distributions (lockups, vesting)"
+          },
+          {
+            "disclosure": "Project status at time of token distribution"
+          },
+          {
+            "disclosure":
+              "Steps to limit sale to individuals who do not intend to consume token"
+          },
+          {
+            "disclosure": "Clarification of duties to increase token price"
+          },
+          {
+            "disclosure": "Restrictions and plans for secondary trading"
+          }
+        ]
+      }
+    },
+    "principle4": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 4: Purpose of Token Distribution",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Planned and actual use of proceeds by function line"
+          },
+          {
+            "disclosure": "Token sale proceeds"
+          },
+          {
+            "disclosure": "Updates on the project’s progress and funds"
+          },
+          {
+            "disclosure":
+              "The aggregate amount of tokens reserved for the remuneration of team members"
+          }
+        ]
+      }
+    },
+    "principle5": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 5: Token Supply",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Initial token supply and eventual supply changes"
+          },
+          {
+            "disclosure":
+              "Differences between token supply and tokens in circulation"
+          },
+          {
+            "disclosure":
+              "Auditability of the token supply governance in production code"
+          }
+        ]
+      }
+    },
+    "principle6": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 6: Mitigation of Conflicts and Improper Trading",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Steps to identify, manage, mitigate conflicts"
+          },
+          {
+            "disclosure": "Prevention of improper trading of tokens"
+          }
+        ]
+      }
+    },
+    "principle7": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 7: Token Safety and Security",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Report of technological audit"
+          },
+          {
+            "disclosure": "Mechanisms for notifying users of security risks"
+          },
+          {
+            "disclosure": "Links to project github repositories"
+          }
+        ]
+      }
+    },
+    "principle8": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 8: Marketing Practices",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure":
+              "Steps taken to comply with the marketing principles outlined in this document"
+          },
+          {
+            "disclosure":
+              "Explanations of the relationship between promises made in marketing materials about a token’s governance provisions and a project’s actual smart contracts (e.g. related to token supply, insider vesting schedules, modifiability of the governance rules)"
+          },
+          {
+            "disclosure": "Links to project website(s) and accounts"
+          },
+          {
+            "disclosure": "Mechanisms to identify issues"
+          }
+        ]
+      }
+    },
+    "principle9": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 9: Protecting and Empowering Consumers",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure": "Rights and obligations of tokenholders"
+          },
+          {
+            "disclosure": "Refund measures if the project is scaled down"
+          },
+          {
+            "disclosure": "Scenarios that may trigger token sale reversal"
+          },
+          {
+            "disclosure": "Privacy policy"
+          }
+        ]
+      }
+    },
+    "principle10": {
+      "schema": {
+        "definitions": {
+          "DisclosureStatus": {
+            "type": "object",
+            "properties": {
+              "disclosure": {
+                "title": "",
+                "type": "string"
+              },
+              "status": {
+                "title": "",
+                "type": "string",
+                "enum": ["N/A", "x", "1/2", "checked"],
+                "enumNames": ["N/A", "x", "1/2", "checked"]
+              },
+              "sources": {
+                "title": "",
+                "type": "string",
+                "enum": ["1", "2", "3"],
+                "enumNames": ["1", "2", "3"]
+              }
+            }
+          },
+          "PrincipleForm": {
+            "type": "object",
+            "properties": {
+              "transparencyScore": {
+                "type": "number",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              },
+              "disclosureTable": {
+                "type": "array",
+                "title": "b. List of available disclosures",
+                "items": {
+                  "$ref": "#/definitions/DisclosureStatus"
+                }
+              },
+              "analysis": {
+                "title": "Analysis",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "Principle 10: Compliance with Applicable Laws",
+        "$ref": "#/definitions/PrincipleForm"
+      },
+      "uiSchema": {
+        "ui:title": {
+          "hidden": true
+        },
+        "transparencyScore": {
+          "ui:widget": "radio",
+          "ui:options": {
+            "inline": true
+          }
+        },
+        "disclosureTable": {
+          "ui:template": "TableArrayField",
+          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          },
+          "items": {
+            "ui:template": "TableInputItemField",
+            "disclosure": {
+              "ui:template": "TableInputField",
+              "ui:widget": "NonEditableTextWidget"
+            },
+            "status": {
+              "ui:template": "TableInputField"
+            },
+            "sources": {
+              "ui:template": "TableInputField"
+            }
+          }
+        },
+        "analysis": {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 5
+          }
+        }
+      },
+      "defaultFormData": {
+        "disclosureTable": [
+          {
+            "disclosure":
+              "Statement of Good Faith affirming compliance with applicable laws and regulations"
+          },
+          {
+            "disclosure":
+              "Legal and professional advice on Statement of Good Faith"
+          }
+        ]
       }
     }
   }

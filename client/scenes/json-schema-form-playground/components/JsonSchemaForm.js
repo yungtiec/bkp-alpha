@@ -27,7 +27,7 @@ const log = type => console.log.bind(console, type);
 
 export default ({ schema, uiSchema, defaultFormData }) => {
   return (
-    <div className="main-container">
+    <div>
       <BootstrapCustomForm
         schema={schema}
         uiSchema={uiSchema}
