@@ -29,6 +29,7 @@ export default ({ schema, uiSchema, defaultFormData }) => {
   return (
     <div>
       <BootstrapCustomForm
+        noHtml5Validate={true}
         schema={schema}
         uiSchema={uiSchema}
         formData={defaultFormData}

@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { templates } from "@react-schema-form/bootstrap";
 
+export const REQUIRED_FIELD_SYMBOL = '*';
+
 function Label(props) {
   const { label, required, id } = props;
   if (!label) {

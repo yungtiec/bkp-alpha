@@ -65,6 +65,7 @@
         "definitions": {
           "DisclosureStatus": {
             "type": "object",
+            "required": ["status", "sources"],
             "properties": {
               "disclosure": {
                 "title": "",
@@ -86,6 +87,7 @@
           },
           "PrincipleForm": {
             "type": "object",
+            "required": ["transparencyScore"],
             "properties": {
               "transparencyScore": {
                 "type": "number",
