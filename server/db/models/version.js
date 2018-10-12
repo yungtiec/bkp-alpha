@@ -25,7 +25,7 @@ module.exports = (db, DataTypes) => {
     },
     version_number: {
       type: DataTypes.TEXT
-    },
+    }
   });
 
   Version.isHierarchy();
