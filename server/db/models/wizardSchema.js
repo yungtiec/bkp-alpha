@@ -1,6 +1,6 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Wizard = sequelize.define("wizard", {
+  const WizardSchema = sequelize.define("wizard_schema", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Wizard.isHierarchy();
-  Wizard.associate = function(models) {
-    Wizard.belongsTo(models.version, {
+  WizardSchema.isHierarchy();
+  WizardSchema.associate = function(models) {
+    WizardSchema.belongsTo(models.version, {
       foreignKey: "wizard_schemas_id"
     });
   };
-  return Wizard;
+  return WizardSchema;
 };

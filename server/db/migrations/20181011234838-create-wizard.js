@@ -3,21 +3,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("wizard_schema", {
-        id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-          references: {
-            model: "wizard_schema",
-            key: "wizard_schema_id"
-          }
-        },
-        step_array: Sequelize.ARRAY(Sequelize.TEXT),
-        step_schemas_json: Sequelize.JSON
-      })
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      step_array: Sequelize.ARRAY(Sequelize.TEXT),
+      step_schemas_json: Sequelize.JSON
+    })
       .then(() => {
         return queryInterface.addColumn("versions", "wizard_schema_id", {
           type: Sequelize.INTEGER,
+          references: {
+            model: "wizard_schema",
+            key: "id"
+          }
         })
       })
       .then(() => {
