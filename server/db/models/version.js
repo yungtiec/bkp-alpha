@@ -47,7 +47,7 @@ module.exports = (db, DataTypes) => {
       foreignKey: "creator_id",
       as: "creator"
     });
-    Version.hasOne(models.wizard, {
+    Version.hasOne(models.wizard_schema, {
       through: "wizard_schema_id",
       foreignKey: "id"
     });
