@@ -1,0 +1,37 @@
+"use strict";
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable("wizard_schema", {
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+          references: {
+            model: "wizard_schema",
+            key: "wizard_schema_id"
+          }
+        },
+        step_array: Sequelize.ARRAY(Sequelize.TEXT),
+        step_schemas_json: Sequelize.JSON
+      })
+      .then(() => {
+        return queryInterface.addColumn("versions", "wizard_schema_id", {
+          type: Sequelize.INTEGER,
+        })
+      })
+      .then(() => {
+        return queryInterface.addColumn("versions", "content_json", {
+          type: Sequelize.JSON,
+        })
+      });
+  },
+
+  down: (queryInterface, Sequelize) => {
+    return [
+      queryInterface.removeColumn("versions", "wizard_schema_id"),
+      queryInterface.removeColumn("versions", "content_json"),
+      queryInterface.dropTable("wizard_schema")
+    ]
+  }
+};

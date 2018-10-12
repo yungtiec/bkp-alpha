@@ -25,7 +25,7 @@ module.exports = (db, DataTypes) => {
     },
     version_number: {
       type: DataTypes.TEXT
-    }
+    },
   });
 
   Version.isHierarchy();
@@ -46,6 +46,10 @@ module.exports = (db, DataTypes) => {
     Version.belongsTo(models.user, {
       foreignKey: "creator_id",
       as: "creator"
+    });
+    Version.hasOne(models.wizard, {
+      through: "wizard_schema_id",
+      foreignKey: "id"
     });
   };
   Version.loadScopes = function(models) {
