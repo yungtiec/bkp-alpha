@@ -22,7 +22,7 @@ export function fetchLatestQuestionsByDocumentId(documentId) {
       const versionQnasById = keyBy(versionQnas, "id");
       const versionQnaIds = versionQnas.map(qna => qna.id);
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
+        type: types.VERSION_QUESTIONS_FETCH_SUCCESS,
         versionQnasById,
         versionQnaIds
       });
@@ -36,7 +36,7 @@ export function fetchQuestionsByVersionId(versionId) {
   return async (dispatch, getState) => {
     try {
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_REQUEST
+        type: types.VERSION_QUESTIONS_FETCH_REQUEST
       });
       var version = await getQuestionsByVersionId(versionId);
       const versionQnas = sortBy(
@@ -47,7 +47,7 @@ export function fetchQuestionsByVersionId(versionId) {
       const versionQnasById = keyBy(versionQnas, "id");
       const versionQnaIds = versionQnas.map(qna => qna.id);
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
+        type: types.VERSION_QUESTIONS_FETCH_SUCCESS,
         versionQnasById,
         versionQnaIds
       });
@@ -61,7 +61,7 @@ export function toggleQuestionEditor({ versionQuestionId }) {
   return async dispatch => {
     try {
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTION_EDITOR_IS_OPEN,
+        type: types.VERSION_QUESTION_EDITOR_IS_OPEN,
         versionQuestionId
       });
     } catch (error) {
@@ -83,7 +83,7 @@ export function toggleAnswerEditor({ versionQuestionId }) {
   return async dispatch => {
     try {
       dispatch({
-        type: types.PROJECT_SURVEY_ANSWER_EDITOR_IS_OPEN,
+        type: types.VERSION_ANSWER_EDITOR_IS_OPEN,
         versionQuestionId
       });
     } catch (error) {
@@ -111,7 +111,7 @@ export function editQuestion({ versionQuestionId, markdown }) {
         markdown
       });
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTION_EDITED,
+        type: types.VERSION_QUESTION_EDITED,
         newlyAddedVersionQuestion,
         prevVersionQuestionId: versionQuestionId
       });
@@ -143,7 +143,7 @@ export function revertToPrevQuestion({
         prevVersionQuestionId
       });
       dispatch({
-        type: types.PROJECT_SURVEY_QUESTION_REVERTED,
+        type: types.VERSION_QUESTION_REVERTED,
         prevVersionQuestionId,
         versionQuestion
       });
@@ -172,7 +172,7 @@ export function editAnswer({ versionAnswerId, markdown, versionQuestionId }) {
         markdown
       });
       dispatch({
-        type: types.PROJECT_SURVEY_ANSWER_EDITED,
+        type: types.VERSION_ANSWER_EDITED,
         newlyAddedVersionAnswer,
         prevVersionAnswerId: versionAnswerId,
         versionQuestionId
@@ -207,7 +207,7 @@ export function revertToPrevAnswer({
         prevVersionAnswerId
       });
       dispatch({
-        type: types.PROJECT_SURVEY_ANSWER_REVERTED,
+        type: types.VERSION_ANSWER_REVERTED,
         versionAnswer,
         prevVersionAnswerId,
         versionQuestionId

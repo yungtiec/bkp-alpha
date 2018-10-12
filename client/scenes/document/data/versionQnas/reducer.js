@@ -109,12 +109,12 @@ const revertAnswer = (state, action) => {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.PROJECT_SURVEY_QUESTIONS_FETCH_REQUEST:
+    case types.VERSION_QUESTIONS_FETCH_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS:
+    case types.VERSION_QUESTIONS_FETCH_SUCCESS:
       const versionQnasById = setDefaultToIsNotBeingEdited(
         cloneDeep(action.versionQnasById)
       );
@@ -125,17 +125,17 @@ export default function reduce(state = initialState, action = {}) {
         versionQnaIds: action.versionQnaIds,
         loading: false
       };
-    case types.PROJECT_SURVEY_QUESTION_EDITOR_IS_OPEN:
+    case types.VERSION_QUESTION_EDITOR_IS_OPEN:
       return openQuestionEditor(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_ANSWER_EDITOR_IS_OPEN:
+    case types.VERSION_ANSWER_EDITOR_IS_OPEN:
       return openAnswerEditor(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_QUESTION_EDITED:
+    case types.VERSION_QUESTION_EDITED:
       return updateQuestions(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_ANSWER_EDITED:
+    case types.VERSION_ANSWER_EDITED:
       return updateAnswer(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_ANSWER_REVERTED:
+    case types.VERSION_ANSWER_REVERTED:
       return revertAnswer(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_QUESTION_REVERTED:
+    case types.VERSION_QUESTION_REVERTED:
       return revertQuestion(cloneDeep(state), action);
     default:
       return state;
