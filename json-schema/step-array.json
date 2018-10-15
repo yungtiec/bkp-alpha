@@ -4,22 +4,35 @@
       "id": "overview",
       "title": "Overview",
       "description": "",
-      "childComponentType": "INSTRUCTIONS"
+      "childComponentType": "INSTRUCTIONS",
+      "content": "put overview here"
     },
     {
       "id": "tokenInformation",
-      "title": "Step 1: Fill out the token information summary",
+      "title": "Fill out the token information summary",
       "childComponentType": "TOKEN_INFORMATION_FORM"
     },
     {
       "id": "listDisclosuresEvaluated",
-      "title": "Step 2: List Disclosures Evaluated",
+      "title": "List Disclosures Evaluated",
       "childComponentType": "JSON_SCHEMA_FORM"
     },
     {
       "id": "analysisOfDisclosures",
-      "title": "Step 3: Analysis of Disclosures",
+      "title": "Analysis of Disclosures",
       "childComponentType": "JSON_SCHEMA_FORMS_ACCORDION"
+    },
+    {
+      "id": "generalCommentary",
+      "title": "Add general commentary",
+      "childComponentType": "JSON_SCHEMA_FORM"
+    }
+    ,
+    {
+      "id": "reviewAndSubmit",
+      "title": "Review & Submit",
+      "childComponentType": "INSTRUCTIONS",
+      "content": "render scorecard here"
     }
   ]
 }

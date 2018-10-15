@@ -9,7 +9,6 @@ module.exports = {
   },
   entry: {
     library: [
-      "@react-schema-form/bootstrap",
       "react",
       "react-accessible-accordion",
       "react-async-poll",
@@ -19,7 +18,6 @@ module.exports = {
       "react-dropzone",
       "react-ga",
       "react-joyride",
-      "react-jsonschema-form",
       "react-loadable",
       "react-markdown",
       "react-markmirror",

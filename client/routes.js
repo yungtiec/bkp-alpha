@@ -13,7 +13,7 @@ import {
   Dashboard,
   Landing,
   Document,
-  JsonSchemaFormPlayground
+  Wizard
 } from "./scenes";
 import {
   Login,
@@ -74,8 +74,8 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/json-schema-form-playground"
-            component={JsonSchemaFormPlayground}
+            path="/wizard"
+            component={Wizard}
           />
           {isLoggedIn && (
             <RouteWithLayout

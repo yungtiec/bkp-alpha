@@ -1,8 +1,4 @@
 {
-  "overview": {
-    "content": "put content here"
-  },
-  "tokenInformation": {},
   "listDisclosuresEvaluated": {
     "schema": {
       "definitions": {
@@ -80,8 +76,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -113,7 +110,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -139,7 +136,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -181,8 +179,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -213,7 +212,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -239,7 +238,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -295,8 +295,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -327,7 +328,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -353,7 +354,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -413,8 +415,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -445,7 +448,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -471,7 +474,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -519,8 +523,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -551,7 +556,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -577,7 +582,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -623,8 +629,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -655,7 +662,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -681,7 +688,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -722,8 +730,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -754,7 +763,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -780,7 +789,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -824,8 +834,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -856,7 +867,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -882,7 +893,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -931,8 +943,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -963,7 +976,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -989,7 +1002,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -1036,8 +1050,9 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["1", "2", "3"],
-                "enumNames": ["1", "2", "3"]
+                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "title"
               }
             }
           },
@@ -1068,7 +1083,7 @@
       },
       "uiSchema": {
         "ui:title": {
-          "hidden": true
+          "hideTitle": true
         },
         "transparencyScore": {
           "ui:widget": "radio",
@@ -1094,7 +1109,8 @@
               "ui:template": "TableInputField"
             },
             "sources": {
-              "ui:template": "TableInputField"
+              "ui:template": "TableInputField",
+              "ui:widget": "DependentSelectWidget"
             }
           }
         },
@@ -1118,5 +1134,13 @@
         ]
       }
     }
+  },
+  "generalCommentary": {
+    "schema": {
+      "title": "",
+      "type": "string"
+    },
+    "uiSchema": {},
+    "defaultFormData": ""
   }
 }
