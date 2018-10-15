@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { templates } from "@react-schema-form/bootstrap";
 
-export const REQUIRED_FIELD_SYMBOL = '*';
+export const REQUIRED_FIELD_SYMBOL = "*";
 
 function Label(props) {
   const { label, required, id } = props;
@@ -60,7 +59,7 @@ function ErrorList(props) {
   );
 }
 
-function TableInputFieldTemplate(props) {
+function FragmentedFieldTemplate(props) {
   const {
     id,
     testId,
@@ -74,6 +73,7 @@ function TableInputFieldTemplate(props) {
     displayLabel,
     classNames
   } = props;
+
   if (hidden) {
     return children;
   }
@@ -91,7 +91,7 @@ function TableInputFieldTemplate(props) {
 }
 
 if (process.env.NODE_ENV !== "production") {
-  TableInputFieldTemplate.propTypes = {
+  FragmentedFieldTemplate.propTypes = {
     id: PropTypes.string,
     classNames: PropTypes.string,
     label: PropTypes.string,
@@ -109,11 +109,11 @@ if (process.env.NODE_ENV !== "production") {
   };
 }
 
-TableInputFieldTemplate.defaultProps = {
+FragmentedFieldTemplate.defaultProps = {
   hidden: false,
   readonly: false,
   required: false,
   displayLabel: true
 };
 
-export default TableInputFieldTemplate;
+export default FragmentedFieldTemplate;

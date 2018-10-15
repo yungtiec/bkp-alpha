@@ -39,7 +39,7 @@ export default class JsonSchemaFormsAccordion extends Component {
       formData,
       ...accordionContext
     } = this.props;
-    console.log(id);
+
     return (
       <div>
         {accordionInstructions && (

@@ -5,7 +5,7 @@ import ArrowDown from "@react-schema-form/bootstrap/lib/components/icons/ArrowDo
 import Cross from "@react-schema-form/bootstrap/lib/components/icons/Cross";
 import Plus from "@react-schema-form/bootstrap/lib/components/icons/Plus";
 
-import { templates } from "@react-schema-form/bootstrap";
+import templates from "./index";
 
 function ArrayFieldTitle({ TitleTemplate, idSchema, title, required }) {
   if (!title) {
@@ -121,71 +121,35 @@ function AddButton({ onClick, disabled }) {
   );
 }
 
-function TableArrayFieldTemplate(props) {
-  if (props.uiSchema["ui:template"] === "TableArrayField")
-    return (
-      <div>
-        <table class="" style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              {props.uiSchema["ui:template:tableInputTitles"] &&
-                props.uiSchema["ui:template:tableInputTitles"].map(title => (
-                  <th scope="col">{title}</th>
-                ))}
-            </tr>
-          </thead>
-          <tbody>
-            {props.items && props.items.map(p => <tr>{ArrayItem(p)}</tr>)}
-          </tbody>
-        </table>
-        {props.canAdd && (
-          <AddButton
-            onClick={props.onAddClick}
-            disabled={props.disabled || props.readonly}
-          />
-        )}
-      </div>
-    );
-  else return <templates.ArrayFieldTemplate {...props} />;
+function ArrayTableFieldTemplate(props) {
+  console.log(props);
+  return (
+    <div>
+      <table class="" style={{ width: "100%" }}>
+        <thead>
+          <tr>
+            {props.uiSchema["ui:template:tableInputTitles"] &&
+              props.uiSchema["ui:template:tableInputTitles"].map(title => (
+                <th scope="col">{title}</th>
+              ))}
+          </tr>
+        </thead>
+        <tbody>
+          {props.items && props.items.map(p => <tr>{ArrayItem(p)}</tr>)}
+        </tbody>
+      </table>
+      {props.canAdd && (
+        <AddButton
+          onClick={props.onAddClick}
+          disabled={props.disabled || props.readonly}
+        />
+      )}
+    </div>
+  );
 }
 
 /**
  * TODO: PropTypes
  */
 
-export default TableArrayFieldTemplate;
-
-// <fieldset className={props.className}>
-//   <ArrayFieldTitle
-//     key={`array-field-title-${props.idSchema.$id}`}
-//     TitleTemplate={props.TitleTemplate}
-//     idSchema={props.idSchema}
-//     title={props.uiSchema['ui:title'] || props.title}
-//     required={props.required}
-//   />
-
-//   {(props.uiSchema['ui:description'] || props.schema.description) && (
-//     <ArrayFieldDescription
-//       key={`array-field-description-${props.idSchema.$id}`}
-//       DescriptionTemplate={props.DescriptionTemplate}
-//       idSchema={props.idSchema}
-//       description={
-//         props.uiSchema['ui:description'] || props.schema.description
-//       }
-//     />
-//   )}
-
-//   <div
-//     className="array-item-list"
-//     key={`array-item-list-${props.idSchema.$id}`}
-//   >
-//     {props.items && props.items.map(p => ArrayItem(p))}
-//   </div>
-
-//   {props.canAdd && (
-//     <AddButton
-//       onClick={props.onAddClick}
-//       disabled={props.disabled || props.readonly}
-//     />
-//   )}
-// </fieldset>
+export default ArrayTableFieldTemplate;

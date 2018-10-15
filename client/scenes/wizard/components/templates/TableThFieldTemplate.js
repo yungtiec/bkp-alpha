@@ -44,7 +44,8 @@ function ErrorList(props) {
   );
 }
 
-function TableInputFieldTemplate(props) {
+function TableThFieldTemplate(props) {
+
   const {
     id,
     testId,
@@ -72,7 +73,7 @@ function TableInputFieldTemplate(props) {
 }
 
 if (process.env.NODE_ENV !== "production") {
-  TableInputFieldTemplate.propTypes = {
+  TableThFieldTemplate.propTypes = {
     id: PropTypes.string,
     classNames: PropTypes.string,
     label: PropTypes.string,
@@ -90,11 +91,11 @@ if (process.env.NODE_ENV !== "production") {
   };
 }
 
-TableInputFieldTemplate.defaultProps = {
+TableThFieldTemplate.defaultProps = {
   hidden: false,
   readonly: false,
   required: false,
   displayLabel: true
 };
 
-export default TableInputFieldTemplate;
+export default TableThFieldTemplate;

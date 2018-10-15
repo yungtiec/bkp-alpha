@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
-import { templates } from "@react-schema-form/bootstrap";
 
-function TableInputItemFieldTemplate(props) {
+function TableRowFieldTemplate(props) {
   return <Fragment>{props.properties.map(prop => prop.content)}</Fragment>;
 }
 
@@ -9,4 +8,4 @@ function TableInputItemFieldTemplate(props) {
  * TODO: PropTypes
  */
 
-export default TableInputItemFieldTemplate;
+export default TableRowFieldTemplate;

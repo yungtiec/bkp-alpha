@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { steps } from "../../../json-schema/step-array.json";
-import FormWizard from "./components/FormWizard";
+import WizardStep from "./components/WizardStep";
 import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { fetchStepArrayAndSchemas } from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
@@ -47,7 +47,7 @@ class Wizard extends Component {
               key={`wizard-steps__${i + 1}`}
               path={`${match.path}/step/${i + 1}`}
               render={props => (
-                <FormWizard
+                <WizardStep
                   {...step}
                   stepNum={i + 1}
                   numStep={stepArray.length}

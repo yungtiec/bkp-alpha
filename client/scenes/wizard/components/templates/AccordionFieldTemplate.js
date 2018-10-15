@@ -6,7 +6,6 @@ import {
   AccordionItemTitle,
   AccordionItemBody
 } from "react-accessible-accordion";
-import { templates } from "@react-schema-form/bootstrap";
 
 export default class AccordionField extends Component {
   constructor(props) {
@@ -30,24 +29,23 @@ export default class AccordionField extends Component {
   }
 
   render() {
-    if (this.props.uiSchema["ui:template"] === "AccordionField")
-      return (
-        <Accordion onChange={this.handleAccordionChange}>
-          {this.props.properties.map((prop, i) => (
-            <AccordionItem
-              key={prop.content.key}
-              expanded={this.state.activeAccordionItemId === i}
-            >
-              <AccordionItemTitle>
-                <p className="upload-accordion__item-header">
-                  {prop.content.props.schema.title}
-                </p>
-              </AccordionItemTitle>
-              <AccordionItemBody>{prop.content}</AccordionItemBody>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      );
-    else return <templates.ObjectFieldTemplate {...this.props} />;
+
+    return (
+      <Accordion onChange={this.handleAccordionChange}>
+        {this.props.properties.map((prop, i) => (
+          <AccordionItem
+            key={prop.content.key}
+            expanded={this.state.activeAccordionItemId === i}
+          >
+            <AccordionItemTitle>
+              <p className="upload-accordion__item-header">
+                {prop.content.props.schema.title}
+              </p>
+            </AccordionItemTitle>
+            <AccordionItemBody>{prop.content}</AccordionItemBody>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    );
   }
 }

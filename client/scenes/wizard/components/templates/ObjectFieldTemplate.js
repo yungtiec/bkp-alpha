@@ -1,9 +1,9 @@
 import React from "react";
-import { templates } from "@react-schema-form/bootstrap";
-import { TableInputItemFieldTemplate, AccordionFieldTemplate } from "./index";
+import templates from "./index";
 
 function DefaultObjectFieldTemplate(props) {
   const { TitleTemplate, DescriptionTemplate } = props;
+
   return (
     <fieldset>
       {props.uiSchema["ui:title"] && props.uiSchema["ui:title"].hideTitle
@@ -33,10 +33,8 @@ function DefaultObjectFieldTemplate(props) {
 
 function ObjectFieldTemplate(props) {
   switch (props.uiSchema["ui:template"]) {
-    case "TableInputItemField":
-      return <TableInputItemFieldTemplate {...props} />;
-    case "AccordionField":
-      return <AccordionFieldTemplate {...props} />;
+    case "TableRow":
+      return <templates.TableRowFieldTemplate {...props} />;
     default:
       return <DefaultObjectFieldTemplate {...props} />;
   }

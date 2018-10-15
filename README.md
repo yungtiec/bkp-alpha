@@ -2,13 +2,14 @@
 
 Now that you've got the code, follow these steps to get acclimated:
 
-* Update project name and description in `package.json` and `.travis.yml` files
-* `npm install`, or `yarn install` - whatever you're into
-* Create two postgres databases: `bkp-dev` and `bkp-test`
-  * By default, running `npm test` will use `bkp-test`, while regular development uses `bkp-dev`
-* Config file`secrets.js` in the project root
-  * This file is `.gitignore`'d, and will *only* be required in your *development* environment
-  * Its purpose is to attach the secret env variables that you'll use while developing
+- Update project name and description in `package.json` and `.travis.yml` files
+- `npm install`, or `yarn install` - whatever you're into
+- Create two postgres databases: `bkp-dev` and `bkp-test`
+  - By default, running `npm test` will use `bkp-test`, while regular development uses `bkp-dev`
+- Config file`secrets.js` in the project root
+
+  - This file is `.gitignore`'d, and will _only_ be required in your _development_ environment
+  - Its purpose is to attach the secret env variables that you'll use while developing
 
   ```
     process.env.GOOGLE_CLIENT_ID = 'hush hush'
@@ -32,20 +33,24 @@ From there, just follow your bliss.
 
 Ready to go world wide? Here's a guide to deployment! There are two (compatible) ways to deploy:
 
-* automatically, via continuous integration
-* manually, from your local machine (current method)
+- automatically, via continuous integration
+- manually, from your local machine (current method)
 
 Either way, you'll need to set up your deployment server to start:
 
 ### Prep
-1. Set up the [Heroku command line tools](https://devcenter.heroku.com/articles/heroku-cli)
-2. `heroku login`
-3. Add a git remote for heroku:
-  - `git remote add production https://git.heroku.com/bkp-alpha.git` This is for production.
-  - `git remote add staging https://git.heroku.com/bkp-alpha-test.git` This is for staging.
-4. Getting data for local development
-  - `heroku pg:pull DATABASE_URL bkp-dev --app bkp-alpha`
-  - create a database named `bkp-test` for testing
+
+1.  Set up the [Heroku command line tools](https://devcenter.heroku.com/articles/heroku-cli)
+2.  `heroku login`
+3.  Add a git remote for heroku:
+
+- `git remote add production https://git.heroku.com/bkp-alpha.git` This is for production.
+- `git remote add staging https://git.heroku.com/bkp-alpha-test.git` This is for staging.
+
+4.  Getting data for local development
+
+- `heroku pg:pull DATABASE_URL bkp-dev --app bkp-alpha`
+- create a database named `bkp-test` for testing
 
 ### When you're ready to deploy
 
@@ -53,16 +58,17 @@ Either way, you'll need to set up your deployment server to start:
 
 Some developers may prefer to control deployment rather than rely on automation. Your local copy of the application can be pushed up to Heroku at will, using Boilermaker's handy deployment script:
 
-1. Make sure that all your work is fully committed and pushed to your master branch on Github.
-2. If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
-3. `npm run deploy` or `npm run deploy-staging` - this will cause the following commands to happen in order:
-  - `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
-  - `webpack -p`: webpack will run in "production mode"
-  - `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
-  - `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
-  - `git push --force REMOTE_NAME deploy:master`: push your local "deploy" branch to the "master" branch on heroku
-  - `git checkout master`: return to your master branch
-  - `git branch -D deploy`: remove the deploy branch
+1.  Make sure that all your work is fully committed and pushed to your master branch on Github.
+2.  If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
+3.  `npm run deploy` or `npm run deploy-staging` - this will cause the following commands to happen in order:
+
+- `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
+- `webpack -p`: webpack will run in "production mode"
+- `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
+- `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
+- `git push --force REMOTE_NAME deploy:master`: push your local "deploy" branch to the "master" branch on heroku
+- `git checkout master`: return to your master branch
+- `git branch -D deploy`: remove the deploy branch
 
 #### TODO: Automatic Deployment via Continuous Integration
 
@@ -70,14 +76,14 @@ Some developers may prefer to control deployment rather than rely on automation.
 
 CI is not about testing per se – it's about _continuously integrating_ your changes into the live application, instead of periodically _releasing_ new versions. CI tools can not only test your code, but then automatically deploy your app. Boilermaker comes with a `.travis.yml` configuration almost ready for deployment; follow these steps to complete the job.
 
-1. Run `git checkout master && git pull && git checkout -b f/travis-deploy` (or use some other new branch name).
-2. Un-comment the bottom part of `.travis.yml` (the `before_deploy` and `deploy` sections)
-3. Add your Heroku app name to `deploy.app`, where it says "YOUR HEROKU APP NAME HERE". For example, if your domain is `cool-salty-conifer.herokuapp.com`, your app name is `cool-salty-conifer`.
-4. Install the Travis CLI tools by following [the instructions here](https://github.com/travis-ci/travis.rb#installation).
-5. Run `travis encrypt $(heroku auth:token)` to encrypt your Heroku API key. _**Warning:** do not run the `--add` command suggested by Travis, that will rewrite part of our existing config!_
-6. Copy-paste your encrypted API key into the `.travis.yml` file under `deploy.api_key.secure`, where it says "YOUR ENCRYPTED API KEY HERE".
-7. `git add -A && git commit -m 'travis: activate deployment' && git push -u origin f/travis-deploy`
-8. Make a PR for the new branch, get it approved, and merge it into master.
+1.  Run `git checkout master && git pull && git checkout -b f/travis-deploy` (or use some other new branch name).
+2.  Un-comment the bottom part of `.travis.yml` (the `before_deploy` and `deploy` sections)
+3.  Add your Heroku app name to `deploy.app`, where it says "YOUR HEROKU APP NAME HERE". For example, if your domain is `cool-salty-conifer.herokuapp.com`, your app name is `cool-salty-conifer`.
+4.  Install the Travis CLI tools by following [the instructions here](https://github.com/travis-ci/travis.rb#installation).
+5.  Run `travis encrypt $(heroku auth:token)` to encrypt your Heroku API key. _**Warning:** do not run the `--add` command suggested by Travis, that will rewrite part of our existing config!_
+6.  Copy-paste your encrypted API key into the `.travis.yml` file under `deploy.api_key.secure`, where it says "YOUR ENCRYPTED API KEY HERE".
+7.  `git add -A && git commit -m 'travis: activate deployment' && git push -u origin f/travis-deploy`
+8.  Make a PR for the new branch, get it approved, and merge it into master.
 
 That's it! From now on, whenever `master` is updated on GitHub, Travis will automatically push the app to Heroku for you.
 
@@ -90,18 +96,21 @@ Why do all of these steps? The big reason is because we don't want our productio
 ### Folder structure
 
 The code is structured following the fractal project structure. Here's a couple articles on using such strucutre.
+
 - [How to use Redux on highly scalable javascript applications?](https://medium.com/@alexmngn/how-to-use-redux-on-highly-scalable-javascript-applications-4e4b8cb5ef38)
 - [Fractal Project Structure](https://github.com/davezuko/react-redux-starter-kit/wiki/Fractal-Project-Structure)
 
 > Large, mature apps tend to naturally organize themselves in this way—analogous to large, mature trees (as in actual trees :evergreen_tree:). The trunk is the router, branches are route bundles, and leaves are views composed of common/shared components/containers. Global application and UI state should be placed on or close to the trunk (or perhaps at the base of a huge branch, eg. /app route).
 
 A few benefits include:
+
 - Routes can be bundled into chunks and loaded on demand
 - Ideally, logic is self-contained so that each route can be broken down into its own repo if needed.
-- It fits nicely with react-router v4 new way of nesting routes. In react-router-v4 you don't nest ``<Routes />``. Instead, you put them inside another ``<Component />``.
+- It fits nicely with react-router v4 new way of nesting routes. In react-router-v4 you don't nest `<Routes />`. Instead, you put them inside another `<Component />`.
 
 Drawbacks I can speak of:
-- ``../../../../../`` in import statement.
+
+- `../../../../../` in import statement.
   - plan on using webpack or babel plugin for aliasing modules
 
 ### Data component
@@ -112,7 +121,7 @@ Read the data component part of [this article](https://github.com/Automattic/wp-
 
 ##### [Annotator.js](http://annotatorjs.org/)
 
-It's part of the JQuery ecosystem, not React so the data flow of annotations is not managed by redux. We have to do some DOM manipulation when ``<QnaContainer />`` is mounted and updated.
+It's part of the JQuery ecosystem, not React so the data flow of annotations is not managed by redux. We have to do some DOM manipulation when `<QnaContainer />` is mounted and updated.
 
 #### [Reapop](https://github.com/LouisBarranqueiro/reapop)
 
@@ -120,8 +129,7 @@ A React and Redux toast
 
 #### [React Modal](https://github.com/reactjs/react-modal)
 
-We use a reducer to manage modal state. Check out [this article](
-https://stackoverflow.com/questions/35623656/how-can-i-display-a-modal-dialog-in-redux-that-performs-asynchronous-actions) for details implementation
+We use a reducer to manage modal state. Check out [this article](https://stackoverflow.com/questions/35623656/how-can-i-display-a-modal-dialog-in-redux-that-performs-asynchronous-actions) for details implementation
 
 #### [React Pundit](https://github.com/jcgertig/react-pundit)
 
@@ -129,7 +137,7 @@ Check out the [access control chart](https://drive.google.com/file/d/1p4ss0x2ps6
 
 In our app, we have different user roles, and each has permission to perform a certain set of actions. For example, in a document, both editors and project admins can verify comments and edit content, but project admin can also appoint editors. The button for appointing editors is only visible to project admins. In this case, We use React Pundit to manage access control down to component level.
 
-Check out ``policy.js`` in the client directory and ``access-control.js`` in the server directory for permission settings.
+Check out `policy.js` in the client directory and `access-control.js` in the server directory for permission settings.
 
 # Backend
 
@@ -140,20 +148,17 @@ Check out ``policy.js`` in the client directory and ``access-control.js`` in the
 The official documentation is a great resource to learn.
 
 ### Making changes to database
+
 [This article](http://www.duringthedrive.com/2017/05/06/models-migrations-sequelize-node/) is about sequelize migration. Ideally, we make changes to the database through migration. Checkout `server/db/migrations` folder for examples. When a migration finishes, Sequelize will insert a row in `SequelizeMetadata` in the database. Run `sequelize db:migrate` will perform any pending migration that's not logged in the table.
 
 Run this command for staging/production environment:
-`heroku run sequelize db:migrate --env staging_or_production -m --app app-name. `
+`heroku run sequelize db:migrate --env staging_or_production -m --app app-name.`
 
 `server/db/migration/20180918083848-add-version-pdf-column.js` is an example of adding a new column and updating data
 
 #### TODO: we can incoprate the command in 'npm start':
 
-`
-"scripts": {
-  "start": "sequelize db:migrate && node server"
-},
-`
+`"scripts": { "start": "sequelize db:migrate && node server" },`
 
 Every deployment will trigger db:migrate to ensure database update.
 
@@ -163,8 +168,7 @@ Every deployment will trigger db:migrate to ensure database update.
 
 We have a scheduler that run the following command everyday to make sure the staging and producation databases are in sync.
 
-`heroku pg:copy bkp-alpha::DATABASE_URL DATABASE_URL --app bkp-alpha-test
-`
+`heroku pg:copy bkp-alpha::DATABASE_URL DATABASE_URL --app bkp-alpha-test`
 
 Read [here](https://github.com/IcaliaLabs/guides/wiki/Sync-staging-&-production-databases-with-heroku) about the setup
 
@@ -189,5 +193,215 @@ If you have no experience writing markdown files
 
 These are the rules specific to our application. Please follow them when writing disclosures so that our server can parse and store your works!
 
-- H1 (#  disclosure title) is reserved for disclosure title
+- H1 (# disclosure title) is reserved for disclosure title
 - H3 (### section title) is reserved for section title
+
+# Document Upload Wizard
+
+Create a component that automatically generates a React form based on a JSON Schema and the consumer token framework.
+
+## Reason
+
+1.  We may publish a newer version of the framework anytime in the future. Since the scorecard is based on the framework, we have to take the future update into consideration.
+2.  It's possible we open source another document format, other than the scorecard.
+
+## Wireframe
+
+[https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1](https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1)
+
+## Make use of existing form generator out there
+
+[react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form) maintained by modzilla services
+
+[with bootstrap v4 and better API for customizing UI](https://github.com/MatejMazur/react-schema-form)
+
+## Plan of attack
+
+Based on the first draft of the [scorecard template](https://docs.google.com/document/d/1dWA3_FJuiGd2QsrXS9Wuv4iF7NziMurseJ9nt4N5PR8/edit#), each step is a page. This can be done with react router
+
+#### 1. Step
+
+Per [wireframe](https://www.figma.com/file/BmpGRTYwaZfyMiJ4t6m0Na3K/Scorecard-Wizard?node-id=0%3A1), each step in the wizard is a web page (or a scene according to our project directory structure).
+
+We can define a component name `<WizardStep />` for react router to render and enforce the form validation check in the `next` and `back` logics.
+
+It takes its input properties from `step-array`:
+
+- title
+- description
+- childComponentType: string input for specifying the React component used for rendering
+
+Child components of `<WizardStep />` includes:
+
+#### 1. INSTRUCTIONS `<Instructions />`
+
+In the scorecard template, there are paragraphs of instructions with external links and lists. These are better displayed by html markup. Instruction component can take in either markdown or static html.
+
+#### 2. TOKEN_INFORMATION_FORM `<TokenInformationForm />`
+
+Consider building a form that's not rendered by react-json-schema-form. This is for getting necessary metadata, like token project, reference framework, author...etc. The metadata can't just be stored in a json column. We need this kind of metadata to make associations in the database.
+
+The logic has to be self-contained so that we can use it in different scenario.
+
+#### 3. JSON_SCHEMA_FORM `<JsonSchemaForm />`
+
+Checkout detailed documentation here: https://github.com/MatejMazur/react-schema-form
+
+Widgets and templates are components for customizing the look and feel of our form.
+
+Widgets are components that decide how a single input field is rendered. You can provide your own custom widgets to a uiSchema for the following json data types:
+
+- string
+- number
+- integer
+- boolean
+
+Templates are components that decide the organization of input fields.
+
+I think `react-json schema` renders a given definition by the following flow:
+
+```
+                                        FieldTemplate
+                                       /              \
+                                      /                \
+ArrayFieldTemplate/ObjectFieldTemplate                Widget for string, number, boolean
+Iterate over each property/item
+repeat for each property/item render FieldTemplate
+```
+
+##### Custom Widgets
+
+###### <SelectWidget />: select menu made with react-select
+
+###### <DependentSelectWidget />: data dependent select menu
+
+Specify the data dependency with `"enum:optionDependencyPath"`. The path should start with the root level of the step-schemas.json. Specify the key for getting label with `"enum:optionDependencyLabelKey"` if the target is an object
+
+```json
+"DisclosureStatus": {
+  "type": "object",
+  "required": ["status", "sources"],
+  "properties": {
+    "disclosure": {
+      "title": "",
+      "type": "string"
+    },
+    "status": {
+      "title": "",
+      "type": "object",
+      "enum": ["N/A", "x", "1/2", "checked"],
+      "enumNames": ["N/A", "x", "1/2", "checked"]
+    },
+    "sources": {
+      "title": "",
+      "type": "object",
+      "enum": ["Please go back and list the dislcosures evaluated"],
+      "enum:optionDependencyPath": "listDisclosuresEvaluated",
+      "enum:optionDependencyLabelKey": "title"
+    }
+  }
+}
+```
+
+###### <MarkdownRenderWidget />: render text given a string input of markdown
+
+###### <NonEditableTextWidget />: render text in regular html tag
+
+###### <TextEditorWidget />: advanced text editor to replace textarea
+
+re-use text editor in document page
+
+##### Templates
+
+In the `MatejMazur/react-json-schema-form` implementation, templates are not like widgets for which you can define with "ui:widget" in the uiSchema. Customization API looks something like this
+
+```jsx
+function ObjectFieldTemplate(props) {
+  return (
+    <div>
+      {props.title}
+      {props.description}
+      {props.properties.map(element => <div className="property-wrapper">{element.children}</div>)}
+    </div>
+  );
+}
+
+render((
+  <Form schema={schema}
+        ObjectFieldTemplate={ObjectFieldTemplate} />,
+), document.getElementById("app"));
+```
+
+We need more flexibility in our app. For example, an object definition can render either as a row-by-row form or a table.
+
+###### Supporting "ui:template" in uiSchema
+
+Our app supports the use of "ui:template" in uiSchema. It works similarly as the "ui:widget" definition. This is done by replacing files like ObjectFieldTemplate, ArrayFieldTemplate...etc with function like this:
+
+```javascript
+function ObjectFieldTemplate(props) {
+  switch (props.uiSchema["ui:template"]) {
+    case "TableInputItemField":
+      return <templates.TableInputItemFieldTemplate {...props} />;
+    case "AccordionField":
+      return <templates.AccordionFieldTemplate {...props} />;
+    default:
+      return <DefaultObjectFieldTemplate {...props} />;
+  }
+}
+```
+
+Check out `client/scenes/wizard/components/template/ObjectFieldTemplate.js` for an example. The same thing can be done with `ArrayFieldTemplate`, `NumberFieldTemplate` or what have you.
+
+###### <FieldTemplate />
+
+Overwrite the existing FieldTemplate to enable "ui:template" definition
+
+###### <ObjectFieldTemplate />
+
+Overwrite the existing ObjectFieldTemplate to enable "ui:template" definition
+
+###### <FragmentedFieldTemplate />
+
+Replace `div` in the original implemantation with `React.Fragment`
+
+###### <ArrayTableFieldTemplate />
+
+Render an array definition as table
+
+###### <TableThFieldTemplate />
+
+###### <TableCellFieldTemplate />
+
+#### 4. JSON_SCHEMA_FORMS_ACCORDION `<JsonSchemaFormsAccordion />`
+
+`<JsonSchemaFormsAccordion />` renders an accordion based on a given accordion schema.
+
+It is possible to render an accordion solely by writing custom components for `react-json-schema-form`, but this gives us one instance of `react-json-schema-form` for 10 principles (10 sub-forms). It requries us to write a lot of form validation logics if we want to validate on a 'principle' basis (validation everytime the users click next in the accordion). Therefore, we end up with our own definition and component for accordion. Checkout "analysisOfDisclosures" in `step-schemas.json`.
+
+## Array and JSON representation
+
+Refer to json files in this folder
+
+#### 1. step-array
+
+This is an array of object. Each object contains the props for the `<Step />` component described above.
+
+- id
+- title
+- description
+- childComponent
+
+#### 2. step-schemas
+
+This is a JSON object with step id as key and an object with schema, uiSchema and defaultFormData as object.
+
+```
+{
+  "STEP_ID": {
+    schema: {},
+    uiSchema: {},
+    defaultFormData: {}
+  }
+}
+```

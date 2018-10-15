@@ -19,7 +19,7 @@ const CHILD_COMPONENTS = {
   JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion
 };
 
-class FormWizard extends Component {
+class WizardStep extends Component {
   static propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
@@ -78,4 +78,4 @@ class FormWizard extends Component {
   }
 }
 
-export default withRouter(FormWizard);
+export default withRouter(WizardStep);

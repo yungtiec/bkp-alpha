@@ -4,6 +4,7 @@ import { getStepFormData } from "../../data/reducer";
 import SelectWidget from "./SelectWidget";
 
 const DependentSelectWidget = props => {
+
   var { stepFormData, schema, options, ...otherProps } = props;
 
   if (schema["enum:optionDependencyPath"])
