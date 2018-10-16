@@ -77,6 +77,18 @@ const addHistory = versionQuestionOrAnswer => {
 
 const postDocument = async (req, res, next) => {
   try {
+    var document = await Document.create({
+      description: req.body.description,
+      creator_id: req.user.id,
+      project_id: req.body.projectId,
+      latest_version: 1
+    });
+    var version = await Version.create({
+      document_id: document.id,
+      creator_id: req.user.id,
+      comment_until_unix: null,
+      version_number: null
+    });
   } catch (err) {
     next(err);
   }

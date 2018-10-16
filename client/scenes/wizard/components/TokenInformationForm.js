@@ -38,6 +38,12 @@ export default class TokenInformationForm extends React.Component {
     });
   }
 
+  next() {
+    // form validation
+
+    this.props.next()
+  }
+
   render() {
     return (
       <div>
@@ -48,7 +54,7 @@ export default class TokenInformationForm extends React.Component {
           value={this.state.value}
         />
         <div>
-          <button onClick={this.props.next}>next</button>
+          <button onClick={this.next}>next</button>
           <button onClick={this.props.back}>back</button>
         </div>
       </div>
