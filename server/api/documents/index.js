@@ -41,6 +41,17 @@ router.get(
   documentController.getDocumentLatestQuestion
 );
 
+/**
+ * Posting document by regular users through the wizard
+ *
+ * @name Post document
+ * @route {POST} /api/documents
+ * @authentication
+ * @bodyparam {String} description
+ * @bodyparam {String} projectId
+ * @bodyparam {String} document_type
+ *
+ */
 router.post(
   "/",
   ensureAuthentication,
@@ -88,7 +99,7 @@ router.post(
  *
  */
 router.post(
-  "/markdown:parentVersionId",
+  "/markdown/:parentVersionId",
   ensureAuthentication,
   ensureResourceAccess,
   documentController.postNewVersionByMarkdown
@@ -129,4 +140,21 @@ router.post(
   ensureAuthentication,
   ensureResourceAccess,
   documentController.postDownvote
+);
+
+/**
+ * Change project association of a given document
+ *
+ * @name Put project for document
+ * @route {PUT} /api/documents/:documentId/project/:projectId
+ * @authentication
+ * @routeparam {Number} documentId
+ * @routeparam {Number} projectId
+ *
+ */
+router.put(
+  "/:documentId/project/:projectId",
+  ensureAuthentication,
+  ensureResourceAccess,
+  documentController.putProjectAssociation
 );

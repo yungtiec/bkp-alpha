@@ -1,25 +1,20 @@
 import React from "react";
-import { Async } from "react-select";
 import axios from "axios";
+import { Async } from "react-select";
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
+import { postDocumentForProject } from "../data/services";
+import { getCurrentProject } from "../data/reducer";
+import { updateCurrentProject } from "../data/actions";
 
-// render one item on the list
-const MyItemView = function({ item }) {
-  return (
-    <div className="user-data">
-      <div>{item.id}</div>
-      <div>{item.name}</div>
-    </div>
-  );
-};
-
-export default class TokenInformationForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      selected: undefined
-    };
+class TokenInformationForm extends React.Component {
+  constructor(props) {
+    super(props);
     autoBind(this);
+  }
+
+  componentDidMount() {
+
   }
 
   loadOptions(input) {
@@ -34,14 +29,14 @@ export default class TokenInformationForm extends React.Component {
 
   onChange(option) {
     this.setState({
-      value: option.value
+      selected: option
     });
   }
 
   next() {
     // form validation
 
-    this.props.next()
+    this.props.next();
   }
 
   render() {
@@ -50,8 +45,12 @@ export default class TokenInformationForm extends React.Component {
         <Async
           name="form-field-name"
           loadOptions={this.loadOptions}
-          onChange={this.onChange}
-          value={this.state.value}
+          onChange={this.props.updateCurrentProject}
+          value={
+            this.props.project
+              ? { value: this.props.project, label: this.props.project.name }
+              : null
+          }
         />
         <div>
           <button onClick={this.next}>next</button>
@@ -61,3 +60,17 @@ export default class TokenInformationForm extends React.Component {
     );
   }
 }
+
+const mapStates = (state, ownProps) => ({
+  ...ownProps,
+  project: getCurrentProject(state)
+});
+
+const mapDispatch = (dispatch, ownProps) => ({
+  updateCurrentProject: option => dispatch(updateCurrentProject(option.value))
+});
+
+export default connect(
+  mapStates,
+  mapDispatch
+)(TokenInformationForm);

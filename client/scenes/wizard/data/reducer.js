@@ -3,6 +3,7 @@ import { set, cloneDeep } from "lodash";
 
 const initialState = {
   version: null,
+  document: null,
   project: null,
   stepArray: null,
   stepSchemas: null,
@@ -47,6 +48,11 @@ export default function reduce(state = initialState, action = {}) {
       };
     case types.FORM_DATA_IN_STORE_UPDATED:
       return updateFormData(action, state);
+    case types.CURRENT_PROJECT_UPDATED:
+      return {
+        ...state,
+        project: action.project
+      };
     default:
       return state;
   }
@@ -55,3 +61,5 @@ export default function reduce(state = initialState, action = {}) {
 export const getStepArrayAndSchemas = state => state.scenes.wizard.data;
 
 export const getStepFormData = state => state.scenes.wizard.data.stepFormData;
+
+export const getCurrentProject = state => state.scenes.wizard.data.project;

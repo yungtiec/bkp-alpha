@@ -89,6 +89,10 @@ const postDocument = async (req, res, next) => {
       comment_until_unix: null,
       version_number: null
     });
+    res.send({
+      document,
+      version
+    });
   } catch (err) {
     next(err);
   }
@@ -397,12 +401,25 @@ const postNewVersionByMarkdown = async (req, res, next) => {
   }
 };
 
+const putProjectAssociation = async (req, res, next) => {
+  try {
+    var document = await Document.findById(req.params.documentId).then(d =>
+      d.update({ project_id: req.params.projectId })
+    );
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getDocuments,
   getDocument,
   getDocumentLatestQuestion,
+  postDocument,
   postDocumentByMarkdown,
   postUpvote,
   postDownvote,
-  postNewVersionByMarkdown
+  postNewVersionByMarkdown,
+  putProjectAssociation
 };
