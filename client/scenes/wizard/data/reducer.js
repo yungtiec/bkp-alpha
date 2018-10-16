@@ -2,6 +2,8 @@ import * as types from "./actionTypes";
 import { set, cloneDeep } from "lodash";
 
 const initialState = {
+  version: null,
+  project: null,
   stepArray: null,
   stepSchemas: null,
   stepFormData: {}

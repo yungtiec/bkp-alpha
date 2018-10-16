@@ -77,6 +77,13 @@ const addHistory = versionQuestionOrAnswer => {
 
 const postDocument = async (req, res, next) => {
   try {
+  } catch (err) {
+    next(err);
+  }
+};
+
+const postDocumentByMarkdown = async (req, res, next) => {
+  try {
     var project = await Project.findOne({
       where: { symbol: req.body.selectedProjectSymbol },
       include: [
@@ -199,7 +206,7 @@ const postDownvote = async (req, res, next) => {
   }
 };
 
-const postNewVersion = async (req, res, next) => {
+const postNewVersionByMarkdown = async (req, res, next) => {
   try {
     var {
       markdown,
@@ -279,20 +286,19 @@ const postNewVersion = async (req, res, next) => {
     var prevCollaboratorEmails = parentVersion.document.collaborators.map(
       user => user.email
     );
-    var removedCollaborators = _.difference(
-      prevCollaboratorEmails,
-      collaboratorEmails
-    ).map(async email =>
-      DocumentCollaborator.update(
-        { revoked_access: true },
-        {
-          where: {
-            email,
-            document_id: parentVersion.document.id
+    var removedCollaborators = _
+      .difference(prevCollaboratorEmails, collaboratorEmails)
+      .map(async email =>
+        DocumentCollaborator.update(
+          { revoked_access: true },
+          {
+            where: {
+              email,
+              document_id: parentVersion.document.id
+            }
           }
-        }
-      )
-    );
+        )
+      );
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
@@ -383,8 +389,8 @@ module.exports = {
   getDocuments,
   getDocument,
   getDocumentLatestQuestion,
-  postDocument,
+  postDocumentByMarkdown,
   postUpvote,
   postDownvote,
-  postNewVersion
+  postNewVersionByMarkdown
 };

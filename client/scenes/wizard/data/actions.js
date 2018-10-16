@@ -24,3 +24,10 @@ export function updateFormDataInStore(formDataPath, formData) {
     formDataPath
   };
 }
+
+export function updateCurrentProject(project) {
+  return {
+    type: types.CURRENT_PROJECT_UPDATED,
+    project
+  };
+}

@@ -41,11 +41,18 @@ router.get(
   documentController.getDocumentLatestQuestion
 );
 
+router.post(
+  "/",
+  ensureAuthentication,
+  ensureResourceAccess,
+  documentController.postDocument
+);
+
 /**
  * Posting document executes a series of database queries, including creating document, first version, questions and answers, and setting up associations.
  *
  * @name Post document
- * @route {POST} /api/documents
+ * @route {POST} /api/documents/markdown
  * @authentication
  * @bodyparam {String} selectedProjectSymbol
  * @bodyparam {String} markdown is the md file uploaded by user, ready to be parsed into questions and answers
@@ -57,10 +64,10 @@ router.get(
  *
  */
 router.post(
-  "/",
+  "/markdown",
   ensureAuthentication,
   ensureResourceAccess,
-  documentController.postDocument
+  documentController.postDocumentByMarkdown
 );
 
 /**
@@ -81,10 +88,10 @@ router.post(
  *
  */
 router.post(
-  "/:parentVersionId",
+  "/markdown:parentVersionId",
   ensureAuthentication,
   ensureResourceAccess,
-  documentController.postNewVersion
+  documentController.postNewVersionByMarkdown
 );
 
 /**
