@@ -9,10 +9,10 @@ module.exports = {
       .then(() => {
         return Promise.all([
           queryInterface.sequelize.query(
-            "UPDATE documents SET document_type = 'general' WHERE document_id = 1;"
+            "UPDATE documents SET document_type = 'general' WHERE id = 1;"
           ),
           queryInterface.sequelize.query(
-            "UPDATE documents SET document_type = 'scorecard' WHERE document_id = 2;"
+            "UPDATE documents SET document_type = 'scorecard' WHERE id = 2;"
           )
         ]);
       });
