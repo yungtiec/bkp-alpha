@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
+  Collaborations,
   Documents,
   Project,
   Profile,
@@ -49,6 +50,11 @@ class Routes extends Component {
             layout={Layout}
             path="/reset-password/:token"
             component={ResetPassword}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/collaborations"
+            component={Collaborations}
           />
           {isLoggedIn && (
             <RouteWithLayout

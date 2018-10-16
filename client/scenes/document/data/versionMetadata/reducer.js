@@ -13,12 +13,12 @@ const updateScorecard = (action, state) => {
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.PROJECT_SURVEY_METADATA_FETCH_REQUEST:
+    case types.VERSION_METADATA_FETCH_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
+    case types.VERSION_METADATA_FETCH_SUCCESS:
       return {
         ...state,
         ...action.versionMetadata,

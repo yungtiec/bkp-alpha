@@ -12,6 +12,14 @@ const labelDividerTitle = versionQnasById => {
   return versionQnasById;
 };
 
+const setDefaultToIsNotBeingEdited = versionQnasById => {
+  for (var id in versionQnasById) {
+    versionQnasById[id].isBeingEdited = false;
+    versionQnasById[id].version_answers[0].isBeingEdited = false;
+  }
+  return versionQnasById;
+};
+
 const initialState = {
   versionQnasById: {},
   versionQnaIds: null,
@@ -32,6 +40,32 @@ const updateQuestions = (state, action) => {
   return state;
 };
 
+const openQuestionEditor = (state, action) => {
+  var versionQnas;
+  const isBeingEdited =
+    state.versionQnasById[action.versionQuestionId].isBeingEdited;
+  state.versionQnasById[
+    action.versionQuestionId
+  ].isBeingEdited = !isBeingEdited;
+  versionQnas = sortBy(
+    values(state.versionQnasById),
+    ["order_in_version"],
+    ["asc"]
+  );
+  state.versionQnaIds = versionQnas.map(qna => qna.id);
+  return state;
+};
+
+const openAnswerEditor = (state, action) => {
+  const isBeingEdited =
+    state.versionQnasById[action.versionQuestionId].version_answers[0]
+      .isBeingEdited;
+  state.versionQnasById[
+    action.versionQuestionId
+  ].version_answers[0].isBeingEdited = !isBeingEdited;
+  return state;
+};
+
 const revertQuestion = (state, action) => {
   var versionQnas;
   var history = cloneDeep(
@@ -40,6 +74,7 @@ const revertQuestion = (state, action) => {
   delete state.versionQnasById[action.prevVersionQuestionId];
   state.versionQnasById[action.versionQuestion.id] = action.versionQuestion;
   state.versionQnasById[action.versionQuestion.id].history = history;
+  state.versionQnasById[action.versionQuestion.id].isBeingEdited = true;
   versionQnas = sortBy(
     values(state.versionQnasById),
     ["order_in_version"],
@@ -65,30 +100,42 @@ const revertAnswer = (state, action) => {
   ];
   state.versionQnasById[
     action.versionQuestionId
+  ].version_answers[0].isBeingEdited = true;
+  state.versionQnasById[
+    action.versionQuestionId
   ].version_answers[0].history = history;
   return state;
 };
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
-    case types.PROJECT_SURVEY_QUESTIONS_FETCH_REQUEST:
+    case types.VERSION_QUESTIONS_FETCH_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS:
+    case types.VERSION_QUESTIONS_FETCH_SUCCESS:
+      const versionQnasById = setDefaultToIsNotBeingEdited(
+        cloneDeep(action.versionQnasById)
+      );
       return {
-        versionQnasById: labelDividerTitle(cloneDeep(action.versionQnasById)),
+        versionQnasById: setDefaultToIsNotBeingEdited(
+          labelDividerTitle(versionQnasById)
+        ),
         versionQnaIds: action.versionQnaIds,
         loading: false
       };
-    case types.PROJECT_SURVEY_QUESTION_EDITED:
+    case types.VERSION_QUESTION_EDITOR_IS_OPEN:
+      return openQuestionEditor(cloneDeep(state), action);
+    case types.VERSION_ANSWER_EDITOR_IS_OPEN:
+      return openAnswerEditor(cloneDeep(state), action);
+    case types.VERSION_QUESTION_EDITED:
       return updateQuestions(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_ANSWER_EDITED:
+    case types.VERSION_ANSWER_EDITED:
       return updateAnswer(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_ANSWER_REVERTED:
+    case types.VERSION_ANSWER_REVERTED:
       return revertAnswer(cloneDeep(state), action);
-    case types.PROJECT_SURVEY_QUESTION_REVERTED:
+    case types.VERSION_QUESTION_REVERTED:
       return revertQuestion(cloneDeep(state), action);
     default:
       return state;

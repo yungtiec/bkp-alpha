@@ -210,6 +210,8 @@ class Document extends Component {
       versionQnasById,
       versionQnaIds,
       editQuestion,
+      toggleQuestionEditor,
+      toggleAnswerEditor,
       editAnswer,
       editScorecard,
       revertToPrevQuestion,
@@ -289,6 +291,8 @@ class Document extends Component {
             editScorecard={editScorecard}
             editQuestion={editQuestion}
             editAnswer={editAnswer}
+            toggleQuestionEditor={toggleQuestionEditor}
+            toggleAnswerEditor={toggleAnswerEditor}
             revertToPrevQuestion={revertToPrevQuestion}
             revertToPrevAnswer={revertToPrevAnswer}
             versionMetadata={versionMetadata}

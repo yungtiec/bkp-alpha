@@ -11,7 +11,6 @@ import { ActionableIssueTag, CommentItem } from "./index";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../../policies.js";
 
-
 export default ({
   comment,
   user,
@@ -35,6 +34,7 @@ export default ({
     (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
     comment.comment
   );
+  const wasEdited = comment.updatedAt === comment.createdAt;
 
   return (
     <CommentItem
@@ -83,6 +83,16 @@ export default ({
         </div>
       ) : null}
       <ReactMarkdown className="comment-item__comment" source={commentText} />
+      <div class="comment-item__tooltip">
+        {wasEdited && (
+          <div>
+            (Edited)
+            <p class="comment-item__tooltiptext">
+              {moment(comment.updateAt).calendar()}
+            </p>
+          </div>
+        )}
+      </div>
       {embeddedUrls.length
         ? embeddedUrls.map((url, i) => (
             <Microlink
