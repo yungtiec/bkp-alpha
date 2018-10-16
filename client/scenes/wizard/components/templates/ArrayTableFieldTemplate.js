@@ -122,7 +122,6 @@ function AddButton({ onClick, disabled }) {
 }
 
 function ArrayTableFieldTemplate(props) {
-  console.log(props);
   return (
     <div>
       <table class="" style={{ width: "100%" }}>

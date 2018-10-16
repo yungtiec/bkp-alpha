@@ -33,12 +33,14 @@ class WizardStep extends Component {
 
   componentDidUpdate(prevProps, prevState) {}
 
-  next(beforeTransition) {
+  next() {
+    console.log("??")
     if (this.props.stepNum <= this.props.numStep)
       history.push(`/wizard/step/${this.props.stepNum + 1}`);
   }
 
-  back(beforeTransition) {
+  back() {
+    console.log("back")
     if (this.props.stepNum > 1)
       history.push(`/wizard/step/${this.props.stepNum - 1}`);
   }

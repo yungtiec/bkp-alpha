@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { updateFormDataInStore } from "../data/actions";
 import { assignIn } from "lodash";
@@ -12,35 +14,46 @@ const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
 
 const log = type => console.log.bind(console, type);
 
-const JsonSchemaForm = ({
-  schema,
-  uiSchema,
-  formData,
-  formDataPath,
-  id,
-  updateFormDataInStore,
-  next,
-  back
-}) => {
-  return (
-    <div>
-      <BootstrapCustomForm
-        noHtml5Validate={true}
-        schema={schema}
-        uiSchema={uiSchema}
-        formData={formData}
-        onChange={updateFormDataInStore}
-        onSubmit={props => next()}
-        onError={log("errors")}
-      >
-        <div>
-          <button type="submit">Submit</button>
-          <button type="button" onClick={back}>Cancel</button>
-        </div>
-      </BootstrapCustomForm>
-    </div>
-  );
-};
+class JsonSchemaForm extends Component {
+  constructor(props) {
+    super(props);
+    autoBind(this);
+  }
+
+  render() {
+    const {
+      schema,
+      uiSchema,
+      formData,
+      formDataPath,
+      id,
+      updateFormDataInStore,
+      next,
+      back
+    } = this.props;
+    return (
+      <div>
+        <BootstrapCustomForm
+          ref={form => (this.form = form)}
+          noHtml5Validate={true}
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+          onSubmit={next}
+          onChange={updateFormDataInStore}
+          onError={log("errors")}
+        >
+          <div>
+            <button type="submit">next</button>
+            <button type="button" onClick={back}>
+              back
+            </button>
+          </div>
+        </BootstrapCustomForm>
+      </div>
+    );
+  }
+}
 
 const mapState = (state, ownProps) => ({ ...ownProps });
 

@@ -25,13 +25,13 @@ export default class JsonSchemaFormsAccordion extends Component {
     });
   }
 
-  next() {
+  nextAccordionItem() {
     this.setState(prevState => ({
       activeAccordionItemId: (prevState.activeAccordionItemId + 1) % 10
     }));
   }
 
-  back() {
+  prevAccordionItem() {
     this.setState(prevState => ({
       activeAccordionItemId: (prevState.activeAccordionItemId - 1) % 10
     }));
@@ -43,6 +43,8 @@ export default class JsonSchemaFormsAccordion extends Component {
       accordionInstructions,
       accordionOrder,
       formData,
+      next,
+      back,
       ...accordionContext
     } = this.props;
 
@@ -67,13 +69,21 @@ export default class JsonSchemaFormsAccordion extends Component {
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
-                  next={this.next}
-                  back={this.back}
+                  next={this.nextAccordionItem}
+                  back={this.prevAccordionItem}
                 />
               </AccordionItemBody>
             </AccordionItem>
           ))}
         </Accordion>
+        <div>
+          <button type="button" onClick={next}>
+            next
+          </button>
+          <button type="button" onClick={back}>
+            back
+          </button>
+        </div>
       </div>
     );
   }
