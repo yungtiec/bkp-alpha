@@ -33,13 +33,12 @@ class WizardStep extends Component {
 
   componentDidUpdate(prevProps, prevState) {}
 
-  next() {
-    // add validation logics here
+  next(beforeTransition) {
     if (this.props.stepNum <= this.props.numStep)
       history.push(`/wizard/step/${this.props.stepNum + 1}`);
   }
 
-  back() {
+  back(beforeTransition) {
     if (this.props.stepNum > 1)
       history.push(`/wizard/step/${this.props.stepNum - 1}`);
   }
@@ -69,13 +68,16 @@ class WizardStep extends Component {
           id={id}
           content={content}
           formData={formData}
+          next={this.next}
+          back={this.back}
         />
-        {stepNum !== 1 && <button onClick={this.back}>back</button>}
-        {stepNum !== numStep && <button onClick={this.next}>next</button>}
-        {stepNum === numStep && <button>submit</button>}
       </div>
     );
   }
 }
 
 export default withRouter(WizardStep);
+
+// {stepNum !== 1 && <button onClick={this.back}>back</button>}
+// {stepNum !== numStep && <button onClick={this.next}>next</button>}
+// {stepNum === numStep && <button>submit</button>}

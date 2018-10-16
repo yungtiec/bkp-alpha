@@ -18,9 +18,10 @@ const JsonSchemaForm = ({
   formData,
   formDataPath,
   id,
-  updateFormDataInStore
+  updateFormDataInStore,
+  next,
+  back
 }) => {
-
   return (
     <div>
       <BootstrapCustomForm
@@ -29,9 +30,14 @@ const JsonSchemaForm = ({
         uiSchema={uiSchema}
         formData={formData}
         onChange={updateFormDataInStore}
-        onSubmit={log("submitted")}
+        onSubmit={props => next()}
         onError={log("errors")}
-      />
+      >
+        <div>
+          <button type="submit">Submit</button>
+          <button type="button" onClick={back}>Cancel</button>
+        </div>
+      </BootstrapCustomForm>
     </div>
   );
 };

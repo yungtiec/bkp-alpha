@@ -31,6 +31,12 @@ export default class JsonSchemaFormsAccordion extends Component {
     }));
   }
 
+  back() {
+    this.setState(prevState => ({
+      activeAccordionItemId: (prevState.activeAccordionItemId - 1) % 10
+    }));
+  }
+
   render() {
     const {
       id,
@@ -61,6 +67,8 @@ export default class JsonSchemaFormsAccordion extends Component {
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
+                  next={this.next}
+                  back={this.back}
                 />
               </AccordionItemBody>
             </AccordionItem>
