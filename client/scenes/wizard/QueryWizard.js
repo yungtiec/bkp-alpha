@@ -1,3 +1,4 @@
+import "./wizard.scss";
 import React, { Component } from "react";
 import { steps } from "../../../json-schema/step-array.json";
 import WizardStep from "./components/WizardStep";
@@ -26,7 +27,11 @@ class Wizard extends Component {
     if (!stepSchemas || !stepSchemas) return null;
     return (
       <div className="main-container">
-        <Steps current={currentStep} labelPlacement="vertical">
+        <Steps
+          className="wizard-steps py-3 mb-5"
+          current={currentStep}
+          labelPlacement="vertical"
+        >
           {stepArray.map((step, i) => (
             <Step
               title={step.title}

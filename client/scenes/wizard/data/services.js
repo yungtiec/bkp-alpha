@@ -1,12 +1,15 @@
 import axios from "axios";
 
-export function putProjectForDocument(projectId) {
+export function putDocumentMetadata({ description, projectId }) {
   return axios
-    .put("api/documents/:id/project/:projectId")
+    .put("api/documents/:id", {
+      description,
+      projectId
+    })
     .then(res => res.data);
 }
 
-export function postDocumentForProject(projectId) {
+export function postDocumentMetadata({ description, projectId }) {
   return axios
     .post("api/documents", {
       description,

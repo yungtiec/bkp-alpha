@@ -19,7 +19,7 @@
     },
     {
       "id": "analysisOfDisclosures",
-      "title": "Analysis of Disclosures",
+      "title": "Provide Analysis of Disclosures",
       "childComponentType": "JSON_SCHEMA_FORMS_ACCORDION"
     },
     {

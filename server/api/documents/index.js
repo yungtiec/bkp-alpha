@@ -60,6 +60,24 @@ router.post(
 );
 
 /**
+ * Change metadata of a given document
+ *
+ * @name Put metadata for document
+ * @route {PUT} /api/documents
+ * @authentication
+ * @routeparam {Number} documentId
+ * @routeparam {Number} projectId
+ *
+ */
+router.put(
+  "/:documentId",
+  ensureAuthentication,
+  ensureResourceAccess,
+  documentController.putDocument
+);
+
+
+/**
  * Posting document executes a series of database queries, including creating document, first version, questions and answers, and setting up associations.
  *
  * @name Post document
@@ -142,19 +160,3 @@ router.post(
   documentController.postDownvote
 );
 
-/**
- * Change project association of a given document
- *
- * @name Put project for document
- * @route {PUT} /api/documents/:documentId/project/:projectId
- * @authentication
- * @routeparam {Number} documentId
- * @routeparam {Number} projectId
- *
- */
-router.put(
-  "/:documentId/project/:projectId",
-  ensureAuthentication,
-  ensureResourceAccess,
-  documentController.putProjectAssociation
-);

@@ -401,12 +401,16 @@ const postNewVersionByMarkdown = async (req, res, next) => {
   }
 };
 
-const putProjectAssociation = async (req, res, next) => {
+const putDocument = async (req, res, next) => {
   try {
+    var updatedMetadata = {};
+    if (req.params.projectId) updatedMetadata.project_id = req.params.projectId;
+    if (req.params.description)
+      updatedMetadata.description = req.params.description;
     var document = await Document.findById(req.params.documentId).then(d =>
-      d.update({ project_id: req.params.projectId })
+      d.update(updatedMetadata)
     );
-    res.sendStatus(200);
+    res.sendStatus(document);
   } catch (err) {
     next(err);
   }
@@ -421,5 +425,5 @@ module.exports = {
   postUpvote,
   postDownvote,
   postNewVersionByMarkdown,
-  putProjectAssociation
+  putDocument
 };

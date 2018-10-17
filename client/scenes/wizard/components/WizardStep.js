@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
@@ -59,8 +59,8 @@ class WizardStep extends Component {
     const ChildComponent = CHILD_COMPONENTS[childComponentType];
 
     return (
-      <div>
-        <h2>{title}</h2>
+      <Fragment>
+        <h5>{title}</h5>
         <p>{description}</p>
         <ChildComponent
           key={id}
@@ -71,7 +71,7 @@ class WizardStep extends Component {
           next={this.next}
           back={this.back}
         />
-      </div>
+      </Fragment>
     );
   }
 }

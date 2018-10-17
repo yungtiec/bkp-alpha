@@ -53,6 +53,11 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         project: action.project
       };
+    case types.DOCUMENT_METADATA_SUBMITTED:
+      return {
+        ...state,
+        ...action
+      };
     default:
       return state;
   }
