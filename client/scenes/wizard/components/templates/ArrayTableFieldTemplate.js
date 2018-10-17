@@ -38,7 +38,7 @@ function IconBtn(props) {
   );
 }
 
-function ArrayItem(props) {
+function ArrayItem(props, arrayLength) {
   const btnStyle = {
     flex: 1,
     paddingLeft: 6,
@@ -57,7 +57,7 @@ function ArrayItem(props) {
             className="btn-group"
             style={{
               display: "flex",
-              justifyContent: "space-around"
+              justifyContent: "flex-end"
             }}
           >
             {(props.hasMoveUp || props.hasMoveDown) && (
@@ -85,16 +85,20 @@ function ArrayItem(props) {
             )}
 
             {props.hasRemove && (
-              <IconBtn
-                type="danger"
-                icon={Cross}
-                className="array-item-remove"
+              <button
                 tabIndex="-1"
-                style={btnStyle}
-                disabled={props.disabled || props.readonly}
+                disabled={props.disabled || props.readonly || arrayLength === 1}
                 onClick={props.onDropIndexClick(props.index)}
                 data-testid="remove-array-item"
-              />
+                style={{
+                  "-webkit-appearance": "none",
+                  "-moz-appearance": "none",
+                  border: "none",
+                  fontSize: "25px"
+                }}
+              >
+                <i class="fas fa-times text-danger" />
+              </button>
             )}
           </div>
         </th>
@@ -105,19 +109,16 @@ function ArrayItem(props) {
 
 function AddButton({ onClick, disabled }) {
   return (
-    <div className="row">
-      <p className="col-md-3 col-md-offset-9 array-item-add text-right">
-        <IconBtn
-          type="info"
-          icon={Plus}
-          className="btn-add col-md-12"
-          tabIndex="0"
-          onClick={onClick}
-          disabled={disabled}
-          data-testid="add-array-item"
-        />
-      </p>
-    </div>
+    <button
+      type="button"
+      className="btn btn-outline-primary mb-3"
+      tabIndex="0"
+      onClick={onClick}
+      disabled={disabled}
+      data-testid="add-array-item"
+    >
+      Add source
+    </button>
   );
 }
 
@@ -131,18 +132,28 @@ function ArrayTableFieldTemplate(props) {
               props.uiSchema["ui:template:tableInputTitles"].map(title => (
                 <th scope="col">{title}</th>
               ))}
+            <th style={{ width: "110px" }}>
+              {props.canAdd && (
+                <button
+                  style={{ width: "100%" }}
+                  type="button"
+                  className="btn btn-outline-primary mb-3"
+                  tabIndex="0"
+                  onClick={props.onAddClick}
+                  disabled={props.disabled || props.readonly}
+                  data-testid="add-array-item"
+                >
+                  Add source
+                </button>
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {props.items && props.items.map(p => <tr>{ArrayItem(p)}</tr>)}
+          {props.items &&
+            props.items.map(p => <tr>{ArrayItem(p, props.items.length)}</tr>)}
         </tbody>
       </table>
-      {props.canAdd && (
-        <AddButton
-          onClick={props.onAddClick}
-          disabled={props.disabled || props.readonly}
-        />
-      )}
     </div>
   );
 }

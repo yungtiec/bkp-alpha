@@ -43,10 +43,12 @@ class JsonSchemaForm extends Component {
           onChange={updateFormDataInStore}
           onError={log("errors")}
         >
-          <div>
-            <button type="submit">next</button>
-            <button type="button" onClick={back}>
+          <div className="d-flex justify-content-end mt-5">
+            <button type="button" className="btn btn-outline-danger" onClick={back}>
               back
+            </button>
+            <button type="submit" className="btn btn-primary ml-2">
+              next
             </button>
           </div>
         </BootstrapCustomForm>

@@ -94,10 +94,10 @@ class TokenInformationForm extends React.Component {
             />
           </div>
         </div>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end mt-5">
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-outline-danger"
             onClick={this.props.back}
           >
             back
