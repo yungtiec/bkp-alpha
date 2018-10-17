@@ -38,7 +38,8 @@
     "defaultFormData": [
       {
         "title": "",
-        "link": ""
+        "link": "",
+        "analysis": ""
       }
     ]
   },
@@ -100,7 +101,9 @@
               },
               "analysis": {
                 "title": "Analysis",
-                "type": "string"
+                "type": "string",
+                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyLabelKey": "Analysis"
               }
             }
           }
@@ -142,7 +145,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
+          "ui:widget": "TextEditorWidget",
           "ui:options": {
             "rows": 5
           }
