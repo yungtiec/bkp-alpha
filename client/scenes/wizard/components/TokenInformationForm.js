@@ -4,7 +4,7 @@ import { Async } from "react-select";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { postDocumentForProject } from "../data/services";
-import { getCurrentProject } from "../data/reducer";
+import { getCurrentProject, getCurrentDocument } from "../data/reducer";
 import { updateCurrentProject, submitDocumentMetadata } from "../data/actions";
 
 class TokenInformationForm extends React.Component {
@@ -18,7 +18,8 @@ class TokenInformationForm extends React.Component {
 
   componentDidMount() {
     this.setState({
-      projectError: !this.props.project
+      project: this.props.project,
+      description: this.props.document ? this.props.document.description : ""
     });
   }
 
@@ -32,21 +33,30 @@ class TokenInformationForm extends React.Component {
     });
   }
 
-  onChange(option) {
+  selectOnChange(option) {
     this.setState({
       pristine: false,
-      projectError: !option.value
+      project: option
     });
-    this.props.updateCurrentProject(option);
+  }
+
+  handleDescriptionChange(event) {
+    this.setState({ description: event.target.value });
   }
 
   next() {
     // form validation
     this.setState({
-      pristine: false,
-      projectError: !this.props.project
+      pristine: false
     });
-    if (!this.props.project) return;
+    if (!this.state.project) return;
+    this.props.submitDocumentMetadata({
+      title: `${this.state.project.value.name} (${
+        this.state.project.value.symbol
+      }) transparency scorecard`,
+      project: this.state.project.value,
+      description: this.state.description
+    });
     this.props.next();
   }
 
@@ -61,18 +71,11 @@ class TokenInformationForm extends React.Component {
             <Async
               name="form-field-name"
               loadOptions={this.loadOptions}
-              onChange={this.onChange}
-              value={
-                this.props.project
-                  ? {
-                      value: this.props.project,
-                      label: this.props.project.name
-                    }
-                  : null
-              }
+              onChange={this.selectOnChange}
+              value={this.state.project}
             />
             {!this.state.pristine &&
-              this.state.projectError && (
+              !this.state.project && (
                 <p className="text-danger">this is required</p>
               )}
           </div>
@@ -86,6 +89,8 @@ class TokenInformationForm extends React.Component {
               type="text"
               class="form-control"
               placeholder="optional short summary"
+              onChange={this.handleDescriptionChange}
+              value={this.state.description}
             />
           </div>
         </div>
@@ -97,7 +102,11 @@ class TokenInformationForm extends React.Component {
           >
             back
           </button>
-          <button type="button" className="btn btn-primary ml-2" onClick={this.next}>
+          <button
+            type="button"
+            className="btn btn-primary ml-2"
+            onClick={this.next}
+          >
             next
           </button>
         </div>
@@ -108,11 +117,13 @@ class TokenInformationForm extends React.Component {
 
 const mapStates = (state, ownProps) => ({
   ...ownProps,
-  project: getCurrentProject(state)
+  project: getCurrentProject(state),
+  document: getCurrentDocument(state)
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
-  updateCurrentProject: option => dispatch(updateCurrentProject(option.value))
+  submitDocumentMetadata: ({ project, description, title }) =>
+    dispatch(submitDocumentMetadata({ project, description, title }))
 });
 
 export default connect(

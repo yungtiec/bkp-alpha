@@ -68,3 +68,5 @@ export const getStepArrayAndSchemas = state => state.scenes.wizard.data;
 export const getStepFormData = state => state.scenes.wizard.data.stepFormData;
 
 export const getCurrentProject = state => state.scenes.wizard.data.project;
+
+export const getCurrentDocument = state => state.scenes.wizard.data.document;

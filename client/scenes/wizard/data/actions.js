@@ -33,28 +33,32 @@ export function updateCurrentProject(project) {
   };
 }
 
-export function submitDocumentMetadata({ description, projectId }) {
+export function submitDocumentMetadata({ title, description, project }) {
   return async (dispatch, getState) => {
     try {
       const currentDocument = getState().scenes.wizard.data.document;
       if (!currentDocument) {
         const { document, version } = await postDocumentMetadata({
+          title,
           description,
-          projectId
+          projectId: project.id
         });
         dispatch({
           type: types.DOCUMENT_METADATA_SUBMITTED,
           document,
-          version
+          version,
+          project
         });
       } else {
         const document = await putDocumentMetadata({
+          title,
           description,
-          projectId
+          projectId: project.id
         });
         dispatch({
           type: types.DOCUMENT_METADATA_SUBMITTED,
-          document
+          document,
+          project
         });
       }
     } catch (err) {}
