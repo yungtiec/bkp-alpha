@@ -13,18 +13,15 @@ class TextEditorWidget extends React.Component {
     super(props);
     autoBind(this);
     this.diff = new TextDiff();
-    console.log(this.props);
     this.state = {
       markdown: this.props.value,
       diff: this.diff.main(
-        this.props.value || "",
-        this.props.value || ""
+        this.props.value,
+        this.props.value
       ),
       editing: false
     };
   }
-  // Note: since React 15.2.0 we can't forward unknown element attributes, so we
-  // exclude the "options" and "schema" ones here.
 
   componentDidUpdate(prevProps) {
     if (this.props.id !== prevProps.id) {
@@ -60,29 +57,28 @@ class TextEditorWidget extends React.Component {
   }
 
   handleValueChange(markdown) {
-    console.log(markdown);
     this.setState({
       markdown,
       diff: this.diff.main("", markdown)
     });
+    return markdown;
   }
 
   render() {
     const {
       value,
-      options,
-      schema,
-      formContext,
-      registry,
-      ...inputProps
+      onChange,
     } = this.props;
+
     return (
       <div>
         <Markmirror
           key="answer-markmirror"
           defaultValue={value}
           value={value}
-          onChange={this.handleValueChange}
+          onChange={markdown => {
+            onChange(this.handleValueChange(markdown))
+          }}
           renderToolbar={this.renderToolbar}
           ref={el => (this.markMirror = el)}
         />

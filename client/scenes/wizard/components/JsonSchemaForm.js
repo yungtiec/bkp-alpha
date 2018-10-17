@@ -31,7 +31,7 @@ class JsonSchemaForm extends Component {
       next,
       back
     } = this.props;
-    console.log('formData', formData);
+
     return (
       <div>
         <BootstrapCustomForm

@@ -4,21 +4,7 @@ import { getStepFormData } from "../../data/reducer";
 import TextEditorWidget from "./TextEditorWidget";
 
 const DependentTextEditorWidget = props => {
-
-  var { stepFormData, schema, options, ...otherProps } = props;
-
-  if (schema["enum:optionDependencyPath"])
-    options.enumOptions = stepFormData[schema["enum:optionDependencyPath"]].map(
-      entry => {
-        console.log('entry', entry);
-        return ({
-          value: entry.analysis,
-          label: entry[schema["enum:optionDependencyLabelKey"]]
-        })
-      }
-    );
-
-  return <TextEditorWidget {...otherProps} schema={schema} options={options} />;
+  return <TextEditorWidget {...props} />;
 };
 
 const mapState = (state, ownProps) => {
