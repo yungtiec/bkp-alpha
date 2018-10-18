@@ -147,10 +147,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -162,7 +159,8 @@
           {
             "disclosure": "The Brooklyn Project Token Taxonomy classification"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle2": {
@@ -249,10 +247,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -278,7 +273,8 @@
           {
             "disclosure": "Updates on milestone progress and funds"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle3": {
@@ -365,10 +361,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -398,7 +391,8 @@
           {
             "disclosure": "Restrictions and plans for secondary trading"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle4": {
@@ -485,10 +479,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -506,7 +497,8 @@
             "disclosure":
               "The aggregate amount of tokens reserved for the remuneration of team members"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle5": {
@@ -593,10 +585,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -612,7 +601,8 @@
             "disclosure":
               "Auditability of the token supply governance in production code"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle6": {
@@ -699,10 +689,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -713,7 +700,8 @@
           {
             "disclosure": "Prevention of improper trading of tokens"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle7": {
@@ -800,10 +788,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -817,7 +802,8 @@
           {
             "disclosure": "Links to project github repositories"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle8": {
@@ -904,10 +890,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -926,7 +909,8 @@
           {
             "disclosure": "Mechanisms to identify issues"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle9": {
@@ -1013,10 +997,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -1033,7 +1014,8 @@
           {
             "disclosure": "Privacy policy"
           }
-        ]
+        ],
+        "analysis": ""
       }
     },
     "principle10": {
@@ -1120,10 +1102,7 @@
           }
         },
         "analysis": {
-          "ui:widget": "textarea",
-          "ui:options": {
-            "rows": 5
-          }
+          "ui:widget": "DependentTextEditorWidget"
         }
       },
       "defaultFormData": {
@@ -1136,7 +1115,8 @@
             "disclosure":
               "Legal and professional advice on Statement of Good Faith"
           }
-        ]
+        ],
+        "analysis": ""
       }
     }
   },
