@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
+import Select, { Creatable } from "react-select";
+import { cloneDeep } from "lodash";
 
 import { asNumber } from "@react-schema-form/core/src/utils";
 
@@ -33,6 +34,31 @@ function getValue(selectedOptions, multiple) {
   }
 }
 
+function selectOnChange({
+  onChange,
+  selectedOptions,
+  schema,
+  creatable,
+  updateFormDataInStore,
+  loadModal,
+  modalProps
+}) {
+  // if creatable and option value is LOAD_SELECT_CREATABLE_MODAL, invoke loadModal
+  // render "enum:optionDependencyPath" form
+  if (
+    creatable &&
+    selectedOptions.filter(o => o.value === "LOAD_SELECT_CREATABLE_MODAL")
+      .length
+  ) {
+    loadModal("LOAD_SELECT_CREATABLE_MODAL", {
+      ...modalProps,
+      updateFormDataInStore
+    });
+    return;
+  }
+  onChange(processValue(schema, selectedOptions));
+}
+
 function SelectWidget(props) {
   const {
     schema,
@@ -47,13 +73,18 @@ function SelectWidget(props) {
     onChange,
     onBlur,
     onFocus,
-    placeholder
+    placeholder,
+    creatable,
+    updateFormDataInStore,
+    loadModal,
+    modalProps
   } = props;
   const { enumOptions, enumDisabled } = options;
   const emptyValue = multiple ? [] : "";
+  const SelectComponent = creatable ? Creatable : Select;
 
   return (
-    <Select
+    <SelectComponent
       id={id}
       multi={multiple}
       options={enumOptions}
@@ -61,9 +92,17 @@ function SelectWidget(props) {
       required={required}
       disabled={disabled || readonly}
       autoFocus={autofocus}
-      onChange={selectedOptions => {
-        onChange(processValue(schema, selectedOptions));
-      }}
+      onChange={selectedOptions =>
+        selectOnChange({
+          onChange,
+          selectedOptions,
+          schema,
+          creatable,
+          updateFormDataInStore,
+          loadModal,
+          modalProps
+        })
+      }
       clearable={true}
     />
   );

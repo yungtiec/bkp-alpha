@@ -28,9 +28,12 @@ class JsonSchemaForm extends Component {
       formDataPath,
       id,
       updateFormDataInStore,
-      next,
-      back
+      submit,
+      cancel,
+      onChange
     } = this.props;
+
+    const handleChange = onChange || updateFormDataInStore;
 
     return (
       <div>
@@ -40,14 +43,20 @@ class JsonSchemaForm extends Component {
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
-          onSubmit={next}
-          onChange={updateFormDataInStore}
+          onSubmit={submit.handler}
+          onChange={handleChange}
           onError={log("errors")}
         >
-          <div>
-            <button type="submit">next</button>
-            <button type="button" onClick={back}>
-              back
+          <div className="d-flex justify-content-end mt-5">
+            <button
+              type="button"
+              className="btn btn-outline-danger"
+              onClick={cancel.handler}
+            >
+              {cancel.label}
+            </button>
+            <button type="submit" className="btn btn-primary ml-2">
+              {submit.label}
             </button>
           </div>
         </BootstrapCustomForm>
