@@ -56,6 +56,7 @@ class WizardStep extends Component {
       stepNum,
       numStep
     } = this.props;
+
     const ChildComponent = CHILD_COMPONENTS[childComponentType];
 
     return (
@@ -68,8 +69,9 @@ class WizardStep extends Component {
           id={id}
           content={content}
           formData={formData}
-          next={this.next}
-          back={this.back}
+          submit={{ label: "next", handler: this.next }}
+          cancel={{ label: "back", handler: this.back }}
+          isNotStep={false}
         />
       </Fragment>
     );

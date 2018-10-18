@@ -43,15 +43,15 @@ export default class JsonSchemaFormsAccordion extends Component {
       accordionInstructions,
       accordionOrder,
       formData,
-      next,
-      back,
+      submit,
+      cancel,
       ...accordionContext
     } = this.props;
 
     return (
       <div>
         {accordionInstructions && (
-          <Instructions content={accordionInstructions} />
+          <Instructions content={accordionInstructions} isNotStep={true} />
         )}
         <Accordion onChange={this.handleAccordionChange}>
           {accordionOrder.map((accordionItemKey, i) => (
@@ -69,19 +69,19 @@ export default class JsonSchemaFormsAccordion extends Component {
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
-                  next={this.nextAccordionItem}
-                  back={this.prevAccordionItem}
+                  submit={{ label: "next", handler: this.nextAccordionItem }}
+                  cancel={{ label: "back", handler: this.prevAccordionItem }}
                 />
               </AccordionItemBody>
             </AccordionItem>
           ))}
         </Accordion>
         <div>
-          <button type="button" onClick={next}>
-            next
+          <button type="button" onClick={submit.handler}>
+            {submit.label}
           </button>
-          <button type="button" onClick={back}>
-            back
+          <button type="button" onClick={cancel.handler}>
+            {cancel.label}
           </button>
         </div>
       </div>

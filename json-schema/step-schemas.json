@@ -81,7 +81,7 @@
               "sources": {
                 "title": "",
                 "type": "string",
-                "enum": ["Please go back and list the dislcosures evaluated"],
+                "enum": ["LOAD_SOURCE_MODAL"],
                 "enum:optionDependencyPath": "listDisclosuresEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }

@@ -47,7 +47,7 @@ export default function reduce(state = initialState, action = {}) {
         )
       };
     case types.FORM_DATA_IN_STORE_UPDATED:
-      return updateFormData(action, state);
+      return updateFormData(action, cloneDeep(state));
     case types.CURRENT_PROJECT_UPDATED:
       return {
         ...state,

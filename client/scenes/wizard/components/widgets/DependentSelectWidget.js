@@ -1,11 +1,27 @@
 import React from "react";
 import { connect } from "react-redux";
 import { getStepFormData } from "../../data/reducer";
+import { updateFormDataInStore } from "../../data/actions";
+import { getStepArrayAndSchemas } from "../../data/reducer";
+import { loadModal } from "../../../../data/reducer";
+import { cloneDeep } from "lodash";
+
 import SelectWidget from "./SelectWidget";
 
 const DependentSelectWidget = props => {
-
-  var { stepFormData, schema, options, ...otherProps } = props;
+  var {
+    loadModal,
+    updateFormDataInStore,
+    stepFormData,
+    stepSchemas,
+    schema,
+    options,
+    ...otherProps
+  } = props;
+  var addSouceOption = {
+    label: "Add another source",
+    value: "LOAD_SELECT_CREATABLE_MODAL"
+  };
 
   if (schema["enum:optionDependencyPath"])
     options.enumOptions = stepFormData[schema["enum:optionDependencyPath"]].map(
@@ -15,16 +31,53 @@ const DependentSelectWidget = props => {
       })
     );
 
-  return <SelectWidget {...otherProps} schema={schema} options={options} />;
+  if (!options.enumOptions[0].label) options.enumOptions = [addSouceOption];
+  else options.enumOptions.push(addSouceOption);
+
+  return (
+    <SelectWidget
+      multiple={true}
+      creatable={true}
+      schema={schema}
+      options={options}
+      loadModal={loadModal}
+      updateFormDataInStore={updateFormDataInStore}
+      modalProps={cloneDeep({
+        schema: stepSchemas[schema["enum:optionDependencyPath"]].schema,
+        uiSchema: stepSchemas[schema["enum:optionDependencyPath"]].uiSchema,
+        formData: stepFormData[schema["enum:optionDependencyPath"]],
+        formDataPath: schema["enum:optionDependencyPath"]
+      })}
+      {...otherProps}
+    />
+  );
 };
 
 const mapState = (state, ownProps) => {
+  const { stepArray, stepSchemas } = getStepArrayAndSchemas(state);
   return {
     ...ownProps,
-    stepFormData: getStepFormData(state)
+    stepFormData: getStepFormData(state),
+    stepArray,
+    stepSchemas
   };
 };
 
-const actions = {};
+const mapDispatch = (dispatch, ownProps) => {
+  return {
+    updateFormDataInStore: formData =>
+      dispatch(
+        updateFormDataInStore(
+          ownProps.schema["enum:optionDependencyPath"],
+          formData
+        )
+      ),
+    loadModal: (modalType, modalProps) =>
+      dispatch(loadModal(modalType, modalProps))
+  };
+};
 
-export default connect(mapState, actions)(DependentSelectWidget);
+export default connect(
+  mapState,
+  mapDispatch
+)(DependentSelectWidget);

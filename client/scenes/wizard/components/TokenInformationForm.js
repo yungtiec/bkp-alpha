@@ -57,7 +57,7 @@ class TokenInformationForm extends React.Component {
       project: this.state.project.value,
       description: this.state.description
     });
-    this.props.next();
+    this.props.submit.handler();
   }
 
   render() {
@@ -98,16 +98,16 @@ class TokenInformationForm extends React.Component {
           <button
             type="button"
             className="btn btn-outline-danger"
-            onClick={this.props.back}
+            onClick={this.props.cancel.handler}
           >
-            back
+            {this.props.cancel.label}
           </button>
           <button
             type="button"
             className="btn btn-primary ml-2"
             onClick={this.next}
           >
-            next
+            {this.props.submit.label}
           </button>
         </div>
       </div>
