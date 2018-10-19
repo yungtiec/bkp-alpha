@@ -12,6 +12,7 @@ router.use("/issues", require("./issues"));
 router.use("/tags", require("./tags"));
 router.use("/notifications", require("./notifications"));
 router.use("/feedback", require("./feedback"));
+router.use("/wizard-schemas", require("./wizard-schemas"));
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");
