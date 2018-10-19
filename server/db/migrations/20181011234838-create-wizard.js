@@ -9,7 +9,7 @@ module.exports = {
           primaryKey: true,
           autoIncrement: true
         },
-        step_array: Sequelize.ARRAY(Sequelize.TEXT),
+        step_array_json: Sequelize.JSON,
         step_schemas_json: Sequelize.JSON
       })
       .then(() => {
