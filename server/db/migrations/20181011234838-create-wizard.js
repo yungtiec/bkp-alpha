@@ -10,7 +10,18 @@ module.exports = {
           autoIncrement: true
         },
         step_array: Sequelize.ARRAY(Sequelize.TEXT),
-        step_schemas_json: Sequelize.JSON
+        step_schemas_json: Sequelize.JSON,
+        hierarchyLevel: {
+          type: Sequelize.INTEGER
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE
+        }
       })
       .then(() => {
         return queryInterface.addColumn("versions", "wizard_schema_id", {
