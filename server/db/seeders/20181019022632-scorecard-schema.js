@@ -11,7 +11,9 @@ module.exports = {
       [
         {
           step_array_json: stepArray,
-          step_schemas_json: stepSchemasJson
+          step_schemas_json: stepSchemasJson,
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {},

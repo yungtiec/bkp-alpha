@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 
   WizardSchema.isHierarchy();
   WizardSchema.associate = function(models) {
-    WizardSchema.belongsTo(models.version, {
+    WizardSchema.hasOne(models.version, {
       foreignKey: "wizard_schemas_id"
     });
   };

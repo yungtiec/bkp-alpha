@@ -47,9 +47,8 @@ module.exports = (db, DataTypes) => {
       foreignKey: "creator_id",
       as: "creator"
     });
-    Version.hasOne(models.wizard_schema, {
-      through: "wizard_schema_id",
-      foreignKey: "id"
+    Version.belongsTo(models.wizard_schema, {
+      foreignKey: "wizard_schemas_id"
     });
   };
   Version.loadScopes = function(models) {
