@@ -1,3 +1,3 @@
 export const DOCUMENT_METADATA_FETCH_SUCCESS =
-  "document.DOCUMENT_METADATA_FETCH_SUCCESS";
-export const DOCUMENT_VOTED = "document.DOCUMENT_VOTED";
+  "project.document.DOCUMENT_METADATA_FETCH_SUCCESS";
+export const SURVEY_VOTED = "project.document.SURVEY_VOTED";

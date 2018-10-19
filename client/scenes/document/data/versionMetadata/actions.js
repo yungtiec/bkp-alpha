@@ -8,11 +8,11 @@ export function fetchMetadataByVersionId(versionId) {
   return async (dispatch, getState) => {
     try {
       dispatch({
-        type: types.VERSION_METADATA_FETCH_REQUEST
+        type: types.PROJECT_SURVEY_METADATA_FETCH_REQUEST
       });
       var versionMetadata = await getMetadataByVersionId(versionId);
       dispatch({
-        type: types.VERSION_METADATA_FETCH_SUCCESS,
+        type: types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS,
         versionMetadata
       });
     } catch (error) {

@@ -1,7 +1,7 @@
 var webpack = require("webpack");
 var path = require("path");
 const LiveReloadPlugin = require("webpack-livereload-plugin");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const isDev = process.env.NODE_ENV === "development";
 const secrets = require("./secrets");
 require("image-webpack-loader");
@@ -16,22 +16,13 @@ module.exports = {
     filename: "./public/bundle.js"
   },
   devtool: "source-map",
+
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        include: [
-          path.resolve(__dirname, "client"),
-          path.resolve(__dirname, "node_modules/@react-schema-form")
-        ],
-        use: {
-          loader: "babel-loader",
-          options: {
-            babelrc: false,
-            presets: ["@babel/react", "@babel/env", "@babel/stage-2"],
-            plugins: ["react-loadable/babel", "syntax-dynamic-import"]
-          }
-        }
+        exclude: /(node_modules|bower_components)/,
+        loader: "babel-loader"
       },
       {
         test: /\.css$/,
@@ -88,7 +79,7 @@ module.exports = {
         new HardSourceWebpackPlugin(),
         new webpack.DllReferencePlugin({
           context: __dirname,
-          manifest: require("./public/build/library/library.json")
+          manifest: require('./public/build/library/library.json')
         })
       ]
     : [

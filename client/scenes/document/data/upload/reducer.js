@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import { DOCUMENT_METADATA_FETCH_SUCCESS } from "../documentMetadata/actionTypes";
-import { VERSION_METADATA_FETCH_SUCCESS } from "../versionMetadata/actionTypes";
+import { PROJECT_SURVEY_METADATA_FETCH_SUCCESS } from "../versionMetadata/actionTypes";
 import { uniq, isEmpty, values } from "lodash";
 
 const initialState = {
@@ -64,7 +64,7 @@ export default function reduce(state = initialState, action = {}) {
           value: c.email
         }))
       };
-    case VERSION_METADATA_FETCH_SUCCESS:
+    case PROJECT_SURVEY_METADATA_FETCH_SUCCESS:
       return {
         ...state,
         scorecard: action.versionMetadata.scorecard
