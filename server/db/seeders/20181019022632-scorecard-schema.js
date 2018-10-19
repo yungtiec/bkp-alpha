@@ -16,6 +16,7 @@ module.exports = {
       ],
       {},
       {
+        // queryInterface is not a sequelize instacne, it's a lower level API so need to define datatype here
         step_array_json: { type: new Sequelize.JSON() },
         step_schemas_json: { type: new Sequelize.JSON() }
       }

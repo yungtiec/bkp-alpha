@@ -1,15 +1,16 @@
 import * as types from "./actionTypes.js";
 import stepSchemas from "../../../../json-schema/step-schemas.json";
 import { steps } from "../../../../json-schema/step-array.json";
-import { postDocumentMetadata } from "./services";
+import { getWizardSchemaById, postDocumentMetadata } from "./services";
 
-export function fetchStepArrayAndSchemas() {
+export function fetchStepArrayAndSchemas(wizardSchemaId) {
   return async (dispatch, getState) => {
+    const wizardSchema = await getWizardSchemaById(wizardSchemaId);
     try {
       dispatch({
         type: types.STEP_ARRAY_AND_SCHEMAS_FETCH_SUCCESS,
-        stepSchemas,
-        stepArray: steps
+        stepSchemas: wizardSchema.step_schemas_json,
+        stepArray: wizardSchema.step_array_json.steps
       });
     } catch (error) {
       console.log(error);
