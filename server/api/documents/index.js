@@ -42,10 +42,46 @@ router.get(
 );
 
 /**
- * Posting document executes a series of database queries, including creating document, first version, questions and answers, and setting up associations.
+ * Posting document by regular users through the wizard
  *
  * @name Post document
  * @route {POST} /api/documents
+ * @authentication
+ * @bodyparam {String} description
+ * @bodyparam {String} projectId
+ * @bodyparam {String} document_type
+ *
+ */
+router.post(
+  "/",
+  ensureAuthentication,
+  ensureResourceAccess,
+  documentController.postDocument
+);
+
+/**
+ * Change metadata of a given document
+ *
+ * @name Put metadata for document
+ * @route {PUT} /api/documents
+ * @authentication
+ * @routeparam {Number} documentId
+ * @routeparam {Number} projectId
+ *
+ */
+router.put(
+  "/:documentId",
+  ensureAuthentication,
+  ensureResourceAccess,
+  documentController.putDocument
+);
+
+
+/**
+ * Posting document executes a series of database queries, including creating document, first version, questions and answers, and setting up associations.
+ *
+ * @name Post document
+ * @route {POST} /api/documents/markdown
  * @authentication
  * @bodyparam {String} selectedProjectSymbol
  * @bodyparam {String} markdown is the md file uploaded by user, ready to be parsed into questions and answers
@@ -57,10 +93,10 @@ router.get(
  *
  */
 router.post(
-  "/",
+  "/markdown",
   ensureAuthentication,
   ensureResourceAccess,
-  documentController.postDocument
+  documentController.postDocumentByMarkdown
 );
 
 /**
@@ -81,10 +117,10 @@ router.post(
  *
  */
 router.post(
-  "/:parentVersionId",
+  "/markdown/:parentVersionId",
   ensureAuthentication,
   ensureResourceAccess,
-  documentController.postNewVersion
+  documentController.postNewVersionByMarkdown
 );
 
 /**
@@ -123,3 +159,4 @@ router.post(
   ensureResourceAccess,
   documentController.postDownvote
 );
+

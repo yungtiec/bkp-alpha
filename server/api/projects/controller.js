@@ -37,6 +37,38 @@ const getProject = async (req, res, next) => {
   }
 };
 
+const searchProject = async (req, res, next) => {
+  try {
+    var formattedQuery = !req.query.q
+      ? null
+      : req.query.q
+          .trim()
+          .split(" ")
+          .map(function(phrase) {
+            return "%" + phrase + "%";
+          })
+          .join("");
+    var queryObj = !req.query.formatted
+      ? {
+          where: {
+            [Op.or]: [{ name: { $ne: null } }, { symbol: { $ne: null } }]
+          }
+        }
+      : {
+          where: {
+            [Op.or]: [
+              { name: { $iLike: req.query.formatted } },
+              { symbol: { $iLike: req.query.formatted } }
+            ]
+          }
+        };
+    var projects = await Project.findAll(queryObj);
+    res.send(projects.filter(p => p.symbol !== "BKP"));
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getProjectCollaboratorOptions = async (req, res, next) => {
   try {
     const project = await Project.findOne({
@@ -131,6 +163,7 @@ const deleteProjectEditor = async (req, res, next) => {
 module.exports = {
   getProjects,
   getProject,
+  searchProject,
   getProjectCollaboratorOptions,
   postProjectEditors,
   deleteProjectEditor
