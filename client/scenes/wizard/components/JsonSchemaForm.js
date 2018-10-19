@@ -46,6 +46,7 @@ class JsonSchemaForm extends Component {
           onSubmit={submit.handler}
           onChange={handleChange}
           onError={log("errors")}
+          showErrorList={false}
         >
           <div className="d-flex justify-content-end mt-5">
             <button
