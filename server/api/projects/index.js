@@ -14,16 +14,6 @@ module.exports = router;
 router.get("/", projectController.getProjects);
 
 /**
- * Searching project by name or symbol
- *
- * @name Get project
- * @route {GET} /api/projects/search
- * @queryParams {String} q
- *
- */
-router.get("/search", projectController.searchProject);
-
-/**
  * Getting project by symbol
  *
  * @name Get project

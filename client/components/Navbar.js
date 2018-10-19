@@ -50,16 +50,6 @@ class Navbar extends Component {
             )}
             {width > 600 ? (
               <Link
-                to="/collaborations"
-                className="navbar__nav-item"
-              >
-                collaborations
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
-              <Link
                 to="/project/BKP/document/1/version/2"
                 className="navbar__nav-item"
               >
@@ -69,8 +59,11 @@ class Navbar extends Component {
               ""
             )}
             {width > 600 ? (
-              <Link to="/documents" className="navbar__nav-item">
-                documents
+              <Link
+                to="/project/CVL/document/2/version/3"
+                className="navbar__nav-item"
+              >
+                Civil scorecard
               </Link>
             ) : (
               ""
@@ -163,10 +156,7 @@ const mapDispatch = dispatch => {
 };
 
 export default withRouter(
-  connect(
-    mapState,
-    mapDispatch
-  )(asyncPoll(60 * 1000, onPollInterval)(Navbar))
+  connect(mapState, mapDispatch)(asyncPoll(60 * 1000, onPollInterval)(Navbar))
 );
 
 Navbar.propTypes = {

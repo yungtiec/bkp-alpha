@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-  Collaborations,
-  Documents,
+  Projects,
   Project,
   Profile,
   Admin,
@@ -13,8 +12,7 @@ import {
   ActivityBoard,
   Dashboard,
   Landing,
-  Document,
-  Wizard
+  Document
 } from "./scenes";
 import {
   Login,
@@ -51,11 +49,6 @@ class Routes extends Component {
             path="/reset-password/:token"
             component={ResetPassword}
           />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/collaborations"
-            component={Collaborations}
-          />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
@@ -65,8 +58,8 @@ class Routes extends Component {
           )}
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/documents"
-            component={Documents}
+            path="/projects"
+            component={Projects}
           />
           <RouteWithLayout
             layout={LayoutWithNav}
@@ -77,11 +70,6 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/project/:symbol"
             component={Project}
-          />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/wizard"
-            component={Wizard}
           />
           {isLoggedIn && (
             <RouteWithLayout
