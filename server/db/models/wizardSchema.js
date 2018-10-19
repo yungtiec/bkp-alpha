@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    step_array: {
-      type: DataTypes.ARRAY(DataTypes.STRING)
+    step_array_json: {
+      type: DataTypes.JSON
     },
     step_schemas_json: {
       type: DataTypes.JSON

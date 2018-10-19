@@ -16,7 +16,8 @@ class Wizard extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchStepArrayAndSchemas();
+    // hardcode wizardSchemaId for now
+    this.props.fetchStepArrayAndSchemas(1);
   }
 
   render() {

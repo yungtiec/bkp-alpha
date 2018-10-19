@@ -3,7 +3,6 @@
     {
       "id": "overview",
       "title": "Overview",
-      "description": "",
       "childComponentType": "INSTRUCTIONS",
       "content": "put overview here"
     },
