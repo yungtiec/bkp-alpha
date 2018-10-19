@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface
-      .createTable("wizard_schema", {
+      .createTable("wizard_schemas", {
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
@@ -16,7 +16,7 @@ module.exports = {
         return queryInterface.addColumn("versions", "wizard_schema_id", {
           type: Sequelize.INTEGER,
           references: {
-            model: "wizard_schema",
+            model: "wizard_schemas",
             key: "id"
           }
         });
@@ -32,7 +32,7 @@ module.exports = {
     return [
       queryInterface.removeColumn("versions", "wizard_schema_id"),
       queryInterface.removeColumn("versions", "content_json"),
-      queryInterface.dropTable("wizard_schema")
+      queryInterface.dropTable("wizard_schemas")
     ];
   }
 };
