@@ -1,3 +1,4 @@
+import "./JsonSchemaForm.scss";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";

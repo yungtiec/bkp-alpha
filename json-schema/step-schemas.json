@@ -24,7 +24,7 @@
     },
     "uiSchema": {
       "ui:template": "ArrayTable",
-      "ui:template:tableInputTitles": ["Description", "Link", ""],
+      "ui:template:tableColumnHeader": ["Description", "Link", ""],
       "ui:options": {
         "orderable": false
       },
@@ -93,7 +93,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -125,7 +125,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -193,7 +194,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -225,7 +226,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -307,7 +309,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -339,7 +341,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -425,7 +428,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -457,7 +460,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -531,7 +535,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -563,7 +567,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -635,7 +640,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -667,7 +672,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -734,7 +740,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -766,7 +772,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -836,7 +843,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -868,7 +875,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -943,7 +951,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -975,7 +983,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -1048,7 +1057,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "a. Transparency score out of 10 (e.g. “5”)",
+                "title": "Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -1080,7 +1089,8 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
           "ui:options": {
             "addable": false,
             "orderable": false,

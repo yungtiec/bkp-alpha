@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
+import "./ArrayTableFieldTemplate.scss";
 
 import ArrowUp from "@react-schema-form/bootstrap/lib/components/icons/ArrowUp";
 import ArrowDown from "@react-schema-form/bootstrap/lib/components/icons/ArrowDown";
-import Cross from "@react-schema-form/bootstrap/lib/components/icons/Cross";
-import Plus from "@react-schema-form/bootstrap/lib/components/icons/Plus";
 
 import templates from "./index";
 
@@ -125,15 +124,29 @@ function AddButton({ onClick, disabled }) {
 function ArrayTableFieldTemplate(props) {
   return (
     <div>
-      <table class="" style={{ width: "100%" }}>
+      <table class="" style={{ width: "100%", marginBottom: "15px" }}>
         <thead>
-          <tr>
-            {props.uiSchema["ui:template:tableInputTitles"] &&
-              props.uiSchema["ui:template:tableInputTitles"].map(title => (
-                <th scope="col">{title}</th>
-              ))}
-            <th style={{ width: "110px" }}>
-              {props.canAdd && (
+          <tr className="array-table__header-row">
+            {props.uiSchema["ui:template:tableColumnHeader"] &&
+              props.uiSchema["ui:template:tableColumnHeader"].map(
+                (title, i) => (
+                  <th
+                    scope="col"
+                    style={
+                      props.uiSchema["ui:template:tableColumnWidth"]
+                        ? {
+                            width:
+                              props.uiSchema["ui:template:tableColumnWidth"][i]
+                          }
+                        : {}
+                    }
+                  >
+                    {title}
+                  </th>
+                )
+              )}
+            {props.canAdd && (
+              <th style={{ width: "110px" }}>
                 <button
                   style={{ width: "100%" }}
                   type="button"
@@ -145,8 +158,8 @@ function ArrayTableFieldTemplate(props) {
                 >
                   Add source
                 </button>
-              )}
-            </th>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>

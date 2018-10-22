@@ -26,11 +26,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("wizard_schemas", [
-      { step_array_json: stepArray }
-      // apparently you can do array in field equality check in sequelize
-      // see here:
-      // https://www.bennadel.com/blog/3302-you-can-use-arrays-in-field-equality-checks-within-a-sequelize-where-clause-in-node-js.htm
-    ]);
+    return queryInterface.bulkDelete("wizard_schemas", { id: 1 }, {});
   }
 };
