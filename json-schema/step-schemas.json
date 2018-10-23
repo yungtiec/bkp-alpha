@@ -23,6 +23,9 @@
       }
     },
     "uiSchema": {
+      "ui:title": {
+        "hideTitle": true
+      },
       "ui:template": "ArrayTable",
       "ui:template:tableColumnHeader": ["Description", "Link", ""],
       "ui:options": {
@@ -93,7 +96,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -104,7 +107,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -126,7 +129,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -194,7 +197,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -205,7 +208,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -227,7 +230,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -309,7 +312,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -320,7 +323,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -342,7 +345,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -428,7 +431,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -439,7 +442,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -461,7 +464,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -535,7 +538,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -546,7 +549,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -568,7 +571,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -640,7 +643,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -651,7 +654,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -673,7 +676,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -740,7 +743,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -751,7 +754,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -773,7 +776,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -843,7 +846,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -854,7 +857,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -876,7 +879,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -951,7 +954,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -962,7 +965,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -984,7 +987,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -1057,7 +1060,7 @@
             "properties": {
               "transparencyScore": {
                 "type": "number",
-                "title": "Transparency score out of 10 (e.g. “5”)",
+                "title": "a. Transparency score out of 10 (e.g. “5”)",
                 "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               },
               "disclosureTable": {
@@ -1068,7 +1071,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -1090,7 +1093,7 @@
         "disclosureTable": {
           "ui:template": "ArrayTable",
           "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
-          "ui:template:tableColumnWidth": ["50%", "25%", "25%"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,

@@ -6,15 +6,6 @@ import ArrowDown from "@react-schema-form/bootstrap/lib/components/icons/ArrowDo
 
 import templates from "./index";
 
-function ArrayFieldTitle({ TitleTemplate, idSchema, title, required }) {
-  if (!title) {
-    // See #312: Ensure compatibility with old versions of React.
-    return <div />;
-  }
-  const id = `${idSchema.$id}__title`;
-  return <TitleTemplate id={id} title={title} required={required} />;
-}
-
 function ArrayFieldDescription({ DescriptionTemplate, idSchema, description }) {
   if (!description) {
     // See #312: Ensure compatibility with old versions of React.
@@ -123,7 +114,17 @@ function AddButton({ onClick, disabled }) {
 
 function ArrayTableFieldTemplate(props) {
   return (
-    <div>
+    <Fragment>
+      {props.uiSchema["ui:title"] && props.uiSchema["ui:title"].hideTitle
+        ? null
+        : (props.uiSchema["ui:title"] || props.title) && (
+            <props.TitleTemplate
+              id={`${props.idSchema.$id}__title`}
+              title={props.title || props.uiSchema["ui:title"]}
+              required={props.required}
+              formContext={props.formContext}
+            />
+          )}
       <table class="" style={{ width: "100%", marginBottom: "15px" }}>
         <thead>
           <tr className="array-table__header-row">
@@ -167,7 +168,7 @@ function ArrayTableFieldTemplate(props) {
             props.items.map(p => <tr>{ArrayItem(p, props.items.length)}</tr>)}
         </tbody>
       </table>
-    </div>
+    </Fragment>
   );
 }
 
