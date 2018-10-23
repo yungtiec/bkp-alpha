@@ -62,7 +62,7 @@ class WizardStep extends Component {
     return (
       <Fragment>
         <h5>{title}</h5>
-        <p>{description}</p>
+        {description && <p>{description}</p>}
         <ChildComponent
           key={id}
           {...jsonSchema}

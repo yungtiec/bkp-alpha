@@ -1,6 +1,7 @@
 import "./ScoreWidget.scss";
 import React from "react";
 import PropTypes from "prop-types";
+import ReactTooltip from "react-tooltip";
 
 const SCORE_AND_ASSESSMENT = [
   {
@@ -71,7 +72,12 @@ const renderUnit = props => (
       "is-focus"}`}
     onClick={() => props.onChange(props.value)}
   >
-    {props.label}
+    <div data-tip data-for={`score-widget__unit-${props.value}`}>
+      {props.label}
+    </div>
+    <ReactTooltip id={`score-widget__unit-${props.value}`} type="light">
+      <span>{props.assessment}</span>
+    </ReactTooltip>
   </div>
 );
 

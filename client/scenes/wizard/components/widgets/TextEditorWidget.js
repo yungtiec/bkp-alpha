@@ -5,8 +5,8 @@ import Markmirror from "react-markmirror";
 import ReactMarkdown from "react-markdown";
 import { sortBy } from "lodash";
 import moment from "moment";
-import autoBind from 'react-autobind';
-import {TextDiff} from '../../../../utils';
+import autoBind from "react-autobind";
+import { TextDiff } from "../../../../utils";
 
 class TextEditorWidget extends React.Component {
   constructor(props) {
@@ -15,10 +15,7 @@ class TextEditorWidget extends React.Component {
     this.diff = new TextDiff();
     this.state = {
       markdown: this.props.value,
-      diff: this.diff.main(
-        this.props.value,
-        this.props.value
-      ),
+      diff: this.diff.main(this.props.value || "", this.props.value || ""),
       editing: false
     };
   }
@@ -27,10 +24,7 @@ class TextEditorWidget extends React.Component {
     if (this.props.id !== prevProps.id) {
       var newState = {
         markdown: this.props.markdown,
-        diff: this.diff.main(
-          this.props.markdown,
-          this.props.markdown
-        )
+        diff: this.diff.main(this.props.markdown, this.props.markdown)
       };
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(
@@ -65,10 +59,7 @@ class TextEditorWidget extends React.Component {
   }
 
   render() {
-    const {
-      value,
-      onChange,
-    } = this.props;
+    const { value, onChange } = this.props;
 
     return (
       <div>
@@ -77,7 +68,7 @@ class TextEditorWidget extends React.Component {
           defaultValue={value}
           value={value}
           onChange={markdown => {
-            onChange(this.handleValueChange(markdown))
+            onChange(this.handleValueChange(markdown));
           }}
           renderToolbar={this.renderToolbar}
           ref={el => (this.markMirror = el)}

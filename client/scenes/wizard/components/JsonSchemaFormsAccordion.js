@@ -69,19 +69,44 @@ export default class JsonSchemaFormsAccordion extends Component {
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
-                  submit={{ label: "next", handler: this.nextAccordionItem }}
-                  cancel={{ label: "back", handler: this.prevAccordionItem }}
+                  submit={
+                    i !== accordionOrder.length - 1
+                      ? {
+                          label: "next principle",
+                          handler: this.nextAccordionItem
+                        }
+                      : {
+                          label: "next step",
+                          handler: submit.handler
+                        }
+                  }
+                  cancel={
+                    i !== 0
+                      ? {
+                          label: "previous principle",
+                          handler: this.prevAccordionItem
+                        }
+                      : null
+                  }
                 />
               </AccordionItemBody>
             </AccordionItem>
           ))}
         </Accordion>
-        <div>
-          <button type="button" onClick={submit.handler}>
-            {submit.label}
-          </button>
-          <button type="button" onClick={cancel.handler}>
+        <div className="d-flex justify-content-end mt-5">
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={cancel.handler}
+          >
             {cancel.label}
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary ml-2"
+            onClick={submit.handler}
+          >
+            {submit.label}
           </button>
         </div>
       </div>

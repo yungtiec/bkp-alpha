@@ -128,7 +128,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -229,7 +229,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -344,7 +344,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -463,7 +463,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -570,7 +570,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -675,7 +675,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -775,7 +775,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -878,7 +878,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -986,7 +986,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
@@ -1092,7 +1092,7 @@
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
           "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,

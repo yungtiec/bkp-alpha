@@ -44,22 +44,26 @@ class JsonSchemaForm extends Component {
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
-          onSubmit={submit.handler}
+          onSubmit={submit ? submit.handler : () => {}}
           onChange={handleChange}
           onError={log("errors")}
           showErrorList={false}
         >
           <div className="d-flex justify-content-end mt-5">
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={cancel.handler}
-            >
-              {cancel.label}
-            </button>
-            <button type="submit" className="btn btn-primary ml-2">
-              {submit.label}
-            </button>
+            {cancel && (
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={cancel.handler}
+              >
+                {cancel.label}
+              </button>
+            )}
+            {submit && (
+              <button type="submit" className="btn btn-primary ml-2">
+                {submit.label}
+              </button>
+            )}
           </div>
         </BootstrapCustomForm>
       </div>
