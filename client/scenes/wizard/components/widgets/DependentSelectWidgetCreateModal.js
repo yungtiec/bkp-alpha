@@ -32,24 +32,22 @@ class DependentSelectWidgetCreatableModal extends Component {
     const { hideModal, schema, uiSchema, formData, formDataPath } = this.props;
 
     return (
-      <Fragment>
+      <Modal
+        isOpen={true}
+        onRequestClose={hideModal}
+        contentLabel="DependentSelectWidgetCreatableModal"
+      >
         <h5>List Disclosures Evalueated</h5>
-        <Modal
-          isOpen={true}
-          onRequestClose={hideModal}
-          contentLabel="DependentSelectWidgetCreatableModal"
-        >
-          <JsonSchemaForm
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={formData}
-            formDataPath={formDataPath}
-            onChange={this.handleChange}
-            submit={{ label: "submit", handler: this.handleSubmit }}
-            cancel={{ label: "cancel", handler: hideModal }}
-          />
-        </Modal>
-      </Fragment>
+        <JsonSchemaForm
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+          formDataPath={formDataPath}
+          onChange={this.handleChange}
+          submit={{ label: "submit", handler: this.handleSubmit }}
+          cancel={{ label: "cancel", handler: hideModal }}
+        />
+      </Modal>
     );
   }
 }

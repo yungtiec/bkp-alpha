@@ -8,6 +8,7 @@ import { assignIn } from "lodash";
 import { withTheme, Form } from "@react-schema-form/core";
 import templates from "./templates";
 import widgets from "./widgets";
+import { loadModal, hideModal } from "../../../data/reducer";
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form
@@ -19,6 +20,24 @@ class JsonSchemaForm extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+    this.form = React.createRef();
+  }
+
+  handleFormInvalidation() {
+    console.log("modal")
+    this.props.loadModal("CONFIRMATION_MODAL", {
+      title: "Are you sure?",
+      message: "Do you wish to skip this step?",
+      hideModal: this.props.hideModal,
+      submit: {
+        label: "Yes",
+        handler: this.props.submit.handler
+      },
+      cancel: {
+        label: "No",
+        handler: this.props.hideModal
+      }
+    });
   }
 
   render() {
@@ -31,7 +50,9 @@ class JsonSchemaForm extends Component {
       updateFormDataInStore,
       submit,
       cancel,
-      onChange
+      onChange,
+      loadModal,
+      hideModal
     } = this.props;
 
     const handleChange = onChange || updateFormDataInStore;
@@ -39,12 +60,13 @@ class JsonSchemaForm extends Component {
     return (
       <div>
         <BootstrapCustomForm
-          ref={form => (this.form = form)}
+          ref={this.form}
           noHtml5Validate={true}
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
           onSubmit={submit ? submit.handler : () => {}}
+          invalidCallback={this.handleFormInvalidation}
           onChange={handleChange}
           onError={log("errors")}
           showErrorList={false}
@@ -80,7 +102,10 @@ const mapDispatch = (dispatch, ownProps) => ({
         ownProps.formDataPath || ownProps.id,
         props.formData
       )
-    )
+    ),
+  loadModal: (modalType, modalProps) =>
+    dispatch(loadModal(modalType, modalProps)),
+  hideModal: () => dispatch(hideModal())
 });
 
 export default connect(

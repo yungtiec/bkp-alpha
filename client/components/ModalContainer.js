@@ -7,6 +7,7 @@ import { CommentModal } from "../scenes/document/scenes/Version/components";
 import { ProjectEditorModal } from "../scenes/project/components";
 import FeedbackModal from "./FeedbackModal";
 import DependentSelectWidgetCreateModal from "../scenes/wizard/components/widgets/DependentSelectWidgetCreateModal";
+import ConfirmationModal from "../scenes/wizard/components/ConfirmationModal";
 
 /** Modal Type Constants */
 const MODAL_COMPONENTS = {
@@ -14,7 +15,8 @@ const MODAL_COMPONENTS = {
   COMMENT_MODAL: CommentModal,
   PROJECT_EDITORS_MODAL: ProjectEditorModal,
   FEEDBACK_MODAL: FeedbackModal,
-  LOAD_SELECT_CREATABLE_MODAL: DependentSelectWidgetCreateModal
+  LOAD_SELECT_CREATABLE_MODAL: DependentSelectWidgetCreateModal,
+  CONFIRMATION_MODAL: ConfirmationModal
 };
 
 const styles = {
