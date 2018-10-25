@@ -94,7 +94,7 @@ const transparencyScoreInstruction = fs.readFileSync(
 
 const disclosureStatusDefinition = {
   type: "object",
-  required: ["status", "sources"],
+  required: ["status"],
   properties: {
     disclosure: {
       title: "",

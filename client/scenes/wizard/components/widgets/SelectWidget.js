@@ -9,7 +9,10 @@ import { asNumber } from "@react-schema-form/core/src/utils";
  * This is a silly limitation in the DOM where option change event values are
  * always retrieved as strings.
  */
-function processValue({ type, items }, value) {
+function processValue({ type, items }, selectedOptions) {
+  var value = selectedOptions.length
+    ? selectedOptions
+    : selectedOptions.value;
   if (value === "") {
     return undefined;
   } else if (

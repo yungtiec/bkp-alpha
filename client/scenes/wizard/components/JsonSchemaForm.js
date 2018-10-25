@@ -47,6 +47,17 @@ class JsonSchemaForm extends Component {
     });
   }
 
+  validate(formData, errors) {
+    if (formData.disclosureTable) {
+      formData.disclosureTable.forEach(
+        (t, i) =>
+          !t.source &&
+          errors.disclosureTable[i].addError("is a required property")
+      );
+    }
+    return errors;
+  }
+
   render() {
     const {
       schema,
