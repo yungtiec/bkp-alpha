@@ -20,11 +20,18 @@ class JsonSchemaForm extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    this.form = React.createRef();
+  }
+
+  componentDidMount() {
+    // this breaks encapsulation...
+    // we expose BootstrapCustomForm to JsonSchemaForm
+    // and then expost JsonSchemaForm to JsonSchemaFormsAccordion
+    // to validate 10 forms when the user want to go to the next stpe
+    // consider move the whole 'validate' function to redux store
+    this.props.onRef && this.props.onRef(this.form);
   }
 
   handleFormInvalidation() {
-    console.log("modal")
     this.props.loadModal("CONFIRMATION_MODAL", {
       title: "Are you sure?",
       message: "Do you wish to skip this step?",
@@ -60,7 +67,8 @@ class JsonSchemaForm extends Component {
     return (
       <div>
         <BootstrapCustomForm
-          ref={this.form}
+          key={id}
+          onRef={ref => (this.form = ref)}
           noHtml5Validate={true}
           schema={schema}
           uiSchema={uiSchema}

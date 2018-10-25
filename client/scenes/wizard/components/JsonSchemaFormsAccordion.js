@@ -1,22 +1,27 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
+import { connect } from "react-redux";
 import {
   Accordion,
   AccordionItem,
   AccordionItemTitle,
   AccordionItemBody
 } from "react-accessible-accordion";
+import { keys } from "lodash";
 import Instructions from "./Instructions";
 import JsonSchemaForm from "./JsonSchemaForm";
 import { templates } from "@react-schema-form/bootstrap";
+import { loadModal, hideModal } from "../../../data/reducer";
 
-export default class JsonSchemaFormsAccordion extends Component {
+class JsonSchemaFormsAccordion extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
     this.state = {
       activeAccordionItemId: 0
     };
+    this.form = {};
+    this.incompleteForm = [];
   }
 
   handleAccordionChange(key) {
@@ -35,6 +40,33 @@ export default class JsonSchemaFormsAccordion extends Component {
     this.setState(prevState => ({
       activeAccordionItemId: (prevState.activeAccordionItemId - 1) % 10
     }));
+  }
+
+  handleNextStep() {
+    // validate all from here
+    const valid = keys(this.form).reduce((vaild, key) => {
+      const { errors } = this.form[key].validate(this.form[key].state.formData);
+      if (keys(errors).length > 0)
+        this.incompleteForm.push(this.form[key].props.schema.title);
+      return keys(errors).length > 0 && valid;
+    }, true);
+    if (valid) this.props.submit.handler();
+    else
+      this.props.loadModal("CONFIRMATION_MODAL", {
+        title: "Are you sure?",
+        message:
+          "You haven't completed the following parts, do you wish to skip this step?",
+        errors: this.incompleteForm,
+        hideModal: this.props.hideModal,
+        submit: {
+          label: "Yes",
+          handler: this.props.submit.handler
+        },
+        cancel: {
+          label: "No",
+          handler: this.props.hideModal
+        }
+      });
   }
 
   render() {
@@ -66,6 +98,8 @@ export default class JsonSchemaFormsAccordion extends Component {
               </AccordionItemTitle>
               <AccordionItemBody>
                 <JsonSchemaForm
+                  onRef={ref => (this.form[i] = ref)}
+                  id={`${id}-accordion__${i}`}
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
@@ -104,7 +138,7 @@ export default class JsonSchemaFormsAccordion extends Component {
           <button
             type="button"
             className="btn btn-primary ml-2"
-            onClick={submit.handler}
+            onClick={this.handleNextStep}
           >
             {submit.label}
           </button>
@@ -113,3 +147,16 @@ export default class JsonSchemaFormsAccordion extends Component {
     );
   }
 }
+
+const mapState = (state, ownProps) => ({ ...ownProps });
+
+const mapDispatch = (dispatch, ownProps) => ({
+  loadModal: (modalType, modalProps) =>
+    dispatch(loadModal(modalType, modalProps)),
+  hideModal: () => dispatch(hideModal())
+});
+
+export default connect(
+  mapState,
+  mapDispatch
+)(JsonSchemaFormsAccordion);

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Modal from "react-modal";
 
-export default ({ hideModal, title, message, submit, cancel }) => (
+export default ({ hideModal, title, message, submit, cancel, errors }) => (
   <Modal
     isOpen={true}
     onRequestClose={hideModal}
@@ -9,6 +9,7 @@ export default ({ hideModal, title, message, submit, cancel }) => (
   >
     <h5>{title}</h5>
     <p>{message}</p>
+    {errors && <div>{errors.map(e => <p>{e}</p>)}</div>}
     <div className="d-flex justify-content-end mt-5">
       {cancel && (
         <button
