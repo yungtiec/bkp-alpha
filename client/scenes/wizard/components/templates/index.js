@@ -8,6 +8,7 @@ import ArrayFieldTemplate from "./ArrayFieldTemplate";
 import ArrayTableFieldTemplate from "./ArrayTableFieldTemplate";
 import TableThFieldTemplate from "./TableThFieldTemplate";
 import TableRowFieldTemplate from "./TableRowFieldTemplate";
+import TitleTemplate from "./TitleTemplate";
 
 templates.AccordionFieldTemplate = AccordionFieldTemplate;
 templates.FieldTemplate = FieldTemplate;
@@ -17,5 +18,6 @@ templates.ArrayFieldTemplate = ArrayFieldTemplate;
 templates.ArrayTableFieldTemplate = ArrayTableFieldTemplate;
 templates.TableThFieldTemplate = TableThFieldTemplate;
 templates.TableRowFieldTemplate = TableRowFieldTemplate;
+templates.TitleTemplate = TitleTemplate;
 
 export default templates;

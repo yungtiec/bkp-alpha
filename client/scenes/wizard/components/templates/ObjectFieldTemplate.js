@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import templates from "./index";
 
 function DefaultObjectFieldTemplate(props) {
   const { TitleTemplate, DescriptionTemplate } = props;
 
   return (
-    <fieldset>
+    <Fragment>
       {props.uiSchema["ui:title"] && props.uiSchema["ui:title"].hideTitle
         ? null
         : (props.uiSchema["ui:title"] || props.title) && (
@@ -27,7 +27,7 @@ function DefaultObjectFieldTemplate(props) {
             />
           )}
       {props.properties.map(prop => prop.content)}
-    </fieldset>
+    </Fragment>
   );
 }
 

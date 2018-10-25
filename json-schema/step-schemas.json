@@ -23,8 +23,11 @@
       }
     },
     "uiSchema": {
+      "ui:title": {
+        "hideTitle": true
+      },
       "ui:template": "ArrayTable",
-      "ui:template:tableInputTitles": ["Description", "Link", ""],
+      "ui:template:tableColumnHeader": ["Description", "Link", ""],
       "ui:options": {
         "orderable": false
       },
@@ -104,7 +107,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -118,14 +121,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -204,7 +208,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -218,14 +222,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -318,7 +323,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -332,14 +337,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -436,7 +442,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -450,14 +456,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -542,7 +549,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -556,14 +563,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -646,7 +654,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -660,14 +668,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -745,7 +754,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -759,14 +768,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -847,7 +857,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -861,14 +871,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -954,7 +965,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -968,14 +979,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,
@@ -1059,7 +1071,7 @@
                 }
               },
               "analysis": {
-                "title": "Analysis",
+                "title": "c. Analysis",
                 "type": "string"
               }
             }
@@ -1073,14 +1085,15 @@
           "hideTitle": true
         },
         "transparencyScore": {
-          "ui:widget": "radio",
+          "ui:widget": "ScoreWidget",
           "ui:options": {
             "inline": true
           }
         },
         "disclosureTable": {
           "ui:template": "ArrayTable",
-          "ui:template:tableInputTitles": ["Disclosure", "Status", "Sources"],
+          "ui:template:tableColumnHeader": ["Disclosure", "Status", "Source(s)"],
+          "ui:template:tableColumnWidth": ["50%", "15%", "35%"],
           "ui:options": {
             "addable": false,
             "orderable": false,

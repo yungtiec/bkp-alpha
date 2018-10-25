@@ -1,20 +1,10 @@
 import React, { Fragment } from "react";
+import "./ArrayTableFieldTemplate.scss";
 
 import ArrowUp from "@react-schema-form/bootstrap/lib/components/icons/ArrowUp";
 import ArrowDown from "@react-schema-form/bootstrap/lib/components/icons/ArrowDown";
-import Cross from "@react-schema-form/bootstrap/lib/components/icons/Cross";
-import Plus from "@react-schema-form/bootstrap/lib/components/icons/Plus";
 
 import templates from "./index";
-
-function ArrayFieldTitle({ TitleTemplate, idSchema, title, required }) {
-  if (!title) {
-    // See #312: Ensure compatibility with old versions of React.
-    return <div />;
-  }
-  const id = `${idSchema.$id}__title`;
-  return <TitleTemplate id={id} title={title} required={required} />;
-}
 
 function ArrayFieldDescription({ DescriptionTemplate, idSchema, description }) {
   if (!description) {
@@ -124,16 +114,40 @@ function AddButton({ onClick, disabled }) {
 
 function ArrayTableFieldTemplate(props) {
   return (
-    <div>
-      <table class="" style={{ width: "100%" }}>
+    <Fragment>
+      {props.uiSchema["ui:title"] && props.uiSchema["ui:title"].hideTitle
+        ? null
+        : (props.uiSchema["ui:title"] || props.title) && (
+            <props.TitleTemplate
+              id={`${props.idSchema.$id}__title`}
+              title={props.title || props.uiSchema["ui:title"]}
+              required={props.required}
+              formContext={props.formContext}
+            />
+          )}
+      <table class="" style={{ width: "100%", marginBottom: "15px" }}>
         <thead>
-          <tr>
-            {props.uiSchema["ui:template:tableInputTitles"] &&
-              props.uiSchema["ui:template:tableInputTitles"].map(title => (
-                <th scope="col">{title}</th>
-              ))}
-            <th style={{ width: "110px" }}>
-              {props.canAdd && (
+          <tr className="array-table__header-row">
+            {props.uiSchema["ui:template:tableColumnHeader"] &&
+              props.uiSchema["ui:template:tableColumnHeader"].map(
+                (title, i) => (
+                  <th
+                    scope="col"
+                    style={
+                      props.uiSchema["ui:template:tableColumnWidth"]
+                        ? {
+                            width:
+                              props.uiSchema["ui:template:tableColumnWidth"][i]
+                          }
+                        : {}
+                    }
+                  >
+                    {title}
+                  </th>
+                )
+              )}
+            {props.canAdd && (
+              <th style={{ width: "110px" }}>
                 <button
                   style={{ width: "100%" }}
                   type="button"
@@ -145,8 +159,8 @@ function ArrayTableFieldTemplate(props) {
                 >
                   Add source
                 </button>
-              )}
-            </th>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -154,7 +168,7 @@ function ArrayTableFieldTemplate(props) {
             props.items.map(p => <tr>{ArrayItem(p, props.items.length)}</tr>)}
         </tbody>
       </table>
-    </div>
+    </Fragment>
   );
 }
 

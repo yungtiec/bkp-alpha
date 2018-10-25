@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 export default props => (
-  <div>
-    {props.content || "hello "}
+  <Fragment>
+    <div className="my-4" dangerouslySetInnerHTML={{ __html: props.content }} />
     {!props.isNotStep && (
       <div className="d-flex justify-content-end mt-5">
         <button
@@ -21,5 +21,5 @@ export default props => (
         </button>
       </div>
     )}
-  </div>
+  </Fragment>
 );
