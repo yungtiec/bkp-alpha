@@ -21,7 +21,8 @@ class Wizard extends Component {
   }
 
   render() {
-    const { stepArray, stepSchemas, stepFormData, match } = this.props;
+    const { stepArray, stepSchemas, stepFormData, match, document, version } = this.props;
+    console.log({stepArray});
     const currentStep = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
@@ -59,6 +60,8 @@ class Wizard extends Component {
                   numStep={stepArray.length}
                   jsonSchema={stepSchemas[step.id]}
                   formData={stepFormData[step.id]}
+                  document={document}
+                  version={version}
                 />
               )}
             />
@@ -71,13 +74,16 @@ class Wizard extends Component {
 }
 
 const mapState = state => {
-  const { stepArray, stepSchemas, stepFormData } = getStepArrayAndSchemas(
+  const { stepArray, stepSchemas, stepFormData, document, version } = getStepArrayAndSchemas(
     state
   );
+
   return {
     stepArray,
     stepSchemas,
-    stepFormData
+    stepFormData,
+    document,
+    version
   };
 };
 

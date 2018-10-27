@@ -25,6 +25,9 @@ module.exports = (db, DataTypes) => {
     },
     version_number: {
       type: DataTypes.TEXT
+    },
+    content_json: {
+      type: DataTypes.JSON
     }
   });
 

@@ -44,13 +44,13 @@ class TokenInformationForm extends React.Component {
     this.setState({ description: event.target.value });
   }
 
-  next() {
+  async next() {
     // form validation
     this.setState({
       pristine: false
     });
     if (!this.state.project) return;
-    this.props.submitDocumentMetadata({
+    await this.props.submitDocumentMetadata({
       title: `${this.state.project.value.name} (${
         this.state.project.value.symbol
       }) transparency scorecard`,

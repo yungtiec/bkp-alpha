@@ -3,12 +3,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import { updateFormDataInStore } from "../data/actions";
+import { updateFormDataInStore, updateVersionContentJson } from "../data/actions";
 import { assignIn } from "lodash";
 import { withTheme, Form } from "@react-schema-form/core";
 import templates from "./templates";
 import widgets from "./widgets";
 import { loadModal, hideModal } from "../../../data/reducer";
+import { withRouter } from "react-router-dom";
+import { matchPath } from 'react-router'
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form
@@ -47,6 +49,17 @@ class JsonSchemaForm extends Component {
     });
   }
 
+  async next() {
+    console.log('hitting next here');
+    console.log(this.props);
+
+    const match = matchPath(this.props.history.location.pathname, {
+      path: '/wizard/step/:step/version/:id',
+    });
+    console.log(match.params.id);
+    await this.props.updateVersionContentJson(match.params.id);
+  }
+
   render() {
     const {
       schema,
@@ -73,7 +86,8 @@ class JsonSchemaForm extends Component {
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
-          onSubmit={submit ? submit.handler : () => {}}
+          //onSubmit={submit ? submit.handler : () => {}}
+          onSubmit={this.next}
           invalidCallback={this.handleFormInvalidation}
           onChange={handleChange}
           onError={log("errors")}
@@ -111,12 +125,17 @@ const mapDispatch = (dispatch, ownProps) => ({
         props.formData
       )
     ),
+  updateVersionContentJson: versionId => {
+    dispatch(
+      updateVersionContentJson(versionId)
+    )
+  },
   loadModal: (modalType, modalProps) =>
     dispatch(loadModal(modalType, modalProps)),
   hideModal: () => dispatch(hideModal())
 });
 
-export default connect(
+export default withRouter(connect(
   mapState,
   mapDispatch
-)(JsonSchemaForm);
+)(JsonSchemaForm));

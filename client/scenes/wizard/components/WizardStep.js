@@ -34,8 +34,13 @@ class WizardStep extends Component {
   componentDidUpdate(prevProps, prevState) {}
 
   next() {
+    // should create or submit changes on next
+    console.log('next', this.props);
     if (this.props.stepNum <= this.props.numStep)
-      history.push(`/wizard/step/${this.props.stepNum + 1}`);
+      if (this.props.version)
+        history.push(`/wizard/step/${this.props.stepNum + 1}/version/${this.props.version.id}`);
+      else
+        history.push(`/wizard/step/${this.props.stepNum + 1}`);
   }
 
   back() {
@@ -52,13 +57,16 @@ class WizardStep extends Component {
       content,
       jsonSchema,
       formData,
+      document,
       match,
       stepNum,
       numStep
     } = this.props;
 
-    const ChildComponent = CHILD_COMPONENTS[childComponentType];
+    console.log('wizard', this.props);
 
+    const ChildComponent = CHILD_COMPONENTS[childComponentType];
+    console.log({formData});
     return (
       <Fragment>
         <h5>{title}</h5>
@@ -69,6 +77,7 @@ class WizardStep extends Component {
           id={id}
           content={content}
           formData={formData}
+          document={document}
           submit={{ label: "next", handler: this.next }}
           cancel={{ label: "back", handler: this.back }}
           isNotStep={false}

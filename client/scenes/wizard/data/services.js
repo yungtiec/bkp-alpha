@@ -24,3 +24,11 @@ export function postDocumentMetadata({ title, description, projectId }) {
     })
     .then(res => res.data);
 }
+
+export function putVersionContentJson(versionId, content) {
+  return axios
+    .put(`/api/versions/${versionId}/content-json`, {
+      content_json: content
+    })
+    .then(res => res.data);
+}

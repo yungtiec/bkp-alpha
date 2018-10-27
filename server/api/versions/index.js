@@ -35,6 +35,17 @@ router.get("/:versionId/metadata", versionController.getMetadata);
 router.put("/:versionId/scorecard", versionController.putScorecard);
 
 /**
+ * Updating version content_json by id
+ *
+ * @name Put version
+ * @route {PUT} /api/versions/:versionId/content-json
+ * @routeparam {Number} versionId
+ * @bodyparam {Object} content_json
+ *
+ */
+router.put("/:versionId/content-json", versionController.putContentJson);
+
+/**
  * Getting version's contents (consisted of series of questions and answers) by id
  *
  * @name Get version contents

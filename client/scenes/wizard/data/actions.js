@@ -1,7 +1,7 @@
 import * as types from "./actionTypes.js";
 import stepSchemas from "../../../../json-schema/step-schemas.json";
 import { steps } from "../../../../json-schema/step-array.json";
-import { getWizardSchemaById, postDocumentMetadata } from "./services";
+import { getWizardSchemaById, postDocumentMetadata, putVersionContentJson } from "./services";
 
 export function fetchStepArrayAndSchemas(wizardSchemaId) {
   return async (dispatch, getState) => {
@@ -33,6 +33,18 @@ export function updateCurrentProject(project) {
     project
   };
 }
+
+export function updateVersionContentJson(versionId) {
+  return async (dispatch, getState) => {
+    try {
+      const currentFormData = getState().scenes.wizard.data.stepFormData;
+      const versionData = await putVersionContentJson(versionId, currentFormData);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
 
 export function submitDocumentMetadata({ title, description, project }) {
   return async (dispatch, getState) => {
