@@ -33,7 +33,7 @@ class Navbar extends Component {
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
-            <Link className="logo-header my-0 ml-0" to="/landing">
+            <Link className="logo-header my-0 ml-0" to="/collaborations">
               <img
                 width="100px"
                 height="auto"
@@ -54,26 +54,6 @@ class Navbar extends Component {
                 className="navbar__nav-item"
               >
                 collaborations
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
-              <Link
-                to="/project/BKP/document/1/version/2"
-                className="navbar__nav-item"
-              >
-                framework
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
-              <Link
-                to="/project/CVL/document/2/version/3"
-                className="navbar__nav-item"
-              >
-                Civil scorecard
               </Link>
             ) : (
               ""
