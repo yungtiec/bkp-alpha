@@ -29,7 +29,7 @@ export default ({ documentIds, documentsById }) => {
         const date = moment(getLatestVersionDate(document)).format(
           "MMM DD YYYY"
         );
-        console.log(date);
+        console.log('doc', document);
         return (
           <ListItemGrid
             key={id}
