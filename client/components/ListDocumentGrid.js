@@ -36,11 +36,7 @@ export default ({ documentIds, documentsById }) => {
               document.project.symbol
             }/document/${id}/version/${document.versions[0].id}
           `}
-            mainTitle={
-              document.project && document.project.symbol
-                ? `${document.project.name} - ${document.title}`
-                : document.title
-            }
+            mainTitle={document.title}
             subtitle={`by ${document.creator.name}`}
             textUpperRight={date}
             mainText={document.description || " "}
