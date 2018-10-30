@@ -53,7 +53,7 @@ class Navbar extends Component {
                 to="/collaborations"
                 className="navbar__nav-item"
               >
-                collaborations
+                home
               </Link>
             ) : (
               ""
@@ -64,7 +64,7 @@ class Navbar extends Component {
                 target="_blank"
                 className="navbar__nav-item"
               >
-                discuss
+                join telegram
               </a>
             ) : (
               ""
