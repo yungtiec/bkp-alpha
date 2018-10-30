@@ -10,6 +10,7 @@ import { asNumber } from "@react-schema-form/core/src/utils";
  * always retrieved as strings.
  */
 function processValue({ type, items }, selectedOptions) {
+  console.log(selectedOptions)
   var value = selectedOptions.length
     ? selectedOptions
     : selectedOptions.value;
