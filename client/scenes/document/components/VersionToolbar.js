@@ -66,7 +66,6 @@ class VersionToolbar extends Component {
 
     return (
       <div>
-        <p>Do you like this framework?</p>
         <div className="btn-group mb-5" role="group" aria-label="Basic example">
           <button
             type="button"
