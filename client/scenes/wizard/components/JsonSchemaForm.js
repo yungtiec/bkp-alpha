@@ -60,7 +60,10 @@ class JsonSchemaForm extends Component {
     // we replace the placeholder enum options [{}] with designated form data
     // causing error because the user selected value is never one of the allowed valued
     return errors.filter(error => {
-      return this.isDependentSelectWidget(error.params.allowedValues);
+      return (
+        !error.params.allowedValues ||
+        this.isDependentSelectWidget(error.params.allowedValues)
+      );
     });
   }
 
