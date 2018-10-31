@@ -7,14 +7,7 @@ module.exports = function generateStepSchemasJson() {
   };
   for (var key in principles) {
     stepSchemasJson.analysisOfDisclosures[key] = {
-      schema: {
-        definitions: {
-          DisclosureStatus: disclosureStatusDefinition,
-          PrincipleForm: principleFormDefinition
-        },
-        title: principles[key].title,
-        $ref: "#/definitions/PrincipleForm"
-      },
+      schema: principleFormDefinition(principles[key].title),
       uiSchema: principleUiSchema,
       defaultFormData: {
         disclosureTable: principles[key].disclosureTable,
@@ -108,15 +101,26 @@ const disclosureStatusDefinition = {
     },
     sources: {
       title: "",
-      type: "string",
-      enum: ["LOAD_SOURCE_MODAL"],
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "object",
+        enum: [{}]
+      },
+      "enum:defaultOptions": [
+        {
+          label: "Add another source",
+          value: "LOAD_SELECT_CREATABLE_MODAL"
+        }
+      ],
       "enum:optionDependencyPath": "listDisclosuresEvaluated",
       "enum:optionDependencyLabelKey": "title"
     }
   }
 };
 
-const principleFormDefinition = {
+const principleFormDefinition = title => ({
+  title: title,
   type: "object",
   required: ["transparencyScore"],
   properties: {
@@ -128,16 +132,14 @@ const principleFormDefinition = {
     disclosureTable: {
       type: "array",
       title: "b. List of available disclosures",
-      items: {
-        $ref: "#/definitions/DisclosureStatus"
-      }
+      items: disclosureStatusDefinition
     },
     analysis: {
       title: "c. Analysis",
       type: "string"
     }
   }
-};
+});
 
 const principleUiSchema = {
   "ui:title": {

@@ -47,6 +47,23 @@ class JsonSchemaForm extends Component {
     });
   }
 
+  isDependentSelectWidget(allowedValues) {
+    return (
+      allowedValues &&
+      allowedValues.length === 1 &&
+      JSON.stringify(allowedValues[0]) === "[{}]"
+    );
+  }
+
+  transformErrors(errors) {
+    // filter out the errors caused by DependentSelectWidget
+    // we replace the placeholder enum options [{}] with designated form data
+    // causing error because the user selected value is never one of the allowed valued
+    return errors.filter(error => {
+      return this.isDependentSelectWidget(error.params.allowedValues);
+    });
+  }
+
   render() {
     const {
       schema,
@@ -78,6 +95,7 @@ class JsonSchemaForm extends Component {
           onChange={handleChange}
           onError={log("errors")}
           showErrorList={false}
+          transformErrors={this.transformErrors}
         >
           <div className="d-flex justify-content-end mt-5">
             {cancel && (

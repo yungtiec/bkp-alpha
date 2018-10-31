@@ -7,6 +7,7 @@ export const REQUIRED_FIELD_SYMBOL = "*";
 function FieldTemplate(props) {
   switch (props.uiSchema["ui:template"]) {
     case "TableTh":
+    case "SelectCollection":
       return <templates.TableThFieldTemplate {...props} />;
     case "TableRow":
       return <templates.FragmentedFieldTemplate {...props} />;
