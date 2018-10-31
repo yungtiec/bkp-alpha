@@ -6,8 +6,6 @@ function ArrayFieldTemplate(props) {
   switch (props.uiSchema["ui:template"]) {
     case "ArrayTable":
       return <templates.ArrayTableFieldTemplate {...props} />;
-    case "SelectCollection":
-      return <templates.SelectCollectionTemplate {...props} />;
     default:
       return <givenTemplates.ArrayFieldTemplate {...props} />;
   }
