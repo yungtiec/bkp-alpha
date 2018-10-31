@@ -87,7 +87,7 @@ const transparencyScoreInstruction = fs.readFileSync(
 
 const disclosureStatusDefinition = {
   type: "object",
-  required: ["status"],
+  required: ["status", "sources"],
   properties: {
     disclosure: {
       title: "",
@@ -102,24 +102,10 @@ const disclosureStatusDefinition = {
     sources: {
       title: "",
       type: "array",
+      uniqueItems: true,
       items: {
         type: "object",
-        properties: {
-          label: {
-            type: "string"
-          },
-          value: {
-            type: "object",
-            properties: {
-              title: {
-                type: "string"
-              },
-              link: {
-                type: "string"
-              }
-            }
-          }
-        }
+        enum: [{}]
       },
       "enum:defaultOptions": [
         {
@@ -184,8 +170,8 @@ const principleUiSchema = {
         "ui:template": "TableTh"
       },
       sources: {
-        "ui:template": "SelectCollection",
-        "ui:template:container": "th"
+        "ui:template": "TableTh",
+        "ui:widget": "DependentSelectWidget"
       }
     }
   },
@@ -299,8 +285,7 @@ const principles = {
         disclosure: "Initial token supply and eventual supply changes"
       },
       {
-        disclosure:
-          "Differences between token supply and tokens in circulation"
+        disclosure: "Differences between token supply and tokens in circulation"
       },
       {
         disclosure:
