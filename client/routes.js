@@ -50,11 +50,6 @@ class Routes extends Component {
             path="/reset-password/:token"
             component={ResetPassword}
           />
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/collaborations"
-            component={Collaborations}
-          />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
@@ -109,9 +104,12 @@ class Routes extends Component {
               component={Admin}
             />
           )}
-          {/* Displays our Login component as a fallback */}
-          {!isLoggedIn && <Route component={Landing} />}
-          {isLoggedIn && <Redirect to="/project/BKP/document/1/version/1" />}
+          {/* Displays our Collaborations component as a fallback */}
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/"
+            component={Collaborations}
+          />
         </Switch>
       </div>
     );

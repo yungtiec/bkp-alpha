@@ -33,7 +33,7 @@ class Navbar extends Component {
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
-            <Link className="logo-header my-0 ml-0" to="/collaborations">
+            <Link className="logo-header my-0 ml-0" to="/">
               <img
                 width="100px"
                 height="auto"
@@ -50,7 +50,7 @@ class Navbar extends Component {
             )}
             {width > 600 ? (
               <Link
-                to="/collaborations"
+                to="/"
                 className="navbar__nav-item"
               >
                 home
