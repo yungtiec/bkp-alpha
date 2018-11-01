@@ -66,7 +66,7 @@ class VersionToolbar extends Component {
 
     return (
       <div>
-        <div className="btn-group mb-5" role="group" aria-label="Basic example">
+        <div className="btn-group mb-3" role="group" aria-label="Basic example">
           <button
             type="button"
             className={`btn ${

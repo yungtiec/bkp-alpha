@@ -12,8 +12,6 @@ export default ({
   tagArray,
   metadataArray
 }) => {
-  console.log({tagArray});
-  console.log({metadataArray});
   return (
     <div className="col-md-12 entity-card">
       <Link to={cardHref}>

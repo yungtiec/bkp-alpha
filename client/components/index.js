@@ -13,6 +13,7 @@ export { default as ModalContainer } from "./ModalContainer";
 export { default as Layout } from "./Layout";
 export { default as LayoutWithNav } from "./LayoutWithNav";
 export { default as RouteWithLayout } from "./RouteWithLayout";
+export { default as ProjectAuthorName } from "./ProjectAuthorName";
 export { default as ProjectSymbolBlueBox } from "./ProjectSymbolBlueBox";
 export { default as CommentMain } from "./CommentMain";
 export { default as CommentReply } from "./CommentReply";

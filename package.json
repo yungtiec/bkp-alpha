@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build-client": "webpack",
+    "build-library": "webpack --config library.webpack.config.js",
     "build-production": "webpack -p",
     "build-client-watch": "webpack -w",
     "deploy": "script/deploy",
@@ -15,7 +16,7 @@
     "heroku-postbuild": "webpack --config library.webpack.config.js && webpack -p",
     "seed": "node script/seed.js",
     "start": "node server",
-    "start-dev": "NODE_ENV='development' webpack --config library.webpack.config.js && npm run build-client-watch & npm run start-server",
+    "start-dev": "NODE_ENV='development' npm run build-client-watch & npm run start-server",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "migrate": "node script/migration",
     "test": "NODE_ENV='test' mocha ./server/**/*.spec.js ./server/**/**/*.spec.js ./client/**/**/*.spec.js --require @babel/polyfill --require @babel/register"
