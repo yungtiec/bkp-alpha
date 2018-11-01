@@ -59,6 +59,7 @@ class Wizard extends Component {
         <button
           className="btn btn-outline-primary"
           onClick={this.loadPreviewModa}
+          style={{ float: "right" }}
         >
           Preview
         </button>

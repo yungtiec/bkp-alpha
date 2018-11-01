@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { keys } from "lodash";
+import { keys, isArray, has } from "lodash";
 
-export default ({ formData }) => {
-  const headers = keys(formData[0]);
+export default ({ formData, headers }) => {
+  headers = headers || keys(formData[0]);
   const isNotEmpty =
     formData.length > 1 ||
     headers.reduce(
@@ -23,7 +23,26 @@ export default ({ formData }) => {
         {formData.map(item => (
           <tr>
             {headers.map(header => (
-              <td style={{ textAlign: "left;" }}>{item[header]}</td>
+              <td style={{ textAlign: "left;" }}>
+                {!isArray(item[header])
+                  ? item[header]
+                  : header === "sources" && (
+                      <span>
+                        {item[header].map((subitem, i) => (
+                          <Fragment>
+                            <a
+                              href={subitem.value.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {subitem.value.title}
+                            </a>
+                            {i !== item[header].length - 1 && "; "}
+                          </Fragment>
+                        ))}
+                      </span>
+                    )}
+              </td>
             ))}
           </tr>
         ))}

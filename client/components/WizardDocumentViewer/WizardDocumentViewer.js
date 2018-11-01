@@ -1,7 +1,10 @@
 import React, { Component, Fragment } from "react";
 import autoBind from "react-autobind";
 import PropTypes from "prop-types";
-import { JsonSchemaFormDataTemplate } from "./templates";
+import {
+  JsonSchemaFormDataTemplate,
+  JsonSchemaAccordionDataTemplate
+} from "./templates";
 
 export default class WizardDocumentViewer extends Component {
   constructor(props) {
@@ -23,12 +26,17 @@ export default class WizardDocumentViewer extends Component {
             case "JSON_SCHEMA_FORM":
               return (
                 <JsonSchemaFormDataTemplate
-                  viewerSchema={stepSchemas[s.id].viewerSchema}
+                  jsonSchema={stepSchemas[s.id]}
                   formData={stepFormData[s.id]}
                 />
               );
             case "JSON_SCHEMA_FORMS_ACCORDION":
-              return "json schema forms accordion";
+              return (
+                <JsonSchemaAccordionDataTemplate
+                  jsonSchemas={stepSchemas[s.id]}
+                  formData={stepFormData[s.id]}
+                />
+              );
             default:
               return "";
           }

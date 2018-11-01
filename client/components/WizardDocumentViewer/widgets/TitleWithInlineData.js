@@ -12,11 +12,6 @@ import React, { Component, Fragment } from "react";
  * The output is going to be 'transparency score: 8'
  */
 
-export default ({ title, formData }) => (
-  <h5>
-    {keys(formData).reduce(
-      key => title.replace(`%${key}%`, formData[key]),
-      title
-    )}
-  </h5>
+export default ({ title, formData, placeholder }) => (
+  <h5>{title.replace("%formData%", formData || placeholder)}</h5>
 );

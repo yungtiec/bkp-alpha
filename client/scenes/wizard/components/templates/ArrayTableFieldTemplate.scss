@@ -4,11 +4,18 @@
   font-size: 14px;
 }
 
-.array-table th {
+.array-table tbody th {
   vertical-align: top;
 }
 
 .array-table {
   width: 100%;
   margin-bottom: 15px;
+}
+
+.array-table__add-button {
+  width: 100%;
+  color: #007bff;
+  display: inline-block;
+  text-align: right;
 }

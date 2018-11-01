@@ -71,7 +71,7 @@ var stepSchemasJson = {
       }
     ],
     viewerSchema: {
-      title: "Sources: ",
+      title: "List Disclosures Evaluated: ",
       "viewer:widget": "CollectionTable"
     }
   },
@@ -104,8 +104,8 @@ const disclosureStatusDefinition = {
     status: {
       title: "",
       type: "string",
-      enum: ["N/A", "x", "1/2", "checked"],
-      enumNames: ["N/A", "x", "1/2", "checked"]
+      enum: ["N/A", "x", "1/2", "✓"],
+      enumNames: ["N/A", "x", "1/2", "✓"]
     },
     sources: {
       title: "",
@@ -191,11 +191,13 @@ const principleUiSchema = {
 const principleViewerSchema = principle => ({
   title: principle.title,
   transparencyScore: {
-    "viewer:widget": "InlineTitleWithData",
-    title: "transparency score: %transparencyScore%"
+    "viewer:widget": "TitleWithInlineData",
+    title: "transparency score: %formData%",
+    placeholder: "no data"
   },
   disclosureTable: {
-    "viewer:widget": "CollectionTable"
+    "viewer:widget": "CollectionTable",
+    headers: ["disclosure", "status", "sources"]
   },
   analysis: {
     title: "analysis"

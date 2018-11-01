@@ -148,17 +148,16 @@ function ArrayTableFieldTemplate(props) {
               )}
             {props.canAdd && (
               <th style={{ width: "110px" }}>
-                <button
+                <a
                   style={{ width: "100%" }}
-                  type="button"
-                  className="btn btn-outline-primary mb-3"
                   tabIndex="0"
+                  className="array-table__add-button"
                   onClick={props.onAddClick}
                   disabled={props.disabled || props.readonly}
                   data-testid="add-array-item"
                 >
                   Add source
-                </button>
+                </a>
               </th>
             )}
           </tr>
