@@ -2,8 +2,6 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
-import { steps } from "../../../../json-schema/step-array.json";
-import jsonSchema from "../../../../json-schema/step-schemas.json";
 import history from "../../../history";
 import {
   Instructions,

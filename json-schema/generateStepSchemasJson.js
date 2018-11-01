@@ -12,7 +12,8 @@ module.exports = function generateStepSchemasJson() {
       defaultFormData: {
         disclosureTable: principles[key].disclosureTable,
         analysis: ""
-      }
+      },
+      viewerSchema: principleViewerSchema(principles[key])
     };
   }
   return stepSchemasJson;
@@ -68,7 +69,11 @@ var stepSchemasJson = {
         title: null,
         link: null
       }
-    ]
+    ],
+    viewerSchema: {
+      title: "Sources: ",
+      "viewer:widget": "CollectionTable"
+    }
   },
   generalCommentary: {
     schema: {
@@ -76,7 +81,10 @@ var stepSchemasJson = {
       type: "string"
     },
     uiSchema: { "ui:widget": "DependentTextEditorWidget" },
-    defaultFormData: ""
+    defaultFormData: "",
+    viewerSchema: {
+      title: ""
+    }
   }
 };
 
@@ -179,6 +187,20 @@ const principleUiSchema = {
     "ui:widget": "DependentTextEditorWidget"
   }
 };
+
+const principleViewerSchema = principle => ({
+  title: principle.title,
+  transparencyScore: {
+    "viewer:widget": "InlineTitleWithData",
+    title: "transparency score: %transparencyScore%"
+  },
+  disclosureTable: {
+    "viewer:widget": "CollectionTable"
+  },
+  analysis: {
+    title: "analysis"
+  }
+});
 
 const accordionOrder = [
   "principle1",

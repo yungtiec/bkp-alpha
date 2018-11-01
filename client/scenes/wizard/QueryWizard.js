@@ -1,10 +1,10 @@
 import "./wizard.scss";
 import React, { Component } from "react";
-import { steps } from "../../../json-schema/step-array.json";
 import WizardStep from "./components/WizardStep";
 import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { fetchStepArrayAndSchemas } from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
+import { loadModal, hideModal } from "../../data/reducer";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import Steps, { Step } from "rc-steps";
@@ -18,6 +18,15 @@ class Wizard extends Component {
   componentDidMount() {
     // hardcode wizardSchemaId for now
     this.props.fetchStepArrayAndSchemas(1);
+  }
+
+  loadPreviewModa() {
+    this.props.loadModal("WIZARD_DOCUMENT_PREVIEW_MODAL", {
+      hideModal: this.props.hideModal,
+      stepArray: this.props.stepArray,
+      stepSchemas: this.props.stepSchemas,
+      stepFormData: this.props.stepFormData
+    });
   }
 
   render() {
@@ -47,6 +56,12 @@ class Wizard extends Component {
             />
           ))}
         </Steps>
+        <button
+          className="btn btn-outline-primary"
+          onClick={this.loadPreviewModa}
+        >
+          Preview
+        </button>
         <Switch>
           {stepArray.map((step, i) => (
             <Route
@@ -81,7 +96,7 @@ const mapState = state => {
   };
 };
 
-const actions = { fetchStepArrayAndSchemas };
+const actions = { fetchStepArrayAndSchemas, loadModal, hideModal };
 
 export default withRouter(
   connect(
