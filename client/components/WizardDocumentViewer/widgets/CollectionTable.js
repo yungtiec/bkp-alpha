@@ -26,7 +26,9 @@ export default ({ formData, headers }) => {
               <td style={{ textAlign: "left;" }}>
                 {!isArray(item[header])
                   ? item[header]
-                  : header === "sources" && (
+                  : // TODO: figure out API in schema for rendering array of array
+                    // breaking generalization here by directly referencing data using specific keys, e.g. title, link...etc
+                    header === "sources" && (
                       <span>
                         {item[header].map((subitem, i) => (
                           <Fragment>
