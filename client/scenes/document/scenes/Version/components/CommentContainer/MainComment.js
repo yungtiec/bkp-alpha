@@ -13,6 +13,7 @@ import policies from "../../../../../../policies.js";
 
 
 export default ({
+  isCreator,
   comment,
   user,
   projectMetadata,
@@ -38,6 +39,7 @@ export default ({
 
   return (
     <CommentItem
+      isCreator={isCreator}
       containerClassName="comment-item__main"
       containerStyle={
         comment.descendents.length ? { borderBottom: "1px solid" } : {}

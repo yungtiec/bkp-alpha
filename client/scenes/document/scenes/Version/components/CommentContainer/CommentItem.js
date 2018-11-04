@@ -9,6 +9,7 @@ import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../../policies.js";
 
 export default ({
+  isCreator,
   children,
   containerClassName,
   containerStyle,
@@ -47,7 +48,12 @@ export default ({
               action="isNotProjectAdmin"
               model={{ project: projectMetadata, comment }}
             >
-              <span>{comment.owner.displayName}</span>
+              <span>
+                {comment.owner.displayName}
+                {isCreator ? (
+                  <span className="comment-item__owner-name"> (admin)</span>
+                ) : null}
+              </span>
             </VisibleIf>
           </PunditTypeSet>
         </PunditContainer>
