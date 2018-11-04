@@ -27,7 +27,11 @@ export default ({
   resetCommentSelection,
   parent
 }) => {
-  const { creator_id } = documentMetadata;
+  const { creator_id, collaborators } = documentMetadata;
+  const collaboratorsArray = collaborators.reduce((acc, curr) => {
+    return acc.concat([curr.id]);
+  }, [creator_id]);
+
   return (
     <Element
       name="sidebar-contents"
@@ -53,7 +57,7 @@ export default ({
         addNewComment={addNewComment}
       />
       <SidebarContents
-        creatorId={creator_id}
+        collaboratorsArray={collaboratorsArray}
         isLoggedIn={isLoggedIn}
         isClosedForComment={isClosedForComment}
         commentIds={commentIds}

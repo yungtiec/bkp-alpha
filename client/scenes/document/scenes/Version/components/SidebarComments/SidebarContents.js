@@ -84,7 +84,7 @@ function renderSidebarWithSelectedComments(props) {
 
 function renderSidebarWithAllComments(props) {
   const {
-    creatorId,
+    collaboratorsArray,
     commentIds,
     commentsById,
     projectMetadata,
@@ -108,7 +108,6 @@ function renderSidebarWithAllComments(props) {
     commentIds
       // .filter(id => commentsById[id].reviewed !== "spam")
       .map(id => {
-        const isCreator = creatorId === commentsById[id].owner.id;
         return (
           <Element key={`comment-${id}__element`} name={`comment-${id}`}>
             <ScrollLink
@@ -121,7 +120,7 @@ function renderSidebarWithAllComments(props) {
               spy={true}
             >
               <CommentItem
-                isCreator={isCreator}
+                collaboratorsArray={collaboratorsArray}
                 key={`comment-${id}`}
                 isClosedForComment={isClosedForComment}
                 comment={commentsById[id]}

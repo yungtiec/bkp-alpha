@@ -44,8 +44,8 @@ export default class Replies extends Component {
 
   renderReplies(replies, rootId) {
     const {
+      collaboratorsArray,
       comment,
-      isCreator,
       user,
       projectMetadata,
       isLoggedIn,
@@ -71,9 +71,10 @@ export default class Replies extends Component {
         reply.upvotesFrom,
         upvotedUser => upvotedUser.id === user.id
       );
+      const isAdmin = collaboratorsArray.includes(reply.owner.id);
       return (
         <CommentItem
-          isCreator={isCreator}
+          isAdmin={isAdmin}
           containerClassName={`comment-item__reply-item ${
             i === replies.length - 1 ? "last-item" : ""
           }`}
