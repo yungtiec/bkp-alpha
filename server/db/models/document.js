@@ -212,7 +212,12 @@ module.exports = (db, DataTypes) => {
         },
         {
           model: models["user"],
-          as: "creator"
+          as: "creator",
+          include: [
+            {
+              model: models.role
+            }
+          ]
         },
         {
           model: models["user"],
