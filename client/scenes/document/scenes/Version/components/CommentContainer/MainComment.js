@@ -36,7 +36,7 @@ export default ({
     (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
     comment.comment
   );
-  const isAdmin = collaboratorsArray.includes(comment.owner.id);
+  const isAdmin = collaboratorsArray ? collaboratorsArray.includes(comment.owner.id) : false;
 
   return (
     <CommentItem
