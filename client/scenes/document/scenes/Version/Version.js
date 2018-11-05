@@ -340,6 +340,7 @@ class Document extends Component {
             >
               {sidebarContext === "comments" && (
                 <SidebarComments
+                  documentMetadata={documentMetadata}
                   isLoggedIn={isLoggedIn}
                   anonymity={anonymity}
                   commentIds={commentIds}

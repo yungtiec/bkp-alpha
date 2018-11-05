@@ -9,6 +9,7 @@ import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../../policies.js";
 
 export default ({
+  isAdmin,
   children,
   containerClassName,
   containerStyle,
@@ -34,9 +35,13 @@ export default ({
             >
               <span class="text-primary">
                 <i class="text-primary mr-2 fas fa-certificate" />
-                {`${comment.owner.displayName} (from ${
-                  projectMetadata.symbol
-                })`}
+                {isAdmin
+                  ? `${comment.owner.displayName} (admin) (from ${
+                      projectMetadata.symbol
+                    })`
+                  : `${comment.owner.displayName} (from ${
+                      projectMetadata.symbol
+                    })`}
               </span>
             </VisibleIf>
           </PunditTypeSet>
@@ -47,7 +52,12 @@ export default ({
               action="isNotProjectAdmin"
               model={{ project: projectMetadata, comment }}
             >
-              <span>{comment.owner.displayName}</span>
+              <span>
+                {comment.owner.displayName}
+                {isAdmin ? (
+                  <span className="comment-item__owner-name"> (admin)</span>
+                ) : null}
+              </span>
             </VisibleIf>
           </PunditTypeSet>
         </PunditContainer>

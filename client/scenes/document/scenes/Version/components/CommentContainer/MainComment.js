@@ -13,6 +13,7 @@ import policies from "../../../../../../policies.js";
 
 
 export default ({
+  collaboratorsArray,
   comment,
   user,
   projectMetadata,
@@ -35,9 +36,11 @@ export default ({
     (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
     comment.comment
   );
+  const isAdmin = collaboratorsArray ? collaboratorsArray.includes(comment.owner.id) : false;
 
   return (
     <CommentItem
+      isAdmin={isAdmin}
       containerClassName="comment-item__main"
       containerStyle={
         comment.descendents.length ? { borderBottom: "1px solid" } : {}
