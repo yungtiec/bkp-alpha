@@ -1,3 +1,4 @@
+import "./WizardStep";
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
@@ -70,6 +71,7 @@ class WizardStep extends Component {
           submit={{ label: "next", handler: this.next }}
           cancel={{ label: "back", handler: this.back }}
           isNotStep={false}
+          className="wizard-step__child-component"
         />
       </Fragment>
     );

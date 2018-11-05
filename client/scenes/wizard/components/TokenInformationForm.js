@@ -62,7 +62,7 @@ class TokenInformationForm extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.className}>
         <div class="form-group row">
           <label for="project" class="col-sm-2 col-form-label">
             project

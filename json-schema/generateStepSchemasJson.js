@@ -200,7 +200,8 @@ const principleViewerSchema = principle => ({
     headers: ["disclosure", "status", "sources"]
   },
   analysis: {
-    title: "analysis"
+    title: "analysis",
+    "viewer:widget": "HtmlBlock"
   }
 });
 
