@@ -11,7 +11,6 @@ const traverse = (formData, viewerSchema) => {
     });
   } else {
     Widget = widgets[viewerSchema["viewer:widget"]];
-    console.log(viewerSchema, formData);
     return Widget ? (
       <Widget {...viewerSchema} formData={formData} />
     ) : (

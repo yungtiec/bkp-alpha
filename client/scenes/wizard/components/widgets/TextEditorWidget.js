@@ -28,10 +28,12 @@ class TextEditorWidget extends React.Component {
     const { value, onChange } = this.props;
 
     return (
-      <RichTextEditor
-        value={this.state.value}
-        onChange={this.handleEditorChange}
-      />
+      <div style={{ zIndex: 1 }}>
+        <RichTextEditor
+          value={this.state.value}
+          onChange={this.handleEditorChange}
+        />
+      </div>
     );
   }
 }
