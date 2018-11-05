@@ -1,4 +1,5 @@
 /*eslint no-unused-vars: off*/
+import "./TextEditorWidget.scss";
 import React from "react";
 import PropTypes from "prop-types";
 import Markmirror from "react-markmirror";
@@ -28,7 +29,7 @@ class TextEditorWidget extends React.Component {
     const { value, onChange } = this.props;
 
     return (
-      <div style={{ zIndex: 1 }}>
+      <div className="text-editor-widget">
         <RichTextEditor
           value={this.state.value}
           onChange={this.handleEditorChange}
