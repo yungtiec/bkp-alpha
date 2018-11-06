@@ -125,7 +125,7 @@ function ArrayTableFieldTemplate(props) {
               formContext={props.formContext}
             />
           )}
-      <table class="" style={{ width: "100%", marginBottom: "15px" }}>
+      <table class="array-table">
         <thead>
           <tr className="array-table__header-row">
             {props.uiSchema["ui:template:tableColumnHeader"] &&

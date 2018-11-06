@@ -49,15 +49,33 @@ class JsonSchemaForm extends Component {
     });
   }
 
-  async next() {
-    console.log('hitting next here');
-    console.log(this.props);
-
+  async next(submit) {
     const match = matchPath(this.props.history.location.pathname, {
-      path: '/wizard/step/:step/version/:id',
+      path : '/wizard/step/:step/version/:id',
     });
     console.log(match.params.id);
     await this.props.updateVersionContentJson(match.params.id);
+    submit.handler();
+  }
+
+  isDependentSelectWidget(allowedValues) {
+    return (
+      allowedValues &&
+      allowedValues.length === 1 &&
+      JSON.stringify(allowedValues[0]) === "[{}]"
+    );
+  }
+
+  transformErrors(errors) {
+    // filter out the errors caused by DependentSelectWidget
+    // we replace the placeholder enum options [{}] with designated form data
+    // causing error because the user selected value is never one of the allowed valued
+    return errors.filter(error => {
+      return (
+        !error.params.allowedValues ||
+        this.isDependentSelectWidget(error.params.allowedValues)
+      );
+    });
   }
 
   render() {
@@ -87,11 +105,12 @@ class JsonSchemaForm extends Component {
           uiSchema={uiSchema}
           formData={formData}
           //onSubmit={submit ? submit.handler : () => {}}
-          onSubmit={this.next}
+          onSubmit={() => this.next(submit)}
           invalidCallback={this.handleFormInvalidation}
           onChange={handleChange}
           onError={log("errors")}
           showErrorList={false}
+          transformErrors={this.transformErrors}
         >
           <div className="d-flex justify-content-end mt-5">
             {cancel && (
