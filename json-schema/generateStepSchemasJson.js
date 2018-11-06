@@ -220,7 +220,7 @@ const accordionOrder = [
 
 const principles = {
   principle1: {
-    title: "Principle 1: Token Design",
+    title: "Principle 1: Consumer Token Design",
     disclosureTable: [
       {
         disclosure: "Description of token’s intrinsic features and operation"

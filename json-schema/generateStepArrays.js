@@ -50,7 +50,10 @@ var viewerSteps = [
   },
   {
     id: "scorecardTable",
-    template: "SCORECARD_TABLE_TEMPLATE"
+    template: "SCORECARD_TABLE_TEMPLATE",
+    formDataPath: "analysisOfDisclosures",
+    formDataOrder: "accordionOrder",
+    formDataKey: "transparencyScore"
   },
   {
     id: "assessmentCriteria",

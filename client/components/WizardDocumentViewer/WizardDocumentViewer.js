@@ -4,13 +4,15 @@ import PropTypes from "prop-types";
 import {
   JsonSchemaFormDataTemplate,
   JsonSchemaAccordionDataTemplate,
-  TextBlockTemplate
+  TextBlockTemplate,
+  ScorecardTableTemplate
 } from "./templates";
 
 const templates = {
   JSON_SCHEMA_FORM_DATA_TEMPLATE: JsonSchemaFormDataTemplate,
   JSON_SCHEMA_ACCORDION_DATA_TEMPLATE: JsonSchemaAccordionDataTemplate,
-  TEXT_BLOCK_TEMPLATE: TextBlockTemplate
+  TEXT_BLOCK_TEMPLATE: TextBlockTemplate,
+  SCORECARD_TABLE_TEMPLATE: ScorecardTableTemplate
 };
 
 export default class WizardDocumentViewer extends Component {
@@ -29,8 +31,8 @@ export default class WizardDocumentViewer extends Component {
           return ChildComponent ? (
             <ChildComponent
               {...s}
-              jsonSchemas={stepSchemas[s.id]}
-              formData={stepFormData[s.id]}
+              jsonSchemas={stepSchemas[s.id] || stepSchemas[s.formDataPath]}
+              formData={stepFormData[s.id] || stepFormData[s.formDataPath]}
             />
           ) : (
             ""
