@@ -2,6 +2,7 @@ import "./Collaborations.scss";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { ListProject, ListDocumentGrid } from "../../components";
+import { Helmet } from 'react-helmet';
 
 const filterDocuments = (documentIds, documentsById) => {
   let scorecardsById = [];
@@ -49,28 +50,33 @@ export default ({
   } = filterDocuments(documentIds, documentsById);
 
   return (
-    <div className="main-container-collaborations">
-      <div className="collaborations-container col-md-7">
-        <div className="projects-containers__collaboration-header">
-          <span className="collaborations-header">Open Collaborations</span>
-        </div>
-        <div className="project-row">
-          <span className="projects-containers__collaboration-sub-header">
-            Thought Leadership
-          </span>
-          <ListDocumentGrid
-            documentIds={thoughtLeadershipIds}
-            documentsById={thoughtLeadershipById}
-          />
-        </div>
-        <div>
-          <span className="projects-containers__collaboration-sub-header">
-            Transparency Scorecards
-          </span>
-          <ListDocumentGrid
-            documentIds={scorecardIds}
-            documentsById={scorecardsById}
-          />
+    <div>
+      <Helmet>
+        <title>The Brooklyn Project | Collaborate</title>
+      </Helmet>
+      <div className="main-container-collaborations">
+        <div className="collaborations-container col-md-7">
+          <div className="projects-containers__collaboration-header">
+            <span className="collaborations-header">Open Collaborations</span>
+          </div>
+          <div className="project-row">
+            <span className="projects-containers__collaboration-sub-header">
+              Thought Leadership
+            </span>
+            <ListDocumentGrid
+              documentIds={thoughtLeadershipIds}
+              documentsById={thoughtLeadershipById}
+            />
+          </div>
+          <div>
+            <span className="projects-containers__collaboration-sub-header">
+              Transparency Scorecards
+            </span>
+            <ListDocumentGrid
+              documentIds={scorecardIds}
+              documentsById={scorecardsById}
+            />
+          </div>
         </div>
       </div>
     </div>
