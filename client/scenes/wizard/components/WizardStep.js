@@ -1,4 +1,4 @@
-import "./WizardStep";
+import "./WizardStep.scss";
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
@@ -62,17 +62,18 @@ class WizardStep extends Component {
       <Fragment>
         <h5>{title}</h5>
         {description && <p>{description}</p>}
-        <ChildComponent
-          key={id}
-          {...jsonSchema}
-          id={id}
-          content={content}
-          formData={formData}
-          submit={{ label: "next", handler: this.next }}
-          cancel={{ label: "back", handler: this.back }}
-          isNotStep={false}
-          className="wizard-step__child-component"
-        />
+        <div className="wizard-step__child-component">
+          <ChildComponent
+            key={id}
+            {...jsonSchema}
+            id={id}
+            content={content}
+            formData={formData}
+            submit={{ label: "next", handler: this.next }}
+            cancel={{ label: "back", handler: this.back }}
+            isNotStep={false}
+          />
+        </div>
       </Fragment>
     );
   }

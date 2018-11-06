@@ -23,14 +23,14 @@ class Wizard extends Component {
   loadPreviewModa() {
     this.props.loadModal("WIZARD_DOCUMENT_PREVIEW_MODAL", {
       hideModal: this.props.hideModal,
-      stepArray: this.props.stepArray,
+      viewerStepArray: this.props.viewerStepArray,
       stepSchemas: this.props.stepSchemas,
       stepFormData: this.props.stepFormData
     });
   }
 
   render() {
-    const { stepArray, stepSchemas, stepFormData, match } = this.props;
+    const { wizardStepArray, stepSchemas, stepFormData, match } = this.props;
     const currentStep = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
@@ -42,7 +42,7 @@ class Wizard extends Component {
           current={currentStep}
           labelPlacement="vertical"
         >
-          {stepArray.map((step, i) => (
+          {wizardStepArray.map((step, i) => (
             <Step
               title={step.title}
               description=""
@@ -64,7 +64,7 @@ class Wizard extends Component {
           Preview
         </button>
         <Switch>
-          {stepArray.map((step, i) => (
+          {wizardStepArray.map((step, i) => (
             <Route
               key={`wizard-steps__${i + 1}`}
               path={`${match.path}/step/${i + 1}`}
@@ -72,7 +72,7 @@ class Wizard extends Component {
                 <WizardStep
                   {...step}
                   stepNum={i + 1}
-                  numStep={stepArray.length}
+                  numStep={wizardStepArray.length}
                   jsonSchema={stepSchemas[step.id]}
                   formData={stepFormData[step.id]}
                 />
@@ -87,11 +87,15 @@ class Wizard extends Component {
 }
 
 const mapState = state => {
-  const { stepArray, stepSchemas, stepFormData } = getStepArrayAndSchemas(
-    state
-  );
+  const {
+    viewerStepArray,
+    wizardStepArray,
+    stepSchemas,
+    stepFormData
+  } = getStepArrayAndSchemas(state);
   return {
-    stepArray,
+    viewerStepArray,
+    wizardStepArray,
     stepSchemas,
     stepFormData
   };

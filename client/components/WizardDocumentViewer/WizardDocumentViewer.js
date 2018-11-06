@@ -3,8 +3,15 @@ import autoBind from "react-autobind";
 import PropTypes from "prop-types";
 import {
   JsonSchemaFormDataTemplate,
-  JsonSchemaAccordionDataTemplate
+  JsonSchemaAccordionDataTemplate,
+  TextBlockTemplate
 } from "./templates";
+
+const templates = {
+  JSON_SCHEMA_FORM_DATA_TEMPLATE: JsonSchemaFormDataTemplate,
+  JSON_SCHEMA_ACCORDION_DATA_TEMPLATE: JsonSchemaAccordionDataTemplate,
+  TEXT_BLOCK_TEMPLATE: TextBlockTemplate
+};
 
 export default class WizardDocumentViewer extends Component {
   constructor(props) {
@@ -13,33 +20,21 @@ export default class WizardDocumentViewer extends Component {
   }
 
   render() {
-    const { stepFormData, stepArray, stepSchemas } = this.props;
+    const { stepFormData, viewerStepArray, stepSchemas } = this.props;
 
     return (
       <div className="markdown-body">
-        {stepArray.map((s, i) => {
-          var localSchema = stepSchemas[s.id];
-          var localFormData = stepFormData[s.id];
-          switch (s.childComponentType) {
-            case "TOKEN_INFORMATION_FORM":
-              return "";
-            case "JSON_SCHEMA_FORM":
-              return (
-                <JsonSchemaFormDataTemplate
-                  jsonSchema={stepSchemas[s.id]}
-                  formData={stepFormData[s.id]}
-                />
-              );
-            case "JSON_SCHEMA_FORMS_ACCORDION":
-              return (
-                <JsonSchemaAccordionDataTemplate
-                  jsonSchemas={stepSchemas[s.id]}
-                  formData={stepFormData[s.id]}
-                />
-              );
-            default:
-              return "";
-          }
+        {viewerStepArray.map((s, i) => {
+          var ChildComponent = templates[s.template];
+          return ChildComponent ? (
+            <ChildComponent
+              {...s}
+              jsonSchemas={stepSchemas[s.id]}
+              formData={stepFormData[s.id]}
+            />
+          ) : (
+            ""
+          );
         })}
       </div>
     );
@@ -49,7 +44,7 @@ export default class WizardDocumentViewer extends Component {
 if (process.env.NODE_ENV !== "production") {
   WizardDocumentViewer.propTypes = {
     stepFormData: PropTypes.object,
-    stepArray: PropTypes.array,
+    viewerStepArray: PropTypes.array,
     stepSchemas: PropTypes.object
   };
 }

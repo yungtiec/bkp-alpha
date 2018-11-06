@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import { WizardDocumentViewer } from "../../../components";
 
 const WizardDocumentPreviewModal = ({
-  stepArray,
+  viewerStepArray,
   stepSchemas,
   stepFormData,
   hideModal
@@ -17,7 +17,7 @@ const WizardDocumentPreviewModal = ({
   >
     <WizardDocumentViewer
       stepFormData={stepFormData}
-      stepArray={stepArray}
+      viewerStepArray={viewerStepArray}
       stepSchemas={stepSchemas}
     />
   </Modal>

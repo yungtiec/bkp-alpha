@@ -19,8 +19,8 @@ const traverse = (formData, viewerSchema) => {
   }
 };
 
-export default ({ jsonSchema, formData }) => {
-  const viewerSchema = jsonSchema.viewerSchema;
+export default ({ jsonSchemas, formData }) => {
+  const viewerSchema = jsonSchemas.viewerSchema;
   const Widget = widgets[viewerSchema["viewer:widget"]];
 
   return (

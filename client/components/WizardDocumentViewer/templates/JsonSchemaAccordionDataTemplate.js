@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import autoBind from "react-autobind";
 import * as widgets from "../widgets";
 import JsonSchemaFormDataTemplate from "./JsonSchemaFormDataTemplate";
 import { keys } from "lodash";
@@ -10,7 +9,7 @@ export default ({ jsonSchemas, formData }) => {
     var { title, viewerSchema } = accordionItemDict[key].viewerSchema;
     return (
       <JsonSchemaFormDataTemplate
-        jsonSchema={accordionItemDict[key]}
+        jsonSchemas={accordionItemDict[key]}
         formData={formData[key]}
       />
     );
