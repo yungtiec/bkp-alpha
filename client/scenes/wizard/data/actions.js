@@ -1,6 +1,4 @@
 import * as types from "./actionTypes.js";
-import stepSchemas from "../../../../json-schema/step-schemas.json";
-import { steps } from "../../../../json-schema/step-array.json";
 import { getWizardSchemaById, postDocumentMetadata, putVersionContentJson } from "./services";
 
 export function fetchStepArrayAndSchemas(wizardSchemaId) {
@@ -10,7 +8,8 @@ export function fetchStepArrayAndSchemas(wizardSchemaId) {
       dispatch({
         type: types.STEP_ARRAY_AND_SCHEMAS_FETCH_SUCCESS,
         stepSchemas: wizardSchema.step_schemas_json,
-        stepArray: wizardSchema.step_array_json.steps
+        wizardStepArray: wizardSchema.step_array_json.wizardSteps,
+        viewerStepArray: wizardSchema.step_array_json.viewerSteps
       });
     } catch (error) {
       console.log(error);

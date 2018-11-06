@@ -77,11 +77,12 @@ class JsonSchemaFormsAccordion extends Component {
       formData,
       submit,
       cancel,
+      className,
       ...accordionContext
     } = this.props;
 
     return (
-      <div>
+      <div className={className}>
         {accordionInstructions && (
           <Instructions content={accordionInstructions} isNotStep={true} />
         )}

@@ -80,6 +80,7 @@ class JsonSchemaForm extends Component {
 
   render() {
     const {
+      className,
       schema,
       uiSchema,
       formData,
@@ -96,7 +97,7 @@ class JsonSchemaForm extends Component {
     const handleChange = onChange || updateFormDataInStore;
 
     return (
-      <div>
+      <div className={className}>
         <BootstrapCustomForm
           key={id}
           onRef={ref => (this.form = ref)}

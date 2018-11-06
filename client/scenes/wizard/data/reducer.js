@@ -5,14 +5,15 @@ const initialState = {
   version: null,
   document: null,
   project: null,
-  stepArray: null,
+  wizardStepArray: null,
+  viewerStepArray: null,
   stepSchemas: null,
   stepFormData: {}
 };
 
-const getInitialStepFormData = (stepArray, stepSchemas) => {
+const getInitialStepFormData = (wizardStepArray, stepSchemas) => {
   var stepFormData = {};
-  stepArray.forEach(step => {
+  wizardStepArray.forEach(step => {
     if (
       step.childComponentType === "JSON_SCHEMA_FORMS_ACCORDION" ||
       step.childComponentType === "JSON_SCHEMA_FORM"
@@ -42,7 +43,7 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         ...action,
         stepFormData: getInitialStepFormData(
-          action.stepArray,
+          action.wizardStepArray,
           action.stepSchemas
         )
       };
