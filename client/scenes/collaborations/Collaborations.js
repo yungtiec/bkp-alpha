@@ -49,28 +49,30 @@ export default ({
   } = filterDocuments(documentIds, documentsById);
 
   return (
-    <div className="main-container-collaborations">
-      <div className="collaborations-container col-md-7">
-        <div className="projects-containers__collaboration-header">
-          <span className="collaborations-header">Open Collaborations</span>
-        </div>
-        <div className="project-row">
-          <span className="projects-containers__collaboration-sub-header">
-            Thought Leadership
-          </span>
-          <ListDocumentGrid
-            documentIds={thoughtLeadershipIds}
-            documentsById={thoughtLeadershipById}
-          />
-        </div>
-        <div>
-          <span className="projects-containers__collaboration-sub-header">
-            Transparency Scorecards
-          </span>
-          <ListDocumentGrid
-            documentIds={scorecardIds}
-            documentsById={scorecardsById}
-          />
+    <div>
+      <div className="main-container-collaborations">
+        <div className="collaborations-container col-md-7">
+          <div className="projects-containers__collaboration-header">
+            <span className="collaborations-header">Open Collaborations</span>
+          </div>
+          <div className="project-row">
+            <span className="projects-containers__collaboration-sub-header">
+              Thought Leadership
+            </span>
+            <ListDocumentGrid
+              documentIds={thoughtLeadershipIds}
+              documentsById={thoughtLeadershipById}
+            />
+          </div>
+          <div>
+            <span className="projects-containers__collaboration-sub-header">
+              Transparency Scorecards
+            </span>
+            <ListDocumentGrid
+              documentIds={scorecardIds}
+              documentsById={scorecardsById}
+            />
+          </div>
         </div>
       </div>
     </div>
