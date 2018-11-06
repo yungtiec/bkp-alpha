@@ -2,6 +2,7 @@ import "./Collaborations.scss";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { ListProject, ListDocumentGrid } from "../../components";
+import { Helmet } from 'react-helmet';
 
 const filterDocuments = (documentIds, documentsById) => {
   let scorecardsById = [];
@@ -50,6 +51,9 @@ export default ({
 
   return (
     <div>
+      <Helmet>
+        <title>The Brooklyn Project | Collaborate</title>
+      </Helmet>
       <div className="main-container-collaborations">
         <div className="collaborations-container col-md-7">
           <div className="projects-containers__collaboration-header">
