@@ -31,3 +31,6 @@ export { InputEmail, InputPassword, InputText } from "./FormsyInputs/Inputs";
 export { default as ScoreInput } from "./FormsyInputs/ScoreInput";
 export { default as ProjectScorecardInputs } from "./ProjectScorecardInputs";
 export { default as FeedbackModal } from "./FeedbackModal";
+export {
+  default as WizardDocumentViewer
+} from "./WizardDocumentViewer/WizardDocumentViewer";

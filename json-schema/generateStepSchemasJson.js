@@ -12,7 +12,8 @@ module.exports = function generateStepSchemasJson() {
       defaultFormData: {
         disclosureTable: principles[key].disclosureTable,
         analysis: ""
-      }
+      },
+      viewerSchema: principleViewerSchema(principles[key])
     };
   }
   return stepSchemasJson;
@@ -68,7 +69,11 @@ var stepSchemasJson = {
         title: null,
         link: null
       }
-    ]
+    ],
+    viewerSchema: {
+      title: "List Disclosures Evaluated: ",
+      "viewer:widget": "CollectionTable"
+    }
   },
   generalCommentary: {
     schema: {
@@ -76,7 +81,10 @@ var stepSchemasJson = {
       type: "string"
     },
     uiSchema: { "ui:widget": "DependentTextEditorWidget" },
-    defaultFormData: ""
+    defaultFormData: "",
+    viewerSchema: {
+      title: ""
+    }
   }
 };
 
@@ -96,8 +104,8 @@ const disclosureStatusDefinition = {
     status: {
       title: "",
       type: "string",
-      enum: ["N/A", "x", "1/2", "checked"],
-      enumNames: ["N/A", "x", "1/2", "checked"]
+      enum: ["N/A", "x", "1/2", "✓"],
+      enumNames: ["N/A", "x", "1/2", "✓"]
     },
     sources: {
       title: "",
@@ -180,6 +188,23 @@ const principleUiSchema = {
   }
 };
 
+const principleViewerSchema = principle => ({
+  title: principle.title,
+  transparencyScore: {
+    "viewer:widget": "TitleWithInlineData",
+    title: "transparency score: %formData%",
+    placeholder: "no data"
+  },
+  disclosureTable: {
+    "viewer:widget": "CollectionTable",
+    headers: ["disclosure", "status", "sources"]
+  },
+  analysis: {
+    title: "analysis",
+    "viewer:widget": "HtmlBlock"
+  }
+});
+
 const accordionOrder = [
   "principle1",
   "principle2",
@@ -195,7 +220,7 @@ const accordionOrder = [
 
 const principles = {
   principle1: {
-    title: "Principle 1: Token Design",
+    title: "Principle 1: Consumer Token Design",
     disclosureTable: [
       {
         disclosure: "Description of token’s intrinsic features and operation"

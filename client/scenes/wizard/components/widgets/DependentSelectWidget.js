@@ -54,11 +54,11 @@ const DependentSelectWidget = props => {
 };
 
 const mapState = (state, ownProps) => {
-  const { stepArray, stepSchemas } = getStepArrayAndSchemas(state);
+  const { wizardStepArray, stepSchemas } = getStepArrayAndSchemas(state);
   return {
     ...ownProps,
     stepFormData: getStepFormData(state),
-    stepArray,
+    wizardStepArray,
     stepSchemas
   };
 };

@@ -1,5 +1,5 @@
 "use strict";
-var stepArray = require("../../../json-schema/step-array.json");
+var generateStepArrays = require("../../../json-schema/generateStepArrays");
 var generateStepSchemasJson = require("../../../json-schema/generateStepSchemasJson");
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
       "wizard_schemas",
       [
         {
-          step_array_json: stepArray,
+          step_array_json: generateStepArrays(),
           step_schemas_json: generateStepSchemasJson(),
           createdAt: new Date(),
           updatedAt: new Date()
