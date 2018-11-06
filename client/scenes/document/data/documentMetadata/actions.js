@@ -72,11 +72,6 @@ export function upvoteDocument({
         upvotesFrom,
         downvotesFrom
       });
-      dispatch(
-        loadModal("COMMENT_MODAL", {
-          versionId
-        })
-      );
     } catch (err) {
       console.log(err);
     }
