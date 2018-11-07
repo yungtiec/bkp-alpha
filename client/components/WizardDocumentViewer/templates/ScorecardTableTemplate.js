@@ -7,6 +7,14 @@ export default ({
   formDataOrder,
   formDataKey
 }) => {
+  var averageScore =
+    jsonSchemas[formDataOrder].reduce((sum, principle) => {
+      var cur = formData[principle][formDataKey] || 0;
+      return cur + sum;
+    }, 0) /
+    jsonSchemas[formDataOrder].filter(
+      principle => formData[principle][formDataKey]
+    ).length;
   return (
     <table>
       <thead>
@@ -27,7 +35,7 @@ export default ({
             <b>OVERALL TRANSPARENCY SCORE</b>
           </td>
           <td className="text-left">
-            <b>9.0</b>
+            <b>{averageScore}</b>
           </td>
         </tr>
       </tbody>
