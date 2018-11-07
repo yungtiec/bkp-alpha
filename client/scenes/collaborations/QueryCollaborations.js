@@ -7,8 +7,11 @@ import { fetchAllProjects } from "../../data/projects/actions";
 import { getAllProjects } from "../../data/projects/reducer";
 import {
   fetchLastestDocumentsWithStats,
-  getDocumentListing
+  getDocumentListing,
+  loadModal,
+  hideModal
 } from "../../data/reducer";
+import { notify } from "reapop";
 import { batchActions } from "redux-batched-actions";
 
 const LoadableProjects = Loadable({
@@ -59,6 +62,15 @@ const actions = dispatch => {
         dispatch(fetchAllProjects()),
         dispatch(fetchLastestDocumentsWithStats())
       ]);
+    },
+    loadModal(modalType, modalProps) {
+      dispatch(loadModal(modalType, modalProps));
+    },
+    hideModal() {
+      dispatch(hideModal());
+    },
+    notify(obj) {
+      dispatch(notify(obj));
     }
   };
 };
