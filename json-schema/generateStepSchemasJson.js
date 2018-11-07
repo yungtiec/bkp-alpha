@@ -20,7 +20,7 @@ module.exports = function generateStepSchemasJson() {
 };
 
 var stepSchemasJson = {
-  listDisclosuresEvaluated: {
+  sourcesEvaluated: {
     schema: {
       definitions: {
         Source: {
@@ -121,7 +121,7 @@ const disclosureStatusDefinition = {
           value: "LOAD_SELECT_CREATABLE_MODAL"
         }
       ],
-      "enum:optionDependencyPath": "listDisclosuresEvaluated",
+      "enum:optionDependencyPath": "sourcesEvaluated",
       "enum:optionDependencyLabelKey": "title"
     }
   }
