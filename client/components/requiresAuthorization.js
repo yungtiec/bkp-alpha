@@ -3,11 +3,7 @@ import { connect } from "react-redux";
 import history from "../history";
 import { isEmpty } from "lodash";
 
-export default function requiresAuthorization({
-  Component,
-  roleRequired,
-  checkDocumentEditRight
-}) {
+export default function requiresAuthorization({ Component, roleRequired }) {
   class AuthorizationComponent extends React.Component {
     componentDidMount() {
       this.checkAndRedirect();
@@ -39,7 +35,7 @@ export default function requiresAuthorization({
 
   const mapStateToProps = state => {
     return {
-      user: state.data.user,
+      user: state.data.user
     };
   };
 
