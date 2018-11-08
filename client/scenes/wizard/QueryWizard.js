@@ -5,6 +5,7 @@ import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { fetchStepArrayAndSchemas } from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
 import { loadModal, hideModal } from "../../data/reducer";
+import { requiresAuthorization } from "../../components";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import Steps, { Step } from "rc-steps";
@@ -106,9 +107,12 @@ const mapState = state => {
 
 const actions = { fetchStepArrayAndSchemas, loadModal, hideModal };
 
-export default withRouter(
-  connect(
-    mapState,
-    actions
-  )(Wizard)
-);
+export default requiresAuthorization({
+  Component: withRouter(
+    connect(
+      mapState,
+      actions
+    )(Wizard)
+  ),
+  roleRequired: ["project_editor", "project_admin", "admin", "alpha_user"]
+});
