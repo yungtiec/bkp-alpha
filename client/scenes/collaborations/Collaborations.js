@@ -83,7 +83,7 @@ export default ({
             />
           </div>
           <div>
-            <span className="projects-containers__collaboration-sub-header">
+            <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
               Transparency Scorecards
             </span>
             <ListDocumentGrid
