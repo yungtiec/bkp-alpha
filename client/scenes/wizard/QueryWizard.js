@@ -1,16 +1,14 @@
-import "./wizard.scss";
 import React, { Component } from "react";
-import WizardStep from "./components/WizardStep";
+import { connect } from "react-redux";
 import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { fetchStepArrayAndSchemas } from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
 import { loadModal, hideModal } from "../../data/reducer";
 import { requiresAuthorization } from "../../components";
 import autoBind from "react-autobind";
-import { connect } from "react-redux";
-import Steps, { Step } from "rc-steps";
+import Wizard from "./Wizard";
 
-class Wizard extends Component {
+class QueryWizard extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -31,62 +29,18 @@ class Wizard extends Component {
   }
 
   render() {
-    const { wizardStepArray, stepSchemas, stepFormData, match } = this.props;
+    const {
+      wizardStepArray,
+      stepSchemas,
+      stepFormData,
+      match,
+      isLoggedIn
+    } = this.props;
     const currentStep = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
-    if (!stepSchemas || !stepSchemas) return null;
-    return (
-      <div className="main-container">
-        <Steps
-          className="wizard-steps py-3 mb-5"
-          current={currentStep}
-          labelPlacement="vertical"
-        >
-          {wizardStepArray.map((step, i) => (
-            <Step
-              title={step.title}
-              description=""
-              status={
-                i + 1 === currentStep
-                  ? "process"
-                  : i + 1 >= currentStep
-                    ? "wait"
-                    : "finish"
-              }
-            />
-          ))}
-        </Steps>
-        {wizardStepArray[currentStep] &&
-          wizardStepArray[currentStep].id !== "reviewAndSubmit" && (
-            <button
-              className="btn btn-outline-primary"
-              onClick={this.loadPreviewModa}
-              style={{ float: "right" }}
-            >
-              Preview
-            </button>
-          )}
-        <Switch>
-          {wizardStepArray.map((step, i) => (
-            <Route
-              key={`wizard-steps__${i + 1}`}
-              path={`${match.path}/step/${i + 1}`}
-              render={props => (
-                <WizardStep
-                  {...step}
-                  stepNum={i + 1}
-                  numStep={wizardStepArray.length}
-                  jsonSchema={stepSchemas[step.id]}
-                  formData={stepFormData[step.id]}
-                />
-              )}
-            />
-          ))}
-          <Redirect to={`${match.path}/step/1`} />
-        </Switch>
-      </div>
-    );
+    if (!stepSchemas || !stepSchemas || !isLoggedIn) return null;
+    return <Wizard {...this.props} />;
   }
 }
 
@@ -101,18 +55,16 @@ const mapState = state => {
     viewerStepArray,
     wizardStepArray,
     stepSchemas,
-    stepFormData
+    stepFormData,
+    isLoggedIn: !!state.data.user.id
   };
 };
 
 const actions = { fetchStepArrayAndSchemas, loadModal, hideModal };
 
-export default requiresAuthorization({
-  Component: withRouter(
-    connect(
-      mapState,
-      actions
-    )(Wizard)
-  ),
-  roleRequired: ["project_editor", "project_admin", "admin", "alpha_user"]
-});
+export default withRouter(
+  connect(
+    mapState,
+    actions
+  )(QueryWizard)
+);
