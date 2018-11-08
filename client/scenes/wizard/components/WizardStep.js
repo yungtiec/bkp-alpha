@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
 import history from "../../../history";
+import { matchPath } from 'react-router';
 import {
   Instructions,
   TokenInformationForm,
@@ -34,17 +35,21 @@ class WizardStep extends Component {
 
   next() {
     // should create or submit changes on next
-    console.log('next', this.props);
-    if (this.props.stepNum <= this.props.numStep)
-      if (this.props.version)
-        history.push(`/wizard/step/${this.props.stepNum + 1}/version/${this.props.version.id}`);
+    const { stepNum, numStep, version } = this.props;
+    if (stepNum <= numStep)
+      if (version.id)
+        history.push(`/wizard/step/${stepNum + 1}/version/${version.id}`);
       else
-        history.push(`/wizard/step/${this.props.stepNum + 1}`);
+        history.push(`/wizard/step/${stepNum + 1}`);
   }
 
   back() {
+    const { stepNum, version } = this.props;
     if (this.props.stepNum > 1)
-      history.push(`/wizard/step/${this.props.stepNum - 1}`);
+      if (this.props.versionId)
+        history.push(`/wizard/step/${stepNum - 1}/version/${version.id}`);
+      else
+        history.push(`/wizard/step/${stepNum - 1}`);
   }
 
   render() {
@@ -62,10 +67,7 @@ class WizardStep extends Component {
       numStep
     } = this.props;
 
-    console.log('wizard', this.props);
-
     const ChildComponent = CHILD_COMPONENTS[childComponentType];
-    console.log({formData});
     return (
       <Fragment>
         <h5>{title}</h5>

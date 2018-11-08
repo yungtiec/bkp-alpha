@@ -57,7 +57,6 @@ class TokenInformationForm extends React.Component {
       project: this.state.project.value,
       description: this.state.description
     });
-    this.props.submit.handler();
   }
 
   render() {

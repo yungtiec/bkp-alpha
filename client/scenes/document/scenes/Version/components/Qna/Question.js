@@ -102,7 +102,6 @@ export default class Question extends Component {
               <a
                 class={`dropdown-item ${h.id === question.id ? "active" : ""}`}
                 onClick={() => {
-                  console.log("hitting this");
                   revertToPrevQuestion({
                     versionQuestionId: h.id,
                     prevVersionQuestionId: question.id

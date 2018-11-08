@@ -8,11 +8,37 @@ import { loadModal, hideModal } from "../../data/reducer";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import Steps, { Step } from "rc-steps";
+import { matchPath } from 'react-router';
 
 class Wizard extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
+  }
+
+  getStepAndVersion() {
+    const currentVersionAndStepMatch = matchPath(this.props.history.location.pathname, {
+      path : '/wizard/step/:step/version/:versionId',
+    });
+    const currentStepMatch = matchPath(this.props.history.location.pathname, {
+      path : '/wizard/step/:step',
+    });
+    if (currentVersionAndStepMatch) {
+      const {step, versionId} = currentVersionAndStepMatch.params;
+      return {
+        versionId: versionId,
+        currentStep : Number(step)
+      }
+    } else {
+      const {step} = currentStepMatch.params;
+      if (this.props.version) {
+        return {
+          versionId: this.props.version.id,
+          currentStep : Number(step)
+        }
+      }
+      return { currentStep : Number(step) };
+    }
   }
 
   componentDidMount() {
@@ -39,10 +65,7 @@ class Wizard extends Component {
       document,
       version
     } = this.props;
-    console.log({ stepArray });
-    const currentStep = Number(
-      window.location.pathname.split("/").slice(-1)[0]
-    );
+    const {currentStep, versionId} = this.getStepAndVersion();
     if (!stepSchemas || !stepSchemas) return null;
     return (
       <div className="main-container">
@@ -86,6 +109,7 @@ class Wizard extends Component {
                   formData={stepFormData[step.id]}
                   document={document}
                   version={version}
+                  versionId={versionId}
                 />
               )}
             />

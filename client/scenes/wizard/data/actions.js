@@ -1,5 +1,6 @@
 import * as types from "./actionTypes.js";
 import { getWizardSchemaById, postDocumentMetadata, putVersionContentJson } from "./services";
+import history from '../../../history';
 
 export function fetchStepArrayAndSchemas(wizardSchemaId) {
   return async (dispatch, getState) => {
@@ -61,6 +62,7 @@ export function submitDocumentMetadata({ title, description, project }) {
           version,
           project
         });
+        history.push(`/wizard/step/3/version/${version.id}`);
       } else {
         const document = await putDocumentMetadata({
           title,
