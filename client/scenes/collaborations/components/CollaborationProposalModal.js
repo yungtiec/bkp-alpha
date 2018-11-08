@@ -1,3 +1,4 @@
+import "./CollaborationProposalModal.scss";
 import React, { Component } from "react";
 import axios from "axios";
 import autoBind from "react-autobind";
@@ -41,6 +42,7 @@ export default class CollaborationProposalModal extends Component {
         isOpen={true}
         onRequestClose={this.props.hideModal}
         contentLabel="CollaborationProposalModal"
+        className="collaboration-proposal-modal"
       >
         <div className="container">
           <div className="form-group">
