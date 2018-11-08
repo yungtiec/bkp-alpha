@@ -18,7 +18,9 @@ export default function requiresAuthorization({ Component, roleRequired }) {
         isEmpty(this.props.user) ||
         (roleRequired &&
           !isEmpty(this.props.user) &&
-          !roleRequired.indexOf(this.props.user.roles[0].name) === -1)
+          (!this.props.user.roles[0] ||
+            (this.props.user.roles[0] &&
+              !roleRequired.indexOf(this.props.user.roles[0].name) === -1)))
       ) {
         history.push("/unauthorized");
       }
