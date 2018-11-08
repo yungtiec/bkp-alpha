@@ -8,14 +8,16 @@ import {
   Instructions,
   TokenInformationForm,
   JsonSchemaForm,
-  JsonSchemaFormsAccordion
+  JsonSchemaFormsAccordion,
+  WizardDocumentFinalReview
 } from "./index";
 
 const CHILD_COMPONENTS = {
   INSTRUCTIONS: Instructions,
   TOKEN_INFORMATION_FORM: TokenInformationForm,
   JSON_SCHEMA_FORM: JsonSchemaForm,
-  JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion
+  JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion,
+  WIZARD_DOCUMENT_FINAL_REVIEW: WizardDocumentFinalReview
 };
 
 class WizardStep extends Component {

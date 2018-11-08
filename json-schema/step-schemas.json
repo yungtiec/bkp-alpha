@@ -1,5 +1,5 @@
 {
-  "listDisclosuresEvaluated": {
+  "sourcesEvaluated": {
     "schema": {
       "definitions": {
         "Source": {
@@ -85,7 +85,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["LOAD_SOURCE_MODAL"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -187,7 +187,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -302,7 +302,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -421,7 +421,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -528,7 +528,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -633,7 +633,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -733,7 +733,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -836,7 +836,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -944,7 +944,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }
@@ -1050,7 +1050,7 @@
                 "title": "",
                 "type": "string",
                 "enum": ["Please go back and list the dislcosures evaluated"],
-                "enum:optionDependencyPath": "listDisclosuresEvaluated",
+                "enum:optionDependencyPath": "sourcesEvaluated",
                 "enum:optionDependencyLabelKey": "title"
               }
             }

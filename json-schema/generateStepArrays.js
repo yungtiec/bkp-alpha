@@ -20,13 +20,13 @@ var wizardSteps = [
     childComponentType: "TOKEN_INFORMATION_FORM"
   },
   {
-    id: "listDisclosuresEvaluated",
-    title: "List Disclosures Evaluated",
+    id: "sourcesEvaluated",
+    title: "Sources Evaluated",
     childComponentType: "JSON_SCHEMA_FORM"
   },
   {
     id: "analysisOfDisclosures",
-    title: "Provide Analysis of Disclosures",
+    title: "Provide Analysis of Transparency",
     childComponentType: "JSON_SCHEMA_FORMS_ACCORDION"
   },
   {
@@ -37,8 +37,7 @@ var wizardSteps = [
   {
     id: "reviewAndSubmit",
     title: "Review & Submit",
-    childComponentType: "INSTRUCTIONS",
-    content: "render scorecard here"
+    childComponentType: "WIZARD_DOCUMENT_FINAL_REVIEW"
   }
 ];
 
@@ -64,7 +63,7 @@ var viewerSteps = [
     )
   },
   {
-    id: "listDisclosuresEvaluated",
+    id: "sourcesEvaluated",
     title: "List Disclosures Evaluated",
     template: "JSON_SCHEMA_FORM_DATA_TEMPLATE"
   },

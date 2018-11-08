@@ -56,13 +56,16 @@ class Wizard extends Component {
             />
           ))}
         </Steps>
-        <button
-          className="btn btn-outline-primary"
-          onClick={this.loadPreviewModa}
-          style={{ float: "right" }}
-        >
-          Preview
-        </button>
+        {wizardStepArray[currentStep] &&
+          wizardStepArray[currentStep].id !== "reviewAndSubmit" && (
+            <button
+              className="btn btn-outline-primary"
+              onClick={this.loadPreviewModa}
+              style={{ float: "right" }}
+            >
+              Preview
+            </button>
+          )}
         <Switch>
           {wizardStepArray.map((step, i) => (
             <Route
