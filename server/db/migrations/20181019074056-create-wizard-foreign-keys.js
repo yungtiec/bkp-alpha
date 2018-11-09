@@ -17,3 +17,5 @@ module.exports = {
     return [queryInterface.removeColumn("wizard_schemas", "parentId")];
   }
 };
+
+// merge

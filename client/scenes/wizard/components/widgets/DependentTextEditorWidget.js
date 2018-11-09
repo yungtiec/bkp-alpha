@@ -17,3 +17,5 @@ const mapState = (state, ownProps) => {
 const actions = {};
 
 export default connect(mapState, actions)(DependentTextEditorWidget);
+
+// merge

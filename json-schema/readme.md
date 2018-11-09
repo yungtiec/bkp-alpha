@@ -1,3 +1,5 @@
+// merge
+
 Create a component that automatically generates a React form based on a JSON Schema and the consumer token framework.
 
 ## Reason
