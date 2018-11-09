@@ -6,7 +6,6 @@ import { UploadInterface, IssueInput, OutstandingIssue } from "./components";
 import {
   SidebarLayout,
   CustomScrollbar,
-  requiresAuthorization,
   ProjectScorecardInputs
 } from "../../../../components";
 import { DocumentHeader, VersionToolbar } from "../../components";

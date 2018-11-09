@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-  Projects,
   Collaborations,
+  Documents,
   Project,
   Profile,
   Admin,
@@ -13,7 +13,8 @@ import {
   ActivityBoard,
   Dashboard,
   Landing,
-  Document
+  Document,
+  Wizard
 } from "./scenes";
 import {
   Login,
@@ -50,6 +51,11 @@ class Routes extends Component {
             path="/reset-password/:token"
             component={ResetPassword}
           />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/collaborations"
+            component={Collaborations}
+          />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
@@ -59,8 +65,8 @@ class Routes extends Component {
           )}
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/projects"
-            component={Projects}
+            path="/documents"
+            component={Documents}
           />
           <RouteWithLayout
             layout={LayoutWithNav}
@@ -71,6 +77,11 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/project/:symbol"
             component={Project}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/wizard"
+            component={Wizard}
           />
           {isLoggedIn && (
             <RouteWithLayout
@@ -104,12 +115,9 @@ class Routes extends Component {
               component={Admin}
             />
           )}
-          {/* Displays our Collaborations component as a fallback */}
-          <RouteWithLayout
-            layout={LayoutWithNav}
-            path="/"
-            component={Collaborations}
-          />
+          {/* Displays our Login component as a fallback */}
+          {!isLoggedIn && <Route component={Landing} />}
+          {isLoggedIn && <Redirect to="/project/BKP/document/1/version/1" />}
         </Switch>
       </div>
     );
