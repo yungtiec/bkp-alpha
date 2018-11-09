@@ -20,7 +20,10 @@ export default class Answers extends Component {
       diff: this.diff.main(
         this.props.answer.markdown,
         this.props.answer.markdown
-      )
+      ),
+      editing: false,
+      versionAnswerIdBeforeReverting: this.props.answer.id,
+      versionAnswerBeforeReverting: this.props.answer.markdown
     };
   }
 
@@ -31,7 +34,9 @@ export default class Answers extends Component {
         diff: this.diff.main(
           this.props.answer.markdown,
           this.props.answer.markdown
-        )
+        ),
+        versionAnswerIdBeforeReverting: this.props.answer.id,
+        versionAnswerBeforeReverting: this.props.answer.markdown
       };
       this.setState(prevState => ({ ...prevState, ...newState }));
       setTimeout(
@@ -42,7 +47,9 @@ export default class Answers extends Component {
   }
 
   handleEditOnClick() {
-    this.props.toggleAnswerEditor({ versionQuestionId: this.props.qnaId });
+    this.setState({
+      editing: true
+    });
   }
 
   handleValueChange(markdown) {
@@ -53,25 +60,36 @@ export default class Answers extends Component {
   }
 
   handleSubmit() {
-    this.props.editAnswer({
-      versionAnswerId: this.props.answer.id,
-      markdown: this.state.markdown,
-      versionQuestionId: this.props.qnaId
-    });
+    if (
+      this.state.versionAnswerBeforeReverting.trim() !==
+      this.state.markdown.trim()
+    )
+      this.props.editAnswer({
+        versionAnswerId: this.props.answer.id,
+        markdown: this.state.markdown,
+        versionQuestionId: this.props.qnaId
+      });
     this.setState({
+      editing: false,
       diff: this.diff.main(this.state.markdown, this.state.markdown)
     });
   }
 
   handleCancel() {
-    this.props.toggleAnswerEditor({ versionQuestionId: this.props.qnaId });
     this.setState({
+      editing: false,
       diff: this.diff.main(
         this.props.answer.markdown,
         this.props.answer.markdown
       ),
       markdown: this.props.answer.markdown
     });
+    if (this.state.versionAnswerIdBeforeReverting !== this.props.answer.id)
+      this.props.revertToPrevAnswer({
+        versionQuestionId: this.props.qnaId,
+        versionAnswerId: this.state.versionAnswerIdBeforeReverting,
+        prevVersionAnswerId: this.props.answer.id
+      });
   }
 
   renderToolbar(markmirror, renderButton) {
@@ -122,10 +140,11 @@ export default class Answers extends Component {
 
   render() {
     const { answer, qnaId, handleCommentOnClick } = this.props;
+
     return (
       <ContentEditingContainer
         otherClassNames="qna__answer-container"
-        editing={this.props.isBeingEdited}
+        editing={this.state.editing}
         handleEditOnClick={this.handleEditOnClick}
         user={this.props.user}
         punditType="Disclosure"
@@ -135,7 +154,7 @@ export default class Answers extends Component {
           disclosure: this.props.documentMetadata
         }}
       >
-        {this.props.isBeingEdited ? (
+        {this.state.editing ? (
           <div>
             <Markmirror
               key="answer-markmirror"
@@ -151,7 +170,6 @@ export default class Answers extends Component {
             />
             <div className="d-flex justify-content-end my-3">
               <button className="btn btn-primary" onClick={this.handleSubmit}>
-                Save
                 Save
               </button>
               <button

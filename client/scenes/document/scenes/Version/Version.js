@@ -210,8 +210,6 @@ class Document extends Component {
       versionQnasById,
       versionQnaIds,
       editQuestion,
-      toggleQuestionEditor,
-      toggleAnswerEditor,
       editAnswer,
       editScorecard,
       revertToPrevQuestion,
@@ -291,8 +289,6 @@ class Document extends Component {
             editScorecard={editScorecard}
             editQuestion={editQuestion}
             editAnswer={editAnswer}
-            toggleQuestionEditor={toggleQuestionEditor}
-            toggleAnswerEditor={toggleAnswerEditor}
             revertToPrevQuestion={revertToPrevQuestion}
             revertToPrevAnswer={revertToPrevAnswer}
             versionMetadata={versionMetadata}
@@ -344,6 +340,7 @@ class Document extends Component {
             >
               {sidebarContext === "comments" && (
                 <SidebarComments
+                  documentMetadata={documentMetadata}
                   isLoggedIn={isLoggedIn}
                   anonymity={anonymity}
                   commentIds={commentIds}

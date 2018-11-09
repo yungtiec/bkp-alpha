@@ -29,7 +29,20 @@ export default ({ documentIds, documentsById }) => {
         const date = moment(getLatestVersionDate(document)).format(
           "MMM DD YYYY"
         );
-        console.log(date);
+        const creatorRole =
+          document.creator &&
+          document.creator.roles[0] &&
+          document.creator.roles[0].name;
+        var tagArray = [
+          `comments (${document.num_total_comments || 0})`,
+          `upvotes (${document.num_upvotes || 0})`,
+          `downvotes (${document.num_downvotes || 0})`
+        ];
+        if (
+          !creatorRole ||
+          (creatorRole !== "admin" && creatorRole !== "project_admin")
+        )
+          tagArray.push(`community contribution`);
         return (
           <ListItemGrid
             key={id}
@@ -37,19 +50,11 @@ export default ({ documentIds, documentsById }) => {
               document.project.symbol
             }/document/${id}/version/${document.versions[0].id}
           `}
-            mainTitle={
-              document.project && document.project.symbol
-                ? `${document.project.name} - ${document.title}`
-                : document.title
-            }
+            mainTitle={document.title}
             subtitle={`by ${document.creator.name}`}
             textUpperRight={date}
             mainText={document.description || " "}
-            tagArray={[
-              `comments (${document.num_total_comments || 0})`,
-              `upvotes (${document.num_upvotes || 0})`,
-              `downvotes (${document.num_downvotes || 0})`
-            ]}
+            tagArray={tagArray}
           />
         );
       })}

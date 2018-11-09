@@ -1,4 +1,3 @@
-import "./Wizard.scss";
 import React, { Component } from "react";
 import WizardStep from "./components/WizardStep";
 import { Switch, Route, Link, Redirect } from "react-router-dom";

@@ -33,7 +33,7 @@ export default class CommentBox extends Component {
           name="textarea"
           value={this.state.value}
           onChange={this.handleChange}
-          placeholder="Please give feedback on the framework..."
+          placeholder="Please give feedback..."
         />
         {this.props.onCancel ? (
           <div className="comment-box__actions">

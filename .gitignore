@@ -13,3 +13,4 @@ reference
 old-db-models
 public/build/library
 yarn.lock
+server/.idea

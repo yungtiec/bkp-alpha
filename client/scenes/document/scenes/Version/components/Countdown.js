@@ -33,8 +33,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
             </p>
             <ReactTooltip id="countdown-explaination" type="light">
               <span>
-                Once the countdown ends, the editors will go over your feedback,
-                edit the document and publish a new version.
+                Once the countdown ends, you will no longer be able to provide feedback.
               </span>
             </ReactTooltip>
           </div>
