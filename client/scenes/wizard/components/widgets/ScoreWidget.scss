@@ -1,0 +1,31 @@
+.score-widget__unit {
+  flex: 1;
+  text-align: center;
+  padding: 5px;
+  color: rgb(69, 157, 249);
+  border-width: 1px 0 1px 1px;
+  border-color: rgb(69, 157, 249);
+  border-style: solid;
+  background-color: rgba(69, 157, 249, 0.08);
+  cursor: pointer;
+}
+
+.score-widget__unit:last-of-type {
+  border-right-width: 1px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.score-widget__unit:first-of-type {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.score-widget__unit:hover {
+  background-color: rgba(69, 157, 249, 0.2);
+}
+
+.score-widget__unit.is-focus {
+  color: white;
+  background-color: rgb(69, 157, 249);
+}
