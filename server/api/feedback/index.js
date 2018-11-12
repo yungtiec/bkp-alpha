@@ -13,3 +13,9 @@ module.exports = router;
  *
  */
 router.post("/", ensureAuthentication, feedbackController.postFeedback);
+
+router.post(
+  "/propose-collaboration",
+  ensureAuthentication,
+  feedbackController.requestForArticleToBeFeatured
+);

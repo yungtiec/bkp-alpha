@@ -22,3 +22,5 @@ module.exports = {
     return [queryInterface.removeColumn("documents", "document_type")];
   }
 };
+
+// merge

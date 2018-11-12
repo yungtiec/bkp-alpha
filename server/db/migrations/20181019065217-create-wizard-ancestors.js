@@ -22,3 +22,5 @@ module.exports = {
     return queryInterface.dropTable("wizard_schemasancestors");
   }
 };
+
+// merge

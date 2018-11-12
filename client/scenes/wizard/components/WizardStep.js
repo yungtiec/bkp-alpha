@@ -9,14 +9,16 @@ import {
   Instructions,
   TokenInformationForm,
   JsonSchemaForm,
-  JsonSchemaFormsAccordion
+  JsonSchemaFormsAccordion,
+  WizardDocumentFinalReview
 } from "./index";
 
 const CHILD_COMPONENTS = {
   INSTRUCTIONS: Instructions,
   TOKEN_INFORMATION_FORM: TokenInformationForm,
   JSON_SCHEMA_FORM: JsonSchemaForm,
-  JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion
+  JSON_SCHEMA_FORMS_ACCORDION: JsonSchemaFormsAccordion,
+  WIZARD_DOCUMENT_FINAL_REVIEW: WizardDocumentFinalReview
 };
 
 class WizardStep extends Component {
@@ -37,7 +39,7 @@ class WizardStep extends Component {
     // should create or submit changes on next
     const { stepNum, numStep, version } = this.props;
     if (stepNum <= numStep)
-      if (version.id)
+      if (version)
         history.push(`/wizard/step/${stepNum + 1}/version/${version.id}`);
       else
         history.push(`/wizard/step/${stepNum + 1}`);
@@ -46,7 +48,7 @@ class WizardStep extends Component {
   back() {
     const { stepNum, version } = this.props;
     if (this.props.stepNum > 1)
-      if (this.props.versionId)
+      if (version)
         history.push(`/wizard/step/${stepNum - 1}/version/${version.id}`);
       else
         history.push(`/wizard/step/${stepNum - 1}`);

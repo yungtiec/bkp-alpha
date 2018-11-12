@@ -6,8 +6,8 @@ import { default as adminReducer } from "./admin/reducer";
 import { default as uploadReducer } from "./upload/reducer";
 import { default as activityBoardReducer } from "./activity-board/reducer";
 import { default as dashboardReducer } from "./dashboard/reducer";
-import { default as wizardReducer } from "./wizard/reducer";
 import { default as documentReducer } from "./document/reducer";
+import { default as wizardReducer } from "./wizard/reducer";
 
 export default combineReducers({
   project: projectReducer,

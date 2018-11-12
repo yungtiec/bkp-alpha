@@ -5,6 +5,7 @@ import NotificationsSystem from "reapop";
 import theme from "reapop-theme-wybo";
 import history from "./history";
 import ReactGA from "react-ga";
+import { Helmet } from 'react-helmet';
 const isProduction = process.env.NODE_ENV === "production";
 
 class App extends Component {
@@ -27,6 +28,9 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>The Brooklyn Project</title>
+        </Helmet>
         <Routes />
         <ModalContainer />
         <NotificationsSystem theme={theme} />

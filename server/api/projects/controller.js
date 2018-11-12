@@ -162,8 +162,8 @@ const deleteProjectEditor = async (req, res, next) => {
 
 module.exports = {
   getProjects,
-  getProject,
   searchProject,
+  getProject,
   getProjectCollaboratorOptions,
   postProjectEditors,
   deleteProjectEditor

@@ -77,6 +77,7 @@ export default class MainContainer extends Component {
 
   render() {
     const {
+      collaboratorsArray,
       comment,
       user,
       projectMetadata,
@@ -95,6 +96,7 @@ export default class MainContainer extends Component {
           >
             <div className="comment-item">
               <MainComment
+                collaboratorsArray={collaboratorsArray}
                 comment={comment}
                 user={user}
                 projectMetadata={projectMetadata}
@@ -109,6 +111,7 @@ export default class MainContainer extends Component {
                 labelAsNotSpam={this.labelAsNotSpam}
               />
               <Replies
+                collaboratorsArray={collaboratorsArray}
                 showReplies={this.state.showReplies}
                 toggleShowReplies={this.toggleShowReplies}
                 comment={comment}

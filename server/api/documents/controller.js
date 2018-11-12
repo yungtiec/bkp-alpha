@@ -77,31 +77,6 @@ const addHistory = versionQuestionOrAnswer => {
 
 const postDocument = async (req, res, next) => {
   try {
-    var document = await Document.create({
-      title: req.body.title,
-      description: req.body.description,
-      creator_id: req.user.id,
-      project_id: req.body.projectId,
-      document_type: req.body.documentType,
-      latest_version: 1
-    });
-    var version = await Version.create({
-      document_id: document.id,
-      creator_id: req.user.id,
-      comment_until_unix: null,
-      version_number: null
-    });
-    res.send({
-      document,
-      version
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-const postDocumentByMarkdown = async (req, res, next) => {
-  try {
     var project = await Project.findOne({
       where: { symbol: req.body.selectedProjectSymbol },
       include: [
@@ -122,7 +97,9 @@ const postDocumentByMarkdown = async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown });
+    console.log('here', req.body);
+    var markdownParsor = new MarkdownParsor({ markdown: req.body.markdown || '' });
+    console.log('here2', project);
     var document = await Document.create({
       title: markdownParsor.title,
       creator_id: req.user.id,
@@ -159,29 +136,30 @@ const postDocumentByMarkdown = async (req, res, next) => {
         });
       }
     );
-    var collaborators = req.body.collaboratorEmails
-      .map(emailOption => emailOption.value)
-      .map(
-        async email =>
-          await User.findOne({ where: { email } }).then(user =>
-            DocumentCollaborator.create({
-              user_id: user ? user.id : null,
-              email,
-              document_id: document.id
-            }).then(collaborator => {
-              return Notification.notifyCollaborators({
-                sender: req.user,
-                collaboratorId: user.id,
-                versionId: version.id,
-                projectSymbol: project.symbol,
-                parentVersionTitle: document.title,
-                action: "created"
-              });
-            })
-          )
-      );
+    //var collaborators = req.body.collaboratorEmails
+    //  .map(emailOption => emailOption.value)
+    //  .map(
+    //    async email =>
+    //      await User.findOne({ where: { email } }).then(user =>
+    //        DocumentCollaborator.create({
+    //          user_id: user ? user.id : null,
+    //          email,
+    //          document_id: document.id
+    //        }).then(collaborator => {
+    //          return Notification.notifyCollaborators({
+    //            sender: req.user,
+    //            collaboratorId: user.id,
+    //            versionId: version.id,
+    //            projectSymbol: project.symbol,
+    //            parentVersionTitle: document.title,
+    //            action: "created"
+    //          });
+    //        })
+    //      )
+    //  );
     version = version.toJSON();
     version.document = document;
+    console.log(version);
     res.send(version);
   } catch (err) {
     next(err);
@@ -224,7 +202,7 @@ const postDownvote = async (req, res, next) => {
   }
 };
 
-const postNewVersionByMarkdown = async (req, res, next) => {
+const postNewVersion = async (req, res, next) => {
   try {
     var {
       markdown,
@@ -304,19 +282,20 @@ const postNewVersionByMarkdown = async (req, res, next) => {
     var prevCollaboratorEmails = parentVersion.document.collaborators.map(
       user => user.email
     );
-    var removedCollaborators = _
-      .difference(prevCollaboratorEmails, collaboratorEmails)
-      .map(async email =>
-        DocumentCollaborator.update(
-          { revoked_access: true },
-          {
-            where: {
-              email,
-              document_id: parentVersion.document.id
-            }
+    var removedCollaborators = _.difference(
+      prevCollaboratorEmails,
+      collaboratorEmails
+    ).map(async email =>
+      DocumentCollaborator.update(
+        { revoked_access: true },
+        {
+          where: {
+            email,
+            document_id: parentVersion.document.id
           }
-        )
-      );
+        }
+      )
+    );
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
@@ -403,31 +382,12 @@ const postNewVersionByMarkdown = async (req, res, next) => {
   }
 };
 
-const putDocument = async (req, res, next) => {
-  try {
-    var updatedMetadata = {};
-    if (req.body.projectId) updatedMetadata.project_id = req.body.projectId;
-    if (req.body.description)
-      updatedMetadata.description = req.body.description;
-    if (req.body.title) updatedMetadata.title = req.body.title;
-    if (req.body.documentType) updatedMetadata.document_type = req.body.documentType;
-    var document = await Document.findById(req.params.documentId).then(d =>
-      d.update(updatedMetadata)
-    );
-    res.sendStatus(document);
-  } catch (err) {
-    next(err);
-  }
-};
-
 module.exports = {
   getDocuments,
   getDocument,
   getDocumentLatestQuestion,
   postDocument,
-  postDocumentByMarkdown,
   postUpvote,
   postDownvote,
-  postNewVersionByMarkdown,
-  putDocument
+  postNewVersion
 };

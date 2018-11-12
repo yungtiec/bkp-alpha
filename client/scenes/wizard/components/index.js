@@ -8,3 +8,6 @@ export { default as TokenInformationForm } from "./TokenInformationForm";
 export {
   default as WizardDocumentPreviewModal
 } from "./WizardDocumentPreviewModal";
+export {
+  default as WizardDocumentFinalReview
+} from './WizardDocumentFinalReview'

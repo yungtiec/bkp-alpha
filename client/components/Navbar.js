@@ -33,7 +33,7 @@ class Navbar extends Component {
       <div className="header">
         <nav className="navbar navbar-expand-md no-gutters navbar--logo">
           <div className="box--left">
-            <Link className="logo-header my-0 ml-0" to="/landing">
+            <Link className="logo-header my-0 ml-0" to="/">
               <img
                 width="100px"
                 height="auto"
@@ -50,27 +50,10 @@ class Navbar extends Component {
             )}
             {width > 600 ? (
               <Link
-                to="/collaborations"
+                to="/"
                 className="navbar__nav-item"
               >
-                collaborations
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
-              <Link
-                to="/project/BKP/document/1/version/2"
-                className="navbar__nav-item"
-              >
-                framework
-              </Link>
-            ) : (
-              ""
-            )}
-            {width > 600 ? (
-              <Link to="/documents" className="navbar__nav-item">
-                documents
+                home
               </Link>
             ) : (
               ""
@@ -81,7 +64,7 @@ class Navbar extends Component {
                 target="_blank"
                 className="navbar__nav-item"
               >
-                discuss
+                join telegram
               </a>
             ) : (
               ""
@@ -163,10 +146,7 @@ const mapDispatch = dispatch => {
 };
 
 export default withRouter(
-  connect(
-    mapState,
-    mapDispatch
-  )(asyncPoll(60 * 1000, onPollInterval)(Navbar))
+  connect(mapState, mapDispatch)(asyncPoll(60 * 1000, onPollInterval)(Navbar))
 );
 
 Navbar.propTypes = {

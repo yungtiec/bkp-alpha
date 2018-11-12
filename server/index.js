@@ -44,8 +44,8 @@ const createApp = () => {
   app.use(morgan("dev"));
 
   // body parsing middleware
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
   // compression middleware
   app.use(compression());
@@ -112,6 +112,9 @@ const createApp = () => {
     }
   );
   app.get("/admin/version/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
+  app.get("/wizard/step/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/admin/list/public/:file", (req, res, next) => {

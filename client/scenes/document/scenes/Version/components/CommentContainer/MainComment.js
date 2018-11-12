@@ -11,7 +11,9 @@ import { ActionableIssueTag, CommentItem } from "./index";
 import { PunditContainer, PunditTypeSet, VisibleIf } from "react-pundit";
 import policies from "../../../../../../policies.js";
 
+
 export default ({
+  collaboratorsArray,
   comment,
   user,
   projectMetadata,
@@ -34,10 +36,11 @@ export default ({
     (comment, url) => comment.replace(new RegExp(url, "g"), `[${url}](${url})`),
     comment.comment
   );
-  const wasEdited = comment.updatedAt === comment.createdAt;
+  const isAdmin = collaboratorsArray ? collaboratorsArray.includes(comment.owner.id) : false;
 
   return (
     <CommentItem
+      isAdmin={isAdmin}
       containerClassName="comment-item__main"
       containerStyle={
         comment.descendents.length ? { borderBottom: "1px solid" } : {}
@@ -83,16 +86,6 @@ export default ({
         </div>
       ) : null}
       <ReactMarkdown className="comment-item__comment" source={commentText} />
-      <div class="comment-item__tooltip">
-        {wasEdited && (
-          <div>
-            (Edited)
-            <p class="comment-item__tooltiptext">
-              {moment(comment.updateAt).calendar()}
-            </p>
-          </div>
-        )}
-      </div>
       {embeddedUrls.length
         ? embeddedUrls.map((url, i) => (
             <Microlink

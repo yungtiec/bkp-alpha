@@ -96,7 +96,7 @@ class AuthForm extends Component {
         onValid={this.enableButton}
         onInvalid={this.disableButton}
       >
-        <div className="form-group row oauth-btns">
+        <div className="form-group d-flex oauth-btns flex-md-row flex-column">
           <a
             href={`/auth/google?state=${encodeURI(
               this.props.location.state
@@ -118,12 +118,16 @@ class AuthForm extends Component {
             />
           </a>
         </div>
-        <div className="d-flex" style={{ margin: "0px -30px" }}>
+        <div
+          className="d-flex justify-content-center"
+          style={{ margin: "0px -30px 20px -30px;" }}
+        >
           <div
             style={{
               border: "1px solid #c2c2c2",
               borderWidth: "0 0 1px 0",
-              width: "45%"
+              width: "45%",
+              marginBottom: "10px"
             }}
           />
           <span style={{ marginTop: "4px" }}>or</span>
@@ -131,7 +135,8 @@ class AuthForm extends Component {
             style={{
               border: "1px solid #c2c2c2",
               borderWidth: "0 0 1px 0",
-              width: "45%"
+              width: "45%",
+              marginBottom: "10px"
             }}
           />
         </div>
@@ -404,16 +409,28 @@ const mapResetPassword = state => {
 };
 
 export const Login = withRouter(
-  connect(mapLogin, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+  connect(
+    mapLogin,
+    { auth, signinWithUport, verifyUportOnMobile }
+  )(AuthForm)
 );
 export const Signup = withRouter(
-  connect(mapSignup, { auth, signinWithUport, verifyUportOnMobile })(AuthForm)
+  connect(
+    mapSignup,
+    { auth, signinWithUport, verifyUportOnMobile }
+  )(AuthForm)
 );
-export const RequestPasswordReset = connect(mapRequestPasswordReset, {
-  requestPasswordReset
-})(AuthForm);
+export const RequestPasswordReset = connect(
+  mapRequestPasswordReset,
+  {
+    requestPasswordReset
+  }
+)(AuthForm);
 export const ResetPassword = withRouter(
-  connect(mapResetPassword, { resetPassword })(AuthForm)
+  connect(
+    mapResetPassword,
+    { resetPassword }
+  )(AuthForm)
 );
 
 /**
