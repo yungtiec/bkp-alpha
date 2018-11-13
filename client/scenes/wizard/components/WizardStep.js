@@ -40,7 +40,7 @@ class WizardStep extends Component {
     const { stepNum, numStep, version } = this.props;
     if (stepNum <= numStep)
       if (version)
-        history.push(`/wizard/step/${stepNum + 1}/version/${version.id}`);
+        history.push(`/wizard/step/${stepNum + 1}/version/${version.version_slug}`);
       else
         history.push(`/wizard/step/${stepNum + 1}`);
   }
@@ -49,7 +49,7 @@ class WizardStep extends Component {
     const { stepNum, version } = this.props;
     if (this.props.stepNum > 1)
       if (version)
-        history.push(`/wizard/step/${stepNum - 1}/version/${version.id}`);
+        history.push(`/wizard/step/${stepNum - 1}/version/${version.version_slug}`);
       else
         history.push(`/wizard/step/${stepNum - 1}`);
   }
@@ -66,7 +66,8 @@ class WizardStep extends Component {
       document,
       match,
       stepNum,
-      numStep
+      numStep,
+      version
     } = this.props;
 
     const ChildComponent = CHILD_COMPONENTS[childComponentType];
@@ -82,6 +83,7 @@ class WizardStep extends Component {
             content={content}
             formData={formData}
             document={document}
+            version={version}
             submit={{ label: "next", handler: this.next }}
             cancel={{ label: "back", handler: this.back }}
             isNotStep={false}

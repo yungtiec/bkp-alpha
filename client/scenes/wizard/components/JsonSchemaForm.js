@@ -10,7 +10,6 @@ import templates from "./templates";
 import widgets from "./widgets";
 import { loadModal, hideModal } from "../../../data/reducer";
 import { withRouter } from "react-router-dom";
-import { matchPath } from 'react-router';
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form
@@ -50,10 +49,8 @@ class JsonSchemaForm extends Component {
   }
 
   async next(submit) {
-    const match = matchPath(this.props.history.location.pathname, {
-      path : '/wizard/step/:step/version/:id',
-    });
-    await this.props.updateVersionContentJson(match.params.id);
+    console.log('props', this.props.version);
+    await this.props.updateVersionContentJson(this.props.version.id);
     submit.handler();
   }
 
@@ -144,9 +141,9 @@ const mapDispatch = (dispatch, ownProps) => ({
         props.formData
       )
     ),
-  updateVersionContentJson: versionId => {
+  updateVersionContentJson: version_slug => {
     dispatch(
-      updateVersionContentJson(versionId)
+      updateVersionContentJson(version_slug)
     )
   },
   loadModal: (modalType, modalProps) =>

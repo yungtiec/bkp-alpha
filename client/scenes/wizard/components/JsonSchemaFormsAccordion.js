@@ -78,6 +78,7 @@ class JsonSchemaFormsAccordion extends Component {
       submit,
       cancel,
       className,
+      version,
       ...accordionContext
     } = this.props;
 
@@ -104,6 +105,7 @@ class JsonSchemaFormsAccordion extends Component {
                   {...accordionContext[accordionItemKey]}
                   formData={formData[accordionItemKey]}
                   formDataPath={`${id}.${accordionItemKey}`}
+                  version={version}
                   submit={
                     i !== accordionOrder.length - 1
                       ? {

@@ -23,6 +23,9 @@ module.exports = (db, DataTypes) => {
     scorecard: {
       type: DataTypes.JSONB
     },
+    version_slug: {
+      type: DataTypes.STRING
+    },
     version_number: {
       type: DataTypes.TEXT
     },

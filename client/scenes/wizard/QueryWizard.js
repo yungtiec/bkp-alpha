@@ -16,31 +16,6 @@ class QueryWizard extends Component {
     autoBind(this);
   }
 
-  getStepAndVersion() {
-    const currentVersionAndStepMatch = matchPath(this.props.history.location.pathname, {
-      path : '/wizard/step/:step/version/:versionId',
-    });
-    const currentStepMatch = matchPath(this.props.history.location.pathname, {
-      path : '/wizard/step/:step',
-    });
-    if (currentVersionAndStepMatch) {
-      const {step, versionId} = currentVersionAndStepMatch.params;
-      return {
-        versionId: versionId,
-        currentStep : Number(step)
-      }
-    } else {
-      const {step} = currentStepMatch.params;
-      if (this.props.version) {
-        return {
-          versionId: this.props.version.id,
-          currentStep : Number(step)
-        }
-      }
-      return { currentStep : Number(step) };
-    }
-  }
-
   componentDidMount() {
     // hardcode wizardSchemaId for now
     this.props.fetchStepArrayAndSchemas(1);
@@ -63,7 +38,6 @@ class QueryWizard extends Component {
       match,
       isLoggedIn
     } = this.props;
-    console.log(this.props);
     const currentStep = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
