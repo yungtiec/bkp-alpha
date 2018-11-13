@@ -188,7 +188,25 @@ export default class Answers extends Component {
             }}
             className="markdown-body"
           >
-            <ReactMarkdown className="qna__answer" source={answer.markdown} />
+            <ReactMarkdown
+              className="qna__answer"
+              source={answer.markdown}
+              renderers={{
+                link: props => {
+                  if (props.href.match(/#(.*?)$/)) {
+                    return (
+                      <a
+                        ref={ref => (this.props.grandParent[props.href.replace("#", "")] = ref)}
+                        href={props.href}
+                      >
+                        {props.children}
+                      </a>
+                    );
+                  }
+                  return <a href={props.href}>{props.children}</a>;
+                }
+              }}
+            />
           </div>
         )}
       </ContentEditingContainer>
