@@ -101,12 +101,18 @@ class Document extends Component {
       this.focusOnContext();
     }
 
-
     if (this.props.location.hash !== prevProps.location.hash) {
       var sectionHash = this.props.location.hash.replace("#", "");
-      var referenceHash = sectionHash.split("_ftn").slice(1);
-      referenceHash.unshift("ref");
-      referenceHash = "_ftn" + referenceHash.join("");
+      var isInFooter = sectionHash.indexOf("ref") !== -1;
+      var referenceHash;
+      if (isInFooter) {
+        referenceHash = sectionHash.replace("ref", "");
+      } else {
+        referenceHash = sectionHash.split("_ftn").slice(1);
+        referenceHash.unshift("ref");
+        referenceHash = "_ftn" + referenceHash.join("");
+      }
+      console.log(referenceHash)
       if (sectionHash) {
         let node = ReactDOM.findDOMNode(this[referenceHash]);
         if (node) {
