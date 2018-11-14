@@ -5,6 +5,7 @@ import { isEmpty } from "lodash";
 import { connect } from "react-redux";
 
 const VersionContent = ({
+  location,
   user,
   isLoggedIn,
   isClosedForComment,
@@ -52,6 +53,8 @@ const VersionContent = ({
               versionMetadata={versionMetadata}
               isDividerTitle={versionQnasById[id].isDividerTitle}
               handleCommentOnClick={commentOnClick}
+              location={location}
+              grandParent={parent}
             />
             {versionQnasById[id].markdown ===
               "### Consumer Token Framework Scorecard" &&
@@ -79,6 +82,8 @@ const VersionContent = ({
               versionMetadata={versionMetadata}
               editAnswer={editAnswer}
               handleCommentOnClick={commentOnClick}
+              location={location}
+              grandParent={parent}
             />
           </Qna>
         </Element>
