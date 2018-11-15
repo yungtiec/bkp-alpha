@@ -21,7 +21,7 @@ class Wizard extends Component {
   }
 
   render() {
-    const { wizardStepArray, stepSchemas, stepFormData, match } = this.props;
+    const { wizardStepArray, stepSchemas, stepFormData, match, version } = this.props;
     const currentStep = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
@@ -68,6 +68,7 @@ class Wizard extends Component {
                   numStep={wizardStepArray.length}
                   jsonSchema={stepSchemas[step.id]}
                   formData={stepFormData[step.id]}
+                  version={version}
                 />
               )}
             />

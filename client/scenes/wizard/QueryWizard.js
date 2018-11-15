@@ -6,6 +6,8 @@ import { getStepArrayAndSchemas } from "./data/reducer";
 import { loadModal, hideModal } from "../../data/reducer";
 import { requiresAuthorization } from "../../components";
 import autoBind from "react-autobind";
+import Steps, { Step } from "rc-steps";
+import { matchPath } from 'react-router';
 import Wizard from "./Wizard";
 
 class QueryWizard extends Component {
@@ -46,16 +48,23 @@ class QueryWizard extends Component {
 
 const mapState = state => {
   const {
-    viewerStepArray,
-    wizardStepArray,
-    stepSchemas,
-    stepFormData
-  } = getStepArrayAndSchemas(state);
-  return {
+    stepArray,
     viewerStepArray,
     wizardStepArray,
     stepSchemas,
     stepFormData,
+    document,
+    version
+  } = getStepArrayAndSchemas(state);
+
+  return {
+    stepArray,
+    viewerStepArray,
+    wizardStepArray,
+    stepSchemas,
+    stepFormData,
+    document,
+    version,
     isLoggedIn: !!state.data.user.id
   };
 };

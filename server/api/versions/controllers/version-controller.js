@@ -23,7 +23,19 @@ const putScorecard = async (req, res, next) => {
   }
 };
 
+const putContentJson = async (req, res, next) => {
+  try {
+    const version = await Version.findById(req.params.versionId).then(v =>
+      v.update({ content_json: req.body.content_json })
+    );
+    res.send(version.content_json);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getMetadata,
-  putScorecard
+  putScorecard,
+  putContentJson
 };
