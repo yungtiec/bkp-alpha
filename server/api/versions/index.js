@@ -4,7 +4,7 @@ const questionController = require("./controllers/question-controller");
 const answerController = require("./controllers/answer-controller");
 const commentController = require("./controllers/comment-controller");
 const annotatorController = require("./controllers/annotator-controller");
-const { ensureAuthentication, ensureResourceAccess } = require("../utils");
+const { ensureAuthentication, ensureResourceAccess, isAdmin } = require("../utils");
 const { Version } = require("../../db/models");
 Promise = require("bluebird");
 module.exports = router;
@@ -16,7 +16,7 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
     }).findOne();
     if (
       !version.submitted &&
-      (!req.user || (req.user && req.user.id !== version.creator.id))
+      (!req.user || (req.user && req.user.id !== version.creator.id) || !isAdmin(req.user))
     )
       res.sendStatus(401);
     else next();

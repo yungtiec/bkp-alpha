@@ -1,6 +1,10 @@
 const { User, Role, Comment } = require("../db/models");
 const _ = require("lodash");
 
+const isAdmin = (user) => {
+ return user.roles.filter(r => r.name === "admin").length;
+};
+
 const ensureAuthentication = async (req, res, next) => {
   if (req.user) {
     next();
@@ -93,6 +97,7 @@ const getEngagedUsers = async ({
 };
 
 module.exports = {
+  isAdmin,
   ensureAuthentication,
   ensureAdminRole,
   ensureAdminRoleOrCommentOwnership,
