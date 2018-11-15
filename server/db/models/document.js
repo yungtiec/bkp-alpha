@@ -91,6 +91,7 @@ module.exports = (db, DataTypes) => {
           },
           {
             model: models["version"],
+            where: { submitted: true, reviewed: true },
             attributes: [
               "id",
               "hierarchyLevel",
@@ -174,6 +175,7 @@ module.exports = (db, DataTypes) => {
         },
         {
           model: models["version"],
+          where: { submitted: true, reviewed: true },
           include: [
             {
               model: models["comment"],
@@ -240,7 +242,11 @@ module.exports = (db, DataTypes) => {
     Document.addScope("includeVersions", function(documentId) {
       var options = {
         include: [
-          { model: models["version"] },
+          {
+            model: models["version"],
+            where: { submitted: true, reviewed: true }
+          },
+
           {
             model: models["project"]
           }
