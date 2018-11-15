@@ -28,9 +28,12 @@ export default ({
   parent
 }) => {
   const { creator_id, collaborators } = documentMetadata;
-  const collaboratorsArray = collaborators.reduce((acc, curr) => {
-    return acc.concat([curr.id]);
-  }, [creator_id]);
+  const collaboratorsArray = (collaborators || []).reduce(
+    (acc, curr) => {
+      return acc.concat([curr.id]);
+    },
+    [creator_id]
+  );
 
   return (
     <Element

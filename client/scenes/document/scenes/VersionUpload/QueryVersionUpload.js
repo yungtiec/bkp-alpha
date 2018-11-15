@@ -65,11 +65,7 @@ class MyComponent extends React.Component {
   }
 
   render() {
-    if (
-      !this.props.versionMetadata.id ||
-      !this.props.versionQnaIds ||
-      !this.props.outstandingIssues
-    )
+    if (!this.props.versionMetadata.id || !this.props.versionQnaIds)
       return null;
     else return <LoadableVersionUpload {...this.props} />;
   }
@@ -77,6 +73,7 @@ class MyComponent extends React.Component {
 
 const mapState = state => {
   const { versionQnasById, versionQnaIds } = getAllDocumentQuestions(state);
+  const { versionMetadata, versionMetadataLoading } = getVersionMetadata(state);
   const {
     importedMarkdown,
     resolvedIssueIds,
@@ -95,7 +92,7 @@ const mapState = state => {
     isLoggedIn: !!state.data.user.id,
     sidebarOpen: state.scenes.document.sidebarOpen,
     // metadata
-    versionMetadata: getVersionMetadata(state),
+    versionMetadata,
     documentMetadata: getDocumentMetadata(state),
     // qnas
     versionQnasById,
@@ -145,4 +142,9 @@ const actions = {
   toggleSidebar
 };
 
-export default withRouter(connect(mapState, actions)(MyComponent));
+export default withRouter(
+  connect(
+    mapState,
+    actions
+  )(MyComponent)
+);

@@ -71,7 +71,8 @@ export default class Replies extends Component {
         reply.upvotesFrom,
         upvotedUser => upvotedUser.id === user.id
       );
-      const isAdmin = collaboratorsArray.includes(reply.owner.id);
+      const isAdmin =
+        collaboratorsArray && collaboratorsArray.includes(reply.owner.id);
       return (
         <CommentItem
           isAdmin={isAdmin}

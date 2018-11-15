@@ -4,8 +4,41 @@ const {
   ensureResourceAccess,
   getEngagedUsers
 } = require("../utils");
+const { Document } = require("../../db/models");
 const documentController = require("./controller");
 module.exports = router;
+
+const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
+  // if document has only one version, make sure the version is submitted
+  try {
+    const document = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          documentId: req.params.documentId
+        }
+      ]
+    }).findOne();
+    const isNotCreator =
+      document && req.user && req.user.id !== document.creator_id;
+    const isNotCollaborator =
+      document &&
+      req.user &&
+      document.collaborators &&
+      !document.collaborators.filter(c => req.user.id !== c.id).length;
+    if (
+      !document ||
+      (document &&
+        document.versions &&
+        !document.versions[0].submitted &&
+        (!req.user || (isNotCreator && isNotCollaborator)))
+    )
+      res.sendStatus(404);
+    else next();
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * Getting a list of documents
@@ -26,7 +59,11 @@ router.get("/", documentController.getDocuments);
  * @routeparam {Number} documentId
  *
  */
-router.get("/:documentId", documentController.getDocument);
+router.get(
+  "/:documentId",
+  ensureDocumentSubmissionOrOwnership,
+  documentController.getDocument
+);
 
 /**
  * Getting document's latest version's contents (consisted of series of questions and answers) by id
@@ -38,6 +75,7 @@ router.get("/:documentId", documentController.getDocument);
  */
 router.get(
   "/:documentId/questions",
+  ensureDocumentSubmissionOrOwnership,
   documentController.getDocumentLatestQuestion
 );
 
