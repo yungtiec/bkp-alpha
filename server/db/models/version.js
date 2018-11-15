@@ -23,8 +23,14 @@ module.exports = (db, DataTypes) => {
     scorecard: {
       type: DataTypes.JSONB
     },
+    version_slug: {
+      type: DataTypes.STRING
+    },
     version_number: {
       type: DataTypes.TEXT
+    },
+    content_json: {
+      type: DataTypes.JSON
     }
   });
 
@@ -46,6 +52,9 @@ module.exports = (db, DataTypes) => {
     Version.belongsTo(models.user, {
       foreignKey: "creator_id",
       as: "creator"
+    });
+    Version.belongsTo(models.wizard_schema, {
+      foreignKey: "wizard_schema_id"
     });
   };
   Version.loadScopes = function(models) {

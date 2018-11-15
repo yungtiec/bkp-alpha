@@ -4,14 +4,26 @@ const questionController = require("./controllers/question-controller");
 const answerController = require("./controllers/answer-controller");
 const commentController = require("./controllers/comment-controller");
 const annotatorController = require("./controllers/annotator-controller");
-const {
-  ensureAuthentication,
-  ensureAdminRole,
-  ensureAdminRoleOrCommentOwnership,
-  ensureResourceAccess
-} = require("../utils");
+const { ensureAuthentication, ensureResourceAccess } = require("../utils");
+const { Version } = require("../../db/models");
 Promise = require("bluebird");
 module.exports = router;
+
+const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
+  try {
+    const version = await Version.scope({
+      method: ["basic", req.params.versionId]
+    }).findOne();
+    if (
+      !version.submitted &&
+      (!req.user || (req.user && req.user.id !== version.creator.id))
+    )
+      res.sendStatus(401);
+    else next();
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * Getting version metadata by id, i.e creator, comments, contents...etc
@@ -21,7 +33,11 @@ module.exports = router;
  * @routeparam {Number} versionId
  *
  */
-router.get("/:versionId/metadata", versionController.getMetadata);
+router.get(
+  "/:versionId/metadata",
+  ensureDocumentSubmissionOrOwnership,
+  versionController.getMetadata
+);
 
 /**
  * Updating version scorecard by id
@@ -35,6 +51,17 @@ router.get("/:versionId/metadata", versionController.getMetadata);
 router.put("/:versionId/scorecard", versionController.putScorecard);
 
 /**
+ * Updating version content_json by id
+ *
+ * @name Put version
+ * @route {PUT} /api/versions/:versionId/content-json
+ * @routeparam {Number} versionId
+ * @bodyparam {Object} content_json
+ *
+ */
+router.put("/:versionId/content-json", versionController.putContentJson);
+
+/**
  * Getting version's contents (consisted of series of questions and answers) by id
  *
  * @name Get version contents
@@ -42,7 +69,11 @@ router.put("/:versionId/scorecard", versionController.putScorecard);
  * @routeparam {Number} versionId
  *
  */
-router.get("/:versionId/questions", questionController.getQuestions);
+router.get(
+  "/:versionId/questions",
+  ensureDocumentSubmissionOrOwnership,
+  questionController.getQuestions
+);
 
 /**
  * Updating version's question by id is done by creating a new row in version question table and referencing the previous row as parent.
@@ -120,7 +151,11 @@ router.put(
  * @routeparam {Number} versionId
  *
  */
-router.get("/:versionId/comments", commentController.getComments);
+router.get(
+  "/:versionId/comments",
+  ensureDocumentSubmissionOrOwnership,
+  commentController.getComments
+);
 
 /**
  * Posting comment
@@ -280,7 +315,11 @@ router.put(
  * @todo handle duplicated arguments in query and route param
  *
  */
-router.get("/:versionId/annotator", annotatorController.getAnnotatedComments);
+router.get(
+  "/:versionId/annotator",
+  ensureDocumentSubmissionOrOwnership,
+  annotatorController.getAnnotatedComments
+);
 
 /**
  * Posting annotated comment

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import autoBind from "react-autobind";
 import { batchActions } from "redux-batched-actions";
 import { SquareLoader } from "halogenium";
@@ -98,6 +99,26 @@ class Document extends Component {
       givenCommentContext
     ) {
       this.focusOnContext();
+    }
+
+    if (this.props.location.hash !== prevProps.location.hash) {
+      var sectionHash = this.props.location.hash.replace("#", "");
+      var isInFooter = sectionHash.indexOf("ref") !== -1;
+      var referenceHash;
+      if (isInFooter) {
+        referenceHash = sectionHash.replace("ref", "");
+      } else {
+        referenceHash = sectionHash.split("_ftn").slice(1);
+        referenceHash.unshift("ref");
+        referenceHash = "_ftn" + referenceHash.join("");
+      }
+      console.log(referenceHash)
+      if (sectionHash) {
+        let node = ReactDOM.findDOMNode(this[referenceHash]);
+        if (node) {
+          node.scrollIntoView();
+        }
+      }
     }
   }
 
@@ -281,6 +302,7 @@ class Document extends Component {
           />
           <VersionContent
             parent={this}
+            location={location}
             isLoggedIn={isLoggedIn}
             isClosedForComment={isClosedForComment}
             documentMetadata={documentMetadata}

@@ -86,7 +86,9 @@ const getUserDocuments = async (req, res, next) => {
 
     switch (req.user.roles[0].name) {
       case "admin":
-        documents = await Document.scope("includeVersions").findAll();
+        documents = await Document.scope("includeVersions", {
+          versionWhereClause: { submitted: true }
+        }).findAll();
         break;
       case "editor":
         ownDocuments = await Document.findAll({
@@ -199,7 +201,9 @@ const getUserComments = async (req, res, next) => {
     };
   }
   try {
-    const { pagedComments, commentCount } = await User.getCommentsAndCount(queryObj);
+    const { pagedComments, commentCount } = await User.getCommentsAndCount(
+      queryObj
+    );
     res.send({ comments: pagedComments, commentCount: commentCount });
   } catch (err) {
     next(err);

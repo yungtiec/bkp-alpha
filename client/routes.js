@@ -13,7 +13,8 @@ import {
   ActivityBoard,
   Dashboard,
   Landing,
-  Document
+  Document,
+  Wizard
 } from "./scenes";
 import {
   Login,
@@ -71,6 +72,16 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/project/:symbol"
             component={Project}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/wizard"
+            component={Wizard}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/wizard/step/:step/version/:id"
+            component={Wizard}
           />
           {isLoggedIn && (
             <RouteWithLayout
@@ -136,7 +147,12 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default withRouter(connect(mapState, mapDispatch)(Routes));
+export default withRouter(
+  connect(
+    mapState,
+    mapDispatch
+  )(Routes)
+);
 
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,

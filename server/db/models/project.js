@@ -82,7 +82,7 @@ module.exports = (db, DataTypes) => {
               },
               {
                 model: models.version,
-                required: false,
+                where: { submitted: true, reviewed: true },
                 include: [
                   { model: models.user, as: "creator" },
                   {
@@ -158,6 +158,7 @@ module.exports = (db, DataTypes) => {
 async function getProjectStats(projectInstance, includeDocuments) {
   var project = projectInstance.toJSON();
   var documents = project.documents;
+  console.log(documents)
   const numSurveys = documents.length;
   const numComments = documents.reduce((count, document) => {
     const numTotalComments = document.versions
