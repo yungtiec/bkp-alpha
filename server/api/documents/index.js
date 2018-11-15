@@ -1,5 +1,6 @@
 const router = require("express").Router({ mergeParams: true });
 const {
+  isAdmin,
   ensureAuthentication,
   ensureResourceAccess,
   getEngagedUsers
@@ -26,11 +27,13 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
       req.user &&
       document.collaborators &&
       !document.collaborators.filter(c => req.user.id !== c.id).length;
+    console.log('admin', !isAdmin(req.user));
     if (
       !document ||
       (document &&
         document.versions &&
         !document.versions[0].submitted &&
+        !isAdmin(req.user) &&
         (!req.user || (isNotCreator && isNotCollaborator)))
     )
       res.sendStatus(404);

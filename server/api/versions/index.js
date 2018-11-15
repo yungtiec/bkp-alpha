@@ -16,7 +16,8 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
     }).findOne();
     if (
       !version.submitted &&
-      (!req.user || (req.user && req.user.id !== version.creator.id) || !isAdmin(req.user))
+      !isAdmin(req.user) &&
+      (!req.user || (req.user && req.user.id !== version.creator.id))
     )
       res.sendStatus(401);
     else next();
