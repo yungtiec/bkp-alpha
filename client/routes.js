@@ -115,6 +115,9 @@ class Routes extends Component {
               component={Admin}
             />
           )}
+          <Route path="/dex-overview" render={() => (
+            <Redirect to="/project/TL/document/9/version/10/"/>
+          )}/>
           {/* Displays our Collaborations component as a fallback */}
           <RouteWithLayout
             layout={LayoutWithNav}
