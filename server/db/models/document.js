@@ -68,9 +68,10 @@ module.exports = (db, DataTypes) => {
     });
   };
   Document.loadScopes = function(models) {
-    Document.addScope("includeVersionsWithOutstandingIssues", function(
-      documentId
-    ) {
+    Document.addScope("includeVersionsWithOutstandingIssues", function({
+      documentId,
+      versionWhereClause
+    }) {
       return {
         where: { id: Number(documentId) },
         include: [
@@ -91,7 +92,7 @@ module.exports = (db, DataTypes) => {
           },
           {
             model: models["version"],
-            where: { submitted: true, reviewed: true },
+            where: versionWhereClause,
             attributes: [
               "id",
               "hierarchyLevel",
@@ -140,7 +141,7 @@ module.exports = (db, DataTypes) => {
             as: "collaborators",
             through: {
               model: models["document_collaborator"],
-              where: { revoked_access: { [Sequelize.Op.not]: true } }
+              where: { revoked_access: false }
             },
             required: false
           },
@@ -175,7 +176,7 @@ module.exports = (db, DataTypes) => {
         },
         {
           model: models["version"],
-          where: { submitted: true, reviewed: true },
+          where: { submitted: true },
           include: [
             {
               model: models["comment"],
@@ -226,7 +227,7 @@ module.exports = (db, DataTypes) => {
           as: "collaborators",
           through: {
             model: models["document_collaborator"],
-            where: { revoked_access: { [Sequelize.Op.not]: true } }
+            where: { revoked_access: false }
           },
           required: false
         },
@@ -239,16 +240,28 @@ module.exports = (db, DataTypes) => {
         [{ model: models["version"] }, "hierarchyLevel", "DESC"]
       ]
     });
-    Document.addScope("includeVersions", function(documentId) {
+    Document.addScope("includeVersions", function({
+      documentId,
+      versionWhereClause
+    }) {
+      var versionIncludeClause = {
+        model: models["version"]
+      };
+      if (versionWhereClause) versionIncludeClause.where = versionWhereClause;
       var options = {
         include: [
-          {
-            model: models["version"],
-            where: { submitted: true, reviewed: true }
-          },
-
+          versionIncludeClause,
           {
             model: models["project"]
+          },
+          {
+            model: models["user"],
+            as: "collaborators",
+            through: {
+              model: models["document_collaborator"],
+              where: { revoked_access: false }
+            },
+            required: false
           }
         ],
         order: [
@@ -256,6 +269,7 @@ module.exports = (db, DataTypes) => {
           [{ model: models["version"] }, "hierarchyLevel", "DESC"]
         ]
       };
+
       if (documentId) options.where = { id: documentId };
       return options;
     });

@@ -34,7 +34,10 @@ const getDocuments = async (req, res, next) => {
 const getDocument = async (req, res, next) => {
   try {
     const document = await Document.scope({
-      method: ["includeVersionsWithOutstandingIssues", req.params.documentId]
+      method: [
+        "includeVersionsWithOutstandingIssues",
+        { documentId: req.params.documentId }
+      ]
     }).findOne();
     res.send(document);
   } catch (err) {
@@ -45,7 +48,7 @@ const getDocument = async (req, res, next) => {
 const getDocumentLatestQuestion = async (req, res, next) => {
   try {
     const document = await Document.scope({
-      method: ["includeVersions", req.params.documentId]
+      method: ["includeVersions", { documentId: req.params.documentId }]
     }).findOne();
     const latestVersionId = _.maxBy(document.versions, "hierarchyLevel").id;
     var rawVersion = await Version.scope({
@@ -279,20 +282,19 @@ const postNewVersion = async (req, res, next) => {
     var prevCollaboratorEmails = parentVersion.document.collaborators.map(
       user => user.email
     );
-    var removedCollaborators = _.difference(
-      prevCollaboratorEmails,
-      collaboratorEmails
-    ).map(async email =>
-      DocumentCollaborator.update(
-        { revoked_access: true },
-        {
-          where: {
-            email,
-            document_id: parentVersion.document.id
+    var removedCollaborators = _
+      .difference(prevCollaboratorEmails, collaboratorEmails)
+      .map(async email =>
+        DocumentCollaborator.update(
+          { revoked_access: true },
+          {
+            where: {
+              email,
+              document_id: parentVersion.document.id
+            }
           }
-        }
-      )
-    );
+        )
+      );
     var collaborators = collaboratorEmails.map(
       async email =>
         await User.findOne({ where: { email } }).then(user =>
