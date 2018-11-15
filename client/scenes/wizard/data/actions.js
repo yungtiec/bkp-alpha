@@ -1,5 +1,6 @@
 import * as types from "./actionTypes.js";
-import { getWizardSchemaById, postDocumentMetadata } from "./services";
+import { getWizardSchemaById, postDocumentMetadata, putVersionContentJson } from "./services";
+import history from '../../../history';
 
 export function fetchStepArrayAndSchemas(wizardSchemaId) {
   return async (dispatch, getState) => {
@@ -33,26 +34,45 @@ export function updateCurrentProject(project) {
   };
 }
 
+export function updateVersionContentJson(versionId) {
+  return async (dispatch, getState) => {
+    try {
+      const currentFormData = getState().scenes.wizard.data.stepFormData;
+      const versionData = await putVersionContentJson(versionId, currentFormData);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+
 export function submitDocumentMetadata({ title, description, project }) {
+  const selectedProjectSymbol = project.symbol;
   return async (dispatch, getState) => {
     try {
       const currentDocument = getState().scenes.wizard.data.document;
       if (!currentDocument) {
-        const { document, version } = await postDocumentMetadata({
+        const version = await postDocumentMetadata({
           title,
           description,
+          selectedProjectSymbol,
           projectId: project.id
         });
+        const { document } = version;
         dispatch({
           type: types.DOCUMENT_METADATA_SUBMITTED,
           document,
           version,
+          selectedProjectSymbol,
           project
         });
+        console.log(version);
+        history.push(`/wizard/step/3/version/${version.version_slug}`);
       } else {
         const document = await putDocumentMetadata({
           title,
           description,
+          selectedProjectSymbol,
           projectId: project.id
         });
         dispatch({

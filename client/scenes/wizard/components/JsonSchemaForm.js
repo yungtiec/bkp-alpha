@@ -3,12 +3,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import { updateFormDataInStore } from "../data/actions";
+import { updateFormDataInStore, updateVersionContentJson } from "../data/actions";
 import { assignIn } from "lodash";
 import { withTheme, Form } from "@react-schema-form/core";
 import templates from "./templates";
 import widgets from "./widgets";
 import { loadModal, hideModal } from "../../../data/reducer";
+import { withRouter } from "react-router-dom";
 
 const BootstrapCustomForm = withTheme("Bootstrap", { widgets, templates })(
   Form
@@ -45,6 +46,12 @@ class JsonSchemaForm extends Component {
         handler: this.props.hideModal
       }
     });
+  }
+
+  async next(submit) {
+    console.log('props', this.props.version);
+    await this.props.updateVersionContentJson(this.props.version.id);
+    submit.handler();
   }
 
   isDependentSelectWidget(allowedValues) {
@@ -94,7 +101,8 @@ class JsonSchemaForm extends Component {
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
-          onSubmit={submit ? submit.handler : () => {}}
+          //onSubmit={submit ? submit.handler : () => {}}
+          onSubmit={() => this.next(submit)}
           invalidCallback={this.handleFormInvalidation}
           onChange={handleChange}
           onError={log("errors")}
@@ -133,12 +141,17 @@ const mapDispatch = (dispatch, ownProps) => ({
         props.formData
       )
     ),
+  updateVersionContentJson: version_slug => {
+    dispatch(
+      updateVersionContentJson(version_slug)
+    )
+  },
   loadModal: (modalType, modalProps) =>
     dispatch(loadModal(modalType, modalProps)),
   hideModal: () => dispatch(hideModal())
 });
 
-export default connect(
+export default withRouter(connect(
   mapState,
   mapDispatch
-)(JsonSchemaForm);
+)(JsonSchemaForm));

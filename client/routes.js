@@ -73,13 +73,16 @@ class Routes extends Component {
             path="/project/:symbol"
             component={Project}
           />
-          {isLoggedIn && (
-            <RouteWithLayout
-              layout={LayoutWithNav}
-              path="/wizard"
-              component={Wizard}
-            />
-          )}
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/wizard"
+            component={Wizard}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/wizard/step/:step/version/:id"
+            component={Wizard}
+          />
           {isLoggedIn && (
             <RouteWithLayout
               layout={LayoutWithNav}
