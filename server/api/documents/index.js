@@ -33,7 +33,7 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
       (document &&
         document.versions &&
         !document.versions[0].submitted &&
-        !isAdmin(req.user) &&
+        //!isAdmin(req.user) &&
         (!req.user || (isNotCreator && isNotCollaborator)))
     )
       res.sendStatus(404);
