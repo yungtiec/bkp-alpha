@@ -27,7 +27,6 @@ const filterDocuments = (documentIds, documentsById) => {
       scorecardIds = [].concat(scorecardIds).concat([docId]);
       scorecardsById = Object.assign({}, scorecardsById, documentObj);
     } else if (document.document_type === documentTypes.regulatory) {
-      console.log(document);
       regulatoryIds = [].concat(regulatoryIds).concat([docId]);
       regulatoryById = Object.assign(
         {},
@@ -71,7 +70,7 @@ export default ({
     regulatoryById,
     regulatoryIds
   } = filterDocuments(documentIds, documentsById);
-  
+
   return (
     <div>
       <Helmet>
