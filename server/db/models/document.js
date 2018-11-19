@@ -179,7 +179,7 @@ module.exports = (db, DataTypes) => {
         },
         {
           model: models["version"],
-          where: { submitted: true },
+          where: { [Sequelize.Op.and]: { submitted: true, reviewed: true } },
           include: [
             {
               model: models["comment"],
