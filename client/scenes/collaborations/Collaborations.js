@@ -5,9 +5,9 @@ import { ListProject, ListDocumentGrid } from "../../components";
 import { Helmet } from "react-helmet";
 
 const documentTypes = {
-  general: 'general',
-  scorecard: 'scorecard',
-  regulatory: 'regulatory'
+  general: "general",
+  scorecard: "scorecard",
+  regulatory: "regulatory"
 };
 
 const filterDocuments = (documentIds, documentsById) => {
@@ -28,11 +28,7 @@ const filterDocuments = (documentIds, documentsById) => {
       scorecardsById = Object.assign({}, scorecardsById, documentObj);
     } else if (document.document_type === documentTypes.regulatory) {
       regulatoryIds = [].concat(regulatoryIds).concat([docId]);
-      regulatoryById = Object.assign(
-        {},
-        regulatoryById,
-        documentObj
-      );
+      regulatoryById = Object.assign({}, regulatoryById, documentObj);
     } else {
       thoughtLeadershipIds = [].concat(thoughtLeadershipIds).concat([docId]);
       thoughtLeadershipById = Object.assign(
@@ -81,44 +77,50 @@ export default ({
           <div className="projects-containers__collaboration-header">
             <span className="collaborations-header">Open Collaborations</span>
           </div>
-          <div className="project-row">
-            <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-              <div>Regulatory Guidance</div>
-              <button
-                className="btn btn-outline-primary"
-                onClick={() =>
-                  loadModal("COLLABORATION_PROPOSAL_MODAL", {
-                    hideModal,
-                    notify
-                  })
-                }
-              >
-                Propose collaboration
-              </button>
+          {regulatoryIds && regulatoryIds.length ? (
+            <div className="project-row">
+              <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                <div>Regulatory Guidance</div>
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() =>
+                    loadModal("COLLABORATION_PROPOSAL_MODAL", {
+                      hideModal,
+                      notify
+                    })
+                  }
+                >
+                  Propose collaboration
+                </button>
+              </div>
+              <ListDocumentGrid
+                documentIds={regulatoryIds}
+                documentsById={regulatoryById}
+              />
             </div>
-            <ListDocumentGrid
-              documentIds={regulatoryIds}
-              documentsById={regulatoryById}
-            />
-          </div>
-          <div>
-            <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-              Thought Leadership
-            </span>
-            <ListDocumentGrid
-              documentIds={thoughtLeadershipIds}
-              documentsById={thoughtLeadershipById}
-            />
-          </div>
-          <div>
-            <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-              Transparency Scorecards
-            </span>
-            <ListDocumentGrid
-              documentIds={scorecardIds}
-              documentsById={scorecardsById}
-            />
-          </div>
+          ) : null}
+          {thoughtLeadershipIds && thoughtLeadershipIds.length ? (
+            <div>
+              <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                Thought Leadership
+              </span>
+              <ListDocumentGrid
+                documentIds={thoughtLeadershipIds}
+                documentsById={thoughtLeadershipById}
+              />
+            </div>
+          ) : null}
+          {scorecardIds && scorecardIds.length ? (
+            <div>
+              <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                Transparency Scorecards
+              </span>
+              <ListDocumentGrid
+                documentIds={scorecardIds}
+                documentsById={scorecardsById}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
