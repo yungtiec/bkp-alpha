@@ -27,7 +27,7 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
       req.user &&
       document.collaborators &&
       !document.collaborators.filter(c => req.user.id !== c.id).length;
-    
+
     if (
       !document ||
       (document &&

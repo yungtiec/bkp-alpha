@@ -13,6 +13,9 @@ module.exports = (db, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    document_type: {
+      type: DataTypes.STRING
+    },
     description: {
       type: DataTypes.STRING
     },
