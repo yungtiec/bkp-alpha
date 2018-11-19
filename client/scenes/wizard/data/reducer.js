@@ -8,6 +8,7 @@ const initialState = {
   wizardStepArray: null,
   viewerStepArray: null,
   stepSchemas: null,
+  stepStatus: {},
   stepFormData: {}
 };
 
@@ -35,6 +36,10 @@ const updateFormData = ({ formData, formDataPath }, state) => {
   set(state.stepFormData, formDataPath, formData);
   return state;
 };
+
+const initStepStatus = (state, action) => {
+
+}
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
