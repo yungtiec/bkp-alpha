@@ -21,33 +21,33 @@ class Wizard extends Component {
   }
 
   render() {
-    const { wizardStepArray, stepSchemas, stepFormData, match, version } = this.props;
-    const currentStep = Number(
+    const {
+      wizardStepArray,
+      stepSchemas,
+      stepFormData,
+      match,
+      version
+    } = this.props;
+    const currentStepNumber = Number(
       window.location.pathname.split("/").slice(-1)[0]
     );
     return (
       <div className="main-container">
         <Steps
           className="wizard-steps py-3 mb-5"
-          current={currentStep}
+          current={currentStepNumber}
           labelPlacement="vertical"
         >
           {wizardStepArray.map((step, i) => (
             <Step
               title={step.title}
               description=""
-              status={
-                i + 1 === currentStep
-                  ? "process"
-                  : i + 1 >= currentStep
-                    ? "wait"
-                    : "finish"
-              }
+              status={i + 1 > currentStepNumber ? "wait" : "process"}
             />
           ))}
         </Steps>
-        {wizardStepArray[currentStep] &&
-          wizardStepArray[currentStep].id !== "reviewAndSubmit" && (
+        {wizardStepArray[currentStepNumber] &&
+          wizardStepArray[currentStepNumber].id !== "reviewAndSubmit" && (
             <button
               className="btn btn-outline-primary"
               onClick={this.loadPreviewModa}
