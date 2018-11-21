@@ -8,6 +8,7 @@ import { default as activityBoardReducer } from "./activity-board/reducer";
 import { default as dashboardReducer } from "./dashboard/reducer";
 import { default as documentReducer } from "./document/reducer";
 import { default as wizardReducer } from "./wizard/reducer";
+import { default as myDocumentsReducer } from "./my-documents/reducer";
 
 export default combineReducers({
   project: projectReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   activityBoard: activityBoardReducer,
   dashboard: dashboardReducer,
   document: documentReducer,
-  wizard: wizardReducer
+  wizard: wizardReducer,
+  myDocuments: myDocumentsReducer
 });

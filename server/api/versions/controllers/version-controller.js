@@ -1,5 +1,10 @@
 const db = require("../../../db");
-const { Project, Version, VersionAnswer } = require("../../../db/models");
+const {
+  Project,
+  Version,
+  VersionAnswer,
+  Document
+} = require("../../../db/models");
 
 const getMetadata = async (req, res, next) => {
   try {
@@ -34,8 +39,33 @@ const putContentJson = async (req, res, next) => {
   }
 };
 
+const getDrafts = async (req, res, next) => {
+  try {
+    const { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: false }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    var versions = rows.map(d => {
+      d = d.toJSON();
+      return d.versions[0];
+    });
+    res.send({ count, versions });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getMetadata,
   putScorecard,
-  putContentJson
+  putContentJson,
+  getDrafts
 };

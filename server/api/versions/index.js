@@ -4,7 +4,11 @@ const questionController = require("./controllers/question-controller");
 const answerController = require("./controllers/answer-controller");
 const commentController = require("./controllers/comment-controller");
 const annotatorController = require("./controllers/annotator-controller");
-const { ensureAuthentication, ensureResourceAccess, isAdmin } = require("../utils");
+const {
+  ensureAuthentication,
+  ensureResourceAccess,
+  isAdmin
+} = require("../utils");
 const { Version } = require("../../db/models");
 Promise = require("bluebird");
 module.exports = router;
@@ -25,6 +29,17 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
     next(err);
   }
 };
+
+/**
+ * Getting a list of user's drafts
+ *
+ * @name Get a list of user's drafts
+ * @route {GET} /api/documents
+ * @queryparam {Number} limit
+ * @queryparam {Number} offset
+ *
+ */
+router.get("/drafts", ensureAuthentication, versionController.getDrafts);
 
 /**
  * Getting version metadata by id, i.e creator, comments, contents...etc
