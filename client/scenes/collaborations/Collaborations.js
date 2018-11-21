@@ -80,7 +80,7 @@ export default ({
           {regulatoryIds && regulatoryIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                <div>Regulatory Guidance</div>
+                <div>Regulatory Notices</div>
                 <button
                   className="btn btn-outline-primary"
                   onClick={() =>
