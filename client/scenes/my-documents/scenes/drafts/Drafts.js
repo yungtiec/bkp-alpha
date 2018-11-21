@@ -16,18 +16,14 @@ const ListDraft = ({ draftIds, draftsById }) =>
           cardHref=""
           mainTitle={draftsById[id].title}
           subtitle={""}
-          textUpperRight={`by ${draftsById[id].creator.displayName}`}
+          textUpperRight={moment(draftsById[id].createdAt).fromNow()}
           mainText={""}
-          metadataArray={[
-            `${draftsById[id].project.symbol}`,
-            moment(draftsById[id].createdAt).fromNow()
-          ]}
         />
       ))}
     </div>
   ) : null;
 
-class DashboardRecentIssues extends Component {
+class Drafts extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
@@ -39,7 +35,7 @@ class DashboardRecentIssues extends Component {
 
   render() {
     return (
-      <div class="dashboard__recent-drafts ml-5">
+      <div class="dashboard__recent-drafts">
         {!this.props.draftIds || !this.props.draftsById ? (
           <div className="component__loader-container d-flex">
             <ScaleLoader
@@ -86,4 +82,4 @@ const actions = { fetchOwnDrafts };
 export default connect(
   mapState,
   actions
-)(DashboardRecentIssues);
+)(Drafts);

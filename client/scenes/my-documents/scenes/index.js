@@ -1,1 +1,1 @@
-export { default as Drafts } from "./drafts/DraftList";
+export { default as Drafts } from "./drafts/Drafts";
