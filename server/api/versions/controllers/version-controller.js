@@ -41,7 +41,7 @@ const putContentJson = async (req, res, next) => {
 
 const getDrafts = async (req, res, next) => {
   try {
-    const { count, rows } = await Document.scope({
+    var { count, rows } = await Document.scope({
       method: [
         "includeVersions",
         {
@@ -53,11 +53,11 @@ const getDrafts = async (req, res, next) => {
       limit: Number(req.query.limit),
       offset: Number(req.query.offset)
     });
-    var versions = rows.map(d => {
+    rows = rows.map(d => {
       d = d.toJSON();
       return d.versions[0];
     });
-    res.send({ count, versions });
+    res.send({ count, rows });
   } catch (err) {
     next(err);
   }
