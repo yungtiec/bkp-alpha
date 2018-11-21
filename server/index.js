@@ -111,6 +111,9 @@ const createApp = () => {
       res.redirect(`/${req.params.file}`);
     }
   );
+  app.get("/documents/:documentId/public/:file", (req, res, next) => {
+    res.redirect(`/${req.params.file}`);
+  });
   app.get("/admin/version/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });

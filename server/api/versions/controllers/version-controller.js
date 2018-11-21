@@ -53,10 +53,6 @@ const getDrafts = async (req, res, next) => {
       limit: Number(req.query.limit),
       offset: Number(req.query.offset)
     });
-    rows = rows.map(d => {
-      d = d.toJSON();
-      return d.versions[0];
-    });
     res.send({ count, rows });
   } catch (err) {
     next(err);

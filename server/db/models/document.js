@@ -265,6 +265,10 @@ module.exports = (db, DataTypes) => {
               where: { revoked_access: false }
             },
             required: false
+          },
+          {
+            model: models["user"],
+            as: "creator"
           }
         ],
         order: [
