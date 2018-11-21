@@ -49,7 +49,6 @@ class JsonSchemaForm extends Component {
   }
 
   async next(submit) {
-    console.log('props', this.props.version);
     await this.props.updateVersionContentJson(this.props.version.id);
     submit.handler();
   }
