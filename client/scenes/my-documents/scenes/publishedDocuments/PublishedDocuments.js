@@ -1,27 +1,27 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { getOwnDrafts, canLoadMore } from "./data/reducer";
-import { fetchOwnDrafts } from "./data/actions";
+import { getOwnPublishedDocuments, canLoadMore } from "./data/reducer";
+import { fetchOwnPublishedDocuments } from "./data/actions";
 import { MyDocumentsList } from "../../components";
 import { ScaleLoader } from "halogenium";
 import moment from "moment";
 
-class Drafts extends Component {
+class PublishedDocuments extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
   }
 
   componentDidMount() {
-    this.props.fetchOwnDrafts();
+    this.props.fetchOwnPublishedDocuments();
   }
 
   render() {
     return (
       <MyDocumentsList
-        myDocumentIds={this.props.draftIds}
-        myDocumentsById={this.props.draftsById}
+        myDocumentIds={this.props.publishedDocumentIds}
+        myDocumentsById={this.props.publishedDocumentsById}
         canLoadMore={this.props.canLoadMore}
       />
     );
@@ -29,17 +29,20 @@ class Drafts extends Component {
 }
 
 const mapState = state => {
-  const { draftsById, draftIds } = getOwnDrafts(state);
+  const {
+    publishedDocumentsById,
+    publishedDocumentIds
+  } = getOwnPublishedDocuments(state);
   return {
-    draftsById,
-    draftIds,
+    publishedDocumentsById,
+    publishedDocumentIds,
     canLoadMore: canLoadMore(state)
   };
 };
 
-const actions = { fetchOwnDrafts };
+const actions = { fetchOwnPublishedDocuments };
 
 export default connect(
   mapState,
   actions
-)(Drafts);
+)(PublishedDocuments);

@@ -42,6 +42,17 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
 router.get("/drafts", ensureAuthentication, versionController.getDrafts);
 
 /**
+ * Getting a list of user's published documents
+ *
+ * @name Get a list of user's published documents
+ * @route {GET} /api/documents
+ * @queryparam {Number} limit
+ * @queryparam {Number} offset
+ *
+ */
+router.get("/published", ensureAuthentication, versionController.getPublishedDocuments);
+
+/**
  * Getting version metadata by id, i.e creator, comments, contents...etc
  *
  * @name Get version

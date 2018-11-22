@@ -5,6 +5,7 @@ const {
   VersionAnswer,
   Document
 } = require("../../../db/models");
+const Sequelize = require("sequelize");
 
 const getMetadata = async (req, res, next) => {
   try {
@@ -59,9 +60,30 @@ const getDrafts = async (req, res, next) => {
   }
 };
 
+const getPublishedDocuments = async (req, res, next) => {
+  try {
+    var { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: true }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    res.send({ count, rows });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getMetadata,
   putScorecard,
   putContentJson,
-  getDrafts
+  getDrafts,
+  getPublishedDocuments
 };
