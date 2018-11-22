@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { getOwnDrafts, canLoadMore } from "./data/reducer";
@@ -9,7 +9,7 @@ import moment from "moment";
 
 const ListDraft = ({ draftIds, draftsById }) =>
   draftIds.length ? (
-    <div className="row entity-cards">
+    <Fragment>
       {draftIds.map(id => (
         <ListItem
           cardKey={id}
@@ -20,7 +20,7 @@ const ListDraft = ({ draftIds, draftsById }) =>
           mainText={""}
         />
       ))}
-    </div>
+    </Fragment>
   ) : null;
 
 class Drafts extends Component {

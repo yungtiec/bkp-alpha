@@ -10,7 +10,7 @@ export default ({ match }) => {
       <MyDocumentsNavbar activeTab={activeTab} url={match.url} />
       <Switch>
         <Route path={`${match.url}/drafts`} component={Drafts} />
-        <Redirect from="/" exact to="/drafts" />
+        <Redirect from={match.url} exact to={`${match.url}/drafts`} />
       </Switch>
     </div>
   );

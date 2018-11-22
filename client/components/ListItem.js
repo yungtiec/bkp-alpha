@@ -10,10 +10,11 @@ export default ({
   mainText,
   quote,
   tagArray,
-  metadataArray
+  metadataArray,
+  borderCss
 }) => {
   return (
-    <div className="col-md-12 entity-card">
+    <div className="col-md-12 entity-card" style={borderCss ? borderCss : {}}>
       <Link to={cardHref}>
         <div className="entity__block">
           <div className="entity__header">
