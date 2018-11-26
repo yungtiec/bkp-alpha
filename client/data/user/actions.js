@@ -42,7 +42,7 @@ export const auth = (userInfo, method) => dispatch => {
           history.push(
             history.location.state
               ? history.location.state.lastPath
-              : "/landing"
+              : "/"
           );
       },
       authError => {
@@ -92,7 +92,7 @@ export const signinWithUport = () => dispatch =>
               ? authRedirectPath
               : history.location.state
                 ? history.location.state.lastPath
-                : "/landing"
+                : "/"
           );
       },
       authError => {
@@ -113,7 +113,7 @@ export const verifyUportOnMobile = accessToken => async dispatch => {
         pathname: "/user/profile/about",
         state: { edit: true, basicInfoMissing: true }
       });
-    else history.push(authRedirectPath || "/landing");
+    else history.push(authRedirectPath || "/");
   } catch (authError) {
     dispatch(getUser({ error: authError }));
   }
