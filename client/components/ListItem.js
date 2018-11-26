@@ -10,12 +10,13 @@ export default ({
   mainText,
   quote,
   tagArray,
-  metadataArray
+  metadataArray,
+  noPaddingX
 }) => {
   return (
     <div className="col-md-12 entity-card">
       <Link to={cardHref}>
-        <div className="entity__block">
+        <div className={`entity__block ${noPaddingX ? "px-0" : ""}`}>
           <div className="entity__header">
             <div className="d-flex flex-column entity__header-content--left">
               {quote ? (

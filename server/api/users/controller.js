@@ -86,8 +86,13 @@ const getUserDocuments = async (req, res, next) => {
 
     switch (req.user.roles[0].name) {
       case "admin":
-        documents = await Document.scope("includeVersions", {
-          versionWhereClause: { submitted: true }
+        documents = await Document.scope({
+          method: [
+            "includeVersions",
+            {
+              versionWhereClause: { submitted: true }
+            }
+          ]
         }).findAll();
         break;
       case "editor":

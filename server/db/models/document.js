@@ -259,6 +259,10 @@ module.exports = (db, DataTypes) => {
           },
           {
             model: models["user"],
+            as: "creator"
+          },
+          {
+            model: models["user"],
             as: "collaborators",
             through: {
               model: models["document_collaborator"],
