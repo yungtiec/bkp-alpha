@@ -55,6 +55,34 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
 router.get("/", documentController.getDocuments);
 
 /**
+ * Getting document metadata by version_slug, i.e upvotes, downvotes, creator, versions...etc
+ *
+ * @name Get document
+ * @route {GET} /api/documents/:documentId
+ * @routeparam {Number} documentId
+ *
+ */
+router.get(
+  "/slug/:version_slug",
+  ensureDocumentSubmissionOrOwnership,
+  documentController.getDocumentBySlug
+);
+
+/**
+ * Getting document's latest version's contents (consisted of series of questions and answers) by version_slug
+ *
+ * @name Get document contents
+ * @route {GET} /api/documents/:documentId/questions
+ * @routeparam {Number} documentId
+ *
+ */
+router.get(
+  "/slug/:version_slug/questions",
+  ensureDocumentSubmissionOrOwnership,
+  documentController.getDocumentLatestQuestionBySlug
+);
+
+/**
  * Getting document metadata by id, i.e upvotes, downvotes, creator, versions...etc
  *
  * @name Get document

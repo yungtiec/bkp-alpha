@@ -14,6 +14,7 @@ import {
   Dashboard,
   Landing,
   Document,
+  DocumentBySlug,
   Wizard
 } from "./scenes";
 import {
@@ -62,6 +63,11 @@ class Routes extends Component {
             layout={LayoutWithNav}
             path="/projects"
             component={Projects}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
+            path="/s/:slug"
+            component={DocumentBySlug}
           />
           <RouteWithLayout
             layout={LayoutWithNav}

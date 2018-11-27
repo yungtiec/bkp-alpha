@@ -2,6 +2,7 @@ import { maxBy } from "lodash";
 import * as types from "./actionTypes";
 import {
   getMetadataByDocumentId,
+  getMetadataBySlug,
   postUpvoteToDocument,
   postDownvoteToDocument
 } from "./service";
@@ -11,6 +12,20 @@ export function fetchMetadataByDocumentId(documentId, versionId) {
   return async (dispatch, getState) => {
     try {
       var documentMetadata = await getMetadataByDocumentId(documentId);
+      dispatch({
+        type: types.DOCUMENT_METADATA_FETCH_SUCCESS,
+        documentMetadata
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
+
+export function fetchMetadataBySlug(slug, versionId) {
+  return async (dispatch, getState) => {
+    try {
+      var documentMetadata = await getMetadataBySlug(slug);
       dispatch({
         type: types.DOCUMENT_METADATA_FETCH_SUCCESS,
         documentMetadata

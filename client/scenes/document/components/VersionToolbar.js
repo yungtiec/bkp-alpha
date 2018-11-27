@@ -139,6 +139,7 @@ class VersionToolbar extends Component {
                     to={`/project/${
                       this.props.projectMetadata.symbol
                     }/document/${documentMetadata.id}/version/${v.id}`}
+                    //to={`/s/version_slug}`}
                     style={
                       v.hierarchyLevel === versionMetadata.hierarchyLevel
                         ? { fontWeight: 700 }

@@ -12,6 +12,12 @@ export function getLatestQuestionsByDocumentId(documentId) {
     .then(res => res.data);
 }
 
+export function getLatestQuestionsBySlug(version_slug) {
+  return axios
+    .get(`/api/documents/slug/${version_slug}/questions`)
+    .then(res => res.data);
+}
+
 export function postEditedQuestion({ versionId, versionQuestionId, markdown }) {
   return axios
     .post(`/api/versions/${versionId}/questions`, {

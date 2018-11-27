@@ -41,6 +41,20 @@ router.get(
 );
 
 /**
+ * Getting version metadata by version_slug, i.e creator, comments, contents...etc
+ *
+ * @name Get version
+ * @route {GET} /api/versions/:versionId/metadata
+ * @routeparam {Number} versionId
+ *
+ */
+router.get(
+  "/:version_slug/metadata",
+  ensureDocumentSubmissionOrOwnership,
+  versionController.getMetadataBySlug
+);
+
+/**
  * Updating version scorecard by id
  *
  * @name Put version

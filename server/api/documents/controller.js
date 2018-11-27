@@ -32,6 +32,23 @@ const getDocuments = async (req, res, next) => {
   }
 };
 
+const getDocumentBySlug = async (req, res, next) => {
+  console.log('getting slug', req.params.version_slug);
+  try {
+    const version = await Version.findOne( { where: { version_slug: req.params.version_slug } } );
+    console.log('docid', version.document_id)
+    const document = await Document.scope({
+      method: [
+        "includeVersionsWithOutstandingIssues",
+        { documentId: version.document_id }
+      ]
+    }).findOne();
+    res.send(document);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getDocument = async (req, res, next) => {
   try {
     const document = await Document.scope({
@@ -41,6 +58,29 @@ const getDocument = async (req, res, next) => {
       ]
     }).findOne();
     res.send(document);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getDocumentLatestQuestionBySlug = async (req, res, next) => {
+  try {
+    const versionBySlug = await Version.findOne( { where: { version_slug: req.params.version_slug } } );
+    const document = await Document.scope({
+      method: ["includeVersions", { documentId: versionBySlug.document_id }]
+    }).findOne();
+    const latestVersionId = _.maxBy(document.versions, "hierarchyLevel").id;
+    var rawVersion = await Version.scope({
+      method: ["byIdWithVersionQuestions", latestVersionId]
+    }).findOne();
+    var version_questions = rawVersion.version_questions.map(vq => {
+      vq = addHistory(vq);
+      vq.version_answers[0] = addHistory(vq.version_answers[0]);
+      return vq;
+    });
+    var version = _.assignIn(rawVersion.toJSON(), { version_questions });
+    console.log({version});
+    res.send(version);
   } catch (err) {
     next(err);
   }
@@ -411,7 +451,9 @@ const postNewVersion = async (req, res, next) => {
 module.exports = {
   getDocuments,
   getDocument,
+  getDocumentBySlug,
   getDocumentLatestQuestion,
+  getDocumentLatestQuestionBySlug,
   postDocument,
   postUpvote,
   postDownvote,
