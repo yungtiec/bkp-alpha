@@ -16,6 +16,8 @@ import {
   Document,
   DocumentBySlug,
   Wizard
+  Wizard,
+  MyDocuments
 } from "./scenes";
 import {
   Login,
@@ -81,6 +83,11 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
+            path="/documents/me"
+            component={MyDocuments}
+          />
+          <RouteWithLayout
+            layout={LayoutWithNav}
             path="/wizard"
             component={Wizard}
           />
@@ -121,9 +128,10 @@ class Routes extends Component {
               component={Admin}
             />
           )}
-          <Route path="/dex-overview" render={() => (
-            <Redirect to="/project/TL/document/9/version/10/"/>
-          )}/>
+          <Route
+            path="/dex-overview"
+            render={() => <Redirect to="/project/TL/document/9/version/10/" />}
+          />
           {/* Displays our Collaborations component as a fallback */}
           <RouteWithLayout
             layout={LayoutWithNav}

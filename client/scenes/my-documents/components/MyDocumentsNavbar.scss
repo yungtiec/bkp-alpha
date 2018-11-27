@@ -1,0 +1,19 @@
+.my-documents-navbar {
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.my-documents-navbar__item {
+  display: inline-block;
+  color: #838383;
+  margin-right: 18px;
+  padding: 10px 0px;
+  font-size: 14px;
+}
+
+.my-documents-navbar__item:hover {
+  color: black;
+}
+
+.my-documents-navbar__item.active {
+  box-shadow: #2a48d4 0px -4px 0px 0px inset;
+}

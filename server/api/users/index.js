@@ -5,7 +5,6 @@ module.exports = router;
 
 const ensureCorrectRole = (req, res, next) => {
   if (!req.user.roles || !req.user.roles.length) {
-    console.log(req.user.roles);
     res.send([]);
     return;
   } else {

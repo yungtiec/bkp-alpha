@@ -17,7 +17,7 @@ const { getEngagedUsers } = require("../utils");
 const moment = require("moment");
 const _ = require("lodash");
 const MarkdownParsor = require("../../../script/markdown-parser");
-const crypto = require('crypto');
+const crypto = require("crypto");
 Promise = require("bluebird");
 
 const getDocuments = async (req, res, next) => {
@@ -120,22 +120,22 @@ const addHistory = versionQuestionOrAnswer => {
 };
 
 const createVersionSlug = async (docTitle, versionObj) => {
-  const sha256 = crypto.createHash('sha256');
+  const sha256 = crypto.createHash("sha256");
 
   try {
     // Hash the original version obj as a JSON string
     // Convert the hash to base64 ([a-z], [A-Z], [0-9], +, /)
-    const hash = sha256.update(JSON.stringify(versionObj)).digest('base64');
+    const hash = sha256.update(JSON.stringify(versionObj)).digest("base64");
 
     // This is the  base64 key that corresponds to the given JSON string
     const base64Key = hash.slice(0, 8);
 
     // Convert base64 to hex string
-    let versionSlug = Buffer.from(base64Key, 'base64').toString('hex');
-    console.log('hash', versionSlug);
+    let versionSlug = Buffer.from(base64Key, "base64").toString("hex");
+    console.log("hash", versionSlug);
 
-    return `${docTitle.split(' ').join('-')}-${versionSlug}`
-  } catch(err) {
+    return `${docTitle.split(" ").join("-")}-${versionSlug}`;
+  } catch (err) {
     console.error(err);
   }
 };
@@ -162,7 +162,9 @@ const postDocument = async (req, res, next) => {
       res.sendStatus(403);
       return;
     }
-    const markdownParsor = new MarkdownParsor({ markdown: req.body.markdown || '' });
+    const markdownParsor = new MarkdownParsor({
+      markdown: req.body.markdown || ""
+    });
     const document = await Document.create({
       title: markdownParsor.title,
       creator_id: req.user.id,
@@ -179,8 +181,14 @@ const postDocument = async (req, res, next) => {
       scorecard: req.body.scorecard,
       version_number: req.body.versionNumber
     };
-    const versionSlug = await createVersionSlug(document.title || req.body.title, versionObj);
-    const versionWithSlug = Object.assign({version_slug: versionSlug}, versionObj);
+    const versionSlug = await createVersionSlug(
+      document.title || req.body.title,
+      versionObj
+    );
+    const versionWithSlug = Object.assign(
+      { version_slug: versionSlug },
+      versionObj
+    );
     const version = await Version.create(versionWithSlug);
 
     const questionInstances = await Promise.map(
@@ -203,10 +211,8 @@ const postDocument = async (req, res, next) => {
         });
       }
     );
-    const collaborators = req.body.collaboratorEmails ?
-      req.body.collaboratorEmails
-        .map(emailOption => emailOption.value)
-        .map(
+    const collaborators = req.body.collaboratorEmails
+      ? req.body.collaboratorEmails.map(emailOption => emailOption.value).map(
           async email =>
             await User.findOne({ where: { email } }).then(user =>
               DocumentCollaborator.create({
@@ -224,7 +230,8 @@ const postDocument = async (req, res, next) => {
                 });
               })
             )
-        ) : null;
+        )
+      : null;
     const versionJSON = version.toJSON();
     versionJSON.document = document;
     res.send(versionJSON);

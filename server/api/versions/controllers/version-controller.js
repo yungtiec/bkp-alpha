@@ -1,5 +1,11 @@
 const db = require("../../../db");
-const { Project, Version, VersionAnswer } = require("../../../db/models");
+const {
+  Project,
+  Version,
+  VersionAnswer,
+  Document
+} = require("../../../db/models");
+const Sequelize = require("sequelize");
 
 const getMetadata = async (req, res, next) => {
   try {
@@ -45,9 +51,51 @@ const putContentJson = async (req, res, next) => {
   }
 };
 
+const getDrafts = async (req, res, next) => {
+  try {
+    var { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: false }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    res.send({ count, rows });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getPublishedDocuments = async (req, res, next) => {
+  try {
+    var { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: true }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    res.send({ count, rows });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getMetadata,
   getMetadataBySlug,
   putScorecard,
-  putContentJson
+  putContentJson,
+  getDrafts,
+  getPublishedDocuments
 };

@@ -4,7 +4,12 @@ import { connect } from "react-redux";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ProfileBanner, ProfileNavbar } from "./components";
-import { QueryPassword, QueryNotifications, QueryComments, About } from "./scenes";
+import {
+  QueryPassword,
+  QueryNotifications,
+  QueryComments,
+  About
+} from "./scenes";
 import autoBind from "react-autobind";
 import moment from "moment";
 
@@ -92,7 +97,7 @@ const Profile = ({
             )}
           />
         )}
-        <Redirect from="/" exact to="/about" />
+        <Redirect from={match.url} exact to={`${match.url}/about`} />
       </Switch>
     </div>
   );
