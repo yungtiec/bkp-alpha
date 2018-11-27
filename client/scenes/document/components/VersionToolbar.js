@@ -114,10 +114,10 @@ class VersionToolbar extends Component {
           <div className="btn-group">
             <button
               type="button"
-              className="btn btn-outline-primary dropdown-toggle"
+              className="btn btn-outline-primary rounded-right"
               type="button"
               id="versionMenuButton"
-              data-toggle="dropdown"
+              //data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >

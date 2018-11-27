@@ -15,7 +15,6 @@ import {
   Landing,
   Document,
   DocumentBySlug,
-  Wizard
   Wizard,
   MyDocuments
 } from "./scenes";
