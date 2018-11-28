@@ -5,18 +5,20 @@ const {
   ensureResourceAccess,
   getEngagedUsers
 } = require("../utils");
-const { Document } = require("../../db/models");
+const { Document, Version } = require("../../db/models");
 const documentController = require("./controller");
 module.exports = router;
 
 const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
   // if document has only one version, make sure the version is submitted
   try {
+    const version = await Version.findOne({version_slug : req.params.version_slug});
+    const documentId = version.document_id;
     const document = await Document.scope({
       method: [
         "includeVersions",
         {
-          documentId: req.params.documentId
+          documentId: documentId
         }
       ]
     }).findOne();
