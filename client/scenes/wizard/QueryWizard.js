@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import { fetchStepArrayAndSchemas } from "./data/actions";
+import {
+  fetchStepArrayAndSchemas,
+  createDocumentWithSchemaId
+} from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
 import { loadModal, hideModal } from "../../data/reducer";
 import { requiresAuthorization } from "../../components";
 import autoBind from "react-autobind";
 import Steps, { Step } from "rc-steps";
-import { matchPath } from 'react-router';
+import { matchPath } from "react-router";
 import Wizard from "./Wizard";
 
 class QueryWizard extends Component {
@@ -18,7 +21,8 @@ class QueryWizard extends Component {
 
   componentDidMount() {
     // hardcode wizardSchemaId for now
-    this.props.fetchStepArrayAndSchemas(1);
+    // create document and version, and associated version with schemas
+    this.props.createDocumentWithSchemaId(1);
   }
 
   loadPreviewModa() {
@@ -69,7 +73,12 @@ const mapState = state => {
   };
 };
 
-const actions = { fetchStepArrayAndSchemas, loadModal, hideModal };
+const actions = {
+  fetchStepArrayAndSchemas,
+  createDocumentWithSchemaId,
+  loadModal,
+  hideModal
+};
 
 export default withRouter(
   connect(

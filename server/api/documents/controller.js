@@ -11,7 +11,8 @@ const {
   DocumentCollaborator,
   Issue,
   ProjectAdmin,
-  ProjectEditor
+  ProjectEditor,
+  WizardSchema
 } = require("../../db/models");
 const { getEngagedUsers } = require("../utils");
 const moment = require("moment");
@@ -94,7 +95,9 @@ const createVersionSlug = async (docTitle, versionObj) => {
     let versionSlug = Buffer.from(base64Key, "base64").toString("hex");
     console.log("hash", versionSlug);
 
-    return `${docTitle.split(" ").join("-")}-${versionSlug}`;
+    return docTitle
+      ? `${docTitle.split(" ").join("-")}-${versionSlug}`
+      : versionSlug;
   } catch (err) {
     console.error(err);
   }
@@ -102,102 +105,168 @@ const createVersionSlug = async (docTitle, versionObj) => {
 
 const postDocument = async (req, res, next) => {
   try {
-    const project = await Project.findOne({
-      where: { symbol: req.body.selectedProjectSymbol },
-      include: [
-        {
-          model: User,
-          through: ProjectAdmin,
-          as: "admins"
-        },
-        {
-          model: User,
-          through: ProjectEditor,
-          as: "editors"
-        }
-      ]
-    });
-    const canCreate = permission("Create", { project }, req.user);
-    if (!canCreate) {
-      res.sendStatus(403);
-      return;
+    switch (req.body.documentFormat) {
+      case "markdown":
+        return createDocumentByMarkdown(req, res, next);
+      case "wizard":
+        return createDocumentWithSchemaId(req, res, next);
+      default:
+        res.sendStatus(404)
     }
-    const markdownParsor = new MarkdownParsor({
-      markdown: req.body.markdown || ""
-    });
-    const document = await Document.create({
-      title: markdownParsor.title,
-      creator_id: req.user.id,
-      project_id: project.id,
-      latest_version: 1
-    });
-    const commentUntilInUnix = moment()
-      .add(req.body.commentPeriodValue, req.body.commentPeriodUnit)
-      .format("x");
-    const versionObj = {
-      document_id: document.id,
-      creator_id: req.user.id,
-      comment_until_unix: commentUntilInUnix,
-      scorecard: req.body.scorecard,
-      version_number: req.body.versionNumber
-    };
-    const versionSlug = await createVersionSlug(
-      document.title || req.body.title,
-      versionObj
-    );
-    const versionWithSlug = Object.assign(
-      { version_slug: versionSlug },
-      versionObj
-    );
-    const version = await Version.create(versionWithSlug);
-
-    const questionInstances = await Promise.map(
-      markdownParsor.questions,
-      async questionObject => {
-        var answer = markdownParsor.findAnswerToQuestion(
-          questionObject.order_in_version
-        );
-        var versionQuestion = await VersionQuestion.create({
-          version_id: version.id,
-          markdown: `### ${questionObject.question.trim()}`,
-          order_in_version: questionObject.order_in_version,
-          latest: true
-        });
-        await VersionAnswer.create({
-          markdown: answer,
-          version_question_id: versionQuestion.id,
-          version_id: version.id,
-          latest: true
-        });
-      }
-    );
-    const collaborators = req.body.collaboratorEmails
-      ? req.body.collaboratorEmails.map(emailOption => emailOption.value).map(
-          async email =>
-            await User.findOne({ where: { email } }).then(user =>
-              DocumentCollaborator.create({
-                user_id: user ? user.id : null,
-                email,
-                document_id: document.id
-              }).then(collaborator => {
-                return Notification.notifyCollaborators({
-                  sender: req.user,
-                  collaboratorId: user.id,
-                  versionId: version.id,
-                  projectSymbol: project.symbol,
-                  parentVersionTitle: document.title,
-                  action: "created"
-                });
-              })
-            )
-        )
-      : null;
-    const versionJSON = version.toJSON();
-    versionJSON.document = document;
-    res.send(versionJSON);
   } catch (err) {
     next(err);
   }
+};
+
+const createDocumentByMarkdown = async (req, res, next) => {
+  const project = await Project.findOne({
+    where: { symbol: req.body.selectedProjectSymbol },
+    include: [
+      {
+        model: User,
+        through: ProjectAdmin,
+        as: "admins"
+      },
+      {
+        model: User,
+        through: ProjectEditor,
+        as: "editors"
+      }
+    ]
+  });
+  const canCreate = permission("Create", { project }, req.user);
+  if (!canCreate) {
+    res.sendStatus(403);
+    return;
+  }
+  const markdownParsor = new MarkdownParsor({
+    markdown: req.body.markdown || ""
+  });
+  const document = await Document.create({
+    title: markdownParsor.title,
+    creator_id: req.user.id,
+    project_id: project.id,
+    latest_version: 1
+  });
+  const commentUntilInUnix = moment()
+    .add(req.body.commentPeriodValue, req.body.commentPeriodUnit)
+    .format("x");
+  const versionObj = {
+    document_id: document.id,
+    creator_id: req.user.id,
+    comment_until_unix: commentUntilInUnix,
+    scorecard: req.body.scorecard,
+    version_number: req.body.versionNumber
+  };
+  const versionSlug = await createVersionSlug(
+    document.title || req.body.title,
+    versionObj
+  );
+  const versionWithSlug = Object.assign(
+    { version_slug: versionSlug },
+    versionObj
+  );
+  const version = await Version.create(versionWithSlug);
+
+  const questionInstances = await Promise.map(
+    markdownParsor.questions,
+    async questionObject => {
+      var answer = markdownParsor.findAnswerToQuestion(
+        questionObject.order_in_version
+      );
+      var versionQuestion = await VersionQuestion.create({
+        version_id: version.id,
+        markdown: `### ${questionObject.question.trim()}`,
+        order_in_version: questionObject.order_in_version,
+        latest: true
+      });
+      await VersionAnswer.create({
+        markdown: answer,
+        version_question_id: versionQuestion.id,
+        version_id: version.id,
+        latest: true
+      });
+    }
+  );
+  const collaborators = req.body.collaboratorEmails
+    ? req.body.collaboratorEmails.map(emailOption => emailOption.value).map(
+        async email =>
+          await User.findOne({ where: { email } }).then(user =>
+            DocumentCollaborator.create({
+              user_id: user ? user.id : null,
+              email,
+              document_id: document.id
+            }).then(collaborator => {
+              return Notification.notifyCollaborators({
+                sender: req.user,
+                collaboratorId: user.id,
+                versionId: version.id,
+                projectSymbol: project.symbol,
+                parentVersionTitle: document.title,
+                action: "created"
+              });
+            })
+          )
+      )
+    : null;
+  res.send(Object.assign({ document }, version.toJSON()));
+};
+
+const createDocumentWithSchemaId = async (req, res, next) => {
+  const canCreate = permission("Create", { project: null }, req.user);
+  if (!canCreate) {
+    res.sendStatus(403);
+    return;
+  }
+  const document = await Document.create({
+    title: "",
+    creator_id: req.user.id,
+    latest_version: 1,
+    document_type: req.body.documentType
+  });
+  const commentUntilInUnix = moment()
+    .add(req.body.commentPeriodValue, req.body.commentPeriodUnit)
+    .format("x");
+  const versionObj = {
+    document_id: document.id,
+    creator_id: req.user.id,
+    comment_until_unix: commentUntilInUnix,
+    version_number: "1"
+  };
+  const versionSlug = await createVersionSlug("", versionObj);
+  const versionWithSlug = Object.assign(
+    {
+      version_slug: versionSlug,
+      wizard_schema_id: req.body.wizardSchemaId
+    },
+    versionObj
+  );
+  const [version, wizardSchema] = await Promise.all([
+    Version.create(versionWithSlug),
+    WizardSchema.findById(req.body.wizardSchemaId)
+  ]);
+  const collaborators = req.body.collaboratorEmails
+    ? req.body.collaboratorEmails.map(emailOption => emailOption.value).map(
+        async email =>
+          await User.findOne({ where: { email } }).then(user =>
+            DocumentCollaborator.create({
+              user_id: user ? user.id : null,
+              email,
+              document_id: document.id
+            }).then(collaborator => {
+              return Notification.notifyCollaborators({
+                sender: req.user,
+                collaboratorId: user.id,
+                versionId: version.id,
+                projectSymbol: project.symbol,
+                parentVersionTitle: document.title,
+                action: "created"
+              });
+            })
+          )
+      )
+    : null;
+  res.send({ version, document, wizardSchema });
 };
 
 const postUpvote = async (req, res, next) => {

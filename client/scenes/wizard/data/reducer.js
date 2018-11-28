@@ -37,9 +37,7 @@ const updateFormData = ({ formData, formDataPath }, state) => {
   return state;
 };
 
-const initStepStatus = (state, action) => {
-
-}
+const initStepStatus = (state, action) => {};
 
 export default function reduce(state = initialState, action = {}) {
   switch (action.type) {
@@ -51,6 +49,19 @@ export default function reduce(state = initialState, action = {}) {
           action.wizardStepArray,
           action.stepSchemas
         )
+      };
+    case types.DOCUMENT_CREATED:
+      return {
+        ...state,
+        stepFormData: getInitialStepFormData(
+          action.wizardSchema.step_array_json.wizardSteps,
+          action.wizardSchema.step_schemas_json
+        ),
+        stepSchemas: action.wizardSchema.step_schemas_json,
+        wizardStepArray: action.wizardSchema.step_array_json.wizardSteps,
+        viewerStepArray: action.wizardSchema.step_array_json.viewerSteps,
+        version: action.version,
+        document: action.document
       };
     case types.FORM_DATA_IN_STORE_UPDATED:
       return updateFormData(action, cloneDeep(state));

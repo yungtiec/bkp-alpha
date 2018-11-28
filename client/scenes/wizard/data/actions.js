@@ -1,6 +1,11 @@
 import * as types from "./actionTypes.js";
-import { getWizardSchemaById, postDocumentMetadata, putVersionContentJson } from "./services";
-import history from '../../../history';
+import {
+  getWizardSchemaById,
+  postDocumentMetadata,
+  putVersionContentJson,
+  postDocumentWithSchemaId
+} from "./services";
+import history from "../../../history";
 
 export function fetchStepArrayAndSchemas(wizardSchemaId) {
   return async (dispatch, getState) => {
@@ -38,13 +43,15 @@ export function updateVersionContentJson(versionId) {
   return async (dispatch, getState) => {
     try {
       const currentFormData = getState().scenes.wizard.data.stepFormData;
-      const versionData = await putVersionContentJson(versionId, currentFormData);
+      const versionData = await putVersionContentJson(
+        versionId,
+        currentFormData
+      );
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 }
-
 
 export function submitDocumentMetadata({ title, description, project }) {
   const selectedProjectSymbol = project.symbol;
@@ -82,5 +89,21 @@ export function submitDocumentMetadata({ title, description, project }) {
         });
       }
     } catch (err) {}
+  };
+}
+
+export function createDocumentWithSchemaId(wizardSchemaId) {
+  return async (dispatch, getState) => {
+    try {
+      var { version, document, wizardSchema } = await postDocumentWithSchemaId(
+        wizardSchemaId
+      );
+      dispatch({
+        type: types.DOCUMENT_CREATED,
+        version,
+        document,
+        wizardSchema
+      });
+    } catch (error) {}
   };
 }

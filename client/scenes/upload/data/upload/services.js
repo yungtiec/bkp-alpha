@@ -7,7 +7,9 @@ export function postMarkdown({
   commentPeriodValue,
   commentPeriodUnit,
   selectedProjectSymbol,
-  scorecard
+  scorecard,
+  // todo: add input for document type: regulatory...etc
+  documentType
 }) {
   return axios
     .post(`/api/documents`, {
@@ -17,7 +19,9 @@ export function postMarkdown({
       commentPeriodValue,
       commentPeriodUnit,
       selectedProjectSymbol,
-      scorecard
+      scorecard,
+      documentFormat: "markdown",
+      documentType
     })
     .then(res => res.data);
 }
