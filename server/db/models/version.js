@@ -254,6 +254,17 @@ module.exports = (db, DataTypes) => {
         ]
       };
     });
+    Version.addScope("includeDocument", function({ version_slug }) {
+      var documentIncludeClause = {
+        model: models["document"]
+      };
+      var options = {
+        include: [documentIncludeClause]
+      };
+
+      if (version_slug) options.where = { version_slug };
+      return options;
+    });
   };
   return Version;
 };

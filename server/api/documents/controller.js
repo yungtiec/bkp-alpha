@@ -73,6 +73,23 @@ const getPublishedDocuments = async (req, res, next) => {
   }
 };
 
+const getDocumentBySlug = async (req, res, next) => {
+  try {
+    const version = await Version.findOne({
+      where: { version_slug: req.params.version_slug }
+    });
+    const document = await Document.scope({
+      method: [
+        "includeVersionsWithOutstandingIssues",
+        { documentId: version.document_id }
+      ]
+    }).findOne();
+    res.send(document);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getDocument = async (req, res, next) => {
   try {
     const document = await Document.scope({
@@ -98,6 +115,30 @@ const getDraftBySlug = async (req, res, next) => {
       wizardSchema: version.wizard_schema,
       project: version.document.project
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getDocumentLatestQuestionBySlug = async (req, res, next) => {
+  try {
+    const versionBySlug = await Version.findOne({
+      where: { version_slug: req.params.version_slug }
+    });
+    const document = await Document.scope({
+      method: ["includeVersions", { documentId: versionBySlug.document_id }]
+    }).findOne();
+    const latestVersionId = _.maxBy(document.versions, "hierarchyLevel").id;
+    var rawVersion = await Version.scope({
+      method: ["byIdWithVersionQuestions", latestVersionId]
+    }).findOne();
+    var version_questions = rawVersion.version_questions.map(vq => {
+      vq = addHistory(vq);
+      vq.version_answers[0] = addHistory(vq.version_answers[0]);
+      return vq;
+    });
+    var version = _.assignIn(rawVersion.toJSON(), { version_questions });
+    res.send(version);
   } catch (err) {
     next(err);
   }
@@ -558,7 +599,9 @@ module.exports = {
   getPublishedDocuments,
   getDocument,
   getDraftBySlug,
+  getDocumentBySlug,
   getDocumentLatestQuestion,
+  getDocumentLatestQuestionBySlug,
   postDocument,
   postUpvote,
   postDownvote,

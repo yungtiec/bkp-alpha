@@ -43,13 +43,11 @@ export default ({ documentIds, documentsById }) => {
           (creatorRole !== "admin" && creatorRole !== "project_admin")
         )
           tagArray.push(`community contribution`);
+
         return (
           <ListItemGrid
             key={id}
-            cardHref={`/project/${
-              document.project.symbol
-            }/document/${id}/version/${document.versions[0].id}
-          `}
+            cardHref={`/s/${document.versions[0].version_slug}`}
             mainTitle={document.title}
             subtitle={`by ${document.creator.name}`}
             textUpperRight={date}

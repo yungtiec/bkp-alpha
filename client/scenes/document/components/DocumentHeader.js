@@ -10,15 +10,12 @@ export default class DocumentHeader extends Component {
   }
 
   goBack() {
-    history.push("/project/" + this.props.projectMetadata.symbol);
+    history.push("/project/" + this.props.documentMetadata.project.symbol);
   }
 
   render() {
     const {
-      versionMetadata,
       documentMetadata,
-      projectMetadata,
-      isClosedForComment
     } = this.props;
     const { creator, createdAt } = documentMetadata;
     const collaborators = documentMetadata.collaborators

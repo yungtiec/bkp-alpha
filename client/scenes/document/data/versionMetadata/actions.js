@@ -21,6 +21,23 @@ export function fetchMetadataByVersionId(versionId) {
   };
 }
 
+export function fetchMetadataByVersionSlug(version_slug) {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: types.PROJECT_SURVEY_METADATA_FETCH_REQUEST
+      });
+      var versionMetadata = await getMetadataByVersionSlug(version_slug);
+      dispatch({
+        type: types.PROJECT_SURVEY_METADATA_FETCH_SUCCESS,
+        versionMetadata
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
+
 export function editScorecard({ versionId, scorecard }) {
   return async (dispatch, getState) => {
     try {

@@ -64,6 +64,7 @@ export function submitDocumentMetadata({
   const selectedProjectSymbol = project.symbol;
   return async (dispatch, getState) => {
     try {
+<<<<<<< HEAD
       const documentId = getState().scenes.wizard.data.document.id;
       const res = await putDocumentMetadata({
         documentId,
@@ -111,6 +112,38 @@ export function fetchDocumentAndSchemasBySlug(versionSlug) {
         wizardSchema,
         project
       });
+=======
+      const currentDocument = getState().scenes.wizard.data.document;
+      if (!currentDocument) {
+        const version = await postDocumentMetadata({
+          title,
+          description,
+          selectedProjectSymbol,
+          projectId: project.id
+        });
+        const { document } = version;
+        dispatch({
+          type: types.DOCUMENT_METADATA_SUBMITTED,
+          document,
+          version,
+          selectedProjectSymbol,
+          project
+        });
+        history.push(`/wizard/step/3/version/${version.version_slug}`);
+      } else {
+        const document = await putDocumentMetadata({
+          title,
+          description,
+          selectedProjectSymbol,
+          projectId: project.id
+        });
+        dispatch({
+          type: types.DOCUMENT_METADATA_SUBMITTED,
+          document,
+          project
+        });
+      }
+>>>>>>> development
     } catch (err) {}
   };
 }

@@ -8,7 +8,6 @@ class ProfilePassword extends Component {
   constructor(props) {
     super(props);
     autoBind(this);
-    console.log(this.props);
     this.state = {
       hasPasswordUpdated: null
     };
@@ -43,8 +42,6 @@ class ProfilePassword extends Component {
   }
 
   componentDidMount() {
-    console.log("hey");
-    console.log(this.props);
     this.setState({
       currentPassword: "",
       newPassword: "",

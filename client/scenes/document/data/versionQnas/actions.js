@@ -2,6 +2,7 @@ import * as types from "./actionTypes";
 import {
   getQuestionsByVersionId,
   getLatestQuestionsByDocumentId,
+  getLatestQuestionsBySlug,
   postEditedQuestion,
   postEditedAnswer,
   putQuestionVersion,
@@ -14,6 +15,28 @@ export function fetchLatestQuestionsByDocumentId(documentId) {
   return async (dispatch, getState) => {
     try {
       var version = await getLatestQuestionsByDocumentId(documentId);
+      const versionQnas = sortBy(
+        version.version_questions,
+        ["order_in_version"],
+        ["asc"]
+      );
+      const versionQnasById = keyBy(versionQnas, "id");
+      const versionQnaIds = versionQnas.map(qna => qna.id);
+      dispatch({
+        type: types.PROJECT_SURVEY_QUESTIONS_FETCH_SUCCESS,
+        versionQnasById,
+        versionQnaIds
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
+
+export function fetchLatestQuestionsBySlug(slug) {
+  return async (dispatch, getState) => {
+    try {
+      var version = await getLatestQuestionsBySlug(slug);
       const versionQnas = sortBy(
         version.version_questions,
         ["order_in_version"],
