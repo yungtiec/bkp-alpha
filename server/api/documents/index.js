@@ -41,7 +41,6 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
       res.sendStatus(404);
     else next();
   } catch (err) {
-    console.error('error was in here', err);
     next(err);
   }
 };
@@ -67,7 +66,7 @@ router.get("/", documentController.getDocuments);
  */
 router.get(
   "/slug/:version_slug",
-  //ensureDocumentSubmissionOrOwnership,
+  ensureDocumentSubmissionOrOwnership,
   documentController.getDocumentBySlug
 );
 

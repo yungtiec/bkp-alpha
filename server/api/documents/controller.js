@@ -79,7 +79,6 @@ const getDocumentLatestQuestionBySlug = async (req, res, next) => {
     var version = _.assignIn(rawVersion.toJSON(), { version_questions });
     res.send(version);
   } catch (err) {
-    console.error('this was the error', err);
     next(err);
   }
 };
@@ -130,7 +129,6 @@ const createVersionSlug = async (docTitle, versionObj) => {
 
     // Convert base64 to hex string
     let versionSlug = Buffer.from(base64Key, "base64").toString("hex");
-    console.log("hash", versionSlug);
 
     return `${docTitle.split(" ").join("-")}-${versionSlug}`;
   } catch (err) {
