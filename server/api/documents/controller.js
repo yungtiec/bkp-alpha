@@ -34,13 +34,16 @@ const getDocuments = async (req, res, next) => {
 
 const getDocumentBySlug = async (req, res, next) => {
   try {
+    console.log('what are the params!?', req.params);
     const version = await Version.findOne( { where: { version_slug: req.params.version_slug } } );
+    console.log('version hereeee', version);
     const document = await Document.scope({
       method: [
         "includeVersionsWithOutstandingIssues",
         { documentId: version.document_id }
       ]
     }).findOne();
+    console.log('document hereeee', document);
     res.send(document);
   } catch (err) {
     next(err);

@@ -64,7 +64,7 @@ router.get("/", documentController.getDocuments);
  */
 router.get(
   "/slug/:version_slug",
-  ensureDocumentSubmissionOrOwnership,
+  //ensureDocumentSubmissionOrOwnership,
   documentController.getDocumentBySlug
 );
 
