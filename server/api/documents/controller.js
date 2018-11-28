@@ -64,27 +64,22 @@ const getDocument = async (req, res, next) => {
 const getDocumentLatestQuestionBySlug = async (req, res, next) => {
   try {
     const versionBySlug = await Version.findOne( { where: { version_slug: req.params.version_slug } } );
-    console.log({versionBySlug})
     const document = await Document.scope({
       method: ["includeVersions", { documentId: versionBySlug.document_id }]
     }).findOne();
-    console.log({document})
     const latestVersionId = _.maxBy(document.versions, "hierarchyLevel").id;
-    console.log({latestVersionId})
     var rawVersion = await Version.scope({
       method: ["byIdWithVersionQuestions", latestVersionId]
     }).findOne();
-    console.log({rawVersion})
     var version_questions = rawVersion.version_questions.map(vq => {
       vq = addHistory(vq);
       vq.version_answers[0] = addHistory(vq.version_answers[0]);
       return vq;
     });
-    console.log({version_questions});
     var version = _.assignIn(rawVersion.toJSON(), { version_questions });
-    console.log('version to be sent', version);
     res.send(version);
   } catch (err) {
+    console.error('this was the error', err);
     next(err);
   }
 };
