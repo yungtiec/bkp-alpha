@@ -78,7 +78,7 @@ router.get(
  */
 router.get(
   "/slug/:version_slug/questions",
-  ensureDocumentSubmissionOrOwnership,
+  //ensureDocumentSubmissionOrOwnership,
   documentController.getDocumentLatestQuestionBySlug
 );
 
