@@ -33,10 +33,8 @@ const getDocuments = async (req, res, next) => {
 };
 
 const getDocumentBySlug = async (req, res, next) => {
-  console.log('getting slug', req.params.version_slug);
   try {
     const version = await Version.findOne( { where: { version_slug: req.params.version_slug } } );
-    console.log('docid', version.document_id)
     const document = await Document.scope({
       method: [
         "includeVersionsWithOutstandingIssues",
@@ -79,7 +77,6 @@ const getDocumentLatestQuestionBySlug = async (req, res, next) => {
       return vq;
     });
     var version = _.assignIn(rawVersion.toJSON(), { version_questions });
-    console.log({version});
     res.send(version);
   } catch (err) {
     next(err);

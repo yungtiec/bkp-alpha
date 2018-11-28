@@ -66,7 +66,6 @@ export function submitDocumentMetadata({ title, description, project }) {
           selectedProjectSymbol,
           project
         });
-        console.log(version);
         history.push(`/wizard/step/3/version/${version.version_slug}`);
       } else {
         const document = await putDocumentMetadata({

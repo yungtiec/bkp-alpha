@@ -6,7 +6,6 @@ export function getMetadataByDocumentId(documentId) {
 
 export function getMetadataBySlug(version_slug) {
   return axios.get(`/api/documents/slug/${version_slug}`).then(res => {
-    console.log('metadata returned', res.data);
     return res.data
   });
 }

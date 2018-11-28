@@ -13,7 +13,7 @@ import {
 import { maxBy } from "lodash";
 import PropTypes from "prop-types";
 import { Events, scrollSpy, animateScroll as scroll } from "react-scroll";
-import QueryVersionUpload from "./scenes/VersionUpload/QueryVersionUpload";
+import QueryVersionUploadBySlug from "./scenes/VersionUpload/QueryVersionUploadBySlug";
 import QueryVersionBySlug from "./scenes/Version/QueryVersionBySlug";
 import autoBind from "react-autobind";
 import { DocumentHeader, VersionToolbar } from "./components";
@@ -46,7 +46,6 @@ class DocumentContainer extends Component {
   }
 
   render() {
-    console.log('this.props', this.props);
     const {
       documentMetadata,
       latestVersionMetadata,
@@ -62,15 +61,10 @@ class DocumentContainer extends Component {
     return (
       <div className="main-container">
         <DocumentHeader
-          versionMetadata={latestVersionMetadata}
           documentMetadata={documentMetadata}
-          projectMetadata={documentMetadata.project}
           isClosedForComment={isClosedForComment}
         />
         <VersionToolbar
-          projectMetadata={documentMetadata.project}
-          versionMetadata={versionMetadata}
-          latestVersionMetadata={latestVersionMetadata}
           documentMetadata={documentMetadata}
           versionQnasById={versionQnasById}
           versionQnaIds={versionQnaIds}
@@ -82,8 +76,7 @@ class DocumentContainer extends Component {
             path={`${match.path}/issues`}
             render={props => (
               <VersionIssues
-                documentVersions={documentMetadata.versions}
-                projectSymbol={documentMetadata.project.symbol}
+                documentMetadata={documentMetadata}
               />
             )}
           />
@@ -92,17 +85,16 @@ class DocumentContainer extends Component {
             render={() => (
               <VersionProgress
                 documentMetadata={documentMetadata}
-                projectSymbol={documentMetadata.project.symbol}
               />
             )}
           />
           <Route
             path={`${match.path}/upload`}
-            render={props => <QueryVersionUpload latestVersionMetadata={latestVersionMetadata} />}
+            render={props => <QueryVersionUploadBySlug documentMetadata={documentMetadata} />}
           />
           <Route
             path={`${match.path}`}
-            render={props => <QueryVersionBySlug latestVersionMetadata={latestVersionMetadata} />}
+            render={props => <QueryVersionBySlug documentMetadata={documentMetadata} />}
           />
         </Switch>
       </div>

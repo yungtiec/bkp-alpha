@@ -244,7 +244,7 @@ class VersionUpload extends Component {
             </AccordionItemTitle>
             <AccordionItemBody>
               <div className="d-flex flex-column">
-                {outstandingIssues.length ? (
+                {outstandingIssues && outstandingIssues.length ? (
                   <div>
                     <p>click to close issues submitted by the community</p>
                     <div className="entity-cards">

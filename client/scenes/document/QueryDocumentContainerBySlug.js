@@ -26,7 +26,6 @@ class QueryDocumentContainerBySlug extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     batchActions([
       this.props.fetchMetadataBySlug(this.props.match.params.slug),
       this.props.fetchLatestQuestionsBySlug(

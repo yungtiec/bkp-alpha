@@ -80,15 +80,15 @@ const LoadableVersion = Loadable({
 
 class MyComponent extends React.Component {
   componentDidMount() {
-    const versionId = this.props.latestVersionMetadata.id;
+    const versionId = this.props.documentMetadata.versions[0].id;
     this.loadData({
       versionId: versionId
     });
   }
 
   componentDidUpdate(prevProps) {
-    const versionId = this.props.latestVersionMetadata.id;
-    const prevVersionId = prevProps.latestVersionMetadata.id;
+    const versionId = this.props.documentMetadata.versions[0].id;
+    const prevVersionId = prevProps.documentMetadata.versions[0].id;
     if (
       prevVersionId !== versionId
     ) {
