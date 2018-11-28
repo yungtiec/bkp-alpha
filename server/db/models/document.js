@@ -102,7 +102,8 @@ module.exports = (db, DataTypes) => {
               "version_number",
               "creator_id",
               "pdf_link",
-              "createdAt"
+              "createdAt",
+              "version_slug"
             ],
             include: [
               { model: models["document"] },

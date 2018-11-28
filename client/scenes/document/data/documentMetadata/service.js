@@ -4,6 +4,12 @@ export function getMetadataByDocumentId(documentId) {
   return axios.get(`/api/documents/${documentId}`).then(res => res.data);
 }
 
+export function getMetadataBySlug(version_slug) {
+  return axios.get(`/api/documents/slug/${version_slug}`).then(res => {
+    return res.data
+  });
+}
+
 export function postUpvoteToDocument({
   documentId,
   projectSymbol,

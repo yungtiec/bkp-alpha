@@ -4,7 +4,7 @@ import { Timeline, TimelineEvent } from "react-event-timeline";
 import { seeCommentContext } from "../../../../../utils";
 import { assignIn } from "lodash";
 
-export default ({ documentMetadata, projectSymbol }) => (
+export default ({ documentMetadata }) => (
   <div className="project-document" id="project-document">
     <Timeline style={{ margin: 0, fontWeight: 400, fontSize: "14px" }}>
       {documentMetadata.versions.map(version => {
@@ -71,7 +71,7 @@ export default ({ documentMetadata, projectSymbol }) => (
                                 document: {
                                   id: documentMetadata.id,
                                   project: {
-                                    symbol: projectSymbol
+                                    symbol: documentMetadata.project.symbol
                                   }
                                 }
                               }

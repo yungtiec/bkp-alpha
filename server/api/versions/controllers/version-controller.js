@@ -18,6 +18,17 @@ const getMetadata = async (req, res, next) => {
   }
 };
 
+const getMetadataBySlug = async (req, res, next) => {
+  try {
+    const version = await Version.scope({
+      method: ["basic", req.params.version_slug]
+    }).findOne();
+    res.send(version);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const putScorecard = async (req, res, next) => {
   try {
     const version = await Version.findById(req.params.versionId).then(v =>
@@ -82,6 +93,7 @@ const getPublishedDocuments = async (req, res, next) => {
 
 module.exports = {
   getMetadata,
+  getMetadataBySlug,
   putScorecard,
   putContentJson,
   getDrafts,
