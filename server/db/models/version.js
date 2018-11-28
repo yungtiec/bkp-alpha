@@ -236,6 +236,24 @@ module.exports = (db, DataTypes) => {
         ]
       };
     });
+    Version.addScope("bySlugWithDocumentAndWizardSchemas", function(slug) {
+      return {
+        where: { version_slug: slug },
+        include: [
+          {
+            model: models.document,
+            include: [
+              {
+                model: models.project
+              }
+            ]
+          },
+          {
+            model: models.wizard_schema
+          }
+        ]
+      };
+    });
   };
   return Version;
 };

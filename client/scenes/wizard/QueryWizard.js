@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import {
   fetchStepArrayAndSchemas,
+  fetchDocumentAndSchemasBySlug,
   createDocumentWithSchemaId
 } from "./data/actions";
 import { getStepArrayAndSchemas } from "./data/reducer";
@@ -21,8 +22,11 @@ class QueryWizard extends Component {
 
   componentDidMount() {
     // hardcode wizardSchemaId for now
-    // create document and version, and associated version with schemas
-    this.props.createDocumentWithSchemaId(1);
+    if (this.props.match.params.slug === "-") {
+      this.props.createDocumentWithSchemaId(1);
+    } else {
+      this.props.fetchDocumentAndSchemasBySlug(this.props.match.params.slug);
+    }
   }
 
   loadPreviewModa() {
@@ -75,6 +79,7 @@ const mapState = state => {
 
 const actions = {
   fetchStepArrayAndSchemas,
+  fetchDocumentAndSchemasBySlug,
   createDocumentWithSchemaId,
   loadModal,
   hideModal

@@ -3,7 +3,9 @@ import {
   getWizardSchemaById,
   postDocumentMetadata,
   putVersionContentJson,
-  postDocumentWithSchemaId
+  postDocumentWithSchemaId,
+  getDraftBySlug,
+  putDocumentMetadata
 } from "./services";
 import history from "../../../history";
 
@@ -53,41 +55,28 @@ export function updateVersionContentJson(versionId) {
   };
 }
 
-export function submitDocumentMetadata({ title, description, project }) {
+export function submitDocumentMetadata({
+  title,
+  description,
+  project,
+  callbackFn
+}) {
   const selectedProjectSymbol = project.symbol;
   return async (dispatch, getState) => {
     try {
-      const currentDocument = getState().scenes.wizard.data.document;
-      if (!currentDocument) {
-        const version = await postDocumentMetadata({
-          title,
-          description,
-          selectedProjectSymbol,
-          projectId: project.id
-        });
-        const { document } = version;
-        dispatch({
-          type: types.DOCUMENT_METADATA_SUBMITTED,
-          document,
-          version,
-          selectedProjectSymbol,
-          project
-        });
-        console.log(version);
-        history.push(`/wizard/step/3/version/${version.version_slug}`);
-      } else {
-        const document = await putDocumentMetadata({
-          title,
-          description,
-          selectedProjectSymbol,
-          projectId: project.id
-        });
-        dispatch({
-          type: types.DOCUMENT_METADATA_SUBMITTED,
-          document,
-          project
-        });
-      }
+      const documentId = getState().scenes.wizard.data.document.id;
+      const res = await putDocumentMetadata({
+        documentId,
+        title,
+        description,
+        selectedProjectSymbol,
+        projectId: project.id
+      });
+      dispatch({
+        type: types.DOCUMENT_METADATA_SUBMITTED,
+        document: res.document,
+        project: res.project
+      });
     } catch (err) {}
   };
 }
@@ -104,6 +93,24 @@ export function createDocumentWithSchemaId(wizardSchemaId) {
         document,
         wizardSchema
       });
+      history.push(`/edit/${version.version_slug}/step/1`);
     } catch (error) {}
+  };
+}
+
+export function fetchDocumentAndSchemasBySlug(versionSlug) {
+  return async (dispatch, getState) => {
+    try {
+      const { version, document, wizardSchema, project } = await getDraftBySlug(
+        versionSlug
+      );
+      dispatch({
+        type: types.DOCUMENT_AND_SCHEMAS_FETCHED_SUCCESS,
+        version,
+        document,
+        wizardSchema,
+        project
+      });
+    } catch (err) {}
   };
 }

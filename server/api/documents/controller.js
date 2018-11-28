@@ -33,6 +33,46 @@ const getDocuments = async (req, res, next) => {
   }
 };
 
+const getDrafts = async (req, res, next) => {
+  try {
+    var { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: false }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    res.send({ count, rows });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getPublishedDocuments = async (req, res, next) => {
+  try {
+    var { count, rows } = await Document.scope({
+      method: [
+        "includeVersions",
+        {
+          versionWhereClause: { submitted: true }
+        }
+      ]
+    }).findAndCountAll({
+      where: { creator_id: req.user.id },
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset)
+    });
+    res.send({ count, rows });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getDocument = async (req, res, next) => {
   try {
     const document = await Document.scope({
@@ -42,6 +82,22 @@ const getDocument = async (req, res, next) => {
       ]
     }).findOne();
     res.send(document);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getDraftBySlug = async (req, res, next) => {
+  try {
+    var version = await Version.scope({
+      method: ["bySlugWithDocumentAndWizardSchemas", req.params.versionSlug]
+    }).findOne();
+    res.send({
+      version: _.omit(version.toJSON(), ["document", "wizard_schema"]),
+      document: version.document,
+      wizardSchema: version.wizard_schema,
+      project: version.document.project
+    });
   } catch (err) {
     next(err);
   }
@@ -111,7 +167,7 @@ const postDocument = async (req, res, next) => {
       case "wizard":
         return createDocumentWithSchemaId(req, res, next);
       default:
-        res.sendStatus(404)
+        res.sendStatus(404);
     }
   } catch (err) {
     next(err);
@@ -484,12 +540,28 @@ const postNewVersion = async (req, res, next) => {
   }
 };
 
+const putDocument = async (req, res, next) => {
+  try {
+    const [document, project] = await Promise.all([
+      Document.update(req.body, { where: { id: req.params.documentId } }),
+      Project.findById(req.body.project_id)
+    ]);
+    res.send({ document, project });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getDocuments,
+  getDrafts,
+  getPublishedDocuments,
   getDocument,
+  getDraftBySlug,
   getDocumentLatestQuestion,
   postDocument,
   postUpvote,
   postDownvote,
-  postNewVersion
+  postNewVersion,
+  putDocument
 };

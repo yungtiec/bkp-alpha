@@ -5,17 +5,18 @@ export function getWizardSchemaById(id) {
 }
 
 export function putDocumentMetadata({
+  documentId,
   title,
   description,
   projectId,
   selectedProjectSymbol
 }) {
   return axios
-    .put("/api/documents/:id", {
+    .put(`/api/documents/${documentId}`, {
       title,
       description,
       selectedProjectSymbol,
-      projectId
+      project_id: projectId
     })
     .then(res => res.data);
 }
@@ -24,9 +25,15 @@ export function postDocumentWithSchemaId(wizardSchemaId) {
   return axios
     .post("/api/documents", {
       wizardSchemaId,
-      documentFormat: 'wizard',
+      documentFormat: "wizard",
       documentType: "scorecard"
     })
+    .then(res => res.data);
+}
+
+export function getDraftBySlug(versionSlug) {
+  return axios
+    .get(`/api/documents/drafts/${versionSlug}`)
     .then(res => res.data);
 }
 
@@ -42,7 +49,7 @@ export function postDocumentMetadata({
       description,
       selectedProjectSymbol,
       projectId,
-      documentFormat: 'wizard',
+      documentFormat: "wizard",
       documentType: "scorecard"
     })
     .then(res => res.data);

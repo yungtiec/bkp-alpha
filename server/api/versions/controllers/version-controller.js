@@ -40,50 +40,10 @@ const putContentJson = async (req, res, next) => {
   }
 };
 
-const getDrafts = async (req, res, next) => {
-  try {
-    var { count, rows } = await Document.scope({
-      method: [
-        "includeVersions",
-        {
-          versionWhereClause: { submitted: false }
-        }
-      ]
-    }).findAndCountAll({
-      where: { creator_id: req.user.id },
-      limit: Number(req.query.limit),
-      offset: Number(req.query.offset)
-    });
-    res.send({ count, rows });
-  } catch (err) {
-    next(err);
-  }
-};
 
-const getPublishedDocuments = async (req, res, next) => {
-  try {
-    var { count, rows } = await Document.scope({
-      method: [
-        "includeVersions",
-        {
-          versionWhereClause: { submitted: true }
-        }
-      ]
-    }).findAndCountAll({
-      where: { creator_id: req.user.id },
-      limit: Number(req.query.limit),
-      offset: Number(req.query.offset)
-    });
-    res.send({ count, rows });
-  } catch (err) {
-    next(err);
-  }
-};
 
 module.exports = {
   getMetadata,
   putScorecard,
-  putContentJson,
-  getDrafts,
-  getPublishedDocuments
+  putContentJson
 };

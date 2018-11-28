@@ -63,6 +63,20 @@ export default function reduce(state = initialState, action = {}) {
         version: action.version,
         document: action.document
       };
+    case types.DOCUMENT_AND_SCHEMAS_FETCHED_SUCCESS:
+      return {
+        ...state,
+        stepFormData: getInitialStepFormData(
+          action.wizardSchema.step_array_json.wizardSteps,
+          action.wizardSchema.step_schemas_json
+        ),
+        stepSchemas: action.wizardSchema.step_schemas_json,
+        wizardStepArray: action.wizardSchema.step_array_json.wizardSteps,
+        viewerStepArray: action.wizardSchema.step_array_json.viewerSteps,
+        version: action.version,
+        document: action.document,
+        project: action.project
+      };
     case types.FORM_DATA_IN_STORE_UPDATED:
       return updateFormData(action, cloneDeep(state));
     case types.CURRENT_PROJECT_UPDATED:
