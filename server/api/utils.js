@@ -96,6 +96,31 @@ const getEngagedUsers = async ({
   return commentators;
 };
 
+const createVersionSlug = async (docTitle, versionObj) => {
+  const sha256 = crypto.createHash("sha256");
+
+  try {
+    // Hash the original version obj as a JSON string
+    // Convert the hash to base64 ([a-z], [A-Z], [0-9], +, /)
+    const hash = sha256.update(JSON.stringify(versionObj)).digest("base64");
+
+    // This is the  base64 key that corresponds to the given JSON string
+    const base64Key = hash.slice(0, 8);
+
+    // Convert base64 to hex string
+    const versionHash = Buffer.from(base64Key, "base64").toString("hex");
+
+    const versionSlug = `${docTitle.toLowerCase().split(" ").join("-")}-${versionHash}`;
+
+
+    return docTitle
+      ? versionSlug
+      : versionHash;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
   isAdmin,
   ensureAuthentication,
@@ -103,5 +128,6 @@ module.exports = {
   ensureAdminRoleOrCommentOwnership,
   ensureAdminRoleOrOwnership,
   ensureResourceAccess,
-  getEngagedUsers
+  getEngagedUsers,
+  createVersionSlug
 };

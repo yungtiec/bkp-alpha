@@ -14,7 +14,7 @@ const {
   ProjectEditor,
   WizardSchema
 } = require("../../db/models");
-const { getEngagedUsers } = require("../utils");
+const { getEngagedUsers, createVersionSlug } = require("../utils");
 const moment = require("moment");
 const _ = require("lodash");
 const MarkdownParsor = require("../../../script/markdown-parser");
@@ -175,28 +175,6 @@ const addHistory = versionQuestionOrAnswer => {
   delete versionQuestionOrAnswer["ancestors"];
   delete versionQuestionOrAnswer["descendents"];
   return versionQuestionOrAnswer;
-};
-
-const createVersionSlug = async (docTitle, versionObj) => {
-  const sha256 = crypto.createHash("sha256");
-
-  try {
-    // Hash the original version obj as a JSON string
-    // Convert the hash to base64 ([a-z], [A-Z], [0-9], +, /)
-    const hash = sha256.update(JSON.stringify(versionObj)).digest("base64");
-
-    // This is the  base64 key that corresponds to the given JSON string
-    const base64Key = hash.slice(0, 8);
-
-    // Convert base64 to hex string
-    let versionSlug = Buffer.from(base64Key, "base64").toString("hex");
-
-    return docTitle
-      ? `${docTitle.split(" ").join("-")}-${versionSlug}`
-      : versionSlug;
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 const postDocument = async (req, res, next) => {
