@@ -55,7 +55,6 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
 router.get("/", documentController.getDocuments);
 
 /**
-<<<<<<< HEAD
  * Getting a list of user's drafts
  *
  * @name Get a list of user's drafts
