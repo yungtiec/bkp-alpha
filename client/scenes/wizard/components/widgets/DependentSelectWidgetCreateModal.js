@@ -13,7 +13,7 @@ class DependentSelectWidgetCreatableModal extends Component {
 
   componentDidMount() {
     this.setState({
-      formData: this.props.formDataPath
+      formData: this.props.formData
     });
   }
 
@@ -23,13 +23,20 @@ class DependentSelectWidgetCreatableModal extends Component {
     });
   }
 
-  handleSubmit({ formData }) {
-    this.props.updateFormDataInStore(formData);
+  handleSubmit() {
+    // this.props.updateFormDataInStore(this.state.formData);
     this.props.hideModal();
   }
 
   render() {
-    const { hideModal, schema, uiSchema, formData, formDataPath } = this.props;
+    const {
+      hideModal,
+      schema,
+      uiSchema,
+      formData,
+      formDataPath,
+      version
+    } = this.props;
 
     return (
       <Modal
@@ -43,7 +50,7 @@ class DependentSelectWidgetCreatableModal extends Component {
           uiSchema={uiSchema}
           formData={formData}
           formDataPath={formDataPath}
-          onChange={this.handleChange}
+          version={version}
           submit={{ label: "submit", handler: this.handleSubmit }}
           cancel={{ label: "cancel", handler: hideModal }}
         />

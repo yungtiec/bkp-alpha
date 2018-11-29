@@ -12,8 +12,9 @@ const initialState = {
   stepFormData: {}
 };
 
-const getInitialStepFormData = (wizardStepArray, stepSchemas) => {
+const getInitialStepFormData = (wizardStepArray, stepSchemas, formData) => {
   var stepFormData = {};
+  if (formData) return formData;
   wizardStepArray.forEach(step => {
     if (
       step.childComponentType === "JSON_SCHEMA_FORMS_ACCORDION" ||
@@ -55,7 +56,8 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         stepFormData: getInitialStepFormData(
           action.wizardSchema.step_array_json.wizardSteps,
-          action.wizardSchema.step_schemas_json
+          action.wizardSchema.step_schemas_json,
+          action.version.content_json
         ),
         stepSchemas: action.wizardSchema.step_schemas_json,
         wizardStepArray: action.wizardSchema.step_array_json.wizardSteps,
@@ -68,7 +70,8 @@ export default function reduce(state = initialState, action = {}) {
         ...state,
         stepFormData: getInitialStepFormData(
           action.wizardSchema.step_array_json.wizardSteps,
-          action.wizardSchema.step_schemas_json
+          action.wizardSchema.step_schemas_json,
+          action.version.content_json
         ),
         stepSchemas: action.wizardSchema.step_schemas_json,
         wizardStepArray: action.wizardSchema.step_array_json.wizardSteps,
@@ -101,3 +104,5 @@ export const getStepFormData = state => state.scenes.wizard.data.stepFormData;
 export const getCurrentProject = state => state.scenes.wizard.data.project;
 
 export const getCurrentDocument = state => state.scenes.wizard.data.document;
+
+export const getCurrentVersion = state => state.scenes.wizard.data.version;
