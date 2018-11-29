@@ -109,7 +109,7 @@ class JsonSchemaFormsAccordion extends Component {
                   submit={
                     i !== accordionOrder.length - 1
                       ? {
-                          label: "next principle",
+                          label: "save and continue",
                           handler: this.nextAccordionItem
                         }
                       : {
