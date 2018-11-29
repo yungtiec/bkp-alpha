@@ -109,23 +109,6 @@ class VersionToolbar extends Component {
               ? documentMetadata.downvotesFrom.length
               : 0}
           </button>
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn btn-outline-primary rounded-right"
-              type="button"
-              id="versionMenuButton"
-              //data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {`Version ${
-                !isEmpty(document)
-                  ? document.version_number
-                  : document.version_number
-              }`}
-            </button>
-          </div>
           {document.pdf_link ? (
             <button type="button" className="btn btn-outline-primary">
               <a
