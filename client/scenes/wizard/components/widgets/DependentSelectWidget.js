@@ -1,8 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getStepFormData } from "../../data/reducer";
-import { updateFormDataInStore } from "../../data/actions";
-import { getStepArrayAndSchemas } from "../../data/reducer";
+import {
+  getStepFormData,
+  getCurrentVersion,
+  getStepArrayAndSchemas
+} from "../../data/reducer";
+import {
+  updateFormDataInStore,
+  updateVersionContentJson
+} from "../../data/actions";
 import { loadModal } from "../../../../data/reducer";
 import { cloneDeep } from "lodash";
 
@@ -16,6 +22,7 @@ const DependentSelectWidget = props => {
     stepSchemas,
     schema,
     options,
+    version,
     ...otherProps
   } = props;
   var addSouceOption = {
@@ -46,7 +53,8 @@ const DependentSelectWidget = props => {
         schema: stepSchemas[schema["enum:optionDependencyPath"]].schema,
         uiSchema: stepSchemas[schema["enum:optionDependencyPath"]].uiSchema,
         formData: stepFormData[schema["enum:optionDependencyPath"]],
-        formDataPath: schema["enum:optionDependencyPath"]
+        formDataPath: schema["enum:optionDependencyPath"],
+        version
       })}
       {...otherProps}
     />
@@ -59,7 +67,8 @@ const mapState = (state, ownProps) => {
     ...ownProps,
     stepFormData: getStepFormData(state),
     wizardStepArray,
-    stepSchemas
+    stepSchemas,
+    version: getCurrentVersion(state)
   };
 };
 

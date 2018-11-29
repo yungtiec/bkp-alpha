@@ -18,7 +18,7 @@ class TokenInformationForm extends React.Component {
 
   componentDidMount() {
     this.setState({
-      project: this.props.project,
+      project: { value: this.props.project, label: this.props.project.name },
       description: this.props.document ? this.props.document.description : ""
     });
   }
@@ -57,6 +57,7 @@ class TokenInformationForm extends React.Component {
       project: this.state.project.value,
       description: this.state.description
     });
+    this.props.submit.handler();
   }
 
   render() {

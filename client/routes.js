@@ -92,7 +92,7 @@ class Routes extends Component {
           />
           <RouteWithLayout
             layout={LayoutWithNav}
-            path="/wizard/step/:step/version/:id"
+            path="/edit/:slug"
             component={Wizard}
           />
           {isLoggedIn && (

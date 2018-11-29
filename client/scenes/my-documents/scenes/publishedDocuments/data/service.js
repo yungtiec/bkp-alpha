@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function getOwnPublishedDocuments({ offset, limit }) {
   return axios
-    .get(`/api/versions/published`, {
+    .get(`/api/documents/published`, {
       params: {
         offset,
         limit
@@ -10,3 +10,4 @@ export function getOwnPublishedDocuments({ offset, limit }) {
     })
     .then(res => res.data);
 }
+

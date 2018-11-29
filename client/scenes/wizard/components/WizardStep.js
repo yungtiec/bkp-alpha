@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import autoBind from "react-autobind";
 import { withRouter } from "react-router-dom";
 import history from "../../../history";
-import { matchPath } from 'react-router';
+import { matchPath } from "react-router";
 import {
   Instructions,
   TokenInformationForm,
@@ -37,21 +37,15 @@ class WizardStep extends Component {
 
   next() {
     // should create or submit changes on next
-    const { stepNum, numStep, version } = this.props;
+    const { stepNum, numStep, version, match } = this.props;
     if (stepNum <= numStep)
-      if (version)
-        history.push(`/wizard/step/${stepNum + 1}/version/${version.version_slug}`);
-      else
-        history.push(`/wizard/step/${stepNum + 1}`);
+      history.push(`/edit/${match.params.slug}/step/${stepNum + 1}`);
   }
 
   back() {
-    const { stepNum, version } = this.props;
+    const { stepNum, version, match } = this.props;
     if (this.props.stepNum > 1)
-      if (version)
-        history.push(`/wizard/step/${stepNum - 1}/version/${version.version_slug}`);
-      else
-        history.push(`/wizard/step/${stepNum - 1}`);
+      history.push(`/edit/${match.params.slug}/step/${stepNum - 1}`);
   }
 
   render() {
@@ -96,6 +90,3 @@ class WizardStep extends Component {
 
 export default withRouter(WizardStep);
 
-// {stepNum !== 1 && <button onClick={this.back}>back</button>}
-// {stepNum !== numStep && <button onClick={this.next}>next</button>}
-// {stepNum === numStep && <button>submit</button>}

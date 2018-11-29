@@ -57,6 +57,47 @@ const ensureDocumentSubmissionOrOwnership = async (req, res, next) => {
 router.get("/", documentController.getDocuments);
 
 /**
+ * Getting a list of user's drafts
+ *
+ * @name Get a list of user's drafts
+ * @route {GET} /api/documents/drafts
+ * @queryparam {Number} limit
+ * @queryparam {Number} offset
+ *
+ */
+router.get("/drafts", ensureAuthentication, documentController.getDrafts);
+
+/**
+ * Getting a list of user's drafts
+ *
+ * @name Get a list of user's drafts
+ * @route {GET} /api/documents/drafts
+ * @queryparam {Number} limit
+ * @queryparam {Number} offset
+ *
+ */
+router.get(
+  "/drafts/:versionSlug",
+  ensureAuthentication,
+  documentController.getDraftBySlug
+);
+
+/**
+ * Getting a list of user's published documents
+ *
+ * @name Get a list of user's published documents
+ * @route {GET} /api/documents/published
+ * @queryparam {Number} limit
+ * @queryparam {Number} offset
+ *
+ */
+router.get(
+  "/published",
+  ensureAuthentication,
+  documentController.getPublishedDocuments
+);
+
+/**
  * Getting document metadata by version_slug, i.e upvotes, downvotes, creator, versions...etc
  *
  * @name Get document
@@ -110,6 +151,20 @@ router.get(
   "/:documentId/questions",
   ensureDocumentSubmissionOrOwnership,
   documentController.getDocumentLatestQuestion
+);
+
+/**
+ * put document metadata by id
+ *
+ * @name Put document
+ * @route {PUT} /api/documents/:documentId
+ * @routeparam {Number} documentId
+ *
+ */
+router.put(
+  "/:documentId",
+  ensureDocumentSubmissionOrOwnership,
+  documentController.putDocument
 );
 
 /**

@@ -117,7 +117,7 @@ const createApp = () => {
   app.get("/admin/version/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
-  app.get("/wizard/step/public/:file", (req, res, next) => {
+  app.get("/edit/:slug/step/public/:file", (req, res, next) => {
     res.redirect(`/${req.params.file}`);
   });
   app.get("/admin/list/public/:file", (req, res, next) => {
