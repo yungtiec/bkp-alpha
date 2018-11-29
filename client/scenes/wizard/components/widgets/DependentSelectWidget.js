@@ -29,11 +29,7 @@ const DependentSelectWidget = props => {
     label: "Add another source",
     value: "LOAD_SELECT_CREATABLE_MODAL"
   };
-  console.log(
-    stepFormData,
-    stepFormData[schema["enum:optionDependencyPath"]],
-    schema["enum:optionDependencyPath"]
-  );
+
   if (schema["enum:optionDependencyPath"])
     options.enumOptions = stepFormData[schema["enum:optionDependencyPath"]].map(
       entry => ({
