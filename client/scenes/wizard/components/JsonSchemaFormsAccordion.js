@@ -1,3 +1,4 @@
+import "./JsonSchemaFormsAccordion.scss";
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
