@@ -30,14 +30,11 @@ const AdminDocumentList = ({ documentIds, documentsById }) => {
         data={data}
         defaultPageSize={10}
         getTrProps={(state, rowInfo, column, instance) => {
+          console.log(rowInfo);
           return {
             onClick: (e, t) => {
               history.push(
-                `/project/${rowInfo.original.project.id}/document/${
-                  rowInfo.original.id
-                }/version/${
-                  maxBy(rowInfo.original.versions, "hierarchyLevel").id
-                }`
+                `/s/${rowInfo.original.versions[0].version_slug}`
               );
             }
           };
