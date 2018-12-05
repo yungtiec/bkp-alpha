@@ -18,7 +18,9 @@ class TokenInformationForm extends React.Component {
 
   componentDidMount() {
     this.setState({
-      project: { value: this.props.project, label: this.props.project.name },
+      project: this.props.project
+        ? { value: this.props.project, label: this.props.project.name }
+        : null,
       description: this.props.document ? this.props.document.description : ""
     });
   }
