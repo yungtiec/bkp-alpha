@@ -1,8 +1,9 @@
 const { User, Role, Comment } = require("../db/models");
 const _ = require("lodash");
+const crypto = require("crypto");
 
-const isAdmin = (user) => {
- return user.roles.filter(r => r.name === "admin").length;
+const isAdmin = user => {
+  return user.roles.filter(r => r.name === "admin").length;
 };
 
 const ensureAuthentication = async (req, res, next) => {
@@ -76,11 +77,7 @@ const ensureResourceAccess = async (req, res, next) => {
   else next();
 };
 
-const getEngagedUsers = async ({
-  version,
-  creator,
-  collaboratorEmails
-}) => {
+const getEngagedUsers = async ({ version, creator, collaboratorEmails }) => {
   var comments = await version.getComments({
     include: [
       {
@@ -89,9 +86,11 @@ const getEngagedUsers = async ({
       }
     ]
   });
-  var commentators = _.uniqBy(comments.map(c => c.owner.toJSON()), "id").filter(
-    c => collaboratorEmails.indexOf(c.email) === -1 && c.id !== creator.id
-  );
+  var commentators = _
+    .uniqBy(comments.map(c => c.owner.toJSON()), "id")
+    .filter(
+      c => collaboratorEmails.indexOf(c.email) === -1 && c.id !== creator.id
+    );
   // we might want to tailor the notification based on their action
   return commentators;
 };
@@ -110,12 +109,12 @@ const createVersionSlug = async (docTitle, versionObj) => {
     // Convert base64 to hex string
     const versionHash = Buffer.from(base64Key, "base64").toString("hex");
 
-    const versionSlug = `${docTitle.toLowerCase().split(" ").join("-")}-${versionHash}`;
+    const versionSlug = `${docTitle
+      .toLowerCase()
+      .split(" ")
+      .join("-")}-${versionHash}`;
 
-
-    return docTitle
-      ? versionSlug
-      : versionHash;
+    return docTitle ? versionSlug : versionHash;
   } catch (err) {
     console.error(err);
   }
