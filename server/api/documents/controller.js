@@ -183,6 +183,7 @@ const postDocument = async (req, res, next) => {
       case "markdown":
         return createDocumentByMarkdown(req, res, next);
       case "wizard":
+        console.log("hello")
         return createDocumentWithSchemaId(req, res, next);
       default:
         res.sendStatus(404);

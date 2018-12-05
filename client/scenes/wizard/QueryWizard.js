@@ -22,6 +22,7 @@ class QueryWizard extends Component {
 
   componentDidMount() {
     // hardcode wizardSchemaId for now
+    console.log("??")
     if (this.props.match.params.slug === "-") {
       this.props.createDocumentWithSchemaId(1);
     } else {
