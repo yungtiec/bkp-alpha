@@ -10,7 +10,8 @@ module.exports = function generateStepSchemasJson() {
       schema: principleFormDefinition(principles[key].title),
       uiSchema: principleUiSchema,
       defaultFormData: {
-        disclosures: principles[key].disclosures
+        disclosureTable: principles[key].disclosureTable,
+        analysis: ""
       },
       viewerSchema: principleViewerSchema(principles[key])
     };
@@ -94,13 +95,37 @@ const transparencyScoreInstruction = fs.readFileSync(
 
 const disclosureStatusDefinition = {
   type: "object",
+  required: ["status", "sources"],
   properties: {
-    test: {
-      title: "analysis",
+    disclosure: {
+      title: "Disclosure",
       type: "string"
     },
+    status: {
+      title: "Status",
+      type: "string",
+      enum: ["N/A", "x", "1/2", "✓"],
+      enumNames: ["N/A", "x", "1/2", "✓"]
+    },
+    sources: {
+      title: "Source(s)",
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "object",
+        enum: [{}]
+      },
+      "enum:defaultOptions": [
+        {
+          label: "Add another source",
+          value: "LOAD_SELECT_CREATABLE_MODAL"
+        }
+      ],
+      "enum:optionDependencyPath": "sourcesEvaluated",
+      "enum:optionDependencyLabelKey": "title"
+    },
     analysis: {
-      title: "analysis",
+      title: "Analysis",
       type: "string"
     }
   }
@@ -116,7 +141,7 @@ const principleFormDefinition = title => ({
       title: "a. Transparency score out of 10 (e.g. “5”)",
       enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
-    disclosures: {
+    disclosureTable: {
       type: "array",
       title: "b. List of available disclosures",
       items: disclosureStatusDefinition
@@ -134,17 +159,27 @@ const principleUiSchema = {
       inline: true
     }
   },
-  disclosures: {
+  disclosureTable: {
     "ui:options": {
       addable: false,
       orderable: false,
       removable: false
     },
     items: {
-      test: {
-        "ui:widget": "DependentTextEditorWidget"
+      classNames: "row",
+      disclosure: {
+        classNames: "col-4",
+        "ui:widget": "NonEditableTextWidget"
+      },
+      sources: {
+        classNames: "col-4",
+        "ui:widget": "DependentSelectWidget"
+      },
+      status: {
+        classNames: "col-4"
       },
       analysis: {
+        classNames: "col-12",
         "ui:widget": "DependentTextEditorWidget"
       }
     }
@@ -158,13 +193,9 @@ const principleViewerSchema = principle => ({
     title: "transparency score: %formData%",
     placeholder: "no data"
   },
-  // disclosures: {
-  //   "viewer:widget": "CollectionTable",
-  //   headers: ["disclosure", "status", "sources"]
-  // },
-  test: {
-    title: "test",
-    "viewer:widget": "HtmlBlock"
+  disclosureTable: {
+    "viewer:widget": "CollectionTable",
+    headers: ["disclosure", "status", "sources"]
   },
   analysis: {
     title: "analysis",
@@ -188,203 +219,173 @@ const accordionOrder = [
 const principles = {
   principle1: {
     title: "Principle 1: Consumer Token Design",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Description of token’s intrinsic features and operation"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "The Brooklyn Project Token Taxonomy classification"
       }
     ]
   },
   principle2: {
     title: "Principle 2: Project Governance and Operation",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "How and by whom the project will be governed"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Relevant holding or operating company and jurisdiction"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Backgrounds of key people"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Description of what part of the project is decentralized, centralized, open-sourced, or “forkable”"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Project roadmap, including key technical and project milestones"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Updates on milestone progress and funds"
       }
     ]
   },
   principle3: {
-    title: "Principle 2: Project Governance and Operation",
-    disclosures: [
+    title: "Principle 3: Responsible Token Distribution",
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Purpose of any token distributions"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Legal entity that distributed tokens"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Conditions a buyer must meet to receive tokens"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Terms of token distributions (lockups, vesting)"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Project status at time of token distribution"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Steps to limit sale to individuals who do not intend to consume token"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Clarification of duties to increase token price"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Restrictions and plans for secondary trading"
       }
     ]
   },
   principle4: {
     title: "Principle 4: Purpose of Token Distribution",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Planned and actual use of proceeds by function line"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Token sale proceeds"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Updates on the project’s progress and funds"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "The aggregate amount of tokens reserved for the remuneration of team members"
       }
     ]
   },
   principle5: {
     title: "Principle 5: Token Supply",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Initial token supply and eventual supply changes"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Differences between token supply and tokens in circulation"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Auditability of the token supply governance in production code"
       }
     ]
   },
   principle6: {
     title: "Principle 6: Mitigation of Conflicts and Improper Trading",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Steps to identify, manage, mitigate conflicts"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Prevention of improper trading of tokens"
       }
     ]
   },
   principle7: {
     title: "Principle 7: Token Safety and Security",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Report of technological audit"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Mechanisms for notifying users of security risks"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Links to project github repositories"
       }
     ]
   },
   principle8: {
     title: "Principle 8: Marketing Practices",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Steps taken to comply with the marketing principles outlined in this document"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Explanations of the relationship between promises made in marketing materials about a token’s governance provisions and a project’s actual smart contracts (e.g. related to token supply, insider vesting schedules, modifiability of the governance rules)"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Links to project website(s) and accounts"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Mechanisms to identify issues"
       }
     ]
   },
   principle9: {
     title: "Principle 9: Protecting and Empowering Consumers",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure: "Rights and obligations of tokenholders"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Refund measures if the project is scaled down"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Scenarios that may trigger token sale reversal"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Privacy policy"
       }
     ]
   },
   principle10: {
     title: "Principle 10: Compliance with Applicable Laws",
-    disclosures: [
+    disclosureTable: [
       {
-        test: "",
-        analysis: ""
+        disclosure:
+          "Statement of Good Faith affirming compliance with applicable laws and regulations"
       },
       {
-        test: "",
-        analysis: ""
+        disclosure: "Legal and professional advice on Statement of Good Faith"
       }
     ]
   }

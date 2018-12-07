@@ -1,6 +1,6 @@
 "use strict";
 var generateStepArrays = require("../../../json-schema/generateStepArrays");
-var generateStepSchemasJson = require("../../../json-schema/generateStepSchemasJson");
+var generateStepSchemasJson = require("../../../json-schema/generateStepSchemasJsonV2");
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -25,7 +25,7 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
     return queryInterface
-      .bulkDelete("wizard_schemas", { id: 1 }, {})
+      .bulkDelete("wizard_schemas", {}, {})
       .then(() =>
         queryInterface.sequelize.query(
           `ALTER SEQUENCE "wizard_schemas_id_seq" RESTART WITH ${1};`
