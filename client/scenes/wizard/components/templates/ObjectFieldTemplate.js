@@ -3,7 +3,6 @@ import templates from "./index";
 
 function DefaultObjectFieldTemplate(props) {
   const { TitleTemplate, DescriptionTemplate } = props;
-
   return (
     <Fragment>
       {props.uiSchema["ui:title"] && props.uiSchema["ui:title"].hideTitle
