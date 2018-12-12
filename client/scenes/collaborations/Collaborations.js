@@ -90,7 +90,7 @@ export default ({
           {regulatoryForCommentIds && regulatoryForCommentIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                <div>Regulatory Requests for Comment</div>
+                <div className="collaborate-header">Regulatory Requests for Comment</div>
                 <div className="btn-propose-container">
                   <button
                     className="btn btn-outline-primary btn-propose"
