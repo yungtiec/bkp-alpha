@@ -7,7 +7,8 @@ import { Helmet } from "react-helmet";
 const documentTypes = {
   general: "general",
   scorecard: "scorecard",
-  regulatory: "regulatory"
+  regulatory: "regulatory",
+  regulatoryForComment: "regulatory-for-comment"
 };
 
 const filterDocuments = (documentIds, documentsById) => {
@@ -17,6 +18,8 @@ const filterDocuments = (documentIds, documentsById) => {
   let thoughtLeadershipIds = [];
   let regulatoryById = [];
   let regulatoryIds = [];
+  let regulatoryForCommentById = [];
+  let regulatoryForCommentIds = [];
 
   for (let id in documentIds) {
     const docId = documentIds[id];
@@ -29,6 +32,9 @@ const filterDocuments = (documentIds, documentsById) => {
     } else if (document.document_type === documentTypes.regulatory) {
       regulatoryIds = [].concat(regulatoryIds).concat([docId]);
       regulatoryById = Object.assign({}, regulatoryById, documentObj);
+    } else if (document.document_type === documentTypes.regulatoryForComment) {
+      regulatoryForCommentIds  = [].concat(regulatoryForCommentIds).concat([docId]);
+      regulatoryForCommentById = Object.assign({}, regulatoryForCommentById, documentObj);
     } else {
       thoughtLeadershipIds = [].concat(thoughtLeadershipIds).concat([docId]);
       thoughtLeadershipById = Object.assign(
@@ -45,7 +51,9 @@ const filterDocuments = (documentIds, documentsById) => {
     thoughtLeadershipById,
     thoughtLeadershipIds,
     regulatoryById,
-    regulatoryIds
+    regulatoryIds,
+    regulatoryForCommentIds,
+    regulatoryForCommentById
   };
 };
 
@@ -64,7 +72,9 @@ export default ({
     thoughtLeadershipById,
     thoughtLeadershipIds,
     regulatoryById,
-    regulatoryIds
+    regulatoryIds,
+    regulatoryForCommentIds,
+    regulatoryForCommentById
   } = filterDocuments(documentIds, documentsById);
 
   return (
@@ -77,6 +87,28 @@ export default ({
           <div className="projects-containers__collaboration-header">
             <span className="collaborations-header">Open Collaborations</span>
           </div>
+          {regulatoryForCommentIds && regulatoryForCommentIds.length ? (
+            <div className="project-row">
+              <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                <div>Regulatory Requests for Comment</div>
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() =>
+                    loadModal("COLLABORATION_PROPOSAL_MODAL", {
+                      hideModal,
+                      notify
+                    })
+                  }
+                >
+                  Propose collaboration
+                </button>
+              </div>
+              <ListDocumentGrid
+                documentIds={regulatoryForCommentIds}
+                documentsById={regulatoryForCommentById}
+              />
+            </div>
+          ) : null}
           {regulatoryIds && regulatoryIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
