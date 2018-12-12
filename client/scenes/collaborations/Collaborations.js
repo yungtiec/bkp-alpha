@@ -113,17 +113,6 @@ export default ({
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
                 <div>Regulatory Notices</div>
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={() =>
-                    loadModal("COLLABORATION_PROPOSAL_MODAL", {
-                      hideModal,
-                      notify
-                    })
-                  }
-                >
-                  Propose collaboration
-                </button>
               </div>
               <ListDocumentGrid
                 documentIds={regulatoryIds}
