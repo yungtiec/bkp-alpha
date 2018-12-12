@@ -60,7 +60,7 @@ const actions = dispatch => {
     loadInitialData() {
       batchActions([
         dispatch(fetchAllProjects()),
-        dispatch(fetchLastestDocumentsWithStats())
+        dispatch(fetchLastestDocumentsWithStats({hasLimit: false}))
       ]);
     },
     loadModal(modalType, modalProps) {
