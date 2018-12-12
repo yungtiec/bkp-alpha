@@ -49,3 +49,14 @@ and (-webkit-min-device-pixel-ratio: 2) {
   background-color: #F4F5F6;
   padding-bottom: 160px;
 }
+
+.btn-propose-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.btn-propose {
+  max-height: 80px;
+}
+
