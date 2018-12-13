@@ -156,15 +156,19 @@ class SidebarHeader extends Component {
                       Log in
                     </Link>{" "}
                     or{" "}
-                    <Link
-                      to={{
-                        pathname: "/signup",
-                        state: { lastPath: this.props.location.pathname }
-                      }}
-                      className="text-primary font-weight-bold"
+                    <a
+                      href={`/auth/google?state=${encodeURI(
+                        this.props.location.state
+                          ? this.props.location.state.lastPath
+                          : "/landing"
+                      )}`}
                     >
-                      sign up
-                    </Link>{" "}
+                      <img
+                        width="191px"
+                        height="46px"
+                        src="/assets/btn_google_light_normal_ios.svg"
+                      />
+                    </a>
                     to comment
                   </p>
                 )}
