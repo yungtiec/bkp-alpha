@@ -24,7 +24,7 @@ if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
   const githubConfig = {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK,
+    callbackURL: process.env.GITHUB_CALLBACK,
   };
 
   const strategy = new GitHubStrategy(
