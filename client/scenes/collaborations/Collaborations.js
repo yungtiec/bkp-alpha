@@ -90,14 +90,12 @@ export default ({
           <div className="btn-container">
             <button
               className="btn btn-outline-primary btn-telegram"
-              onClick={() =>
-                loadModal("COLLABORATION_PROPOSAL_MODAL", {
-                  hideModal,
-                  notify
-                })
-              }
             >
-              Telegram
+              <a
+                href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                target="_blank"
+                className="navbar__nav-item"
+              >Telegram</a>
             </button>
             <button
               className="btn btn-outline-primary btn-propose"
