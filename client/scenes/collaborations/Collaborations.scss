@@ -17,12 +17,16 @@
   color: black;
   margin-top: 40px;
   margin-left: 30px;
+  margin-right: 30px;
 }
 
 @media only screen
 and (min-device-width: 320px)
 and (max-device-width: 568px)
 and (-webkit-min-device-pixel-ratio: 2) {
+  .projects-containers__collaboration-sub-header {
+    margin-right: 0px;
+  }
   .projects-containers__collaboration-header {
     display: none;
   }
