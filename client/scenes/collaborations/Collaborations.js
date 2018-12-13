@@ -87,27 +87,29 @@ export default ({
           <div className="projects-containers__collaboration-header-mobile">
             <span className="collaborations-header">Open Collaborations</span>
           </div>
-          <div className="btn-container">
-            <button
-              className="btn btn-outline-primary btn-telegram"
-            >
-              <a
-                href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
-                target="_blank"
-                className="navbar__nav-item"
-              >Telegram</a>
-            </button>
-            <button
-              className="btn btn-outline-primary btn-propose"
-              onClick={() =>
-                loadModal("COLLABORATION_PROPOSAL_MODAL", {
-                  hideModal,
-                  notify
-                })
-              }
-            >
-              Propose collaboration
-            </button>
+          <div className="btn-container-flex">
+            <div className="btn-container">
+              <button
+                className="btn btn-outline-primary btn-telegram"
+              >
+                <a
+                  href="https://t.me/joinchat/HRhhQEvAeC2t4wiYHquYUg"
+                  target="_blank"
+                  className="navbar__nav-item"
+                >Telegram</a>
+              </button>
+              <button
+                className="btn btn-outline-primary btn-propose"
+                onClick={() =>
+                  loadModal("COLLABORATION_PROPOSAL_MODAL", {
+                    hideModal,
+                    notify
+                  })
+                }
+              >
+                Propose collaboration
+              </button>
+            </div>
           </div>
         </div>
         <div className="collaborations-container col-md-7">
