@@ -36,7 +36,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
       display: flex;
       flex-direction: column;
       background-color: #FFFFFF;
-      padding: 40px 30px 0px 30px;
+      padding: 40px 20px 0px 20px;
       color: black;
       border: 1px solid #e8e8e8;
       border-bottom: 0;
@@ -66,7 +66,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
           max-height: 80px;
           margin-top: 7.5px;
           background: white;
-          padding: 0 20px;
+          padding: 0 25px;
           border-radius: 2.5px 2.5px;
         }
       }
@@ -113,4 +113,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
   justify-content: center;
   background-color: #F4F5F6;
   padding-bottom: 160px;
+  .entity__action--bottom {
+    margin-top: 20px;
+  }
 }
