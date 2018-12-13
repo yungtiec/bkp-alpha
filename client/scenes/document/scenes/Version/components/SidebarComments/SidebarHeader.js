@@ -71,6 +71,8 @@ class SidebarHeader extends Component {
       isClosedForComment
     } = this.props;
 
+    console.log('props', this.props);
+
     return (
       <div>
         {selectedComments && !selectedComments.length ? (
@@ -158,9 +160,7 @@ class SidebarHeader extends Component {
                     or{" "}
                     <a
                       href={`/auth/google?state=${encodeURI(
-                        this.props.location.state
-                          ? this.props.location.state.lastPath
-                          : "/landing"
+                        this.props.location.pathname
                       )}`}
                     >
                       <img
