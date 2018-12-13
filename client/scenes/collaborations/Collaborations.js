@@ -143,7 +143,7 @@ export default ({
           {regulatoryIds && regulatoryIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                <div>Regulatory Notices</div>
+                <div className="collaborate-header">Regulatory Notices</div>
               </div>
               <ListDocumentGrid
                 documentIds={regulatoryIds}
@@ -152,10 +152,10 @@ export default ({
             </div>
           ) : null}
           {thoughtLeadershipIds && thoughtLeadershipIds.length ? (
-            <div>
-              <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                Thought Leadership
-              </span>
+            <div className="project-row">
+              <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                <div className="collaborate-header">Leadership Notices</div>
+              </div>
               <ListDocumentGrid
                 documentIds={thoughtLeadershipIds}
                 documentsById={thoughtLeadershipById}
@@ -163,10 +163,10 @@ export default ({
             </div>
           ) : null}
           {scorecardIds && scorecardIds.length ? (
-            <div>
-              <span className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                Transparency Scorecards
-              </span>
+            <div className="project-row">
+              <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                <div className="collaborate-header">Transparency Scorecards</div>
+              </div>
               <ListDocumentGrid
                 documentIds={scorecardIds}
                 documentsById={scorecardsById}
