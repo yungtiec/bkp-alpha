@@ -2,7 +2,7 @@ import * as types from "./actionTypes.js";
 import { getLastestDocumentsWithStats } from "./service";
 import { keyBy } from "lodash";
 
-export function fetchLastestDocumentsWithStats({hasLimit}) {
+export function fetchLastestDocumentsWithStats(hasLimit) {
   return async (dispatch, getState) => {
     try {
       const state = getState();
@@ -10,7 +10,7 @@ export function fetchLastestDocumentsWithStats({hasLimit}) {
       const { count, documents } = await getLastestDocumentsWithStats({
         offset,
         limit,
-        hasLimit
+        hasLimit: hasLimit || false
       });
       const documentIds = documents.map(s => s.id);
       const documentsById = keyBy(documents, "id");
