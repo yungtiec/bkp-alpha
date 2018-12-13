@@ -83,6 +83,35 @@ export default ({
         <title>The Brooklyn Project | Collaborate</title>
       </Helmet>
       <div className="main-container-collaborations">
+        <div className="projects-containers__collaboration-container">
+          <div className="projects-containers__collaboration-header-mobile">
+            <span className="collaborations-header">Open Collaborations</span>
+          </div>
+          <div className="btn-container">
+            <button
+              className="btn btn-outline-primary btn-telegram"
+              onClick={() =>
+                loadModal("COLLABORATION_PROPOSAL_MODAL", {
+                  hideModal,
+                  notify
+                })
+              }
+            >
+              Telegram
+            </button>
+            <button
+              className="btn btn-outline-primary btn-propose"
+              onClick={() =>
+                loadModal("COLLABORATION_PROPOSAL_MODAL", {
+                  hideModal,
+                  notify
+                })
+              }
+            >
+              Propose collaboration
+            </button>
+          </div>
+        </div>
         <div className="collaborations-container col-md-7">
           <div className="projects-containers__collaboration-header">
             <span className="collaborations-header">Open Collaborations</span>
