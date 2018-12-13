@@ -6,6 +6,7 @@ import Select from "react-select";
 import { keys } from "lodash";
 import { CommentBoxWithTagField, Countdown } from "../index";
 import { withRouter } from "react-router-dom";
+import { signinWithUport } from './../../../../../../../client/data/reducer.js'
 
 class SidebarHeader extends Component {
   constructor(props) {
@@ -148,28 +149,41 @@ class SidebarHeader extends Component {
                   </p>
                 ) : (
                   <p className="mb-0">
-                    <Link
-                      to={{
-                        pathname: "/login",
-                        state: { lastPath: this.props.location.pathname }
-                      }}
-                      className="text-primary font-weight-bold"
-                    >
-                      Log in
-                    </Link>{" "}
-                    or{" "}
-                    <a
-                      href={`/auth/google?state=${encodeURI(
-                        this.props.location.pathname
-                      )}`}
-                    >
-                      <img
-                        width="191px"
-                        height="46px"
-                        src="/assets/btn_google_light_normal_ios.svg"
-                      />
-                    </a>
-                    to comment
+                    <div className="sidebar__login-container-flex">
+                      <div className="sidebar__login-container d-flex">
+                        <span className="sidebar__signin-text mb-2"> To join the conversation: </span>
+                        <a
+                          href={`/auth/google?state=${encodeURI(
+                            this.props.location.pathname
+                          )}`}
+                        >
+                          <img src="/assets/btn_google_signin_dark_normal_web.png" />
+                        </a>
+                        <a onClick={signinWithUport}>
+                          <img src="/assets/btn_uport_signin_dark_normal_web.png"
+                          />
+                        </a>
+                        <a
+                          href={`/auth/github?state=${encodeURI(
+                            this.props.location.pathname
+                          )}`}
+                        >
+                          <img className="btn-github" src="/assets/btn-github-dark.png" />
+                        </a>
+                        <div class="d-flex mt-2">
+                          <span className="sidebar__signin-text">or sign in with</span>
+                          <Link
+                            to={{
+                              pathname: "/login",
+                              state: { lastPath: this.props.location.pathname }
+                            }}
+                            className="text-primary font-weight-bold sidebar__signin-text"
+                          >
+                            email
+                          </Link>
+                        </div>
+                      </div>
+                      </div>
                   </p>
                 )}
               </div>
