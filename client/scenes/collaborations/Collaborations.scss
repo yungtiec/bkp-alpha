@@ -23,14 +23,74 @@
 and (min-device-width: 320px)
 and (max-device-width: 568px)
 and (-webkit-min-device-pixel-ratio: 2) {
-  .projects-containers__collaboration-sub-header {
-    margin-left: 10px;
+  .projects-containers__collaboration-header {
+    display: none;
   }
+  .btn-propose-container {
+    display: none;
+  }
+  .main-container-collaborations {
+    flex-direction: column;
+    border: 1px solid #e8e8e8;
+    .projects-containers__collaboration-container {
+      display: flex;
+      flex-direction: column;
+      background-color: #FFFFFF;
+      padding: 40px 30px 0px 30px;
+      color: black;
+      border: 1px solid #e8e8e8;
+      border-bottom: 0;
+      margin-top: 30px;
+      .projects-containers__collaboration-header-mobile {
+        display: flex;
+        justify-content: center;
+      }
+      .collaborations-header {
+        font-size: 28px
+      }
+      .btn-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        .btn-propose {
+          color: #3697FF;
+          font-weight: 500;
+          max-height: 80px;
+          margin-top: 7.5px;
+          background: white;
+          border-radius: 2.5px 2.5px;
+        }
+        .btn-telegram {
+          color: #3697FF;
+          font-weight: 500;
+          max-height: 80px;
+          margin-top: 7.5px;
+          background: white;
+          padding: 0 20px;
+          border-radius: 2.5px 2.5px;
+        }
+      }
+    }
+    .collaborations-container {
+      margin-top: 0px !important;
+      padding-top: 0px !important;
+      border: 1px solid #e8e8e8;
+      border-top: 0;
+    }
+    .project-row {
+      .projects-containers__collaboration-sub-header {
+        margin-left: 10px;
+      }
+    }
+  }
+}
 
-  .btn-propose {
-    max-height: 80px;
-    margin-top: 7.5px;
-  }
+.projects-containers__collaboration-header-mobile {
+  display: none;
+}
+
+.projects-containers__collaboration-container {
+  display: none;
 }
 
 .project-row {

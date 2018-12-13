@@ -56,11 +56,12 @@ const mapState = state => {
 };
 
 const actions = dispatch => {
+  const hasLimit = false;
   return {
     loadInitialData() {
       batchActions([
         dispatch(fetchAllProjects()),
-        dispatch(fetchLastestDocumentsWithStats({hasLimit: false}))
+        dispatch(fetchLastestDocumentsWithStats(hasLimit))
       ]);
     },
     loadModal(modalType, modalProps) {
