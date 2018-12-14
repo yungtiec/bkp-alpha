@@ -98,11 +98,7 @@ class AuthForm extends Component {
       >
         <div className="d-flex oauth-btns flex-md-row flex-column">
           <a
-            href={`/auth/google?state=${encodeURI(
-              this.props.location.state
-                ? this.props.location.state.lastPath
-                : "/landing"
-            )}`}
+            href={`/auth/google?state=${encodeURI("/")}`}
           >
             <img
               width="150px"
@@ -118,11 +114,7 @@ class AuthForm extends Component {
             />
           </a>
           <a
-            href={`/auth/github?state=${encodeURI(
-              this.props.location.state
-                ? this.props.location.state.lastPath
-                : "/landing"
-            )}`}
+            href={`/auth/github?state=${encodeURI("/")}`}
           >
             <img
               width="145px"
