@@ -96,7 +96,7 @@ class AuthForm extends Component {
         onValid={this.enableButton}
         onInvalid={this.disableButton}
       >
-        <div className="form-group d-flex oauth-btns flex-md-row flex-column">
+        <div className="d-flex oauth-btns flex-md-row flex-column">
           <a
             href={`/auth/google?state=${encodeURI(
               this.props.location.state
@@ -105,17 +105,29 @@ class AuthForm extends Component {
             )}`}
           >
             <img
-              width="191px"
-              height="46px"
+              width="150px"
+              height="40px"
               src="/assets/btn_google_signin_dark_normal_web.png"
             />
           </a>
           <a onClick={signinWithUport}>
             <img
-              width="191px"
-              height="46px"
+              width="150px"
+              height="40px"
               src="/assets/btn_uport_signin_dark_normal_web.png"
             />
+          </a>
+          <a
+            href={`/auth/github?state=${encodeURI(
+              this.props.location.state
+                ? this.props.location.state.lastPath
+                : "/landing"
+            )}`}
+          >
+            <img
+              width="145px"
+              height="39px"
+              src="/assets/btn-github-dark.png" />
           </a>
         </div>
         <div
