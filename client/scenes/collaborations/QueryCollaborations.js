@@ -56,7 +56,7 @@ const mapState = state => {
 };
 
 const actions = dispatch => {
-  const hasLimit = false;
+  const hasLimit = true;
   return {
     loadInitialData() {
       batchActions([
