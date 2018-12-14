@@ -154,7 +154,7 @@ export default ({
           {thoughtLeadershipIds && thoughtLeadershipIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                <div className="collaborate-header">Leadership Notices</div>
+                <div className="collaborate-header">Thought Leadership</div>
               </div>
               <ListDocumentGrid
                 documentIds={thoughtLeadershipIds}
