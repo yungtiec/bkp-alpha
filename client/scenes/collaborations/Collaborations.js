@@ -8,7 +8,8 @@ const documentTypes = {
   general: "general",
   scorecard: "scorecard",
   regulatory: "regulatory",
-  regulatoryForComment: "regulatory-for-comment"
+  regulatoryForComment: "regulatory-for-comment",
+  proposedLawsRegulations: "proposed-laws-regulations"
 };
 
 const filterDocuments = (documentIds, documentsById) => {
@@ -20,6 +21,8 @@ const filterDocuments = (documentIds, documentsById) => {
   let regulatoryIds = [];
   let regulatoryForCommentById = [];
   let regulatoryForCommentIds = [];
+  let proposedLawsRegulationsById = [];
+  let proposedLawsRegulationsIds = [];
 
   for (let id in documentIds) {
     const docId = documentIds[id];
@@ -35,6 +38,10 @@ const filterDocuments = (documentIds, documentsById) => {
     } else if (document.document_type === documentTypes.regulatoryForComment) {
       regulatoryForCommentIds  = [].concat(regulatoryForCommentIds).concat([docId]);
       regulatoryForCommentById = Object.assign({}, regulatoryForCommentById, documentObj);
+    } else if (document.document_type === documentTypes.proposedLawsRegulations) {
+      console.log('document', document);
+      proposedLawsRegulationsIds  = [].concat(proposedLawsRegulationsIds).concat([docId]);
+      proposedLawsRegulationsById = Object.assign({}, proposedLawsRegulationsById, documentObj);
     } else {
       thoughtLeadershipIds = [].concat(thoughtLeadershipIds).concat([docId]);
       thoughtLeadershipById = Object.assign(
@@ -53,7 +60,9 @@ const filterDocuments = (documentIds, documentsById) => {
     regulatoryById,
     regulatoryIds,
     regulatoryForCommentIds,
-    regulatoryForCommentById
+    regulatoryForCommentById,
+    proposedLawsRegulationsIds,
+    proposedLawsRegulationsById
   };
 };
 
@@ -74,7 +83,9 @@ export default ({
     regulatoryById,
     regulatoryIds,
     regulatoryForCommentIds,
-    regulatoryForCommentById
+    regulatoryForCommentById,
+    proposedLawsRegulationsIds,
+    proposedLawsRegulationsById
   } = filterDocuments(documentIds, documentsById);
 
   return (
@@ -116,10 +127,10 @@ export default ({
           <div className="projects-containers__collaboration-header">
             <span className="collaborations-header">Open Collaborations</span>
           </div>
-          {regulatoryForCommentIds && regulatoryForCommentIds.length ? (
+          {proposedLawsRegulationsIds && proposedLawsRegulationsIds.length ? (
             <div className="project-row">
               <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
-                <div className="collaborate-header">Regulatory Requests for Comment</div>
+                <div className="collaborate-header">Proposed Laws & Regulations</div>
                 <div className="btn-propose-container">
                   <button
                     className="btn btn-outline-primary btn-propose"
@@ -133,6 +144,17 @@ export default ({
                     Propose collaboration
                   </button>
                 </div>
+              </div>
+              <ListDocumentGrid
+                documentIds={proposedLawsRegulationsIds}
+                documentsById={proposedLawsRegulationsById}
+              />
+            </div>
+          ) : null}
+          {regulatoryForCommentIds && regulatoryForCommentIds.length ? (
+            <div className="project-row">
+              <div className="projects-containers__collaboration-sub-header d-flex justify-content-between">
+                <div className="collaborate-header">Regulatory Requests for Comment</div>
               </div>
               <ListDocumentGrid
                 documentIds={regulatoryForCommentIds}
