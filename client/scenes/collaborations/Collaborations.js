@@ -39,7 +39,6 @@ const filterDocuments = (documentIds, documentsById) => {
       regulatoryForCommentIds  = [].concat(regulatoryForCommentIds).concat([docId]);
       regulatoryForCommentById = Object.assign({}, regulatoryForCommentById, documentObj);
     } else if (document.document_type === documentTypes.proposedLawsRegulations) {
-      console.log('document', document);
       proposedLawsRegulationsIds  = [].concat(proposedLawsRegulationsIds).concat([docId]);
       proposedLawsRegulationsById = Object.assign({}, proposedLawsRegulationsById, documentObj);
     } else {

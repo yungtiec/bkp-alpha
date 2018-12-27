@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { values, orderBy, cloneDeep, keys, assignIn } from "lodash";
+import { values, orderBy, cloneDeep, keys, assignIn, uniq } from "lodash";
 
 const initialState = {
   documentsById: null,
@@ -16,7 +16,7 @@ export default function reduce(state = initialState, action = {}) {
       return {
         ...state,
         documentsById: assignIn(action.documentsById, state.documentsById || {}),
-        documentIds: (state.documentIds || []).concat(action.documentIds),
+        documentIds: uniq((state.documentIds || []).concat(action.documentIds)),
         offset: action.offset,
         count: action.count
       };
