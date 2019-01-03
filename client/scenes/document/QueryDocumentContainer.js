@@ -48,6 +48,7 @@ class QueryDocumentContainer extends Component {
   }
 
   render() {
+    console.log(this.props);
     if (!this.props.documentMetadata.id || !this.props.versionQnaIds)
       return null;
     return <DocumentContainer {...this.props} />;

@@ -104,39 +104,6 @@ module.exports = (db, DataTypes) => {
               "pdf_link",
               "createdAt"
             ],
-            include: [
-              { model: models["document"] },
-              {
-                model: models["user"],
-                as: "creator"
-              },
-              {
-                model: models["issue"],
-                as: "resolvedIssues", // use in SurveyProgress
-                required: false,
-                where: {
-                  comment_id: {
-                    [Sequelize.Op.not]: null
-                  }
-                },
-                include: [
-                  {
-                    model: models["comment"]
-                  }
-                ]
-              },
-              {
-                model: models["comment"], // use in SurveyIssues
-                required: false,
-                include: [
-                  {
-                    model: models["issue"],
-                    required: false,
-                    where: { open: true }
-                  }
-                ]
-              }
-            ],
             order: [[{ model: models["version"] }, "hierarchyLevel"]]
           },
           {

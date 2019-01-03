@@ -83,24 +83,6 @@ class DocumentContainer extends Component {
         />
         <Switch>
           <Route
-            path={`${match.path}/issues`}
-            render={props => (
-              <VersionIssues
-                documentVersions={documentMetadata.versions}
-                projectSymbol={documentMetadata.project.symbol}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/progress`}
-            render={() => (
-              <VersionProgress
-                documentMetadata={documentMetadata}
-                projectSymbol={documentMetadata.project.symbol}
-              />
-            )}
-          />
-          <Route
             path={`${match.path}/version/:versionId/upload`}
             render={props => <QueryVersionUpload />}
           />
