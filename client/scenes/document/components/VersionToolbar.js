@@ -114,7 +114,7 @@ class VersionToolbar extends Component {
           <div className="btn-group">
             <button
               type="button"
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary dropdown-toggle"
               type="button"
               id="versionMenuButton"
               data-toggle="dropdown"
@@ -127,6 +127,29 @@ class VersionToolbar extends Component {
                   : this.props.latestVersionMetadata.version_number
               }`}
             </button>
+            <div className="dropdown-menu" aria-labelledby="versionMenuButton">
+              {this.props.documentMetadata.versions.map(v => {
+                var versionMetadata = !isEmpty(this.props.versionMetadata)
+                  ? this.props.versionMetadata
+                  : this.props.latestVersionMetadata;
+                return (
+                  <Link
+                    key={`version-dropdown__item-${v.id}`}
+                    class="dropdown-item"
+                    to={`/project/${
+                      this.props.projectMetadata.symbol
+                    }/document/${documentMetadata.id}/version/${v.id}`}
+                    style={
+                      v.hierarchyLevel === versionMetadata.hierarchyLevel
+                        ? { fontWeight: 700 }
+                        : {}
+                    }
+                  >
+                    {`Version ${v.version_number}`}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
           {maxBy(documentMetadata.versions, "hierarchyLevel").pdf_link ? (
             <button type="button" className="btn btn-outline-primary">
