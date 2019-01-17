@@ -285,7 +285,8 @@ function computeDocumentStats(document) {
       num_issues: issues.length,
       num_pending_comments: comments.filter(c => c.reviewed === "pending")
         .length,
-      num_total_comments: comments.filter(c => c.reviewed !== "spam").length,
+      num_total_comments:
+        comments.filter(c => c.reviewed !== "spam").length + replies.length,
       num_upvotes: document.upvotesFrom.length,
       num_downvotes: document.downvotesFrom.length,
       latest_version: document.versions[0]
