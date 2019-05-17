@@ -27,9 +27,7 @@ export function getCommentContextPath(comment) {
     comment.ancestors && comment.ancestors.length
       ? find(comment.ancestors, a => a.hierarchyLevel === 1)
       : comment;
-  return `/project/${comment.version.document.project.symbol}/document/${
-    comment.version.document.id
-  }/version/${comment.version.id}/comment/${rootItem.id}`;
+  return `/s/${comment.version.document.version_slug}/comment/${rootItem.id}`;
 }
 
 export function seeCommentContext(comment) {

@@ -25,6 +25,20 @@ export default class CommentBox extends Component {
     }
   }
 
+  componentDidMount() {
+    const textarea = document.querySelector('.comment-box__text-area');
+
+    textarea.addEventListener('keydown', autosize);
+
+    function autosize(){
+      const el = this;
+      setTimeout(function(){
+        const scrollHeight = el.scrollHeight < 80 || el.innerHTML === "" ? 80 : el.scrollHeight;
+        el.style.cssText = 'height:' + scrollHeight + 'px';
+      },0);
+    }
+  }
+
   render() {
     return (
       <div className="comment-box">
